@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>🗾 Japan Trip 2026 · Ledger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; }
+    #root { max-width: 480px; margin: 0 auto; }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-thumb { border-radius: 2px; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ── Firestore ─────────────────────────────────────────────────────
+const PID  = "japan-2026-apr";
+const AKEY = "AIzaSyD372bOo6NQR6VxB-_kkv4zfLNt4B5HaAc";
+const FS   = `https://firestore.googleapis.com/v1/projects/${PID}/databases/(default)/documents/expenses`;
+
+function toFS(obj) {
+  const f = {};
+  for (const [k,v] of Object.entries(obj)) {
+    if (k==="id") continue;
+    if (v===null||v===undefined)   f[k]={nullValue:null};
+    else if (typeof v==="boolean") f[k]={booleanValue:v};
+    else if (typeof v==="number")  f[k]={doubleValue:v};
+    else                           f[k]={stringValue:String(v)};
+  }
+  return f;
+}
+function fromFS(doc) {
+  const id=doc.name.split("/").pop(), o={id};
+  for (const [k,v] of Object.entries(doc.fields||{})) {
+    if      ("stringValue"  in v) o[k]=v.stringValue;
+    else if ("doubleValue"  in v) o[k]=v.doubleValue;
+    else if ("integerValue" in v) o[k]=Number(v.integerValue);
+    else if ("booleanValue" in v) o[k]=v.booleanValue;
+    else if ("nullValue"    in v) o[k]=null;
+  }
+  return o;
+}
+async function fsList() {
+  const r=await fetch(`${FS}?key=${AKEY}&pageSize=300`);
+  const d=await r.json();
+  if (!r.ok) throw new Error(d.error?.message||"Fetch failed");
+  return (d.documents||[]).map(fromFS);
+}
+async function fsCreate(exp) {
+  const {id,...rest}=exp;
+  const r=await fetch(`${FS}?key=${AKEY}&documentId=${encodeURIComponent(id)}`,{
+    method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields:toFS(rest)})
+  });
+  if (!r.ok){const d=await r.json();throw new Error(d.error?.message);}
+}
+async function fsUpdate(exp) {
+  const {id,...rest}=exp;
+  const fields=toFS(rest);
+  const mask=Object.keys(fields).map(k=>`updateMask.fieldPaths=${encodeURIComponent(k)}`).join("&");
+  const r=await fetch(`${FS}/${encodeURIComponent(id)}?key=${AKEY}&${mask}`,{
+    method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({fields})
+  });
+  if (!r.ok){const d=await r.json();throw new Error(d.error?.message);}
+}
+async function fsDel(id) {
+  await fetch(`${FS}/${encodeURIComponent(id)}?key=${AKEY}`,{method:"DELETE"});
+}
+
+// ── FX ────────────────────────────────────────────────────────────
+const FX_FALLBACK={INR:1,JPY:0.5908,AED:25.706941,USD:83.5};
+async function fetchLiveFX() {
+  const r=await fetch("https://open.er-api.com/v6/latest/INR");
+  const d=await r.json();
+  if (!r.ok||!d.rates) throw new Error("FX failed");
+  return {INR:1,JPY:1/d.rates.JPY,AED:1/d.rates.AED,USD:1/d.rates.USD};
+}
+
+// ── Themes ────────────────────────────────────────────────────────
+const THEMES = {
+  teal: {
+    name:"🌊 Teal & Ivory", id:"teal",
+    bg:"#faf8f3", card:"#ffffff", border:"#ede7db",
+    t1:"#2d2824", t2:"#6b6458", t3:"#a09488",
+    accent:"#5aada5", accentDk:"#2d7870", accentLt:"#e8f5f4",
+    accent2:"#7ea58c", accent2Dk:"#4a7a5a", accent2Lt:"#e8f2ec",
+    rose:"#d4877a", roseLt:"#fdf0ee",
+    lav:"#9b8ec4", lavLt:"#f0edfb",
+    amber:"#c9984a", amberLt:"#fef6e8",
+    sky:"#6ba8cc", skyLt:"#e8f3fb",
+    headerGrad:"linear-gradient(135deg,#e4f5f2 0%,#ede8fa 55%,#fae8e5 100%)",
+    tabActive:"#7ea58c",
+    scrollThumb:"#ede7db",
+    dark:false,
+  },
+  pastel: {
+    name:"🌸 Pastel Pink", id:"pastel",
+    bg:"#fff8f8", card:"#ffffff", border:"#f2dde0",
+    t1:"#3a2428", t2:"#7a5860", t3:"#b89098",
+    accent:"#e89aaa", accentDk:"#c0607a", accentLt:"#fde8ed",
+    accent2:"#e8a8c8", accent2Dk:"#b86898", accent2Lt:"#fce8f4",
+    rose:"#e87890", roseLt:"#fde8ed",
+    lav:"#c8a8d8", lavLt:"#f4e8fc",
+    amber:"#e8b890", amberLt:"#fdf0e4",
+    sky:"#a8c8e8", skyLt:"#e4f0fc",
+    headerGrad:"linear-gradient(135deg,#ffe4ec 0%,#fce8f8 50%,#ffeee4 100%)",
+    tabActive:"#e89aaa",
+    scrollThumb:"#f2dde0",
+    dark:false,
+  },
+  mocha: {
+    name:"🍫 Dark Mocha", id:"mocha",
+    bg:"#1a1410", card:"#241e18", border:"#3d3028",
+    t1:"#f0e8d8", t2:"#c0a888", t3:"#806858",
+    accent:"#c8905a", accentDk:"#e8b07a", accentLt:"#3d2c1c",
+    accent2:"#a87848", accent2Dk:"#d0985c", accent2Lt:"#302010",
+    rose:"#d08068", roseLt:"#3d1c14",
+    lav:"#9888c0", lavLt:"#281c38",
+    amber:"#d0a040", amberLt:"#302408",
+    sky:"#7098c0", skyLt:"#142038",
+    headerGrad:"linear-gradient(135deg,#2a1c10 0%,#201820 55%,#1c1014 100%)",
+    tabActive:"#c8905a",
+    scrollThumb:"#3d3028",
+    dark:true,
+  },
+  matcha: {
+    name:"🍵 Matcha & Red", id:"matcha",
+    bg:"#f4f6f0", card:"#ffffff", border:"#d8e4cc",
+    t1:"#1e2818", t2:"#506040", t3:"#8ca880",
+    accent:"#6a9858", accentDk:"#3a6830", accentLt:"#e4f0d8",
+    accent2:"#88b870", accent2Dk:"#4a7838", accent2Lt:"#ecf4e4",
+    rose:"#c85840", roseLt:"#fde8e4",
+    lav:"#7888b0", lavLt:"#e4e8f4",
+    amber:"#b89040", amberLt:"#f8f0d8",
+    sky:"#5888a8", skyLt:"#ddeef8",
+    headerGrad:"linear-gradient(135deg,#e4f0d8 0%,#f0ece0 55%,#fde8e4 100%)",
+    tabActive:"#6a9858",
+    scrollThumb:"#d8e4cc",
+    dark:false,
+  },
+};
+
+// ── Constants ─────────────────────────────────────────────────────
+const CITIES=["India","Transit","Narita","Fukuoka","Osaka","Tokyo","Sapporo"];
+const CATS=["Transport","Accommodation","Food & Dining","Activities","Shopping","Miscellaneous"];
+const SUB={
+  Transport:      ["Train","Flight","Shinkansen","Metro/Subway","Bus","Taxi/Cab","Ferry","Other"],
+  Accommodation:  ["Hotel","Hostel","Airbnb","Other"],
+  "Food & Dining":["Restaurant","Cafe","Street Food","Convenience Store","Grocery","Izakaya","Other"],
+  Activities:     ["Sightseeing","Museum","Theme Park","Tour","Entertainment","Onsen","Other"],
+  Shopping:       ["Clothing","Electronics","Souvenirs","Pharmacy","Department Store","Other"],
+  Miscellaneous:  ["SIM/Data","Insurance","Tips","Laundry","Currency Exchange","Other"],
+};
+const PAYERS=["Jiten","Runa","Devanuj","Priyanuj","Shared","Unknown"];
+const TRAVELLERS=["Jiten","Runa","Devanuj","Priyanuj","Other"];
+const TRAV_EMO=["🧔","👩","🧑","✈️","👤"];
+const PAY_MODES=["Credit Card","Debit Card","Cash (INR)","Cash (JPY)","Cash (AED)","Online/App","Unknown"];
+const CURRENCIES=["JPY","INR","AED","USD"];
+
+const CITY_CLR={
+  India:  {bg:"#fef6e8",text:"#8c6020",dot:"#c9984a"},
+  Transit:{bg:"#f0f1f6",text:"#505880",dot:"#8890b8"},
+  Narita: {bg:"#e8f3fb",text:"#2a6090",dot:"#6ba8cc"},
+  Fukuoka:{bg:"#fdf0ee",text:"#904030",dot:"#d4877a"},
+  Osaka:  {bg:"#f0edfb",text:"#5040a0",dot:"#9b8ec4"},
+  Tokyo:  {bg:"#fdf0f4",text:"#903055",dot:"#c47a8a"},
+  Sapporo:{bg:"#e8f5f4",text:"#257870",dot:"#5aada5"},
+};
+const CAT_ICO={Transport:"🚄",Accommodation:"🏨","Food & Dining":"🍜",Activities:"🎌",Shopping:"🛍️",Miscellaneous:"📋"};
+const CAT_CLR=["#7ea58c","#d4877a","#9b8ec4","#5aada5","#c9984a","#6ba8cc"];
+
+const TRIP_DAYS=[
+  {date:"2026-03-31",city:"India",  label:"Departure Day",       events:["🚂 Train Vadodara→Bandra 09:03–15:00","✈️ Flight EGQ38S BOM→NRT 23:25"]},
+  {date:"2026-04-01",city:"Narita", label:"Arrive in Japan 🇯🇵",  events:["🛬 Land Narita 18:05","🏨 Toyoko Inn Narita Airport"]},
+  {date:"2026-04-02",city:"Fukuoka",label:"Fly to Fukuoka",      events:["✈️ GK509 NRT→FUK 11:35–13:50","🏨 APA Hotel Hakata"]},
+  {date:"2026-04-03",city:"Fukuoka",label:"Fukuoka · Day 2",     events:[]},
+  {date:"2026-04-04",city:"Fukuoka",label:"Fukuoka · Day 3",     events:[]},
+  {date:"2026-04-05",city:"Osaka",  label:"Shinkansen to Osaka", events:["🚄 NOZOMI 24 Hakata→Shin-Osaka 11:15–13:43","🏨 Toyoko Inn Osaka Hankyu Juso"]},
+  {date:"2026-04-06",city:"Osaka",  label:"Osaka · Day 2",       events:[]},
+  {date:"2026-04-07",city:"Osaka",  label:"Osaka · Day 3",       events:[]},
+  {date:"2026-04-08",city:"Tokyo",  label:"Shinkansen to Tokyo", events:["🚄 NOZOMI 12 Shin-Osaka→Tokyo 10:45–13:15","🏨 APA Hotel Nihonbashi"]},
+  {date:"2026-04-09",city:"Tokyo",  label:"Tokyo · Day 2",       events:[]},
+  {date:"2026-04-10",city:"Tokyo",  label:"Tokyo · Day 3",       events:[]},
+  {date:"2026-04-11",city:"Sapporo",label:"Fly to Sapporo",      events:["✈️ GK113 NRT→CTS 14:00–15:50","🏨 KOKO Hotel Sapporo Ekimae"]},
+  {date:"2026-04-12",city:"Sapporo",label:"Sapporo · Day 2",     events:[]},
+  {date:"2026-04-13",city:"Sapporo",label:"Sapporo · Day 3",     events:[]},
+  {date:"2026-04-14",city:"Narita", label:"Fly back to Narita",  events:["✈️ GK114 CTS→NRT 17:40–19:20","🏨 Narita Gateway Hotel"]},
+  {date:"2026-04-15",city:"Transit",label:"Fly Home ✈️",          events:["✈️ EGQ38S NRT→BOM 10:20","🛬 Arrive Mumbai 22:15"]},
+];
+
+const SEED=[
+  {id:"pre-1", date:"2026-03-31",category:"Transport",    subcategory:"Train",     description:"Vadodara → Bandra · Train 19028 JAT BDTS EXP · 2A · Priyanuj Deka",              amount:1023.60, currency:"INR",city:"India",  paidBy:"Priyanuj",paymentMode:"Unknown",   pax:1,notes:"PNR 2733078322 · Dep 09:03, Arr 15:00",                                          status:"confirmed",   preBooked:true,loggedBy:"System"},
+  {id:"pre-2", date:"2026-03-31",category:"Transport",    subcategory:"Train",     description:"Vadodara → Bandra · Train 19028 JAT BDTS EXP · 2A · Jiten + Runa + Devanuj",    amount:3023.60, currency:"INR",city:"India",  paidBy:"Devanuj", paymentMode:"Unknown",   pax:3,notes:"PNR 2731814055 · Dep 09:03, Arr 15:00",                                          status:"confirmed",   preBooked:true,loggedBy:"System"},
+  {id:"pre-3", date:"2026-03-31",category:"Transport",    subcategory:"Flight",    description:"Malaysia Airlines EGQ38S · BOM→NRT · Economy · 4 pax",                         amount:null,    currency:"INR",city:"Transit",paidBy:"Unknown", paymentMode:"Unknown",   pax:4,notes:"Ref EGQ38S · Dep 23:25, Arr 1 Apr 18:05 · E-tickets 232-5803927026/27/28/29",status:"pending_cost",preBooked:true,loggedBy:"System"},
+  {id:"pre-4", date:"2026-04-02",category:"Transport",    subcategory:"Flight",    description:"Jetstar GK509 · NRT→FUK · 4 pax",                                              amount:null,    currency:"JPY",city:"Transit",paidBy:"Unknown", paymentMode:"Unknown",   pax:4,notes:"Trip.com #1365641083754648 · Dep 11:35, Arr 13:50 · 7kg+20kg",               status:"pending_cost",preBooked:true,loggedBy:"System"},
+  {id:"pre-5", date:"2026-04-11",category:"Transport",    subcategory:"Flight",    description:"Jetstar GK113 · NRT→CTS · 4 pax",                                              amount:null,    currency:"JPY",city:"Transit",paidBy:"Unknown", paymentMode:"Unknown",   pax:4,notes:"Ref GW8HMW · Dep 14:00, Arr 15:50 · 7kg+20kg",                               status:"pending_cost",preBooked:true,loggedBy:"System"},
+  {id:"pre-6", date:"2026-04-14",category:"Transport",    subcategory:"Flight",    description:"Jetstar GK114 · CTS→NRT · 4 pax",                                              amount:null,    currency:"JPY",city:"Transit",paidBy:"Unknown", paymentMode:"Unknown",   pax:4,notes:"Ref CLNF9M · Dep 17:40, Arr 19:20 · 7kg+20kg",                               status:"pending_cost",preBooked:true,loggedBy:"System"},
+  {id:"pre-7", date:"2026-04-05",category:"Transport",    subcategory:"Shinkansen",description:"NOZOMI 24 · Hakata→Shin-Osaka · Ordinary · 4 pax",                            amount:63280,   currency:"JPY",city:"Transit",paidBy:"Devanuj", paymentMode:"Online/App",pax:4,notes:"Res#2013 · Dep 11:15, Arr 13:43 · SmartEX 17 Mar",                            status:"confirmed",   preBooked:true,loggedBy:"System"},
+  {id:"pre-8", date:"2026-04-08",category:"Transport",    subcategory:"Shinkansen",description:"NOZOMI 12 · Shin-Osaka→Tokyo · Ordinary · 4 pax",                             amount:57280,   currency:"JPY",city:"Transit",paidBy:"Devanuj", paymentMode:"Online/App",pax:4,notes:"Res#2014 · Dep 10:45, Arr 13:15 · SmartEX 17 Mar",                            status:"confirmed",   preBooked:true,loggedBy:"System"},
+  {id:"pre-9", date:"2026-04-01",category:"Accommodation",subcategory:"Hotel",     description:"Toyoko Inn Narita Airport Shinkan · 2 Twin Rooms · 1 Night · Bkfst incl.",     amount:10407,   currency:"INR",city:"Narita", paidBy:"Unknown", paymentMode:"Unknown",   pax:4,notes:"Check-in 1 Apr → Check-out 2 Apr · Tel: +81 476 33 1045",                     status:"confirmed",   preBooked:true,loggedBy:"System"},
+  {id:"pre-10",date:"2026-04-02",category:"Accommodation",subcategory:"Hotel",     description:"APA Hotel Hakatahigashihie-Ekimae · 2 Standard Double · 3 Nights",            amount:null,    currency:"JPY",city:"Fukuoka",paidBy:"Unknown", paymentMode:"Unknown",   pax:4,notes:"Check-in 2 Apr → Check-out 5 Apr · Booking ID 1996490173",                   status:"pending_cost",preBooked:true,loggedBy:"System"},
+  {id:"pre-11",date:"2026-04-05",category:"Accommodation",subcategory:"Hotel",     description:"Toyoko Inn Osaka Hankyu Juso-eki · 2 Queen Rooms · 3 Nights · Bkfst incl.",    amount:33767,   currency:"INR",city:"Osaka",  paidBy:"Unknown", paymentMode:"Unknown",   pax:4,notes:"Check-in 5 Apr → Check-out 8 Apr · Tel: +81 6 6302 1045",                     status:"confirmed",   preBooked:true,loggedBy:"System"},
+  {id:"pre-12",date:"2026-04-08",category:"Accommodation",subcategory:"Hotel",     description:"APA Hotel Nihonbashi Hamacho Ekiminami · 2 Double · 3 Nights · Bkfst+WiFi",   amount:126604,  currency:"JPY",city:"Tokyo",  paidBy:"Unknown", paymentMode:"Unknown",   pax:4,notes:"Check-in 8 Apr → Check-out 11 Apr · Booking ID 1990024035",                   status:"confirmed",   preBooked:true,loggedBy:"System"},
+  {id:"pre-13",date:"2026-04-11",category:"Accommodation",subcategory:"Hotel",     description:"KOKO Hotel Sapporo Ekimae · 2 Twin Rooms · 3 Nights · Bkfst+WiFi",            amount:1270.06, currency:"AED",city:"Sapporo",paidBy:"Priyanuj",paymentMode:"Online/App",pax:4,notes:"Check-in 11 Apr → Check-out 14 Apr · Booking ID AH74088474741962 (MakeMyTrip)",status:"confirmed",   preBooked:true,loggedBy:"System"},
+  {id:"pre-14",date:"2026-04-14",category:"Accommodation",subcategory:"Hotel",     description:"Narita Gateway Hotel · 2 Economy Twin Rooms · 1 Night · WiFi",                 amount:14742,   currency:"JPY",city:"Narita", paidBy:"Unknown", paymentMode:"Unknown",   pax:4,notes:"Check-in 14 Apr → Check-out 15 Apr · Booking ID 1990029938",                   status:"confirmed",   preBooked:true,loggedBy:"System"},
+];
+
+// ── Helpers ───────────────────────────────────────────────────────
+const toINR =(a,c,fx=FX_FALLBACK)=>a==null?null:a*(fx[c]||1);
+const fmtINR=v=>v==null||isNaN(v)?"—":"₹"+Math.round(v).toLocaleString("en-IN");
+const fmtAmt=(a,c)=>{if(a==null)return"—";return({INR:"₹",JPY:"¥",AED:"AED ",USD:"$"}[c]||"")+Number(a).toLocaleString("en-IN",{maximumFractionDigits:2});};
+const lsGet=k=>{try{return localStorage.getItem(k);}catch{return null;}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,v);}catch{}};
+const BLANK={date:"",category:"Transport",subcategory:"Train",description:"",amount:"",currency:"JPY",city:"Tokyo",paidBy:"Unknown",paymentMode:"Unknown",pax:4,notes:""};
+
+// ── SwipeRow component ────────────────────────────────────────────
+function SwipeRow({onEdit,onDelete,disabled,children,C}) {
+  const [dx,setDx]=useState(0);
+  const [settling,setSettling]=useState(false);
+  const startX=useRef(null);
+  const startY=useRef(null);
+  const isSwipe=useRef(false);
+
+  function onTouchStart(e){
+    startX.current=e.touches[0].clientX;
+    startY.current=e.touches[0].clientY;
+    isSwipe.current=false;
+  }
+  function onTouchMove(e){
+    if(startX.current===null)return;
+    const dx=e.touches[0].clientX-startX.current;
+    const dy=e.touches[0].clientY-startY.current;
+    if(!isSwipe.current&&Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>8){isSwipe.current=true;}
+    if(isSwipe.current){e.preventDefault();setDx(Math.max(-90,Math.min(90,dx)));}
+  }
+  function onTouchEnd(){
+    if(!isSwipe.current){setDx(0);return;}
+    setSettling(true);
+    if(dx<-60){setDx(-90);setTimeout(()=>{setDx(0);setSettling(false);if(onDelete)onDelete();},220);}
+    else if(dx>60){setDx(90);setTimeout(()=>{setDx(0);setSettling(false);if(onEdit)onEdit();},180);}
+    else{setDx(0);setTimeout(()=>setSettling(false),200);}
+    startX.current=null;
+  }
+
+  const underlayClr=dx<0?C.rose:C.accent2;
+  const underlayIcon=dx<0?"🗑":"✏";
+  const underlayTxt=dx<0?"Delete":"Edit";
+
+  return (
+    <div style={{position:"relative",overflow:"hidden",borderRadius:18,marginBottom:14}}>
+      {Math.abs(dx)>10&&(
+        <div style={{position:"absolute",inset:0,background:underlayClr,borderRadius:18,
+          display:"flex",alignItems:"center",justifyContent:dx<0?"flex-end":"flex-start",
+          padding:"0 22px",gap:6}}>
+          <span style={{fontSize:18}}>{underlayIcon}</span>
+          <span style={{fontSize:12,fontWeight:800,color:"#fff"}}>{underlayTxt}</span>
+        </div>
+      )}
+      <div
+        onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}
+        style={{transform:`translateX(${dx}px)`,transition:settling||dx===0?"transform .2s ease":"none",willChange:"transform"}}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ── FlipCard component ────────────────────────────────────────────
+function FlipCard({front,back,C}) {
+  const [flipped,setFlipped]=useState(false);
+  return (
+    <div onClick={()=>setFlipped(f=>!f)} style={{cursor:"pointer",perspective:600,height:74}}>
+      <div style={{position:"relative",width:"100%",height:"100%",transformStyle:"preserve-3d",
+        transition:"transform .45s ease",transform:flipped?"rotateY(180deg)":"rotateY(0deg)"}}>
+        <div style={{position:"absolute",inset:0,backfaceVisibility:"hidden",WebkitBackfaceVisibility:"hidden",
+          background:"rgba(255,255,255,.8)",border:`1px solid ${C.border}`,borderRadius:16,padding:"12px 14px",
+          display:"flex",flexDirection:"column",justifyContent:"center"}}>
+          {front}
+        </div>
+        <div style={{position:"absolute",inset:0,backfaceVisibility:"hidden",WebkitBackfaceVisibility:"hidden",
+          transform:"rotateY(180deg)",background:"rgba(255,255,255,.8)",border:`1px solid ${C.border}`,
+          borderRadius:16,padding:"12px 14px",display:"flex",flexDirection:"column",justifyContent:"center"}}>
+          {back}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── App ───────────────────────────────────────────────────────────
+function App() {
+  const [exps,      setExps]      = useState([]);
+  const [loading,   setLoading]   = useState(true);
+  const [seeding,   setSeeding]   = useState(false);
+  const [syncing,   setSyncing]   = useState(false);
+  const [syncErr,   setSyncErr]   = useState(null);
+  const [lastSync,  setLastSync]  = useState(null);
+  const [user,      setUser]      = useState(()=>lsGet("tj-user"));
+  const [showPick,  setShowPick]  = useState(false);
+  const [showForm,  setShowForm]  = useState(false);
+  const [editId,    setEditId]    = useState(null);
+  const [form,      setForm]      = useState(BLANK);
+  const [tab,       setTab]       = useState("list");
+  const [fCity,     setFCity]     = useState("All");
+  const [fCat,      setFCat]      = useState("All");
+  const [search,    setSearch]    = useState("");
+  const [expandId,  setExpandId]  = useState(null);
+  const [saving,    setSaving]    = useState(false);
+  const [fxRates,   setFxRates]   = useState(FX_FALLBACK);
+  const [fxUpdated, setFxUpdated] = useState(null);
+  const [fxLoading, setFxLoading] = useState(false);
+  const [expandDay, setExpandDay] = useState(null);
+  const [expandExpId,setExpandExpId]=useState(null);
+  const [themeId,   setThemeId]   = useState(()=>lsGet("tj-theme")||"teal");
+  const [showTheme, setShowTheme] = useState(false);
+  const pollRef=useRef(null);
+
+  const C=THEMES[themeId]||THEMES.teal;
+
+  const fetchAll=useCallback(async(quiet=false)=>{
+    if(!quiet)setSyncing(true);
+    setSyncErr(null);
+    try{const data=await fsList();setExps(data.sort((a,b)=>(a.date||"").localeCompare(b.date||"")));setLastSync(new Date());}
+    catch(e){setSyncErr(e.message);}
+    finally{setSyncing(false);setLoading(false);}
+  },[]);
+
+  const loadFX=useCallback(async()=>{
+    setFxLoading(true);
+    try{const r=await fetchLiveFX();setFxRates(r);setFxUpdated(new Date());}
+    catch{}
+    finally{setFxLoading(false);}
+  },[]);
+
+  useEffect(()=>{
+    (async()=>{
+      try{
+        const data=await fsList();
+        if(data.length===0){
+          setSeeding(true);
+          for(const exp of SEED){try{await fsCreate(exp);}catch{}}
+          setSeeding(false);await fetchAll(true);
+        }else{setExps(data.sort((a,b)=>(a.date||"").localeCompare(b.date||"")));setLastSync(new Date());setLoading(false);}
+      }catch(e){setSyncErr(e.message);setLoading(false);}
+    })();
+    pollRef.current=setInterval(()=>fetchAll(true),10000);
+    return()=>clearInterval(pollRef.current);
+  },[fetchAll]);
+
+  useEffect(()=>{loadFX();const t=setInterval(loadFX,600000);return()=>clearInterval(t);},[loadFX]);
+  useEffect(()=>{if(!user)setShowPick(true);},[user]);
+
+  function pickUser(name){setUser(name);lsSet("tj-user",name);setShowPick(false);}
+  function pickTheme(id){setThemeId(id);lsSet("tj-theme",id);setShowTheme(false);}
+
+  function openAdd(prefillDate,prefillCity){
+    setForm({...BLANK,date:prefillDate||new Date().toISOString().split("T")[0],city:prefillCity||"Tokyo",loggedBy:user||"Unknown"});
+    setEditId(null);setShowForm(true);
+  }
+  function openEdit(e){setForm({...e,amount:e.amount??""});setEditId(e.id);setShowForm(true);}
+  function setField(k,v){setForm(f=>{const n={...f,[k]:v};if(k==="category")n.subcategory=(SUB[v]||[])[0]||"";return n;});}
+
+  async function submit(){
+    if(!form.date||!form.description)return alert("Date and description are required.");
+    setSaving(true);
+    const entry={...form,amount:(form.amount===""||form.amount===null)?null:Number(form.amount),
+      pax:Number(form.pax)||1,status:(!form.amount||form.amount==="")?"pending_cost":"confirmed",
+      id:editId||`exp-${Date.now()}`,preBooked:editId?(exps.find(e=>e.id===editId)?.preBooked||false):false,
+      loggedBy:user||"Unknown",updatedAt:new Date().toISOString()};
+    try{if(editId)await fsUpdate(entry);else await fsCreate(entry);await fetchAll(true);setShowForm(false);}
+    catch(e){alert("Save error: "+e.message);}
+    finally{setSaving(false);}
+  }
+  async function doDelete(id){
+    if(!window.confirm("Delete this entry?"))return;
+    await fsDel(id);await fetchAll(true);setExpandExpId(null);
+  }
+
+  const knownTotal=exps.reduce((s,e)=>s+(toINR(e.amount,e.currency,fxRates)||0),0);
+  const pendingCount=exps.filter(e=>e.status==="pending_cost").length;
+  const byCity=CITIES.map(city=>({city,count:exps.filter(e=>e.city===city).length,
+    total:exps.filter(e=>e.city===city).reduce((s,e)=>s+(toINR(e.amount,e.currency,fxRates)||0),0)}));
+  const byCat=CATS.map((cat,i)=>({cat,i,count:exps.filter(e=>e.category===cat).length,
+    total:exps.filter(e=>e.category===cat).reduce((s,e)=>s+(toINR(e.amount,e.currency,fxRates)||0),0)}));
+
+  const filtered=exps.filter(e=>{
+    if(fCity!=="All"&&e.city!==fCity)return false;
+    if(fCat!=="All"&&e.category!==fCat)return false;
+    if(search&&![e.description,e.notes,e.subcategory,e.loggedBy].some(t=>t?.toLowerCase().includes(search.toLowerCase())))return false;
+    return true;
+  });
+  const groups={};
+  filtered.forEach(e=>{if(!groups[e.date])groups[e.date]=[];groups[e.date].push(e);});
+
+  const today=new Date().toISOString().split("T")[0];
+
+  const inp={background:C.card,border:`1.5px solid ${C.border}`,borderRadius:12,color:C.t1,
+    padding:"11px 14px",width:"100%",fontSize:14,marginTop:6,fontFamily:"Nunito,sans-serif",outline:"none"};
+  const lbl={fontSize:10,color:C.t3,letterSpacing:".07em",textTransform:"uppercase",fontWeight:700,display:"block",marginTop:16};
+
+  if(loading||seeding)return(
+    <div style={{minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:16}}>
+      <div style={{fontSize:60}}>🗾</div>
+      <div style={{fontWeight:800,fontSize:18,color:C.accent2}}>{seeding?"Setting up your ledger…":"Loading…"}</div>
+      {seeding&&<div style={{fontSize:13,color:C.t3}}>Pre-loading 14 bookings…</div>}
+    </div>
+  );
+
+  return(
+    <div style={{fontFamily:"Nunito,sans-serif",background:C.bg,minHeight:"100vh",color:C.t1,paddingBottom:120}}>
+      <style>{`
+        .btn{cursor:pointer;border:none;outline:none;transition:all .15s;font-family:Nunito,sans-serif}
+        .btn:hover{opacity:.85}.btn:active{transform:scale(.97)}
+        .chip{cursor:pointer;border:none;outline:none;transition:all .15s;font-family:Nunito,sans-serif;flex-shrink:0;white-space:nowrap}
+        .chip:hover{transform:translateY(-1px)}
+        .hcard{transition:all .2s;cursor:pointer}
+        .hcard:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.1)!important}
+        .exp-row{cursor:pointer;transition:background .12s}
+        .exp-row:hover{opacity:.88}
+        input:focus,select:focus,textarea:focus{border-color:${C.accent2}!important;box-shadow:0 0 0 3px ${C.accent2Lt}!important;outline:none}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @keyframes slideUp{from{transform:translateY(70px);opacity:0}to{transform:translateY(0);opacity:1}}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes popIn{from{transform:scale(.88) translateY(10px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+        .scroll-x{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+        .scroll-x::-webkit-scrollbar{display:none}
+        ::-webkit-scrollbar-thumb{background:${C.scrollThumb};border-radius:2px;}
+      `}</style>
+
+      {/* USER PICKER */}
+      {showPick&&(
+        <div style={{position:"fixed",inset:0,background:C.dark?"rgba(10,8,6,.96)":"rgba(250,248,243,.96)",backdropFilter:"blur(10px)",zIndex:400,display:"flex",alignItems:"center",justifyContent:"center",padding:24,animation:"fadeIn .2s"}}>
+          <div style={{background:C.card,borderRadius:28,padding:"34px 24px 28px",maxWidth:320,width:"100%",boxShadow:"0 20px 60px rgba(0,0,0,.15)",border:`1px solid ${C.border}`}}>
+            <div style={{textAlign:"center",marginBottom:28}}>
+              <div style={{fontSize:48,marginBottom:12}}>👋</div>
+              <div style={{fontFamily:"Playfair Display,serif",fontSize:24,color:C.t1,marginBottom:8}}>Who are you?</div>
+              <div style={{fontSize:13,color:C.t3,lineHeight:1.7}}>Your name will appear on every entry you log</div>
+            </div>
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              {TRAVELLERS.map((t,i)=>(
+                <button key={t} className="btn" onClick={()=>pickUser(t)}
+                  style={{background:C.accent2Lt,border:`1.5px solid ${C.accent2}30`,borderRadius:16,padding:"15px 18px",fontSize:15,fontWeight:700,color:C.accent2Dk,display:"flex",alignItems:"center",gap:14}}>
+                  <span style={{fontSize:24}}>{TRAV_EMO[i]}</span>{t}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* THEME PICKER */}
+      {showTheme&&(
+        <div style={{position:"fixed",inset:0,background:C.dark?"rgba(10,8,6,.92)":"rgba(250,248,243,.92)",backdropFilter:"blur(10px)",zIndex:400,display:"flex",alignItems:"center",justifyContent:"center",padding:24,animation:"fadeIn .15s"}}
+          onClick={()=>setShowTheme(false)}>
+          <div style={{background:C.card,borderRadius:28,padding:"28px 22px",maxWidth:320,width:"100%",boxShadow:"0 20px 60px rgba(0,0,0,.15)",border:`1px solid ${C.border}`}}
+            onClick={e=>e.stopPropagation()}>
+            <div style={{fontFamily:"Playfair Display,serif",fontSize:20,color:C.t1,marginBottom:20,textAlign:"center"}}>Choose Theme</div>
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              {Object.values(THEMES).map(th=>(
+                <button key={th.id} className="btn" onClick={()=>pickTheme(th.id)}
+                  style={{background:themeId===th.id?C.accent2Lt:C.bg,border:`2px solid ${themeId===th.id?C.accent2:C.border}`,borderRadius:16,padding:"14px 18px",fontSize:14,fontWeight:700,color:C.t1,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                  <span>{th.name}</span>
+                  {themeId===th.id&&<span style={{fontSize:16}}>✓</span>}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* HEADER */}
+      <div style={{background:C.headerGrad,borderBottom:`1px solid ${C.border}`,padding:"24px 18px 20px"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:18}}>
+          <div>
+            <div style={{fontSize:10,color:C.accent,letterSpacing:".2em",textTransform:"uppercase",fontWeight:800,marginBottom:4}}>Trip Ledger · Live</div>
+            <div style={{fontFamily:"Playfair Display,serif",fontSize:28,color:C.t1,lineHeight:1.1}}>🗾 Japan 2026</div>
+            <div style={{fontSize:12,color:C.t2,marginTop:5,fontWeight:600}}>31 Mar – 15 Apr · Jiten · Runa · Devanuj · Priyanuj</div>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:7}}>
+            <div style={{display:"flex",gap:6}}>
+              <button className="btn" onClick={()=>setShowTheme(true)}
+                style={{background:"rgba(255,255,255,.85)",border:`1px solid ${C.border}`,borderRadius:20,padding:"6px 12px",fontSize:13,fontWeight:700,color:C.t2}}>
+                🎨
+              </button>
+              <button className="btn" onClick={()=>{setUser(null);lsSet("tj-user","");setShowPick(true);}}
+                style={{background:"rgba(255,255,255,.85)",border:`1px solid ${C.border}`,borderRadius:20,padding:"6px 12px",fontSize:11,fontWeight:700,color:C.t2}}>
+                👤 {user||"Set name"}
+              </button>
+            </div>
+            <div style={{display:"flex",alignItems:"center",gap:5}}>
+              {syncing
+                ?<div style={{width:8,height:8,borderRadius:"50%",border:`2px solid ${C.accent2}`,borderTopColor:"transparent",animation:"spin .8s linear infinite"}}/>
+                :<div style={{width:7,height:7,borderRadius:"50%",background:syncErr?C.rose:C.accent2,animation:!syncErr?"pulse 2.5s infinite":"none"}}/>}
+              <span style={{fontSize:10,color:C.t3,fontWeight:600}}>
+                {syncErr?"⚠ Sync error":syncing?"Syncing…":lastSync?`Live · ${lastSync.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit"})}`:"Connecting…"}
+              </span>
+              <button className="btn" onClick={()=>fetchAll(false)} style={{background:"none",color:C.t3,fontSize:14,padding:"0 3px"}}>↻</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats row — first card is flippable */}
+        <div style={{display:"grid",gridTemplateColumns:"1.1fr 1fr 1fr",gap:10,marginBottom:14}}>
+          <FlipCard C={C}
+            front={<>
+              <div style={{fontSize:9,color:C.t3,fontWeight:800,letterSpacing:".07em",marginBottom:5}}>KNOWN TOTAL <span style={{fontSize:9,color:C.accent}}>↕</span></div>
+              <div style={{fontSize:18,fontWeight:900,color:C.accent2Dk,lineHeight:1}}>{fmtINR(knownTotal)}</div>
+              <div style={{fontSize:9,color:C.t3,marginTop:3,fontWeight:600}}>tap to flip</div>
+            </>}
+            back={<>
+              <div style={{fontSize:9,color:C.t3,fontWeight:800,letterSpacing:".07em",marginBottom:6}}>IN OTHER CURRENCIES</div>
+              {[["¥",knownTotal/fxRates.JPY,"JPY"],["AED",knownTotal/fxRates.AED,"AED"],["$",knownTotal/fxRates.USD,"USD"]].map(([sym,val,cur])=>(
+                <div key={cur} style={{fontSize:11,fontWeight:800,color:C.t2,lineHeight:1.6}}>
+                  {sym}{isNaN(val)?"-":Math.round(val).toLocaleString("en-IN")} <span style={{fontSize:9,color:C.t3,fontWeight:600}}>{cur}</span>
+                </div>
+              ))}
+            </>}
+          />
+          {[[`PENDING`,`${pendingCount} items`,C.rose],[`ENTRIES`,exps.length,C.lav]].map(([l,v,clr])=>(
+            <div key={l} style={{background:"rgba(255,255,255,.8)",border:`1px solid ${C.border}`,borderRadius:16,padding:"14px 12px"}}>
+              <div style={{fontSize:9,color:C.t3,fontWeight:800,letterSpacing:".07em",marginBottom:5}}>{l}</div>
+              <div style={{fontSize:18,fontWeight:900,color:clr,lineHeight:1}}>{v}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* FX bar */}
+        <div style={{display:"flex",gap:7,alignItems:"center",flexWrap:"wrap"}}>
+          <span style={{fontSize:9,color:C.accent,fontWeight:800,letterSpacing:".1em",textTransform:"uppercase"}}>FX</span>
+          {fxLoading
+            ?<span style={{fontSize:10,color:C.t3,fontStyle:"italic"}}>fetching live rates…</span>
+            :(<>
+              {[["¥100",toINR(100,"JPY",fxRates)],["AED 1",toINR(1,"AED",fxRates)],["$1",toINR(1,"USD",fxRates)]].map(([label,val])=>(
+                <span key={label} style={{fontSize:10,fontWeight:700,color:C.t2,background:"rgba(255,255,255,.75)",border:`1px solid ${C.border}`,borderRadius:10,padding:"3px 10px"}}>
+                  {label} = {fmtINR(val)}
+                </span>
+              ))}
+              <span style={{fontSize:9,fontWeight:800,color:fxUpdated?C.accent:C.amber}}>{fxUpdated?"● live":"fallback"}</span>
+            </>)
+          }
+        </div>
+      </div>
+
+      {/* TABS */}
+      <div style={{display:"flex",background:C.card,borderBottom:`1px solid ${C.border}`}}>
+        {[["list","📋 Entries"],["city","🏙 City"],["cat","📊 Category"],["days","📅 Days"]].map(([t,l])=>(
+          <button key={t} className="btn" onClick={()=>setTab(t)}
+            style={{flex:1,padding:"13px 2px",fontSize:10,fontWeight:800,letterSpacing:".03em",color:tab===t?C.tabActive:C.t3,borderBottom:`2.5px solid ${tab===t?C.tabActive:"transparent"}`,background:"none"}}>
+            {l}
+          </button>
+        ))}
+      </div>
+
+      {/* CITY TAB */}
+      {tab==="city"&&(
+        <div style={{padding:18}}>
+          {byCity.filter(c=>c.count>0).map(({city,total,count})=>{
+            const clr=CITY_CLR[city]||{bg:"#f5f5f5",text:"#555",dot:"#888"};
+            const pct=knownTotal>0?Math.min(100,(total/knownTotal)*100):0;
+            return(
+              <div key={city} className="hcard" style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:20,padding:"18px 18px",marginBottom:14,boxShadow:"0 2px 10px rgba(0,0,0,.05)"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+                  <div style={{display:"flex",alignItems:"center",gap:10}}>
+                    <span style={{width:13,height:13,borderRadius:"50%",background:clr.dot,display:"inline-block",flexShrink:0}}/>
+                    <span style={{fontWeight:800,fontSize:16}}>{city}</span>
+                    <span style={{fontSize:12,color:C.t3,fontWeight:600}}>{count} item{count!==1?"s":""}</span>
+                  </div>
+                  <span style={{fontWeight:900,color:C.accent2Dk,fontSize:17}}>{fmtINR(total)}</span>
+                </div>
+                <div style={{background:C.bg,borderRadius:10,height:10,overflow:"hidden"}}>
+                  <div style={{height:"100%",borderRadius:10,background:clr.dot,width:`${pct}%`,transition:"width .7s ease"}}/>
+                </div>
+                <div style={{fontSize:11,color:C.t3,marginTop:6,textAlign:"right",fontWeight:600}}>{pct.toFixed(1)}% of known total</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* CATEGORY TAB */}
+      {tab==="cat"&&(
+        <div style={{padding:18}}>
+          {byCat.filter(c=>c.count>0).map(({cat,i,total,count})=>{
+            const clr=CAT_CLR[i%CAT_CLR.length];
+            const pct=knownTotal>0?Math.min(100,(total/knownTotal)*100):0;
+            return(
+              <div key={cat} className="hcard" style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:20,padding:"18px 18px",marginBottom:14,boxShadow:"0 2px 10px rgba(0,0,0,.05)"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
+                  <div><span style={{fontWeight:800,fontSize:15}}>{CAT_ICO[cat]} {cat}</span><span style={{fontSize:12,color:C.t3,marginLeft:10,fontWeight:600}}>{count} item{count!==1?"s":""}</span></div>
+                  <span style={{fontWeight:900,color:C.accent2Dk,fontSize:17}}>{fmtINR(total)}</span>
+                </div>
+                <div style={{background:C.bg,borderRadius:10,height:10,overflow:"hidden"}}>
+                  <div style={{height:"100%",borderRadius:10,background:clr,width:`${pct}%`,transition:"width .7s ease"}}/>
+                </div>
+                <div style={{fontSize:11,color:C.t3,marginTop:6,textAlign:"right",fontWeight:600}}>{pct.toFixed(1)}%</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* LIST TAB */}
+      {tab==="list"&&(
+        <div>
+          <div style={{padding:"16px 18px",background:C.card,borderBottom:`1px solid ${C.border}`}}>
+            <input placeholder="🔍 Search entries, notes…" value={search} onChange={e=>setSearch(e.target.value)}
+              style={{...inp,borderRadius:24,padding:"10px 18px",marginTop:0,marginBottom:12,fontSize:14}}/>
+            <div className="scroll-x">
+              {["All",...CITIES].map(c=>{
+                const clr=CITY_CLR[c];const active=fCity===c;
+                return(
+                  <button key={c} className="chip" onClick={()=>setFCity(c)}
+                    style={{background:active?(clr?.dot||C.accent2):C.bg,color:active?"#fff":C.t2,border:`1.5px solid ${active?(clr?.dot||C.accent2):C.border}`,borderRadius:22,padding:"5px 15px",fontSize:12,fontWeight:700}}>
+                    {c}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="scroll-x" style={{marginTop:8}}>
+              {["All",...CATS].map(c=>(
+                <button key={c} className="chip" onClick={()=>setFCat(c)}
+                  style={{background:fCat===c?C.accent2Lt:C.bg,color:fCat===c?C.accent2Dk:C.t3,border:`1.5px solid ${fCat===c?C.accent2:C.border}`,borderRadius:22,padding:"5px 14px",fontSize:11,fontWeight:700}}>
+                  {c==="All"?"All":`${CAT_ICO[c]} ${c}`}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div style={{padding:"14px 18px 0"}}>
+            {Object.keys(groups).length===0&&(
+              <div style={{textAlign:"center",color:C.t3,padding:"60px 0",fontSize:15}}>No entries found ✦</div>
+            )}
+            {Object.entries(groups).map(([date,items])=>{
+              const d=new Date(date+"T00:00:00");
+              const dayTotal=items.reduce((s,e)=>s+(toINR(e.amount,e.currency,fxRates)||0),0);
+              return(
+                <div key={date}>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 2px 8px"}}>
+                    <span style={{fontSize:12,color:C.accent2,letterSpacing:".1em",textTransform:"uppercase",fontWeight:800}}>
+                      {d.toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}
+                    </span>
+                    <span style={{fontSize:12,color:C.t3,fontWeight:700}}>{fmtINR(dayTotal)}</span>
+                  </div>
+                  {items.map(e=>{
+                    const inr=toINR(e.amount,e.currency,fxRates);
+                    const isEx=expandId===e.id;
+                    const clr=CITY_CLR[e.city]||{bg:"#f5f5f5",text:"#555",dot:"#888"};
+                    return(
+                      <SwipeRow key={e.id} C={C}
+                        onEdit={()=>openEdit(e)}
+                        onDelete={e.preBooked?null:()=>doDelete(e.id)}>
+                        <div className="hcard" onClick={()=>setExpandId(isEx?null:e.id)}
+                          style={{background:C.card,border:`1.5px solid ${isEx?C.accent2:C.border}`,borderRadius:18,padding:"16px 16px",
+                            boxShadow:isEx?`0 6px 24px rgba(0,0,0,.1)`:"0 2px 8px rgba(0,0,0,.04)"}}>
+                          <div style={{display:"flex",justifyContent:"space-between",gap:12}}>
+                            <div style={{flex:1,minWidth:0}}>
+                              <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
+                                <span style={{background:clr.bg,color:clr.text,border:`1px solid ${clr.dot}40`,borderRadius:22,padding:"3px 11px",fontSize:11,fontWeight:700}}>{e.city}</span>
+                                <span style={{background:C.lavLt,color:C.lav,borderRadius:22,padding:"3px 11px",fontSize:11,fontWeight:700}}>{CAT_ICO[e.category]} {e.subcategory}</span>
+                                {e.status==="pending_cost"&&<span style={{background:C.roseLt,color:C.rose,borderRadius:22,padding:"3px 11px",fontSize:11,fontWeight:700}}>⚠ pending</span>}
+                              </div>
+                              <div style={{fontSize:14,color:C.t1,lineHeight:1.5,fontWeight:600,marginBottom:6}}>{e.description}</div>
+                              <div style={{fontSize:11,color:C.t3,fontWeight:600}}>
+                                🪪 {e.loggedBy||"System"}
+                                {e.paidBy&&e.paidBy!=="Unknown"&&<span style={{marginLeft:10}}>💳 {e.paidBy}</span>}
+                              </div>
+                            </div>
+                            <div style={{textAlign:"right",flexShrink:0,minWidth:70}}>
+                              {e.amount!==null
+                                ?<><div style={{fontSize:16,fontWeight:900,color:C.accent2Dk}}>{fmtINR(inr)}</div>
+                                    {e.currency!=="INR"&&<div style={{fontSize:11,color:C.t3,fontWeight:600,marginTop:2}}>{fmtAmt(e.amount,e.currency)}</div>}</>
+                                :<div style={{fontSize:14,fontWeight:800,color:C.rose}}>₹ ?</div>}
+                            </div>
+                          </div>
+                          {isEx&&(
+                            <div style={{marginTop:14,paddingTop:14,borderTop:`1.5px dashed ${C.border}`,animation:"fadeIn .2s"}}>
+                              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px 16px",marginBottom:12,fontSize:13}}>
+                                {[["PAX",`${e.pax} person${e.pax!==1?"s":""}`],["PAID BY",e.paidBy],["PAYMENT",e.paymentMode],["CURRENCY",`${e.currency}${e.amount?` × ${fxRates[e.currency]?.toFixed(4)||"—"}`:""}`]].map(([l,v])=>(
+                                  <div key={l}><span style={{fontSize:9,color:C.t3,fontWeight:800,letterSpacing:".07em",display:"block",marginBottom:2}}>{l}</span><span style={{color:C.t2,fontWeight:700}}>{v}</span></div>
+                                ))}
+                              </div>
+                              {e.notes&&<div style={{background:C.bg,borderRadius:12,padding:"10px 14px",fontSize:13,color:C.t2,lineHeight:1.6,marginBottom:12,fontWeight:500}}>{e.notes}</div>}
+                              <div style={{fontSize:11,color:C.t3,marginBottom:10,fontStyle:"italic"}}>← swipe to edit or delete</div>
+                              <div style={{display:"flex",gap:8,justifyContent:"flex-end"}}>
+                                <button className="btn" onClick={ev=>{ev.stopPropagation();openEdit(e);}}
+                                  style={{background:C.skyLt,color:C.sky,border:`1px solid ${C.sky}40`,borderRadius:10,padding:"8px 18px",fontSize:12,fontWeight:800}}>✏ Edit</button>
+                                {!e.preBooked&&(
+                                  <button className="btn" onClick={ev=>{ev.stopPropagation();doDelete(e.id);}}
+                                    style={{background:C.roseLt,color:C.rose,border:`1px solid ${C.rose}40`,borderRadius:10,padding:"8px 18px",fontSize:12,fontWeight:800}}>🗑 Delete</button>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </SwipeRow>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* DAYS TAB */}
+      {tab==="days"&&(
+        <div style={{padding:"18px 18px 0"}}>
+          {(()=>{
+            const start=new Date("2026-03-31"),end=new Date("2026-04-15"),now=new Date();
+            const pct=Math.max(0,Math.min(100,((now-start)/(end-start))*100));
+            const dayNum=Math.floor((now-start)/86400000)+1;
+            if(now<start||now>end)return null;
+            return(
+              <div style={{background:C.card,border:`1px solid ${C.border}`,borderRadius:20,padding:"16px 18px",marginBottom:18}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+                  <span style={{fontSize:12,fontWeight:800,color:C.accent}}>🗓 Trip in progress</span>
+                  <span style={{fontSize:12,color:C.t3,fontWeight:600}}>Day {dayNum} of 16</span>
+                </div>
+                <div style={{background:C.bg,borderRadius:10,height:10,overflow:"hidden"}}>
+                  <div style={{height:"100%",borderRadius:10,background:`linear-gradient(90deg,${C.accent},${C.accent2})`,width:`${pct}%`,transition:"width 1s"}}/>
+                </div>
+              </div>
+            );
+          })()}
+
+          {TRIP_DAYS.map((day,idx)=>{
+            const dayExps=exps.filter(e=>e.date===day.date);
+            const dayTotal=dayExps.reduce((s,e)=>s+(toINR(e.amount,e.currency,fxRates)||0),0);
+            const hasPending=dayExps.some(e=>e.status==="pending_cost");
+            const clr=CITY_CLR[day.city]||CITY_CLR.Transit;
+            const isToday=day.date===today;
+            const isPast=day.date<today;
+            const isExpanded=expandDay===day.date;
+
+            return(
+              <div key={day.date} style={{position:"relative",paddingLeft:26,marginBottom:0}}>
+                {idx<TRIP_DAYS.length-1&&(
+                  <div style={{position:"absolute",left:6,top:28,bottom:-6,width:2,background:clr.dot+"28"}}/>
+                )}
+                <div style={{position:"absolute",left:0,top:19,width:14,height:14,borderRadius:"50%",
+                  background:isToday?clr.dot:isPast?clr.dot+"70":"#fff",
+                  border:`2.5px solid ${isToday?clr.dot:clr.dot+"80"}`,
+                  boxShadow:isToday?`0 0 0 5px ${clr.dot}22`:"none",zIndex:1}}/>
+
+                <div className="hcard" onClick={()=>{setExpandDay(isExpanded?null:day.date);setExpandExpId(null);}}
+                  style={{background:C.card,border:`1.5px solid ${isExpanded?clr.dot:isToday?clr.dot+"55":C.border}`,
+                    borderRadius:20,padding:"14px 16px",marginBottom:12,
+                    boxShadow:isExpanded?`0 8px 28px ${clr.dot}20`:isToday?`0 4px 16px ${clr.dot}18`:"0 2px 8px rgba(0,0,0,.04)",
+                    opacity:isPast&&!isToday?0.70:1}}>
+
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+                    <div>
+                      {isToday&&<div style={{fontSize:9,color:clr.dot,fontWeight:900,letterSpacing:".15em",marginBottom:4}}>● TODAY</div>}
+                      <div style={{fontSize:12,fontWeight:800,color:clr.text}}>
+                        {new Date(day.date+"T00:00:00").toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short"})}
+                      </div>
+                      <div style={{fontSize:14,fontWeight:700,color:C.t1,marginTop:3}}>{day.label}</div>
+                    </div>
+                    <div style={{textAlign:"right",display:"flex",flexDirection:"column",alignItems:"flex-end",gap:5}}>
+                      <div style={{display:"flex",alignItems:"center",gap:7}}>
+                        <span style={{background:clr.bg,color:clr.text,border:`1px solid ${clr.dot}40`,borderRadius:22,padding:"3px 12px",fontSize:11,fontWeight:700}}>{day.city}</span>
+                        <span style={{fontSize:14,color:C.t3,fontWeight:700}}>{isExpanded?"▲":"▼"}</span>
+                      </div>
+                      {dayTotal>0&&<div style={{fontSize:15,fontWeight:900,color:C.accent2Dk}}>{fmtINR(dayTotal)}</div>}
+                      {hasPending&&<div style={{fontSize:11,color:C.rose,fontWeight:700}}>⚠ pending</div>}
+                      {dayExps.length>0&&!isExpanded&&<div style={{fontSize:11,color:C.t3,fontWeight:600}}>{dayExps.length} expense{dayExps.length!==1?"s":""}</div>}
+                    </div>
+                  </div>
+
+                  {isExpanded&&(
+                    <div style={{marginTop:14,animation:"fadeIn .18s"}} onClick={e=>e.stopPropagation()}>
+                      {day.events.length>0&&(
+                        <div style={{borderTop:`1px solid ${C.border}`,paddingTop:12,marginBottom:12}}>
+                          <div style={{fontSize:9,color:C.t3,fontWeight:800,letterSpacing:".1em",marginBottom:8}}>SCHEDULE</div>
+                          {day.events.map((ev,i)=>(
+                            <div key={i} style={{fontSize:13,color:C.t2,fontWeight:600,marginBottom:5,lineHeight:1.5}}>{ev}</div>
+                          ))}
+                        </div>
+                      )}
+
+                      <div style={{borderTop:`1px solid ${C.border}`,paddingTop:12}}>
+                        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+                          <div style={{fontSize:9,color:C.t3,fontWeight:800,letterSpacing:".1em"}}>EXPENSES{dayExps.length>0?` · ${dayExps.length}`:""}</div>
+                          <button className="btn" onClick={()=>openAdd(day.date,day.city)}
+                            style={{background:C.accent2Lt,color:C.accent2Dk,border:`1px solid ${C.accent2}50`,borderRadius:22,padding:"5px 14px",fontSize:12,fontWeight:800}}>
+                            + Add
+                          </button>
+                        </div>
+
+                        {dayExps.length===0&&(
+                          <div style={{fontSize:13,color:C.t3,fontStyle:"italic",paddingBottom:6}}>No expenses logged for this day</div>
+                        )}
+
+                        {dayExps.map(e=>{
+                          const inr=toINR(e.amount,e.currency,fxRates);
+                          const isExpEx=expandExpId===e.id;
+                          return(
+                            <div key={e.id}>
+                              <div className="exp-row" onClick={()=>setExpandExpId(isExpEx?null:e.id)}
+                                style={{display:"flex",justifyContent:"space-between",alignItems:"center",
+                                  background:isExpEx?C.accent2Lt:C.bg,borderRadius:13,padding:"10px 13px",marginBottom:5,
+                                  border:`1px solid ${isExpEx?C.accent2+"50":C.border}`}}>
+                                <div style={{flex:1,minWidth:0}}>
+                                  <div style={{fontSize:13,color:C.t1,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
+                                    {CAT_ICO[e.category]} {e.description}
+                                  </div>
+                                  <div style={{fontSize:11,color:C.t3,fontWeight:600,marginTop:2}}>
+                                    {e.subcategory}
+                                    {e.status==="pending_cost"&&<span style={{color:C.rose,marginLeft:7}}>⚠ cost pending</span>}
+                                  </div>
+                                </div>
+                                <div style={{textAlign:"right",flexShrink:0,marginLeft:12}}>
+                                  {e.amount!=null
+                                    ?<><div style={{fontSize:14,fontWeight:900,color:C.accent2Dk}}>{fmtINR(inr)}</div>
+                                        {e.currency!=="INR"&&<div style={{fontSize:10,color:C.t3,fontWeight:600}}>{fmtAmt(e.amount,e.currency)}</div>}</>
+                                    :<div style={{fontSize:13,fontWeight:800,color:C.rose}}>₹ ?</div>}
+                                </div>
+                              </div>
+
+                              {isExpEx&&(
+                                <div style={{background:C.card,border:`1px solid ${C.accent2}28`,borderRadius:14,padding:"14px 15px",marginBottom:8,marginTop:-2,animation:"fadeIn .15s"}}>
+                                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px 18px",marginBottom:12,fontSize:13}}>
+                                    {[["PAX",`${e.pax} person${e.pax!==1?"s":""}`],["PAID BY",e.paidBy||"Unknown"],["PAYMENT",e.paymentMode||"Unknown"],["LOGGED BY",e.loggedBy||"System"]].map(([l,v])=>(
+                                      <div key={l}><span style={{fontSize:9,color:C.t3,fontWeight:800,letterSpacing:".07em",display:"block",marginBottom:2}}>{l}</span><span style={{color:C.t1,fontWeight:700}}>{v}</span></div>
+                                    ))}
+                                  </div>
+                                  {e.currency!=="INR"&&e.amount!=null&&(
+                                    <div style={{background:C.accent2Lt,borderRadius:10,padding:"7px 12px",fontSize:12,color:C.accent2Dk,fontWeight:700,marginBottom:10}}>
+                                      {fmtAmt(e.amount,e.currency)} × {fxRates[e.currency]?.toFixed(4)} = {fmtINR(inr)}
+                                      <span style={{marginLeft:8,fontSize:10,fontWeight:600,color:C.accent}}>{fxUpdated?"live rate":"fallback"}</span>
+                                    </div>
+                                  )}
+                                  {e.notes&&<div style={{background:C.bg,borderRadius:11,padding:"9px 12px",fontSize:12,color:C.t2,lineHeight:1.6,marginBottom:12,fontWeight:500}}>{e.notes}</div>}
+                                  <div style={{display:"flex",gap:8}}>
+                                    <button className="btn" onClick={()=>openEdit(e)}
+                                      style={{flex:1,background:C.skyLt,color:C.sky,border:`1px solid ${C.sky}40`,borderRadius:11,padding:"9px",fontSize:12,fontWeight:800}}>✏ Edit</button>
+                                    {!e.preBooked&&(
+                                      <button className="btn" onClick={()=>doDelete(e.id)}
+                                        style={{flex:1,background:C.roseLt,color:C.rose,border:`1px solid ${C.rose}40`,borderRadius:11,padding:"9px",fontSize:12,fontWeight:800}}>🗑 Delete</button>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* FAB */}
+      {!showForm&&!showPick&&!showTheme&&(
+        <button className="btn" onClick={()=>openAdd()}
+          style={{position:"fixed",bottom:30,right:22,width:62,height:62,borderRadius:"50%",
+            background:`linear-gradient(135deg,${C.accent2},${C.accent})`,color:"#fff",fontSize:32,fontWeight:700,
+            boxShadow:`0 8px 28px ${C.accent2}66`,display:"flex",alignItems:"center",justifyContent:"center",zIndex:100}}>
+          +
+        </button>
+      )}
+
+      {/* EXPENSE FORM */}
+      {showForm&&(
+        <div style={{position:"fixed",inset:0,background:C.dark?"rgba(10,8,6,.82)":"rgba(250,248,243,.78)",backdropFilter:"blur(8px)",zIndex:200,display:"flex",alignItems:"flex-end"}}>
+          <div style={{background:C.card,borderRadius:"26px 26px 0 0",width:"100%",maxWidth:480,margin:"0 auto",maxHeight:"92vh",overflowY:"auto",padding:"26px 20px 56px",boxShadow:"0 -12px 48px rgba(0,0,0,.14)",animation:"slideUp .25s ease"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:24}}>
+              <div style={{fontFamily:"Playfair Display,serif",fontSize:22,color:C.t1}}>{editId?"Edit Entry":"New Expense"}</div>
+              <button className="btn" onClick={()=>setShowForm(false)}
+                style={{background:C.bg,border:`1px solid ${C.border}`,borderRadius:"50%",width:36,height:36,fontSize:18,color:C.t3}}>✕</button>
+            </div>
+
+            <label style={lbl}>Date *</label>
+            <input type="date" value={form.date} onChange={e=>setField("date",e.target.value)} style={inp}/>
+
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              <div><label style={lbl}>Category</label>
+                <select value={form.category} onChange={e=>setField("category",e.target.value)} style={inp}>
+                  {CATS.map(c=><option key={c}>{c}</option>)}
+                </select>
+              </div>
+              <div><label style={lbl}>Sub-category</label>
+                <select value={form.subcategory} onChange={e=>setField("subcategory",e.target.value)} style={inp}>
+                  {(SUB[form.category]||[]).map(s=><option key={s}>{s}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <label style={lbl}>Description *</label>
+            <input type="text" value={form.description} onChange={e=>setField("description",e.target.value)}
+              placeholder="e.g. Ramen at Ichiran · Dotonbori, Osaka" style={inp}/>
+
+            <div style={{display:"grid",gridTemplateColumns:"2fr 1fr",gap:12}}>
+              <div><label style={lbl}>Amount (blank if unknown)</label>
+                <input type="number" value={form.amount} onChange={e=>setField("amount",e.target.value)} placeholder="0.00" step="0.01" style={inp}/>
+              </div>
+              <div><label style={lbl}>Currency</label>
+                <select value={form.currency} onChange={e=>setField("currency",e.target.value)} style={inp}>
+                  {CURRENCIES.map(c=><option key={c}>{c}</option>)}
+                </select>
+              </div>
+            </div>
+
+            {form.amount&&form.currency!=="INR"&&(
+              <div style={{background:C.accent2Lt,borderRadius:12,padding:"10px 14px",fontSize:13,color:C.accent2Dk,fontWeight:700,marginTop:10}}>
+                ≈ {fmtINR(toINR(Number(form.amount),form.currency,fxRates))} at {fxUpdated?"live rate":"fallback rate"}
+              </div>
+            )}
+
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              <div><label style={lbl}>City / Leg</label>
+                <select value={form.city} onChange={e=>setField("city",e.target.value)} style={inp}>
+                  {CITIES.map(c=><option key={c}>{c}</option>)}
+                </select>
+              </div>
+              <div><label style={lbl}>Pax</label>
+                <select value={form.pax} onChange={e=>setField("pax",e.target.value)} style={inp}>
+                  {[1,2,3,4].map(n=><option key={n}>{n}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+              <div><label style={lbl}>Paid by</label>
+                <select value={form.paidBy} onChange={e=>setField("paidBy",e.target.value)} style={inp}>
+                  {PAYERS.map(p=><option key={p}>{p}</option>)}
+                </select>
+              </div>
+              <div><label style={lbl}>Payment mode</label>
+                <select value={form.paymentMode} onChange={e=>setField("paymentMode",e.target.value)} style={inp}>
+                  {PAY_MODES.map(p=><option key={p}>{p}</option>)}
+                </select>
+              </div>
+            </div>
+
+            <label style={lbl}>Notes (optional)</label>
+            <textarea rows={3} value={form.notes} onChange={e=>setField("notes",e.target.value)}
+              placeholder="Booking ID, PNR, timings, reference numbers…"
+              style={{...inp,resize:"vertical",lineHeight:1.6}}/>
+
+            <div style={{background:C.accent2Lt,borderRadius:14,padding:"11px 16px",fontSize:13,color:C.accent2Dk,fontWeight:700,marginTop:16}}>
+              🪪 Logging as <strong>{user||"Unknown"}</strong>
+            </div>
+
+            <button className="btn" onClick={submit} disabled={saving}
+              style={{background:`linear-gradient(135deg,${C.accent2},${C.accent})`,color:"#fff",borderRadius:16,padding:"16px",fontSize:16,fontWeight:900,
+                boxShadow:`0 8px 24px ${C.accent2}55`,opacity:saving?.7:1,width:"100%",marginTop:16,cursor:saving?"not-allowed":"pointer"}}>
+              {saving?"Saving…":editId?"Update Entry ✦":"Add to Ledger ✦"}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const root=ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App/>);
+</script>
+</body>
+</html>
