@@ -91,7 +91,11 @@ title: CCC Library
 
         {% if f.name != "index.html" %}
 
-          <li>{{ f.path | relative_url }}{{ f.name }}</a></li>
+         <li>
+
+              {{ f.path | relative_url }}{{ f.name }}</a>
+
+        </li>
 
         {% endif %}
 
