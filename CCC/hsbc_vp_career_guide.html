@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSBC VP Liquidity Ops — Career Playbook | Priyanuj Deka</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f5f0e8;
+    --red: #c0392b;
+    --gold: #b8860b;
+    --accent: #1a3a5c;
+    --muted: #6b6b7a;
+    --border: #d4c9b0;
+    --green: #1e6b45;
+    --orange: #d35400;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--accent);
+    color: white;
+    padding: 48px 40px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border: 60px solid rgba(255,255,255,0.05);
+    border-radius: 50%;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--red), var(--accent));
+  }
+  .header-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  header h1 span { color: var(--gold); }
+  .header-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* FIT SCORE BANNER */
+  .fit-banner {
+    background: var(--ink);
+    color: white;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .fit-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+  }
+  .fit-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .fit-score sub { font-size: 18px; color: rgba(255,255,255,0.3); }
+  .fit-verdict {
+    flex: 1;
+    min-width: 200px;
+  }
+  .fit-verdict strong { color: var(--gold); display: block; font-size: 14px; margin-bottom: 2px; }
+  .fit-verdict p { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.4; }
+  .fit-bars {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .fit-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+  }
+  .pill-green { background: #1e6b45; color: #a8f0c6; }
+  .pill-amber { background: #7a4a00; color: #ffd27a; }
+  .pill-red { background: #6b0f0f; color: #ffaaaa; }
+
+  /* NAV TABS */
+  .nav-tabs {
+    display: flex;
+    overflow-x: auto;
+    background: white;
+    border-bottom: 2px solid var(--border);
+    gap: 0;
+    padding: 0 16px;
+  }
+  .tab-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--muted);
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    margin-bottom: -2px;
+  }
+  .tab-btn:hover { color: var(--accent); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+
+  /* CONTENT */
+  .tab-panel { display: none; padding: 32px 24px; max-width: 900px; margin: 0 auto; }
+  .tab-panel.active { display: block; }
+
+  /* SECTION HEADERS */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    margin-top: 28px;
+  }
+  .section-title:first-child { margin-top: 0; }
+  .section-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  /* CARDS */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .card-accent-left {
+    border-left: 4px solid var(--accent);
+  }
+  .card-accent-gold {
+    border-left: 4px solid var(--gold);
+  }
+  .card-accent-red {
+    border-left: 4px solid var(--red);
+  }
+  .card-accent-green {
+    border-left: 4px solid var(--green);
+  }
+  .card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .card p, .card li {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.6;
+  }
+  .card ul { padding-left: 16px; }
+  .card li { margin-bottom: 4px; }
+
+  /* BADGE */
+  .badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .badge-blue { background: #dde8f5; color: var(--accent); }
+  .badge-gold { background: #fdf3d7; color: var(--gold); }
+  .badge-red { background: #fde8e8; color: var(--red); }
+  .badge-green { background: #ddf5ea; color: var(--green); }
+  .badge-orange { background: #fde8d5; color: var(--orange); }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width: 600px){ .grid-2 { grid-template-columns: 1fr; } }
+
+  /* PROGRESS BAR */
+  .progress-row {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  }
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    width: 160px;
+    flex-shrink: 0;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+  .fill-green { background: var(--green); }
+  .fill-amber { background: var(--gold); }
+  .fill-red { background: var(--red); }
+  .progress-pct {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    width: 30px;
+    text-align: right;
+    color: var(--ink);
+  }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: var(--border);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -24px; top: 5px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    border: 2px solid white;
+  }
+  .dot-now { background: var(--red); }
+  .dot-3m { background: var(--gold); }
+  .dot-6m { background: var(--accent); }
+  .dot-12m { background: var(--green); }
+  .timeline-period {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .timeline-item h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .timeline-item p { font-size: 12px; color: #444; }
+
+  /* VOCAB TABLE */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  @media(max-width: 600px){ .vocab-grid { grid-template-columns: 1fr; } }
+  .vocab-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+  .vocab-term {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-bottom: 3px;
+  }
+  .vocab-def {
+    font-size: 12px;
+    color: #444;
+    line-height: 1.45;
+  }
+
+  /* AI PROMPT BOX */
+  .ai-box {
+    background: #0a0a1a;
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #b0c4de;
+    line-height: 1.6;
+    position: relative;
+  }
+  .ai-box::before {
+    content: '⚡ AI PROMPT';
+    display: block;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .ai-box em { color: #7fc4ff; font-style: normal; }
+
+  /* INTERVIEW TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  th {
+    background: var(--accent);
+    color: white;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 10px 12px;
+    text-align: left;
+  }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: #333;
+    line-height: 1.5;
+  }
+  tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+
+  /* DISCLAIMER */
+  .note-box {
+    background: #fffbeb;
+    border: 1px solid #f0d070;
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #7a5c00;
+    margin-top: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+  .note-box strong { display: block; margin-bottom: 4px; }
+
+  footer {
+    text-align: center;
+    padding: 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">Career Intelligence Brief — Confidential</div>
+  <h1>HSBC <span>VP, Liquidity Operations</span><br>CIB COO — Career Playbook</h1>
+  <div class="header-sub">Prepared for Priyanuj Deka &nbsp;|&nbsp; AGM Dues Collections, Sobha Realty &nbsp;|&nbsp; March 2026</div>
+</header>
+
+<div class="fit-banner">
+  <div>
+    <div class="fit-label">Current Fit Score</div>
+    <div class="fit-score">61<sub>/100</sub></div>
+  </div>
+  <div class="fit-verdict">
+    <strong>Viable Candidate — Significant Bridge Work Required</strong>
+    <p>Strong operational DNA and scale proof points. Critical gaps in banking domain vocabulary, liquidity product knowledge, and regulatory frameworks. Addressable to ~80/100 with 6–9 months targeted preparation.</p>
+  </div>
+  <div class="fit-bars">
+    <span class="fit-pill pill-green">Scale ✓</span>
+    <span class="fit-pill pill-green">Multi-geo Ops ✓</span>
+    <span class="fit-pill pill-green">Incident Mgmt ✓</span>
+    <span class="fit-pill pill-amber">UAT/Deployment △</span>
+    <span class="fit-pill pill-amber">Stakeholder Forums △</span>
+    <span class="fit-pill pill-red">Liquidity Products ✗</span>
+    <span class="fit-pill pill-red">Banking Regulation ✗</span>
+  </div>
+</div>
+
+<div class="nav-tabs">
+  <button class="tab-btn active" onclick="showTab('decode')">Role Decode</button>
+  <button class="tab-btn" onclick="showTab('fit')">Fit Analysis</button>
+  <button class="tab-btn" onclick="showTab('vocab')">Domain Vocab</button>
+  <button class="tab-btn" onclick="showTab('roadmap')">90-Day Roadmap</button>
+  <button class="tab-btn" onclick="showTab('ai')">AI Leverage</button>
+  <button class="tab-btn" onclick="showTab('interview')">Interview Prep</button>
+  <button class="tab-btn" onclick="showTab('narrative')">Your Narrative</button>
+</div>
+
+<!-- TAB 1: ROLE DECODE -->
+<div class="tab-panel active" id="tab-decode">
+  <div class="section-title">What This Role Really Is</div>
+  <div class="section-subtitle">STRIPPING AWAY THE BANKING JARGON</div>
+
+  <div class="card card-accent-gold">
+    <h3>The Plain-English Summary</h3>
+    <p>HSBC runs a global cash and liquidity management engine for corporate clients. This VP is the <strong>operational nerve centre</strong> — responsible for keeping that engine running 24/7 across multiple countries, fixing it when it breaks (incident management), deploying it to new countries (UAT/PVT), and governing the entire workflow. Think of it as a <strong>Global Program Director for a complex B2B financial product</strong> that spans 15+ countries, multiple product lines, and dozens of internal and external stakeholders.</p>
+  </div>
+
+  <div class="section-title">Five Core Job Functions (Decoded)</div>
+  <div class="section-subtitle">WHAT YOU WILL ACTUALLY DO EVERY DAY</div>
+
+  <div class="card card-accent-left">
+    <h3>1. Keep the Machine Running — Production BAU</h3>
+    <span class="badge badge-blue">Incident Mgmt</span><span class="badge badge-blue">SLA Governance</span><span class="badge badge-blue">Query Resolution</span>
+    <p style="margin-top:8px">You manage live liquidity transactions for corporate clients globally. When something breaks (wrong interest rework, failed cash concentration, system defect), you are the escalation owner. You drive root cause analysis and fix timelines. <em>This maps directly to your PR rejection rate governance intervention and PCC TAT governance work.</em></p>
+  </div>
+
+  <div class="card card-accent-left">
+    <h3>2. Launch Into New Markets — Country Deployment (UAT/PVT)</h3>
+    <span class="badge badge-gold">UAT Leadership</span><span class="badge badge-gold">Country Expansion</span><span class="badge badge-gold">Go-Live Readiness</span>
+    <p style="margin-top:8px">Each time HSBC launches liquidity products in a new country, this VP runs User Acceptance Testing and Production Verification Testing, trains local teams, and signs off go-live. <em>This parallels your experience launching collections operations across Dubai and India geographies — the governance and readiness framework is identical.</em></p>
+  </div>
+
+  <div class="card card-accent-left">
+    <h3>3. Manage the Information Layer — MI & Reporting</h3>
+    <span class="badge badge-green">MIS Architecture</span><span class="badge badge-green">KPI Dashboards</span><span class="badge badge-green">Senior Reporting</span>
+    <p style="margin-top:8px">You produce Management Information for senior stakeholders across HTS, GPS, and regional payments teams. <em>Your 70+ report intelligence ecosystem across two geographies — 18 personally built — is a direct proof point. Reframe your Salesforce dashboard architecture as an MI framework.</em></p>
+  </div>
+
+  <div class="card card-accent-left">
+    <h3>4. Govern the Ecosystem — Control, Audit & Risk</h3>
+    <span class="badge badge-red">Control Framework</span><span class="badge badge-red">Audit SPOC</span><span class="badge badge-red">Compliance Mgmt</span>
+    <p style="margin-top:8px">You embed controls, manage audit outcomes, and ensure compliance with payments risk frameworks. <em>Your 4+ consecutive years as Named Audit SPOC and 6 MD-approved process documents are your strongest direct matches here.</em></p>
+  </div>
+
+  <div class="card card-accent-left">
+    <h3>5. Build the Team — Talent, Training & Culture</h3>
+    <span class="badge badge-blue">People Leadership</span><span class="badge badge-blue">Cross-geo Teams</span><span class="badge badge-blue">Capability Building</span>
+    <p style="margin-top:8px">You lead a multi-location operations team, build capability before go-live, and develop successors. <em>Your 77-person team across Dubai and India, with structured sub-teams under four managers, demonstrates this at matching scale.</em></p>
+  </div>
+
+  <div class="note-box">
+    <strong>⚠ Critical Context</strong>
+    This role sits within HSBC's Global Payments Solutions (GPS) division — one of their most profitable businesses. The "CIB COO" framing signals this is a Chief Operating Officer function for the Corporate & Institutional Banking division, not a product or relationship role. It rewards operational excellence, risk discipline, and execution speed over sales or revenue generation. This plays to your natural High-C, High-S DISC profile.
+  </div>
+</div>
+
+<!-- TAB 2: FIT ANALYSIS -->
+<div class="tab-panel" id="tab-fit">
+  <div class="section-title">Your Fit — Dimension by Dimension</div>
+  <div class="section-subtitle">HONEST GAP ASSESSMENT WITH SOURCE ATTRIBUTION</div>
+
+  <div class="progress-row"><span class="progress-label">Scale of Operations</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:90%"></div></div><span class="progress-pct">90%</span></div>
+  <div class="progress-row"><span class="progress-label">Multi-geo Team Mgmt</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:85%"></div></div><span class="progress-pct">85%</span></div>
+  <div class="progress-row"><span class="progress-label">Incident / Escalation Mgmt</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:80%"></div></div><span class="progress-pct">80%</span></div>
+  <div class="progress-row"><span class="progress-label">MI & Reporting Architecture</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:82%"></div></div><span class="progress-pct">82%</span></div>
+  <div class="progress-row"><span class="progress-label">Audit & Control Framework</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:78%"></div></div><span class="progress-pct">78%</span></div>
+  <div class="progress-row"><span class="progress-label">Process Governance Docs</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:85%"></div></div><span class="progress-pct">85%</span></div>
+  <div class="progress-row"><span class="progress-label">UAT / Deployment Leadership</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:45%"></div></div><span class="progress-pct">45%</span></div>
+  <div class="progress-row"><span class="progress-label">Vendor Management</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:40%"></div></div><span class="progress-pct">40%</span></div>
+  <div class="progress-row"><span class="progress-label">Liquidity Product Knowledge</span><div class="progress-bar"><div class="progress-fill fill-red" style="width:20%"></div></div><span class="progress-pct">20%</span></div>
+  <div class="progress-row"><span class="progress-label">Banking Reg / Compliance</span><div class="progress-bar"><div class="progress-fill fill-red" style="width:15%"></div></div><span class="progress-pct">15%</span></div>
+  <div class="progress-row"><span class="progress-label">Payments Systems (Core)</span><div class="progress-bar"><div class="progress-fill fill-red" style="width:10%"></div></div><span class="progress-pct">10%</span></div>
+  <div class="progress-row"><span class="progress-label">Senior Forum Visibility (DISC-I)</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:50%"></div></div><span class="progress-pct">50%</span></div>
+
+  <div class="section-title" style="margin-top:28px">Where You Are Strongest</div>
+  <div class="section-subtitle">PROOF POINTS THAT MAP DIRECTLY</div>
+
+  <div class="grid-2">
+    <div class="card card-accent-green">
+      <h3>Scaled Operations at Pace</h3>
+      <p>AED 867M → AED 13B in collections (14.9x) while cutting delinquency 74%. HSBC needs someone who has run an operation at scale under pressure. This is your anchor.</p>
+    </div>
+    <div class="card card-accent-green">
+      <h3>Governance Documentation</h3>
+      <p>6 MD-approved process documents + 7 IOM templates authored. HSBC explicitly requires "standard procedures, quality checking model, operational framework" — you have built these from scratch.</p>
+    </div>
+    <div class="card card-accent-green">
+      <h3>Named Audit SPOC (4+ yrs)</h3>
+      <p>HSBC requires "audit readiness, satisfactory findings, no overdue high-risk points." Four consecutive years as the audit SPOC at Sobha is a rare, concrete proof point.</p>
+    </div>
+    <div class="card card-accent-green">
+      <h3>77-Person Cross-geo Team</h3>
+      <p>Dubai + India team structure with 4 sub-team managers mirrors exactly the CIB COO model of centralized ops with in-country and offshore nodes.</p>
+    </div>
+  </div>
+
+  <div class="section-title">Your Critical Gaps — And How to Close Them</div>
+  <div class="section-subtitle">ADDRESSABLE IN 6–9 MONTHS</div>
+
+  <div class="card card-accent-red">
+    <h3>Gap 1: Liquidity Product Knowledge (GLE, CBCC, GDP, LIS)</h3>
+    <p>You need to understand <em>what</em> Global Liquidity Engine, Cross Border Cash Concentration, and Global Deposit Pricing actually do — functionally, not technically. HSBC won't expect a non-HSBC candidate to know their proprietary systems, but they will test conceptual fluency. <strong>Fix: 4–6 weeks of self-study using free resources (HSBC GPS product pages, Temenos documentation, SWIFT cash management papers).</strong></p>
+  </div>
+
+  <div class="card card-accent-red">
+    <h3>Gap 2: Banking Regulatory Vocabulary (Payments Risk Framework)</h3>
+    <p>Terms like "Group Compliance Policy," "Three Lines of Defence," "Payments Risk Framework," "RCSA," and "KRIs" appear throughout. Some you already know from other research. All need to be conversational. <strong>Fix: CAMS overview (3 weeks) + ACT Diploma in Treasury materials (free preview chapters).</strong></p>
+  </div>
+
+  <div class="card card-accent-amber" style="border-left:4px solid var(--gold)">
+    <h3>Gap 3: UAT/PVT Deployment Leadership</h3>
+    <p>Your closest analogy is the dual-geography operations rollout. You need to reframe: every time Sobha launched a new collection milestone or policy across Dubai and India, that was a deployment with readiness testing, training, and go-live sign-off. <strong>Fix: Build one case study from your India operations setup as an "operational deployment" narrative.</strong></p>
+  </div>
+
+  <div class="card card-accent-amber" style="border-left:4px solid var(--gold)">
+    <h3>Gap 4: DISC Low-I / Senior Forum Visibility</h3>
+    <p>The role requires chairing steering committees, presenting to HSBC's GPS Exco, and managing conflict in escalation settings. Your High-C/High-S profile makes you excellent in substance but you need deliberate practice in commanding the room. <strong>Fix: Prepare one structured "conflict resolution via data" story for the interview and use it early. Show you can hold a position under pressure.</strong></p>
+  </div>
+
+  <div class="note-box">
+    <strong>⚡ Strategic Verdict</strong>
+    This role is a lateral-to-upward move into a larger, more complex operational ecosystem. Your collections background is NOT a mismatch — cash management and collections both sit within treasury operations and share the same risk governance, MI, and customer outcome logic. The bridge is vocabulary and product fluency, not capability.
+  </div>
+</div>
+
+<!-- TAB 3: DOMAIN VOCAB -->
+<div class="tab-panel" id="tab-vocab">
+  <div class="section-title">The HSBC Liquidity Vocabulary You Must Own</div>
+  <div class="section-subtitle">LEARN THESE — THEN USE THEM NATURALLY IN INTERVIEW</div>
+
+  <div class="vocab-grid">
+    <div class="vocab-card">
+      <div class="vocab-term">Global Liquidity Engine (GLE)</div>
+      <div class="vocab-def">HSBC's core platform that automatically sweeps client cash across accounts to optimize liquidity positions globally in real time.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Cross Border Cash Concentration (CBCC)</div>
+      <div class="vocab-def">Moves client cash across country borders into a notional or physical pool to maximize yield and minimize idle cash.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Notional Pooling</div>
+      <div class="vocab-def">Client accounts are linked mathematically — interest calculated on net position, without physically moving funds. Used where cross-border movement is restricted.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Physical Cash Concentration</div>
+      <div class="vocab-def">Actual fund sweeping from subsidiary accounts to a master account. More operationally intensive; requires tax and regulatory sign-off per country.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Global Deposit Pricing (GDP)</div>
+      <div class="vocab-def">HSBC's framework for pricing client deposits at competitive rates based on market conditions, client tier, and tenor — a key retention and revenue tool.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Production Verification Testing (PVT)</div>
+      <div class="vocab-def">Post-UAT validation in the live production environment before a country or product goes fully live. Different from UAT — this is "does it work in the real system?"</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Payments Risk Framework</div>
+      <div class="vocab-def">HSBC's internal control architecture for payments operations — covers operational risk, fraud controls, RCSA, KRI thresholds, and escalation protocols.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">RCSA (Risk & Control Self-Assessment)</div>
+      <div class="vocab-def">Periodic process where operations teams assess their own risks and rate the effectiveness of existing controls. Standard in banking Three Lines of Defence.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">KRI (Key Risk Indicator)</div>
+      <div class="vocab-def">Forward-looking metric that signals elevated operational risk before an incident occurs. Similar in logic to your delinquency rate early-warning signals.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Three Lines of Defence</div>
+      <div class="vocab-def">1st Line: Operations (you). 2nd Line: Risk/Compliance oversight. 3rd Line: Internal Audit. Your role owns the 1st Line controls.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Operational Readiness Review</div>
+      <div class="vocab-def">Pre-launch assessment confirming systems, people, processes, and documentation are ready before country go-live. You sign off as VP.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Interest Rework</div>
+      <div class="vocab-def">Correcting incorrectly calculated or applied interest on client accounts after a system error or rate update — a high-sensitivity ops task affecting client P&L.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">GPS / GTS (Global Payment Solutions / Global Transaction Services)</div>
+      <div class="vocab-def">The HSBC business division this role sits within. Serves multinational corporate clients with cash, payments, liquidity, and trade finance solutions.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">HTS (HSBC Technology Services)</div>
+      <div class="vocab-def">HSBC's internal technology function — your key IT counterpart for system defect fixes, application releases, and platform deployments.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">MI (Management Information)</div>
+      <div class="vocab-def">Structured reporting for leadership decision-making. In this role, you produce MI on operational performance, SLA adherence, incident volumes, and deployment progress.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">SLA / KPI Governance</div>
+      <div class="vocab-def">Service Level Agreements with internal and external clients — e.g., query resolution TAT, incident closure time, go-live milestone adherence. You own the tracking and remediation.</div>
+    </div>
+  </div>
+
+  <div class="note-box" style="margin-top:20px">
+    <strong>📘 Study Resources</strong>
+    Free: HSBC GPS product pages (hsbc.com/liquidity), ACT (Association of Corporate Treasurers) knowledge centre, SWIFT Institute cash management papers, BIS working papers on liquidity management, Kyriba and Finastra product documentation (GLE-like systems).
+  </div>
+</div>
+
+<!-- TAB 4: ROADMAP -->
+<div class="tab-panel" id="tab-roadmap">
+  <div class="section-title">Your 9-Month Preparation Roadmap</div>
+  <div class="section-subtitle">SEQUENCED ACTIONS — IMMEDIATE TO INTERVIEW-READY</div>
+
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-now"></div>
+      <div class="timeline-period">WEEKS 1–3 — FOUNDATION</div>
+      <h4>Build Liquidity Domain Literacy</h4>
+      <p>Spend 45 minutes daily on HSBC GPS product materials, ACT Diploma previews, and SWIFT cash management knowledge base. Goal: speak fluently about pooling, sweeping, and concentration structures. Also begin mapping your Sobha collections governance language to banking equivalents (RCSA → your audit control process; KRI → your delinquency early-warning signals).</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-3m"></div>
+      <div class="timeline-period">WEEKS 4–8 — CREDENTIAL & STORY BANK</div>
+      <h4>Certifications + Deployment Case Study</h4>
+      <p><strong>Certification priority for this role:</strong> PMP (signals deployment and program governance fluency) or ACT Certificate in Treasury (signals product domain investment). Draft one "India Operations Launch" case study written as a deployment narrative: readiness assessment → UAT equivalent → training → go-live → post-launch governance. This becomes your UAT gap bridge story.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-6m"></div>
+      <div class="timeline-period">MONTHS 3–5 — DEEPEN & DIFFERENTIATE</div>
+      <h4>AI-Augmented Ops Portfolio + Stakeholder Visibility</h4>
+      <p>Build two AI-powered operational tools relevant to this role: (1) an automated incident triage classifier — show how you'd use AI to categorize and route incoming operational failures. (2) a country deployment readiness tracker — demonstrate how AI can flag go-live risk from checklist data. These position you as a modern VP, not just an experienced one. Also begin seeking or manufacturing senior forum visibility at Sobha: present to the C-suite, run a cross-functional steering committee. Document it.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-12m"></div>
+      <div class="timeline-period">MONTHS 6–9 — INTERVIEW READY</div>
+      <h4>Mock Interviews + Narrative Lock</h4>
+      <p>Run 6 structured mock interviews using the STAR format mapped to HSBC's five leadership behaviours (Navigate, Aspire, Drive, Mobilize, Sustain). Lock your core narrative: "I have spent 5 years building and governing a high-stakes, multi-geography operational engine at Sobha — scaling it 14.9x while simultaneously reducing risk by 74%. HSBC's Liquidity Operations VP role is that capability at a larger product complexity and a regulated financial services context." Practice saying this in 90 seconds.</p>
+    </div>
+
+  </div>
+
+  <div class="section-title">Certification Priority Order for This Role</div>
+  <div class="section-subtitle">RANKED BY IMPACT ON HSBC FIT SCORE</div>
+  <div class="grid-2">
+    <div class="card card-accent-gold">
+      <h3>🥇 PMP (Project Management Professional)</h3>
+      <span class="badge badge-gold">HIGH IMPACT</span>
+      <p style="margin-top:6px">UAT/deployment leadership and country rollout governance are program management functions. PMP signals you can run structured deployments. Study time: ~3 months.</p>
+    </div>
+    <div class="card card-accent-gold">
+      <h3>🥈 ACT Certificate in Treasury / Cash Management</h3>
+      <span class="badge badge-gold">HIGH IMPACT</span>
+      <p style="margin-top:6px">Directly closes the liquidity product knowledge gap. Even partial completion signals domain intent and investment to the hiring manager.</p>
+    </div>
+    <div class="card card-accent-left">
+      <h3>🥉 CRISC (Certified in Risk & Info Systems Control)</h3>
+      <span class="badge badge-blue">MEDIUM IMPACT</span>
+      <p style="margin-top:6px">Strengthens your risk governance and control framework credentials — relevant to the "Payments Risk Framework" and audit readiness requirements.</p>
+    </div>
+    <div class="card card-accent-left">
+      <h3>Azure AZ-900 (Cloud Fundamentals)</h3>
+      <span class="badge badge-blue">SUPPORTING</span>
+      <p style="margin-top:6px">Banking technology stack is moving to cloud. AZ-900 signals you can engage intelligently with HTS (HSBC Technology) counterparts on platform discussions.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: AI LEVERAGE -->
+<div class="tab-panel" id="tab-ai">
+  <div class="section-title">How to Use AI to Leapfrog the Domain Gap</div>
+  <div class="section-subtitle">FIVE SPECIFIC AI TOOLS YOU CAN BUILD AND DEMONSTRATE</div>
+
+  <div class="card card-accent-gold" style="margin-bottom:20px">
+    <h3>Why AI Is Your Biggest Differentiator Here</h3>
+    <p>HSBC's Liquidity Operations function is drowning in incident queues, manual MI production, and deployment checklist management. A VP who walks in already knowing how to apply AI to these problems is 2 years ahead of a domain expert who doesn't. You don't need banking experience if you can show you'll eliminate the operational drag that experienced VPs are still managing manually.</p>
+  </div>
+
+  <div class="ai-box">
+    <em>Tool 1: Incident Triage & Classification Engine</em><br><br>
+    Problem: Liquidity ops teams receive hundreds of monthly incidents — wrong interest, failed sweeps, reference data errors, client setup failures. Triage is manual and slow.<br><br>
+    Your AI solution: Fine-tune a classification model (GPT-4 / Claude via API) that reads incoming incident descriptions and auto-categorizes by: (1) product type, (2) severity, (3) likely root cause cluster, (4) resolution team routing. Outputs a daily incident dashboard with predicted resolution time.<br><br>
+    How to build it now at Sobha: Apply the same logic to your PR rejection queue — classify rejections by root cause type, predict resolution owner, flag recurrence patterns. Document the methodology. Same architecture, different domain.
+  </div>
+
+  <div class="ai-box">
+    <em>Tool 2: Country Deployment Readiness Scorer</em><br><br>
+    Problem: Country go-live decisions are made from 50+ item checklists reviewed manually in spreadsheets. Late risk identification delays launches or causes post-go-live incidents.<br><br>
+    Your AI solution: Build a readiness scoring model that ingests checklist completion data + historical deployment incident data and outputs a go-live risk score (Red/Amber/Green) with the specific items most likely to cause post-launch failures flagged for executive attention.<br><br>
+    How to demonstrate it: Build a prototype using your India operations setup data as the "historical deployment." Present it in the interview as a capability you have already built and applied.
+  </div>
+
+  <div class="ai-box">
+    <em>Tool 3: MI Auto-Generation from Ops Data</em><br><br>
+    Problem: MI production for stakeholder packs (weekly/monthly) takes 2–3 days of analyst time per cycle. Data lives across multiple systems (GLE, payment rails, incident logs).<br><br>
+    Your AI solution: AI agent that pulls from Salesforce/CRM equivalent, auto-generates narrative commentary on metric movements ("Incident volume up 12% WoW driven by CBCC failures in APAC; 3 of 5 root causes resolved"), and formats into a PowerPoint-ready pack.<br><br>
+    Your existing evidence: You already built 18 Salesforce reports personally and architected a 70+ report intelligence ecosystem. This is the natural AI evolution of that work.
+  </div>
+
+  <div class="ai-box">
+    <em>Tool 4: SLA Breach Predictor</em><br><br>
+    Problem: SLA breaches are identified reactively — after the breach — triggering client escalations and audit findings.<br><br>
+    Your AI solution: Regression model trained on historical query volume, complexity indicators, and team capacity data to predict SLA breach probability 48 hours in advance. Triggers proactive resource reallocation or client communication before the breach occurs.<br><br>
+    Mapping to your work: Your 55-day critical collection window (T−25 to T+30) is exactly this logic — predictive intervention before delinquency peaks. Explain the architecture, then show the banking equivalent.
+  </div>
+
+  <div class="ai-box">
+    <em>Tool 5: Reference Data & Customer Setup Quality Checker</em><br><br>
+    Problem: Incorrect reference data setup (account structures, interest rate parameters, client entity mapping) is the #1 cause of liquidity product failures and interest rework.<br><br>
+    Your AI solution: Validation agent that checks new customer setup data against a rules engine + historical error patterns before it enters production. Flags anomalies for human review. Cuts post-go-live rework by 60–70%.<br><br>
+    Your existing evidence: Your PR rejection rate governance (49% failure traced to upstream data quality issues) is the exact same problem. You already identified and solved this in a different product context. This is a direct reframe.
+  </div>
+
+  <div class="note-box">
+    <strong>🎯 Interview Application</strong>
+    You don't need to have built these in a banking context. In the interview, say: "In my current role, I applied the same logic to [X Sobha problem] and achieved [Y result]. In the HSBC context, the architecture would translate directly to [specific liquidity ops problem]." Capability transfer, not domain experience, is the pitch.
+  </div>
+</div>
+
+<!-- TAB 6: INTERVIEW PREP -->
+<div class="tab-panel" id="tab-interview">
+  <div class="section-title">Likely Interview Questions — With Your Answer Framework</div>
+  <div class="section-subtitle">MAPPED TO HSBC'S 5 LEADERSHIP BEHAVIOURS</div>
+
+  <table>
+    <tr>
+      <th>HSBC Behaviour</th>
+      <th>Likely Question</th>
+      <th>Your Answer Anchor (Sobha Evidence)</th>
+    </tr>
+    <tr>
+      <td><strong>Navigate</strong><br><span style="font-size:11px;color:#999">Strategy → Execution</span></td>
+      <td>Tell me about a time you translated a complex strategic change into operational reality for a large team.</td>
+      <td>NPV Advance Rebate Policy — MD-approved, AED 652M incremental inflow. You designed the policy logic, built the operational process for implementation, trained the team, and tracked outcomes across a 77-person operation.</td>
+    </tr>
+    <tr>
+      <td><strong>Aspire</strong><br><span style="font-size:11px;color:#999">World-class standards</span></td>
+      <td>What does operational excellence look like to you, and how have you built it in your function?</td>
+      <td>PCC TAT: 20 days → 3 days while tripling volume. 70+ live report ecosystem. 6 MD-approved process documents. Frame this as building a "centre of excellence" not just improving a process.</td>
+    </tr>
+    <tr>
+      <td><strong>Drive</strong><br><span style="font-size:11px;color:#999">Stretching goals, leading change</span></td>
+      <td>Describe a situation where you drove a transformation that others were resistant to.</td>
+      <td>PR rejection governance intervention — 49% failure rate (Dec-25) driven by upstream data quality. You identified, escalated, and drove cross-functional remediation against resistance from teams who didn't own the problem. Frame the conflict and how you resolved it.</td>
+    </tr>
+    <tr>
+      <td><strong>Mobilize</strong><br><span style="font-size:11px;color:#999">Stakeholder engagement</span></td>
+      <td>How do you manage conflicting priorities across a large, diverse stakeholder network?</td>
+      <td>MD-level escalation for IOM approvals (7 IOMs authored), cross-functional work with Sales, CRM, Legal, Finance. Describe your escalation framework: data-first, written position papers, structured steering — not verbal escalations.</td>
+    </tr>
+    <tr>
+      <td><strong>Sustain</strong><br><span style="font-size:11px;color:#999">Risk, values, governance</span></td>
+      <td>How have you embedded risk controls into a large-scale operational function?</td>
+      <td>4+ consecutive years as Named Audit SPOC. No overdue high-risk audit points. Describe your control architecture: daily reconciliation triggers, TAT alerts, data quality gates, and the escalation protocol you built.</td>
+    </tr>
+  </table>
+
+  <div class="section-title">The Question You Will Definitely Be Asked</div>
+  <div class="section-subtitle">AND HOW TO ANSWER IT WITHOUT FLINCHING</div>
+  <div class="card card-accent-red">
+    <h3>"You haven't worked in banking or payments. Why should we trust you to run HSBC's global liquidity operations?"</h3>
+    <p style="margin-top:8px"><strong>Your answer structure:</strong></p>
+    <p style="margin-top:8px">"That's a fair question. My answer is that operational excellence at scale is not domain-specific — it's structural. I have spent five years running a high-stakes, multi-geography operations function that grew 14.9 times while simultaneously reducing risk by 74%. I have built the governance frameworks, the MI architecture, the control checkpoints, and the team capability from scratch, and I have done it under audit scrutiny for four consecutive years without a single overdue high-risk finding.</p>
+    <p style="margin-top:8px">The liquidity product knowledge is learnable — and I have already begun building it. What is not easily learned is the operational judgment to manage complexity at scale, handle escalations with integrity, and build systems that sustain performance rather than create fragility. That is what I bring. And I believe the right question isn't 'has this person worked in banking' — it's 'has this person solved the same class of problems?' I have."</p>
+  </div>
+
+  <div class="section-title">Your 5-Story STAR Bank</div>
+  <div class="section-subtitle">BUILD THESE BEFORE THE INTERVIEW</div>
+  <div class="grid-2">
+    <div class="card card-accent-left">
+      <h3>Story 1: Scale Under Pressure</h3>
+      <p>Collections scaled 14.9x. What broke? What did you fix? What did you build to sustain it? This is your "operational transformation" story.</p>
+    </div>
+    <div class="card card-accent-left">
+      <h3>Story 2: Incident Governance</h3>
+      <p>PR rejection rate crisis (49%). Root cause, escalation, fix, governance. HSBC's incident management requirement met directly.</p>
+    </div>
+    <div class="card card-accent-left">
+      <h3>Story 3: Country/Geo Deployment</h3>
+      <p>India operations setup — reframe as "deployment." Readiness review, training, go-live, post-launch governance. This is your UAT gap bridge.</p>
+    </div>
+    <div class="card card-accent-left">
+      <h3>Story 4: Stakeholder Conflict</h3>
+      <p>One situation where you held your position against senior resistance using data. Low-D development: show you can drive a position, not just facilitate one.</p>
+    </div>
+    <div class="card card-accent-left">
+      <h3>Story 5: Policy Design (Revenue Impact)</h3>
+      <p>NPV Advance Rebate Policy — AED 652M impact. This is your "product thinking" story — you identified a problem, designed a solution, got MD approval, and tracked impact.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: NARRATIVE -->
+<div class="tab-panel" id="tab-narrative">
+  <div class="section-title">Your Master Career Narrative for This Role</div>
+  <div class="section-subtitle">90-SECOND VERSION — REHEARSE THIS UNTIL IT IS EFFORTLESS</div>
+
+  <div class="card card-accent-gold" style="font-size:14px; line-height:1.7; padding:24px">
+    <p>"I lead global collections and liquidity operations for Sobha Realty — one of the UAE's largest real estate developers — where I've built and run a 77-person, two-geography operations function from the ground up. Over five years, I scaled our collections engine 14.9 times, from AED 867 million to AED 13 billion in managed portfolio, while simultaneously reducing delinquency risk by 74%. I did this through operational architecture — governance frameworks, MI systems, control checkpoints, and team capability — not just volume growth.</p>
+    <p style="margin-top:12px">What makes this relevant to HSBC is the structural similarity: I have been running a high-stakes, multi-geography financial operations function with strict audit accountability, cross-functional stakeholder governance, and a mandate to scale without adding risk. The product context is different — I am coming from real estate collections into banking liquidity — but the operational discipline, the control framework instinct, and the stakeholder management at MD and C-suite level are directly transferable.</p>
+    <p style="margin-top:12px">I am actively building the domain-specific knowledge — I've begun studying HSBC's GPS product architecture and treasury management fundamentals — and I'm pursuing PMP certification to formalise the deployment governance capability that this role requires. I believe I can be fully operational in this role within 60 to 90 days, and I bring something that domain experience alone cannot — the perspective of someone who has built these systems from zero, rather than inherited them."</p>
+  </div>
+
+  <div class="section-title">The Three Reframes You Must Execute</div>
+  <div class="section-subtitle">LANGUAGE THAT BRIDGES REAL ESTATE TO BANKING</div>
+
+  <table>
+    <tr>
+      <th>What You Did at Sobha</th>
+      <th>How to Say It for HSBC</th>
+    </tr>
+    <tr>
+      <td>Managed dues collections across Dubai + India</td>
+      <td>Led end-to-end receivables operations governance across two geographies, managing a 77-person function with multi-product complexity</td>
+    </tr>
+    <tr>
+      <td>PR rejection rate governance (49% → addressed)</td>
+      <td>Identified and remediated a systemic upstream data quality failure causing 49% operational error rate — diagnosed root cause, escalated cross-functionally, and implemented preventive controls</td>
+    </tr>
+    <tr>
+      <td>PCC TAT: 20 days → 3 days</td>
+      <td>Drove 85% reduction in process turnaround time through workflow redesign and control automation — tripling throughput without proportional headcount increase</td>
+    </tr>
+    <tr>
+      <td>India operations setup</td>
+      <td>Designed and deployed an offshore operations hub — readiness assessment, role definition, training delivery, and post-launch performance governance across a 42-person team</td>
+    </tr>
+    <tr>
+      <td>70+ Salesforce MI reports</td>
+      <td>Architected a live-data operational intelligence ecosystem — 70+ reports across two geographies, enabling real-time performance management and proactive escalation</td>
+    </tr>
+    <tr>
+      <td>Named Audit SPOC for 4 years</td>
+      <td>Served as the designated audit interface for the function for four consecutive years — zero overdue high-risk findings, clean track record across internal and external reviews</td>
+    </tr>
+    <tr>
+      <td>NPV Rebate Policy (AED 652M)</td>
+      <td>Designed and secured executive approval for a financial incentive framework — modelled NPV impact, authored the policy, drove cross-functional sign-off, and tracked AED 652M in incremental inflows</td>
+    </tr>
+  </table>
+
+  <div class="note-box">
+    <strong>💡 One Final Principle</strong>
+    Every interviewer at HSBC has been trained to ask "tell me about a time when..." They are looking for evidence of their five leadership behaviours in real situations. Your job is not to convince them you know liquidity products — it is to convince them you have the leadership architecture to run a complex global operations team. The product knowledge comes with 90 days on the job. The operational judgment either exists or it doesn't. Yours exists. Show it.
+  </div>
+</div>
+
+<footer>
+  Priyanuj Deka — HSBC VP Liquidity Ops Career Playbook &nbsp;|&nbsp; Generated March 2026 &nbsp;|&nbsp; Confidential
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: document.querySelector('.nav-tabs').offsetTop - 10, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>

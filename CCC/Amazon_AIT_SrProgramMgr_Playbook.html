@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon Sr. Program Manager AIT — Career Playbook | Priyanuj Deka</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #1c2333;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --dim: #484f58;
+  --amazon-orange: #ff9900;
+  --amazon-dark: #232f3e;
+  --amazon-blue: #146eb4;
+  --green: #3fb950;
+  --red: #f85149;
+  --amber: #d29922;
+  --purple: #bc8cff;
+  --cyan: #79c0ff;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.header {
+  background: linear-gradient(135deg, var(--amazon-dark) 0%, #1a1f2b 50%, #0d1117 100%);
+  border-bottom: 2px solid var(--amazon-orange);
+  padding: 48px 40px 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(255,153,0,0.03) 80px, rgba(255,153,0,0.03) 81px);
+}
+
+.header-content { position: relative; max-width: 1200px; margin: 0 auto; }
+
+.header-badge {
+  display: inline-block;
+  background: rgba(255,153,0,0.15);
+  color: var(--amazon-orange);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 4px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255,153,0,0.3);
+}
+
+.header h1 {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--amazon-orange), #ffcc66);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-sub {
+  font-size: 16px;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.kpi-row {
+  display: flex;
+  gap: 24px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.kpi {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  min-width: 130px;
+}
+
+.kpi-value {
+  font-size: 28px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.kpi-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+/* Tabs */
+.tab-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex;
+  overflow-x: auto;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tab {
+  padding: 14px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+}
+
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--amazon-orange); border-bottom-color: var(--amazon-orange); }
+
+/* Panels */
+.panel {
+  display: none;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px;
+}
+
+.panel.active { display: block; }
+
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--amazon-orange);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.section-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  letter-spacing: -0.3px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+p { margin-bottom: 12px; color: var(--text); font-size: 14px; }
+p:last-child { margin-bottom: 0; }
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+  margin-right: 6px;
+}
+
+.badge-green { background: rgba(63,185,80,0.15); color: var(--green); border: 1px solid rgba(63,185,80,0.3); }
+.badge-amber { background: rgba(210,153,34,0.15); color: var(--amber); border: 1px solid rgba(210,153,34,0.3); }
+.badge-red { background: rgba(248,81,73,0.15); color: var(--red); border: 1px solid rgba(248,81,73,0.3); }
+.badge-blue { background: rgba(20,110,180,0.15); color: var(--cyan); border: 1px solid rgba(20,110,180,0.3); }
+.badge-orange { background: rgba(255,153,0,0.15); color: var(--amazon-orange); border: 1px solid rgba(255,153,0,0.3); }
+
+/* Fit table */
+.fit-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+}
+
+.fit-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--surface2);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+
+.fit-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  color: var(--text);
+}
+
+.fit-table tr:last-child td { border-bottom: none; }
+
+.strength-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.st-headline { background: rgba(63,185,80,0.2); color: var(--green); }
+.st-strong { background: rgba(20,110,180,0.2); color: var(--cyan); }
+.st-moderate { background: rgba(210,153,34,0.2); color: var(--amber); }
+.st-gap { background: rgba(248,81,73,0.2); color: var(--red); }
+
+/* STAR boxes */
+.star-box {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 12px 0;
+}
+
+.star-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.star-row:last-child { margin-bottom: 0; }
+
+.star-key {
+  min-width: 80px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--amazon-orange);
+  padding-top: 2px;
+  letter-spacing: 0.5px;
+}
+
+.star-key.green { color: var(--green); }
+.star-content { font-size: 13px; color: var(--text); line-height: 1.5; }
+
+/* AI project boxes */
+.ai-box {
+  background: linear-gradient(135deg, rgba(255,153,0,0.05), rgba(20,110,180,0.05));
+  border: 1px solid rgba(255,153,0,0.2);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.ai-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--amazon-orange);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.ai-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+.ai-body { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+
+.ai-stack {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.tag-blue { background: rgba(20,110,180,0.2); color: var(--cyan); }
+.tag-gold { background: rgba(255,153,0,0.2); color: var(--amazon-orange); }
+
+/* LP grid */
+.lp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.lp-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  border-left: 3px solid var(--amazon-orange);
+}
+
+.lp-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--amazon-orange);
+  margin-bottom: 4px;
+}
+
+.lp-def { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.lp-story { font-size: 12px; color: var(--text); }
+.lp-story strong { color: var(--cyan); }
+
+/* Comp table */
+.comp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0;
+}
+
+.comp-table th {
+  text-align: left;
+  padding: 10px 14px;
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comp-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+.comp-table tr:last-child td { border-bottom: none; }
+
+/* Vocab table */
+.vocab-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0;
+}
+
+.vocab-table th {
+  text-align: left;
+  padding: 8px 12px;
+  background: var(--surface2);
+  color: var(--amazon-orange);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.vocab-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.vocab-table td:first-child {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: var(--cyan);
+  min-width: 160px;
+}
+
+/* Elevator pitch */
+.pitch-box {
+  background: linear-gradient(135deg, rgba(255,153,0,0.08), rgba(255,153,0,0.02));
+  border-left: 3px solid var(--amazon-orange);
+  border-radius: 0 8px 8px 0;
+  padding: 20px 24px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+  margin: 20px 0;
+  font-style: italic;
+}
+
+/* Fit bar */
+.fit-bar-container {
+  margin: 20px 0;
+  position: relative;
+}
+
+.fit-bar-track {
+  height: 8px;
+  background: var(--surface2);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.fit-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--red), var(--amber), var(--green));
+}
+
+.fit-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.fit-marker {
+  position: absolute;
+  top: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--amazon-orange);
+  background: var(--bg);
+  transform: translateX(-50%);
+}
+
+.req-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+
+.req-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.req-title { font-size: 14px; font-weight: 700; }
+
+.req-match {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.match-high { background: rgba(63,185,80,0.15); color: var(--green); }
+.match-med { background: rgba(210,153,34,0.15); color: var(--amber); }
+.match-gap { background: rgba(248,81,73,0.15); color: var(--red); }
+
+.req-proof { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.req-proof strong { color: var(--text); }
+
+/* Question router */
+.q-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0;
+}
+
+.q-table th {
+  text-align: left;
+  padding: 8px 12px;
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.q-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.q-table td:first-child {
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--dim);
+  width: 30px;
+}
+
+.callout {
+  background: rgba(255,153,0,0.08);
+  border: 1px solid rgba(255,153,0,0.2);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-size: 13px;
+}
+
+.callout-title {
+  font-weight: 700;
+  color: var(--amazon-orange);
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .header { padding: 28px 20px; }
+  .header h1 { font-size: 24px; }
+  .kpi-row { gap: 12px; }
+  .kpi { min-width: 110px; padding: 12px 14px; }
+  .kpi-value { font-size: 22px; }
+  .panel { padding: 20px; }
+  .tab { padding: 12px 12px; font-size: 11px; }
+  .two-col { grid-template-columns: 1fr; }
+  .lp-grid { grid-template-columns: 1fr; }
+  .fit-table, .comp-table, .vocab-table, .q-table { font-size: 12px; }
+}
+
+.footer {
+  text-align: center;
+  padding: 32px;
+  color: var(--dim);
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  border-top: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-content">
+    <div class="header-badge">Active · Apply Now · Pipeline Role #15</div>
+    <h1>Amazon Sr. Program Manager — Audits & Insights</h1>
+    <div class="header-sub">Hyderabad · AIT (Audits & Insights Team) · E-Commerce Operations · L6</div>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-value" style="color:var(--green)">78→82</div>
+        <div class="kpi-label">Fit Score / 100</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value" style="color:var(--cyan)">₹45–70L</div>
+        <div class="kpi-label">Est. Total Comp</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value" style="color:var(--amazon-orange)">2–4 wks</div>
+        <div class="kpi-label">Prep Window</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value" style="color:var(--purple)">L6</div>
+        <div class="kpi-label">Level Mapping</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value" style="color:var(--amber)">RSU+Cash</div>
+        <div class="kpi-label">Comp Structure</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <div class="tab active" onclick="showTab(0)">01 JD Decoded</div>
+  <div class="tab" onclick="showTab(1)">02 Your Fit</div>
+  <div class="tab" onclick="showTab(2)">03 Gaps & Plan</div>
+  <div class="tab" onclick="showTab(3)">04 AI Portfolio</div>
+  <div class="tab" onclick="showTab(4)">05 STAR Bank</div>
+  <div class="tab" onclick="showTab(5)">06 Comp Intel</div>
+  <div class="tab" onclick="showTab(6)">07 Interview Prep</div>
+  <div class="tab" onclick="showTab(7)">08 Vocab Decoder</div>
+</div>
+
+<!-- PANEL 01: JD DECODED -->
+<div class="panel active" id="panel-0">
+  <div class="section-num">01 /</div>
+  <div class="section-title">The Role, Decoded</div>
+  
+  <div class="card">
+    <p>Amazon's Audits & Insights Team (AIT) is the internal operational quality arm of Amazon's consumer business. Think of it as the "internal consulting + audit" function that evaluates whether Amazon's own operational processes — fulfillment, customer service, seller verification, content moderation — are working as intended. When they aren't, AIT designs the fix.</p>
+    <p>This role exists because Amazon is scaling its audit capabilities from manual, human-led reviews toward AI-augmented, automated audit workflows. The person hired will bridge the gap between audit strategy (what to audit, when, and why) and program execution (building the processes, dashboards, and AI tools that make audits faster and more insightful).</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Role Translated Into Plain English</div>
+    <div class="pitch-box" style="font-style: normal;">
+      "COO of Audit Operations — with an AI Transformation Mandate"
+    </div>
+    <p>You own how Amazon's internal audits run. You don't do the auditing yourself — you design the programs, build the metrics, automate the workflows, and present the insights to leadership. The "and Insights" part of the team name is the AI/automation agenda — turning raw audit data into strategic recommendations using intelligent tooling.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Top 5 Requirements, Reverse-Engineered</div>
+    <table class="fit-table">
+      <thead>
+        <tr><th>#</th><th>JD Language</th><th>What It Actually Means</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-family:'JetBrains Mono',monospace; color:var(--amazon-orange);">1</td>
+          <td>"Lead complex change requests within audit programs"</td>
+          <td>When an operational process changes (new seller policy, new fulfillment workflow), the audit program must change too. You manage that change — scoping, designing, and deploying the updated audit methodology. This is exactly what your audit SPOC role does at Sobha.</td>
+        </tr>
+        <tr>
+          <td style="font-family:'JetBrains Mono',monospace; color:var(--amazon-orange);">2</td>
+          <td>"Design and implement AI & Automation roadmap for audit processes"</td>
+          <td>This is the headline ask. Amazon wants someone to identify where AI can replace or augment human auditors — anomaly detection, risk scoring, automated evidence collection. Your AI portfolio projects (P7, P8, P9) map directly here.</td>
+        </tr>
+        <tr>
+          <td style="font-family:'JetBrains Mono',monospace; color:var(--amazon-orange);">3</td>
+          <td>"Develop risk-based prioritization models for audit programs"</td>
+          <td>Not every audit is equal. Some operations carry more risk (financial, regulatory, customer-impact). You build the framework that decides which audits run first, get more resources, and get escalated. Your 55-day T−25/T+30 framework is this — risk-based prioritization of collections actions.</td>
+        </tr>
+        <tr>
+          <td style="font-family:'JetBrains Mono',monospace; color:var(--amazon-orange);">4</td>
+          <td>"Develop and maintain comprehensive business performance reporting"</td>
+          <td>Executive dashboards. KPIs. Trend analysis. Weekly/monthly reviews. You are the MI architect for audit performance. Your 70+ report Salesforce ecosystem is the exact proof point.</td>
+        </tr>
+        <tr>
+          <td style="font-family:'JetBrains Mono',monospace; color:var(--amazon-orange);">5</td>
+          <td>"Build and maintain strong relationships with senior leadership"</td>
+          <td>You present to VPs and Directors. You influence audit strategy by framing data compellingly. Your NPV AED 652M defense at MD/CEO level is a higher-intensity version of this.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Why Amazon Is Hiring This Now</div>
+    <p>Amazon's internal audit function has historically been manual, labor-intensive, and reactive. With the scale of Amazon's operations (hundreds of millions of transactions daily), human-only auditing doesn't scale. The AI/automation mandate in this JD signals a strategic shift: AIT is building its "next-generation audit platform," and this role is the program leader who will architect and deliver it.</p>
+    <p><strong>Watch signal:</strong> The JD explicitly calls out "AI and Automation Strategy for Audits" as a standalone responsibility block — not a nice-to-have bullet. This tells you the hiring manager has budget and mandate for this transformation. A candidate who can demonstrate AI-augmented operations work (you) will have an asymmetric advantage over candidates who have audit experience but no AI execution capability.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">What "Audits and Insights" Specifically Involves</div>
+    <div class="two-col">
+      <div>
+        <p><strong>The Audit Surface</strong></p>
+        <p style="color:var(--muted); font-size:13px;">
+          <strong style="color:var(--text)">Seller Verification Audits:</strong> Are third-party sellers meeting Amazon's quality, documentation, and identity standards?<br><br>
+          <strong style="color:var(--text)">Fulfillment Process Audits:</strong> Are FC (Fulfillment Center) processes compliant with safety, accuracy, and speed standards?<br><br>
+          <strong style="color:var(--text)">Customer Service Quality Audits:</strong> Are CS agents resolving issues per policy? Are refunds/replacements justified?<br><br>
+          <strong style="color:var(--text)">Content & Catalog Audits:</strong> Are product listings compliant with category rules, imagery standards, restricted content policies?<br><br>
+          <strong style="color:var(--text)">Policy Compliance Audits:</strong> Are internal teams following SOPs? Are control gaps being caught before they become customer-facing?
+        </p>
+      </div>
+      <div>
+        <p><strong>The Operational Loop</strong></p>
+        <p style="color:var(--muted); font-size:13px;">
+          Audit program scoped → methodology designed<br>
+          Auditors execute (manual + automated checks)<br>
+          Findings generated → categorized by severity<br>
+          Root cause analysis → corrective action plans<br>
+          Change requests processed → new controls deployed<br>
+          Weekly: review audit KPIs, coverage rates, defect trends<br>
+          Monthly: present to senior leadership, propose strategic changes<br>
+          Quarterly: update AI/automation roadmap
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 02: FIT ANALYSIS -->
+<div class="panel" id="panel-1">
+  <div class="section-num">02 /</div>
+  <div class="section-title">Fit Analysis</div>
+
+  <div class="card">
+    <div style="text-align:center; margin-bottom:20px;">
+      <span style="font-family:'JetBrains Mono',monospace; font-size:42px; font-weight:800; color:var(--green);">78 → 82</span>
+      <span style="font-size:16px; color:var(--muted);"> /100</span>
+      <div style="font-size:12px; color:var(--muted); margin-top:4px;">CURRENT → POST-PREP · 2–4 WEEKS</div>
+    </div>
+    <div class="fit-bar-container">
+      <div class="fit-bar-track">
+        <div class="fit-bar-fill" style="width:100%"></div>
+        <div class="fit-marker" style="left:78%"></div>
+      </div>
+      <div class="fit-bar-labels">
+        <span>0 STRETCH</span><span>50 COMPETITIVE</span><span>70 STRONG</span><span>85</span><span>100</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Sobha → Amazon AIT: The Translation Matrix</div>
+    <table class="fit-table">
+      <thead>
+        <tr><th>JD Requirement</th><th>Your Evidence</th><th>Strength</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Lead complex change requests within audit programs</td>
+          <td>Named Audit SPOC for 4 consecutive years. 14-finding risk register → 97.5% error rate reduction. 6 MD-approved process documents as structural audit responses.</td>
+          <td><span class="strength-tag st-headline">HEADLINE</span></td>
+        </tr>
+        <tr>
+          <td>Design AI & Automation roadmap for audit processes</td>
+          <td>AI-augmented ops portfolio: automated programme health trackers, AI-assisted risk flagging, dashboard automation. 12-project AI portfolio. Pitch: "I built what AIT needs, different domain."</td>
+          <td><span class="strength-tag st-headline">HEADLINE</span></td>
+        </tr>
+        <tr>
+          <td>Risk-based prioritization models</td>
+          <td>55-day T−25/T+30 proprietary framework — risk-based prioritization of collections actions across AED 86.8B portfolio.</td>
+          <td><span class="strength-tag st-strong">STRONG</span></td>
+        </tr>
+        <tr>
+          <td>Comprehensive business performance reporting</td>
+          <td>70+ report Salesforce MI ecosystem. Led solution design for 0→1 CRM build with 6-stakeholder discovery. PR Rejected Dashboard, PR Ageing Dashboard, quality scorecards.</td>
+          <td><span class="strength-tag st-headline">HEADLINE</span></td>
+        </tr>
+        <tr>
+          <td>Establish metrics and KPIs to measure program success</td>
+          <td>Delinquency rate (16.7%→4.4%), PR TAT (20d→3d), error rates by document type, collection rate vs target, 55-day window compliance. Built KPI architecture from zero.</td>
+          <td><span class="strength-tag st-strong">STRONG</span></td>
+        </tr>
+        <tr>
+          <td>Stakeholder management with senior leadership</td>
+          <td>NPV AED 652M defended at MD/CEO through multiple scrutiny rounds. 3 proactive CCO escalations. Reports to CCO directly. Presents to MD-level governance forums.</td>
+          <td><span class="strength-tag st-strong">STRONG</span></td>
+        </tr>
+        <tr>
+          <td>Cross-functional team leadership</td>
+          <td>77-person two-geography team (Dubai + India). 4-function matrix: Dues (12) + Ops (38) + QCG (12) + MIS (15). DLD termination process: 5-department CFT.</td>
+          <td><span class="strength-tag st-strong">STRONG</span></td>
+        </tr>
+        <tr>
+          <td>7+ years program management</td>
+          <td>~6 years directly, but at 14.9x programme scale and AED 86.8B portfolio scope. The scale compensates for the year-count gap.</td>
+          <td><span class="strength-tag st-moderate">MODERATE</span></td>
+        </tr>
+        <tr>
+          <td>Amazon Leadership Principles fluency</td>
+          <td>Stories map well but need explicit LP tagging. No prior Amazon interview experience.</td>
+          <td><span class="strength-tag st-gap">PREP NEEDED</span></td>
+        </tr>
+        <tr>
+          <td>E-commerce / marketplace audit domain</td>
+          <td>Audit experience is real estate collections domain. Methodology transfers; specific audit types (seller verification, catalog compliance) are new vocabulary.</td>
+          <td><span class="strength-tag st-moderate">REFRAME</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pitch-box">
+    "I've spent six years as the audit SPOC and programme architect for a AED 86.8B portfolio — scaling throughput 14.9x while cutting defect rates 97.5%. The AI-augmented operations tooling I've built — automated risk flagging, dashboard intelligence, quality scorecards — is exactly the audit automation roadmap this role is tasked with creating. I bring proven governance rigor at scale, senior-forum influence, and the AI execution capability to transform audit from reactive compliance into proactive intelligence."
+  </div>
+
+  <div class="card">
+    <div class="card-title">Why You, Specifically</div>
+    <div class="two-col">
+      <div>
+        <p><strong style="color:var(--amazon-orange)">Audit SPOC DNA</strong></p>
+        <p style="font-size:13px; color:var(--muted);">Most PM candidates have managed audits. You've <em>been the audit respondent</em> for 4 consecutive years — finding-by-finding, remediation-by-remediation. That operator depth is rare at the Sr PM level.</p>
+      </div>
+      <div>
+        <p><strong style="color:var(--amazon-orange)">AI Execution, Not Just Strategy</strong></p>
+        <p style="font-size:13px; color:var(--muted);">The JD asks for an "AI & Automation roadmap." Most candidates will pitch strategy decks. You've actually built AI-augmented tools. The portfolio is the differentiator.</p>
+      </div>
+      <div>
+        <p><strong style="color:var(--amazon-orange)">Scale Credibility</strong></p>
+        <p style="font-size:13px; color:var(--muted);">14.9x throughput scale with delinquency -74%. The combination of volume growth AND quality improvement simultaneously is the exact story Amazon wants for AIT transformation.</p>
+      </div>
+      <div>
+        <p><strong style="color:var(--amazon-orange)">Metrics-First Operator</strong></p>
+        <p style="font-size:13px; color:var(--muted);">70+ reports, quality scorecards, PR rejection governance — you don't just track metrics, you design the measurement architecture. Amazon's data-driven culture will recognize this immediately.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 03: GAPS & PLAN -->
+<div class="panel" id="panel-2">
+  <div class="section-num">03 /</div>
+  <div class="section-title">Gap Closure Plan — 4 Weeks</div>
+
+  <div class="callout">
+    <div class="callout-title">Prep Philosophy</div>
+    Invest 50% into Amazon LP fluency (non-negotiable gate), 30% into domain vocabulary (e-commerce audit specifics), 20% into one AI portfolio project tailored to AIT. The LP prep benefits every Amazon role you ever apply to. Domain vocab is a 2-week sprint, not a career investment.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="badge badge-red">CRITICAL</span> Gap 1 — Amazon Leadership Principles Fluency</div>
+    <div class="card-subtitle">2–3 weeks · Non-negotiable</div>
+    <p>Amazon interviews are LP interviews. Every single answer must be framed around 2-3 Leadership Principles. Unlike any other company in your pipeline, Amazon has a codified culture assessment that can reject a technically perfect candidate who doesn't speak LP. The Bar Raiser has veto power.</p>
+    <p><strong>The fix (ordered):</strong></p>
+    <p>Week 1: Memorize all 16 LPs. Map each LP to at least 2 STAR stories from your bank. Use the LP mapping in Tab 7 as your starting point.</p>
+    <p>Week 2: Practice telling each story with explicit LP framing — "This demonstrates Customer Obsession because..." and "The Ownership principle here was..." Don't be subtle. Amazon wants you to name the principle.</p>
+    <p>Week 3: Run 3 mock interviews (use Exponent, interviewing.io, or a friend). Focus on: story conciseness (2 minutes max per STAR), LP tagging, and the "drill-down" — Amazon interviewers will ask "what specifically did YOU do?" repeatedly. Every "we" must become an "I."</p>
+    <p><strong>Resources:</strong> Amazon's own PM Interview Prep page (amazon.jobs), Exponent Amazon LP guide, interviewing.io Amazon guide (all free).</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="badge badge-amber">HIGH</span> Gap 2 — E-Commerce Audit Domain Vocabulary</div>
+    <div class="card-subtitle">2 weeks parallel · Fixable</div>
+    <p>Your audit experience is real and deep — but it's in real estate collections, not e-commerce. You need to speak Amazon's audit language: seller verification, catalog compliance, fulfillment quality, defect rate, ASIN-level audits, policy compliance, SOP adherence. The goal isn't expertise — it's fluency sufficient to not trip on terminology.</p>
+    <p><strong>The fix:</strong></p>
+    <p>Read Amazon's Seller University content — understand how sellers are onboarded, verified, and monitored. This gives you the audit target context.</p>
+    <p>Read 3–5 LinkedIn posts from Amazon AIT alumni (search "Amazon Audits and Insights Team") — absorb the vocabulary and framing.</p>
+    <p>Memorize 30 terms from the Vocab Decoder tab (Tab 8).</p>
+    <p>Understand the key audit metrics: defect rate, coverage rate, audit cycle time, finding severity classification, corrective action closure rate. Map each to your Sobha analogs.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="badge badge-amber">MEDIUM</span> Gap 3 — "7+ Years" Experience Bar</div>
+    <div class="card-subtitle">Reframe only · No prep needed</div>
+    <p>JD says 7+ years. You have ~6 years of direct programme management. The gap is narrow, and the scale of your work (14.9x, 77-person team, AED 86.8B portfolio) makes it functionally irrelevant. However, if challenged:</p>
+    <p><strong>Reframe:</strong> "My 6 years include managing a AED 86.8B portfolio across 4 legal entities with a 77-person team. The scope is equivalent to 10+ years at a single-entity operation." Don't apologize for the gap — lead with the scale story.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="badge badge-blue">LOW</span> Gap 4 — SQL / Data Tooling</div>
+    <div class="card-subtitle">Not blocking for this specific role</div>
+    <p>Unlike Uber (where SQL is a gating screen), Amazon AIT likely won't test SQL in the interview. The JD says "using data and metrics to determine and drive improvements" — not "write SQL queries." However, your ongoing SQL gap closure (Mode Analytics + DataCamp) will strengthen your answers about data-driven decision-making. Continue the parallel track but don't prioritize it over LP prep for this role.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Certification Strategy</div>
+    <table class="fit-table">
+      <thead><tr><th>Cert</th><th>Value</th><th>Effort</th><th>When</th></tr></thead>
+      <tbody>
+        <tr><td>Amazon LP Mastery (self-study)</td><td style="color:var(--green)">Critical</td><td>~20 hrs</td><td>Weeks 1–2, required</td></tr>
+        <tr><td>AWS Cloud Practitioner (CLF-C02)</td><td style="color:var(--amber)">Medium</td><td>~20 hrs</td><td>Optional, signals Amazon ecosystem interest</td></tr>
+        <tr><td>PMI-ACP (already in pipeline)</td><td style="color:var(--amber)">Medium</td><td>In progress</td><td>Shared with Qualcomm track</td></tr>
+        <tr><td>CRISC (already in pipeline)</td><td style="color:var(--muted)">Low for this role</td><td>In progress</td><td>More relevant for AmEx</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PANEL 04: AI PORTFOLIO -->
+<div class="panel" id="panel-3">
+  <div class="section-num">04 /</div>
+  <div class="section-title">AI Portfolio — The Differentiator</div>
+
+  <div class="card">
+    <p>The JD explicitly calls out "Spearhead AI and Automation Strategy for Audits" as a standalone responsibility block. A working prototype of an AI-augmented audit tool will separate you from every other candidate who can only pitch strategy slides. Build ONE polished project. Ship it to GitHub. Link it in your resume.</p>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT · AMAZON-AIT SPECIFIC · PRIMARY BUILD</div>
+    <div class="ai-title">P15 — Audit Intelligence Dashboard with AI Risk Flagging</div>
+    <div class="ai-body">
+      <strong>The Problem:</strong> Audit program managers spend 60%+ of their time assembling context — pulling audit coverage data, cross-referencing finding severity, tracking corrective action closure across multiple workstreams — before they can present insights to leadership. The weekly audit review meeting requires 4+ hours of manual deck assembly.
+    </div>
+    <div class="ai-body">
+      <strong>The Build:</strong> A Streamlit dashboard that ingests mock audit programme data (synthetic Amazon-style audits across seller verification, fulfillment, CS quality, and catalog compliance). AI layer computes: audit coverage rate by programme, finding severity distribution, corrective action closure velocity, over-due findings by owner. Claude API generates: (1) Weekly executive summary for leadership review, (2) Top 3 risk areas with root cause hypothesis, (3) Recommended audit prioritization for next cycle based on risk-impact scoring.
+    </div>
+    <div class="ai-body">
+      <strong>The Pitch:</strong> "The JD asks me to design an AI & Automation roadmap for audits. So I built the first deliverable on that roadmap — an AI-powered audit intelligence dashboard that automates finding analysis, generates executive briefings, and prioritizes the next audit cycle by risk impact. This is exactly what I'd build in the first 90 days."
+    </div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Python</span>
+      <span class="tag tag-blue">Streamlit</span>
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Pandas</span>
+      <span class="tag tag-blue">Plotly</span>
+      <span class="tag tag-gold">Priority 1 · 2–3 weekends</span>
+    </div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT · STRETCH · REUSE FROM AMEX</div>
+    <div class="ai-title">P9 — Risk Committee Meeting Pack Generator (Reframed for AIT)</div>
+    <div class="ai-body">
+      <strong>Reframe:</strong> Input: raw audit KPIs + open findings list + past action items. Claude API drafts the audit leadership briefing pack — executive summary, metric commentary, aged finding escalations, and recommended actions. Same architecture as the AmEx P9 build, different domain vocabulary. If P9 is already built for AmEx, fork it with Amazon audit vocabulary in 1 weekend.
+    </div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Python</span>
+      <span class="tag tag-blue">Markdown/PDF output</span>
+      <span class="tag tag-gold">Priority 2 · 1 weekend if P9 exists</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">The 30-Second AI Differentiator Story</div>
+    <p style="font-style:italic; color:var(--muted);">"At Sobha, I've been automating the lowest-judgment parts of my team's day — weekly governance pack assembly, risk register status pulls, quality scorecard generation. The time saved goes back into actual judgment work: which findings to escalate, which processes need redesign, which controls are over-firing. I'd bring that same philosophy to AIT — AI as a force multiplier on the auditor's judgment, not a replacement for it. I've already built a prototype of what this team's first AI tool could look like."</p>
+  </div>
+</div>
+
+<!-- PANEL 05: STAR BANK -->
+<div class="panel" id="panel-4">
+  <div class="section-num">05 /</div>
+  <div class="section-title">STAR Stories — Amazon AIT Frame</div>
+  
+  <div class="callout">
+    <div class="callout-title">Amazon STAR Rule</div>
+    Every story must: (1) be told in first-person ("I", not "we"), (2) name 2-3 Leadership Principles it demonstrates, (3) include specific metrics, (4) survive the drill-down ("What specifically did YOU do?"). Amazon interviewers are trained to keep asking "tell me more about YOUR role" until they find the boundary of your contribution.
+  </div>
+
+  <div class="card">
+    <div class="card-title">S1 — "Tell me about a time you led a complex change management initiative."</div>
+    <div class="card-subtitle">LPs: Ownership · Deliver Results · Dive Deep</div>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">By April 2024, the Final Notice error rate in my collections audit had reached 41%. Document volume had grown 4x (from ~183/month to 982/month). I was the named audit SPOC — every finding came back to me personally.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Reduce error rates systematically across 3 document categories while absorbing the 4x volume growth — without slowing down collections velocity that drove an AED 8.2B annual target.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I conducted root cause analysis across all error categories. I initiated 6 MD-approved process documents as structural responses to recurring findings — not patches, but permanent process redesigns. I introduced "Zero Error Forward" checkpoints in every document flow. I built dedicated governance reports (PR Rejected Dashboard, PR Ageing) for continuous quality monitoring. I implemented a quality scorecard in Salesforce and maintained the PR rejection rate at 49% as a controls standard despite commercial pressure to relax it.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">Final Notice error rate: 41% → 1% (97.5% reduction). Mortgage/PCC error rate: 20% → 6-7%. Transfer & Assignment: 22% → 7-10%. All while volume grew 4x. Named respondent for 4 consecutive years without a critical unresolved finding.</div></div>
+    </div>
+    <p style="margin-top:12px; font-size:12px; color:var(--amazon-orange);"><strong>SO WHAT FOR AIT:</strong> This is audit change management in action — finding → root cause → structural fix → metric monitoring → sustained compliance. At Amazon scale, with 100x the audit volume, the same discipline applies. I've done this loop for 4 years.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">S2 — "Tell me about a time you held a standard under pressure."</div>
+    <div class="card-subtitle">LPs: Have Backbone; Disagree and Commit · Customer Obsession · Insist on Highest Standards</div>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">Dec-2025: Payment Request rejection rate hit 49% on our quality control gate. Commercial team pushed hard to relax the documentation standard — "the friction is killing velocity."</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Decide: loosen the gate and accept downstream risk, or hold the gate and accept the friction cost?</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I ran the data. Pulled root-cause analysis on rejected PRs — 73% were rejected for substantive documentation gaps, not procedural nits. I built a daily KPI governance pack breaking rejection reasons by category. Presented to leadership: the 49% rejection wasn't over-firing — it was catching real quality gaps. I held the line. Parallel fix: I coached originators on documentation quality, bringing rejection rate down organically without relaxing the rule.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">Standards held. Downstream error rate never spiked. Originator documentation quality improved. Position vindicated by data.</div></div>
+    </div>
+    <p style="margin-top:12px; font-size:12px; color:var(--amazon-orange);"><strong>SO WHAT FOR AIT:</strong> AIT audits will face the same pressure — "you're auditing too much, you're slowing us down." The judgment to hold a standard, backed by data, is the core muscle this role needs.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">S3 — "Tell me about a time you built a process from scratch at scale."</div>
+    <div class="card-subtitle">LPs: Ownership · Think Big · Invent and Simplify</div>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">In 2021, Sobha's collections were running on ad-hoc Excel trackers across 4 legal entities with zero unified reporting. Volume: AED 867M. Projected growth: 15x over 4 years. Delinquency 16.7% and rising.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Build the operating system — tooling, process, MI — that could absorb 15x volume without delinquency breaking.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I led Salesforce 0→1 build with 6-stakeholder discovery. I architected 70+ live reports. I designed the 55-day T−25 to T+30 critical collection window as the operational backbone. I stood up a 77-person two-geography org (Dubai + India) across four functions. Every rule and workflow was documented, versioned, and owned.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">14.9x throughput scale (AED 867M → 12.97B). Delinquency -74% (16.7% → 4.4%). System currently carrying AED 86.8B active portfolio.</div></div>
+    </div>
+    <p style="margin-top:12px; font-size:12px; color:var(--amazon-orange);"><strong>SO WHAT FOR AIT:</strong> AIT needs someone who can build audit programme infrastructure from scratch — the methodology, the metrics, the dashboards, the governance cadence. I've done this build-from-zero at billion-dollar scale.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">S4 — "Tell me about a time you influenced senior leadership with data."</div>
+    <div class="card-subtitle">LPs: Earn Trust · Are Right, A Lot · Deliver Results</div>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">I built an NPV model for a prepayment incentive programme — AED 652M incremental inflow opportunity at AED 21.2M cost, 32% cheaper than bank financing on a 248-day prepayment window.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Get it approved by MD/CEO. The model touched finance, treasury, sales, and legal — each with a reason to push back.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I presented through multiple rounds of scrutiny. Each round I came back with new sensitivity analyses, cohort breakdowns, and edge-case stress tests. I pre-briefed each stakeholder 1:1 before the group meeting so no one was surprised in the room. I defended the assumptions and conceded nothing material.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">Approved. AED 652M programme in execution. Zero material concessions on the model.</div></div>
+    </div>
+    <p style="margin-top:12px; font-size:12px; color:var(--amazon-orange);"><strong>SO WHAT FOR AIT:</strong> This role presents audit insights to VPs and Directors. You need to defend your analysis, propose changes to audit strategy, and influence resource allocation. I've done this at MD/CEO level.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">S5 — "Tell me about a time you improved a process dramatically."</div>
+    <div class="card-subtitle">LPs: Bias for Action · Invent and Simplify · Deliver Results</div>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">Post-Commencement Certificate issuance had a 20-day TAT. Volume tripled to 281/month in November 2025 versus historical ~90.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Cut TAT without creating downstream errors, in a month when volume was 3x normal.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I mapped the workflow end-to-end — found 4 sequential handoffs that could be parallelized, 2 manual checks duplicative with QCG, 1 approval loop that could be pre-authorized by policy. Redesigned the flow, deployed in 2 weeks, monitored daily.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">TAT collapsed from 20 days to 3 days. 3x volume absorbed. Zero quality regressions.</div></div>
+    </div>
+    <p style="margin-top:12px; font-size:12px; color:var(--amazon-orange);"><strong>SO WHAT FOR AIT:</strong> Audit cycle time is a critical metric. If I can compress a 20-day process to 3 days at 3x volume, I can do the same for audit methodology workflows.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Quick Reference — Story Router</div>
+    <table class="q-table">
+      <thead><tr><th>#</th><th>If They Ask About...</th><th>Use</th><th>Headline</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Change management / audit remediation</td><td>S1</td><td>97.5% error reduction, 4-year SPOC</td></tr>
+        <tr><td>2</td><td>Holding standards / disagreement</td><td>S2</td><td>PR 49% defense, data over pressure</td></tr>
+        <tr><td>3</td><td>Building from scratch / scale</td><td>S3</td><td>14.9x scale, 70+ reports, 0→1 Salesforce</td></tr>
+        <tr><td>4</td><td>Senior leadership influence</td><td>S4</td><td>NPV AED 652M at MD/CEO</td></tr>
+        <tr><td>5</td><td>Process improvement / speed</td><td>S5</td><td>PCC 20d→3d at 3x volume</td></tr>
+        <tr><td>6</td><td>AI / automation / innovation</td><td>P15</td><td>Audit Intelligence Dashboard prototype</td></tr>
+        <tr><td>7</td><td>Failure / learning</td><td>—</td><td>Sobha One App (17% vs 80% adoption target)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PANEL 06: COMP INTEL -->
+<div class="panel" id="panel-5">
+  <div class="section-num">06 /</div>
+  <div class="section-title">Compensation Intelligence</div>
+
+  <div class="card">
+    <div class="card-title">Amazon L6 Sr Program Manager — Hyderabad Comp Band</div>
+    <p style="font-size:13px; color:var(--muted); margin-bottom:16px;">Amazon's comp structure: Base + Sign-on Bonus (Year 1 & 2) + RSU (back-loaded vesting: 5/15/40/40). Note the unusual back-loaded RSU vesting — Year 1 TC is dominated by sign-on bonus, not equity.</p>
+    <table class="comp-table">
+      <thead><tr><th>Component</th><th>P25</th><th>P50</th><th>P75</th></tr></thead>
+      <tbody>
+        <tr><td>Base salary</td><td>₹26L</td><td>₹33–36L</td><td>₹43L</td></tr>
+        <tr><td>Sign-on bonus (Y1)</td><td>₹5L</td><td>₹8–12L</td><td>₹15L</td></tr>
+        <tr><td>Sign-on bonus (Y2)</td><td>₹3L</td><td>₹5–8L</td><td>₹10L</td></tr>
+        <tr><td>RSU grant (4-year total)</td><td>₹20L</td><td>₹35–50L</td><td>₹65L</td></tr>
+        <tr><td>RSU Year 1 (5%)</td><td>₹1L</td><td>₹1.75–2.5L</td><td>₹3.25L</td></tr>
+        <tr style="background: rgba(255,153,0,0.05);">
+          <td style="color:var(--amazon-orange); font-weight:700;">Year 1 Total</td>
+          <td style="color:var(--amazon-orange);">~₹35L</td>
+          <td style="color:var(--amazon-orange);">~₹45–55L</td>
+          <td style="color:var(--amazon-orange);">~₹65L</td>
+        </tr>
+        <tr style="background: rgba(63,185,80,0.05);">
+          <td style="color:var(--green); font-weight:700;">Steady-state (Y3/Y4)</td>
+          <td style="color:var(--green);">~₹38L</td>
+          <td style="color:var(--green);">~₹50–65L</td>
+          <td style="color:var(--green);">~₹70L+</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Head-to-Head: Your Pipeline</div>
+    <table class="comp-table">
+      <thead><tr><th>Role</th><th>P25</th><th>P50</th><th>P75</th><th>Equity</th></tr></thead>
+      <tbody>
+        <tr><td>Amazon AIT L6 (this)</td><td>₹35L</td><td>₹45–55L</td><td>₹65L</td><td>AMZN RSUs (back-loaded)</td></tr>
+        <tr><td>AmEx GMNS Director</td><td>₹50–55L</td><td>₹60–70L</td><td>₹82L</td><td>None</td></tr>
+        <tr><td>Uber L5A</td><td>₹75L</td><td>₹85–95L</td><td>₹110L</td><td>UBER RSUs (front-loaded)</td></tr>
+        <tr><td>Google GBO Tools L5</td><td>₹70L</td><td>₹80–85L</td><td>₹95L</td><td>GOOGL RSUs</td></tr>
+        <tr><td>Oaktree VP</td><td>₹42L</td><td>₹55–65L</td><td>₹70L</td><td>Deferred cash LTI</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">The Amazon RSU Back-Loading Reality</div>
+    <p>Amazon's 5/15/40/40 RSU vesting is the worst in FAANG. Year 1: you get only 5% of your stock grant. Amazon compensates with a sign-on bonus that fills the gap in Years 1-2. <strong>Critical negotiation point:</strong> Push for a larger sign-on bonus, not larger RSU — the sign-on is cash-in-hand in Year 1. If AMZN stock appreciates, Years 3-4 comp explodes (40% vests each year). If it doesn't, Year 1-2 sign-on insulates you.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Negotiation Playbook</div>
+    <p>Your AmEx + Uber + Google competing signals are leverage. Amazon recruiters use a "Total Comp" framework — they'll frame the 4-year average. You should frame Year 1 cash (base + sign-on) because that's what you actually earn before RSUs vest meaningfully.</p>
+    <p style="margin-top:12px;"><strong>Key tactics:</strong></p>
+    <p style="font-size:13px; color:var(--muted);">Push sign-on bonus hard — Amazon has more discretion here than on base or RSU.</p>
+    <p style="font-size:13px; color:var(--muted);">Request L6 upper-band leveling using 77-person org scope, AED 86.8B portfolio, MD/CEO-level stakeholder exposure.</p>
+    <p style="font-size:13px; color:var(--muted);">Don't reveal current AED package unless Amazon makes an offer first — use it as leverage only.</p>
+    <p style="font-size:13px; color:var(--muted);">If Amazon offers L5, push back with the scope story — L5 Sr PMs at Amazon typically manage single programs, not multi-programme portfolios with 77 reports.</p>
+    <p style="font-size:13px; color:var(--muted);">Lead with Google/Uber signals for comp pressure — FAANG competing offers carry more weight with Amazon recruiters than non-tech.</p>
+  </div>
+</div>
+
+<!-- PANEL 07: INTERVIEW PREP -->
+<div class="panel" id="panel-6">
+  <div class="section-num">07 /</div>
+  <div class="section-title">Interview Process & Prep</div>
+
+  <div class="card">
+    <div class="card-title">Expected Process — Amazon Sr PM (L6)</div>
+    <div class="two-col" style="margin-top:12px;">
+      <div>
+        <p><span class="badge badge-orange">Round 1</span> <strong>Recruiter Screen</strong> (30 min)</p>
+        <p style="font-size:12px; color:var(--muted);">Background, comp expectations, why-Amazon, LP surface check.</p>
+        <p style="margin-top:16px;"><span class="badge badge-orange">Round 2</span> <strong>Hiring Manager Screen</strong> (60 min)</p>
+        <p style="font-size:12px; color:var(--muted);">Half LP behavioral, half functional PM questions. Scope probing. This is your gate to the loop.</p>
+        <p style="margin-top:16px;"><span class="badge badge-orange">Round 3</span> <strong>The Loop — 5 Interviews</strong> (55 min each)</p>
+        <p style="font-size:12px; color:var(--muted);">5 back-to-back interviews in one day. Each interviewer is assigned 2-3 LPs. One is the Bar Raiser (not from the team). Extreme endurance test.</p>
+      </div>
+      <div>
+        <p><span class="badge badge-red">BAR RAISER</span> <strong>The Veto</strong></p>
+        <p style="font-size:12px; color:var(--muted);">One loop interviewer is a Bar Raiser — an L6+ Amazonian from another team. They have veto power. If they say no, you don't get hired even if every other interviewer says yes. They assess: "Will this person make the team better than it is today?"</p>
+        <p style="margin-top:16px;"><span class="badge badge-green">DEBRIEF</span> <strong>Decision</strong></p>
+        <p style="font-size:12px; color:var(--muted);">All interviewers meet post-loop. Each presents their LP assessment. Consensus required. Bar Raiser has final say on level calibration.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">LP → Story Mapping for This Role</div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:16px;">Amazon's 16 LPs, mapped to your stories. Priority LPs for this role are starred (★).</p>
+    <div class="lp-grid">
+      <div class="lp-card">
+        <div class="lp-name">★ Customer Obsession</div>
+        <div class="lp-def">Leaders start with the customer and work backwards.</div>
+        <div class="lp-story">Use <strong>S5 (PCC TAT)</strong>: Customer couldn't occupy their unit because of a 20-day processing delay. I obsessed over the customer's pain, mapped the end-to-end workflow, and cut it to 3 days.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">★ Ownership</div>
+        <div class="lp-def">Leaders act on behalf of the entire company. They never say "that's not my job."</div>
+        <div class="lp-story">Use <strong>S1 (Audit SPOC)</strong>: I didn't wait for someone else to own the audit findings. I became the named respondent for 4 years and personally drove the 97.5% error reduction.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">★ Dive Deep</div>
+        <div class="lp-def">Leaders operate at all levels, stay connected to details, and audit frequently.</div>
+        <div class="lp-story">Use <strong>S2 (PR 49%)</strong>: I pulled root-cause analysis on every rejection category. 73% were substantive gaps. The data dive — not gut — drove the decision to hold standards.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">★ Deliver Results</div>
+        <div class="lp-def">Leaders focus on key inputs and deliver them with quality and on time.</div>
+        <div class="lp-story">Use <strong>S3 (14.9x scale)</strong>: AED 867M → 12.97B. Delinquency -74%. Built the MI ecosystem, the team structure, and the operating cadence from zero.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">★ Have Backbone; Disagree and Commit</div>
+        <div class="lp-def">Leaders voice disagreement, then commit wholly once a decision is made.</div>
+        <div class="lp-story">Use <strong>S2 (PR 49%)</strong>: Commercial team wanted me to relax controls. I disagreed — with data. When leadership validated my position, the team committed to the quality path.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">★ Insist on the Highest Standards</div>
+        <div class="lp-def">Leaders have relentlessly high standards that many may think are unreasonably high.</div>
+        <div class="lp-story">Use <strong>S1 (97.5% error reduction)</strong>: I didn't stop at "good enough." I designed Zero Error Forward checkpoints and quality scorecards that made 1% error rate the new normal.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">★ Invent and Simplify</div>
+        <div class="lp-def">Leaders expect innovation from their teams and always find ways to simplify.</div>
+        <div class="lp-story">Use <strong>P15 (AI Dashboard)</strong>: I identified that 60% of audit prep time is manual assembly. I built an AI-powered dashboard that automates finding analysis and generates executive briefings.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">Think Big</div>
+        <div class="lp-def">Leaders create and communicate a bold direction that inspires results.</div>
+        <div class="lp-story">Use <strong>S3 (14.9x)</strong>: When I joined, collections was AED 867M on Excel. I didn't just fix the tracker — I designed a system that could carry AED 86.8B.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">Bias for Action</div>
+        <div class="lp-def">Speed matters. Many decisions are reversible and don't need extensive study.</div>
+        <div class="lp-story">Use <strong>S5 (PCC TAT)</strong>: I mapped the workflow, found the bottlenecks, and redesigned the flow in 2 weeks. Didn't wait for a committee — shipped it, monitored daily.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">Earn Trust</div>
+        <div class="lp-def">Leaders listen attentively, speak candidly, and treat others respectfully.</div>
+        <div class="lp-story">Use <strong>S4 (NPV defense)</strong>: I pre-briefed every stakeholder 1:1 before the group meeting. No surprises in the room. Trust is built before the meeting, not in it.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">Are Right, A Lot</div>
+        <div class="lp-def">Leaders have strong judgment and good instincts.</div>
+        <div class="lp-story">Use <strong>S4 (NPV)</strong>: The AED 652M model survived multiple rounds of MD/CEO scrutiny with zero material concessions. The assumptions held because the analysis was rigorous.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">Hire and Develop the Best</div>
+        <div class="lp-def">Leaders raise the performance bar with every hire.</div>
+        <div class="lp-story">Built team capability to operate independently. Team members authored MD-approved documents autonomously. Grew team from 0 → 77 across two geographies.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">Learn and Be Curious</div>
+        <div class="lp-def">Leaders are never done learning and always seek to improve.</div>
+        <div class="lp-story">Use <strong>AI portfolio</strong>: Self-taught AI tooling (Claude API, Streamlit, Python) to build automated programme health tools. Currently pursuing SQL fluency via Mode Analytics + DataCamp.</div>
+      </div>
+      <div class="lp-card">
+        <div class="lp-name">Frugality</div>
+        <div class="lp-def">Accomplish more with less. Constraints breed resourcefulness.</div>
+        <div class="lp-story">Use <strong>NPV story</strong>: The prepayment programme delivered AED 652M inflow at only AED 21.2M cost — 32% cheaper than bank financing. Maximum output, minimum spend.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Top 12 Likely Behavioral Questions</div>
+    <table class="q-table">
+      <thead><tr><th>#</th><th>Question</th><th>Story</th><th>Primary LP</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Tell me about a time you drove a complex change initiative</td><td>S1</td><td>Ownership + Deliver Results</td></tr>
+        <tr><td>2</td><td>Describe when data and stakeholder pressure pointed different directions</td><td>S2</td><td>Have Backbone</td></tr>
+        <tr><td>3</td><td>Tell me about building something from scratch</td><td>S3</td><td>Think Big + Ownership</td></tr>
+        <tr><td>4</td><td>Walk me through your most complex senior-leadership presentation</td><td>S4</td><td>Earn Trust + Are Right A Lot</td></tr>
+        <tr><td>5</td><td>Describe a time you improved a process dramatically</td><td>S5</td><td>Bias for Action + Invent & Simplify</td></tr>
+        <tr><td>6</td><td>Tell me about a time you used AI or automation to solve a problem</td><td>P15</td><td>Invent & Simplify + Learn & Be Curious</td></tr>
+        <tr><td>7</td><td>Tell me about a failure and what you learned</td><td>Sobha One App (17% vs 80%)</td><td>Earn Trust + Learn & Be Curious</td></tr>
+        <tr><td>8</td><td>How do you prioritize when everything is urgent?</td><td>T-25/T+30 framework</td><td>Deliver Results + Dive Deep</td></tr>
+        <tr><td>9</td><td>Tell me about managing a cross-functional initiative</td><td>S3 (6 stakeholders)</td><td>Earn Trust + Ownership</td></tr>
+        <tr><td>10</td><td>What would your first 90 days look like?</td><td>30-60-90 below</td><td>Customer Obsession + Dive Deep</td></tr>
+        <tr><td>11</td><td>How do you measure success for an audit programme?</td><td>Framework answer</td><td>Insist on Highest Standards</td></tr>
+        <tr><td>12</td><td>Why Amazon / why this role / why now?</td><td>Pitch</td><td>Customer Obsession + Think Big</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Your 30-60-90 Day Plan</div>
+    <div class="two-col">
+      <div class="star-box">
+        <p style="color:var(--amazon-orange); font-weight:700; font-size:14px; margin-bottom:8px;">30 Days — Learn</p>
+        <p style="font-size:13px; color:var(--muted);">Shadow current audit workflows. Map all active audit programmes and their owners. Pull 90 days of audit KPI data — coverage rate, finding severity, closure velocity. Meet every cross-functional stakeholder 1:1 (Operations, Analytics, Policy, Technology). Read every major audit methodology document. Identify the current AI/automation baseline (likely near zero). Do not propose changes yet.</p>
+      </div>
+      <div class="star-box">
+        <p style="color:var(--amazon-orange); font-weight:700; font-size:14px; margin-bottom:8px;">60 Days — Diagnose</p>
+        <p style="font-size:13px; color:var(--muted);">Publish a "State of AIT Operations" memo — audit programme health, top 3 bottlenecks, worst-performing audit cycles, biggest automation opportunities. Identify 2-3 quick wins (audit cycle time compression, dashboard automation, finding triage standardization). Ship one. Present the memo to the hiring manager and senior stakeholders. This is the equivalent of my 14-finding risk register at Sobha.</p>
+      </div>
+    </div>
+    <div class="star-box" style="margin-top:12px;">
+      <p style="color:var(--amazon-orange); font-weight:700; font-size:14px; margin-bottom:8px;">90 Days — Build the Roadmap</p>
+      <p style="font-size:13px; color:var(--muted);">Quarterly plan: 2-3 strategic bets (AI-powered anomaly detection pilot, audit prioritization framework, automated finding triage). Each with a success metric and resource plan. Establish the weekly audit review cadence with standardized dashboards. Align with Technology on one joint AI initiative. First AI/automation pilot shipped (audit intelligence dashboard). Present the AI & Automation roadmap to senior leadership. This is my 55-day T−25/T+30 framework applied to audit operations.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Questions to Ask the Interviewer</div>
+    <p style="font-size:13px; color:var(--muted);">What is AIT's current automation baseline — what % of audit workflows are manual vs automated today?</p>
+    <p style="font-size:13px; color:var(--muted);">How is success measured for this role in 90 days, 6 months, 12 months?</p>
+    <p style="font-size:13px; color:var(--muted);">What's the split between audit programme management and the AI transformation mandate?</p>
+    <p style="font-size:13px; color:var(--muted);">Which operational domains does AIT currently cover, and which are growing fastest?</p>
+    <p style="font-size:13px; color:var(--muted);">What does the team structure look like, and where are the capability gaps?</p>
+    <p style="font-size:13px; color:var(--muted);">How does AIT interact with Amazon's central Data Science and ML Platform teams?</p>
+    <p style="font-size:13px; color:var(--muted);">What's the current cadence for presenting audit insights to senior leadership?</p>
+  </div>
+</div>
+
+<!-- PANEL 08: VOCAB DECODER -->
+<div class="panel" id="panel-7">
+  <div class="section-num">08 /</div>
+  <div class="section-title">Vocabulary Decoder</div>
+  
+  <div class="card">
+    <p>Thirty terms to master. Memorize these cold. Fluency — not expertise — is the goal.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="color:var(--amazon-orange);">Amazon Core Vocabulary</div>
+    <table class="vocab-table">
+      <thead><tr><th>Term</th><th>Definition</th><th>Sobha Analog</th></tr></thead>
+      <tbody>
+        <tr><td>LP (Leadership Principles)</td><td>Amazon's 16 codified cultural values. Every decision, hire, and promotion is evaluated against LPs.</td><td>No direct analog — unique to Amazon</td></tr>
+        <tr><td>Bar Raiser</td><td>Senior interviewer from outside the hiring team with veto power. Ensures every hire raises the team's bar.</td><td>External audit reviewer</td></tr>
+        <tr><td>Working Backwards</td><td>Start with the customer press release, then build the product. Amazon's product development methodology.</td><td>Start with the MD approval memo, then build the process</td></tr>
+        <tr><td>PRFAQ</td><td>Press Release + FAQ document. Amazon's product proposal format. Describes the product as if announcing it to customers.</td><td>No direct analog — learn the template</td></tr>
+        <tr><td>6-Pager / 1-Pager</td><td>Amazon's narrative-driven meeting documents. No PowerPoint. All prose, all data, read silently at the start of meetings.</td><td>Your MD-approved process documents</td></tr>
+        <tr><td>OKR</td><td>Objectives & Key Results. Goal-setting framework used across Amazon.</td><td>KPI targets + quarterly plans</td></tr>
+        <tr><td>WBR (Weekly Business Review)</td><td>Weekly metrics review cadence. Standard operating rhythm for Amazon teams.</td><td>Your weekly governance cadence</td></tr>
+        <tr><td>COE (Correction of Errors)</td><td>Amazon's post-incident review document. Root cause + action items + prevention plan.</td><td>Your audit finding remediation reports</td></tr>
+        <tr><td>OP1 / OP2</td><td>Amazon's annual and mid-year planning cycles. OP1 (annual plan, Q3-Q4). OP2 (mid-year revision, Q1-Q2).</td><td>Annual budget + mid-year revision</td></tr>
+        <tr><td>SOP (Standard Operating Procedure)</td><td>Documented process that audits check compliance against.</td><td>Your 6 MD-approved process documents</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="color:var(--amazon-orange);">Audit & Quality Vocabulary</div>
+    <table class="vocab-table">
+      <thead><tr><th>Term</th><th>Definition</th><th>Sobha Analog</th></tr></thead>
+      <tbody>
+        <tr><td>Defect Rate</td><td>% of audited items with quality failures. The core audit output metric.</td><td>Error rate (your 41%→1%)</td></tr>
+        <tr><td>Coverage Rate</td><td>% of eligible transactions/processes actually audited. Higher = more comprehensive.</td><td>Collection coverage % across portfolio</td></tr>
+        <tr><td>Audit Cycle Time</td><td>Time from audit initiation to finding delivery. Speed metric.</td><td>PCC TAT (your 20d→3d)</td></tr>
+        <tr><td>Finding Severity</td><td>Classification of audit findings: Critical, High, Medium, Low.</td><td>Your 14-finding risk register severity tiers</td></tr>
+        <tr><td>Corrective Action Plan (CAP)</td><td>Remediation plan for each audit finding. Tracked to closure.</td><td>Your remediation programme</td></tr>
+        <tr><td>Root Cause Analysis (RCA)</td><td>Structured diagnosis of why a defect occurred. Amazon uses 5-Whys.</td><td>Your PR rejection root cause analysis</td></tr>
+        <tr><td>Control Point</td><td>A step in a process where quality is verified before proceeding.</td><td>Your "Zero Error Forward" checkpoints</td></tr>
+        <tr><td>False Positive (audit context)</td><td>An item flagged by audit that was actually compliant. Wastes auditor time.</td><td>PR rejections that were procedural, not substantive</td></tr>
+        <tr><td>Sampling Methodology</td><td>Statistical approach to selecting which items to audit (random, risk-based, stratified).</td><td>Your risk-based prioritization via T−25/T+30</td></tr>
+        <tr><td>Audit Universe</td><td>The complete population of auditable processes, teams, and operations.</td><td>Your 36-project portfolio across 4 entities</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="color:var(--amazon-orange);">Amazon E-Commerce Operations Vocabulary</div>
+    <table class="vocab-table">
+      <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+      <tbody>
+        <tr><td>ASIN</td><td>Amazon Standard Identification Number. Unique product identifier. Audits often operate at ASIN level.</td></tr>
+        <tr><td>FC (Fulfillment Center)</td><td>Amazon's warehouses where products are stored, picked, packed, and shipped.</td></tr>
+        <tr><td>3P (Third-Party Seller)</td><td>External merchants selling on Amazon's marketplace. Major audit target for compliance.</td></tr>
+        <tr><td>1P (First-Party)</td><td>Products sold directly by Amazon (Amazon Retail).</td></tr>
+        <tr><td>Catalog</td><td>The product information database. Catalog audits check listing quality, accuracy, and compliance.</td></tr>
+        <tr><td>CSAT / NPS</td><td>Customer Satisfaction Score / Net Promoter Score. Customer experience metrics that audit programmes often track as outcomes.</td></tr>
+        <tr><td>Andon Cord</td><td>Amazon's mechanism to stop a process when a defect is found. Named after Toyota's manufacturing practice.</td></tr>
+        <tr><td>Flywheel</td><td>Amazon's virtuous cycle: lower prices → more customers → more sellers → more selection → lower costs → lower prices.</td></tr>
+        <tr><td>Two-Pizza Team</td><td>Amazon's team sizing principle: a team should be small enough to feed with two pizzas (~6-10 people).</td></tr>
+        <tr><td>Tenets</td><td>Team-level operating principles that guide decision-making. Each team writes their own tenets, informed by LPs.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <div class="callout-title">How to Deploy Vocabulary</div>
+    <p>Use it naturally, not performatively. Saying "I'd start by understanding the audit universe, define sampling methodology based on risk severity, and establish control points in the highest-defect workflows" is fluency. Saying "Let me tell you what an ASIN is" is memorization. Weave, don't lecture.</p>
+  </div>
+</div>
+
+<div class="footer">
+  Amazon Sr. Program Manager AIT Playbook · Priyanuj Deka · v1 · May 2026<br>
+  Pipeline Role #15 · Active · Apply Now
+</div>
+
+<script>
+function showTab(idx) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.panel').forEach((p,i) => p.classList.toggle('active', i===idx));
+  window.scrollTo({top: document.querySelector('.tab-bar').offsetTop - 10, behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>

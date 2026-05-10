@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D.E. Shaw MBOSS — Story Bank Reframes | Priyanuj Deka</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #0f2044;
+    --navy-light: #1a3260;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-pale: #f5e9c8;
+    --cream: #faf7f0;
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --border: rgba(201,168,76,0.2);
+    --border-strong: rgba(201,168,76,0.5);
+    --card-bg: #ffffff;
+    --tag-ops: #0f2044;
+    --tag-vendor: #1a3260;
+    --tag-tech: #2d4a7a;
+    --tag-controls: #3d2b0f;
+    --tag-data: #0f3020;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-primary);
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    padding: 56px 48px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.15;
+    max-width: 700px;
+    margin-bottom: 16px;
+  }
+  .header h1 span { color: var(--gold-light); }
+  .header-subtitle {
+    color: rgba(255,255,255,0.55);
+    font-size: 14px;
+    font-weight: 300;
+    max-width: 620px;
+    margin-bottom: 32px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .meta-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+  }
+  .meta-value {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* ── LEGEND ── */
+  .legend-bar {
+    background: var(--navy-mid);
+    padding: 16px 48px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .legend-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    margin-right: 8px;
+  }
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    color: #fff;
+  }
+  .tag-ops { background: var(--tag-ops); border: 1px solid rgba(201,168,76,0.3); }
+  .tag-vendor { background: var(--tag-vendor); border: 1px solid rgba(201,168,76,0.25); }
+  .tag-tech { background: var(--tag-tech); border: 1px solid rgba(100,150,255,0.3); }
+  .tag-controls { background: var(--tag-controls); border: 1px solid rgba(201,120,40,0.3); color: #e8c97a; }
+  .tag-data { background: var(--tag-data); border: 1px solid rgba(40,180,100,0.3); }
+
+  /* ── MAIN ── */
+  .main { max-width: 1000px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── STORY CARD ── */
+  .story-card {
+    background: white;
+    border: 1px solid #e8e0d0;
+    border-left: 4px solid var(--gold);
+    border-radius: 4px;
+    margin-bottom: 40px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(10,22,40,0.06);
+    transition: box-shadow 0.2s;
+  }
+  .story-card:hover { box-shadow: 0 6px 24px rgba(10,22,40,0.10); }
+
+  .story-header {
+    padding: 24px 28px 20px;
+    background: linear-gradient(135deg, #fdfbf7 0%, #f9f6ef 100%);
+    border-bottom: 1px solid #ede8de;
+  }
+  .story-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .story-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 10px;
+    line-height: 1.25;
+  }
+  .story-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .story-body { padding: 28px; }
+
+  /* REFRAME BRIDGE */
+  .reframe-bridge {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 28px;
+    padding: 20px;
+    background: #f8f5ef;
+    border-radius: 4px;
+    border: 1px solid #ede8de;
+  }
+  .reframe-side { }
+  .reframe-side-label {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 6px;
+  }
+  .reframe-text-original {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .reframe-text-new {
+    font-size: 13px;
+    color: var(--navy);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .reframe-arrow {
+    width: 40px;
+    text-align: center;
+    color: var(--gold);
+    font-size: 20px;
+  }
+
+  /* STAR GRID */
+  .star-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .star-block {
+    padding: 16px 18px;
+    border-radius: 4px;
+    border: 1px solid #ede8de;
+  }
+  .star-block.situation { background: #f0f4ff; border-color: #c5d3f5; }
+  .star-block.task      { background: #f0fff4; border-color: #b2dfc3; }
+  .star-block.action    { background: #fffbf0; border-color: #e8d89a; }
+  .star-block.result    { background: #f8f0ff; border-color: #d4b3f0; }
+  .star-block.full-width { grid-column: 1 / -1; }
+
+  .star-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .situation .star-label { color: #3a5ab8; }
+  .task      .star-label { color: #2a7a4a; }
+  .action    .star-label { color: #a0820a; }
+  .result    .star-label { color: #7a3ab8; }
+
+  .star-content {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--text-primary);
+  }
+  .star-content strong { font-weight: 500; color: var(--navy); }
+
+  /* INTERVIEW CALLOUT */
+  .interview-box {
+    background: var(--navy);
+    border-radius: 4px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+  }
+  .interview-box-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .interview-quote {
+    font-style: italic;
+    color: rgba(255,255,255,0.85);
+    font-size: 13.5px;
+    line-height: 1.65;
+    border-left: 2px solid var(--gold);
+    padding-left: 14px;
+  }
+  .interview-quote em { color: var(--gold-light); font-style: normal; font-weight: 500; }
+
+  /* VOCAB ROW */
+  .vocab-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #ede8de;
+    flex-wrap: wrap;
+  }
+  .vocab-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding-top: 3px;
+    white-space: nowrap;
+  }
+  .vocab-chip {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 11px;
+    color: var(--navy);
+    font-family: 'DM Mono', monospace;
+  }
+  .vocab-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* STRENGTH BADGE */
+  .strength-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, #fdf8ec, #f5e9c8);
+    border: 1px solid var(--border-strong);
+    border-radius: 20px;
+    font-size: 11px;
+    color: #7a5c10;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* METRIC HIGHLIGHT */
+  .metric { color: var(--navy); font-weight: 600; }
+
+  /* DIVIDER */
+  .section-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+    margin: 48px 0 40px;
+  }
+
+  /* QUICK REF TABLE */
+  .quick-ref {
+    background: white;
+    border: 1px solid #e8e0d0;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 12px rgba(10,22,40,0.06);
+  }
+  .quick-ref-header {
+    background: var(--navy);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .quick-ref-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: white;
+    font-weight: 500;
+  }
+  .quick-ref-header span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 1.5px;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    background: #f8f5ef;
+    padding: 10px 20px;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    border-bottom: 1px solid #ede8de;
+  }
+  td {
+    padding: 12px 20px;
+    font-size: 13px;
+    border-bottom: 1px solid #f0ebe0;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #fdf9f2; }
+  td.original { color: var(--text-secondary); font-style: italic; }
+  td.reframed { color: var(--navy); font-weight: 500; }
+  td.role-fit { font-size: 11.5px; color: var(--text-secondary); }
+
+  /* FOOTER */
+  .footer {
+    background: var(--navy);
+    padding: 32px 48px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: rgba(255,255,255,0.35);
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 640px) {
+    .header { padding: 40px 24px 36px; }
+    .header h1 { font-size: 30px; }
+    .main { padding: 32px 16px 60px; }
+    .star-grid { grid-template-columns: 1fr; }
+    .reframe-bridge { grid-template-columns: 1fr; }
+    .reframe-arrow { transform: rotate(90deg); }
+    .legend-bar { padding: 16px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-eyebrow">Career Positioning Document · Confidential</div>
+  <h1>Story Bank <span>Reframes</span><br>for D.E. Shaw MBOSS</h1>
+  <p class="header-subtitle">Eight Sobha Realty achievements translated into Middle Back Office Strategy & Support language — ready for CV, cover letter, and interview use.</p>
+  <div class="header-meta">
+    <div class="meta-item">
+      <span class="meta-label">Candidate</span>
+      <span class="meta-value">Priyanuj Deka</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Target Role</span>
+      <span class="meta-value">Senior Manager / Associate Director, MBOSS</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Employer</span>
+      <span class="meta-value">D.E. Shaw India Private Limited</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Stories</span>
+      <span class="meta-value">8 Reframes · 3 Priority Tiers</span>
+    </div>
+  </div>
+</div>
+
+<!-- LEGEND BAR -->
+<div class="legend-bar">
+  <span class="legend-label">Category Key</span>
+  <span class="tag tag-ops">Ops Transformation</span>
+  <span class="tag tag-vendor">Vendor Oversight</span>
+  <span class="tag tag-tech">Tech Implementation</span>
+  <span class="tag tag-controls">Controls & Governance</span>
+  <span class="tag tag-data">Data-Informed Strategy</span>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- QUICK REFERENCE TABLE -->
+  <p class="section-title">Quick Reference — All 8 Reframes at a Glance</p>
+  <div class="quick-ref">
+    <div class="quick-ref-header">
+      <h3>Sobha Achievement → MBOSS Narrative</h3>
+      <span>Use this table to select stories per question type</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Original Sobha Frame</th>
+          <th>D.E. Shaw MBOSS Reframe</th>
+          <th>Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1</strong></td>
+          <td class="original">Reduced delinquency 74% while scaling collections 14.9x</td>
+          <td class="reframed">Transformed an underperforming service delivery model — simultaneous scale + quality improvement</td>
+          <td class="role-fit">"Tell me about an ops transformation you led"</td>
+        </tr>
+        <tr>
+          <td><strong>2</strong></td>
+          <td class="original">Designed the 55-day critical collection window framework</td>
+          <td class="reframed">Designed a proprietary service delivery timing model that replaced reactive exception-handling with proactive SLA management</td>
+          <td class="role-fit">"How do you approach process re-design?"</td>
+        </tr>
+        <tr>
+          <td><strong>3</strong></td>
+          <td class="original">Led Salesforce architecture — 70+ report suite</td>
+          <td class="reframed">Led strategic technology implementation to create a single source of truth for operational performance visibility</td>
+          <td class="role-fit">"Experience with tech/systems implementation"</td>
+        </tr>
+        <tr>
+          <td><strong>4</strong></td>
+          <td class="original">PCC TAT: 20 days → 3 days; volume 3x</td>
+          <td class="reframed">Re-engineered a high-volume client servicing process — 85% TAT reduction while tripling throughput</td>
+          <td class="role-fit">"Give an example of continuous improvement"</td>
+        </tr>
+        <tr>
+          <td><strong>5</strong></td>
+          <td class="original">NPV prepayment model — AED 652M, AED 21.2M cost</td>
+          <td class="reframed">Built a value-linkage framework that quantified the ROI of an operational program and justified investment at CFO level</td>
+          <td class="role-fit">"Linking cost to value / vendor economics"</td>
+        </tr>
+        <tr>
+          <td><strong>6</strong></td>
+          <td class="original">Built 77-person team across UAE + India</td>
+          <td class="reframed">Designed and implemented a cross-geography operating model — structured accountability, offshore-onshore coordination</td>
+          <td class="role-fit">"Cross-functional alignment across business units"</td>
+        </tr>
+        <tr>
+          <td><strong>7</strong></td>
+          <td class="original">Managed external collection agencies (vendor empanelment)</td>
+          <td class="reframed">Designed a third-party service provider governance framework — SLA design, performance tracking, cost accountability</td>
+          <td class="role-fit">"Experience managing third-party providers"</td>
+        </tr>
+        <tr>
+          <td><strong>8</strong></td>
+          <td class="original">PR rejection rate governance — 49% flagged, root cause resolved</td>
+          <td class="reframed">Established a controls and exception management framework — systematic quality gate with upstream process correction</td>
+          <td class="role-fit">"Controls, oversight, and risk governance"</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="section-divider">
+  <p class="section-title">Tier 1 — Lead Stories (Use in Every Interview)</p>
+
+  <!-- STORY 1 -->
+  <div class="story-card">
+    <div class="story-header">
+      <div class="story-number">Story 01 · Tier 1 Priority</div>
+      <div class="story-title">Transforming a Broken Service Delivery Model at Scale</div>
+      <div class="story-tags">
+        <span class="tag tag-ops">Ops Transformation</span>
+        <span class="tag tag-data">Data-Informed Strategy</span>
+        <span class="strength-badge">⚡ Restorative + Analytical</span>
+      </div>
+    </div>
+    <div class="story-body">
+
+      <div class="reframe-bridge">
+        <div class="reframe-side">
+          <div class="reframe-side-label">Original Sobha Frame</div>
+          <div class="reframe-text-original">"Reduced delinquency from 16.7% to 4.4% over four years while scaling total collections 14.9x across 30+ real estate projects."</div>
+        </div>
+        <div class="reframe-arrow">→</div>
+        <div class="reframe-side">
+          <div class="reframe-side-label">D.E. Shaw MBOSS Reframe</div>
+          <div class="reframe-text-new">"Transformed an underperforming service delivery model under hypergrowth conditions — achieving a 74% quality improvement while simultaneously scaling operational throughput 14.9x."</div>
+        </div>
+      </div>
+
+      <div class="star-grid">
+        <div class="star-block situation">
+          <div class="star-label">Situation</div>
+          <div class="star-content">Sobha Realty's collections function was fragmented across 30+ projects with no unified performance model. Delinquency was running at <strong>16.7%</strong> — an unsustainable risk exposure — while the business was rapidly expanding its portfolio. There were no consistent SLAs, no provider accountability frameworks, and no data infrastructure to diagnose where service delivery was failing.</div>
+        </div>
+        <div class="star-block task">
+          <div class="star-label">Task</div>
+          <div class="star-content">Design and implement a scalable operations model that could absorb aggressive business growth without a proportional increase in delinquency or operational risk. The mandate was dual: improve quality indicators while enabling volume growth — the same challenge any MBOSS leader faces when a firm's third-party operations infrastructure hasn't kept pace with AUM growth.</div>
+        </div>
+        <div class="star-block action full-width">
+          <div class="star-label">Action</div>
+          <div class="star-content">Built the operating model from first principles: <strong>(1) Segmented the portfolio</strong> by risk profile to allocate resources where expected value was highest. <strong>(2) Designed performance standards</strong> — defined what "good" looked like at each stage of the collections lifecycle, creating measurable benchmarks analogous to SLAs for a fund administrator. <strong>(3) Embedded data infrastructure</strong> — co-architected a Salesforce-based reporting suite of 70+ live dashboards to create real-time visibility into performance versus target. <strong>(4) Redesigned the intervention model</strong> — replaced reactive exception-handling with a structured 55-day proactive engagement window, shifting the team from firefighting to systematic service delivery.</div>
+        </div>
+        <div class="star-block result full-width">
+          <div class="star-label">Result</div>
+          <div class="star-content">Delinquency fell from <strong>16.7% → 4.4%</strong> (−74%) over four years. Total collections scaled <strong>14.9x</strong> over the same period. The operating model built to support this is still running. This is the equivalent of a fund administrator improving reconciliation accuracy from 83% to 96% while tripling AUM serviced — the core MBOSS challenge: <em>scale without degradation of quality or control.</em></div>
+        </div>
+      </div>
+
+      <div class="interview-box">
+        <div class="interview-box-label">How to Say This in Interview</div>
+        <div class="interview-quote">"The closest analogy to what MBOSS does is what I spent four years building at Sobha. I inherited a collections function with 16.7% delinquency across 30 projects — which in fund operations terms is like having your fund administrator running a 17% error rate on NAV calculations. My job was to <em>build the operating model that made that impossible</em>. By the time I had fully embedded the performance framework, delinquency was at 4.4%, and we had scaled the business 14.9x. That required exactly the same disciplines your MBOSS team works on: SLA design, data infrastructure, cross-functional accountability, and linking operational cost to business value."</div>
+      </div>
+
+      <div class="vocab-row">
+        <span class="vocab-label">Use These Words</span>
+        <div class="vocab-chips">
+          <span class="vocab-chip">service delivery model</span>
+          <span class="vocab-chip">performance standards</span>
+          <span class="vocab-chip">operational risk</span>
+          <span class="vocab-chip">SLA design</span>
+          <span class="vocab-chip">quality at scale</span>
+          <span class="vocab-chip">control framework</span>
+          <span class="vocab-chip">real-time visibility</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STORY 2 -->
+  <div class="story-card">
+    <div class="story-header">
+      <div class="story-number">Story 02 · Tier 1 Priority</div>
+      <div class="story-title">Designing a Proprietary Operational Timing Framework</div>
+      <div class="story-tags">
+        <span class="tag tag-ops">Ops Transformation</span>
+        <span class="tag tag-data">Data-Informed Strategy</span>
+        <span class="strength-badge">⚡ Analytical + Restorative</span>
+      </div>
+    </div>
+    <div class="story-body">
+
+      <div class="reframe-bridge">
+        <div class="reframe-side">
+          <div class="reframe-side-label">Original Sobha Frame</div>
+          <div class="reframe-text-original">"Developed a 55-day critical collection window (T−25 to T+30) that structured all team activity around payment due dates."</div>
+        </div>
+        <div class="reframe-arrow">→</div>
+        <div class="reframe-side">
+          <div class="reframe-side-label">D.E. Shaw MBOSS Reframe</div>
+          <div class="reframe-text-new">"Diagnosed the root cause of recurring service failures and designed a structured intervention model that replaced exception-based firefighting with a proactive, SLA-anchored operational rhythm."</div>
+        </div>
+      </div>
+
+      <div class="star-grid">
+        <div class="star-block situation">
+          <div class="star-label">Situation</div>
+          <div class="star-content">Collections activity was happening reactively — the team engaged customers only after payment failures had already occurred. This was the operational equivalent of a fund administrator flagging reconciliation breaks after the NAV had already been reported to investors. The cost of late intervention (higher delinquency, strained relationships, elevated recovery effort) was not being measured or attributed to the process design failure.</div>
+        </div>
+        <div class="star-block task">
+          <div class="star-label">Task</div>
+          <div class="star-content">Redesign the operational model so that the team's activity was structured around <em>preventing</em> failures rather than responding to them. This required building a timing-based framework that could be standardised across 30+ projects and 77 team members without losing contextual judgment.</div>
+        </div>
+        <div class="star-block action full-width">
+          <div class="star-label">Action</div>
+          <div class="star-content">Analysed historical payment data to identify the precise window in which intervention had the highest yield — the <strong>T−25 to T+30 day band</strong> around payment due dates. Built a standardised playbook for each phase of this 55-day window, assigning specific activities, escalation triggers, and accountability checkpoints at each stage. Embedded the framework into Salesforce workflows so execution was systematic, not discretionary. The framework became the operational standard across the entire team — not a guideline, but the operating model itself.</div>
+        </div>
+        <div class="star-block result">
+          <div class="star-label">Result</div>
+          <div class="star-content">The framework became the team's primary operating model and contributed directly to the delinquency reduction from 16.7% → 4.4%. More importantly, it transformed the <em>character</em> of the operation: from unpredictable and reactive to structured and measurable — which is precisely what MBOSS is charged with doing to third-party service providers.</div>
+        </div>
+        <div class="star-block task">
+          <div class="star-label">MBOSS Parallel</div>
+          <div class="star-content">In fund operations, this maps directly to designing an SLA governance calendar — defining when fund admins must deliver NAV drafts, when reconciliation exceptions must be resolved, and when escalation to senior operations should occur. The methodology is identical: <em>replace reactive exception-handling with a structured, time-anchored performance model.</em></div>
+        </div>
+      </div>
+
+      <div class="interview-box">
+        <div class="interview-box-label">How to Say This in Interview</div>
+        <div class="interview-quote">"One of my core beliefs about operations management is that most 'performance problems' are actually <em>process design problems</em>. When I joined Sobha's collections function, the team was firefighting — engaging clients only after they'd already missed payments. I ran a data analysis on historical recovery rates by timing of intervention and found a clear 55-day window where engagement had the highest yield. I codified that into a structured operational playbook — essentially an internal SLA model — and embedded it into the team's workflow system. That's the same logic I'd apply at D.E. Shaw: map where your third-party providers' process design is creating downstream risk, and redesign the interaction model to remove it."</div>
+      </div>
+
+      <div class="vocab-row">
+        <span class="vocab-label">Use These Words</span>
+        <div class="vocab-chips">
+          <span class="vocab-chip">proactive intervention model</span>
+          <span class="vocab-chip">SLA calendar design</span>
+          <span class="vocab-chip">root cause analysis</span>
+          <span class="vocab-chip">structured playbook</span>
+          <span class="vocab-chip">exception prevention</span>
+          <span class="vocab-chip">operational rhythm</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STORY 3 -->
+  <div class="story-card">
+    <div class="story-header">
+      <div class="story-number">Story 03 · Tier 1 Priority</div>
+      <div class="story-title">Linking Operational Cost to Measurable Business Value</div>
+      <div class="story-tags">
+        <span class="tag tag-vendor">Vendor Oversight</span>
+        <span class="tag tag-data">Data-Informed Strategy</span>
+        <span class="strength-badge">⚡ Analytical + Arranger</span>
+      </div>
+    </div>
+    <div class="story-body">
+
+      <div class="reframe-bridge">
+        <div class="reframe-side">
+          <div class="reframe-side-label">Original Sobha Frame</div>
+          <div class="reframe-text-original">"Built an NPV model for Advance Collections program — AED 652M incremental inflow, AED 21.2M cost, 248-day avg prepayment, 32% cheaper than bank financing."</div>
+        </div>
+        <div class="reframe-arrow">→</div>
+        <div class="reframe-side">
+          <div class="reframe-side-label">D.E. Shaw MBOSS Reframe</div>
+          <div class="reframe-text-new">"Designed a rigorous value-linkage framework that quantified the ROI of an operational program and translated operational performance into CFO-level investment justification."</div>
+        </div>
+      </div>
+
+      <div class="star-grid">
+        <div class="star-block situation">
+          <div class="star-label">Situation</div>
+          <div class="star-content">The Advance Collections program was running operationally, but its economic case had never been formally quantified. Leadership was allocating resources to it without a clear model of what value it was generating versus its cost. This mirrors a common MBOSS challenge: firms pay significant fees to fund administrators, custodians, and prime brokers without a rigorous framework for measuring whether the cost is proportionate to the value delivered.</div>
+        </div>
+        <div class="star-block task">
+          <div class="star-label">Task</div>
+          <div class="star-content">Build a financial model that objectively quantified the value the Advance Collections program was generating, expressed in terms a CFO could act on — comparable to the cost of alternative capital sources and benchmarked against the program's operational cost.</div>
+        </div>
+        <div class="star-block action full-width">
+          <div class="star-label">Action</div>
+          <div class="star-content">Modelled the net present value of cash inflows generated by early collections — using actual payment timing data (248-day average prepayment) against the opportunity cost of bank financing (which the firm would otherwise use). Quantified the total operational cost of running the program at <strong>AED 21.2M</strong>, against an incremental inflow of <strong>AED 652M</strong>. Demonstrated that the program delivered financing at <strong>32% lower cost than conventional bank debt</strong>. This became the business case that justified ongoing investment and headcount allocation.</div>
+        </div>
+        <div class="star-block result full-width">
+          <div class="star-label">Result</div>
+          <div class="star-content">The model shifted the conversation from "collections is a cost centre" to "collections is a financing function with quantifiable ROI." Senior leadership approved continued investment based on the economic case. The same methodology — cost-per-unit of value, benchmarked against alternatives — is directly applicable to how MBOSS should evaluate third-party service provider pricing: <em>not just "is this the market rate" but "is the value-to-cost ratio defensible."</em></div>
+        </div>
+      </div>
+
+      <div class="interview-box">
+        <div class="interview-box-label">How to Say This in Interview</div>
+        <div class="interview-quote">"One of the skills I've developed that I think is directly relevant to your vendor economics work is building cost-to-value linkage frameworks. At Sobha, I built a full NPV model for our Advance Collections program — quantifying AED 652M in incremental cash inflows against a total program cost of AED 21.2M, which demonstrated we were providing capital at 32% below our bank financing rate. That's the same analytical discipline required to evaluate whether a fund administrator's fee schedule is justified by the operational value they deliver — which I understand is a core part of what this role manages."</div>
+      </div>
+
+      <div class="vocab-row">
+        <span class="vocab-label">Use These Words</span>
+        <div class="vocab-chips">
+          <span class="vocab-chip">cost-to-value linkage</span>
+          <span class="vocab-chip">vendor economics</span>
+          <span class="vocab-chip">ROI framework</span>
+          <span class="vocab-chip">pricing renegotiation</span>
+          <span class="vocab-chip">fee benchmarking</span>
+          <span class="vocab-chip">capital efficiency</span>
+          <span class="vocab-chip">CFO-level justification</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="section-divider">
+  <p class="section-title">Tier 2 — Supporting Stories (Deploy for Specific Questions)</p>
+
+  <!-- STORY 4 -->
+  <div class="story-card">
+    <div class="story-header">
+      <div class="story-number">Story 04 · Tier 2</div>
+      <div class="story-title">Strategic Technology Implementation — 70+ Report Platform</div>
+      <div class="story-tags">
+        <span class="tag tag-tech">Tech Implementation</span>
+        <span class="tag tag-data">Data-Informed Strategy</span>
+        <span class="strength-badge">⚡ Arranger + Analytical</span>
+      </div>
+    </div>
+    <div class="story-body">
+
+      <div class="reframe-bridge">
+        <div class="reframe-side">
+          <div class="reframe-side-label">Original Sobha Frame</div>
+          <div class="reframe-text-original">"Led solution design for Salesforce CRM implementation — live-data-connected 70+ report suite for collections performance management."</div>
+        </div>
+        <div class="reframe-arrow">→</div>
+        <div class="reframe-side">
+          <div class="reframe-side-label">D.E. Shaw MBOSS Reframe</div>
+          <div class="reframe-text-new">"Led strategic technology implementation that replaced manual, fragmented reporting with a real-time operational intelligence platform — driving the business case, defining requirements, and embedding adoption across 77 users."</div>
+        </div>
+      </div>
+
+      <div class="star-grid">
+        <div class="star-block situation">
+          <div class="star-label">Situation</div>
+          <div class="star-content">Collections performance data was fragmented across Excel files, manual reports, and disconnected systems. There was no single source of truth. Leadership decisions were being made on data that was days old, manually compiled, and prone to error. In financial operations terms, this is analogous to a fund administrator with no automated reconciliation system — everything manual, everything delayed, everything fragile.</div>
+        </div>
+        <div class="star-block task">
+          <div class="star-label">Task</div>
+          <div class="star-content">Lead the design and implementation of a technology platform that could provide real-time operational visibility across all 30+ projects, enabling data-driven management decisions and creating a single source of truth for performance governance.</div>
+        </div>
+        <div class="star-block action full-width">
+          <div class="star-label">Action</div>
+          <div class="star-content">Drove solution architecture for Salesforce CRM implementation from the operations side — defining use-case requirements, designing the data model to support performance tracking, and building out a <strong>70+ report and dashboard suite</strong> that covered every critical performance dimension (collections rate, delinquency trends, agent productivity, project-level variance, escalation queues). Coordinated across IT, finance, and operations to ensure the platform served all stakeholder views. Managed adoption across 77 team members across two geographies.</div>
+        </div>
+        <div class="star-block result">
+          <div class="star-label">Result</div>
+          <div class="star-content">The platform became the operational nerve centre for the entire collections function. Real-time data replaced weekly manual reporting cycles. Performance management became proactive rather than retrospective. The infrastructure directly enabled the delinquency improvement and scale story in Story 01.</div>
+        </div>
+        <div class="star-block task">
+          <div class="star-label">MBOSS Parallel</div>
+          <div class="star-content">In investment operations, this maps to implementing a data aggregation and exception reporting platform across fund administration providers — Geneva, InvestOne, or similar — to enable real-time oversight rather than month-end reconciliation reviews.</div>
+        </div>
+      </div>
+
+      <div class="vocab-row">
+        <span class="vocab-label">Use These Words</span>
+        <div class="vocab-chips">
+          <span class="vocab-chip">single source of truth</span>
+          <span class="vocab-chip">solution architecture</span>
+          <span class="vocab-chip">operational intelligence</span>
+          <span class="vocab-chip">requirements definition</span>
+          <span class="vocab-chip">cross-functional implementation</span>
+          <span class="vocab-chip">adoption management</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STORY 5 -->
+  <div class="story-card">
+    <div class="story-header">
+      <div class="story-number">Story 05 · Tier 2</div>
+      <div class="story-title">Process Re-Engineering — 85% TAT Reduction at 3x Volume</div>
+      <div class="story-tags">
+        <span class="tag tag-ops">Ops Transformation</span>
+        <span class="strength-badge">⚡ Restorative + Arranger</span>
+      </div>
+    </div>
+    <div class="story-body">
+
+      <div class="reframe-bridge">
+        <div class="reframe-side">
+          <div class="reframe-side-label">Original Sobha Frame</div>
+          <div class="reframe-text-original">"Reduced Payment Confirmation Certificate (PCC) TAT from 20 days to 3 days while request volume tripled (Nov-25: 281 vs prior ~90/month)."</div>
+        </div>
+        <div class="reframe-arrow">→</div>
+        <div class="reframe-side">
+          <div class="reframe-side-label">D.E. Shaw MBOSS Reframe</div>
+          <div class="reframe-text-new">"Re-engineered a multi-stakeholder client servicing process to achieve an 85% reduction in turnaround time simultaneously with a 3x increase in volume — without additional headcount."</div>
+        </div>
+      </div>
+
+      <div class="star-grid">
+        <div class="star-block situation">
+          <div class="star-label">Situation</div>
+          <div class="star-content">The Payment Confirmation Certificate process was a critical client-facing document with a 20-day TAT that was generating significant client dissatisfaction. As the business grew, volume was tripling — which would have further stretched an already slow process. This is the operations equivalent of a fund administrator taking 20 days to deliver investor account statements — acceptable at low volume, catastrophic as AUM scales.</div>
+        </div>
+        <div class="star-block task">
+          <div class="star-label">Task</div>
+          <div class="star-content">Redesign the end-to-end PCC process to reduce TAT dramatically while absorbing the projected 3x increase in request volume — without proportional headcount increase.</div>
+        </div>
+        <div class="star-block action full-width">
+          <div class="star-label">Action</div>
+          <div class="star-content">Mapped the full process end-to-end to identify bottlenecks — found that most of the 20-day cycle was composed of waiting time between handoffs, not actual processing time. Redesigned the workflow to <strong>eliminate sequential dependencies</strong> wherever parallel processing was possible. Defined clear ownership for each step with maximum SLA timers per stage. Automated trigger notifications to remove manual follow-up loops. Implemented a dedicated processing queue to prevent PCC work from being displaced by other priorities.</div>
+        </div>
+        <div class="star-block result">
+          <div class="star-label">Result</div>
+          <div class="star-content">TAT fell from <strong>20 days → 3 days</strong> (85% reduction). Monthly volume absorbed grew from ~90 to <strong>281 certificates</strong> (3x). The process now operates at scale with the same team size. Client satisfaction on documentation turnaround improved materially.</div>
+        </div>
+        <div class="star-block task">
+          <div class="star-label">MBOSS Parallel</div>
+          <div class="star-content">Direct analogy: fund administrator NAV delivery SLA re-engineering, trade confirmation turnaround improvement, or investor reporting cycle compression. The methodology — process map, identify wait time vs. processing time, eliminate sequential dependencies — is universal.</div>
+        </div>
+      </div>
+
+      <div class="vocab-row">
+        <span class="vocab-label">Use These Words</span>
+        <div class="vocab-chips">
+          <span class="vocab-chip">end-to-end process redesign</span>
+          <span class="vocab-chip">TAT reduction</span>
+          <span class="vocab-chip">workflow automation</span>
+          <span class="vocab-chip">capacity at scale</span>
+          <span class="vocab-chip">SLA per stage</span>
+          <span class="vocab-chip">handoff elimination</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STORY 6 -->
+  <div class="story-card">
+    <div class="story-header">
+      <div class="story-number">Story 06 · Tier 2</div>
+      <div class="story-title">Designing a Cross-Geography Operating Model</div>
+      <div class="story-tags">
+        <span class="tag tag-ops">Ops Transformation</span>
+        <span class="tag tag-vendor">Vendor Oversight</span>
+        <span class="strength-badge">⚡ Arranger + Individualization</span>
+      </div>
+    </div>
+    <div class="story-body">
+
+      <div class="reframe-bridge">
+        <div class="reframe-side">
+          <div class="reframe-side-label">Original Sobha Frame</div>
+          <div class="reframe-text-original">"Built and managed a 77-person team across Dubai (35) and India (42) — four functional sub-teams with distinct accountabilities."</div>
+        </div>
+        <div class="reframe-arrow">→</div>
+        <div class="reframe-side">
+          <div class="reframe-side-label">D.E. Shaw MBOSS Reframe</div>
+          <div class="reframe-text-new">"Designed and implemented a structured cross-geography operating model — defined functional accountability boundaries, offshore-onshore coordination protocols, and performance governance across a distributed 77-person organisation."</div>
+        </div>
+      </div>
+
+      <div class="star-grid">
+        <div class="star-block situation">
+          <div class="star-label">Situation</div>
+          <div class="star-content">As the collections function grew, the team expanded across two geographies with fundamentally different operating contexts — client-facing Dubai-based relationship managers and offshore India-based operations, quality control, and MIS teams. Without a deliberate operating model design, this would create coordination failures, accountability gaps, and quality inconsistency — the same challenges D.E. Shaw faces when managing offshore-onshore fund administration delivery models.</div>
+        </div>
+        <div class="star-block task">
+          <div class="star-label">Task</div>
+          <div class="star-content">Design the operating model that defined how four distinct functional teams (Dues RMs, Operations, Quality Control, MIS) would work together across two time zones — with clear accountability, escalation protocols, and performance measurement for each function.</div>
+        </div>
+        <div class="star-block action full-width">
+          <div class="star-label">Action</div>
+          <div class="star-content">Defined the <strong>functional mandate and accountability</strong> for each sub-team — what they owned, what they escalated, and how performance was measured. Built <strong>cross-geography coordination protocols</strong>: daily stand-ups with MIS leads, weekly performance reviews with functional heads, escalation matrices for exceptions that required cross-team resolution. Designed <strong>information flow</strong> between functions so that the quality control team's exception flags fed directly into the operations team's work queue without manual handoffs. Built team capability to operate independently — team members progressed to authoring MD-approved process documents autonomously.</div>
+        </div>
+        <div class="star-block result">
+          <div class="star-label">Result</div>
+          <div class="star-content">A 77-person distributed team operating as a coherent, high-performing unit across two geographies. The operating model scaled without structural breakdown during a period of significant business growth. Succession depth was built: the team ran independently and produced MD-approved process documentation without my direct involvement.</div>
+        </div>
+      </div>
+
+      <div class="vocab-row">
+        <span class="vocab-label">Use These Words</span>
+        <div class="vocab-chips">
+          <span class="vocab-chip">operating model design</span>
+          <span class="vocab-chip">cross-functional alignment</span>
+          <span class="vocab-chip">offshore-onshore coordination</span>
+          <span class="vocab-chip">accountability framework</span>
+          <span class="vocab-chip">escalation protocols</span>
+          <span class="vocab-chip">information architecture</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="section-divider">
+  <p class="section-title">Tier 3 — Specialist Stories (Deploy for Controls, Governance & Vendor Questions)</p>
+
+  <!-- STORY 7 -->
+  <div class="story-card">
+    <div class="story-header">
+      <div class="story-number">Story 07 · Tier 3</div>
+      <div class="story-title">Third-Party Service Provider Governance Framework</div>
+      <div class="story-tags">
+        <span class="tag tag-vendor">Vendor Oversight</span>
+        <span class="tag tag-controls">Controls & Governance</span>
+        <span class="strength-badge">⚡ Restorative + Analytical</span>
+      </div>
+    </div>
+    <div class="story-body">
+
+      <div class="reframe-bridge">
+        <div class="reframe-side">
+          <div class="reframe-side-label">Original Sobha Frame</div>
+          <div class="reframe-text-original">"Managed external collection agencies — vendor empanelment, SLA setting, performance monitoring, and cost management across multiple providers."</div>
+        </div>
+        <div class="reframe-arrow">→</div>
+        <div class="reframe-side">
+          <div class="reframe-side-label">D.E. Shaw MBOSS Reframe</div>
+          <div class="reframe-text-new">"Designed and operationalised a third-party service provider governance framework — provider selection criteria, performance SLAs, cost accountability structures, and continuous improvement mandates embedded in provider relationships."</div>
+        </div>
+      </div>
+
+      <div class="star-grid">
+        <div class="star-block situation">
+          <div class="star-label">Situation</div>
+          <div class="star-content">External collection agencies were being used across the portfolio with no consistent selection framework, no performance benchmarks, and no structured cost management approach. Providers were paid on activity rather than outcomes, creating misaligned incentives — a direct analogy to a fund administrator paid a flat fee regardless of error rates or service quality.</div>
+        </div>
+        <div class="star-block task">
+          <div class="star-label">Task</div>
+          <div class="star-content">Build a governance model for third-party collections service providers that aligned incentives, enabled objective performance comparison, and gave the firm leverage in pricing conversations.</div>
+        </div>
+        <div class="star-block action full-width">
+          <div class="star-label">Action</div>
+          <div class="star-content">Developed <strong>empanelment criteria</strong> — capability standards, past performance benchmarks, and contractual requirements for new providers. Designed <strong>performance SLAs</strong> covering recovery rate, contact quality, escalation compliance, and reporting accuracy. Built a <strong>monthly scorecard system</strong> that ranked providers against each other and against internal benchmarks. Introduced <strong>outcome-linked payment structures</strong> — shifting from pure activity fees toward performance-contingent components. Used performance data in annual pricing negotiations to support or challenge provider fee requests.</div>
+        </div>
+        <div class="star-block result">
+          <div class="star-label">Result</div>
+          <div class="star-content">Provider selection became data-driven. Performance conversations shifted from subjective to evidence-based. Cost management improved as pricing discussions were grounded in demonstrated performance rather than vendor-stated benchmarks. The governance model created leverage in negotiations that hadn't previously existed.</div>
+        </div>
+      </div>
+
+      <div class="interview-box">
+        <div class="interview-box-label">How to Say This in Interview</div>
+        <div class="interview-quote">"I've had direct experience building what I'd describe as a third-party operations governance framework. When I took over external agency management at Sobha, providers were being paid on activity metrics regardless of outcome quality. I designed an empanelment and performance framework — defining what good looked like, measuring it monthly, and using that data both to manage performance in-period and to anchor pricing negotiations at renewal. That's the same logic I'd apply to managing D.E. Shaw's fund administration relationships: <em>performance data should drive both the management conversation and the commercial conversation.</em>"</div>
+      </div>
+
+      <div class="vocab-row">
+        <span class="vocab-label">Use These Words</span>
+        <div class="vocab-chips">
+          <span class="vocab-chip">provider governance</span>
+          <span class="vocab-chip">empanelment criteria</span>
+          <span class="vocab-chip">outcome-linked fees</span>
+          <span class="vocab-chip">performance scorecard</span>
+          <span class="vocab-chip">pricing negotiation</span>
+          <span class="vocab-chip">commercial leverage</span>
+          <span class="vocab-chip">aligned incentives</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STORY 8 -->
+  <div class="story-card">
+    <div class="story-header">
+      <div class="story-number">Story 08 · Tier 3</div>
+      <div class="story-title">Controls & Exception Management — 49% Rejection Rate Governance</div>
+      <div class="story-tags">
+        <span class="tag tag-controls">Controls & Governance</span>
+        <span class="tag tag-data">Data-Informed Strategy</span>
+        <span class="strength-badge">⚡ Analytical + Restorative</span>
+      </div>
+    </div>
+    <div class="story-body">
+
+      <div class="reframe-bridge">
+        <div class="reframe-side">
+          <div class="reframe-side-label">Original Sobha Frame</div>
+          <div class="reframe-text-original">"Payment Request rejection rate hit 49% in Dec-25 — investigated root cause, identified upstream data quality failures, implemented corrective framework."</div>
+        </div>
+        <div class="reframe-arrow">→</div>
+        <div class="reframe-side">
+          <div class="reframe-side-label">D.E. Shaw MBOSS Reframe</div>
+          <div class="reframe-text-new">"Operated a systematic controls and exception management framework — identified a 49% failure rate at a critical quality gate, traced root cause upstream, and implemented corrective process redesign to prevent recurrence."</div>
+        </div>
+      </div>
+
+      <div class="star-grid">
+        <div class="star-block situation">
+          <div class="star-label">Situation</div>
+          <div class="star-content">The Payment Request rejection rate reached 49% in December 2025 — meaning nearly half of all payment requests submitted were being rejected at the quality gate before reaching finance. This is the operational equivalent of a 49% trade exception rate in a middle office — a systemic signal that something upstream in the data or process chain is broken. Left unaddressed, it would create downstream backlogs and erode confidence in the function's reliability.</div>
+        </div>
+        <div class="star-block task">
+          <div class="star-label">Task</div>
+          <div class="star-content">Diagnose the root cause of the elevated rejection rate, determine whether it was a training issue, a process design failure, or a data quality problem upstream, and implement a corrective framework that prevented recurrence rather than just clearing the backlog.</div>
+        </div>
+        <div class="star-block action full-width">
+          <div class="star-label">Action</div>
+          <div class="star-content">Conducted structured root cause analysis — categorised rejected PRs by failure type to identify whether the problem was data entry errors, incorrect documentation, or system-level data inconsistencies. Traced the majority of failures to <strong>upstream data quality issues</strong> in the CRM records being used to populate PRs. Implemented a <strong>pre-submission data validation checkpoint</strong> at the team level — a structured checklist that flagged likely rejection causes before submission. Worked with the MIS team to build automated data quality flags in Salesforce to surface the root issues before they reached the PR stage.</div>
+        </div>
+        <div class="star-block result">
+          <div class="star-label">Result</div>
+          <div class="star-content">Rejection rate reduced significantly in subsequent months. More importantly, the intervention addressed the structural cause rather than the symptom — the validation checkpoint and automated data quality flags became a permanent part of the process, creating a sustainable control rather than a one-time fix.</div>
+        </div>
+      </div>
+
+      <div class="interview-box">
+        <div class="interview-box-label">How to Say This in Interview</div>
+        <div class="interview-quote">"Controls work for me always starts with the question: is this an isolated failure or is it telling me something structural? When our payment request rejection rate hit 49%, my first instinct wasn't to clear the backlog — it was to categorise the failures to find the pattern. Almost all of them traced back to upstream data quality problems. So the fix wasn't retraining the team on PR submission — it was building a pre-submission validation checkpoint and automating the data quality flags in our system. That's the same approach I'd take to managing exception rates with a fund administrator: <em>the exception report is a symptom, not the diagnosis.</em>"</div>
+      </div>
+
+      <div class="vocab-row">
+        <span class="vocab-label">Use These Words</span>
+        <div class="vocab-chips">
+          <span class="vocab-chip">controls framework</span>
+          <span class="vocab-chip">exception management</span>
+          <span class="vocab-chip">root cause analysis</span>
+          <span class="vocab-chip">quality gate</span>
+          <span class="vocab-chip">upstream data quality</span>
+          <span class="vocab-chip">preventive control</span>
+          <span class="vocab-chip">systematic remediation</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- CLOSING GUIDANCE -->
+  <p class="section-title">Using This Story Bank</p>
+  <div class="quick-ref">
+    <div class="quick-ref-header">
+      <h3>Interview Question → Story Routing Guide</h3>
+      <span>Match question type to story number</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>If They Ask…</th>
+          <th>Use</th>
+          <th>Opening Line</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"Tell me about a large-scale operational transformation you led."</td>
+          <td><strong>Story 01</strong>, then 06</td>
+          <td>"I spent four years rebuilding an operations function from the ground up under hypergrowth conditions..."</td>
+        </tr>
+        <tr>
+          <td>"How do you approach process re-design or continuous improvement?"</td>
+          <td><strong>Story 02</strong>, then 05</td>
+          <td>"My core belief is that most performance problems are actually process design problems..."</td>
+        </tr>
+        <tr>
+          <td>"Describe your experience managing third-party providers."</td>
+          <td><strong>Story 07</strong>, then 03</td>
+          <td>"I've built a third-party governance framework from scratch, including empanelment criteria, SLA design, and performance-linked pricing..."</td>
+        </tr>
+        <tr>
+          <td>"How do you link operational cost to business value?"</td>
+          <td><strong>Story 03</strong></td>
+          <td>"I built a full NPV model to quantify the value our operations program was generating at the CFO level..."</td>
+        </tr>
+        <tr>
+          <td>"Tell me about your experience with technology implementation."</td>
+          <td><strong>Story 04</strong></td>
+          <td>"I led solution design for a Salesforce implementation that created a 70+ report operational intelligence platform..."</td>
+        </tr>
+        <tr>
+          <td>"How do you manage controls and operational risk?"</td>
+          <td><strong>Story 08</strong>, then 02</td>
+          <td>"Controls work for me always starts with the question: is this a symptom or a structural issue?..."</td>
+        </tr>
+        <tr>
+          <td>"How do you drive alignment across multiple teams and stakeholders?"</td>
+          <td><strong>Story 06</strong>, then 01</td>
+          <td>"I designed an operating model across 77 people in two geographies with four distinct functional mandates..."</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  Priyanuj Deka · Career Positioning · D.E. Shaw MBOSS Application · Confidential · 2026
+</div>
+
+</body>
+</html>

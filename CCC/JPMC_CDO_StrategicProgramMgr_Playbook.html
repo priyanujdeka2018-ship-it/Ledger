@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPMC CDO Strategic Program Manager — Career Playbook | Priyanuj Deka</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --jpmc-navy: #003A70;
+  --jpmc-blue: #0A5EB5;
+  --jpmc-sky: #4A90D9;
+  --jpmc-light: #E8F0FE;
+  --jpmc-gold: #C5A54E;
+  --jpmc-gold-light: #F5EFD7;
+  --accent-green: #1B7A4A;
+  --accent-green-light: #E6F4ED;
+  --accent-amber: #B8860B;
+  --accent-amber-light: #FFF8E7;
+  --accent-red: #C0392B;
+  --accent-red-light: #FDECEB;
+  --text-primary: #1A1A2E;
+  --text-secondary: #4A4A6A;
+  --text-muted: #7A7A9A;
+  --bg-main: #FAFBFD;
+  --bg-card: #FFFFFF;
+  --border-light: #E2E6EE;
+  --shadow-sm: 0 1px 3px rgba(0,58,112,0.06);
+  --shadow-md: 0 4px 16px rgba(0,58,112,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,58,112,0.12);
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: 15.5px;
+}
+
+/* ── HEADER ── */
+.hero {
+  background: linear-gradient(135deg, var(--jpmc-navy) 0%, #001F3F 40%, var(--jpmc-blue) 100%);
+  color: white;
+  padding: 56px 0 48px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(197,165,78,0.12) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--jpmc-gold), var(--jpmc-sky), var(--jpmc-gold));
+}
+.hero-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 1;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(197,165,78,0.2);
+  border: 1px solid rgba(197,165,78,0.4);
+  color: var(--jpmc-gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 4px;
+  margin-bottom: 18px;
+}
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.hero h1 span { color: var(--jpmc-gold); }
+.hero-subtitle {
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 32px;
+}
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+.stat-card {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 16px 14px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+.stat-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--jpmc-gold);
+  display: block;
+}
+.stat-label {
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.55);
+  margin-top: 4px;
+}
+.stat-arrow {
+  color: rgba(255,255,255,0.4);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── NAV ── */
+.nav-bar {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+.nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+.nav-inner a {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 14px 14px;
+  white-space: nowrap;
+  border-bottom: 2.5px solid transparent;
+  transition: all 0.2s;
+}
+.nav-inner a:hover {
+  color: var(--jpmc-blue);
+  border-bottom-color: var(--jpmc-blue);
+}
+
+/* ── SECTIONS ── */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.section {
+  padding: 52px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.section:last-child { border-bottom: none; }
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--jpmc-navy);
+  margin-bottom: 6px;
+}
+.section-sub {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: var(--shadow-md); }
+.card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--jpmc-navy);
+  margin-bottom: 8px;
+}
+.card p { color: var(--text-secondary); }
+
+.card-blue { border-left: 4px solid var(--jpmc-blue); }
+.card-green { border-left: 4px solid var(--accent-green); }
+.card-amber { border-left: 4px solid var(--accent-amber); }
+.card-red { border-left: 4px solid var(--accent-red); }
+.card-gold { border-left: 4px solid var(--jpmc-gold); }
+.card-navy { border-left: 4px solid var(--jpmc-navy); }
+
+.card-warn {
+  background: var(--accent-amber-light);
+  border: 1px solid rgba(184,134,11,0.2);
+  border-left: 4px solid var(--accent-amber);
+}
+
+/* ── BADGES ── */
+.badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+.badge-blue { background: var(--jpmc-light); color: var(--jpmc-blue); }
+.badge-green { background: var(--accent-green-light); color: var(--accent-green); }
+.badge-amber { background: var(--accent-amber-light); color: var(--accent-amber); }
+.badge-red { background: var(--accent-red-light); color: var(--accent-red); }
+.badge-gold { background: var(--jpmc-gold-light); color: var(--accent-amber); }
+
+/* ── GRID ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+
+/* ── RESPONSIBILITY TABLE ── */
+.resp-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  font-size: 14.5px;
+}
+.resp-table th {
+  background: var(--jpmc-navy);
+  color: white;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.resp-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+  color: var(--text-secondary);
+}
+.resp-table tr:hover td { background: var(--jpmc-light); }
+.weight-critical {
+  font-weight: 700;
+  color: var(--accent-red);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.weight-high {
+  font-weight: 700;
+  color: var(--accent-amber);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.weight-medium {
+  font-weight: 700;
+  color: var(--jpmc-blue);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── FIT MATCH ── */
+.fit-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.fit-item h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--jpmc-navy);
+  margin-bottom: 4px;
+}
+.fit-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+.fit-strong { background: var(--accent-green-light); color: var(--accent-green); }
+.fit-moderate { background: var(--accent-amber-light); color: var(--accent-amber); }
+.fit-gap { background: var(--accent-red-light); color: var(--accent-red); }
+.fit-item p { color: var(--text-secondary); font-size: 14.5px; }
+.fit-item blockquote {
+  font-style: italic;
+  color: var(--text-muted);
+  border-left: 3px solid var(--jpmc-sky);
+  padding-left: 14px;
+  margin-top: 8px;
+  font-size: 13.5px;
+}
+
+/* ── PROGRESS BARS ── */
+.progress-item {
+  margin-bottom: 14px;
+}
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13.5px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.progress-bar {
+  height: 8px;
+  background: var(--border-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+.fill-green { background: linear-gradient(90deg, var(--accent-green), #2ecc71); }
+.fill-amber { background: linear-gradient(90deg, var(--accent-amber), #f39c12); }
+.fill-red { background: linear-gradient(90deg, var(--accent-red), #e74c3c); }
+.fill-blue { background: linear-gradient(90deg, var(--jpmc-blue), var(--jpmc-sky)); }
+
+/* ── GAP PLAN ── */
+.gap-week {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.gap-week-header {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--jpmc-blue);
+  margin-bottom: 4px;
+}
+.gap-week h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--jpmc-navy);
+  margin-bottom: 8px;
+}
+.gap-week p { color: var(--text-secondary); font-size: 14.5px; }
+
+/* ── SALARY TABLE ── */
+.sal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 14.5px;
+}
+.sal-table th {
+  background: var(--jpmc-navy);
+  color: white;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.sal-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-secondary);
+}
+.sal-highlight {
+  font-weight: 700;
+  color: var(--jpmc-navy);
+}
+
+/* ── AI PROJECT ── */
+.ai-project {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 26px 28px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+.ai-project::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+}
+.ai-primary::before { background: var(--jpmc-blue); }
+.ai-secondary::before { background: var(--accent-green); }
+.ai-supporting::before { background: var(--jpmc-gold); }
+.ai-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--jpmc-blue);
+  margin-bottom: 6px;
+}
+.ai-project h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--jpmc-navy);
+  margin-bottom: 8px;
+}
+.ai-project p { color: var(--text-secondary); font-size: 14.5px; }
+.tech-stack {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.tech-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: var(--jpmc-light);
+  color: var(--jpmc-blue);
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+/* ── STAR STORIES ── */
+.star-story {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.star-story h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--jpmc-navy);
+  margin-bottom: 4px;
+}
+.star-maps {
+  font-size: 13px;
+  color: var(--jpmc-blue);
+  font-style: italic;
+  margin-bottom: 12px;
+}
+.star-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--jpmc-gold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+.star-story p { color: var(--text-secondary); font-size: 14.5px; }
+
+/* ── VOCAB ── */
+.vocab-row {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr;
+  gap: 0;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+.vocab-from {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.vocab-arrow {
+  text-align: center;
+  color: var(--jpmc-gold);
+  font-size: 1.1rem;
+}
+.vocab-to {
+  font-weight: 600;
+  color: var(--jpmc-navy);
+}
+
+.vocab-term {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.vocab-term strong {
+  color: var(--jpmc-navy);
+  font-size: 0.95rem;
+}
+.vocab-term p {
+  color: var(--text-secondary);
+  font-size: 13.5px;
+  margin-top: 4px;
+}
+.vocab-term .vocab-use {
+  color: var(--jpmc-blue);
+  font-size: 12.5px;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+/* ── UNLOCK / NARRATIVE ── */
+.unlock-box {
+  background: linear-gradient(135deg, var(--jpmc-navy) 0%, #001F3F 100%);
+  color: white;
+  border-radius: var(--radius);
+  padding: 32px 36px;
+  margin-top: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.unlock-box::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -5%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(197,165,78,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.unlock-box h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: var(--jpmc-gold);
+  margin-bottom: 12px;
+}
+.unlock-box p {
+  color: rgba(255,255,255,0.85);
+  font-size: 15px;
+  line-height: 1.75;
+  position: relative;
+  z-index: 1;
+}
+.unlock-box .use-note {
+  font-size: 12px;
+  color: var(--jpmc-gold);
+  font-style: italic;
+  margin-top: 12px;
+}
+
+/* ── INTERVIEW Q TABLE ── */
+.iq-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+.iq-table th {
+  background: var(--jpmc-navy);
+  color: white;
+  font-weight: 600;
+  text-align: left;
+  padding: 11px 14px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.iq-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: top;
+  color: var(--text-secondary);
+}
+.iq-table tr:hover td { background: var(--jpmc-light); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 1.8rem; }
+  .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  .stat-arrow { display: none; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .nav-inner { padding: 0 16px; }
+  .container { padding: 0 16px; }
+  .vocab-row { grid-template-columns: 1fr; gap: 4px; }
+  .vocab-arrow { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Active Target · Evaluate & Apply</div>
+    <h1>JPMorganChase <span>Strategic Program Manager</span></h1>
+    <p class="hero-subtitle">Firmwide CDO Strategy & Execution · Data Management & Governance · Transformational Change</p>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <span class="stat-val">82</span>
+        <span class="stat-label">Current Fit /100</span>
+      </div>
+      <div class="stat-card stat-arrow">→</div>
+      <div class="stat-card">
+        <span class="stat-val">90</span>
+        <span class="stat-label">Addressable Fit</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-val">₹45–75L</span>
+        <span class="stat-label">Est. CTC (VP Band)</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-val">2–3 wk</span>
+        <span class="stat-label">Prep Timeline</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ NAV ═══════════════ -->
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <a href="#jd-decoded">JD Decoded</a>
+    <a href="#fit">Your Fit</a>
+    <a href="#gaps">Gaps & Plan</a>
+    <a href="#salary">Salary Intel</a>
+    <a href="#ai">AI Solutions</a>
+    <a href="#star">STAR Bank</a>
+    <a href="#interview">Interview Prep</a>
+    <a href="#vocab">Vocab Decoder</a>
+  </div>
+</nav>
+
+<!-- ═══════════════ JD DECODED ═══════════════ -->
+<section class="section" id="jd-decoded">
+<div class="container">
+  <h2 class="section-title">JD Decoded</h2>
+  <p class="section-sub">What JPMorganChase's Firmwide CDO team is actually looking for — beyond the job description language</p>
+
+  <div class="card card-navy">
+    <h3>The Core Mission — What This Role Really Is</h3>
+    <p>This is a <strong>Strategic Program Manager inside JPMorganChase's Firmwide Chief Data Office (CDO)</strong> — the central function that sets data management standards, governance frameworks, and modernisation strategy across the entire $3.7T-asset firm. Teresa Heitsenrether (Chief Data & Analytics Officer, Operating Committee member) leads this organisation. Mark Birkhead is the Firmwide CDO. You sit in the <strong>Strategy & Execution</strong> arm — the team that converts enterprise data strategy into delivered products, operating models, and regulatory-compliant processes across all Lines of Business (CIB, CCB, AWM, CB, Corporate Functions).</p>
+    <p style="margin-top:10px">You are <strong>not</strong> a data engineer. You are <strong>not</strong> a data analyst. You are the person who takes a firmwide data governance mandate — say "every critical data element must have documented lineage by Q4" — and turns it into a programme with milestones, stakeholder buy-in, risk tracking, executive reporting, and delivered outcomes. You drive the operating model changes that make data a first-class citizen at JPMC.</p>
+  </div>
+
+  <div class="grid-2" style="margin-top:24px">
+    <div class="card card-blue">
+      <h3>🎯 Strategic Change Driver</h3>
+      <span class="badge badge-blue">Strategy</span><span class="badge badge-blue">Change Management</span>
+      <p style="margin-top:8px">Lead transformative data management initiatives across LOBs and Corporate Functions. Partner with Product, Technology, and business leaders. You bring structure to firmwide ambiguity — defining what "modernised data management" looks like in practice.</p>
+    </div>
+    <div class="card card-green">
+      <h3>⚙️ Requirements-to-Roadmap Translator</h3>
+      <span class="badge badge-green">Requirements</span><span class="badge badge-green">Product Roadmap</span>
+      <p style="margin-top:8px">Gather firmwide stakeholder requirements, synthesise competing priorities, and partner with Product & Technology to define the solution roadmap. You're the bridge between "what the business needs" and "what gets built."</p>
+    </div>
+    <div class="card card-amber">
+      <h3>📊 PMO & Governance Architect</h3>
+      <span class="badge badge-amber">PMO</span><span class="badge badge-amber">Governance</span><span class="badge badge-amber">Reporting</span>
+      <p style="margin-top:8px">Establish PMO capabilities for large strategic programmes. Build standardised processes, tools, templates. Develop executive-grade programme metrics and progress reporting for senior leadership.</p>
+    </div>
+    <div class="card card-gold">
+      <h3>🛡️ Risk & Escalation Manager</h3>
+      <span class="badge badge-gold">Risk</span><span class="badge badge-gold">Escalation</span>
+      <p style="margin-top:8px">Identify roadblocks and emerging risks before they derail programmes. Escalate proactively. Navigate regulatory commitments — BCBS 239, GDPR, OCC data management expectations — with governance rigour.</p>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; font-size:1.15rem; color:var(--jpmc-navy); margin:28px 0 16px">Breaking Down Every Responsibility</h3>
+  <table class="resp-table">
+    <tr>
+      <th>JD Responsibility</th>
+      <th>What It Really Means</th>
+      <th>Weight</th>
+    </tr>
+    <tr>
+      <td>Lead strategic change initiatives in partnership with Product, Technology, LOBs, and Corporate Functions</td>
+      <td>Own the programme from problem definition through embedded adoption. Navigate a matrixed organisation where every LOB has its own CDO, priorities, and politics. You unify them around firmwide standards.</td>
+      <td><span class="weight-critical">Critical</span></td>
+    </tr>
+    <tr>
+      <td>Gather, synthesise, and prioritise requirements from firmwide stakeholders</td>
+      <td>Run discovery sessions across 5+ LOBs. Translate 20 competing demands into a coherent priority stack. This is BA + PM work — exactly what you did for Salesforce 0→1.</td>
+      <td><span class="weight-critical">Critical</span></td>
+    </tr>
+    <tr>
+      <td>Partner with Product and Technology to design solutions and define the product roadmap</td>
+      <td>You don't write code. You define what needs to be built, when, and why. You shape the product direction with the technical teams who execute. Requirements-to-roadmap translation.</td>
+      <td><span class="weight-critical">Critical</span></td>
+    </tr>
+    <tr>
+      <td>Support development of business cases to acquire funding</td>
+      <td>Build investment memos with ROI projections, cost-benefit analysis, and strategic rationale. Present to senior leadership to secure budget allocation for data programmes.</td>
+      <td><span class="weight-high">High</span></td>
+    </tr>
+    <tr>
+      <td>Provide governance and oversight of strategic programmes</td>
+      <td>Design the governance cadence — steering committees, stakeholder reviews, decision logs, action tracking. Ensure alignment across LOBs that naturally resist central mandates.</td>
+      <td><span class="weight-critical">Critical</span></td>
+    </tr>
+    <tr>
+      <td>Identify roadblocks and emerging risks, escalate as needed</td>
+      <td>Be the risk radar. Surface problems early. This maps to regulatory programmes where missing a deadline means audit findings and consent orders.</td>
+      <td><span class="weight-high">High</span></td>
+    </tr>
+    <tr>
+      <td>Establish and drive PMO capabilities for large programmes</td>
+      <td>Build the programme management infrastructure from scratch if needed — RAID logs, milestone trackers, status templates, reporting frameworks. You ARE the PMO.</td>
+      <td><span class="weight-high">High</span></td>
+    </tr>
+    <tr>
+      <td>Develop standardised PM processes, tools, and templates</td>
+      <td>Create reusable artefacts that scale across programmes. Process consistency and efficiency across the CDO portfolio.</td>
+      <td><span class="weight-medium">Medium</span></td>
+    </tr>
+    <tr>
+      <td>Develop comprehensive programme reporting and metrics for senior executives</td>
+      <td>Build the executive dashboard layer. Communicate programme health, risks, decisions needed. This goes to MD-level and Operating Committee stakeholders.</td>
+      <td><span class="weight-high">High</span></td>
+    </tr>
+    <tr>
+      <td>Coach team members and contribute to group objectives</td>
+      <td>Develop junior programme managers. Build team capability. Contribute to the CDO Strategy & Execution function's own evolution.</td>
+      <td><span class="weight-medium">Medium</span></td>
+    </tr>
+  </table>
+
+  <div class="card card-warn">
+    <h3>The Unstated Requirements (What They Won't Tell You)</h3>
+    <p><strong>Regulatory pressure is the invisible driver.</strong> JPMC's CDO exists partly because regulators (OCC, Fed, BCBS 239) demand enterprise-wide data governance. This role carries regulatory urgency — missed deadlines have consent-order consequences. You must understand this dynamic.</p>
+    <p style="margin-top:8px"><strong>Matrix navigation is the actual job.</strong> Each LOB has its own CDO, its own priorities, its own technology stack. Firmwide CDO sets standards; LOB CDOs implement. Your job is to drive adoption of firmwide standards across LOBs that resist central mandates. Political skill matters.</p>
+    <p style="margin-top:8px"><strong>Agile + Waterfall hybrid.</strong> Financial services programmes are rarely pure Agile. They're hybrid — Agile development sprints inside Waterfall governance milestones. You need both vocabularies.</p>
+    <p style="margin-top:8px"><strong>Data governance is not data analytics.</strong> The JD mentions "data & analytics focused organisation" as preferred. But this role is about <em>governance</em> — policies, standards, lineage, classification, lifecycle. You govern the data; you don't analyse it.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════ YOUR FIT ═══════════════ -->
+<section class="section" id="fit">
+<div class="container">
+  <h2 class="section-title">Your Fit</h2>
+  <p class="section-sub">How your Sobha experience maps — requirement by requirement — to this JD</p>
+
+  <div class="card card-navy" style="text-align:center; padding:28px">
+    <span style="font-family:'Playfair Display',serif; font-size:2.4rem; font-weight:700; color:var(--jpmc-navy)">82</span>
+    <span style="display:block; font-size:13px; color:var(--text-muted)">Current Fit Score</span>
+    <p style="margin-top:8px; color:var(--text-secondary); font-size:14px">Addressable to <strong>90/100</strong> with data governance vocabulary + JPMC culture prep. No certifications required. Reframe effort: <strong>Low–Moderate</strong> (vocabulary substitution, not capability building).</p>
+  </div>
+
+  <div style="margin-top:24px">
+    <div class="fit-item">
+      <h4>Lead strategic change initiatives across LOBs and Corporate Functions</h4>
+      <span class="fit-label fit-strong">STRONG MATCH</span>
+      <p>You led strategic change across a 77-person, two-geography organisation (Dubai + India) serving 4 legal entities with an AED 86.8B active portfolio. You partnered with Operations, Finance, Legal, IT, and Customer Service to deliver 12 concurrent programmes — exactly the cross-functional, multi-LOB programme leadership this role demands. Your 14.9x programme scale (AED 867M → AED 12.97B) demonstrates transformational change at enterprise level.</p>
+    </div>
+
+    <div class="fit-item">
+      <h4>Gather, synthesise, and prioritise requirements from firmwide stakeholders</h4>
+      <span class="fit-label fit-strong">STRONG MATCH</span>
+      <p>Your Salesforce 0→1 build is the definitive proof point. You conducted a 6-stakeholder discovery process, translated operational requirements into functional specifications, and partnered with the vendor implementation team to deploy across two geographies. The platform scaled to support 14.9x programme growth with 70+ live data-connected reports. This is requirements-to-product at scale.</p>
+    </div>
+
+    <div class="fit-item">
+      <h4>Partner with Product and Technology to design solutions and define roadmap</h4>
+      <span class="fit-label fit-strong">STRONG MATCH</span>
+      <p>You led solution design for the Salesforce MI platform, drove Power BI migration proof-of-concept, and are currently leading the SQL/Azure database modernisation programme. Each involved defining business requirements, evaluating technology options, and partnering with technical teams on roadmap and delivery. The MI report catalogue (70+ reports) is a product roadmap artefact.</p>
+    </div>
+
+    <div class="fit-item">
+      <h4>Support development of business cases to acquire funding</h4>
+      <span class="fit-label fit-strong">STRONG MATCH</span>
+      <p>Your NPV model (AED 652M incremental inflow / AED 21.2M cost / 248-day prepayment acceleration / 32% cheaper than bank financing) is a business case defended at MD/CEO level through multiple rounds of scrutiny with zero material concessions. This is exactly the financial justification rigour JPMC expects for strategic programme funding.</p>
+    </div>
+
+    <div class="fit-item">
+      <h4>Governance and oversight of strategic programmes</h4>
+      <span class="fit-label fit-strong">STRONG MATCH</span>
+      <p>You designed the 3-tier governance cadence: weekly team KPI reviews → monthly CRO business reviews → quarterly CCO strategic reviews. You built standardised data packs, decision tracking logs, and action item accountability mechanisms. The governance cadence is the operating backbone for the entire collections function. This is programme governance at the exact level JPMC requires.</p>
+    </div>
+
+    <div class="fit-item">
+      <h4>Identify roadblocks and emerging risks, escalate as needed</h4>
+      <span class="fit-label fit-strong">STRONG MATCH</span>
+      <p>You maintained a 14-finding risk register, proactively escalated 3 blocked items to CCO before due dates, and held the PR rejection documentation standard at 49% under pressure. Your T−25/T+30 proprietary framework is a risk-forward operating model. This maps directly to the risk radar function this role demands.</p>
+    </div>
+
+    <div class="fit-item">
+      <h4>Establish PMO capabilities for large programmes</h4>
+      <span class="fit-label fit-strong">STRONG MATCH</span>
+      <p>You built the PMO from zero for the collections function — RAID logs, milestone tracking, cross-workstream coordination, status reporting, 12-programme portfolio governance. All without dedicated PM infrastructure. This is the "establish PMO capabilities" requirement in its purest form.</p>
+    </div>
+
+    <div class="fit-item">
+      <h4>Comprehensive programme reporting for senior executives</h4>
+      <span class="fit-label fit-strong">STRONG MATCH</span>
+      <p>70+ report MI ecosystem built from zero on Salesforce. Executive-grade reporting to MD/CEO, CRO, CCO. NPV scenario modelling with sensitivity analysis for board-level presentation. Delinquency trend analytics, portfolio health dashboards, vendor performance tracking — all executive-facing.</p>
+    </div>
+
+    <div class="fit-item">
+      <h4>Data governance domain expertise (preferred)</h4>
+      <span class="fit-label fit-moderate">VOCABULARY GAP — CLOSEABLE</span>
+      <p>You don't have data governance vocabulary natively (data lineage, metadata management, classification taxonomy, lifecycle management). But the structural work is identical — your MI report catalogue IS a data catalogue, your PR quality standards ARE data quality controls, your 4-entity compliance governance IS data governance across LOBs. The gap is vocabulary, not capability. 5–8 hours of DAMA-DMBOK reading closes it.</p>
+    </div>
+
+    <div class="fit-item">
+      <h4>Big data platforms and data architecture (preferred)</h4>
+      <span class="fit-label fit-moderate">PARTIAL — SUFFICIENT</span>
+      <p>Your SQL migration programme + Salesforce platform architecture + Power BI PoC demonstrate "solid understanding" of data infrastructure. You won't be quizzed on Hadoop or Spark — this is a programme management role, not a data engineering role. Your current stack is sufficient at the "working knowledge" level the JD expects.</p>
+    </div>
+  </div>
+
+  <div class="card card-warn" style="margin-top:20px">
+    <h3>⚠ Qualification Fit Note</h3>
+    <p>JD requires BA/BS + 5 years. You have: <strong>BITS Pilani dual degree (B.E. + M.Sc.) + IIM Udaipur PGDM + 6 years</strong>. You exceed the education bar significantly. MBA from a top-tier programme is listed as "preferred" — IIM Udaipur PGDM qualifies. Your 6 years exceeds the 5-year minimum. JPMC hierarchy: this role likely maps to <strong>VP or senior Associate band</strong>. With your scope (77-person team, AED 12.97B portfolio, MD/CEO decision support), push for VP.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════ GAPS & PLAN ═══════════════ -->
+<section class="section" id="gaps">
+<div class="container">
+  <h2 class="section-title">Gaps & Action Plan</h2>
+  <p class="section-sub">What's missing, what's bridgeable, and the 2–3 week path to close every gap</p>
+
+  <div class="grid-2">
+    <div>
+      <h3 style="font-size:1rem; font-weight:600; color:var(--accent-green); margin-bottom:16px">Strengths — Already Proven</h3>
+      <div class="progress-item">
+        <div class="progress-label"><span>Strategic Programme Leadership</span><span>95%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-green" style="width:95%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Requirements-to-Roadmap Translation</span><span>90%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-green" style="width:90%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Programme Governance & PMO</span><span>92%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-green" style="width:92%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Business Case Development</span><span>90%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-green" style="width:90%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Executive Reporting & Communications</span><span>85%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-green" style="width:85%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Risk Identification & Escalation</span><span>88%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-green" style="width:88%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Cross-Functional Stakeholder Management</span><span>88%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-green" style="width:88%"></div></div>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-size:1rem; font-weight:600; color:var(--accent-red); margin-bottom:16px">Gaps — What Needs Closing</h3>
+      <div class="progress-item">
+        <div class="progress-label"><span>Data Governance Vocabulary</span><span>25%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-red" style="width:25%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>JPMC CDO Org & Culture Context</span><span>20%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-red" style="width:20%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Financial Services Regulatory Drivers</span><span>35%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-amber" style="width:35%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Agile/Scrum Methodology Fluency</span><span>45%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-amber" style="width:45%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Monday.com / PM Tool Familiarity</span><span>40%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-amber" style="width:40%"></div></div>
+      </div>
+      <div class="progress-item">
+        <div class="progress-label"><span>Senior-Forum Assertiveness (Low-D)</span><span>60%</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-amber" style="width:60%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; font-size:1.15rem; color:var(--jpmc-navy); margin:28px 0 16px">2–3 Week Gap Closure Plan</h3>
+
+  <div class="gap-week">
+    <div class="gap-week-header">Week 1 — Vocabulary Sprint</div>
+    <h4>Data Governance Domain + JPMC CDO Context</h4>
+    <p>Read DAMA-DMBOK chapters 1–3 (Data Governance, Data Quality, Metadata Management). Learn: data lineage, data classification taxonomy, data lifecycle management, critical data elements (CDEs), data stewardship, data cataloguing. Study BCBS 239 principles (risk data aggregation & reporting). Read JPMC's public CDO content — Teresa Heitsenrether's talks, Mark Birkhead's LinkedIn posts. Understand the firmwide vs. LOB CDO structure. Learn JPMC hierarchy: Analyst → Associate → VP → ED → MD. <strong>8 focused hours.</strong></p>
+  </div>
+
+  <div class="gap-week">
+    <div class="gap-week-header">Week 1 — Parallel Track</div>
+    <h4>Agile/Scrum + PM Tool Familiarity</h4>
+    <p>Complete a free Scrum fundamentals course (ScrumAlliance or Scrum.org). Learn: sprint planning, backlog grooming, retrospectives, velocity, story points. Watch 2–3 Monday.com product tutorials (30 min total). You don't need certification — you need conversational fluency. Practice describing your PCC TAT and Salesforce builds using Agile vocabulary: "We ran 2-week sprints with daily standups and backlog prioritisation." <strong>4 hours.</strong></p>
+  </div>
+
+  <div class="gap-week">
+    <div class="gap-week-header">Week 2 — Resume & Application</div>
+    <h4>Build Resume v1 & Submit</h4>
+    <p>Resume headline: "Strategic Program Manager & Data Governance Operations Leader." Closest base resume: MS Biz Mgr OPG v1 (same archetype). Minimal delta: swap Microsoft OPG vocabulary for JPMC CDO data governance vocabulary. Reframe: collections ops → data programme delivery, MIS ecosystem → data governance reporting framework, 4-entity compliance → cross-LOB data standards. Activate IIM Udaipur alumni network at JPMC for warm referral. <strong>Apply on jpmc.fa.oraclecloud.com.</strong></p>
+  </div>
+
+  <div class="gap-week">
+    <div class="gap-week-header">Week 2–3 — Interview Prep</div>
+    <h4>STAR Rehearsal + JPMC Behavioural Questions</h4>
+    <p>Rehearse 6 STAR stories using JPMC CDO vocabulary. Practice regulatory urgency framing: "Data governance programmes carry regulatory consequences — I managed the same dynamic with RERA compliance and payment regulation." Prepare 3 assertiveness proof points. Mock interview with JPMC behavioural format. Study "How We Do Business" principles. <strong>6–8 hours spread across Week 2–3.</strong></p>
+  </div>
+
+  <div class="gap-week">
+    <div class="gap-week-header">Week 3 — Optional High-Impact</div>
+    <h4>AI-Powered Programme Health Dashboard Prototype</h4>
+    <p>Build the Data Governance Programme Health Tracker (see AI Solutions tab). Even a working prototype signals you've automated one of the role's most time-consuming deliverables — programme status reporting. Host on GitHub with a short LinkedIn post. <strong>2-day build.</strong></p>
+  </div>
+
+  <div class="unlock-box">
+    <h3>Key Unlock Phrase for This Role</h3>
+    <p>"I've spent six years building and governing the data infrastructure for a $3.2B portfolio across four legal entities and two geographies. I built the data catalogue from zero — 70+ reports, quality controls, lifecycle management, classification standards. I designed the governance cadence that ensures data-driven decisions reach the right stakeholders with the right rigour. That's data governance programme management. The domain changes — the discipline is identical."</p>
+    <div class="use-note">— Use in Cover Note + Interview Opening</div>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════ SALARY ═══════════════ -->
+<section class="section" id="salary">
+<div class="container">
+  <h2 class="section-title">Salary Intelligence</h2>
+  <p class="section-sub">Based on Levels.fyi, Glassdoor, 6figr, Quora reports — May 2026</p>
+
+  <div class="card card-navy">
+    <h3>Level Mapping & Market Context</h3>
+    <p>JPMC India hierarchy: Analyst → Associate → Vice President → Executive Director → Managing Director. "Strategic Program Manager" with 5+ years + MBA typically maps to <strong>VP band</strong>. With your scope (77-person team, AED 12.97B portfolio, MD/CEO decision support), you should target VP. JPMC CDO roles in India are typically based in <strong>Mumbai, Bengaluru, or Hyderabad</strong>.</p>
+    <p style="margin-top:8px">VP is the sweet spot for this JD. Associate would be a downband — push against it.</p>
+  </div>
+
+  <table class="sal-table" style="margin-top:20px">
+    <tr>
+      <th>Component</th>
+      <th>Associate (Risk of Downband)</th>
+      <th>VP (Target Band)</th>
+    </tr>
+    <tr>
+      <td>Base Salary</td>
+      <td>₹22–32L</td>
+      <td><span class="sal-highlight">₹35–50L</span></td>
+    </tr>
+    <tr>
+      <td>Annual Bonus</td>
+      <td>10–20% (₹2–6L)</td>
+      <td>15–30% (₹5–15L)</td>
+    </tr>
+    <tr>
+      <td>RSU / LTIP</td>
+      <td>Minimal / None</td>
+      <td>Minor – ₹3–8L/yr equivalent</td>
+    </tr>
+    <tr>
+      <td>Joining Bonus</td>
+      <td>₹1–3L (if negotiated)</td>
+      <td>₹3–6L (negotiable)</td>
+    </tr>
+    <tr>
+      <td><strong>Total Comp Year 1</strong></td>
+      <td>₹28–40L</td>
+      <td><span class="sal-highlight">₹45–75L</span></td>
+    </tr>
+  </table>
+
+  <div class="grid-2">
+    <div class="card card-green">
+      <h3>Strategic Value Beyond CTC</h3>
+      <p><strong>Brand pedigree:</strong> JPMC is the #1 US bank by assets. A VP title at JPMC CDO is a career-defining credential for any data governance or programme management trajectory.</p>
+      <p style="margin-top:8px"><strong>Internal mobility:</strong> JPMC's internal job market is vast — London, Singapore, New York, Hong Kong. A VP in CDO can move to any LOB's data function within 2–3 years.</p>
+      <p style="margin-top:8px"><strong>Regulatory expertise:</strong> BCBS 239, GDPR, OCC — this regulatory data governance experience is transferable across every global bank.</p>
+      <p style="margin-top:8px"><strong>ED trajectory:</strong> VP → ED promotion timeline at JPMC is typically 3–5 years. ED total comp in India: ₹85L–1.2Cr.</p>
+    </div>
+    <div class="card card-amber">
+      <h3>Negotiation Playbook</h3>
+      <table class="sal-table">
+        <tr><th>Lever</th><th>Strategy</th></tr>
+        <tr>
+          <td>Level</td>
+          <td>Push for VP. Cite: 77-person team, AED 12.97B portfolio, MD/CEO-level decision support. "My scope exceeds typical VP-band programme managers."</td>
+        </tr>
+        <tr>
+          <td>Base</td>
+          <td>Anchor at ₹45L (VP mid-band). Floor: ₹38L.</td>
+        </tr>
+        <tr>
+          <td>Bonus</td>
+          <td>Negotiate 20%+ target. JPMC bonuses are discretionary but firm-culture rewards performance.</td>
+        </tr>
+        <tr>
+          <td>Joining</td>
+          <td>₹4–6L. Cite relocation from Dubai. Always ask — JPMC offers joining bonuses routinely.</td>
+        </tr>
+        <tr>
+          <td>Relocation</td>
+          <td>If Dubai → India, negotiate relocation package: flights, temporary housing, visa support.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card card-warn">
+    <h3>⚠ Dubai → India Comp Reality Check</h3>
+    <p>Your current AED package is tax-free. India VP total comp of ₹55L = approximately ₹38–40L in-hand after 30% tax slab. Factor housing (Hyderabad ₹25–50K/month, Mumbai ₹40–80K/month). This is a strategic career move for brand + trajectory + internal mobility, not a lateral comp move. CTC parity with Dubai is achievable at ED level (~3–5 years).</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════ AI SOLUTIONS ═══════════════ -->
+<section class="section" id="ai">
+<div class="container">
+  <h2 class="section-title">AI Solutions</h2>
+  <p class="section-sub">AI-powered tools that solve real problems for this role — your interview differentiator</p>
+
+  <div class="card card-blue" style="margin-bottom:24px">
+    <h3>Why AI Matters for This Role</h3>
+    <p>A Strategic Program Manager in JPMC's CDO spends 50–60% of their time assembling programme status reports, tracking stakeholder commitments, compiling governance metrics, and drafting executive summaries. AI can automate the assembly layer and shift your time toward strategic influence, stakeholder negotiation, and risk judgment. You're not replacing the PM — you're making the PM 3x more effective. This is your strongest interview differentiator: you've already built AI-augmented programme management infrastructure.</p>
+  </div>
+
+  <div class="ai-project ai-primary">
+    <div class="ai-tag">AI Project · Primary</div>
+    <h3>Data Governance Programme Health Tracker</h3>
+    <p>Input: programme milestone data (% complete, blockers, risk flags, dependency status) across multiple data governance workstreams. AI classifies each workstream as green/amber/red, generates root-cause hypotheses for at-risk items, drafts escalation recommendations, and produces a one-page executive summary. This is exactly the "comprehensive programme reporting and metrics" the JD demands — automated.</p>
+    <div class="tech-stack">
+      <span class="tech-pill">Python</span>
+      <span class="tech-pill">Claude API</span>
+      <span class="tech-pill">Streamlit</span>
+      <span class="tech-pill">Priority 1 · 2-day build</span>
+    </div>
+  </div>
+
+  <div class="ai-project ai-secondary">
+    <div class="ai-tag">AI Project · Secondary</div>
+    <h3>Firmwide Requirements Prioritisation Engine</h3>
+    <p>Input: requirement descriptions from multiple LOBs with effort estimates, regulatory urgency flags, strategic alignment scores. AI ranks requirements using weighted scoring (regulatory weight × strategic alignment × implementation complexity), generates a prioritised backlog with rationale, and identifies requirement conflicts across LOBs. Mirrors the "gather, synthesise, and prioritise requirements from firmwide stakeholders" responsibility.</p>
+    <div class="tech-stack">
+      <span class="tech-pill">Python</span>
+      <span class="tech-pill">Claude API</span>
+      <span class="tech-pill">Streamlit</span>
+      <span class="tech-pill">Priority 2 · 2-day build</span>
+    </div>
+  </div>
+
+  <div class="ai-project ai-supporting">
+    <div class="ai-tag">AI Project · Supporting</div>
+    <h3>Business Case Generator for Data Programmes</h3>
+    <p>Input: programme description + estimated cost + expected benefits + risk factors. AI generates a structured business case memo — executive summary, cost-benefit analysis, strategic rationale, risk mitigation plan, and recommendation. Output matches JPMC's investment memo format. Demonstrates that you've already automated the "business cases to acquire funding" function.</p>
+    <div class="tech-stack">
+      <span class="tech-pill">Claude API</span>
+      <span class="tech-pill">Document Gen</span>
+      <span class="tech-pill">Priority 3 · 1-day build</span>
+    </div>
+  </div>
+
+  <div class="card card-gold" style="margin-top:24px">
+    <h3>How to Pitch AI Capability in the Interview</h3>
+    <p>"One of the structural inefficiencies I see in programme management is that 50–60% of a programme manager's time goes into assembling status reports rather than acting on the intelligence they contain. At Sobha, I addressed this by building a 70+ report data governance ecosystem that automated intelligence aggregation across two geographies. For a Firmwide CDO role, I would apply the same architecture — but AI-augmented — so that programme health assessments, requirement prioritisation, and executive summaries are generated automatically, freeing the programme manager to spend time on stakeholder alignment and strategic influence rather than data assembly."</p>
+    <p style="margin-top:10px">"I've already built a prototype Programme Health Tracker using AI that classifies workstream status, generates variance commentary, and drafts escalation memos. It took me two days to build and would save a CDO team approximately 8–10 hours per reporting cycle."</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════ STAR BANK ═══════════════ -->
+<section class="section" id="star">
+<div class="container">
+  <h2 class="section-title">STAR Story Bank</h2>
+  <p class="section-sub">Pre-mapped STAR stories for every key JD responsibility — reframed for JPMC CDO context</p>
+
+  <div class="star-story">
+    <h4>Story 1 — Strategic Programme Leadership (14.9x Scale)</h4>
+    <div class="star-maps">Maps to: "Lead strategic change initiatives" + "Demonstrated ability to manage tight timelines and multiple deliverables"</div>
+    <div class="star-label">Situation</div>
+    <p>In FY2026, the organisation set its most ambitious annual target — AED 8.2B across a portfolio that had grown 14.9x (from AED 867M to AED 12.97B over four years). There was no structured framework to decompose this target into team-level milestones across 77 people in two geographies.</p>
+    <div class="star-label">Task</div>
+    <p>Translate the top-level strategic objective into an executable quarterly plan with individual-level accountability, tracking infrastructure, and a governance cadence that kept 12 concurrent programmes on schedule.</p>
+    <div class="star-label">Action</div>
+    <p>Designed a multi-layered OKR decomposition: function-level quarterly targets → team-level monthly milestones → individual weekly KPIs. Built the tracking infrastructure using the 70+ report data governance ecosystem. Established weekly review cadences at team-lead level and monthly business reviews at CRO level. Performance weightage set at 60% of appraisal. Built automated early-warning signals for portfolio health degradation.</p>
+    <div class="star-label">Result</div>
+    <p>+62% YoY performance. All 12 programme deliverables on schedule. The planning infrastructure is now the permanent operating model — the same architecture used for the prior 14.9x growth. Delinquency simultaneously reduced 74% (16.7% → 4.4%), proving growth discipline and governance rigour are not in tension.</p>
+  </div>
+
+  <div class="star-story">
+    <h4>Story 2 — Programme Governance & PMO Build (3-Tier Cadence)</h4>
+    <div class="star-maps">Maps to: "Governance and oversight" + "Establish PMO capabilities" + "Executive reporting"</div>
+    <div class="star-label">Situation</div>
+    <p>The function had no structured management review cadence. Decisions were ad hoc, follow-ups inconsistent, and there was no systematic tracking of leadership action items across the organisation.</p>
+    <div class="star-label">Task</div>
+    <p>Build and embed a governance operating rhythm — from weekly team reviews to monthly CRO-level business reviews to quarterly CCO-level strategic reviews — with decision tracking, action item accountability, and data-driven pre-reads.</p>
+    <div class="star-label">Action</div>
+    <p>Designed a 3-tier review cadence with standardised data packs from the MI ecosystem. Created decision tracking logs and enforced action item follow-through. Prepared the NPV decision framework for MD/CEO — scenario modelling, sensitivity analysis, and stakeholder-ready framing — which survived multiple rounds of scrutiny.</p>
+    <div class="star-label">Result</div>
+    <p>Governance cadence is now the operating backbone. Decision cycle time reduced — issues that took weeks now close within one review cycle. NPV programme approved (AED 652M) because governance infrastructure ensured it reached the right decision-makers with the right data.</p>
+  </div>
+
+  <div class="star-story">
+    <h4>Story 3 — Cross-Functional Process Redesign (PCC TAT 20→3)</h4>
+    <div class="star-maps">Maps to: "Process improvement" + "Identify roadblocks" + "Navigating ambiguity"</div>
+    <div class="star-label">Situation</div>
+    <p>Payment Completion Certificate processing took 20 days on average — spanning Operations, Finance, Legal, and Customer Service with no single owner.</p>
+    <div class="star-label">Task</div>
+    <p>Reduce TAT to under 5 days while maintaining compliance rigour — requiring cross-functional alignment across 4 departments for 281 monthly transactions.</p>
+    <div class="star-label">Action</div>
+    <p>Mapped end-to-end process, identified 6 bottlenecks (3 systemic, 3 handoff-related). Designed parallel processing workflow eliminating sequential dependencies. Partnered with Legal on pre-approved templates, Finance on automated clearance triggers, Operations on restructured verification. Implemented daily TAT monitoring at each handoff point.</p>
+    <div class="star-label">Result</div>
+    <p>TAT reduced from 20 to 3 days — 85% reduction. Volume scaled to 281/month without additional headcount. Cross-functional process redesign embedded as permanent workflow. This is the "standardised project management processes" the JD demands — designed once, runs permanently.</p>
+  </div>
+
+  <div class="star-story">
+    <h4>Story 4 — Business Case Development (NPV AED 652M)</h4>
+    <div class="star-maps">Maps to: "Business cases to acquire funding" + "Communication and influencing skills"</div>
+    <div class="star-label">Situation</div>
+    <p>Identified an opportunity to create a structured incentive for early payment — but required building a complex financial case for MD/CEO approval across Finance, Legal, and Operations stakeholders.</p>
+    <div class="star-label">Task</div>
+    <p>Design, financially model, get approved, and track outcomes of an NPV-based programme — defending assumptions through multiple executive scrutiny rounds.</p>
+    <div class="star-label">Action</div>
+    <p>Built full NPV model: AED 652M incremental inflow, AED 21.2M cost, 248-day prepayment acceleration, 32% cheaper than bank financing equivalent. Created scenario modelling and sensitivity analysis. Managed objections from Finance (cost), Legal (compliance), Operations (complexity). Post-launch, tracked actuals vs. forecast monthly.</p>
+    <div class="star-label">Result</div>
+    <p>Programme approved and implemented. AED 652M incremental inflow. 32% cheaper than bank alternative. Zero material concessions. Financial tracking infrastructure became permanent governance tool.</p>
+  </div>
+
+  <div class="star-story">
+    <h4>Story 5 — Requirements-to-Product Delivery (Salesforce 0→1)</h4>
+    <div class="star-maps">Maps to: "Requirements management" + "Product roadmap" + "Partner with Product and Technology"</div>
+    <div class="star-label">Situation</div>
+    <p>The organisation had no centralised data platform — reporting was manual, fragmented, and couldn't scale with 14.9x programme growth.</p>
+    <div class="star-label">Task</div>
+    <p>Lead solution design and end-to-end build of the data intelligence platform from zero — discovery, requirements, vendor partnership, deployment, and adoption across two geographies.</p>
+    <div class="star-label">Action</div>
+    <p>Conducted 6-stakeholder discovery process. Translated operational requirements into functional specifications. Partnered with vendor implementation team. Built and maintained the report catalogue and workflow documentation. Drove platform evolution through iterative releases. Currently leading Power BI migration and SQL modernisation as next-generation roadmap.</p>
+    <div class="star-label">Result</div>
+    <p>Platform scaled to support 14.9x programme growth with 70+ live data-connected reports and zero incremental reporting headcount. This is the requirements-to-product-roadmap-to-delivery lifecycle in one story.</p>
+  </div>
+
+  <div class="star-story">
+    <h4>Story 6 — Risk Governance & Assertiveness (PR Rejection Standard)</h4>
+    <div class="star-maps">Maps to: "Risk management" + "Proactive self-starter" + "Governance rigour"</div>
+    <div class="star-label">Situation</div>
+    <p>Payment Request rejection rate reached 49%. Stakeholders pressured to relax documentation standards — trading data quality for throughput.</p>
+    <div class="star-label">Task</div>
+    <p>Maintain the data quality standard while finding a sustainable way to improve throughput.</p>
+    <div class="star-label">Action</div>
+    <p>Held the quality standard. Presented data showing relaxing it would create downstream compliance risk. Designed a structural solution: quality scorecard with pre-submission checklist, daily monitoring, and peer review. Made the case with data, not opinion.</p>
+    <div class="star-label">Result</div>
+    <p>Position vindicated by subsequent data — throughput improved while quality held. Standard became permanent. This is a data governance story: holding data quality standards under business pressure to compromise. Exactly the dynamic a CDO programme manager faces when LOBs resist firmwide governance mandates.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════ INTERVIEW PREP ═══════════════ -->
+<section class="section" id="interview">
+<div class="container">
+  <h2 class="section-title">Interview Prep</h2>
+  <p class="section-sub">JPMC behavioural questions, "How We Do Business" framing, and ready-to-deploy answers</p>
+
+  <div class="card card-navy">
+    <h3>JPMC Interview Format — What to Expect</h3>
+    <p>JPMC interviews follow a structured behavioural format with 3–4 rounds. The culture signal is <strong>"How We Do Business" (HWDB)</strong> — JPMC's values framework covering Integrity, Client Focus, Operational Excellence, and Teamwork. Every answer should embed at least one HWDB signal. CDO-specific rounds may include a case scenario (e.g., "How would you roll out a new data classification policy across 5 LOBs?").</p>
+    <p style="margin-top:8px">Expect: 1 Recruiter Screen → 2 Behavioural + Situational → 1 Senior Leader / Hiring Manager Round</p>
+  </div>
+
+  <h3 style="font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--jpmc-navy); margin:24px 0 16px">Behavioural Question → STAR Story Routing</h3>
+
+  <table class="iq-table">
+    <tr>
+      <th>Likely Question</th>
+      <th>Primary Story</th>
+      <th>Key Line</th>
+    </tr>
+    <tr>
+      <td>Tell me about a transformational change you led</td>
+      <td>Story 1 (14.9x Scale)</td>
+      <td>"I scaled a data programme 14.9x while simultaneously reducing portfolio-at-risk rate by 74%."</td>
+    </tr>
+    <tr>
+      <td>How do you establish governance for large programmes?</td>
+      <td>Story 2 (3-Tier Cadence)</td>
+      <td>"I designed a 3-tier governance cadence — weekly, monthly, quarterly — with standardised data packs and action tracking."</td>
+    </tr>
+    <tr>
+      <td>Describe a cross-functional process you improved</td>
+      <td>Story 3 (PCC TAT)</td>
+      <td>"I reduced processing time 85% across 4 departments by redesigning sequential workflows to parallel."</td>
+    </tr>
+    <tr>
+      <td>How do you build a business case for a strategic programme?</td>
+      <td>Story 4 (NPV Model)</td>
+      <td>"I built a business case generating AED 652M return at 32% lower cost than the alternative — defended at MD/CEO level."</td>
+    </tr>
+    <tr>
+      <td>How do you gather and prioritise requirements from multiple stakeholders?</td>
+      <td>Story 5 (Salesforce 0→1)</td>
+      <td>"I ran a 6-stakeholder discovery process, translated requirements into specs, and delivered a platform scaling to 70+ reports."</td>
+    </tr>
+    <tr>
+      <td>Tell me about a time you held a standard under pressure</td>
+      <td>Story 6 (PR Rejection)</td>
+      <td>"I held the data quality standard at 49% rejection when there was pressure to relax it. The data proved me right."</td>
+    </tr>
+    <tr>
+      <td>Tell me about a time you failed or made a mistake</td>
+      <td>App Adoption Miss (S8)</td>
+      <td>"I set 80% adoption, hit 17%. I learned that tool adoption is a change management problem, not a technology problem."</td>
+    </tr>
+    <tr>
+      <td>Walk me through your career</td>
+      <td>MT → AGM Arc (S10)</td>
+      <td>"Management Trainee to AGM in 6 years, building the data and programme infrastructure from zero."</td>
+    </tr>
+  </table>
+
+  <div class="card card-green" style="margin-top:20px">
+    <h3>"How We Do Business" Framing Guide</h3>
+    <p><strong>For integrity questions:</strong> Frame the PR rejection story — "I held the standard because data quality is non-negotiable, even when it creates short-term friction."</p>
+    <p style="margin-top:8px"><strong>For client focus:</strong> Frame PCC TAT — "The 20-day processing time was creating client friction. I redesigned the process because client experience is upstream of everything."</p>
+    <p style="margin-top:8px"><strong>For operational excellence:</strong> Frame the 3-tier governance cadence — "I built the operating rhythm from zero because sustainable excellence requires systematic governance, not heroic effort."</p>
+    <p style="margin-top:8px"><strong>For teamwork:</strong> Frame the India hub deployment — "I built a 42-person hub that operates at the same standard as the Dubai team. That's not just hiring — it's embedding a shared culture of accountability."</p>
+  </div>
+
+  <div class="card card-amber">
+    <h3>Questions You Should Ask the Interviewer</h3>
+    <p>"What's the current maturity level of firmwide data governance adoption across LOBs — and where are the biggest resistance points?"</p>
+    <p style="margin-top:8px">"How does the CDO Strategy & Execution team interact with LOB CDOs day-to-day — is it primarily standards-setting, or does this role also drive implementation?"</p>
+    <p style="margin-top:8px">"What are the highest-priority regulatory commitments driving the programme roadmap right now?"</p>
+    <p style="margin-top:8px">"What does success look like for this role in the first 6 months — is there a specific programme or initiative I'd be expected to own immediately?"</p>
+    <p style="margin-top:8px">"How does the CDO team measure programme health — is there an established reporting framework, or is that part of what this role builds?"</p>
+  </div>
+
+  <div class="card card-blue">
+    <h3>Assertiveness Proof Points (Prepare for Senior Leader Round)</h3>
+    <p>Your DISC profile shows Low-D. JPMC's senior leader round probes for executive presence. Have these ready:</p>
+    <p style="margin-top:8px"><strong>Proof Point 1:</strong> Held PR rejection documentation standard at 49% under pressure from multiple stakeholders to relax — position vindicated by data.</p>
+    <p style="margin-top:8px"><strong>Proof Point 2:</strong> Defended NPV model at MD/CEO level through multiple scrutiny rounds — zero material concessions.</p>
+    <p style="margin-top:8px"><strong>Proof Point 3:</strong> Escalated 3 blocked risk register items to CCO proactively before due dates — demonstrating risk radar, not risk avoidance.</p>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════ VOCAB DECODER ═══════════════ -->
+<section class="section" id="vocab">
+<div class="container">
+  <h2 class="section-title">Vocabulary Decoder</h2>
+  <p class="section-sub">Translate your Sobha language into JPMC CDO language — use in resume, interviews, and cover note</p>
+
+  <h3 style="font-size:1rem; font-weight:600; color:var(--jpmc-navy); margin-bottom:16px">Sobha → JPMC CDO Translation Map</h3>
+
+  <div class="vocab-row"><span class="vocab-from">Collections function</span><span class="vocab-arrow">→</span><span class="vocab-to">Data programme delivery / Data operations</span></div>
+  <div class="vocab-row"><span class="vocab-from">Delinquency rate</span><span class="vocab-arrow">→</span><span class="vocab-to">Data quality metric / Portfolio-at-risk rate</span></div>
+  <div class="vocab-row"><span class="vocab-from">MIS ecosystem (70+ reports)</span><span class="vocab-arrow">→</span><span class="vocab-to">Data governance reporting framework / Data catalogue</span></div>
+  <div class="vocab-row"><span class="vocab-from">PR rejection quality scorecard</span><span class="vocab-arrow">→</span><span class="vocab-to">Data quality control threshold / DQ scorecard</span></div>
+  <div class="vocab-row"><span class="vocab-from">3-tier review cadence (weekly/monthly/quarterly)</span><span class="vocab-arrow">→</span><span class="vocab-to">Programme governance operating model / Steering committee cadence</span></div>
+  <div class="vocab-row"><span class="vocab-from">4 legal entities governance</span><span class="vocab-arrow">→</span><span class="vocab-to">Cross-LOB data governance / Firmwide standards adoption</span></div>
+  <div class="vocab-row"><span class="vocab-from">14-finding risk register</span><span class="vocab-arrow">→</span><span class="vocab-to">Programme RAID log / Risk & issue register</span></div>
+  <div class="vocab-row"><span class="vocab-from">NPV model AED 652M</span><span class="vocab-arrow">→</span><span class="vocab-to">Business case development / Investment memo</span></div>
+  <div class="vocab-row"><span class="vocab-from">Salesforce 0→1 platform</span><span class="vocab-arrow">→</span><span class="vocab-to">Data platform solution design / Product roadmap delivery</span></div>
+  <div class="vocab-row"><span class="vocab-from">SQL migration programme</span><span class="vocab-arrow">→</span><span class="vocab-to">Data infrastructure modernisation / Data architecture evolution</span></div>
+  <div class="vocab-row"><span class="vocab-from">RERA compliance</span><span class="vocab-arrow">→</span><span class="vocab-to">Regulatory compliance / BCBS 239 adherence</span></div>
+  <div class="vocab-row"><span class="vocab-from">MD/CEO-level presentation</span><span class="vocab-arrow">→</span><span class="vocab-to">ED/MD-level executive engagement</span></div>
+  <div class="vocab-row"><span class="vocab-from">T−25/T+30 framework</span><span class="vocab-arrow">→</span><span class="vocab-to">Operational readiness framework / Programme milestone window</span></div>
+  <div class="vocab-row"><span class="vocab-from">77-person cross-geo team</span><span class="vocab-arrow">→</span><span class="vocab-to">Global programme team across multiple delivery locations</span></div>
+
+  <h3 style="font-size:1rem; font-weight:600; color:var(--jpmc-navy); margin:32px 0 16px">JPMC CDO-Specific Terms You Must Know</h3>
+
+  <div class="vocab-term">
+    <strong>Firmwide CDO</strong>
+    <p>The central Chief Data Office that sets data management standards, governance frameworks, and modernisation strategy across all Lines of Business. Teresa Heitsenrether leads. Mark Birkhead is the Firmwide CDO.</p>
+    <div class="vocab-use">Use: "I would be driving firmwide data governance programme execution — ensuring consistent standards adoption across LOBs."</div>
+  </div>
+
+  <div class="vocab-term">
+    <strong>Line of Business (LOB)</strong>
+    <p>JPMC's major divisions: CIB (Corporate & Investment Bank), CCB (Consumer & Community Banking), AWM (Asset & Wealth Management), CB (Commercial Banking), Corporate Functions. Each has its own LOB CDO.</p>
+    <div class="vocab-use">Use: "I managed data governance across 4 legal entities — analogous to cross-LOB programme execution."</div>
+  </div>
+
+  <div class="vocab-term">
+    <strong>BCBS 239</strong>
+    <p>Basel Committee on Banking Supervision — Principles for effective risk data aggregation and risk reporting. The regulatory driver behind most bank data governance programmes. 14 principles covering governance, architecture, accuracy, completeness, timeliness, adaptability.</p>
+    <div class="vocab-use">Use: "I understand that data governance programmes at global banks are regulatory-driven — BCBS 239 principles set the standard for data quality, lineage, and reporting."</div>
+  </div>
+
+  <div class="vocab-term">
+    <strong>Data Lineage</strong>
+    <p>The end-to-end lifecycle of data: where it originates, how it transforms, where it's consumed. Critical for regulatory reporting — regulators want to trace any reported number back to its source.</p>
+    <div class="vocab-use">Use: "My MI report catalogue documented data flow from source systems through transformation to executive dashboards — that's data lineage governance."</div>
+  </div>
+
+  <div class="vocab-term">
+    <strong>Critical Data Elements (CDEs)</strong>
+    <p>The specific data fields that drive critical business and regulatory processes. CDO programmes often focus on ensuring CDEs have documented ownership, quality standards, and lineage.</p>
+    <div class="vocab-use">Use: "I identified and governed the critical data elements across our portfolio — the fields that drive executive decisions and regulatory reporting."</div>
+  </div>
+
+  <div class="vocab-term">
+    <strong>Data Classification</strong>
+    <p>Categorising data by sensitivity (public, internal, confidential, restricted) and by business criticality. Drives access controls, retention policies, and handling procedures.</p>
+    <div class="vocab-use">Use: "Our 4-entity governance model included data classification — different sensitivity levels for customer financial data across legal entities."</div>
+  </div>
+
+  <div class="vocab-term">
+    <strong>Data Stewardship</strong>
+    <p>The practice of assigning business owners to data domains. Data stewards are accountable for data quality, definitions, and governance within their domain.</p>
+    <div class="vocab-use">Use: "I embedded data stewardship by assigning report ownership to each sub-function lead — they owned data quality within their domain."</div>
+  </div>
+
+  <div class="vocab-term">
+    <strong>Operating Model</strong>
+    <p>The organisational design that defines how data governance is executed: centralised vs. federated, roles & responsibilities, escalation paths, decision rights. A key deliverable of this role.</p>
+    <div class="vocab-use">Use: "I designed the operating model for a 77-person cross-geography function — governance cadence, escalation paths, decision rights, and accountability framework."</div>
+  </div>
+
+  <div class="vocab-term">
+    <strong>1LOD / 2LOD / 3LOD</strong>
+    <p>Three Lines of Defence: 1LOD (business / front line), 2LOD (risk management / compliance), 3LOD (internal audit). Data governance spans all three. You'll work across these lines.</p>
+    <div class="vocab-use">Use: "My risk register and quality scorecard governance spans the equivalent of 1LOD (operational delivery) and 2LOD (quality control & governance)."</div>
+  </div>
+
+  <div class="vocab-term">
+    <strong>How We Do Business (HWDB)</strong>
+    <p>JPMC's cultural values framework: Integrity, Client Focus, Operational Excellence, Teamwork. Interview scoring criteria. Embed in every answer.</p>
+    <div class="vocab-use">Use these values naturally in interview answers — don't name them, demonstrate them.</div>
+  </div>
+
+  <div class="unlock-box" style="margin-top:32px">
+    <h3>Career Reframe — The Core Narrative</h3>
+    <p>I've spent six years building the data governance and programme management infrastructure for a function that scaled 14.9x — from AED 867M to AED 12.97B. I built the data catalogue from zero, designed the governance operating model, drove cross-functional process transformation, and developed business cases defended at MD/CEO level. I've managed 12 concurrent programmes across two geographies with a 77-person team. At Sobha, the title is AGM Dues Collections. But the work I've been doing is strategic data programme management — requirements gathering, product roadmap design, governance architecture, executive reporting, and risk management. That's this role. I'm ready to bring this discipline to JPMorganChase's Firmwide CDO.</p>
+    <div class="use-note">— Core Interview Narrative</div>
+  </div>
+</div>
+</section>
+
+</body>
+</html>

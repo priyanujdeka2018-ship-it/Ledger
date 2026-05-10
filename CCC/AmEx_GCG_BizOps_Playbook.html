@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmEx GCG Business Operations — Career Playbook | Priyanuj Deka</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=DM+Serif+Display&display=swap');
+
+:root {
+  --bg: #050d18;
+  --surface: #0a1628;
+  --surface2: #0f1f38;
+  --surface3: #162744;
+  --border: #1c3354;
+  --border2: #264870;
+  --text: #d4e4f7;
+  --muted: #6888a8;
+  --dim: #2a4060;
+  --amex-blue: #006fcf;
+  --amex-blue-bright: #1a8fff;
+  --amex-blue-glow: rgba(0,111,207,0.15);
+  --amex-gold: #c8a832;
+  --amex-gold-bright: #e6c547;
+  --green: #1db87a;
+  --red: #e84545;
+  --amber: #f0a030;
+  --purple: #9977ff;
+  --cyan: #5cc8ff;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+}
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #000d1f 0%, #001830 50%, #000a16 100%);
+  border-bottom: 2px solid var(--amex-blue);
+  padding: 44px 40px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -10%;
+  width: 50%;
+  height: 200%;
+  background: radial-gradient(ellipse, rgba(0,111,207,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.header::after {
+  content: 'GCG';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'DM Serif Display', serif;
+  font-size: 200px;
+  color: rgba(0,111,207,0.04);
+  pointer-events: none;
+  letter-spacing: -10px;
+}
+
+.header-content { position: relative; max-width: 1200px; margin: 0 auto; z-index: 1; }
+
+.header-badge {
+  display: inline-block;
+  background: rgba(0,111,207,0.15);
+  color: var(--amex-blue-bright);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 4px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  border: 1px solid rgba(0,111,207,0.3);
+}
+
+.header h1 {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+  background: linear-gradient(135deg, var(--amex-blue-bright), var(--amex-gold-bright));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header-sub { font-size: 15px; color: var(--muted); font-weight: 400; margin-bottom: 22px; }
+
+/* ROLE TOGGLE */
+.role-toggle {
+  display: inline-flex;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.role-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+
+.role-btn:hover { color: var(--text); }
+
+.role-btn.active {
+  background: linear-gradient(135deg, var(--amex-blue), var(--amex-blue-bright));
+  color: #fff;
+  box-shadow: 0 0 16px rgba(0,111,207,0.4);
+}
+
+/* KPI ROW */
+.kpi-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.kpi {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  min-width: 130px;
+}
+
+.kpi-value { font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.kpi-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+/* TAB BAR */
+.tab-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex;
+  overflow-x: auto;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-bar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.tab {
+  padding: 14px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+  user-select: none;
+}
+
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--amex-blue-bright); border-bottom-color: var(--amex-blue-bright); }
+
+/* PANELS */
+.panel {
+  display: none;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 40px 60px;
+}
+
+.panel.active { display: block; }
+
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--amex-blue-bright);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 32px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+  color: #fff;
+}
+
+.section-sub {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 14px;
+}
+
+/* CARDS */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.card.gold { border-left: 3px solid var(--amex-gold); }
+.card.green { border-left: 3px solid var(--green); }
+.card.red { border-left: 3px solid var(--red); }
+.card.amber { border-left: 3px solid var(--amber); }
+.card.blue { border-left: 3px solid var(--amex-blue-bright); }
+
+.card-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amex-blue-bright);
+  margin-bottom: 12px;
+}
+
+.card.gold .card-title { color: var(--amex-gold); }
+.card.green .card-title { color: var(--green); }
+.card.red .card-title { color: var(--red); }
+.card.amber .card-title { color: var(--amber); }
+
+p { margin-bottom: 11px; font-size: 13.5px; }
+p:last-child { margin-bottom: 0; }
+ul, ol { margin: 8px 0 8px 20px; }
+ul li, ol li { margin-bottom: 6px; font-size: 13.5px; }
+
+strong { color: #fff; font-weight: 600; }
+em { color: var(--cyan); font-style: normal; }
+
+/* TABLES */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 12px 0;
+}
+
+th {
+  text-align: left;
+  padding: 10px 12px;
+  background: var(--surface3);
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+
+td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(0,111,207,0.03); }
+
+/* TAGS */
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  margin: 2px 2px 2px 0;
+}
+
+.tag-blue { background: rgba(0,111,207,0.15); color: var(--amex-blue-bright); }
+.tag-green { background: rgba(29,184,122,0.12); color: var(--green); }
+.tag-red { background: rgba(232,69,69,0.12); color: var(--red); }
+.tag-gold { background: rgba(200,168,50,0.15); color: var(--amex-gold-bright); }
+.tag-amber { background: rgba(240,160,48,0.12); color: var(--amber); }
+.tag-purple { background: rgba(153,119,255,0.12); color: var(--purple); }
+
+/* BADGE */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+  margin-right: 6px;
+}
+
+.badge-strong { background: rgba(29,184,122,0.15); color: var(--green); border: 1px solid rgba(29,184,122,0.3); }
+.badge-mod { background: rgba(240,160,48,0.15); color: var(--amber); border: 1px solid rgba(240,160,48,0.3); }
+.badge-gap { background: rgba(232,69,69,0.15); color: var(--red); border: 1px solid rgba(232,69,69,0.3); }
+.badge-blue { background: rgba(0,111,207,0.15); color: var(--amex-blue-bright); border: 1px solid rgba(0,111,207,0.3); }
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+@media(max-width: 880px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .header { padding: 32px 22px 24px; }
+  .header h1 { font-size: 27px; }
+  .panel { padding: 24px 22px 50px; }
+  .tab-bar { padding: 0 16px; }
+}
+
+/* WANT GRID */
+.want-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.want-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--amex-blue-bright);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.want-icon { font-size: 22px; margin-bottom: 8px; }
+.want-card h4 { font-size: 13px; font-weight: 700; color: var(--amex-blue-bright); margin-bottom: 6px; letter-spacing: 0.3px; }
+.want-card p { font-size: 12.5px; color: var(--muted); margin: 0; line-height: 1.55; }
+
+/* FIT */
+.fit-meter {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 18px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.fit-meter::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--amex-blue-bright), transparent);
+}
+
+.fit-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--amex-blue-bright);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.fit-label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.fit-bar-wrap { max-width: 360px; margin: 0 auto 8px; }
+.fit-bar-bg { height: 8px; background: var(--surface3); border-radius: 4px; overflow: hidden; }
+.fit-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--amex-blue), var(--amex-blue-bright), var(--amex-gold));
+  border-radius: 4px;
+  transition: width 1.5s ease;
+}
+
+.fit-meter .small { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* REQ CARD */
+.req-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+}
+
+.req-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.req-title { font-size: 14px; font-weight: 700; color: #fff; flex: 1; min-width: 240px; }
+
+.req-jd {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-style: italic;
+  margin: 6px 0 10px;
+  padding-left: 10px;
+  border-left: 2px solid var(--border2);
+}
+
+.req-proof { font-size: 13px; color: var(--text); line-height: 1.6; }
+
+/* STAR */
+.star-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px;
+  margin: 12px 0;
+}
+
+.star-row { display: grid; grid-template-columns: 90px 1fr; gap: 12px; margin: 6px 0; align-items: start; }
+.star-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--amex-blue-bright);
+  letter-spacing: 0.06em;
+  padding-top: 1px;
+}
+.star-key.green { color: var(--green); }
+.star-content { font-size: 13px; color: var(--text); line-height: 1.55; }
+
+/* AI BOX */
+.ai-box {
+  background: linear-gradient(135deg, rgba(0,111,207,0.06), rgba(200,168,50,0.04));
+  border: 1px solid rgba(0,111,207,0.25);
+  border-radius: 10px;
+  padding: 22px;
+  margin-bottom: 14px;
+}
+
+.ai-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--amex-gold);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.ai-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: #fff; }
+.ai-body { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+
+.ai-stack { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* PROGRESS */
+.progress-wrap { margin: 8px 0 4px; }
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.4px;
+}
+.progress-bar { height: 6px; background: var(--surface3); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+.fill-blue { background: linear-gradient(90deg, var(--amex-blue), var(--amex-blue-bright)); }
+.fill-green { background: linear-gradient(90deg, #0d9e5a, var(--green)); }
+.fill-amber { background: linear-gradient(90deg, #c07820, var(--amber)); }
+.fill-red { background: linear-gradient(90deg, #b03030, var(--red)); }
+
+/* CERT */
+.cert-item {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.cert-item:last-child { border-bottom: none; }
+.cert-priority {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 14px;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.cert-priority.p1 { background: rgba(232,69,69,0.15); color: var(--red); }
+.cert-priority.p2 { background: rgba(240,160,48,0.15); color: var(--amber); }
+.cert-priority.p3 { background: rgba(0,111,207,0.15); color: var(--amex-blue-bright); }
+.cert-body h4 { font-size: 13.5px; color: #fff; margin-bottom: 4px; }
+.cert-body p { font-size: 12.5px; color: var(--muted); margin: 0; }
+
+/* PHRASE */
+.phrase {
+  background: linear-gradient(135deg, rgba(0,111,207,0.08), rgba(0,111,207,0.02));
+  border-left: 3px solid var(--amex-blue-bright);
+  padding: 14px 18px;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text);
+  margin: 10px 0;
+}
+
+.phrase.gold {
+  background: linear-gradient(135deg, rgba(200,168,50,0.1), rgba(200,168,50,0.02));
+  border-left-color: var(--amex-gold);
+}
+
+/* DIVIDER */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border2), transparent);
+  margin: 26px 0;
+}
+
+/* COMP */
+.comp-table td { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; }
+
+/* VOCAB */
+.vocab-table td:first-child {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  color: var(--cyan);
+  min-width: 180px;
+  font-size: 12.5px;
+}
+
+/* ROLE-SPECIFIC SHOW/HIDE */
+.role-content { display: none; }
+.role-content.active { display: block; }
+
+/* SHARED CONTENT */
+.shared-content { display: block; }
+
+/* ROLE BADGE INLINE */
+.role-pill {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.role-pill.dir { background: rgba(200,168,50,0.15); color: var(--amex-gold-bright); border: 1px solid rgba(200,168,50,0.3); }
+.role-pill.sm  { background: rgba(0,111,207,0.15); color: var(--amex-blue-bright); border: 1px solid rgba(0,111,207,0.3); }
+
+/* LIST ICONS */
+.check::before { content: '✓ '; color: var(--green); font-weight: bold; }
+.cross::before { content: '✗ '; color: var(--red); font-weight: bold; }
+.arrow::before { content: '→ '; color: var(--amex-blue-bright); font-weight: bold; }
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--dim);
+  font-size: 11px;
+  border-top: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.3px;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-content">
+    <div class="header-badge">American Express · GMNS · Global Client Group</div>
+    <h1 id="role-title">Director, Business Operations</h1>
+    <p class="header-sub" id="role-sub">Risk · Controls · Day-to-Day Operations · GCG India</p>
+
+    <div class="role-toggle">
+      <button class="role-btn active" id="btn-dir" onclick="setRole('dir')">Director · Business Operations</button>
+      <button class="role-btn" id="btn-sm" onclick="setRole('sm')">Sr. Manager · Business Operations</button>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="kpi-value" id="kpi-fit" style="color:var(--green)">61→75</div>
+        <div class="kpi-label">Fit Score / 100</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value" id="kpi-comp" style="color:var(--cyan)">₹50–75L</div>
+        <div class="kpi-label">Est. Total Comp</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value" id="kpi-prep" style="color:var(--amex-blue-bright)">3–4 wks</div>
+        <div class="kpi-label">Prep Window</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value" id="kpi-band" style="color:var(--amex-gold-bright)">Band 35</div>
+        <div class="kpi-label">Level Mapping</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-value" id="kpi-prio" style="color:var(--amber)">Stretch</div>
+        <div class="kpi-label">Pursuit Mode</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <div class="tab active" onclick="showTab(0)">01 JD Decoded</div>
+  <div class="tab" onclick="showTab(1)">02 Your Fit</div>
+  <div class="tab" onclick="showTab(2)">03 Gaps & Plan</div>
+  <div class="tab" onclick="showTab(3)">04 AI Portfolio</div>
+  <div class="tab" onclick="showTab(4)">05 STAR Bank</div>
+  <div class="tab" onclick="showTab(5)">06 Comp Intel</div>
+  <div class="tab" onclick="showTab(6)">07 Interview Prep</div>
+  <div class="tab" onclick="showTab(7)">08 Vocab Decoder</div>
+</div>
+
+<!-- ============================================== -->
+<!-- PANEL 01: JD DECODED                           -->
+<!-- ============================================== -->
+<div class="panel active" id="panel-0">
+  <div class="section-num">01 /</div>
+  <div class="section-title">The Roles, Decoded</div>
+  <p class="section-sub">Two roles, same team, complementary mandates — what GCG actually wants from each one</p>
+
+  <div class="card">
+    <div class="card-title">The GCG Context</div>
+    <p>The Global Client Group within American Express's GMNS Business Unit serves AmEx's <strong>largest and most complex global merchants</strong> across retail, online, and travel — representing <strong>$300B+ in charge volume</strong>. The mission: drive revenue through premium service, high-touch engagement, and being the merchant's partner of choice for global commerce.</p>
+    <p>These two newly-positioned Business Operations roles sit at the intersection of GCG's commercial mandate and AmEx's enterprise risk discipline. They exist because as GCG scales relationships across millions in merchant volume, the operational risk surface scales with it — and AmEx wants it managed with the same rigor as its consumer card business. <strong>Risk discipline is not a brake on commercial outcomes; it is the infrastructure that protects them.</strong></p>
+  </div>
+
+  <div class="card gold">
+    <div class="card-title">Role Relationship — Director ↔ Senior Manager</div>
+    <p>These are paired roles, not duplicate ones. Think of them as a <em>leadership tandem</em> running GCG's risk operations stack:</p>
+    <table>
+      <tr>
+        <th>Dimension</th>
+        <th>Director · Business Operations</th>
+        <th>Sr. Manager · Business Operations</th>
+      </tr>
+      <tr>
+        <td><strong>Owns</strong></td>
+        <td>The operating model — what gets measured, how risk is governed, how GCG shows up in enterprise forums</td>
+        <td>The execution machine — ORE management, project delivery, root cause closure</td>
+      </tr>
+      <tr>
+        <td><strong>Cadence</strong></td>
+        <td>Weekly leadership check-ins, monthly Risk Committee, quarterly enterprise governance</td>
+        <td>Daily ORE triage, weekly project reviews, ad-hoc CLM partnership</td>
+      </tr>
+      <tr>
+        <td><strong>Stakeholders</strong></td>
+        <td>GCG VP/SVP, GMNS Risk leadership, Guardian, Compliance, GCO, Internal Audit</td>
+        <td>CLMs, Control Management Governance, Compliance teams, GCO partners</td>
+      </tr>
+      <tr>
+        <td><strong>Headline ask</strong></td>
+        <td>"Strengthen how GCG delivers — operational discipline, effective risk management, control execution"</td>
+        <td>"Embed control management into daily operations and continuous process improvement"</td>
+      </tr>
+      <tr>
+        <td><strong>Failure mode if absent</strong></td>
+        <td>Risk events surface in audit; enterprise loses confidence in GCG's controls</td>
+        <td>Issues stay open longer; root causes recur; CLMs work around broken controls</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- DIRECTOR-SPECIFIC -->
+  <div class="role-content active" id="dir-jd">
+    <div class="card">
+      <div class="card-title">What They're Really Hiring For — Director</div>
+      <p>This is described in the JD as a <em>"newly created"</em> role. That phrase carries weight: <strong>there is no playbook here.</strong> The first occupant will define what GCG Business Operations means as a function. The hiring manager is looking for someone who can walk into a vacuum and immediately establish a risk operating model, then sustain it with discipline.</p>
+      <p>The role title says "Business Operations" — the actual job is <strong>Chief of Staff for GCG Risk &amp; Controls</strong>. They want a leader who can hold risk accountability for an entire global organization, represent GCG in enterprise forums, and translate ambiguous risk mandates into executable change across CLMs, Tech, Compliance, and GCO.</p>
+    </div>
+
+    <div class="want-grid">
+      <div class="want-card">
+        <div class="want-icon">🛡️</div>
+        <h4>Risk Operating Model Owner</h4>
+        <p>Build and sustain how operational risk is identified, assessed, governed, and reported across global GCG. The framework, the cadence, the standards.</p>
+      </div>
+      <div class="want-card">
+        <div class="want-icon">🎯</div>
+        <h4>Central Accountability Point</h4>
+        <p>JD literal language: "central point of accountability for how operational risk, controls, and core processes are managed and delivered."</p>
+      </div>
+      <div class="want-card">
+        <div class="want-icon">🤝</div>
+        <h4>CLM Partnership Architect</h4>
+        <p>Not a controls cop — a trusted partner Client Managers come to with operational pain. Translate their friction into structural improvements.</p>
+      </div>
+      <div class="want-card">
+        <div class="want-icon">🏛️</div>
+        <h4>Guardian / Enterprise Risk Liaison</h4>
+        <p>Represent GCG in Guardian (AmEx's internal risk programme) and enterprise risk initiatives. Orchestrate inputs, drive outcomes back into the team.</p>
+      </div>
+      <div class="want-card">
+        <div class="want-icon">📊</div>
+        <h4>Risk Intelligence Generator</h4>
+        <p>Turn ORE data, finding trends, and KRI movement into clear, actionable insights for senior leaders. Build the executive narrative around risk performance.</p>
+      </div>
+      <div class="want-card">
+        <div class="want-icon">⚙️</div>
+        <h4>Automation &amp; Roadmap Sponsor</h4>
+        <p>Define business requirements for product roadmaps. New tooling and capabilities should improve control effectiveness — that's your sign-off.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Director Responsibilities — Plain Language Breakdown</div>
+      <table>
+        <tr><th>JD Language</th><th>What It Means in Practice</th><th>Weight</th></tr>
+        <tr><td>Manage day-to-day business operations and risk execution for GCG, serving as a central point of accountability</td><td>You are the single throat to choke for operational risk performance across GCG. When a senior leader asks "where do we stand on X risk," the answer comes from your team.</td><td><span class="tag tag-red">CRITICAL</span></td></tr>
+        <tr><td>Embed operational and control rigor; ensure risks identified early, issues addressed decisively, customer experience protected</td><td>Build proactive surveillance. Catch issues before they become OREs. Frame every control through merchant customer outcome.</td><td><span class="tag tag-red">CRITICAL</span></td></tr>
+        <tr><td>Partner closely with CLMs; translate insights into practical process and control enhancements; work with CLMs to implement</td><td>Be present in CLM conversations. Hear the friction. Convert it into prioritized control work. Drive adoption — not just delivery.</td><td><span class="tag tag-red">CRITICAL</span></td></tr>
+        <tr><td>Drive consistency and uplift across GCG processes and controls; lead design, implementation, adoption</td><td>Same operations, same standards, globally. You are the consistency function — process X looks identical in NYC, London, Sydney, and Hong Kong.</td><td><span class="tag tag-red">CRITICAL</span></td></tr>
+        <tr><td>Monitor, analyze, drive resolution of OREs, findings, issues; root causes, trends, removing roadblocks, timely closure</td><td>Run the risk register at scale. Push closure. Surface patterns. Escalate blockers before they age. This is operational risk programme management.</td><td><span class="tag tag-red">CRITICAL</span></td></tr>
+        <tr><td>Represent GCG in Guardian and enterprise risk initiatives</td><td>You are GCG's voice in the room when the rest of AmEx is debating risk standards. Carry GCG's perspective in; carry the outcome out.</td><td><span class="tag tag-amber">HIGH</span></td></tr>
+        <tr><td>Analyze risk performance and operational data; surface emerging risks; clear, actionable insights to senior leaders</td><td>Build the intelligence layer. Weekly/monthly briefings. Trend commentary. Risk narrative for VP/SVP review.</td><td><span class="tag tag-amber">HIGH</span></td></tr>
+        <tr><td>Support governance forums and risk committees; raise issues, inform discussions, track actions</td><td>Run the meetings. Author the materials. Own the action log. This is governance secretariat work — the unglamorous backbone of risk operations.</td><td><span class="tag tag-amber">HIGH</span></td></tr>
+        <tr><td>Define business requirements for product roadmaps; new capabilities improve control effectiveness</td><td>Sit in product/tech roadmap conversations. Make sure controls are designed in, not bolted on. Sign off when capabilities are control-grade.</td><td><span class="tag tag-blue">MEDIUM</span></td></tr>
+        <tr><td>Own and lead execution across multiple cross-functional initiatives; hold team accountable for delivery</td><td>You have a small but capable team. Set clear expectations, track performance honestly, and remove blockers. Accountability culture starts with you.</td><td><span class="tag tag-blue">MEDIUM</span></td></tr>
+      </table>
+    </div>
+
+    <div class="card green">
+      <div class="card-title">The Unstated Requirements (Director)</div>
+      <ul>
+        <li><strong>Walk into a vacuum and own it:</strong> "Newly created" means no precedent. You'll be writing the operating model from scratch in the first 90 days. AmEx wants someone who is energized by this, not destabilized.</li>
+        <li><strong>Influence without authority across $300B in volume stakes:</strong> No CLM reports to you. No Tech team reports to you. Yet every ORE you own touches their work. Trust capital is your only currency.</li>
+        <li><strong>Decisive in ambiguity:</strong> "Customer experience is protected" requires you to call it when something is unsafe — even when consensus is missing. The Director who waits for full alignment will be the one who lets a control gap escape.</li>
+        <li><strong>Enterprise fluency:</strong> Guardian, GCO, Internal Audit — these are not just acronyms. They are political ecosystems with their own incentives. You need to navigate without being captured by any of them.</li>
+        <li><strong>Hands-on at scale:</strong> "Hands-on leadership style with high accountability and follow-through" — this is not a strategy role. The JD repeats <em>execution</em> language. AmEx wants a leader who reviews the ORE register personally on a Friday afternoon.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SR MANAGER-SPECIFIC -->
+  <div class="role-content" id="sm-jd">
+    <div class="card">
+      <div class="card-title">What They're Really Hiring For — Senior Manager</div>
+      <p>This role is the <strong>execution engine of GCG risk operations</strong>. Where the Director sets the model, the Senior Manager runs the machine. The JD's language is unambiguous: "embedding control management into daily operations" and "continuous improvement of business processes." This is <em>operator-grade work</em> — not advisory, not strategic.</p>
+      <p>The hiring manager wants someone who will own a risk portfolio area outright, drive every issue to closure with discipline, conduct independent root cause analyses, and partner directly with Client Managers to make controls work in the real world. The phrase <em>"high level of ownership, attention to detail, and follow-through"</em> appears verbatim — that is the candidate signature.</p>
+    </div>
+
+    <div class="want-grid">
+      <div class="want-card">
+        <div class="want-icon">📋</div>
+        <h4>ORE End-to-End Owner</h4>
+        <p>Operational Risk Events from detection → triage → RCA → remediation → closure. Independent ownership for assigned areas.</p>
+      </div>
+      <div class="want-card">
+        <div class="want-icon">🔬</div>
+        <h4>Root Cause Investigator</h4>
+        <p>JD literal: "Conduct independent root cause analyses to identify underlying process vulnerabilities." Diagnostic work, not symptom management.</p>
+      </div>
+      <div class="want-card">
+        <div class="want-icon">📐</div>
+        <h4>Project Manager — Discipline Mode</h4>
+        <p>Build execution plans, milestones, owners, dependencies. Drive delivery against timelines. Multiple workstreams in parallel without dropping any.</p>
+      </div>
+      <div class="want-card">
+        <div class="want-icon">🛠️</div>
+        <h4>Process &amp; Control Designer</h4>
+        <p>Design and implement controls that actually work — not just satisfy a framework. Partner with CLMs to validate fit before deployment.</p>
+      </div>
+      <div class="want-card">
+        <div class="want-icon">🔄</div>
+        <h4>CLM Day-to-Day Liaison</h4>
+        <p>Be the operating contact for CLMs on risk and process matters. Translate their business signals into operational responses.</p>
+      </div>
+      <div class="want-card">
+        <div class="want-icon">📈</div>
+        <h4>Trend Analyst &amp; Insight Sharer</h4>
+        <p>Look across issues. Surface what's recurring. Share better practices across GCG. Continuous improvement is owned here.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Senior Manager Responsibilities — Plain Language Breakdown</div>
+      <table>
+        <tr><th>JD Language</th><th>What It Means in Practice</th><th>Weight</th></tr>
+        <tr><td>Own operational risk and issue management for assigned areas; end-to-end management of OREs, findings, and related issues</td><td>You have a portfolio. Every open issue has a status, a plan, an owner, a due date — because you own that view.</td><td><span class="tag tag-red">CRITICAL</span></td></tr>
+        <tr><td>Conduct independent root cause analyses to identify underlying process vulnerabilities; high-risk or recurring issues</td><td>5-Why, Fishbone, Fault Tree — pick the tool. Find the actual cause, not the proximate one. Inform what controls need to change.</td><td><span class="tag tag-red">CRITICAL</span></td></tr>
+        <tr><td>Project manage end to end; clear execution plans, milestones, owners, timelines; discipline and follow-through</td><td>Standard PM craft applied to risk work. The deliverable is closure on time, not a Gantt chart.</td><td><span class="tag tag-red">CRITICAL</span></td></tr>
+        <tr><td>Develop well-formed recommendations on process risk and mitigation strategies; clear options and trade-offs for senior leadership</td><td>You bring the Director two or three options, each with cost/benefit. They choose. You execute.</td><td><span class="tag tag-amber">HIGH</span></td></tr>
+        <tr><td>Design, enhance, and implement processes and controls; close partnership with CLMs to ensure solutions meet business and customer needs</td><td>No control survives contact with the field if CLMs hate it. Build with them, not for them.</td><td><span class="tag tag-amber">HIGH</span></td></tr>
+        <tr><td>Day-to-day CLM liaison; translate business and customer insights into practical operational and control improvements</td><td>You are the trusted operator CLMs call when something feels off. That trust is built one resolved issue at a time.</td><td><span class="tag tag-amber">HIGH</span></td></tr>
+        <tr><td>Enable and monitor the integration of changes to the Operational Risk framework; translate requirements into business execution; track adoption</td><td>When enterprise risk policy changes, you are the person who turns the policy memo into a checklist GCG actually follows.</td><td><span class="tag tag-amber">HIGH</span></td></tr>
+        <tr><td>Support governance forums and Guardian initiatives; prepare materials, surface key risks and themes, track actions</td><td>You are the Director's right hand for governance. The deck, the data, the action log — produced cleanly, on time.</td><td><span class="tag tag-blue">MEDIUM</span></td></tr>
+        <tr><td>Analyze risk performance and issue data; identify trends; surface emerging risks; share insights and better practices across GCG</td><td>Pattern detection across your portfolio. What recurs. Where it concentrates. What others can learn.</td><td><span class="tag tag-blue">MEDIUM</span></td></tr>
+      </table>
+    </div>
+
+    <div class="card green">
+      <div class="card-title">The Unstated Requirements (Senior Manager)</div>
+      <ul>
+        <li><strong>Bias toward action — explicit:</strong> The JD says <em>"comfortable operating in ambiguity with a bias toward action."</em> AmEx is naming the trait. They want someone who acts on 70% information rather than waiting for 100%.</li>
+        <li><strong>Detail without paralysis:</strong> "High level of ownership, attention to detail, and follow-through." These pair together intentionally — they want detail-orientation that drives delivery, not detail-orientation that delays it.</li>
+        <li><strong>Senior-leader-grade communication at SM level:</strong> "Clearly explain complex concepts, develop and defend recommendations, influence outcomes." This is not a task-doer role. The SM presents in rooms with decision-makers.</li>
+        <li><strong>Multi-workstream maturity:</strong> "Manage multiple workstreams simultaneously" — code for: don't drop balls. Personal systems for tracking, communicating, and prioritizing must already exist before day one.</li>
+        <li><strong>Independent judgment:</strong> "Independent root cause analyses." You investigate alone. You don't need a steering committee to find the cause. You need a steering committee to ratify your recommendation.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- PANEL 02: YOUR FIT                             -->
+<!-- ============================================== -->
+<div class="panel" id="panel-1">
+  <div class="section-num">02 /</div>
+  <div class="section-title">Your Fit</div>
+  <p class="section-sub">How your Sobha experience maps — requirement by requirement — to each role</p>
+
+  <!-- DIRECTOR FIT -->
+  <div class="role-content active" id="dir-fit">
+    <div class="fit-meter">
+      <div class="fit-number">61</div>
+      <div class="fit-label">Current Director Fit</div>
+      <div class="fit-bar-wrap">
+        <div class="fit-bar-bg"><div class="fit-bar-fill" style="width:61%"></div></div>
+      </div>
+      <p class="small">Addressable to <strong style="color:var(--green)">75/100</strong> with: vocabulary reframe + assertiveness coaching + CRISC enrolled + AI portfolio piece</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Director Fit Snapshot</div>
+      <p>Your operational rigour, programme governance discipline, and 14.9× scale-up track record map cleanly to the Director mandate. The friction is not capability — it is <strong>positioning and behavioural visibility</strong>. The Director role demands assertiveness in senior forums and decisive action under ambiguity. Your DISC profile (Low D / Low I) means these behaviours need conscious activation, not because they're absent, but because they're not your default mode.</p>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Central point of accountability for operational risk, controls, and core processes</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Manage day-to-day business operations and risk execution for GCG"</div>
+      <div class="req-proof">You are the <strong>single point of accountability for AED 12.97B in dues + advance collections</strong> across two geographies and 77 people. CRO, CCO, MD/CEO direct your risk and operational performance. The 14-finding audit risk register, PR rejection governance programme, and three-tier governance cadence are operational accountability mechanisms — at financial-services-grade scale.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Drive consistency and uplift across processes and controls; lead design, implementation, adoption</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Leading the design, implementation, and adoption of improved standards, procedures, and operating practices"</div>
+      <div class="req-proof">The <strong>55-day T−25/T+30 framework</strong> is your proprietary operating standard — designed, implemented, and adopted across 77 people in two geographies. The <strong>Salesforce 0→1 build</strong> standardised data architecture across 6 stakeholder discovery streams. Standards design + adoption at scale is your strongest signal.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Monitor, analyze, and drive resolution of OREs, findings, issues; root causes, trends, timely closure</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Identifying root causes, surfacing trends, removing roadblocks, ensuring timely closure"</div>
+      <div class="req-proof">The <strong>14-finding remediation programme</strong> with weekly governance cadence, owner-and-due-date discipline, and 97.5% error reduction is the exact muscle memory. The <strong>49% PR rejection root-cause programme</strong> — diagnosis, scorecard design, daily monitoring, structural fix — is RCA at production scale.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Analyze risk performance and operational data; clear, actionable insights to senior leaders</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Provide clear, actionable insights to senior leaders"</div>
+      <div class="req-proof">Your <strong>70+ report MI ecosystem</strong> is the senior-leader insight infrastructure for collections operations — daily, weekly, monthly cadence with role-tailored views. You authored the analysis behind the AED 652M NPV proposal and defended it at MD/CEO across multiple scrutiny rounds.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Partner closely with Client Managers; translate insights into process and control enhancements</div>
+        <div class="badge badge-mod">MODERATE MATCH</div>
+      </div>
+      <div class="req-jd">"Working with CLMs to implement changes"</div>
+      <div class="req-proof">You partner with <strong>RMs (Relationship Managers) at Sobha</strong> — same archetype as CLMs, different vocabulary. The Salesforce build was 6-stakeholder discovery-led; the PR rejection programme was field-validated before deployment. <strong>Reframe needed:</strong> Sobha "RM" → AmEx "CLM" in every story.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Represent GCG in Guardian and enterprise risk initiatives; orchestrating inputs, managing follow-ups</div>
+        <div class="badge badge-mod">MODERATE MATCH</div>
+      </div>
+      <div class="req-jd">"Orchestrating inputs, managing follow-ups, and ensuring outcomes are delivered"</div>
+      <div class="req-proof">You are <strong>Audit SPOC for Collections</strong> across three Sobha entities — orchestration of inputs, response coordination, follow-up tracking. The named programme equivalent of "Guardian" doesn't exist in your background, but the function is identical. <strong>Reframe needed:</strong> "audit interface" → "enterprise risk initiative orchestration."</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Embed operational and control rigor; ensure customer experience is protected</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Risks identified early, issues addressed decisively, customer experience is protected"</div>
+      <div class="req-proof">The <strong>delinquency reduction (16.7% → 4.4%, –74%)</strong> is customer-experience protection through control rigour. The PR governance programme protected the AED 8.2B revenue stream by fixing what was breaking customer-facing payment processing. You routinely frame ops decisions through customer outcome — exactly the AmEx mindset.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Hands-on leadership with high accountability and follow-through; multiple cross-functional initiatives</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Hands-on leadership style with high accountability and follow-through"</div>
+      <div class="req-proof">12-project AI-augmented operations portfolio. 70+ report platform. PR governance + Salesforce build + risk register remediation running simultaneously. You run multi-workstream programmes with CRO/CCO/MD-level accountability. Hands-on is not a stretch — it's a documented pattern.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Define business requirements for product roadmaps; capabilities improve control effectiveness</div>
+        <div class="badge badge-mod">MODERATE MATCH</div>
+      </div>
+      <div class="req-jd">"Defining business requirements for product roadmaps and ensuring new capabilities improve control effectiveness"</div>
+      <div class="req-proof">The <strong>Salesforce CRM platform 0→1 build</strong> — you led solution design, defined data architecture for 70+ reports, partnered with tech on delivery. This is exactly product/control roadmap definition at the business-requirement level. <strong>Frame as:</strong> "I built the internal intelligence platform that runs collections."</div>
+    </div>
+  </div>
+
+  <!-- SR MANAGER FIT -->
+  <div class="role-content" id="sm-fit">
+    <div class="fit-meter">
+      <div class="fit-number">72</div>
+      <div class="fit-label">Current Sr. Manager Fit</div>
+      <div class="fit-bar-wrap">
+        <div class="fit-bar-bg"><div class="fit-bar-fill" style="width:72%"></div></div>
+      </div>
+      <p class="small">Addressable to <strong style="color:var(--green)">85/100</strong> with: vocabulary reframe + RCA framework articulation + CRISC enrolled + 1 AI portfolio piece</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Senior Manager Fit Snapshot</div>
+      <p>This is your <strong>natural fit role.</strong> Every dominant trait in your DISC and CSF profile aligns with the JD: Restorative + Analytical for RCA, Arranger for multi-workstream PM, High C for control design rigour, Relator + Individualization for CLM partnership. The "bias toward action" requirement is the only non-default behaviour you'll need to consciously activate. The reframe work is lighter than for the Director role because the SM language matches operator vocabulary more directly.</p>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Own operational risk and issue management; end-to-end ORE management for assigned areas</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"End-to-end management of Operational Risk Events (OREs), findings, and related issues"</div>
+      <div class="req-proof">The <strong>14-finding risk register at Sobha</strong> is direct ORE-equivalent work — owner per item, root cause documented, target closure date, evidence criterion, weekly cadence, blocker escalation. 100% closure within window, zero recurrence. This is the JD requirement, expressed in different vocabulary.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Conduct independent root cause analyses; high-risk or recurring issues; inform risk reduction actions</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Identify underlying process vulnerabilities, with a focus on high-risk or recurring issues"</div>
+      <div class="req-proof">The <strong>49% PR rejection root cause analysis</strong> is the textbook example: high-risk recurring issue (volume tripled while quality collapsed) → categorised RCA across rejection reasons → structural fix (quality scorecard + daily monitoring + peer review) → validated outcome (TAT 20→3 days). Your Restorative + Analytical strengths are the natural engine.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Project manage work end to end; building execution plans, managing dependencies, driving delivery</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Project managing work end to end, including building execution plans, managing dependencies"</div>
+      <div class="req-proof">12 simultaneous deliverable streams across Dubai+India. The Salesforce 0→1 build, the PR governance programme, and the 14-finding remediation ran in parallel — each with milestone tracking, dependency management, and stakeholder coordination. PM craft is your default operating mode.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Design, enhance, and implement processes and controls; partnership with CLMs</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Working closely with Client Managers to ensure solutions meet business and customer needs"</div>
+      <div class="req-proof">The <strong>55-day T−25/T+30 framework</strong> is a control architecture designed in partnership with Sobha RMs and validated in field deployment. The PR scorecard was built with the team that uses it daily. You don't deliver controls top-down — you co-design.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Day-to-day liaison with Client Managers; translate business insights into operational improvements</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Partner closely with Client Managers as a day-to-day liaison"</div>
+      <div class="req-proof">Your Relator + Individualization strengths drive deep, sustained one-on-one trust with RMs and operations leads at Sobha. The MI ecosystem was specifically architected role-by-role because you observed how each user actually consumed information. CLM partnership is a documented strength, not an interview claim.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Develop well-formed recommendations on process risk; clear options and trade-offs for senior leadership</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Provide clear options and trade-offs for senior leadership"</div>
+      <div class="req-proof">The <strong>NPV AED 652M / AED 21.2M cost / 32% cheaper than bank financing</strong> defence is the proof. You built the option set, ran sensitivities, presented trade-offs at MD/CEO level, defended the recommendation across multiple scrutiny rounds, and held the position under pressure. This is well-formed recommendation development at the highest internal stakes.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Enable and monitor integration of changes to Operational Risk framework; translate requirements into execution; track adoption</div>
+        <div class="badge badge-mod">MODERATE MATCH</div>
+      </div>
+      <div class="req-jd">"Translating requirements into business execution and tracking adoption"</div>
+      <div class="req-proof">When Sobha's compliance and audit teams introduced new requirements, you owned translation into operational standards and tracked adoption across 77 people. The named "Operational Risk framework" doesn't exist in real estate — but the function does. <strong>Reframe needed:</strong> "compliance change management" → "ORM framework integration."</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">Analyze risk performance and issue data; identify trends; share insights across GCG</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"Identify trends, surface emerging risks, share insights and better practices"</div>
+      <div class="req-proof">The 70+ report MI ecosystem is exactly this capability — and you built daily/weekly/monthly trend layers across delinquency, PR performance, and recovery metrics. Sharing insights to drive consistency is your default mode.</div>
+    </div>
+
+    <div class="req-card">
+      <div class="req-header">
+        <div class="req-title">High level of ownership, attention to detail, follow-through in fast-paced environments; multiple workstreams</div>
+        <div class="badge badge-strong">STRONG MATCH</div>
+      </div>
+      <div class="req-jd">"High level of ownership, attention to detail, and follow-through; manage multiple workstreams simultaneously"</div>
+      <div class="req-proof">Your DISC profile (High C / High S) is engineered for this requirement. 12 simultaneous workstreams, 70+ reports, three-tier governance cadence — sustained over multi-quarter horizons. Detail orientation that drives delivery, not delay.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card gold">
+    <div class="card-title">Vocabulary Reframe — Sobha → AmEx GCG (Both Roles)</div>
+    <p>The single highest-leverage preparation action: translate every Sobha story into GCG language before the interview room.</p>
+    <table>
+      <tr><th>Sobha Vocabulary</th><th>AmEx GCG Equivalent</th></tr>
+      <tr><td>Dues collections</td><td>Revenue operations / receivables management</td></tr>
+      <tr><td>Delinquency rate</td><td>Portfolio-at-risk rate</td></tr>
+      <tr><td>Audit findings (14)</td><td>Operational Risk Events / findings register</td></tr>
+      <tr><td>Audit SPOC for Collections</td><td>Risk and control liaison / Guardian-equivalent role</td></tr>
+      <tr><td>Relationship Manager (RM)</td><td>Client Manager (CLM)</td></tr>
+      <tr><td>MIS ecosystem (70+ reports)</td><td>Internal intelligence platform / risk &amp; operational reporting layer</td></tr>
+      <tr><td>PR (Payment Request) governance</td><td>1LOD documentation quality control / control execution</td></tr>
+      <tr><td>55-day T−25/T+30 window</td><td>Operational readiness framework / control cadence model</td></tr>
+      <tr><td>QCG / Quality Control Group</td><td>Control testing function / control monitoring team</td></tr>
+      <tr><td>Compliance change management</td><td>ORM framework integration / policy adoption tracking</td></tr>
+      <tr><td>Three Lines of Defense at Sobha</td><td>1LOD / 2LOD / 3LOD interface management</td></tr>
+      <tr><td>Three-tier governance cadence</td><td>Risk committee operating rhythm / governance forum architecture</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- PANEL 03: GAPS & PLAN                          -->
+<!-- ============================================== -->
+<div class="panel" id="panel-2">
+  <div class="section-num">03 /</div>
+  <div class="section-title">Gaps &amp; Plan</div>
+  <p class="section-sub">Honest gap assessment, severity-ranked, with closure actions</p>
+
+  <!-- DIRECTOR GAPS -->
+  <div class="role-content active" id="dir-gaps">
+    <div class="grid-2">
+      <div>
+        <div class="card red">
+          <div class="card-title">Gap 1 — Assertiveness in Senior Forums</div>
+          <p>The Director represents GCG in Guardian, GCO interactions, and enterprise risk forums. Your DISC profile (Low D, Low I) means deferring is your default. At Director level, AmEx needs someone who pushes back on VPs when risk posture demands it.</p>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Severity</span><span>HIGHEST</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-red" style="width:80%"></div></div>
+          </div>
+          <p style="font-size:12.5px; margin-top:8px;"><strong>Close it:</strong> Build 3 vetted "I held the line" stories. (1) PR rejection 49% standard held under pressure — vindicated by data. (2) NPV AED 652M defence at MD/CEO across multiple rounds, zero material concessions. (3) 3 risk register items escalated to CCO before due date. Practice delivery in mock format until confident.</p>
+        </div>
+
+        <div class="card red">
+          <div class="card-title">Gap 2 — Financial Services Risk Vocabulary</div>
+          <p>You manage risk at enormous scale, but the named language of FS operational risk (Guardian, three lines of defense, RCSA, KRI/KCI, ORE) is not your daily vocabulary.</p>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Severity</span><span>HIGH</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-red" style="width:75%"></div></div>
+          </div>
+          <p style="font-size:12.5px; margin-top:8px;"><strong>Close it:</strong> Master the 35-term Vocab Decoder (Section 8). Read the Basel Operational Risk Principles (BIS publication, ~30 pages). Watch 2–3 ISACA CRISC primer videos. Use this language in mock interviews so it sounds native, not memorised.</p>
+        </div>
+
+        <div class="card amber">
+          <div class="card-title">Gap 3 — Newly-Created Role Reframing</div>
+          <p>This Director role is newly created. AmEx wants someone who can walk into a vacuum and write the operating model. Your Sobha context has more structure than that — you'll need to demonstrate "writing the model from scratch" capability.</p>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Severity</span><span>MODERATE</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-amber" style="width:55%"></div></div>
+          </div>
+          <p style="font-size:12.5px; margin-top:8px;"><strong>Close it:</strong> Frame the Salesforce 0→1 build as "operating model design from zero." Frame the 55-day framework as "proprietary methodology I authored from blank page." Bring a 5-slide "GCG Risk Operating Model — First 90 Days" mock deck to final-round if invited.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="card amber">
+          <div class="card-title">Gap 4 — CRISC Certification (Not Started)</div>
+          <p>CRISC is the gold-standard credential for operational/IT risk roles in financial services. AmEx hiring panels treat it as a strong positive signal.</p>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Severity</span><span>MODERATE</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-amber" style="width:55%"></div></div>
+          </div>
+          <p style="font-size:12.5px; margin-top:8px;"><strong>Close it:</strong> You don't need CRISC certified to apply. Enroll in ISACA CRISC QAE study materials in week 1. Be able to say "I'm actively preparing for CRISC, scheduled exam in [month]." Schedule the exam to demonstrate commitment.</p>
+        </div>
+
+        <div class="card amber">
+          <div class="card-title">Gap 5 — Direct CLM Equivalent Experience</div>
+          <p>You partner with RMs at Sobha. CLMs at AmEx are higher-stakes — they manage merchant relationships representing $300B+ in volume. The interview will probe whether you can scale your relationship instinct to that level.</p>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Severity</span><span>MODERATE</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-amber" style="width:50%"></div></div>
+          </div>
+          <p style="font-size:12.5px; margin-top:8px;"><strong>Close it:</strong> Frame your 6-stakeholder Salesforce discovery as multi-segment partnership. Frame the AED 12.97B portfolio as institutional-scale stewardship. Show curiosity about CLM workflows in interview — ask about their day, signal you understand the relationship is the business.</p>
+        </div>
+
+        <div class="card green">
+          <div class="card-title">NOT a Gap — Real Estate vs Financial Services</div>
+          <p>Pre-empt the "you've been in real estate" frame. AED 12.97B portfolio. AED 652M NPV. AED 8.2B annual target. Three-entity audit interface. 14.9× scale-up. These are <strong>financial-services-grade numbers</strong>. The asset class differs; the operational risk profile is identical. State this directly if asked.</p>
+        </div>
+
+        <div class="card blue">
+          <div class="card-title">NOT a Gap — Team Scale</div>
+          <p>The Director role doesn't specify direct reports — it's a leadership-by-influence role. Your 77-person operating responsibility (12 direct, plus Ops 38 / QCG 12 / MIS 15 indirect) is more than sufficient. Don't volunteer team size unless asked.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SR MANAGER GAPS -->
+  <div class="role-content" id="sm-gaps">
+    <div class="grid-2">
+      <div>
+        <div class="card red">
+          <div class="card-title">Gap 1 — Bias Toward Action Demonstration</div>
+          <p>The JD names this trait explicitly. Your DISC profile shows you seek consultation before acting. In a fast-paced GCG operations role, every issue you ponder is an issue someone else is feeling pain from.</p>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Severity</span><span>HIGH</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-red" style="width:75%"></div></div>
+          </div>
+          <p style="font-size:12.5px; margin-top:8px;"><strong>Close it:</strong> Build 2 stories where you acted on 70% information and were right. The PR rejection diagnosis was an action-without-perfect-data move. The 3-day PCC TAT compression required acting on initial findings. Lead with these in any "tell me about a time you operated in ambiguity" question.</p>
+        </div>
+
+        <div class="card red">
+          <div class="card-title">Gap 2 — RCA Methodology Articulation</div>
+          <p>You do RCA naturally (Restorative + Analytical), but you may not articulate it in the named frameworks AmEx expects: 5-Why, Fishbone/Ishikawa, Fault Tree Analysis.</p>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Severity</span><span>HIGH</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-red" style="width:70%"></div></div>
+          </div>
+          <p style="font-size:12.5px; margin-top:8px;"><strong>Close it:</strong> Re-tell the 49% PR rejection RCA in explicit framework language: "I ran a 5-Why on the rejection categories, then mapped contributing causes onto a Fishbone — what emerged was that 60% of failures clustered in documentation completeness." Same story, framework-fluent.</p>
+        </div>
+
+        <div class="card amber">
+          <div class="card-title">Gap 3 — FS Operational Risk Vocabulary</div>
+          <p>Same gap as Director — but lower bar at SM level. You need fluency, not authority, in the named vocabulary.</p>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Severity</span><span>MODERATE</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-amber" style="width:60%"></div></div>
+          </div>
+          <p style="font-size:12.5px; margin-top:8px;"><strong>Close it:</strong> Master the 35-term Vocab Decoder (Section 8). Use ORE/RCSA/KRI/Three Lines of Defense in mock interviews until natural.</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="card amber">
+          <div class="card-title">Gap 4 — CRISC Certification (Not Started)</div>
+          <p>Same as Director — credential gap, not capability gap.</p>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Severity</span><span>MODERATE</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-amber" style="width:50%"></div></div>
+          </div>
+          <p style="font-size:12.5px; margin-top:8px;"><strong>Close it:</strong> Enroll in ISACA CRISC QAE prep. Schedule the exam. State commitment in interview.</p>
+        </div>
+
+        <div class="card amber">
+          <div class="card-title">Gap 5 — Independent Authority Signaling</div>
+          <p>The JD says "independent root cause analyses." Your Sobha pattern includes CCO/CRO consultation by default. The SM role wants someone who investigates and recommends without needing approval cycles.</p>
+          <div class="progress-wrap">
+            <div class="progress-label"><span>Severity</span><span>MODERATE</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-amber" style="width:45%"></div></div>
+          </div>
+          <p style="font-size:12.5px; margin-top:8px;"><strong>Close it:</strong> Frame the 49% PR programme as: "I ran the RCA independently, brought a structured recommendation to the CCO, and drove deployment." The decision was theirs; the analysis and proposal were yours alone. Emphasise the autonomous diagnostic work.</p>
+        </div>
+
+        <div class="card green">
+          <div class="card-title">NOT a Gap — Workstream Volume</div>
+          <p>You run 12 simultaneous workstreams. The JD requires "multiple workstreams simultaneously." This is below your demonstrated ceiling. Don't undersell it; lead with it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title">Certification Stack — Both Roles</div>
+    <div class="cert-item">
+      <div class="cert-priority p1">1</div>
+      <div class="cert-body">
+        <h4>CRISC — Certified in Risk and Information Systems Control (ISACA)</h4>
+        <p>Single most important credential for both roles. Covers operational risk identification, assessment, response, monitoring. Maps directly to ORE management, RCSA, and 1LOD/2LOD governance language. Enroll in QAE materials immediately. Exam schedule: within 90 days.</p>
+      </div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-priority p2">2</div>
+      <div class="cert-body">
+        <h4>PMI-ACP — Already in Progress</h4>
+        <p>Demonstrates programme management discipline. Highly relevant to SM role's "project manage end-to-end" mandate. Continue on current timeline.</p>
+      </div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-priority p3">3</div>
+      <div class="cert-body">
+        <h4>Lean Six Sigma Green Belt (Optional, fast-track)</h4>
+        <p>RCA methodology fluency credential. 6–8 weeks online. Useful if interview probes named frameworks (DMAIC, FMEA, control charts). Lower priority than CRISC; consider only if timeline allows.</p>
+      </div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-priority p3">4</div>
+      <div class="cert-body">
+        <h4>FRM (GARP) or PRMIA ORM — Long-term</h4>
+        <p>FS-credentialing path if AmEx becomes the long-term home. Consider 12–18 months post-joining. Not pre-application priority.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">4-Week Sprint Plan</div>
+    <table>
+      <tr><th>Week</th><th>Director Focus</th><th>Sr. Manager Focus</th></tr>
+      <tr>
+        <td><strong>Week 1</strong></td>
+        <td>Master 35-term Vocab Decoder. Read Basel ORM Principles. Enroll CRISC QAE.</td>
+        <td>Master 35-term Vocab Decoder. Re-articulate PR RCA in 5-Why + Fishbone framing. Enroll CRISC QAE.</td>
+      </tr>
+      <tr>
+        <td><strong>Week 2</strong></td>
+        <td>Build 3 "I held the line" stories. Build "GCG Risk Operating Model — 90 Days" mock deck.</td>
+        <td>Build 2 "acted on 70% information" stories. Build mock ORE management tracker (Excel/Smartsheet).</td>
+      </tr>
+      <tr>
+        <td><strong>Week 3</strong></td>
+        <td>Ship 1 AI portfolio piece (ORE risk-flagging tool — see Section 4). Mock interview round 1.</td>
+        <td>Ship 1 AI portfolio piece (RCA cluster analysis tool — see Section 4). Mock interview round 1.</td>
+      </tr>
+      <tr>
+        <td><strong>Week 4</strong></td>
+        <td>Mock interview round 2 with senior-forum simulation. Refine "Director vacuum" framing. Salary anchor preparation.</td>
+        <td>Mock interview round 2 with bias-to-action simulation. Refine framework articulation. Salary anchor preparation.</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- PANEL 04: AI PORTFOLIO                         -->
+<!-- ============================================== -->
+<div class="panel" id="panel-3">
+  <div class="section-num">04 /</div>
+  <div class="section-title">AI Portfolio</div>
+  <p class="section-sub">Three GCG-mapped AI projects you can ship before the interview to create asymmetric edge</p>
+
+  <div class="card gold">
+    <div class="card-title">The AI Differentiator Pitch (Both Roles)</div>
+    <p>GCG Business Operations runs on data — ORE registers, finding logs, RCA outputs, governance pack content. The team that uses AI to compress a 3-day weekly compilation cycle into a 30-minute automated intelligence flow is the team that has time to <em>act</em> on risk rather than describe it. <strong>You've already built the precedent at Sobha</strong>: the 70+ report MI ecosystem is internal intelligence infrastructure. At AmEx, you bring the same architecture — AI-augmented from day one.</p>
+    <p>This is not "I read about ChatGPT" framing. It is: <em>"I will ship a working prototype before week one of joining."</em> That single shift in posture moves you from "candidate with operational background" to "candidate who reduces the team's tooling debt."</p>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT 1 · DIRECTOR-CRITICAL · SHIPPABLE IN 2 DAYS</div>
+    <div class="ai-title">ORE Risk-Flagging Dashboard</div>
+    <div class="ai-body">
+      Build an AI-powered ORE status dashboard. Input: a mock portfolio of 25 open risk events with owner, age, last update, blocker. Claude API classifies each ORE by severity (P0–P3), generates a "blocker hypothesis" for aged items, and drafts a weekly status briefing for the Risk Committee. Output: a Streamlit dashboard that demonstrates the exact intelligence layer this Director would own. Carry a 60-second screen-share demo into a final-round interview.
+    </div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Python</span>
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Streamlit</span>
+      <span class="tag tag-blue">Pandas</span>
+      <span class="tag tag-gold">Priority 1</span>
+    </div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT 2 · SM-CRITICAL · SHIPPABLE IN 2 DAYS</div>
+    <div class="ai-title">RCA Cluster &amp; Trend Analyzer</div>
+    <div class="ai-body">
+      Build an RCA cluster tool. Input: 50 mock issue records with text descriptions of failure modes. Claude API runs categorical clustering on root cause language, identifies the top 3 recurring themes, drafts an "emerging trend" memo for governance review, and recommends which controls to revisit. Output: a working Python notebook + 1-page output sample. Demonstrates exactly the SM JD line: <em>"identify trends, surface emerging risks, share insights and better practices across GCG."</em>
+    </div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Python</span>
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">NLP Clustering</span>
+      <span class="tag tag-gold">Priority 1</span>
+    </div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT 3 · BOTH ROLES · SHIPPABLE IN 1 DAY</div>
+    <div class="ai-title">Risk Committee Pack Generator</div>
+    <div class="ai-body">
+      Input: raw KRI metrics + open ORE list + last meeting actions. Claude API drafts the Risk Committee briefing pack — executive summary, metric commentary, aged-item escalations, recommended action list. This is exactly the recurring deliverable both roles produce monthly. A working prototype signals: <em>"I haven't just researched the role — I've already automated one of its hardest weekly burdens."</em>
+    </div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Document Generation</span>
+      <span class="tag tag-blue">Structured Prompting</span>
+      <span class="tag tag-gold">Priority 2</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title">How to Pitch AI Capability in the Interview</div>
+    <div class="phrase">
+      "One structural inefficiency I've observed in large risk operations teams is that programme managers spend 60–70% of their time assembling status reports rather than acting on the underlying risk. At Sobha, I addressed this by building a 70+ report internal intelligence platform that automated MI aggregation across two geographies. At AmEx, I would apply the same architecture — AI-augmented from day one — so ORE status synthesis, aged-item escalation flagging, and Risk Committee materials generate themselves. That frees the team to spend time on resolution and CLM partnership rather than compilation."
+    </div>
+    <div class="phrase gold">
+      "I've already built a working prototype — an ORE tracker that classifies events by severity, generates blocker hypotheses, and drafts executive summaries. It took me two days. I'd be glad to walk through it. For a team like this, I estimate it saves 6–8 hours of manual compilation per week — and that's before any custom tuning to AmEx data shapes."
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">AI Capability Already Provable from Sobha</div>
+    <ul>
+      <li><strong>70+ report MI ecosystem:</strong> Frame as <em>internal intelligence platform</em> — data aggregation, automated distribution, live-data-connected dashboards. AI-adjacent infrastructure thinking.</li>
+      <li><strong>PR rejection quality scorecard:</strong> Frame as AI-ready quality monitoring architecture. Threshold → flag → escalate → remediate is the same pattern as anomaly detection. You built the manual version; AI makes it real-time.</li>
+      <li><strong>14-finding risk register:</strong> Frame as a structured risk data model — same data structure required to build any ORE tool. You already know the fields that matter: owner, age, blocker, severity, target closure.</li>
+      <li><strong>12-project AI-augmented portfolio:</strong> Cite the existence of an AI portfolio tied to current operations. Show 1–2 working examples in interview if asked.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- PANEL 05: STAR BANK                            -->
+<!-- ============================================== -->
+<div class="panel" id="panel-4">
+  <div class="section-num">05 /</div>
+  <div class="section-title">STAR Bank</div>
+  <p class="section-sub">Pre-mapped STAR stories per JD requirement — ready to deploy in interview rounds</p>
+
+  <div class="card">
+    <div class="card-title">Story 1 — Risk Register &amp; ORE Management <span class="role-pill dir">DIR</span><span class="role-pill sm">SM</span></div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:10px;">Maps to: "Own monitoring, tracking, and progression of OREs and findings; root causes, trends, timely closure"</p>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">An internal audit at Sobha identified 14 control findings across documentation, approval protocols, and data governance in the collections function. The findings carried recurrence risk if remediation didn't reach root causes — historical practice was to fix for the audit cycle and re-fail the next.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">As the Collections audit liaison — equivalent to a 1LOD ORE owner — I was responsible for end-to-end programme delivery: not just remediation tracking, but verifiable, sustainable closure across a 77-person organisation in two geographies.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I built a structured risk register: each finding had an owner, a documented root cause, a remediation action, a target closure date, and an evidence criterion. I implemented weekly governance with team leads, escalated 3 blocked items proactively to the CCO before they aged, and designed structural process controls — not compliance-period fixes — so recurrence became impossible by design.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">97.5% reduction in error rate. All 14 findings closed within remediation window. Zero recurrence in subsequent audit cycles. The risk register became standing governance infrastructure — it now serves as the team's continuous controls monitoring framework.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 2 — Independent Root Cause Analysis <span class="role-pill sm">SM</span><span class="role-pill dir">DIR</span></div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:10px;">Maps to: "Conduct independent root cause analyses; high-risk or recurring issues; design and implement processes and controls"</p>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">By December 2025, Payment Request rejection rate at Sobha had reached 49% — nearly half of collections financial requests were being returned by the approvals function due to documentation failures. Volume had tripled (90 → 281/month) while quality collapsed.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Diagnose the root causes independently, design a sustainable documentation quality architecture, and reduce rejection rate without slowing collections velocity — the AED 8.2B annual target depended on payment processing speed.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I ran a 5-Why on rejection categories, then mapped contributing causes onto a Fishbone diagram. 60% of failures clustered in documentation completeness — the rest split across data accuracy and routing errors. I built a quality scorecard with mandatory pre-submission checklist fields, implemented daily KPI monitoring with team-level visibility, introduced peer review pre-submission, and trained the team on closure evidence standards.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">PR TAT 20 days → 3 days. Rejection rate fell sharply from 49%. The quality architecture is now permanent operating infrastructure — a 1LOD-equivalent quality gate built and owned by the business team. This is exactly the 1LOD ownership model AmEx describes in the JD.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 3 — Held the Line Under Pressure <span class="role-pill dir">DIR</span></div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:10px;">Maps to: "Risks identified early, issues addressed decisively, customer experience protected" + assertiveness signal for Director-level forums</p>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">During the PR rejection crisis, multiple senior stakeholders pushed to approve borderline-quality requests to keep collections velocity high — the AED 8.2B target was at stake and quarter-end pressure was intense.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Decide: relax the quality threshold to maintain throughput, or hold the standard and accept short-term volume risk. The decision was mine as the operational owner.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I held the threshold at the 49% standard — refusing to release sub-quality requests despite the velocity argument. I framed the trade-off explicitly to leadership: short-term throughput risk vs. structural recurrence risk that would compound across quarters. I committed to a parallel acceleration of the quality scorecard rollout to recover throughput within 30 days.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">Within the 30-day window, TAT compressed 20 → 3 days, rejection rate dropped sharply, and throughput recovered without recurrence. The data vindicated the position. This story signals the senior-forum assertiveness AmEx is testing for at Director level.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 4 — Cross-Functional CLM-Equivalent Partnership <span class="role-pill dir">DIR</span><span class="role-pill sm">SM</span></div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:10px;">Maps to: "Partner closely with Client Managers; translate insights into practical operational and control improvements"</p>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">Sobha's collections function operated without a unified CRM. RMs (the institutional equivalent of CLMs) were managing customer relationships across fragmented systems — Excel, paper records, ad-hoc tracking. This created risk in dispute management and customer-experience continuity.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Lead the design of a Salesforce CRM platform from zero — with 6 stakeholder groups (RMs, Operations, QCG, MIS, Compliance, Finance) — that would standardise customer engagement and create a defensible operational data layer.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I conducted multi-segment discovery — sat with RMs through their daily workflows, mapped friction points, and translated business signals into platform design requirements. I led solution design with the tech team, defined data architecture for 70+ downstream reports, and managed handoffs between business and technology teams. The platform was built around what RMs actually do, not what management thought they did.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">Salesforce platform deployed, 70+ live data-connected reports running, RMs adopted because the platform reduced their friction rather than added to it. This is the CLM-partnership model in action — translate field signals into structural improvements that the field actually wants.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 5 — Senior Stakeholder Defence Under Scrutiny <span class="role-pill dir">DIR</span><span class="role-pill sm">SM</span></div>
+    <p style="font-size:12px; color:var(--muted); margin-bottom:10px;">Maps to: "Develop and defend recommendations; influence outcomes; comfortable operating with senior stakeholders"</p>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">I designed a financial restructuring proposal at Sobha worth NPV AED 652M — a significant balance-sheet impact decision that required MD and CEO sign-off. The proposal involved a 248-day prepayment structure that was 32% cheaper than equivalent bank financing.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Develop the analytical case, present to senior leadership, defend the recommendation through multiple scrutiny rounds, and secure approval — without making material concessions that would erode the financial outcome.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I built the option set with full sensitivity analysis. I ran a structured presentation to MD and CEO. Across multiple rounds of challenge — on cost assumptions, sensitivity ranges, downside scenarios, implementation risk — I held the analytical position. I conceded minor framing edits but held the core recommendation. I prepared rebuttal data for every challenge category in advance.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">Approval secured. AED 21.2M cost yielding AED 652M NPV — implementable structure, deployed. Senior stakeholder defense at the highest internal stakes is documented. This story signals the senior-forum capability both roles require, particularly at Director level.</div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title">Behavioral Question Quick Router</div>
+    <table>
+      <tr><th>If they ask...</th><th>Use Story</th></tr>
+      <tr><td>"Tell me about a time you owned an issue end to end"</td><td>Story 1 — Risk Register</td></tr>
+      <tr><td>"Walk me through a root cause analysis you ran"</td><td>Story 2 — PR RCA</td></tr>
+      <tr><td>"Tell me about a time you held a position under pressure"</td><td>Story 3 — Held the Line</td></tr>
+      <tr><td>"How have you partnered with non-direct stakeholders?"</td><td>Story 4 — Salesforce / CLM-equivalent</td></tr>
+      <tr><td>"Describe presenting a recommendation to senior leadership"</td><td>Story 5 — NPV Defense</td></tr>
+      <tr><td>"Tell me about a time you operated in ambiguity"</td><td>Story 2 (PR diagnosis) or Story 4 (Salesforce 0→1)</td></tr>
+      <tr><td>"How do you manage multiple workstreams?"</td><td>Frame Story 1 + Story 4 running in parallel</td></tr>
+      <tr><td>"Tell me about a time you drove change adoption"</td><td>Story 4 — Salesforce / RM partnership</td></tr>
+      <tr><td>"Describe surfacing a risk early"</td><td>Story 3 — escalation before the rejection rate became uncontrollable</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- PANEL 06: COMP INTEL                           -->
+<!-- ============================================== -->
+<div class="panel" id="panel-5">
+  <div class="section-num">06 /</div>
+  <div class="section-title">Comp Intel</div>
+  <p class="section-sub">Level mapping, salary anchors, mutual-offer leverage, negotiation playbook</p>
+
+  <!-- DIRECTOR COMP -->
+  <div class="role-content active" id="dir-comp">
+    <div class="card">
+      <div class="card-title">Director · Level &amp; Band Mapping</div>
+      <table>
+        <tr><th>Component</th><th>AmEx Director · GCG India</th><th>Notes</th></tr>
+        <tr><td>Internal Band</td><td>Band 35 (Director-equivalent)</td><td>One band below GMNS Director (Band 40)</td></tr>
+        <tr><td>Years of Experience target</td><td>5–7+ years risk / control / audit / business operations</td><td>You are at 6 years post-MBA — within window</td></tr>
+        <tr><td>Reports into</td><td>VP / SVP, GCG Business Operations</td><td>Likely IC role with leadership-by-influence; potential 1–2 indirect reports</td></tr>
+        <tr><td>Location</td><td>India (Gurgaon / Bangalore)</td><td>Hybrid; 3 days office expected</td></tr>
+        <tr><td>Stock</td><td>RSU + Cash bonus</td><td>~15–20% of total comp typical at this band</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Director · CTC Bands (April 2026)</div>
+      <table class="comp-table">
+        <tr><th>Component</th><th>Conservative</th><th>Realistic Anchor</th><th>Push Anchor</th></tr>
+        <tr><td>Base Salary</td><td>₹38–42L</td><td>₹45–50L</td><td>₹55–60L</td></tr>
+        <tr><td>Annual Bonus (target)</td><td>₹6–8L</td><td>₹10–12L</td><td>₹14–18L</td></tr>
+        <tr><td>RSU (annual vest)</td><td>₹5–7L</td><td>₹8–12L</td><td>₹14–18L</td></tr>
+        <tr><td>Joining Bonus</td><td>₹3–5L</td><td>₹5–8L</td><td>₹10–15L</td></tr>
+        <tr><td><strong>Total CTC (Year 1)</strong></td><td><strong>₹52–62L</strong></td><td><strong>₹68–82L</strong></td><td><strong>₹93–110L</strong></td></tr>
+      </table>
+      <p style="font-size:12.5px; color:var(--muted); margin-top:8px;">Push anchor requires: live competing offer (Uber / Google / Mastercard) at higher band; CRISC commitment evidenced; AI portfolio demonstrated.</p>
+    </div>
+  </div>
+
+  <!-- SR MANAGER COMP -->
+  <div class="role-content" id="sm-comp">
+    <div class="card">
+      <div class="card-title">Senior Manager · Level &amp; Band Mapping</div>
+      <table>
+        <tr><th>Component</th><th>AmEx Sr. Manager · GCG India</th><th>Notes</th></tr>
+        <tr><td>Internal Band</td><td>Band 30 (Sr. Manager-equivalent)</td><td>One band below Director</td></tr>
+        <tr><td>Years of Experience target</td><td>5–7 years risk / control / audit / ops / project management</td><td>You are at 6 years post-MBA — central match</td></tr>
+        <tr><td>Reports into</td><td>Director, GCG Business Operations</td><td>IC role; partners closely with Director on framework execution</td></tr>
+        <tr><td>Location</td><td>India (Gurgaon / Bangalore)</td><td>Hybrid; 3 days office expected</td></tr>
+        <tr><td>Stock</td><td>RSU + Cash bonus</td><td>~10–15% of total comp typical at this band</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Senior Manager · CTC Bands (April 2026)</div>
+      <table class="comp-table">
+        <tr><th>Component</th><th>Conservative</th><th>Realistic Anchor</th><th>Push Anchor</th></tr>
+        <tr><td>Base Salary</td><td>₹28–32L</td><td>₹34–38L</td><td>₹42–46L</td></tr>
+        <tr><td>Annual Bonus (target)</td><td>₹4–6L</td><td>₹7–9L</td><td>₹10–13L</td></tr>
+        <tr><td>RSU (annual vest)</td><td>₹3–5L</td><td>₹5–8L</td><td>₹9–12L</td></tr>
+        <tr><td>Joining Bonus</td><td>₹2–4L</td><td>₹4–6L</td><td>₹7–10L</td></tr>
+        <tr><td><strong>Total CTC (Year 1)</strong></td><td><strong>₹37–47L</strong></td><td><strong>₹50–61L</strong></td><td><strong>₹68–81L</strong></td></tr>
+      </table>
+      <p style="font-size:12.5px; color:var(--muted); margin-top:8px;">Push anchor leverage: BITS+IIM dual credential, AED 12.97B portfolio scale, AI portfolio shipped, parallel offers.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title">Pipeline Comparison — Mutual-Offer Leverage</div>
+    <table class="comp-table">
+      <tr><th>Role</th><th>Conservative</th><th>Realistic</th><th>Push</th><th>Stock</th><th>Strategic Note</th></tr>
+      <tr><td>AmEx GCG Director (Band 35)</td><td>₹52L</td><td>₹68–82L</td><td>₹93–110L</td><td>AXP RSUs</td><td>Highest title, controls/governance brand</td></tr>
+      <tr><td>AmEx GCG Sr Manager (Band 30)</td><td>₹37L</td><td>₹50–61L</td><td>₹68–81L</td><td>AXP RSUs</td><td>Natural fit — fastest-to-offer route</td></tr>
+      <tr><td>AmEx GMNS Director (Band 40)</td><td>₹55L</td><td>₹70–85L</td><td>₹100–115L</td><td>AXP RSUs</td><td>Highest fit (75→88) — primary AmEx target</td></tr>
+      <tr><td>Uber Sr Risk Ops Mgr (L5B)</td><td>—</td><td>₹95L</td><td>₹110–120L</td><td>UBER RSUs</td><td>Highest CTC ceiling — SQL is blocker</td></tr>
+      <tr><td>Google GBO Tools (L5)</td><td>₹70L</td><td>₹80–85L</td><td>₹95L</td><td>GOOGL RSUs</td><td>Most stable equity, parallel track</td></tr>
+      <tr><td>Microsoft Sr PM (L63)</td><td>₹63L</td><td>₹73L</td><td>₹90L</td><td>MSFT RSUs</td><td>Stable equity, similar base, exploratory</td></tr>
+      <tr><td>Oaktree VP Info Solutions</td><td>—</td><td>—</td><td>—</td><td>None</td><td>Buy-side credibility, fastest TTO</td></tr>
+    </table>
+    <p style="font-size:12.5px; color:var(--muted); margin-top:8px;">Strategy: GCG roles slot as <strong>parallel options</strong> in the AmEx track. If GMNS Director progresses simultaneously, do not volunteer that you are also interviewing for GCG Director — they are different recruiting org streams. Use the broader pipeline (Uber / Google / Microsoft) as external leverage.</p>
+  </div>
+
+  <div class="card gold">
+    <div class="card-title">Negotiation Anchors &amp; Tactics</div>
+    <ul>
+      <li><strong>Push for one band higher:</strong> If recruiter signals SM, ask explicitly whether the role spec accommodates Director scope given your AED 12.97B portfolio responsibility. <em>Worst case</em>: they confirm SM. <em>Best case</em>: you bridge the conversation upward.</li>
+      <li><strong>Anchor on total comp, not base:</strong> AmEx India compensation is RSU + bonus rich. Don't fixate on base. State a total-comp target and let them structure.</li>
+      <li><strong>Never volunteer current AED package:</strong> Use it as leverage only — say "I'm not optimising for base; I'm optimising for total comp + role scope." Anchor at push range; let them negotiate down.</li>
+      <li><strong>Joining bonus is your easiest win:</strong> Cite "RSU vesting cliff" framing — you're walking away from in-flight equity. Ask for ₹8–15L joining bonus to bridge.</li>
+      <li><strong>Push timeline patience:</strong> If AmEx is your only active offer, do not signal urgency. If Uber or Google is parallel, use it (named or unnamed) as a real timeline anchor.</li>
+      <li><strong>BITS + IIM dual credential is genuine asymmetry:</strong> India PM/ops hiring panels weigh dual-degree. Frame it as: "I bring engineering rigour and management discipline — that combination is what GCG Operations actually needs."</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- PANEL 07: INTERVIEW PREP                       -->
+<!-- ============================================== -->
+<div class="panel" id="panel-6">
+  <div class="section-num">07 /</div>
+  <div class="section-title">Interview Prep</div>
+  <p class="section-sub">Expected rounds, top BQs, behavioural coaching, 30-60-90 plan, questions to ask</p>
+
+  <div class="card">
+    <div class="card-title">Expected Interview Rounds (AmEx India · Director / SM)</div>
+    <table>
+      <tr><th>Round</th><th>Format</th><th>Focus</th><th>Pass Signal</th></tr>
+      <tr><td>1. Recruiter Screen (30 min)</td><td>Phone</td><td>Background, motivation, comp expectations, location flexibility</td><td>Recruiter advances + shares hiring manager prep notes</td></tr>
+      <tr><td>2. Hiring Manager (60 min)</td><td>Video</td><td>Role fit, JD-mapped behavioural questions, RCA depth, vocabulary</td><td>Specific second-round invitation; hiring manager shares team context</td></tr>
+      <tr><td>3. Cross-functional Panel (60–90 min)</td><td>Video / on-site</td><td>Stakeholder management, governance forum simulation, scenario judgement</td><td>Panel asks future-tense "when you join" questions</td></tr>
+      <tr><td>4. Senior Leader (45 min)</td><td>Video</td><td>Strategic fit, GCG philosophy alignment, executive presence test</td><td>Conversational tone, "what questions do you have for us" deepens</td></tr>
+      <tr><td>5. HR / Comp Discussion (30 min)</td><td>Phone</td><td>Salary expectations, joining timeline, references, paperwork</td><td>Pre-offer conversation — verbal range discussion</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Top 12 Behavioural Questions (Both Roles, with Coaching Notes)</div>
+    <table>
+      <tr><th>#</th><th>Question</th><th>Coaching Note</th></tr>
+      <tr><td>1</td><td>"Walk me through a complex risk or control issue you owned end to end."</td><td>Lead with Story 1 (14-finding register). Anchor structure: Issue → Root Cause → Action → Closure → Recurrence Prevention. Use "ORE-equivalent" framing once, then drop into your own language.</td></tr>
+      <tr><td>2</td><td>"Tell me about a time you ran an independent root cause analysis."</td><td>Story 2 (PR rejection). Use named frameworks: 5-Why, Fishbone. Show the cluster output ("60% in documentation completeness"). Demonstrate you separate symptoms from causes.</td></tr>
+      <tr><td>3</td><td>"How do you handle ambiguity?"</td><td><strong>Critical for both roles.</strong> Lead with Salesforce 0→1 build (no precedent, no playbook). Frame the Director version: "I treat 'newly created' as opportunity to author, not anxiety to manage." Avoid language that signals you wait for full clarity.</td></tr>
+      <tr><td>4</td><td>"Describe a time you held a position despite pressure."</td><td>Story 3 (PR threshold defense) or Story 5 (NPV defense). Don't soften the ending. <em>"The data vindicated the position"</em> is a strong closer — use it.</td></tr>
+      <tr><td>5</td><td>"How do you partner with stakeholders who don't report to you?"</td><td>Story 4 (Salesforce 6-stakeholder discovery). Emphasise that you start with their workflow, not your agenda. CLM partnership at AmEx is the same archetype.</td></tr>
+      <tr><td>6</td><td>"Tell me about a time you influenced senior leadership."</td><td>Story 5 (NPV defense). Critical: emphasise <em>holding</em> the recommendation through challenge — not just presenting it once.</td></tr>
+      <tr><td>7</td><td>"How do you manage multiple priorities simultaneously?"</td><td>12 simultaneous workstreams. 70+ reports. Three-tier governance. Lead with the system: "I run a tiered prioritisation model — risk-weighted, deadline-weighted, dependency-weighted."</td></tr>
+      <tr><td>8</td><td>"Describe a process you designed from scratch."</td><td>55-day T−25/T+30 framework. Frame as: "I authored this from blank page based on field discovery — it's now the operating standard for 77 people."</td></tr>
+      <tr><td>9</td><td>"How do you escalate when something isn't moving?"</td><td>3 risk register items escalated to CCO before due date — proactive, not reactive. Signal: <em>"I escalate before the date, not after."</em></td></tr>
+      <tr><td>10</td><td>"Tell me about a time you spotted a risk before it became an issue."</td><td>PR rejection trend monitoring caught the 49% level before it became audit-grade. Frame as proactive surveillance, not reactive firefighting.</td></tr>
+      <tr><td>11</td><td>"What would your first 30/60/90 days look like in this role?"</td><td>See plan below.</td></tr>
+      <tr><td>12</td><td>"Why GCG / AmEx?"</td><td>Three threads: (1) GCG's scale + premium-service brand match my muscle memory at Sobha. (2) Newly-created role offers asymmetric ownership opportunity. (3) Risk + commercial integration is exactly what I built at Sobha — at AmEx I get to do it with FS-grade rigour.</td></tr>
+    </table>
+  </div>
+
+  <div class="card amber">
+    <div class="card-title">Behavioural Coaching — Three Conscious Activations for Interview Day</div>
+    <p>Your DISC profile (High C, High S, Low D, Low I) and CSF (no Influencing themes in Top 5) means three behaviours that are not your default need to be on intentionally during interview rounds:</p>
+    <ol>
+      <li><strong>Lead with the answer, not the analysis.</strong> Your Restorative + Analytical instinct is to walk through the diagnostic path. Senior interviewers want the conclusion first, then the reasoning. Practice the inversion: "I held the threshold. Here's why."</li>
+      <li><strong>Use ownership language, not consultative language.</strong> Replace <em>"we decided"</em> with <em>"I decided"</em> in stories where you led. Replace <em>"I worked with the CCO"</em> with <em>"I escalated to the CCO and recommended X — they approved."</em> The action belongs to you.</li>
+      <li><strong>Match the energy of the room.</strong> Your default is calm, measured, deliberate. That's an asset. But in panel interviews, mirror the panel's tempo — if they're animated, lift your energy a notch. Low-energy answers in high-energy rooms read as low conviction, even when content is strong.</li>
+    </ol>
+    <p style="font-size:12.5px; color:var(--muted); margin-top:10px;"><em>Note:</em> These are interview-room activations, not personality changes. Your steadiness is what AmEx wants in the role — it's the visibility of that steadiness in a 60-minute window that needs deliberate practice.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">30-60-90 Day Plan (Customise Per Role)</div>
+    <table>
+      <tr><th>Window</th><th>Director · Business Operations</th><th>Sr. Manager · Business Operations</th></tr>
+      <tr>
+        <td><strong>Days 1–30</strong></td>
+        <td>Listen-first tour: 1:1s with VP, GCG leadership, top 5 CLMs, Compliance lead, GCO partner. Inventory current OREs, governance cadences, open audit findings. Map enterprise risk forums GCG sits in.</td>
+        <td>Take ownership of the assigned ORE portfolio. Read-only on every open issue — owner, age, blocker, plan. Build relationships with 3 CLMs in the assigned portfolio. Establish weekly 1:1 with the Director.</td>
+      </tr>
+      <tr>
+        <td><strong>Days 31–60</strong></td>
+        <td>Author the GCG Risk Operating Model v1: governance cadence design, KRI dashboard, ORE triage rubric, escalation protocols. Socialise with VP and CLMs. Identify top 3 control gaps to remediate.</td>
+        <td>Drive 2–3 stuck OREs to closure. Run independent RCA on one recurring issue category. Propose process redesign with options/trade-offs to the Director. First Risk Committee material co-authored.</td>
+      </tr>
+      <tr>
+        <td><strong>Days 61–90</strong></td>
+        <td>Operating Model v1 deployed. First Risk Committee under your ownership. Present 90-day intelligence read to VP. Deliver one ORE backlog reduction. AI portfolio piece (ORE tracker) prototyped for team review.</td>
+        <td>Deliver 1 closed ORE backlog. Roll out 1 redesigned process to a CLM segment with measured adoption. Surface 1 emerging risk theme in trend analysis. AI portfolio piece (RCA cluster tool) prototyped.</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Questions You Ask Them</div>
+    <ul>
+      <li><strong>Strategic:</strong> "What does success look like for this role at the 12-month mark — beyond the JD bullets?"</li>
+      <li><strong>Operating model:</strong> "How is the relationship between GCG Business Operations and Guardian / GCO structured today? Where do you see friction?"</li>
+      <li><strong>For the Director role specifically:</strong> "This role is newly created. What capability gap was the catalyst for creating it?"</li>
+      <li><strong>For the SM role specifically:</strong> "What does the Director–Senior Manager partnership look like in practice? Where does the SM operate independently vs collaboratively?"</li>
+      <li><strong>Risk culture:</strong> "How does GCG balance commercial pressure with operational risk discipline? Where does that tension show up most often?"</li>
+      <li><strong>Tooling:</strong> "What tools does GCG use for ORE management and risk reporting? Any AI / automation initiatives in flight or planned?"</li>
+      <li><strong>Team:</strong> "What kinds of profiles are already on the team? Where are the gaps you're hoping the next hire fills?"</li>
+      <li><strong>Closing question:</strong> "Based on our conversation, do you have any reservations about my fit I can address now?"</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================== -->
+<!-- PANEL 08: VOCAB DECODER                        -->
+<!-- ============================================== -->
+<div class="panel" id="panel-7">
+  <div class="section-num">08 /</div>
+  <div class="section-title">Vocab Decoder</div>
+  <p class="section-sub">35 GCG / AmEx / FS-ops terms — fluency is required, not optional</p>
+
+  <div class="card">
+    <div class="card-title">Operational Risk Core</div>
+    <table class="vocab-table">
+      <tr><td>ORE (Operational Risk Event)</td><td>A realised operational risk incident — the named unit AmEx tracks. End-to-end management of OREs is core to both roles.</td></tr>
+      <tr><td>Finding</td><td>A control deficiency or gap identified through audit, testing, or self-assessment. Findings drive remediation actions.</td></tr>
+      <tr><td>Issue</td><td>Generic open work item — could be a finding, an ORE follow-up, a control gap, or a stakeholder-raised concern.</td></tr>
+      <tr><td>Root Cause</td><td>The underlying process vulnerability, not the proximate trigger. Independent RCA is a named SM deliverable.</td></tr>
+      <tr><td>RCSA</td><td>Risk &amp; Control Self-Assessment — the periodic structured exercise where a business unit catalogues its risks and controls.</td></tr>
+      <tr><td>KRI / KCI</td><td>Key Risk Indicator / Key Control Indicator — quantitative metrics that monitor risk and control health.</td></tr>
+      <tr><td>Risk Appetite</td><td>The level of risk an organisation is willing to accept in pursuit of strategy. Frames every controls trade-off.</td></tr>
+      <tr><td>Inherent Risk</td><td>Risk before controls are applied. The "raw" risk profile.</td></tr>
+      <tr><td>Residual Risk</td><td>Risk after controls are applied. The "real" exposure.</td></tr>
+      <tr><td>Control Effectiveness</td><td>Whether a control actually does what it's designed to do. Tested by testing function (typically 2LOD).</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">AmEx-Specific Language</div>
+    <table class="vocab-table">
+      <tr><td>GCG (Global Client Group)</td><td>Within GMNS — serves AmEx's largest global merchants, $300B+ charge volume.</td></tr>
+      <tr><td>GMNS (Global Merchant &amp; Network Services)</td><td>The BU acquiring/maintaining merchant relationships across the AmEx network.</td></tr>
+      <tr><td>CLM (Client Manager)</td><td>The relationship-owning role within GCG; the partner persona Business Operations supports day-to-day.</td></tr>
+      <tr><td>Guardian</td><td>AmEx's internal operational risk programme — the named enterprise framework GCG must align with and feed.</td></tr>
+      <tr><td>GCO (General Counsel's Organization)</td><td>AmEx Legal — frequent partner on risk and control matters with regulatory implication.</td></tr>
+      <tr><td>Control Management Governance</td><td>The 2LOD-equivalent function that sets standards for how 1LOD designs and executes controls.</td></tr>
+      <tr><td>Charge Volume</td><td>The dollar value of card transactions processed — GCG's commercial measure ($300B+).</td></tr>
+      <tr><td>Blue Box Values</td><td>AmEx's internal cultural framework (customer commitment, integrity, teamwork, accountability, etc.).</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Three Lines of Defense Framework</div>
+    <table class="vocab-table">
+      <tr><td>1LOD (First Line of Defense)</td><td>The business owners — they design, execute, and own controls. GCG Business Operations sits primarily in 1LOD.</td></tr>
+      <tr><td>2LOD (Second Line of Defense)</td><td>Risk management and compliance functions — they set standards, test 1LOD, and provide independent oversight.</td></tr>
+      <tr><td>3LOD (Third Line of Defense)</td><td>Internal Audit — independent assurance on the effectiveness of 1LOD and 2LOD.</td></tr>
+      <tr><td>1LOD ↔ 2LOD Bridge</td><td>The interface where business and risk oversight meet. Business Operations is the connective tissue.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Process &amp; Project Methodology</div>
+    <table class="vocab-table">
+      <tr><td>5-Why Analysis</td><td>RCA technique: ask "why" five times to drill from symptom to root cause.</td></tr>
+      <tr><td>Fishbone (Ishikawa) Diagram</td><td>RCA technique: visual mapping of contributing causes across categories (people, process, technology, environment).</td></tr>
+      <tr><td>FMEA (Failure Mode &amp; Effects Analysis)</td><td>Proactive technique: identify potential failure modes, score severity/likelihood/detectability, prioritise mitigations.</td></tr>
+      <tr><td>RAID Log</td><td>Risks, Assumptions, Issues, Dependencies — the standard PM tracking artifact for cross-functional programmes.</td></tr>
+      <tr><td>SIPOC</td><td>Supplier, Input, Process, Output, Customer — process mapping framework for end-to-end view.</td></tr>
+      <tr><td>DMAIC</td><td>Define, Measure, Analyse, Improve, Control — Six Sigma improvement framework.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Governance &amp; Reporting Vocabulary</div>
+    <table class="vocab-table">
+      <tr><td>Risk Committee</td><td>Recurring governance forum where risk performance, OREs, and emerging issues are reviewed by senior leaders. Both roles feed it.</td></tr>
+      <tr><td>Governance Cadence</td><td>The rhythm of forums — weekly team, monthly leadership, quarterly enterprise — that drives accountability.</td></tr>
+      <tr><td>Control Gap</td><td>A weakness or absence in the control environment that creates exposure.</td></tr>
+      <tr><td>Past-Due Finding</td><td>A finding that has not been closed by its target date — an aging signal demanding escalation.</td></tr>
+      <tr><td>Escalation Threshold</td><td>The criteria (severity, age, dollar value, customer impact) that trigger upward escalation.</td></tr>
+      <tr><td>Action Owner</td><td>The named individual accountable for a remediation or follow-up — non-negotiable in disciplined risk programmes.</td></tr>
+      <tr><td>Closure Evidence</td><td>The artifact (test result, signed-off SOP, deployed control, test sample) that proves an action was actually completed.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Regulatory &amp; FS Context</div>
+    <table class="vocab-table">
+      <tr><td>Basel ORM Principles</td><td>The international banking standard for operational risk management — sets the framework AmEx (and most FS firms) align to.</td></tr>
+      <tr><td>OCC (Office of the Comptroller of the Currency)</td><td>U.S. federal banking regulator with operational risk oversight authority over national banks.</td></tr>
+      <tr><td>CFPB (Consumer Financial Protection Bureau)</td><td>U.S. consumer-protection regulator — relevant where merchant interactions touch consumer outcomes.</td></tr>
+      <tr><td>Material Weakness</td><td>A control deficiency severe enough to require disclosure or specific regulatory attention.</td></tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    AmEx GCG Business Operations · Career Playbook v1 · Priyanuj Deka · 2026
+  </div>
+</div>
+
+<script>
+function showTab(idx) {
+  document.querySelectorAll('.panel').forEach((p, i) => {
+    p.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setRole(role) {
+  // Toggle button states
+  document.getElementById('btn-dir').classList.toggle('active', role === 'dir');
+  document.getElementById('btn-sm').classList.toggle('active', role === 'sm');
+
+  // Toggle role-specific content blocks
+  document.querySelectorAll('[id^="dir-"]').forEach(el => {
+    if (el.classList.contains('role-content')) el.classList.toggle('active', role === 'dir');
+  });
+  document.querySelectorAll('[id^="sm-"]').forEach(el => {
+    if (el.classList.contains('role-content')) el.classList.toggle('active', role === 'sm');
+  });
+
+  // Update header
+  if (role === 'dir') {
+    document.getElementById('role-title').textContent = 'Director, Business Operations';
+    document.getElementById('role-sub').textContent = 'Risk · Controls · Day-to-Day Operations · GCG India';
+    document.getElementById('kpi-fit').textContent = '61→75';
+    document.getElementById('kpi-comp').textContent = '₹68–82L';
+    document.getElementById('kpi-prep').textContent = '3–4 wks';
+    document.getElementById('kpi-band').textContent = 'Band 35';
+    document.getElementById('kpi-prio').textContent = 'Stretch';
+    document.getElementById('kpi-prio').style.color = 'var(--amber)';
+  } else {
+    document.getElementById('role-title').textContent = 'Senior Manager, Business Operations';
+    document.getElementById('role-sub').textContent = 'ORE · RCA · Project Delivery · GCG India';
+    document.getElementById('kpi-fit').textContent = '72→85';
+    document.getElementById('kpi-comp').textContent = '₹50–61L';
+    document.getElementById('kpi-prep').textContent = '2–3 wks';
+    document.getElementById('kpi-band').textContent = 'Band 30';
+    document.getElementById('kpi-prio').textContent = 'Primary';
+    document.getElementById('kpi-prio').style.color = 'var(--green)';
+  }
+}
+</script>
+
+</body>
+</html>

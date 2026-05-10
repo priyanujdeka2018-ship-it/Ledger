@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adobe India Education — Lead BizOps & Strategy Playbook | Priyanuj Deka</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0608;
+    --surface: #1a0c10;
+    --s2: #261218;
+    --s3: #301820;
+    --border: #3d2028;
+    --border2: #5a3040;
+    --red: #eb1000;
+    --red-bright: #ff3b2f;
+    --red-glow: rgba(235,16,0,0.12);
+    --coral: #ff6b5a;
+    --gold: #e8b931;
+    --gold-dim: rgba(232,185,49,0.1);
+    --green: #2dd47a;
+    --amber: #f0a030;
+    --text: #f0dde0;
+    --muted: #9a6872;
+    --dim: #4a2530;
+    --accent: #eb1000;
+    --white: #fff;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #120206 0%, #1f0810 50%, #0e0408 100%);
+    border-bottom: 1px solid var(--border2);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -10%;
+    width: 50%; height: 200%;
+    background: radial-gradient(ellipse, rgba(235,16,0,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: 'ADOBE';
+    position: absolute;
+    right: -30px; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'DM Serif Display', serif;
+    font-size: 160px;
+    color: rgba(235,16,0,0.04);
+    pointer-events: none;
+    letter-spacing: -4px;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 32px 36px;
+    position: relative; z-index: 1;
+  }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(235,16,0,0.1);
+    border: 1px solid rgba(235,16,0,0.25);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em;
+    color: var(--coral);
+    margin-bottom: 16px;
+  }
+  .header-badge::before { content: '●'; font-size: 8px; }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 4vw, 44px);
+    line-height: 1.15; color: #fff;
+    margin-bottom: 8px;
+  }
+  .header h1 span { color: var(--coral); }
+  .header-sub {
+    color: var(--muted);
+    font-size: 13px; letter-spacing: 0.05em;
+    margin-bottom: 24px;
+  }
+  .header-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+  .hstat { display: flex; flex-direction: column; gap: 2px; }
+  .hstat-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px; color: var(--coral); line-height: 1;
+  }
+  .hstat-val.gold { color: var(--gold); }
+  .hstat-val.green { color: var(--green); }
+  .hstat-label {
+    font-size: 10px; letter-spacing: 0.1em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .hstat-divider { width: 1px; background: var(--border); align-self: stretch; }
+
+  /* NAVIGATION */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .nav-inner {
+    max-width: 1200px; margin: 0 auto; padding: 0 32px;
+    display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    padding: 14px 18px;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.06em; color: var(--muted);
+    background: none; border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer; white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--coral); border-bottom-color: var(--coral); }
+
+  /* MAIN */
+  .main { max-width: 1200px; margin: 0 auto; padding: 32px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px; margin-bottom: 20px;
+    position: relative;
+  }
+  .card::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--red);
+    border-radius: 8px 0 0 8px;
+  }
+  .card h3 {
+    font-size: 15px; font-weight: 700;
+    margin-bottom: 12px; color: var(--white);
+  }
+  .card p { color: var(--text); line-height: 1.75; margin-bottom: 8px; }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* SECTION TITLE */
+  .stitle {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px; color: var(--white);
+    margin-bottom: 8px;
+  }
+  .ssub {
+    color: var(--muted); font-size: 13px;
+    margin-bottom: 28px; letter-spacing: 0.03em;
+  }
+
+  /* FIT METER */
+  .fit-meter {
+    text-align: center; padding: 32px 0 24px;
+  }
+  .fit-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 72px; color: var(--coral); line-height: 1;
+  }
+  .fit-label {
+    font-size: 12px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted);
+    margin: 4px 0 16px;
+  }
+  .fit-bar-wrap { max-width: 400px; margin: 0 auto; }
+  .fit-bar-bg {
+    height: 8px; background: var(--s3);
+    border-radius: 4px; overflow: hidden;
+  }
+  .fit-bar-fill {
+    height: 100%; width: 70%;
+    background: linear-gradient(90deg, var(--red), var(--coral));
+    border-radius: 4px;
+    transition: width 0.5s;
+  }
+  .fit-target {
+    font-size: 12px; color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* TABLES */
+  table {
+    width: 100%; border-collapse: collapse;
+    margin-bottom: 20px; font-size: 13px;
+  }
+  th {
+    text-align: left; padding: 10px 14px;
+    background: var(--s2); color: var(--coral);
+    font-weight: 700; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border2);
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text); vertical-align: top;
+  }
+  tr:hover td { background: var(--s2); }
+
+  /* MATCH BADGES */
+  .match { display: inline-block; padding: 2px 10px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; }
+  .match-strong { background: rgba(45,212,122,0.12); color: var(--green); }
+  .match-mod { background: rgba(240,160,48,0.12); color: var(--amber); }
+  .match-gap { background: rgba(232,69,69,0.12); color: #e84545; }
+  .match-edge { background: rgba(255,107,90,0.1); color: var(--coral); }
+
+  /* VOCAB GRID */
+  .vocab-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 12px; margin-bottom: 24px;
+  }
+  .vocab-card {
+    background: var(--s2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 14px 16px;
+  }
+  .vocab-term {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; font-weight: 600; color: var(--coral);
+    margin-bottom: 4px;
+  }
+  .vocab-def { font-size: 12px; color: var(--text); line-height: 1.6; }
+  .vocab-group-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+    margin: 24px 0 12px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* STAR CARDS */
+  .star-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px;
+    margin-bottom: 16px; border-left: 3px solid var(--coral);
+  }
+  .star-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    letter-spacing: 0.1em; margin-bottom: 4px;
+  }
+  .star-title { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+  .star-section { margin-bottom: 8px; }
+  .star-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; color: var(--coral);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .star-text { font-size: 13px; line-height: 1.7; color: var(--text); }
+  .star-line {
+    background: var(--s2); border-left: 3px solid var(--gold);
+    padding: 10px 14px; border-radius: 0 4px 4px 0;
+    font-style: italic; font-size: 13px; color: var(--gold);
+    margin-top: 10px;
+  }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+    width: 2px; background: var(--border2);
+  }
+  .tl-item { position: relative; margin-bottom: 24px; }
+  .tl-dot {
+    position: absolute; left: -24px; top: 6px;
+    width: 12px; height: 12px;
+    background: var(--red); border-radius: 50%;
+    border: 2px solid var(--bg);
+  }
+  .tl-week {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; color: var(--coral);
+    letter-spacing: 0.08em; margin-bottom: 6px;
+  }
+  .tl-tasks { list-style: none; padding: 0; }
+  .tl-tasks li {
+    font-size: 13px; color: var(--text);
+    padding: 4px 0; line-height: 1.6;
+    padding-left: 16px; position: relative;
+  }
+  .tl-tasks li::before {
+    content: '→'; position: absolute; left: 0;
+    color: var(--muted);
+  }
+
+  /* INTERVIEW ROUND TABLE */
+  .round-table td:first-child {
+    font-family: 'DM Mono', monospace;
+    font-weight: 600; color: var(--coral);
+    white-space: nowrap;
+  }
+
+  /* 30-60-90 */
+  .day-block {
+    background: var(--s2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .day-block h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px; color: var(--coral);
+    margin-bottom: 8px; letter-spacing: 0.06em;
+  }
+  .day-block p { font-size: 13px; line-height: 1.75; }
+
+  /* SALARY TABLE */
+  .sal-table td:last-child { font-weight: 700; }
+  .sal-highlight { background: var(--red-glow); }
+
+  /* NOTES */
+  .note {
+    background: var(--s2); border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 0 6px 6px 0;
+    font-size: 13px; color: var(--text);
+    margin-bottom: 20px; line-height: 1.7;
+  }
+  .note strong { color: var(--gold); }
+
+  /* REFRAME TABLE */
+  .reframe-arrow { color: var(--coral); font-weight: 700; }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--dim);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  @media (max-width: 768px) {
+    .header-inner { padding: 28px 18px 24px; }
+    .main { padding: 18px; }
+    .header-stats { gap: 18px; }
+    .hstat-val { font-size: 22px; }
+    .nav-btn { padding: 12px 12px; font-size: 11px; }
+    .vocab-grid { grid-template-columns: 1fr; }
+    table { font-size: 12px; }
+    th, td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-badge">CAREER INTELLIGENCE BRIEF · CONFIDENTIAL · PRIYANUJ DEKA</div>
+    <h1>Adobe India Education — <span>Lead, Business Operations & Strategy</span></h1>
+    <div class="header-sub">Noida / Bangalore &nbsp;|&nbsp; Role ID: E5 &nbsp;|&nbsp; Status: EXPLORATORY &nbsp;|&nbsp; April 2026</div>
+    <div class="header-stats">
+      <div class="hstat">
+        <div class="hstat-val">70</div>
+        <div class="hstat-label">Current Fit</div>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat">
+        <div class="hstat-val gold">78</div>
+        <div class="hstat-label">Addressable Fit</div>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat">
+        <div class="hstat-val green">₹65–80L</div>
+        <div class="hstat-label">Total Comp P50</div>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat">
+        <div class="hstat-val">4–6w</div>
+        <div class="hstat-label">Prep Window</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showTab('snapshot')">1 · Snapshot</button>
+    <button class="nav-btn" onclick="showTab('jd')">2 · JD Decoder</button>
+    <button class="nav-btn" onclick="showTab('fit')">3 · Fit & Gaps</button>
+    <button class="nav-btn" onclick="showTab('vocab')">4 · Domain Vocab</button>
+    <button class="nav-btn" onclick="showTab('star')">5 · STAR Map</button>
+    <button class="nav-btn" onclick="showTab('plan')">6 · Action Plan</button>
+    <button class="nav-btn" onclick="showTab('interview')">7 · Interview Prep</button>
+    <button class="nav-btn" onclick="showTab('salary')">8 · Salary & Negotiation</button>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<!-- ═══════════ TAB 1: ROLE SNAPSHOT ═══════════ -->
+<div class="section active" id="tab-snapshot">
+  <div class="stitle">Role Snapshot</div>
+  <div class="ssub">What this role is, who it serves, and why it fits your operating DNA</div>
+
+  <div class="card">
+    <h3>The Role In One Line</h3>
+    <p>Chief of Staff + Business Operations Lead for Adobe's India Education division. You own the operating rhythm — business reviews, KPI dashboards, planning cycles, executive reporting — and independently drive cross-functional strategic initiatives end-to-end. You translate complex business performance into narratives that help C-suite leadership make decisions.</p>
+  </div>
+
+  <div class="card">
+    <h3>Employer Context</h3>
+    <p><strong>Adobe Inc.</strong> — $21B+ revenue (FY2025), ~30,000 employees globally. Three clouds: Creative Cloud, Document Cloud, Experience Cloud. Market cap ~$170B+.</p>
+    <p><strong>India operations:</strong> 8,500+ employees across Noida (HQ since 1998) and Bangalore. Third campus in Noida announced (Sector 132, operational early 2026). India teams lead engineering for Document Cloud, Illustrator, Campaign, AEM Guides.</p>
+    <p><strong>India Education team:</strong> Drives Adobe's partnerships with Ministry of Education, AICTE, K-12 schools (targeting 2 crore students + 5 lakh teachers by 2027 via Adobe Express). Partners include Kendriya Vidyalayas, Army Public Schools, Reliance Foundation Schools. Strategic priority under CEO Shantanu Narayen's "Create in India" vision.</p>
+    <p><strong>India Country Manager:</strong> Abhigyan Modi (SVP, Document Cloud).</p>
+  </div>
+
+  <div class="card">
+    <h3>Why This Role Fits (Short Version)</h3>
+    <p>This is a CoS/BizOps role — the operating backbone of a business unit. You've been running the operating backbone of Sobha's entire collections division for 6 years. Your 14.9x scale was managed through exactly the operating rhythms this JD describes: business reviews, performance tracking, planning cadences, cross-functional alignment without formal authority. The vocabulary is different — "strategic roadmaps" instead of "collection governance architecture" — but the muscle is identical.</p>
+    <p style="color: var(--coral); font-style: italic; margin-top: 12px;">"I've been the Chief of Staff for a ₹1,500 Cr revenue operation — I just haven't been calling it that."</p>
+  </div>
+
+  <div class="card">
+    <h3>Position In Your Pipeline</h3>
+    <p>Slots at <strong>E5</strong> (Exploratory). Higher fit (70→78) than Adobe AEP Sr PM (52-58) and Google gTech Ads CX S&O (55). Different role family — this is BizOps/CoS, not Product Management. No hard domain gate (Education team ≠ EdTech industry requirement). Pursue after AmEx + Oaktree applications are filed.</p>
+    <p><strong>Not the same as AEP Sr PM (E4).</strong> AEP requires ETL/data engineering, Paid Media/AdTech, BigQuery/SQL — all hard zeros. This role requires strategic planning, executive reporting, stakeholder management — all strong matches.</p>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 2: JD DECODER ═══════════ -->
+<div class="section" id="tab-jd">
+  <div class="stitle">JD Decoder — 6 Pillars Broken Down</div>
+  <div class="ssub">The JD decomposes into six functional pillars. You need 2–3 STAR stories for each.</div>
+
+  <table>
+    <tr>
+      <th style="width:22%">Pillar</th>
+      <th style="width:38%">JD Language</th>
+      <th style="width:40%">Your Sobha Proof</th>
+    </tr>
+    <tr>
+      <td><strong>Strategic Planning & Execution</strong></td>
+      <td>Define business priorities and strategic roadmaps. Translate strategy into execution plans with milestones, owners, success metrics. Drive annual/quarterly planning.</td>
+      <td>AED 8.2B FY2026 personal target with cascaded team KPIs. T−25/T+30 proprietary framework adopted as MD-approved operational standard. Annual planning across 4 entities.</td>
+    </tr>
+    <tr>
+      <td><strong>Chief of Staff Support</strong></td>
+      <td>Support decision-making through structured problem-solving. Ensure follow-through on key initiatives by driving alignment, accountability, execution.</td>
+      <td>12 concurrent workstreams (2025, all on schedule). NPV AED 652M structured problem-solving → MD/CEO sign-off. Delinquency tracking → weekly leadership reporting cadence.</td>
+    </tr>
+    <tr>
+      <td><strong>C-Suite Reporting & Executive Communication</strong></td>
+      <td>Own executive-level reporting. Translate business performance into narratives. Build dashboards and review materials. Anticipate leadership questions.</td>
+      <td>Weekly reporting to MD/CEO/CRO/CCO. NPV model defence through multiple scrutiny rounds. 70+ Salesforce report ecosystem designed for executive decision-making.</td>
+    </tr>
+    <tr>
+      <td><strong>Strategic Initiatives</strong></td>
+      <td>Independently lead high-priority cross-functional initiatives. Problem definition → solution design → execution → impact tracking.</td>
+      <td>PCC TAT 20→3 days (end-to-end redesign). Salesforce 0→1 platform build. PR rejection 49% governance architecture. India hub 42-person stand-up.</td>
+    </tr>
+    <tr>
+      <td><strong>Data, Analytics & Decision Support</strong></td>
+      <td>Build data frameworks and dashboards. Track KPIs, strategic initiatives. Identify trends, risks, opportunities. Enable data-driven culture.</td>
+      <td>70+ Salesforce report MI ecosystem. Delinquency trend dashboards. PR rejection daily KPI with automated escalation triggers. Quality scorecard monitoring 8 workflow metrics.</td>
+    </tr>
+    <tr>
+      <td><strong>Financial Planning & Business Insights</strong></td>
+      <td>Partner with Finance on forecasting and planning. Budget tracking. ROI-driven recommendations.</td>
+      <td>NPV AED 652M model (AED 21.2M cost, 32% cheaper than bank financing). Cost-to-collect analysis. Portfolio-level financial impact tracking across 4 entities.</td>
+    </tr>
+  </table>
+
+  <div class="card">
+    <h3>Qualifications Checklist</h3>
+    <table>
+      <tr><th>Adobe Requirement</th><th>Your Match</th><th>Status</th></tr>
+      <tr>
+        <td>10+ years in consulting / BizOps / CoS</td>
+        <td>~9–10 years total (BITS pre + 6 post-MBA); consulting preferred, not mandatory</td>
+        <td><span class="match match-mod">BORDERLINE</span></td>
+      </tr>
+      <tr>
+        <td>Strong analytical skills, build frameworks</td>
+        <td>T−25/T+30 framework, NPV model, delinquency analytics</td>
+        <td><span class="match match-strong">STRONG</span></td>
+      </tr>
+      <tr>
+        <td>Dashboard experience (KPIs, business metrics)</td>
+        <td>70+ Salesforce report ecosystem, quality scorecard</td>
+        <td><span class="match match-strong">STRONG</span></td>
+      </tr>
+      <tr>
+        <td>C-suite reporting</td>
+        <td>MD/CEO/CRO/CCO weekly reporting cadence</td>
+        <td><span class="match match-strong">STRONG</span></td>
+      </tr>
+      <tr>
+        <td>Drive initiatives end-to-end independently</td>
+        <td>PCC redesign, Salesforce build, NPV programme — all independently led</td>
+        <td><span class="match match-strong">STRONG</span></td>
+      </tr>
+      <tr>
+        <td>Financial modelling, budgeting, forecasting</td>
+        <td>NPV model, cost-to-collect, portfolio financial tracking</td>
+        <td><span class="match match-mod">MODERATE</span></td>
+      </tr>
+      <tr>
+        <td>Tableau / Power BI proficiency</td>
+        <td>Salesforce only — no Tableau/PBI demonstrated</td>
+        <td><span class="match match-gap">GAP</span></td>
+      </tr>
+      <tr>
+        <td>Excel / Google Sheets</td>
+        <td>Core daily toolkit</td>
+        <td><span class="match match-strong">STRONG</span></td>
+      </tr>
+      <tr>
+        <td>Cross-functional project management</td>
+        <td>77-person two-geography team, 6-stakeholder Salesforce delivery</td>
+        <td><span class="match match-strong">STRONG</span></td>
+      </tr>
+      <tr>
+        <td>Executive presence, influence without authority</td>
+        <td>NPV defence, PR 49% standard, CCO escalation — with DISC Low-D development area</td>
+        <td><span class="match match-mod">MODERATE</span></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 3: FIT & GAPS ═══════════ -->
+<div class="section" id="tab-fit">
+  <div class="stitle">Fit & Gaps</div>
+  <div class="ssub">Current score 70/100 — addressable to 78 with Power BI + financial framing retranslation</div>
+
+  <div class="fit-meter">
+    <div class="fit-number">70</div>
+    <div class="fit-label">Current Fit Score</div>
+    <div class="fit-bar-wrap">
+      <div class="fit-bar-bg"><div class="fit-bar-fill"></div></div>
+    </div>
+    <div class="fit-target">Addressable to 78/100 with Power BI cert + financial modelling reframe</div>
+  </div>
+
+  <div class="card">
+    <h3>Strengths — Lead With These</h3>
+    <p><strong>1. Operating rhythm ownership:</strong> Built the entire business review + performance tracking + planning cadence at Sobha from scratch — no institutional template existed. Exactly what this JD asks you to "establish and manage."</p>
+    <p><strong>2. C-suite narrative building:</strong> NPV AED 652M defended at MD/CEO through multiple rounds. Weekly reporting to CRO/CCO. You don't just report numbers — you anticipate questions and bring forward-looking insights.</p>
+    <p><strong>3. Cross-functional initiative execution:</strong> PCC redesign (Accounts + Audit + DLD + Tech), Salesforce build (6 stakeholders), India hub stand-up (42-person deployment). All driven without formal authority over the partner functions.</p>
+    <p><strong>4. Data framework architecture:</strong> 70+ Salesforce report ecosystem designed for decision-making, not just reporting. Quality scorecard with automated escalation triggers. Delinquency trend dashboards.</p>
+    <p><strong>5. Scale proof:</strong> 14.9x portfolio growth managed through exactly the execution discipline this role demands — strategic alignment → planning cadence → performance tracking → accountability.</p>
+  </div>
+
+  <div class="card">
+    <h3>Gaps — Prioritised by Severity</h3>
+    <table>
+      <tr><th>Gap</th><th>Severity</th><th>Fix</th><th>Timeline</th></tr>
+      <tr>
+        <td>Tableau / Power BI</td>
+        <td><span class="match match-gap">HARD</span></td>
+        <td>Power BI Desktop (free) + one dashboard project using Sobha-equivalent sample data. Microsoft PL-300 optional.</td>
+        <td>2 weeks</td>
+      </tr>
+      <tr>
+        <td>Financial modelling framing</td>
+        <td><span class="match match-mod">SOFT</span></td>
+        <td>Retranslate NPV work into "forecasting + business case + budget tracking" language. No new skill — framing exercise only.</td>
+        <td>1 day</td>
+      </tr>
+      <tr>
+        <td>Management consulting background</td>
+        <td><span class="match match-mod">SOFT</span></td>
+        <td>"I've operated as an internal strategy function without consulting infrastructure." Bridge: structured problem-solving is demonstrated, not credentialed.</td>
+        <td>Framing only</td>
+      </tr>
+      <tr>
+        <td>Years of experience (10+ asked)</td>
+        <td><span class="match match-mod">BORDERLINE</span></td>
+        <td>~9-10 years total from BITS to present. Do not volunteer. If probed, BITS dual degree + pre-MBA ops work is defensible.</td>
+        <td>N/A</td>
+      </tr>
+      <tr>
+        <td>Education sector context</td>
+        <td><span class="match match-edge">MINIMAL</span></td>
+        <td>Education team ≠ EdTech hard gate. BizOps skills are domain-agnostic. Reference: BITS Pilani + IIM Udaipur gives institutional fluency.</td>
+        <td>N/A</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>The Translation Bridge</h3>
+    <table>
+      <tr><th>Your Sobha Term</th><th></th><th>Adobe Equivalent</th></tr>
+      <tr><td>Collections governance architecture</td><td class="reframe-arrow">→</td><td>Operating rhythm / business operations framework</td></tr>
+      <tr><td>Delinquency tracking</td><td class="reframe-arrow">→</td><td>Business performance management / KPI tracking</td></tr>
+      <tr><td>70+ Salesforce MI ecosystem</td><td class="reframe-arrow">→</td><td>Data frameworks & dashboards for business metrics</td></tr>
+      <tr><td>MD/CEO/CRO reporting</td><td class="reframe-arrow">→</td><td>C-suite reporting / executive communication</td></tr>
+      <tr><td>PCC redesign / PR rejection fix</td><td class="reframe-arrow">→</td><td>Strategic initiative: problem definition → impact</td></tr>
+      <tr><td>NPV AED 652M model</td><td class="reframe-arrow">→</td><td>Financial modelling / ROI-driven recommendation</td></tr>
+      <tr><td>T−25/T+30 framework</td><td class="reframe-arrow">→</td><td>Proprietary business planning framework</td></tr>
+      <tr><td>4 legal entities</td><td class="reframe-arrow">→</td><td>Multi-BU / cross-functional environment</td></tr>
+      <tr><td>77-person two-geography team</td><td class="reframe-arrow">→</td><td>Cross-functional stakeholder management at scale</td></tr>
+      <tr><td>Internal audit SPOC / risk register</td><td class="reframe-arrow">→</td><td>Accountability & execution discipline</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 4: DOMAIN VOCAB ═══════════ -->
+<div class="section" id="tab-vocab">
+  <div class="stitle">Domain Vocabulary</div>
+  <div class="ssub">Master these 25 terms before interview. You don't need to become an EdTech expert — you need to speak Adobe fluently.</div>
+
+  <div class="vocab-group-title">Adobe Business & Products</div>
+  <div class="vocab-grid">
+    <div class="vocab-card">
+      <div class="vocab-term">Creative Cloud</div>
+      <div class="vocab-def">Subscription suite: Photoshop, Illustrator, Premiere Pro, After Effects, InDesign, Lightroom, XD. Adobe's flagship revenue engine.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Document Cloud</div>
+      <div class="vocab-def">Acrobat, Acrobat Sign, PDF services. India teams lead engineering. Abhigyan Modi (Country Manager) is SVP of Document Cloud.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Experience Cloud</div>
+      <div class="vocab-def">AEP, AEM, Campaign, Analytics, Target, Marketo. Enterprise DXP stack. Separate from the Education team but part of Adobe's three-cloud architecture.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Adobe Express</div>
+      <div class="vocab-def">Simplified creative tool (templates, AI, design). Key vehicle for India Education partnerships — free Premium access for K-12 schools.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Adobe Firefly</div>
+      <div class="vocab-def">Adobe's generative AI engine. Integrated across Creative Cloud. "AI-first" strategy is central to 2025-2026 product positioning.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">ARR / ARPU</div>
+      <div class="vocab-def">Annual Recurring Revenue / Average Revenue Per User. Key SaaS metrics for subscription business. Education segment has distinct ARPU from enterprise.</div>
+    </div>
+  </div>
+
+  <div class="vocab-group-title">India Education Ecosystem</div>
+  <div class="vocab-grid">
+    <div class="vocab-card">
+      <div class="vocab-term">Ministry of Education Partnership</div>
+      <div class="vocab-def">Adobe Express curriculum for K-12. Target: 2 crore students + 5 lakh teachers by 2027. Announced at G-20 Leaders' Summit (Sep 2023).</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">AICTE</div>
+      <div class="vocab-def">All India Council for Technical Education. Adobe partner for higher education — 75,000 faculty at 10,000 institutions using Express.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Adobe Creative Educator</div>
+      <div class="vocab-def">Certification for teachers completing Adobe Express training. Signal of programme adoption success — a KPI the Education team likely tracks.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">WAVES Initiative</div>
+      <div class="vocab-def">World Audio Visual & Entertainment Summit. Adobe announced "Create in India" vision + Noida third campus + education partnerships at WAVES (May 2025).</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Kendriya Vidyalayas / Army Public Schools</div>
+      <div class="vocab-def">Government school networks targeted for Adobe Express rollout. High-visibility government-partnership programme.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Digital Literacy</div>
+      <div class="vocab-def">Adobe's education thesis: "digital literacy is a core tenet." The Education team's mission — measured through adoption, engagement, and partner institution count.</div>
+    </div>
+  </div>
+
+  <div class="vocab-group-title">BizOps / Chief of Staff Concepts</div>
+  <div class="vocab-grid">
+    <div class="vocab-card">
+      <div class="vocab-term">Operating Rhythm / Cadence</div>
+      <div class="vocab-def">Structured cycle of business reviews, planning sessions, performance check-ins. Weekly → Monthly → Quarterly → Annual. Your Sobha reporting cadence IS this.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">OKRs</div>
+      <div class="vocab-def">Objectives and Key Results. Adobe likely uses a variant. Your AED 8.2B target with cascaded KPIs = OKR structure.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">QBR / MBR</div>
+      <div class="vocab-def">Quarterly / Monthly Business Review. The formal executive review forum. You'll own preparation of these materials.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Executive Narrative</div>
+      <div class="vocab-def">"Not just retrospective updates — forward-looking insights." The JD explicitly asks for this. Your NPV defence is a proof point of narrative construction.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">RACI Matrix</div>
+      <div class="vocab-def">Responsible, Accountable, Consulted, Informed. Standard cross-functional initiative governance tool. Expect to reference in interviews.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Stakeholder Map</div>
+      <div class="vocab-def">Visual of who influences/decides what. Sales, Marketing, Product, Finance, Partnerships — the five functions the JD names explicitly.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Strategic Roadmap</div>
+      <div class="vocab-def">Prioritised timeline of initiatives with owners, milestones, dependencies. Your 12-concurrent-workstream tracker is the collections equivalent.</div>
+    </div>
+  </div>
+
+  <div class="vocab-group-title">Data & Analytics</div>
+  <div class="vocab-grid">
+    <div class="vocab-card">
+      <div class="vocab-term">Tableau / Power BI</div>
+      <div class="vocab-def">Enterprise BI tools the JD explicitly requires. Power BI free desktop version → build one dashboard before applying.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Google Sheets / Advanced Functions</div>
+      <div class="vocab-def">QUERY, IMPORTRANGE, pivot tables, dynamic charts. Your Excel fluency transfers directly. Mention Google Sheets alongside Excel.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Data-Driven Culture</div>
+      <div class="vocab-def">JD: "Enable a data-driven culture within the team." Your 70+ report ecosystem that eliminated spreadsheet-based decision-making IS culture change.</div>
+    </div>
+    <div class="vocab-card">
+      <div class="vocab-term">Leading vs Lagging Indicators</div>
+      <div class="vocab-def">Leading = predictive (e.g., pipeline velocity, engagement rate). Lagging = outcome (e.g., revenue, churn). JD wants you to "identify trends, risks, opportunities" — that's leading indicator work.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 5: STAR STORY MAP ═══════════ -->
+<div class="section" id="tab-star">
+  <div class="stitle">STAR Story Map — 6 Tagged + 1 Secret Weapon</div>
+  <div class="ssub">All 6 stories tagged adobe-india-edu in CCC v3.5. Each maps to a specific JD pillar.</div>
+
+  <div class="star-card">
+    <div class="star-id">S1 · STRATEGIC PLANNING & EXECUTION</div>
+    <div class="star-title">14.9x Programme Scale — AED 867M → 12.97B</div>
+    <div class="star-section"><div class="star-label">Situation</div><div class="star-text">AED 867M baseline, single entity, no governance infrastructure, spreadsheet-based operations (2021).</div></div>
+    <div class="star-section"><div class="star-label">Task</div><div class="star-text">Scale delivery across 4 entities while building governance and managing delinquency.</div></div>
+    <div class="star-section"><div class="star-label">Action</div><div class="star-text">Designed governance architecture; built 70+ report Salesforce MI ecosystem; led 77-person team across Dubai + India; established planning cadences across 4 entities.</div></div>
+    <div class="star-section"><div class="star-label">Result</div><div class="star-text">AED 12.97B by 2025 (14.9x), delinquency 16.7%→4.4% (−74%), NPV AED 652M from incentive design.</div></div>
+    <div class="star-line">"We took collections from AED 867M to 12.97B in four years. The team grew from 8 to 77 across two geographies."</div>
+  </div>
+
+  <div class="star-card">
+    <div class="star-id">S4 · C-SUITE REPORTING & EXECUTIVE COMMUNICATION</div>
+    <div class="star-title">NPV AED 652M Defended at MD/CEO</div>
+    <div class="star-section"><div class="star-label">Situation</div><div class="star-text">Early-payment incentive programme required MD/CEO sign-off; commercial case challenged on risk, cost, ROI.</div></div>
+    <div class="star-section"><div class="star-label">Task</div><div class="star-text">Build, defend, and secure approval for a complex financial model — independently.</div></div>
+    <div class="star-section"><div class="star-label">Action</div><div class="star-text">Built NPV from first principles (AED 652M inflow, AED 21.2M cost, 248-day avg prepayment, 32% cheaper than bank). Anticipated leadership questions — brought sensitivity scenarios. Defended at MD/CEO through multiple scrutiny rounds.</div></div>
+    <div class="star-section"><div class="star-label">Result</div><div class="star-text">Full MD approval. Zero material concessions. Programme delivered as modelled.</div></div>
+    <div class="star-line">"I defended an AED 652M NPV model in front of the MD and CEO across three rounds of scrutiny. We left with zero material concessions."</div>
+  </div>
+
+  <div class="star-card">
+    <div class="star-id">S5 · DATA, ANALYTICS & DECISION SUPPORT</div>
+    <div class="star-title">Salesforce 0→1 — Data Framework Architecture</div>
+    <div class="star-section"><div class="star-label">Situation</div><div class="star-text">35+ team operating on fragmented spreadsheets — no CRM, no shared data layer, no real-time visibility.</div></div>
+    <div class="star-section"><div class="star-label">Task</div><div class="star-text">Design and deploy a collections intelligence platform from scratch, with no vendor PM.</div></div>
+    <div class="star-section"><div class="star-label">Action</div><div class="star-text">Conducted 6-stakeholder requirements discovery; led solution design with Salesforce implementation team; built 70+ report MI ecosystem; rolled out across two geographies.</div></div>
+    <div class="star-section"><div class="star-label">Result</div><div class="star-text">Scaled to support 14.9x programme growth. 77 practitioners on shared real-time data layer. Zero additional reporting headcount. Enabled data-driven culture across the division.</div></div>
+    <div class="star-line">"We built the Salesforce ecosystem from zero. I ran a six-stakeholder discovery, owned the architecture decisions, and shipped 70+ live reports."</div>
+  </div>
+
+  <div class="star-card">
+    <div class="star-id">S3 · STRATEGIC INITIATIVES (END-TO-END)</div>
+    <div class="star-title">PCC TAT 20→3 Days at 3× Volume</div>
+    <div class="star-section"><div class="star-label">Situation</div><div class="star-text">Property Completion Certificate process averaging 20-day TAT, causing revenue leakage.</div></div>
+    <div class="star-section"><div class="star-label">Task</div><div class="star-text">Redesign end-to-end workflow without increasing headcount.</div></div>
+    <div class="star-section"><div class="star-label">Action</div><div class="star-text">Mapped full process flow; identified bottlenecks at verification + approval stages; eliminated redundant steps; built daily TAT + volume dashboards for performance tracking.</div></div>
+    <div class="star-section"><div class="star-label">Result</div><div class="star-text">TAT 20→3 days (85% reduction). Monthly volume ~90→281 (3×). Same team, redesigned workflow.</div></div>
+    <div class="star-line">"We took the PCC process from 20 days to 3 days while volume tripled. Same team, redesigned workflow."</div>
+  </div>
+
+  <div class="star-card">
+    <div class="star-id">S9 · STAKEHOLDER MANAGEMENT & INFLUENCE</div>
+    <div class="star-title">77-Person Team Capability Build</div>
+    <div class="star-section"><div class="star-label">Situation</div><div class="star-text">Scaling from 8 to 77 people created bottleneck risk — senior leader review required on every critical output.</div></div>
+    <div class="star-section"><div class="star-label">Task</div><div class="star-text">Build team capability so the organisation could scale without becoming leader-dependent.</div></div>
+    <div class="star-section"><div class="star-label">Action</div><div class="star-text">Designed capability framework; built training materials and documentation standards; created review cadences; empowered senior layer to author MD-approved process documents independently.</div></div>
+    <div class="star-section"><div class="star-label">Result</div><div class="star-text">Senior team now produces governance documents that pass MD review without escalation. Organisation scales without single-point-of-failure risk.</div></div>
+    <div class="star-line">"I built team capability so the senior layer could author MD-approved documents independently. That's how an org scales."</div>
+  </div>
+
+  <div class="star-card">
+    <div class="star-id">S13 · CROSS-FUNCTIONAL EXECUTION AT SCALE</div>
+    <div class="star-title">India Hub Stand-Up — 42 People in 12 Months</div>
+    <div class="star-section"><div class="star-label">Situation</div><div class="star-text">Collections operations needed offshore capacity for the growing AED 86.8B portfolio.</div></div>
+    <div class="star-section"><div class="star-label">Task</div><div class="star-text">Deploy a 42-person India hub — hiring, capability build, governance, attrition control — in under 12 months.</div></div>
+    <div class="star-section"><div class="star-label">Action</div><div class="star-text">Designed org structure; led hiring across 3 functions (Ops, QCG, MIS); established governance cadences; built capability from zero to operational delivery.</div></div>
+    <div class="star-section"><div class="star-label">Result</div><div class="star-text">Hub operational in under 12 months. Handles operational delivery for the full portfolio. Zero quality degradation post-transition.</div></div>
+    <div class="star-line">"I deployed a 42-person hub in under 12 months — hiring, capability build, governance, attrition control."</div>
+  </div>
+
+  <div class="card" style="border-left: 3px solid var(--gold);">
+    <h3 style="color: var(--gold);">Secret Weapon: The Sobha One App Honest Story</h3>
+    <p>When asked "Tell me about an initiative that didn't go as planned":</p>
+    <p style="color: var(--gold); font-style: italic;">"I rolled out our internal field-ops app. We set 80% adoption. Actual: 17%. We'd scoped 12 functional requirements but hadn't built a behavioural adoption plan. For the next roll-out (Salesforce quality scorecard), we front-loaded behavioural change work and hit our adoption curve."</p>
+    <p style="color: var(--muted); font-size: 12px; margin-top: 8px;">This is worth more than any success story. Change management is a real BizOps challenge — Adobe's Education team is rolling out programmes to 2 crore students. They know adoption isn't automatic.</p>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 6: ACTION PLAN ═══════════ -->
+<div class="section" id="tab-plan">
+  <div class="stitle">4–6 Week Action Plan</div>
+  <div class="ssub">Execute after AmEx + Oaktree applications are filed. No action before that.</div>
+
+  <div class="note"><strong>Gate condition:</strong> Do NOT start this plan until AmEx GMNS + Oaktree VP applications are submitted. This is E5 (Exploratory). Active tracks take priority.</div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 1 · Domain Immersion</div>
+      <ul class="tl-tasks">
+        <li>Read Adobe FY2025 earnings call transcript — understand revenue segmentation, Education team mentions</li>
+        <li>Read Adobe India press releases from WAVES 2025 summit — "Create in India" vision, Education partnerships</li>
+        <li>LinkedIn-map Adobe India Education team leadership: search "Adobe Education India" → identify hiring manager and peers</li>
+        <li>Study Adobe Express product — create 3 things with it to understand the tool the Education team sells</li>
+        <li>Master the 25-term vocabulary bank (Tab 4) — 30 min/day until fluent</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 2 · Power BI Gap Closure</div>
+      <ul class="tl-tasks">
+        <li>Install Power BI Desktop (free) — complete Microsoft Learn "Get Started with Power BI" learning path (4 hrs)</li>
+        <li>Build one dashboard: Education Programme Performance Tracker — mock data (institution count, teacher certifications, student engagement, regional breakdown)</li>
+        <li>Screenshot dashboard for portfolio / interview reference</li>
+        <li>Optional: start PL-300 certification prep (Power BI Data Analyst Associate)</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 3 · Artifact Build</div>
+      <ul class="tl-tasks">
+        <li>Resume v1 build — adapt from GBO Tools framing (strategy/ops language already set); add Power BI to tech stack</li>
+        <li>Cover note — 300 words, lead with: "I've been the operating backbone of a ₹1,500 Cr revenue operation. I'd bring that same discipline to Adobe's India Education strategy."</li>
+        <li>Retranslate NPV model into "financial modelling + forecasting + ROI-driven recommendation" language in resume bullets</li>
+        <li>Update LinkedIn headline: "Business Operations & Strategy Lead | 14.9x Scale | IIM Udaipur | BITS Pilani"</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 4 · AI Portfolio Project (P-NEW)</div>
+      <ul class="tl-tasks">
+        <li>Build: India Education Business Intelligence Layer</li>
+        <li>Stack: Python + Streamlit + Claude API + Power BI embed</li>
+        <li>Features: automated business review narrative generation (AI-drafted from KPI feeds), anomaly detection on leading indicators, weekly C-suite briefing that self-generates</li>
+        <li>Mock data: institution onboarding pipeline, teacher certification rates, student engagement metrics, regional adoption heatmap</li>
+        <li>Output: GitHub repo + screenshots for interview discussion</li>
+      </ul>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-week">Week 5–6 · Apply + Interview Prep</div>
+      <ul class="tl-tasks">
+        <li>Submit application via Adobe Careers (R167791) + LinkedIn referral (dual-path)</li>
+        <li>Referral hunt: IIM Udaipur alumni at Adobe / BITS Pilani alumni at Adobe Noida</li>
+        <li>Mock interview: BQ question bank (Tab 7) — rehearse 6 tagged stories + honest failure</li>
+        <li>Prepare 5 questions for the interviewer (Tab 7)</li>
+        <li>Salary research refresh: confirm P50 band, set anchor number (Tab 8)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 7: INTERVIEW PREP ═══════════ -->
+<div class="section" id="tab-interview">
+  <div class="stitle">Interview Prep</div>
+  <div class="ssub">Likely loop structure, BQ-to-STAR mapping, 30-60-90 framework, and questions to ask</div>
+
+  <div class="card">
+    <h3>Likely Interview Loop</h3>
+    <table class="round-table">
+      <tr><th>Round</th><th>With</th><th>Focus</th></tr>
+      <tr>
+        <td>R1 (30m)</td>
+        <td>HR / Recruiter</td>
+        <td>Screen, motivation, comp expectations, availability, relocation readiness (Dubai→India)</td>
+      </tr>
+      <tr>
+        <td>R2 (60m)</td>
+        <td>Hiring Manager (Head of India Education or BizOps lead)</td>
+        <td>Strategic thinking, CoS competency, 2-3 STARs on initiative leadership + executive reporting</td>
+      </tr>
+      <tr>
+        <td>R3 (60m)</td>
+        <td>Cross-functional peers (Sales / Marketing / Finance)</td>
+        <td>Stakeholder management style, conflict resolution, data-driven decision-making, case study</td>
+      </tr>
+      <tr>
+        <td>R4 (45m)</td>
+        <td>VP / Senior Director (likely Education GM or India leadership)</td>
+        <td>Senior-forum presence, strategic judgment, cultural fit, "why Adobe"</td>
+      </tr>
+      <tr>
+        <td>R5 (30m)</td>
+        <td>US/HQ stakeholder (virtual)</td>
+        <td>Communication clarity, cross-timezone working style, global collaboration</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Top 14 Behavioural Questions — Primary STAR Mapping</h3>
+    <table>
+      <tr><th>Question</th><th>Primary</th><th>Backup</th></tr>
+      <tr><td>"Walk me through your career"</td><td>S10 (MT→AGM)</td><td>S1</td></tr>
+      <tr><td>"How do you build an operating rhythm for a new team?"</td><td>S1 (14.9x scale)</td><td>S5</td></tr>
+      <tr><td>"Tell me about a C-suite presentation that required influence"</td><td>S4 (NPV defence)</td><td>S2 (PR 49%)</td></tr>
+      <tr><td>"Describe a strategic initiative you led end-to-end"</td><td>S3 (PCC redesign)</td><td>S5 (Salesforce 0→1)</td></tr>
+      <tr><td>"How do you translate data into executive narratives?"</td><td>S5 (70+ reports)</td><td>S4 (NPV model)</td></tr>
+      <tr><td>"Tell me about managing competing priorities"</td><td>S1 (12 workstreams)</td><td>S13 (India hub)</td></tr>
+      <tr><td>"How do you influence without authority?"</td><td>S3 (PCC: Accounts + Audit + DLD)</td><td>S4 (NPV defence)</td></tr>
+      <tr><td>"Tell me about a time you failed"</td><td>S8 (Sobha One App)</td><td>S11 (SQL delegation)</td></tr>
+      <tr><td>"How do you build dashboards for leadership?"</td><td>S5 (Salesforce MI)</td><td>S3 (daily TAT dashboards)</td></tr>
+      <tr><td>"Describe cross-functional stakeholder management"</td><td>S5 (6-stakeholder discovery)</td><td>S13 (India hub)</td></tr>
+      <tr><td>"Tell me about financial modelling or ROI analysis"</td><td>S4 (NPV AED 652M)</td><td>Cost-to-collect vs bank</td></tr>
+      <tr><td>"How do you drive accountability?"</td><td>S2 (PR 49% standard)</td><td>S1 (risk register)</td></tr>
+      <tr><td>"What's your weakness?"</td><td>S11 (SQL delegation)</td><td>DISC Low-D + 3 proof points</td></tr>
+      <tr><td>"Why Adobe? Why Education?"</td><td>See framework below</td><td>—</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>"Why Adobe? Why Education?" Framework</h3>
+    <p><strong>Why Adobe:</strong> "Adobe is one of the few companies where creativity meets enterprise-grade operational scale. I've spent 6 years building operational infrastructure that scales — 14.9x across 4 entities. Adobe's three-cloud architecture runs on exactly that kind of disciplined execution behind creative products. I want to bring that operational backbone to a team that's shaping how India's next generation creates."</p>
+    <p><strong>Why Education:</strong> "Education is where Adobe's mission — empowering people to create — starts. The India Education team's partnership with the Ministry of Education targeting 2 crore students is the kind of strategic initiative that needs tight operational execution: institution onboarding pipelines, adoption tracking, partner management at scale. I've done that at a different scale; I want to do it here."</p>
+    <p><strong>Why this role specifically:</strong> "I've been the operating backbone — the invisible CoS — for a billion-dirham operation. This JD describes the role I've been performing for 6 years, with better vocabulary and a more inspiring mission."</p>
+  </div>
+
+  <div class="card">
+    <h3>30-60-90 Day Framework</h3>
+    <div class="day-block">
+      <h4>Days 1–30 · Listen & Map</h4>
+      <p>Meet every stakeholder in Sales, Marketing, Product, Finance, and Partnerships. Shadow the current business review process end-to-end. Map the existing KPI framework — what's tracked, what's not, where are the blind spots. Understand the Education team's annual planning cycle and where it currently sits. Identify the 3 biggest "the leadership doesn't have visibility into X" pain points.</p>
+    </div>
+    <div class="day-block">
+      <h4>Days 31–60 · Build Visibility</h4>
+      <p>Design and deploy the first iteration of a business performance dashboard — even if it's Excel/Sheets-based. Establish a weekly operating rhythm: Mon planning, Wed progress check, Fri metrics review. For the top pain point identified in Month 1, produce a structured problem definition with quantified impact and 2 solution options for leadership review. Own preparation of the next QBR.</p>
+    </div>
+    <div class="day-block">
+      <h4>Days 61–90 · Deliver & Propose</h4>
+      <p>Ship first quick win (likely: a dashboard or reporting automation that saves leadership 4+ hours/week of manual deck-building). Propose AI-augmented business review automation — C-suite briefing that self-generates from KPI feeds. Establish yourself as the person leadership calls when they need "what's really happening" in the business. Present a 6-month strategic initiative roadmap for leadership approval.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>5 Questions to Ask Them</h3>
+    <p><strong>1.</strong> "What does the India Education team's operating rhythm look like today — and what's the biggest gap in how leadership gets visibility into business performance?"</p>
+    <p><strong>2.</strong> "The Ministry of Education partnership targets 2 crore students by 2027. Where are we on that trajectory, and what are the leading indicators you're watching?"</p>
+    <p><strong>3.</strong> "How does the India Education team interact with Adobe's global Education strategy — is this an autonomous P&L or a matrix-reporting structure?"</p>
+    <p><strong>4.</strong> "What's the most complex cross-functional initiative the team has run in the last 12 months, and what would you do differently?"</p>
+    <p><strong>5.</strong> "How does this role's success get measured in Year 1 — what would make you say 'this was the right hire' after 12 months?"</p>
+  </div>
+
+  <div class="card">
+    <h3>Assertiveness Proof Points (DISC Low-D Development)</h3>
+    <p>Deploy when challenged on decisiveness or executive presence:</p>
+    <p><strong>1.</strong> Held PR rejection documentation standard at 49% despite pressure to relax — position vindicated by data.</p>
+    <p><strong>2.</strong> Defended NPV model (AED 652M) at MD/CEO through multiple scrutiny rounds — zero material concessions.</p>
+    <p><strong>3.</strong> Proactively escalated 3 blocked risk register items to CCO before due dates.</p>
+  </div>
+</div>
+
+<!-- ═══════════ TAB 8: SALARY & NEGOTIATION ═══════════ -->
+<div class="section" id="tab-salary">
+  <div class="stitle">Salary & Negotiation</div>
+  <div class="ssub">Compensation intelligence + negotiation playbook</div>
+
+  <div class="card">
+    <h3>Compensation Table (INR, per annum)</h3>
+    <table class="sal-table">
+      <tr><th>Percentile</th><th>Fixed</th><th>Bonus %</th><th>Bonus ₹</th><th>RSU (4yr)</th><th>Total Target</th></tr>
+      <tr>
+        <td>P25</td><td>₹35L</td><td>15%</td><td>₹5.3L</td><td>₹15L</td><td>~₹44L</td>
+      </tr>
+      <tr class="sal-highlight">
+        <td><strong>P50 ← target</strong></td><td><strong>₹45L</strong></td><td><strong>18%</strong></td><td><strong>₹8.1L</strong></td><td><strong>₹25L</strong></td><td><strong>₹59–72L</strong></td>
+      </tr>
+      <tr>
+        <td>P75</td><td>₹55L</td><td>20%</td><td>₹11L</td><td>₹35L</td><td>~₹75–80L</td>
+      </tr>
+      <tr>
+        <td>P90</td><td>₹62L</td><td>20%</td><td>₹12.4L</td><td>₹45L</td><td>~₹86L</td>
+      </tr>
+    </table>
+    <p style="color: var(--muted); font-size: 12px;">Confidence: Medium (6/10). Triangulated from Glassdoor Adobe India data + Levels.fyi "Lead" level + AmbitionBox. Adobe India RSU grants vary significantly by level/role. "Lead" in Adobe India typically maps to IC5/M1 band.</p>
+  </div>
+
+  <div class="card">
+    <h3>Negotiation Leverage (MODERATE)</h3>
+    <p><strong>In your favour:</strong></p>
+    <p>→ AED-denominated current package creates favourable conversion optics</p>
+    <p>→ BITS + IIM credential profile rare for BizOps hires at this level</p>
+    <p>→ Noida campus expansion = active hiring → leverage in negotiations</p>
+    <p>→ 14.9x execution proof with no consulting infrastructure — genuine differentiation</p>
+    <p>→ Adobe's 4.1/5 Glassdoor comp rating suggests they pay competitively</p>
+
+    <p style="margin-top: 16px;"><strong>Watch for:</strong></p>
+    <p>→ "Lead" title in Adobe India may sit lower than "Director" — confirm band mapping</p>
+    <p>→ RSU grant variability: Education team (non-engineering) may get smaller RSU grants than product engineering</p>
+    <p>→ Glassdoor India reviews note "slow career progression in operations roles" and "compensation growth can lag market trends"</p>
+    <p>→ Adobe India bonus is "Team Bonus" (product dev) or "Sales Compensation" — confirm which plan this role falls under</p>
+  </div>
+
+  <div class="card">
+    <h3>Negotiation Playbook</h3>
+    <p><strong>Anchor:</strong> Quote current AED package converted to INR + 20–25% premium for relocation + role-level. Target: ₹52L fixed + 18-20% bonus + RSU front-loading ask.</p>
+    <p><strong>Walk-away:</strong> ₹62L total comp (below this, pipeline has better options at Oaktree P50).</p>
+    <p><strong>Push on joining bonus:</strong> ₹3–5L to offset Dubai exit costs (housing deposit forfeiture, gratuity timing gap, relocation logistics).</p>
+    <p><strong>RSU front-loading:</strong> Ask for Year 1 vest of 40% (vs standard 25%). Common at Adobe for experienced hires.</p>
+    <p><strong>Title clarification:</strong> Confirm "Lead" = IC5/M1. If M1, negotiate management-track benefits (people management training, leadership development programme access).</p>
+    <p><strong>Do NOT concede on:</strong> Hybrid flexibility (Adobe India is hybrid but not mandatory per Glassdoor), outcome-based performance review.</p>
+  </div>
+
+  <div class="card">
+    <h3>Against Your Pipeline</h3>
+    <table>
+      <tr><th>Role</th><th>Total Comp</th><th>vs Adobe P50</th></tr>
+      <tr><td>Uber Sr Risk Ops (L5B)</td><td>₹110–120L</td><td>+60 to +80%</td></tr>
+      <tr><td>Google GBO Tools</td><td>₹70–95L</td><td>+5 to +40%</td></tr>
+      <tr><td>AmEx GMNS Director</td><td>~₹82L</td><td>+20%</td></tr>
+      <tr><td>HSBC VP Liquidity Ops</td><td>₹65–90L</td><td>−5 to +30%</td></tr>
+      <tr class="sal-highlight"><td><strong>Adobe India Edu Lead</strong></td><td><strong>₹65–80L</strong></td><td><strong>baseline</strong></td></tr>
+      <tr><td>Oaktree VP Info Solutions</td><td>₹55–65L</td><td>−10 to −20%</td></tr>
+      <tr><td>Qualcomm Sr PM</td><td>₹46–68L</td><td>−15 to −30%</td></tr>
+    </table>
+    <p style="color: var(--muted); font-size: 12px; margin-top: 12px;">Adobe trades some comp ceiling for: (a) T1 global brand equity, (b) strong WLB reputation, (c) RSU upside if stock appreciates, (d) genuine "Create in India" mission alignment.</p>
+  </div>
+
+  <div class="card">
+    <h3>AI Differentiator — Day-1 Value Proposition</h3>
+    <p>Frame in interview: <em>"I'd build an India Education Business Intelligence layer — automated business review deck generation from KPI feeds, anomaly detection on leading indicators like institution onboarding velocity and teacher certification rates, and a weekly C-suite briefing that writes itself. Your leadership shouldn't spend 4 hours every week building the deck; they should spend 30 minutes deciding what the data means."</em></p>
+    <p style="color: var(--muted); font-size: 12px;">This directly answers the JD's: "Move beyond reporting to identify trends, risks, and opportunities" and "Anticipate leadership questions and provide forward-looking insights."</p>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<footer>
+  Adobe India Education Lead BizOps Playbook · v1 · Generated April 2026<br>
+  Built alongside CCC Architecture v3.5 · Role E5 · EXPLORATORY<br>
+  Companion docs: PRIYANUJ_DEKA_MASTER_DATABANK_V6 · STAR_STORY_BANK_V2 · CCC_Architecture_v3_5
+</footer>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: document.querySelector('.main').offsetTop - 60, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

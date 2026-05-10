@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Commerce S&O Manager — Career Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c1118;
+  --surface: #131c27;
+  --s2: #182433;
+  --s3: #1e2d40;
+  --border: #243548;
+  --border2: #2c4060;
+  --google-blue: #4285f4;
+  --google-green: #34a853;
+  --google-yellow: #fbbc04;
+  --google-red: #ea4335;
+  --accent: #4285f4;
+  --accent-dim: rgba(66,133,244,0.12);
+  --green: #34a853;
+  --green-dim: rgba(52,168,83,0.12);
+  --amber: #fbbc04;
+  --amber-dim: rgba(251,188,4,0.12);
+  --red: #ea4335;
+  --red-dim: rgba(234,67,53,0.12);
+  --text: #d4e4f0;
+  --muted: #7a94aa;
+  --dim: #3a5068;
+  --purple: #a370f7;
+  --purple-dim: rgba(163,112,247,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'IBM Plex Sans',sans-serif; font-size:14px; line-height:1.6; }
+h1,h2,h3 { font-family:'DM Serif Display',serif; font-weight:400; }
+code { font-family:'JetBrains Mono',monospace; font-size:12px; background:var(--s3); padding:2px 6px; border-radius:3px; }
+
+/* Header */
+.header { background:linear-gradient(135deg, var(--s2) 0%, var(--bg) 100%); border-bottom:1px solid var(--border); padding:28px 32px 20px; }
+.header-top { display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+.google-dots { display:flex; gap:4px; }
+.google-dots span { width:8px; height:8px; border-radius:50%; }
+.google-dots span:nth-child(1) { background:var(--google-blue); }
+.google-dots span:nth-child(2) { background:var(--google-red); }
+.google-dots span:nth-child(3) { background:var(--google-yellow); }
+.google-dots span:nth-child(4) { background:var(--google-green); }
+.header-label { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
+.header h1 { font-size:26px; color:#fff; margin:4px 0 2px; }
+.header-sub { font-size:13px; color:var(--muted); }
+.header-stats { display:flex; gap:28px; margin-top:16px; flex-wrap:wrap; }
+.stat { text-align:center; }
+.stat-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--dim); margin-bottom:2px; }
+.stat-value { font-size:18px; font-weight:600; color:#fff; }
+.stat-value.score { color:var(--google-blue); }
+.stat-value.ctc { color:var(--google-green); }
+.stat-value.timeline { color:var(--amber); }
+.stat-value.status { color:var(--google-red); font-size:12px; font-weight:700; letter-spacing:1px; }
+
+/* Tabs */
+.tab-bar { display:flex; background:var(--surface); border-bottom:1px solid var(--border); overflow-x:auto; padding:0 16px; }
+.tab-btn { background:none; border:none; color:var(--muted); font-family:'IBM Plex Sans',sans-serif; font-size:12px; font-weight:500; padding:12px 14px; cursor:pointer; white-space:nowrap; border-bottom:2px solid transparent; transition:all 0.2s; }
+.tab-btn:hover { color:var(--text); }
+.tab-btn.active { color:var(--google-blue); border-bottom-color:var(--google-blue); }
+.tab-panel { display:none; padding:24px 28px; max-width:960px; }
+.tab-panel.active { display:block; }
+
+/* Cards */
+.card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:20px; margin-bottom:16px; }
+.card-blue { border-left:3px solid var(--google-blue); }
+.card-green { border-left:3px solid var(--google-green); }
+.card-amber { border-left:3px solid var(--amber); }
+.card-red { border-left:3px solid var(--google-red); }
+.card-purple { border-left:3px solid var(--purple); }
+.card h3 { font-size:16px; color:#fff; margin-bottom:8px; }
+.card p { color:var(--text); font-size:13px; }
+
+/* Section titles */
+.section-title { font-family:'DM Serif Display',serif; font-size:20px; color:#fff; margin:24px 0 6px; }
+.section-sub { font-size:12px; color:var(--muted); margin-bottom:16px; }
+
+/* Tables */
+table { width:100%; border-collapse:collapse; margin:12px 0; font-size:13px; }
+th { background:var(--s2); color:var(--muted); font-weight:600; text-align:left; padding:8px 12px; font-size:11px; letter-spacing:0.5px; text-transform:uppercase; border-bottom:1px solid var(--border); }
+td { padding:8px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+tr:hover td { background:var(--s2); }
+
+/* Badges */
+.badge { display:inline-block; padding:2px 8px; border-radius:3px; font-size:10px; font-weight:700; letter-spacing:0.5px; }
+.badge-green { background:var(--green-dim); color:var(--green); }
+.badge-amber { background:var(--amber-dim); color:var(--amber); }
+.badge-red { background:var(--red-dim); color:var(--red); }
+.badge-blue { background:var(--accent-dim); color:var(--accent); }
+.badge-purple { background:var(--purple-dim); color:var(--purple); }
+
+/* Pills */
+.pill-row { display:flex; flex-wrap:wrap; gap:6px; margin:10px 0; }
+.pill { display:inline-block; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:500; }
+.pill-green { background:var(--green-dim); color:var(--green); }
+.pill-amber { background:var(--amber-dim); color:var(--amber); }
+.pill-red { background:var(--red-dim); color:var(--red); }
+.pill-blue { background:var(--accent-dim); color:var(--accent); }
+
+/* Timeline */
+.timeline { margin:12px 0 20px; }
+.tl-item { display:flex; gap:14px; margin-bottom:14px; padding-left:8px; border-left:2px solid var(--border); }
+.tl-week { min-width:64px; font-size:11px; font-weight:600; color:var(--accent); padding-top:1px; }
+.tl-title { font-weight:600; color:#fff; font-size:13px; }
+.tl-desc { font-size:12px; color:var(--muted); margin-top:2px; }
+
+/* Fit bars */
+.fit-row { display:flex; align-items:center; gap:10px; margin:4px 0; }
+.fit-label { min-width:140px; font-size:12px; color:var(--muted); }
+.fit-bar-wrap { flex:1; height:6px; background:var(--s3); border-radius:3px; overflow:hidden; }
+.fit-bar-fill { height:100%; border-radius:3px; transition:width 0.3s; }
+.fill-green { background:var(--green); }
+.fill-amber { background:var(--amber); }
+.fill-red { background:var(--red); }
+.fill-blue { background:var(--accent); }
+.fit-pct { font-size:11px; font-weight:600; color:var(--text); min-width:32px; text-align:right; }
+
+/* Blockquote */
+.quote { background:var(--accent-dim); border-left:3px solid var(--accent); padding:14px 18px; border-radius:0 6px 6px 0; margin:14px 0; font-style:italic; color:var(--text); font-size:13px; }
+
+/* STAR */
+.star-card { background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:18px; margin-bottom:14px; }
+.star-card h4 { color:var(--accent); font-size:14px; font-weight:600; margin-bottom:6px; font-family:'IBM Plex Sans',sans-serif; }
+.star-letter { display:inline-block; width:18px; height:18px; border-radius:3px; text-align:center; font-size:10px; font-weight:700; line-height:18px; margin-right:6px; }
+.star-s { background:var(--accent-dim); color:var(--accent); }
+.star-t { background:var(--amber-dim); color:var(--amber); }
+.star-a { background:var(--green-dim); color:var(--green); }
+.star-r { background:var(--purple-dim); color:var(--purple); }
+
+.responsive-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media(max-width:700px) { .responsive-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="google-dots"><span></span><span></span><span></span><span></span></div>
+    <span class="header-label">Google · Global Partnerships · Commerce</span>
+  </div>
+  <h1>Strategy & Operations Manager, Commercial</h1>
+  <div class="header-sub">Career Playbook · Priyanuj Deka · April 2026 · Payments & Shopping (APAC)</div>
+  <div class="header-stats">
+    <div class="stat"><div class="stat-label">Fit Score</div><div class="stat-value score">74 → 85</div></div>
+    <div class="stat"><div class="stat-label">Est. CTC (L5/L6)</div><div class="stat-value ctc">₹70–115L</div></div>
+    <div class="stat"><div class="stat-label">Prep Window</div><div class="stat-value timeline">4–6 Weeks</div></div>
+    <div class="stat"><div class="stat-label">Status</div><div class="stat-value status">PARALLEL · NOW</div></div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('snapshot')">1 · Snapshot</button>
+  <button class="tab-btn" onclick="showTab('decoder')">2 · JD Decoder</button>
+  <button class="tab-btn" onclick="showTab('gaps')">3 · Fit & Gaps</button>
+  <button class="tab-btn" onclick="showTab('vocab')">4 · Domain Vocab</button>
+  <button class="tab-btn" onclick="showTab('stars')">5 · STAR Map</button>
+  <button class="tab-btn" onclick="showTab('prep')">6 · Prep Plan</button>
+  <button class="tab-btn" onclick="showTab('interview')">7 · Interview Prep</button>
+  <button class="tab-btn" onclick="showTab('salary')">8 · Salary & Negotiation</button>
+</div>
+
+<!-- TAB 1: SNAPSHOT -->
+<div class="tab-panel active" id="tab-snapshot">
+  <div class="section-title">Role Snapshot</div>
+  <div class="section-sub">What this role actually is, who you'd work with, and why it matters</div>
+
+  <div class="card card-blue">
+    <h3>The Role In One Line</h3>
+    <p>You are the <strong>internal strategy consultant + operating rhythm owner</strong> for Google's Payments & Shopping partnerships across APAC. You run QBRs, set OKRs, analyze business performance, define partnership GTM playbooks for new Commerce features, and help APAC leadership influence global product strategy. Think: <strong>Chief of Staff to the APAC Commerce Partnerships Head.</strong></p>
+  </div>
+
+  <div class="card card-green">
+    <h3>Employer & Org Context</h3>
+    <p><strong>Google — Global Partnerships → APAC → Payments & Shopping (Commerce PA)</strong></p>
+    <p style="margin-top:8px">The Global Partnerships org explores and enables partnerships that power Google's consumer products. The Commerce "Product Area" (PA) covers two product families:</p>
+    <p style="margin-top:6px"><strong>Google Pay:</strong> India's #2 UPI app with ~35% market share, processing 6.7B+ monthly transactions. UPI-linked credit cards, UPI Circle, Autopay mandates, cross-border expansion (UAE, Singapore, Nepal). NPCI's 30% volume cap (deadline Dec 2026) is a live regulatory challenge.</p>
+    <p style="margin-top:6px"><strong>Google Shopping:</strong> Product discovery platform powered by Merchant Center + Google Ads. India e-commerce projected to reach $250B by 2030 (Google-Deloitte, Apr 2026). YouTube Shopping Affiliate Program live in India with Flipkart, Myntra, Nykaa, Purplle. Creator-led commerce projected to influence 30% of retail spending.</p>
+    <p style="margin-top:6px"><strong>Key strategic initiatives you'd likely touch:</strong> NPCI volume cap compliance strategy, new market UPI launches, Merchant Center India expansion (Hindi language support), YouTube Shopping partner onboarding, Gemini/AI-powered shopping features rollout, agentic AI commerce tools.</p>
+  </div>
+
+  <div class="card card-amber">
+    <h3>Key Leadership (Public)</h3>
+    <p><strong>Roma Datta Chobey</strong> — MD, Connected Consumer Commerce, Google India (likely your reporting chain)</p>
+    <p><strong>Google India Commerce</strong> — Heavy focus on "Inspired, Intelligent, Instant, Immersive" commerce framework (from Google-Deloitte report)</p>
+    <p><strong>Global Partnerships leadership</strong> — President of GP + VP Partnerships Solutions oversee the broader S&O function globally</p>
+  </div>
+
+  <div class="card card-purple">
+    <h3>Why This Role Fits (Short Version)</h3>
+    <p>This is the <strong>highest-ceiling Google role in your pipeline</strong> because the domain gap is narrower than your other Google tracks. Your Sobha career is literally <strong>payment operations and revenue management</strong> — the core vocabulary translates directly. Unlike the Ads/SMB gap in GBO Tools or the vendor ops framing needed for gTech, this role sits in payments and commerce where your 10-bank escrow infrastructure, NPV prepayment model, and AED 12.97B collections programme are native proof points.</p>
+    <p style="margin-top:6px">The "management consulting / investment banking" qualifier in minimum quals is a direct IIM PGDM match. The 8-year experience bar (6 with advanced degree) — you clear it.</p>
+  </div>
+
+  <div class="quote">"I've been running payment operations strategy for six years — I just haven't been calling it Commerce S&O."</div>
+
+  <div class="card card-green">
+    <h3>Position vs. Your Other Google Tracks</h3>
+    <table>
+      <thead><tr><th>Dimension</th><th>GBO Tools</th><th>gTech SDM</th><th>gTech Ads CX</th><th style="color:var(--google-blue)">This: Commerce S&O</th></tr></thead>
+      <tbody>
+        <tr><td>Org</td><td>GBO (internal tools)</td><td>Extended Workforce</td><td>gSO → Ads CX</td><td style="color:var(--google-blue)"><strong>Global Partnerships → Commerce</strong></td></tr>
+        <tr><td>Domain</td><td>SMB sales enablement</td><td>Vendor cost optimisation</td><td>Vendor ops for support</td><td style="color:var(--google-blue)"><strong>Payments & Shopping partnerships</strong></td></tr>
+        <tr><td>Your best match</td><td>MI ecosystem</td><td>NPV + vendor governance</td><td>India hub + programme</td><td style="color:var(--google-blue)"><strong>QBR/OKR + payments + GTM</strong></td></tr>
+        <tr><td>Domain gap</td><td><span class="badge badge-red">HIGH</span> SMB ads</td><td><span class="badge badge-amber">MED</span> MSP/VMS</td><td><span class="badge badge-red">MED-HIGH</span> Ads CX</td><td><span class="badge badge-green">LOWER</span> Payments/commerce</td></tr>
+        <tr><td>Fit</td><td>63→80</td><td>74→82</td><td>58→76</td><td style="color:var(--google-blue)"><strong>74→85</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TAB 2: JD DECODER -->
+<div class="tab-panel" id="tab-decoder">
+  <div class="section-title">JD Decoder — 6 Responsibilities Broken Down</div>
+  <div class="section-sub">What each JD line actually means and your direct Sobha proof point</div>
+
+  <div class="card card-blue">
+    <h3>1. Partner with APAC Commerce Leadership on Forward-Looking Initiatives</h3>
+    <p><span class="badge badge-blue">STRATEGIC PARTNER</span> <span class="badge badge-green">STRONGEST MATCH</span></p>
+    <p style="margin-top:8px">You sit beside APAC Commerce leadership as their thinking partner — translating their vision into structured recommendations, building business cases, and driving implementation. This is a Chief-of-Staff function: the leader has the direction, you bring the rigour.</p>
+    <p style="margin-top:8px"><strong>Your analog:</strong> You serve as the primary operational partner to the CCO, CRO, and MD/CEO — owning the annual planning cycle, OKR governance (AED 8.2B target), and 12 concurrent programme portfolio. The NPV model (AED 652M, defended at MD/CEO level) is exactly this: a forward-looking initiative with rigorous analysis and executive buy-in.</p>
+  </div>
+
+  <div class="card card-green">
+    <h3>2. Help Define Partnerships GTM for New & Existing Features</h3>
+    <p><span class="badge badge-amber">GTM STRATEGY</span> <span class="badge badge-blue">PRODUCT-PARTNERSHIP</span></p>
+    <p style="margin-top:8px">When Google Pay launches UPI Circle or Shopping enables YouTube affiliate integration, someone has to build the partnership go-to-market playbook: which partners to onboard first, what the onboarding workflow looks like, what success metrics to track, and how to scale. That's you.</p>
+    <p style="margin-top:8px"><strong>Your analog:</strong> Salesforce 0→1 deployment was exactly a new-capability GTM: you led solution design across 6 stakeholders, defined the rollout sequence, built adoption tracking (70+ reports), and scaled the platform from zero to enterprise-wide. Your mortgage MOU partnerships with ADIB, NBQ, and RAK Bank are literal partnership GTM — defining terms, coordinating across legal/ops, driving activation.</p>
+  </div>
+
+  <div class="card card-amber">
+    <h3>3. Run Key Operational Workflows — QBRs, OKRs</h3>
+    <p><span class="badge badge-green">OPERATING RHYTHM</span> <span class="badge badge-green">STRONGEST MATCH</span></p>
+    <p style="margin-top:8px">You own the operating cadence: setting OKRs each quarter, preparing QBR pre-reads, tracking KR progress, synthesizing performance data into executive summaries. You're the person who makes sure leadership always has the right data at the right time.</p>
+    <p style="margin-top:8px"><strong>Your analog:</strong> You designed and run a 3-tier review cadence: weekly team KPI reviews, monthly CRO-level business reviews, quarterly CCO-level strategic reviews. AED 8.2B target with 60% personal weightage and cascaded KPIs across 77 people — this IS OKR governance, just not called that.</p>
+  </div>
+
+  <div class="card card-red">
+    <h3>4. Analyze Business Performance & Provide "Unlocks"</h3>
+    <p><span class="badge badge-blue">ANALYTICAL</span> <span class="badge badge-green">STRONG MATCH</span></p>
+    <p style="margin-top:8px">When a payments partnership is underperforming in a specific APAC market, you diagnose the root cause and propose the "unlock" — whether it's a process bottleneck, a partner capability gap, a product limitation, or a market-level barrier. You turn data into action.</p>
+    <p style="margin-top:8px"><strong>Your analog:</strong> The T−25/T+30 critical collection window framework was exactly this — you identified that collection probability was highest in a specific 55-day window, designed an operational model around it, and it was adopted organisation-wide. Delinquency reduction from 16.7% to 4.4% (−74%) required systematic unlock analysis across portfolio segments.</p>
+  </div>
+
+  <div class="card card-purple">
+    <h3>5. Support Business Planning & Cross-Functional Coordination</h3>
+    <p><span class="badge badge-blue">CROSS-FUNCTIONAL</span> <span class="badge badge-green">STRONG MATCH</span></p>
+    <p style="margin-top:8px">You coordinate across Product (Google Pay/Shopping PMs), Marketing, and GTM functions. You're the connective tissue that ensures these teams are aligned on priorities and execution timelines. Annual planning, headcount allocation, budget governance.</p>
+    <p style="margin-top:8px"><strong>Your analog:</strong> You coordinate across Legal, Accounts, DLD, Technology, Sales, and external banking partners. The PCC TAT transformation (20→3 days) required removing cross-functional blockers across 4 departments simultaneously. Your 70+ report MI ecosystem serves as the single source of truth across 4 legal entities.</p>
+  </div>
+
+  <div class="card card-blue">
+    <h3>6. Develop an "APAC Voice" on Product Priorities</h3>
+    <p><span class="badge badge-amber">STRATEGIC INFLUENCE</span> <span class="badge badge-amber">STRETCH GOAL</span></p>
+    <p style="margin-top:8px">This is the highest-value responsibility: synthesizing APAC partnership feedback into structured product recommendations that influence the global product roadmap. You're the voice that says "India needs X feature because of UPI dynamics" and gets it onto the global team's backlog.</p>
+    <p style="margin-top:8px"><strong>Your analog:</strong> Your India hub stand-up (42 people from zero) was about building a regional operational voice. The CX Journey 1.0 participation — defining 5 Collections touchpoints in the MD-approved customer journey — shows you can contribute regional perspectives into global frameworks. The NPV model influenced company-wide financial strategy from a functional perspective.</p>
+  </div>
+
+  <div class="section-title">Qualifications Checklist</div>
+  <table>
+    <thead><tr><th>Requirement</th><th>Your Match</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Bachelor's degree or equivalent</td><td>BITS Pilani dual degree (B.E. + M.Sc.)</td><td><span class="badge badge-green">✓ EXCEEDS</span></td></tr>
+      <tr><td>8 yrs in consulting/strategy/IB/PE/ops (6 with advanced degree)</td><td>IIM Udaipur PGDM + 6+ years at Sobha</td><td><span class="badge badge-green">✓ MEETS</span></td></tr>
+      <tr><td>4 yrs with executive stakeholders</td><td>MD/CEO, CRO, CCO — daily/weekly interaction since 2022</td><td><span class="badge badge-green">✓ STRONG</span></td></tr>
+      <tr><td>Master's degree (preferred)</td><td>PGDM (MBA equivalent), IIM Udaipur</td><td><span class="badge badge-green">✓</span></td></tr>
+      <tr><td>Leading complex strategic & operational initiatives</td><td>14.9x scale, 12 concurrent workstreams, NPV AED 652M</td><td><span class="badge badge-green">✓ STRONG</span></td></tr>
+      <tr><td>Develop frameworks for complex business constructs</td><td>T−25/T+30 framework, NPV model, MI architecture</td><td><span class="badge badge-green">✓ STRONG</span></td></tr>
+      <tr><td>Stakeholder & project management</td><td>77-person team, 6-stakeholder coordination</td><td><span class="badge badge-green">✓ STRONG</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- TAB 3: FIT & GAPS -->
+<div class="tab-panel" id="tab-gaps">
+  <div class="section-title">Fit & Gaps Analysis</div>
+  <div class="section-sub">Honest assessment of where you stand and what needs closing</div>
+
+  <div class="section-title" style="font-size:16px">Strengths (Lead With These)</div>
+  <div class="pill-row">
+    <span class="pill pill-green">QBR/OKR Governance ✓</span>
+    <span class="pill pill-green">Payment Operations Scale ✓</span>
+    <span class="pill pill-green">Executive Stakeholder Mgmt ✓</span>
+    <span class="pill pill-green">Cross-Functional Coordination ✓</span>
+    <span class="pill pill-green">MI Architecture (70+ reports) ✓</span>
+    <span class="pill pill-green">IIM PGDM ✓</span>
+    <span class="pill pill-green">Multi-Bank Partner Mgmt ✓</span>
+    <span class="pill pill-green">Framework Design ✓</span>
+    <span class="pill pill-amber">AI-Augmented Ops △</span>
+    <span class="pill pill-amber">Google Vocabulary △</span>
+    <span class="pill pill-red">Commerce/Shopping Domain ✗</span>
+    <span class="pill pill-red">UPI/Fintech Vocabulary ✗</span>
+  </div>
+
+  <div class="fit-row"><span class="fit-label">QBR / OKR Operations</span><div class="fit-bar-wrap"><div class="fit-bar-fill fill-green" style="width:92%"></div></div><span class="fit-pct">92%</span></div>
+  <div class="fit-row"><span class="fit-label">Executive Partnership</span><div class="fit-bar-wrap"><div class="fit-bar-fill fill-green" style="width:88%"></div></div><span class="fit-pct">88%</span></div>
+  <div class="fit-row"><span class="fit-label">Cross-Functional Coord.</span><div class="fit-bar-wrap"><div class="fit-bar-fill fill-green" style="width:85%"></div></div><span class="fit-pct">85%</span></div>
+  <div class="fit-row"><span class="fit-label">Business Analysis</span><div class="fit-bar-wrap"><div class="fit-bar-fill fill-green" style="width:82%"></div></div><span class="fit-pct">82%</span></div>
+  <div class="fit-row"><span class="fit-label">Partnership GTM Design</span><div class="fit-bar-wrap"><div class="fit-bar-fill fill-amber" style="width:60%"></div></div><span class="fit-pct">60%</span></div>
+  <div class="fit-row"><span class="fit-label">Payments/Commerce Domain</span><div class="fit-bar-wrap"><div class="fit-bar-fill fill-amber" style="width:40%"></div></div><span class="fit-pct">40%</span></div>
+  <div class="fit-row"><span class="fit-label">Google Internal Vocabulary</span><div class="fit-bar-wrap"><div class="fit-bar-fill fill-red" style="width:25%"></div></div><span class="fit-pct">25%</span></div>
+
+  <div class="section-title" style="font-size:16px; margin-top:24px">Gaps to Close</div>
+  <table>
+    <thead><tr><th>Gap</th><th>Severity</th><th>Closing Strategy</th><th>Timeline</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>UPI / Digital Payments Ecosystem</strong><br><small>NPCI, UPI architecture, Google Pay market position, volume cap regulation, UPI Circle, Autopay, cross-border expansion</small></td>
+        <td><span class="badge badge-red">HIGH</span></td>
+        <td>Study NPCI UPI reports, Google Pay India blog posts, UPI market share data. Understand: TPAP model, PSP vs TPAP, volume cap compliance, P2P vs P2M split. Your 10-bank infrastructure is direct vocabulary.</td>
+        <td>2 weeks</td>
+      </tr>
+      <tr>
+        <td><strong>Google Shopping / Merchant Center / Commerce</strong><br><small>Merchant Center, Shopping Graph, YouTube Shopping affiliates, creator commerce, AI-powered shopping</small></td>
+        <td><span class="badge badge-red">HIGH</span></td>
+        <td>Study Google Merchant Center documentation, Google-Deloitte commerce report (Apr 2026), YouTube Shopping India launch. Understand: product feed lifecycle, merchant onboarding, free vs paid listings.</td>
+        <td>2–3 weeks</td>
+      </tr>
+      <tr>
+        <td><strong>Google Partnerships Org Vocabulary</strong><br><small>PA (Product Area), GP structure, S&O function within GP, Transformation team, partner playbooks</small></td>
+        <td><span class="badge badge-amber">MEDIUM</span></td>
+        <td>LinkedIn research on Google Partnerships S&O professionals. Study public GP job descriptions for vocabulary patterns. Read Google Partnerships blog for framing.</td>
+        <td>1–2 weeks</td>
+      </tr>
+      <tr>
+        <td><strong>India E-Commerce & Fintech Macro</strong><br><small>ONDC, RBI tokenization, BNPL regulation, quick commerce, Tier 2+ digital adoption</small></td>
+        <td><span class="badge badge-amber">MEDIUM</span></td>
+        <td>Read Google-Deloitte India e-commerce report, follow RBI digital payments circulars, understand ONDC as competitive context. Your Dubai-to-India transition adds interesting perspective.</td>
+        <td>2–3 weeks</td>
+      </tr>
+      <tr>
+        <td><strong>Google Ads / Skillshop Certifications</strong><br><small>Shared with all Google tracks</small></td>
+        <td><span class="badge badge-amber">MEDIUM</span></td>
+        <td>Google Ads Search + Measurement + GA4 (all free, Skillshop). Shared investment with GBO Tools and gTech tracks. Signals Google ecosystem commitment.</td>
+        <td>2–3 weeks</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title" style="font-size:16px; margin-top:24px">The Three Reframes That Change This Profile</div>
+
+  <div class="card card-blue">
+    <h3>Reframe #1: Dues Collections = Payment Operations & Revenue Realisation</h3>
+    <p>Your AED 12.97B annual collections programme IS payment operations at scale. Your 10-bank escrow infrastructure processing AED 442M daily IS multi-PSP partner management. Your delinquency governance IS payment conversion rate optimisation. The vocabulary is different; the capability is identical.</p>
+  </div>
+
+  <div class="card card-green">
+    <h3>Reframe #2: T−25/T+30 Framework = Partnership Performance Intervention Model</h3>
+    <p>When a payments partnership underperforms in a market, you need an intervention framework — when to escalate, what data to pull, which levers to push. Your T−25/T+30 critical collection window is exactly this: a data-driven intervention framework with defined trigger points and escalation paths. In Google language: "I designed a 55-day performance intervention framework that increased recovery rates and was adopted organisation-wide."</p>
+  </div>
+
+  <div class="card card-amber">
+    <h3>Reframe #3: Multi-Bank Infrastructure = Multi-Partner Ecosystem Governance</h3>
+    <p>Google Pay works through PSPs (Payment Service Providers) — banks that provide the UPI rails. You manage 10 banking relationships with different settlement cycles, statement formats, and reconciliation requirements. This maps directly to managing multiple payment partners with different integration specs, SLA structures, and performance metrics. In Google language: "I govern a 10-partner payment processing ecosystem handling 3,579 transactions daily with systematic reconciliation across all channels."</p>
+  </div>
+</div>
+
+<!-- TAB 4: DOMAIN VOCAB -->
+<div class="tab-panel" id="tab-vocab">
+  <div class="section-title">Domain Vocabulary Guide</div>
+  <div class="section-sub">Master these terms before the first screen call</div>
+
+  <div class="card card-blue">
+    <h3>Google Organisational Vocabulary</h3>
+    <table>
+      <thead><tr><th>Term</th><th>What It Means</th><th>Your Equivalent</th></tr></thead>
+      <tbody>
+        <tr><td><strong>GP</strong></td><td>Global Partnerships — the org this role sits in</td><td>Your broader business partnerships function</td></tr>
+        <tr><td><strong>PA</strong></td><td>Product Area — Commerce PA covers Payments + Shopping</td><td>Your "functional verticals" — Dues + Advance + PCC</td></tr>
+        <tr><td><strong>S&O</strong></td><td>Strategy & Operations — the function you'd be in</td><td>Your strategic programme management + MI governance role</td></tr>
+        <tr><td><strong>GBO</strong></td><td>Global Business and Operations — internal ops teams</td><td>Your operations governance + MI function</td></tr>
+        <tr><td><strong>GCS</strong></td><td>Google Customer Solutions — SMB sales org</td><td>Not your direct counterpart — this is the sales side</td></tr>
+        <tr><td><strong>xPM</strong></td><td>Cross-functional Programme Manager — Google's PM methodology</td><td>Exactly your role — managing 12 concurrent workstreams</td></tr>
+        <tr><td><strong>OKR</strong></td><td>Objectives & Key Results — Google invented this</td><td>Your AED 8.2B target with cascaded KRs</td></tr>
+        <tr><td><strong>QBR</strong></td><td>Quarterly Business Review</td><td>Your quarterly CCO-level strategic reviews</td></tr>
+        <tr><td><strong>MBR</strong></td><td>Monthly Business Review</td><td>Your monthly CRO-level business reviews</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card card-green">
+    <h3>Payments & UPI Vocabulary (Critical for This Role)</h3>
+    <table>
+      <thead><tr><th>Term</th><th>What It Means</th><th>Interview Usage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>UPI</strong></td><td>Unified Payments Interface — India's real-time payment system, 80%+ of digital payment volume</td><td>"I manage payment operations across 10 banking partners — similar to managing PSP relationships in the UPI ecosystem"</td></tr>
+        <tr><td><strong>NPCI</strong></td><td>National Payments Corporation of India — operates UPI, RuPay, IMPS</td><td>Know NPCI's 30% volume cap, deadline Dec 2026</td></tr>
+        <tr><td><strong>TPAP</strong></td><td>Third-Party Application Provider — Google Pay, PhonePe (they provide the app, banks provide the rails)</td><td>Google Pay is a TPAP with ~35% UPI market share</td></tr>
+        <tr><td><strong>PSP</strong></td><td>Payment Service Provider — banks that provide UPI infrastructure</td><td>Your 10-bank infrastructure = multi-PSP management</td></tr>
+        <tr><td><strong>P2P / P2M</strong></td><td>Person-to-Person / Person-to-Merchant — P2M is 63% of UPI volume and growing</td><td>P2M growth = merchant adoption = partnership opportunity</td></tr>
+        <tr><td><strong>UPI Circle</strong></td><td>Feature allowing trusted people to make payments without linking their bank</td><td>New feature requiring partnership GTM — exactly this role's work</td></tr>
+        <tr><td><strong>UPI Autopay</strong></td><td>Recurring payment mandates — 1.27B mandates in Nov 2025</td><td>Subscription/recurring revenue partnership opportunity</td></tr>
+        <tr><td><strong>Merchant Center</strong></td><td>Google's platform where merchants upload product data for Shopping listings</td><td>The merchant onboarding pipeline for Shopping</td></tr>
+        <tr><td><strong>Shopping Graph</strong></td><td>Google's product entity database — crawls web, YouTube, manufacturer sites</td><td>The data infrastructure powering product discovery</td></tr>
+        <tr><td><strong>ONDC</strong></td><td>Open Network for Digital Commerce — India's open e-commerce protocol</td><td>Competitive context — government-backed alternative to platform commerce</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card card-amber">
+    <h3>Commerce & Shopping Vocabulary</h3>
+    <table>
+      <thead><tr><th>Term</th><th>What It Means</th></tr></thead>
+      <tbody>
+        <tr><td><strong>YouTube Shopping Affiliate</strong></td><td>Creator programme — tag products in videos, earn commission. 40%+ eligible creators enrolled in India.</td></tr>
+        <tr><td><strong>Shoppable CTV / Mastheads</strong></td><td>Commerce-enabled TV and mobile ad formats — creator content → purchase</td></tr>
+        <tr><td><strong>Partnership Ads</strong></td><td>Brands amplify creator content with measurement — 2.3x ROAS vs paid social</td></tr>
+        <tr><td><strong>Quick Commerce</strong></td><td>10-30 min delivery (Blinkit, Zepto, Instamart) — projected $50B segment</td></tr>
+        <tr><td><strong>Creator-led Commerce</strong></td><td>Creators projected to influence 30% of retail spend — Google's strategic bet</td></tr>
+        <tr><td><strong>Agentic AI Commerce</strong></td><td>Google's vision: AI agents that browse, compare, checkout for users. Gemini-powered.</td></tr>
+        <tr><td><strong>PA-CB</strong></td><td>Payment Aggregator – Cross Border — RBI license for cross-border payments</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card card-purple">
+    <h3>Sobha → Google Commerce Translation Map</h3>
+    <table>
+      <thead><tr><th>Your Current Language</th><th>Google Commerce Translation</th></tr></thead>
+      <tbody>
+        <tr><td>Dues Collections Programme</td><td>Payment Operations & Revenue Realisation Programme</td></tr>
+        <tr><td>10-bank escrow infrastructure</td><td>Multi-PSP / Multi-Partner Payment Infrastructure</td></tr>
+        <tr><td>AED 12.97B collections target</td><td>Annual Revenue Operations OKR — AED 12.97B objective</td></tr>
+        <tr><td>Portfolio delinquency rate (4.4%)</td><td>Payment Conversion Rate / Portfolio Health Score</td></tr>
+        <tr><td>T−25/T+30 framework</td><td>Partnership Performance Intervention Framework</td></tr>
+        <tr><td>PCC TAT (20→3 days)</td><td>Partner Process Velocity Improvement Programme</td></tr>
+        <tr><td>Payment Request rejection rate (49%)</td><td>Quality Gate / First-Pass Yield Metric</td></tr>
+        <tr><td>Mortgage MOUs with ADIB/NBQ/RAK</td><td>Partnership GTM — New Partner Onboarding & Activation</td></tr>
+        <tr><td>NPV AED 652M model</td><td>Business Case & Executive Decision Support</td></tr>
+        <tr><td>70+ MI reports</td><td>Business Intelligence Platform / Operational Data Layer</td></tr>
+        <tr><td>FY2026 annual planning</td><td>Annual Planning & OKR Alignment</td></tr>
+        <tr><td>Weekly/Monthly/Quarterly reviews</td><td>Operating Rhythm / Cadence Governance</td></tr>
+        <tr><td>India hub (42-person deployment)</td><td>Regional Operations Build & Org Design</td></tr>
+        <tr><td>MD/CEO, CRO, CCO engagement</td><td>VP/Director-level Executive Stakeholder Management</td></tr>
+        <tr><td>Salesforce 0→1</td><td>Platform GTM — Solution Design & Enterprise Rollout</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TAB 5: STAR MAP -->
+<div class="tab-panel" id="tab-stars">
+  <div class="section-title">STAR Story Map</div>
+  <div class="section-sub">6 stories mapped to the 6 JD responsibilities — quantified outcomes ready</div>
+
+  <div class="star-card">
+    <h4>S1: OKR Governance & Operating Rhythm → JD #3 (QBR/OKR Operations)</h4>
+    <p><span class="star-letter star-s">S</span> FY2026: Sobha set an AED 8.2B collections target — the most ambitious in history. No structured framework to decompose it across 77 people in two geographies.</p>
+    <p><span class="star-letter star-t">T</span> Translate top-level strategic target into executable quarterly plan with individual accountability, tracking infrastructure, and governance cadence.</p>
+    <p><span class="star-letter star-a">A</span> Designed multi-layered OKR decomposition: function → team → individual KPIs. Built tracking via 70+ report Salesforce ecosystem. Weekly team reviews, monthly CRO reviews, quarterly CCO reviews. 60% appraisal weightage to ensure alignment. Built early-warning signals for delinquency creep and payment velocity drops.</p>
+    <p><span class="star-letter star-r">R</span> <strong>+62% YoY collections performance. All 12 programme deliverables on schedule. Framework scales — same architecture used for prior 14.9x growth.</strong></p>
+  </div>
+
+  <div class="star-card">
+    <h4>S2: Partnership GTM & Platform Rollout → JD #2 (Define Partnerships GTM)</h4>
+    <p><span class="star-letter star-s">S</span> Sobha had zero CRM platform for collections — all operations ran on spreadsheets. No standardised data layer, no workflow automation, no reporting infrastructure.</p>
+    <p><span class="star-letter star-t">T</span> Lead solution design and enterprise-wide rollout of Salesforce as the operational backbone for the entire collections function.</p>
+    <p><span class="star-letter star-a">A</span> Ran 6-stakeholder discovery process across Operations, Finance, Legal, Technology, Sales, and Management. Defined requirements, designed workflows, built adoption playbook. Deployed across 77 users in 2 geographies. Created 70+ reports serving as single source of truth across 4 legal entities.</p>
+    <p><span class="star-letter star-r">R</span> <strong>0→1 platform build. 70+ live reports. 77 users across 2 geographies. Single source of truth across 4 legal entities. The platform is now the permanent operating infrastructure.</strong></p>
+  </div>
+
+  <div class="star-card">
+    <h4>S3: Business Performance "Unlock" → JD #4 (Analyze & Provide Unlocks)</h4>
+    <p><span class="star-letter star-s">S</span> Collection probability varied dramatically across the payment lifecycle, but no structured framework existed to identify when intervention was most effective.</p>
+    <p><span class="star-letter star-t">T</span> Design a data-driven intervention model that identifies the optimal engagement window and deploys resources accordingly.</p>
+    <p><span class="star-letter star-a">A</span> Analyzed portfolio behaviour across thousands of accounts. Identified a 55-day critical window (T−25 to T+30 around due date) where collection probability was highest. Designed operational model with differentiated contact strategies at each phase. Built tracking infrastructure to monitor adherence and effectiveness.</p>
+    <p><span class="star-letter star-r">R</span> <strong>Framework adopted organisation-wide. Portfolio delinquency reduced 74% (16.7%→4.4%). Became the proprietary operational model for the function.</strong></p>
+  </div>
+
+  <div class="star-card">
+    <h4>S4: Cross-Functional Programme Execution → JD #5 (Business Planning & Coordination)</h4>
+    <p><span class="star-letter star-s">S</span> PCC (Payment Completion Certificate) processing took 20 days — spanning Operations, Finance, Legal, and Customer Service with no single owner.</p>
+    <p><span class="star-letter star-t">T</span> Reduce PCC TAT to under 5 days while maintaining compliance rigour for a monthly volume of 281 transactions.</p>
+    <p><span class="star-letter star-a">A</span> Mapped end-to-end process, identified 6 bottlenecks (3 systemic, 3 handoff-related). Designed parallel processing workflow. Partnered with Legal for pre-approved templates, Finance for automated clearance triggers, Operations for restructured verification. Implemented daily monitoring at each handoff point.</p>
+    <p><span class="star-letter star-r">R</span> <strong>TAT: 20→3 days (85% reduction). Volume: 281 transactions/month without additional headcount. Cross-functional process redesign now permanent.</strong></p>
+  </div>
+
+  <div class="star-card">
+    <h4>S5: Executive Decision Support → JD #1 (Forward-Looking Recommendations)</h4>
+    <p><span class="star-letter star-s">S</span> Sobha's collections relied on contractual due-date payments. Opportunity existed to accelerate cash flow through incentivised prepayments, but required a rigorous business case.</p>
+    <p><span class="star-letter star-t">T</span> Build financial model, quantify NPV, and secure MD/CEO approval for an incentive-driven prepayment programme.</p>
+    <p><span class="star-letter star-a">A</span> Designed NPV model with scenario analysis and sensitivity testing. Quantified AED 652M incremental inflow vs AED 21.2M cost. Demonstrated 32% cost advantage over bank financing. Prepared executive-ready framing with multiple scrutiny rounds. Defended model at MD/CEO and CRO levels with zero material concessions.</p>
+    <p><span class="star-letter star-r">R</span> <strong>Programme approved. AED 652M incremental inflow. 248-day average prepay. 32% cheaper than bank financing. Zero material concessions during defence.</strong></p>
+  </div>
+
+  <div class="star-card">
+    <h4>S6: Regional Voice & Org Build → JD #6 (APAC Voice on Product Priorities)</h4>
+    <p><span class="star-letter star-s">S</span> Sobha's collections function was entirely Dubai-based. Growing volume and the need for specialised MIS and operations capability required a regional expansion.</p>
+    <p><span class="star-letter star-t">T</span> Design and deploy a 42-person India operations hub across 3 sub-functions with dedicated governance, reporting, and quality architecture.</p>
+    <p><span class="star-letter star-a">A</span> Designed the org structure: Operations (38 under Mathews Babu), QCG (12 under Garima Shah), MIS (15 under Asjad Mohammed). Built governance model with India-specific KPI dashboards. Established quality parity between India and Dubai through standardised processes and daily monitoring. India hub now produces 39 reports independently.</p>
+    <p><span class="star-letter star-r">R</span> <strong>42-person hub live. 39 reports in production. Zero quality gap with onshore team. Team members authoring MD-approved documents autonomously.</strong></p>
+  </div>
+</div>
+
+<!-- TAB 6: PREP PLAN -->
+<div class="tab-panel" id="tab-prep">
+  <div class="section-title">4–6 Week Preparation Roadmap</div>
+  <div class="section-sub">80% shared with your existing Google track prep — incremental effort is Payments/Commerce domain</div>
+
+  <div class="section-title" style="font-size:16px">Sprint 1 — Domain Immersion (Weeks 1–2)</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-week">Week 1</div>
+      <div>
+        <div class="tl-title">UPI & Digital Payments Deep Dive</div>
+        <div class="tl-desc">Study: NPCI UPI architecture, TPAP vs PSP model, Google Pay India positioning (35% market share, #2 to PhonePe). Read: NPCI volume cap circular (Dec 2026 deadline), RBI digital payments framework. Understand: P2P vs P2M split (P2M = 63% of volume), UPI Lite, UPI Circle, Autopay mandates. Your 10-bank infrastructure is direct vocabulary — map each bank to a PSP equivalent.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Week 2</div>
+      <div>
+        <div class="tl-title">Google Commerce Ecosystem Study</div>
+        <div class="tl-desc">Study: Google Merchant Center (product feeds, free vs paid listings), YouTube Shopping India (affiliate programme, 3M+ videos tagged, Flipkart/Myntra/Nykaa partnerships). Read: Google-Deloitte India e-commerce report (Apr 2026 — $250B by 2030), Google blog posts on AI-powered shopping (Gemini, agentic commerce). Understand: "Inspired, Intelligent, Instant, Immersive" framework.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:16px">Sprint 2 — Certifications & Tool Proficiency (Weeks 3–4)</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-week">Week 3</div>
+      <div>
+        <div class="tl-title">Google Skillshop Certifications (Shared Investment)</div>
+        <div class="tl-desc">Complete Google Ads Search cert (~4hrs) + Google Ads Measurement cert (~3hrs). These are shared with GBO Tools and gTech tracks — zero wasted effort. Signals Google ecosystem commitment on LinkedIn.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Week 4</div>
+      <div>
+        <div class="tl-title">GA4 + Looker Studio + OKR Framework</div>
+        <div class="tl-desc">Complete GA4 certification (Skillshop, free, ~6hrs). Build 1 Looker Studio dashboard: mock Commerce Partnership Performance Tracker (partner onboarding funnel, payment volume trends, feature adoption rates). Read "Measure What Matters" (Doerr) — understand Google's OKR methodology. Write 3 OKRs from your current role in Google format.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:16px">Sprint 3 — AI Portfolio & Outreach (Weeks 5–6)</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-week">Week 5</div>
+      <div>
+        <div class="tl-title">Build AI Portfolio Project — P14: Commerce Partnership Health Dashboard</div>
+        <div class="tl-desc">Design and demo-build an AI-powered dashboard that monitors payment partnership performance across APAC markets. Mock data: 5 payment partners × 4 APAC markets × 6 months. AI layer: anomaly detection on transaction volume drops, automated root cause hypothesis, partnership "unlock" recommendations. Stack: Python + Claude API + Streamlit + Looker Studio. This directly mirrors the role's core function.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Week 6</div>
+      <div>
+        <div class="tl-title">Resume Build + Alumni Network + Application</div>
+        <div class="tl-desc">Build Commerce S&O resume (v1) with payments/commerce reframing. Search LinkedIn for IIM Udaipur / BITS Pilani alumni at Google India — specifically in Global Partnerships, Commerce, or Payments teams. Request informational conversations. Apply with: reframed resume, AI portfolio demo, 3+ Skillshop certs, and warm referral. The BITS+IIM profile is rare and creates genuine asymmetry.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-blue" style="margin-top:16px">
+    <h3>Certification Priority Stack</h3>
+    <table>
+      <thead><tr><th>#</th><th>Certification</th><th>Platform</th><th>Cost</th><th>Shared With</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Google Ads Search</td><td>Skillshop</td><td>Free</td><td>GBO, gTech SDM, gTech Ads CX</td></tr>
+        <tr><td>2</td><td>Google Ads Measurement</td><td>Skillshop</td><td>Free</td><td>GBO, gTech SDM, gTech Ads CX</td></tr>
+        <tr><td>3</td><td>GA4</td><td>Skillshop</td><td>Free</td><td>GBO, gTech SDM, gTech Ads CX</td></tr>
+        <tr><td>4</td><td>Looker Studio (self-built dashboards)</td><td>Google</td><td>Free</td><td>GBO, gTech SDM, gTech Ads CX</td></tr>
+        <tr><td>5</td><td>PMI-ACP</td><td>PMI</td><td>~$495</td><td>All roles</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card card-green">
+    <h3>AI Portfolio Project — P14</h3>
+    <p><strong>Commerce Partnership Health Dashboard</strong></p>
+    <p style="margin-top:6px"><strong>Concept:</strong> AI-powered dashboard monitoring payment & shopping partnership performance across APAC markets. Detects underperformance, generates "unlock" hypotheses, and drafts QBR briefing packs.</p>
+    <p style="margin-top:6px"><strong>Mock data:</strong> 5 partners (banks/PSPs/merchants) × 4 markets (India, SEA, Japan, ANZ) × 6 months. Metrics: transaction volume, partner activation rate, feature adoption, settlement velocity, merchant onboarding funnel conversion.</p>
+    <p style="margin-top:6px"><strong>AI layer:</strong> Claude/GPT-4o anomaly detection on volume trends; automated root cause hypothesis ("Partner X's volume drop in Indonesia correlates with a settlement cycle delay — recommend SLA review"); QBR pre-read generation.</p>
+    <p style="margin-top:6px"><strong>Stack:</strong> Python + Claude API + Streamlit (interactive demo) + Looker Studio (reporting layer).</p>
+    <p style="margin-top:6px"><strong>Why it works:</strong> This mirrors exactly what the role does — analyze partnership performance, identify unlocks, and prepare executive briefings. Walking through this in an interview demonstrates you can do the job on Day 1.</p>
+  </div>
+</div>
+
+<!-- TAB 7: INTERVIEW PREP -->
+<div class="tab-panel" id="tab-interview">
+  <div class="section-title">Interview Preparation</div>
+  <div class="section-sub">Google S&O interview format + pre-mapped answers for common questions</div>
+
+  <div class="card card-blue">
+    <h3>Google Interview Format — S&O Roles (Typical 4–5 Rounds)</h3>
+    <p><strong>Round 1 — Recruiter Screen:</strong> Fit, motivation, experience alignment. 30 min. They check: years of experience, executive stakeholder work, why Google, why Commerce.</p>
+    <p style="margin-top:6px"><strong>Round 2 — Hiring Manager:</strong> Depth on programme leadership, strategic thinking, operating rhythm experience. 45–60 min. Heavy on STAR stories with quantified outcomes.</p>
+    <p style="margin-top:6px"><strong>Round 3 — Cross-Functional Panel:</strong> Stakeholder management, analytical thinking, ambiguity navigation. May include a case study or business scenario. 45 min.</p>
+    <p style="margin-top:6px"><strong>Round 4 — Leadership Round:</strong> Executive communication, strategic vision, "Googleyness." 30–45 min. They evaluate intellectual curiosity, comfort with ambiguity, collaborative leadership.</p>
+    <p style="margin-top:6px"><strong>Every story needs a quantified outcome.</strong> Google evaluates "Googleyness" — intellectual curiosity, comfort with ambiguity, collaborative leadership, doing the right thing.</p>
+  </div>
+
+  <div class="section-title" style="font-size:16px; margin-top:20px">Question → Story Router</div>
+  <table>
+    <thead><tr><th>Question Theme</th><th>Primary Story</th><th>Backup Story</th></tr></thead>
+    <tbody>
+      <tr><td>"Tell me about a strategic initiative you drove"</td><td>S5 (NPV AED 652M)</td><td>S1 (OKR Governance)</td></tr>
+      <tr><td>"How do you run QBRs / operating rhythm?"</td><td>S1 (3-tier cadence)</td><td>S2 (MI ecosystem)</td></tr>
+      <tr><td>"How do you identify and resolve underperformance?"</td><td>S3 (T−25/T+30 framework)</td><td>S4 (PCC TAT 85% reduction)</td></tr>
+      <tr><td>"Tell me about a GTM or launch you led"</td><td>S2 (Salesforce 0→1)</td><td>Mortgage MOU partnerships</td></tr>
+      <tr><td>"How do you coordinate cross-functionally?"</td><td>S4 (PCC: 4 departments)</td><td>S2 (6-stakeholder discovery)</td></tr>
+      <tr><td>"How do you influence leadership?"</td><td>S5 (NPV defence at MD/CEO)</td><td>PR 49% standard under pressure</td></tr>
+      <tr><td>"Tell me about scaling something"</td><td>S6 (India hub: 0→42)</td><td>14.9x programme scale</td></tr>
+      <tr><td>"How do you use data for decisions?"</td><td>S3 (T−25/T+30 data analysis)</td><td>S1 (70+ reports)</td></tr>
+      <tr><td>"How do you handle ambiguity?"</td><td>S2 (Salesforce 0→1, no CRM existed)</td><td>S6 (India hub greenfield)</td></tr>
+      <tr><td>"Tell me about a failure"</td><td>Sobha One App (honest adoption story)</td><td>SQL delegation lesson</td></tr>
+      <tr><td>"Why Google? Why Commerce?"</td><td>See framework below</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card card-green" style="margin-top:16px">
+    <h3>"Why Google? Why Commerce?" Framework</h3>
+    <p><strong>Why Google:</strong> "I've spent six years building operational infrastructure that powers payment collection at scale — AED 12.97B across 77 people. Google's Commerce partnerships are building the infrastructure that powers how India transacts. I want to bring the same operational rigour I've applied to real estate payments to the platform that processes 6.7 billion UPI transactions monthly."</p>
+    <p style="margin-top:8px"><strong>Why Commerce specifically:</strong> "Commerce sits at the intersection of payments, partnerships, and product — exactly where my experience converges. My 10-bank payment infrastructure, multi-stakeholder coordination, and data-driven governance map directly to managing payment partnerships across APAC. And I'm energised by the macro — India's e-commerce reaching $250B by 2030, creator-led commerce influencing 30% of spending, and AI transforming product discovery. This is the most consequential commercial transformation in APAC."</p>
+    <p style="margin-top:8px"><strong>Why S&O:</strong> "I've been doing S&O for six years — I just haven't been calling it that. My QBR governance, OKR architecture, cross-functional programme management, and executive decision support are the same capabilities Google's S&O function runs on. The difference is scale and domain — and the domain gap is narrower than you'd think when your current job is literally managing payment operations."</p>
+  </div>
+
+  <div class="card card-amber">
+    <h3>Assertiveness Proof Points (For Low-D DISC Gap)</h3>
+    <p>Google's leadership rounds probe for executive presence. Have these ready:</p>
+    <p style="margin-top:8px"><strong>1.</strong> Held PR rejection documentation standard at 49% despite pressure to relax — position vindicated by data.</p>
+    <p><strong>2.</strong> Defended NPV model at MD/CEO level through multiple scrutiny rounds — zero material concessions.</p>
+    <p><strong>3.</strong> Escalated 3 blocked risk register items to CCO proactively before due dates — didn't wait for escalation to be forced.</p>
+  </div>
+
+  <div class="card card-purple">
+    <h3>Case Study Preparation — Likely Scenario</h3>
+    <p><strong>Scenario type:</strong> "Google Pay is launching a new feature (e.g., UPI credit line) in 3 APAC markets. How would you design the partnership GTM?"</p>
+    <p style="margin-top:6px"><strong>Your framework:</strong></p>
+    <p>1. <strong>Market Assessment:</strong> Regulatory readiness, partner landscape, consumer readiness by market</p>
+    <p>2. <strong>Partner Prioritisation:</strong> Which PSPs/banks to onboard first (volume, capability, strategic value)</p>
+    <p>3. <strong>GTM Playbook:</strong> Onboarding workflow, integration SLAs, testing milestones, launch criteria</p>
+    <p>4. <strong>OKR Definition:</strong> Activation rate, transaction volume target, time-to-live per partner</p>
+    <p>5. <strong>Operating Rhythm:</strong> Weekly partner status, monthly performance review, quarterly strategic assessment</p>
+    <p>6. <strong>Unlock Identification:</strong> Early warning indicators, escalation triggers, intervention playbook</p>
+    <p style="margin-top:8px"><em>This framework maps directly to your Salesforce GTM, mortgage MOU partnerships, and 3-tier review cadence. Same structure, different context.</em></p>
+  </div>
+</div>
+
+<!-- TAB 8: SALARY & NEGOTIATION -->
+<div class="tab-panel" id="tab-salary">
+  <div class="section-title">Salary Intelligence & Negotiation</div>
+  <div class="section-sub">Google India compensation structure for S&O roles</div>
+
+  <div class="card card-blue">
+    <h3>Google India Levelling — S&O Roles</h3>
+    <p>This JD reads as <strong>L5 (Senior) to low L6 (Lead)</strong>. The "8 years preferred" + "MBA preferred" + "executive stakeholders" signals L6 aspiration but L5 entry is realistic given the domain gap. Google India S&O compensation includes base + bonus + RSU (4-year vesting with front-loaded Year 1 grant).</p>
+  </div>
+
+  <div class="responsive-grid">
+    <div class="card card-green">
+      <h3>L5 — S&O Manager</h3>
+      <p><strong>Total Comp: ₹70L – ₹88L</strong></p>
+      <p>Base: ~₹45–55L</p>
+      <p>Bonus: 15–20%</p>
+      <p>RSU: ~₹15–25L/yr vesting</p>
+    </div>
+    <div class="card card-amber">
+      <h3>L6 — S&O Lead</h3>
+      <p><strong>Total Comp: ₹90L – ₹115L</strong></p>
+      <p>Base: ~₹60–72L</p>
+      <p>Bonus: 15–20%</p>
+      <p>RSU: ~₹25–40L/yr vesting</p>
+    </div>
+  </div>
+
+  <div class="card card-purple">
+    <h3>Realistic Landing Zone</h3>
+    <p><strong>Target: ₹70L – ₹95L total comp</strong></p>
+    <p>Entry at L5 with strong push for L6 consideration given team scale and programme ownership. Negotiate toward L6 by anchoring on: 77-person team, AED 12.97B programme, executive-level stakeholder management.</p>
+  </div>
+
+  <div class="card card-blue">
+    <h3>Negotiation Strategy</h3>
+    <p><strong>Anchor 1 — Scale:</strong> "I manage a AED 12.97B annual programme with 77 people — that's L6-scale programme ownership in any S&O framework."</p>
+    <p style="margin-top:6px"><strong>Anchor 2 — CTC:</strong> Your current Dubai CTC (converting AED to INR at ~22.5x) provides a legitimate anchor. Include total comp with housing/transport allowances.</p>
+    <p style="margin-top:6px"><strong>Anchor 3 — Competing offers:</strong> If AmEx, Oaktree, or Uber conversations are active simultaneously, signal competing interest without specifics. Google responds to competitive pressure.</p>
+    <p style="margin-top:6px"><strong>RSU negotiation:</strong> Push for front-loaded Year 1 RSU grant. Google's standard is 4-year vesting — the Year 1 grant size matters more than total grant. Ask for signing bonus (₹3–5L) if base negotiation stalls.</p>
+    <p style="margin-top:6px"><strong>Level negotiation:</strong> If offered L5, ask: "What would the path to L6 look like in the first 12–18 months? Can we document expected milestones?" This signals ambition without rejecting the offer.</p>
+  </div>
+
+  <div class="card card-green">
+    <h3>Application Strategy — Do Not Apply Cold</h3>
+    <p>Google's ATS for S&O roles filters heavily on keyword match. Before applying:</p>
+    <p style="margin-top:6px"><strong>1.</strong> Get Skillshop certs visible on LinkedIn (Google Ads Search, GA4)</p>
+    <p><strong>2.</strong> Rewrite LinkedIn headline: "Strategy & Operations | Payment Operations Programme Leadership | OKR Governance | AI-Augmented Operations | IIM Udaipur · BITS Pilani"</p>
+    <p><strong>3.</strong> Connect with 2–3 IIM/BITS alumni at Google India for a referral conversation</p>
+    <p><strong>4.</strong> The referral multiplier at Google is 5–8x on screening chance</p>
+    <p><strong>5.</strong> Apply with Commerce-reframed resume + portfolio link + referral</p>
+  </div>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

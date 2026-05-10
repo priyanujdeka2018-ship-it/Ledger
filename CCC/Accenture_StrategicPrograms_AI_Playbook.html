@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accenture Strategic Programs Manager — Career Playbook | Priyanuj Deka</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0f14;
+  --surface: #151921;
+  --surface2: #1c2230;
+  --border: #2a3040;
+  --text: #e2e6ed;
+  --text-muted: #8b93a5;
+  --accent: #a855f7;
+  --accent2: #7c3aed;
+  --accent-glow: rgba(168,85,247,0.15);
+  --green: #22c55e;
+  --green-bg: rgba(34,197,94,0.1);
+  --amber: #f59e0b;
+  --amber-bg: rgba(245,158,11,0.1);
+  --red: #ef4444;
+  --red-bg: rgba(239,68,68,0.1);
+  --blue: #3b82f6;
+  --blue-bg: rgba(59,130,246,0.1);
+  --cyan: #06b6d4;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+h1,h2,h3,h4 { font-family:'Instrument Serif',serif; font-weight:400; }
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #1a1030 0%, #0c0f14 40%, #0f1a2e 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 48px 24px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content:'';position:absolute;top:-60%;left:-20%;width:140%;height:200%;
+  background:radial-gradient(ellipse at 50% 30%, rgba(168,85,247,0.08) 0%, transparent 60%);
+  pointer-events:none;
+}
+.hero-badge {
+  display:inline-block; background:var(--accent-glow); border:1px solid rgba(168,85,247,0.3);
+  color:var(--accent); font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
+  padding:6px 16px; border-radius:20px; margin-bottom:16px;
+}
+.hero h1 { font-size:clamp(28px,5vw,44px); color:#fff; margin-bottom:4px; line-height:1.15; }
+.hero-sub { font-size:15px; color:var(--text-muted); margin-bottom:28px; max-width:520px; margin-left:auto; margin-right:auto; }
+.hero-stats {
+  display:flex; justify-content:center; gap:24px; flex-wrap:wrap;
+}
+.stat-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:16px 20px; min-width:110px; text-align:center;
+}
+.stat-val { font-family:'Instrument Serif',serif; font-size:28px; color:#fff; }
+.stat-val .arrow { color:var(--accent); font-size:18px; margin:0 4px; }
+.stat-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
+
+/* TABS */
+.tab-bar {
+  position:sticky; top:0; z-index:100; background:var(--bg);
+  border-bottom:1px solid var(--border);
+  display:flex; overflow-x:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.tab-bar::-webkit-scrollbar { display:none; }
+.tab-btn {
+  flex-shrink:0; background:none; border:none; color:var(--text-muted);
+  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500;
+  padding:14px 18px; cursor:pointer; border-bottom:2px solid transparent;
+  transition:all 0.2s;
+}
+.tab-btn:hover { color:var(--text); }
+.tab-btn.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+/* PANELS */
+.panel { display:none; max-width:820px; margin:0 auto; padding:32px 20px 60px; }
+.panel.active { display:block; }
+
+/* SECTION TITLES */
+.stitle { font-size:24px; color:#fff; margin-bottom:4px; }
+.ssub { font-size:13px; color:var(--text-muted); margin-bottom:24px; }
+
+/* CARDS */
+.card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:20px 22px; margin-bottom:16px;
+}
+.card h3 { font-size:19px; color:#fff; margin-bottom:8px; }
+.card p { font-size:14px; color:var(--text); }
+
+/* BADGES */
+.badge {
+  display:inline-block; font-size:11px; font-weight:600; padding:3px 10px;
+  border-radius:12px; margin-right:6px; margin-bottom:6px;
+}
+.b-purple { background:var(--accent-glow); color:var(--accent); border:1px solid rgba(168,85,247,0.25); }
+.b-green { background:var(--green-bg); color:var(--green); border:1px solid rgba(34,197,94,0.25); }
+.b-amber { background:var(--amber-bg); color:var(--amber); border:1px solid rgba(245,158,11,0.25); }
+.b-red { background:var(--red-bg); color:var(--red); border:1px solid rgba(239,68,68,0.25); }
+.b-blue { background:var(--blue-bg); color:var(--blue); border:1px solid rgba(59,130,246,0.25); }
+
+/* ICON CARDS */
+.icon-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-bottom:24px; }
+.icon-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:18px; display:flex; gap:12px; align-items:flex-start;
+}
+.icon-card .ic-emoji { font-size:22px; flex-shrink:0; margin-top:2px; }
+.icon-card h4 { font-size:15px; color:#fff; margin-bottom:3px; }
+.icon-card p { font-size:13px; color:var(--text-muted); }
+
+/* RESPONSIBILITY TABLE */
+.resp-table { width:100%; border-collapse:collapse; margin-bottom:24px; font-size:13px; }
+.resp-table th {
+  text-align:left; padding:10px 12px; background:var(--surface2);
+  color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.8px; font-size:11px;
+  border-bottom:1px solid var(--border);
+}
+.resp-table td { padding:12px; border-bottom:1px solid var(--border); vertical-align:top; }
+.resp-table td:last-child { white-space:nowrap; }
+.wt-critical { color:var(--red); font-weight:600; }
+.wt-high { color:var(--amber); font-weight:600; }
+.wt-medium { color:var(--cyan); font-weight:500; }
+
+/* FIT BARS */
+.fit-item { margin-bottom:14px; }
+.fit-label { font-size:13px; color:var(--text); margin-bottom:4px; display:flex; justify-content:space-between; }
+.fit-bar { height:6px; background:var(--surface2); border-radius:3px; overflow:hidden; }
+.fit-fill { height:100%; border-radius:3px; transition:width 0.6s ease; }
+.fill-green { background:var(--green); }
+.fill-amber { background:var(--amber); }
+.fill-red { background:var(--red); }
+
+/* TIMELINE */
+.timeline { position:relative; padding-left:28px; margin-bottom:24px; }
+.timeline::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:2px; background:var(--border); }
+.tl-item { position:relative; margin-bottom:24px; }
+.tl-dot {
+  position:absolute; left:-24px; top:4px; width:12px; height:12px;
+  border-radius:50%; border:2px solid var(--accent); background:var(--bg);
+}
+.tl-dot.now { background:var(--accent); box-shadow:0 0 8px var(--accent); }
+.tl-period { font-size:11px; color:var(--accent); font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+.tl-item h4 { font-size:16px; color:#fff; margin-bottom:6px; }
+.tl-item p { font-size:13px; color:var(--text-muted); }
+
+/* AI PROJECT BOX */
+.ai-box {
+  background:linear-gradient(135deg, rgba(168,85,247,0.06), rgba(59,130,246,0.04));
+  border:1px solid rgba(168,85,247,0.2); border-radius:12px;
+  padding:20px; margin-bottom:16px;
+}
+.ai-tag { font-size:10px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px; }
+.ai-title { font-family:'Instrument Serif',serif; font-size:18px; color:#fff; margin-bottom:8px; }
+.ai-body { font-size:13px; color:var(--text-muted); margin-bottom:12px; }
+.ai-stack { display:flex; flex-wrap:wrap; gap:6px; }
+.tag { font-size:11px; padding:3px 10px; border-radius:10px; font-weight:500; }
+.tag-blue { background:var(--blue-bg); color:var(--blue); }
+.tag-gold { background:var(--amber-bg); color:var(--amber); }
+.tag-purple { background:var(--accent-glow); color:var(--accent); }
+
+/* STAR */
+.star-box { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:16px; }
+.star-box h4 { font-size:16px; color:#fff; margin-bottom:4px; }
+.star-box .star-maps { font-size:12px; color:var(--accent); margin-bottom:12px; }
+.star-row { display:flex; gap:10px; margin-bottom:8px; }
+.star-label {
+  flex-shrink:0; width:68px; font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:1px; padding-top:2px;
+}
+.sl-s { color:#06b6d4; } .sl-t { color:var(--amber); } .sl-a { color:var(--green); } .sl-r { color:var(--accent); }
+.star-content { font-size:13px; color:var(--text-muted); }
+
+/* VOCAB */
+.vocab-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:16px 18px; margin-bottom:12px;
+}
+.vocab-term { font-size:15px; color:var(--accent); font-weight:600; margin-bottom:4px; }
+.vocab-def { font-size:13px; color:var(--text); margin-bottom:6px; }
+.vocab-sobha { font-size:12px; color:var(--text-muted); font-style:italic; padding-left:12px; border-left:2px solid var(--accent-glow); }
+
+/* SALARY TABLE */
+.sal-table { width:100%; border-collapse:collapse; margin-bottom:20px; font-size:13px; }
+.sal-table th {
+  text-align:left; padding:10px 12px; background:var(--surface2);
+  color:var(--text-muted); font-weight:600; font-size:11px; text-transform:uppercase;
+  letter-spacing:0.8px; border-bottom:1px solid var(--border);
+}
+.sal-table td { padding:10px 12px; border-bottom:1px solid var(--border); }
+
+/* PHRASE BOX */
+.phrase {
+  background:var(--surface2); border-left:3px solid var(--accent);
+  padding:16px 18px; font-size:14px; color:var(--text); margin-bottom:16px;
+  border-radius:0 8px 8px 0; font-style:italic;
+}
+
+/* TRANSLATION MAP */
+.trans-row {
+  display:flex; align-items:center; gap:12px; padding:10px 0;
+  border-bottom:1px solid var(--border); font-size:13px;
+}
+.trans-from { flex:1; color:var(--text-muted); }
+.trans-arrow { color:var(--accent); font-weight:700; flex-shrink:0; }
+.trans-to { flex:1; color:#fff; font-weight:500; }
+
+/* RESPONSIVE */
+@media(max-width:600px) {
+  .hero { padding:32px 16px 28px; }
+  .hero-stats { gap:12px; }
+  .stat-card { min-width:90px; padding:12px 14px; }
+  .panel { padding:24px 16px 48px; }
+  .resp-table { font-size:12px; }
+  .icon-row { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">New Target · Parallel (3–4 mo)</div>
+  <h1>Accenture — Strategic Programs<br>Manager: Product, Data &amp; Agentic AI</h1>
+  <div class="hero-sub">Office of the COO → Enterprise Operations & Profitability Mgmt → Modernization Tower · CL7 Manager · Bengaluru</div>
+  <div class="hero-stats">
+    <div class="stat-card">
+      <div class="stat-val">72<span class="arrow">→</span>83</div>
+      <div class="stat-label">Fit Score</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">₹30–55L</div>
+      <div class="stat-label">Est. CTC</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">12–15yr</div>
+      <div class="stat-label">Exp. Ask</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">4–6 wk</div>
+      <div class="stat-label">Prep Time</div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar" id="tabBar">
+  <button class="tab-btn active" onclick="showTab('decode')">JD Decoded</button>
+  <button class="tab-btn" onclick="showTab('fit')">Your Fit</button>
+  <button class="tab-btn" onclick="showTab('gaps')">Gaps &amp; Plan</button>
+  <button class="tab-btn" onclick="showTab('salary')">Salary Intel</button>
+  <button class="tab-btn" onclick="showTab('ai')">AI Solutions</button>
+  <button class="tab-btn" onclick="showTab('star')">STAR Bank</button>
+  <button class="tab-btn" onclick="showTab('interview')">Interview Prep</button>
+  <button class="tab-btn" onclick="showTab('vocab')">Vocab Decoder</button>
+</div>
+
+<!-- ===================== TAB 1: JD DECODED ===================== -->
+<div class="panel active" id="decode">
+  <div class="stitle">What This Role Actually Is</div>
+  <div class="ssub">Stripping away the corporate language — decoded for Priyanuj</div>
+
+  <div class="card">
+    <h3>The Plain-English Summary</h3>
+    <p>Accenture's Office of the COO runs the firm's own internal operations. Within it, the Enterprise Operations & Profitability Management team is the group responsible for making Accenture itself more profitable — not client work, but internal transformation. The <strong>Modernization Tower</strong> is one of three sub-teams (alongside Activation and Realization), focused on reimagining how the firm operates using AI and data products.</p>
+    <p style="margin-top:10px">You would be the <strong>internal Product Lead for AI-powered decision tools</strong> used by Accenture's own senior leadership to make better profitability decisions. Think: CPO of an internal Agentic AI platform that ingests Finance, HR, Sales, and Delivery data and surfaces executive-grade intelligence. You're not building consulting deliverables for clients — you're building the systems that help Accenture's C-suite run the $67B company more efficiently.</p>
+  </div>
+
+  <div class="stitle" style="font-size:19px; margin-top:28px;">The Six Core Functions — Decoded</div>
+  <div class="ssub">What you will actually deliver every week at Accenture</div>
+
+  <div class="icon-row">
+    <div class="icon-card">
+      <div class="ic-emoji">🧭</div>
+      <div>
+        <h4>Product Strategy Owner</h4>
+        <p>Define multi-quarter roadmap for Agentic AI platforms. Own end-to-end accountability for adoption and business impact.</p>
+      </div>
+    </div>
+    <div class="icon-card">
+      <div class="ic-emoji">🤖</div>
+      <div>
+        <h4>Agentic AI Systems Lead</h4>
+        <p>Design and scale AI agents for enterprise decision support. Prompt engineering, agent orchestration, response governance.</p>
+      </div>
+    </div>
+    <div class="icon-card">
+      <div class="ic-emoji">📊</div>
+      <div>
+        <h4>Enterprise Data Integrator</h4>
+        <p>Unify data from Finance, HR, Sales, Delivery into AI-powered products. Define data architecture and guardrails.</p>
+      </div>
+    </div>
+    <div class="icon-card">
+      <div class="ic-emoji">💰</div>
+      <div>
+        <h4>Profitability Value Driver</h4>
+        <p>Link product outputs to financial KPIs. Quantify value realization. Drive structural efficiency and margin expansion.</p>
+      </div>
+    </div>
+    <div class="icon-card">
+      <div class="ic-emoji">🤝</div>
+      <div>
+        <h4>Stakeholder & CIO Partner</h4>
+        <p>Trusted advisor to senior leadership. Lead CIO/Global IT collaboration on architecture, security, deployment.</p>
+      </div>
+    </div>
+    <div class="icon-card">
+      <div class="ic-emoji">👥</div>
+      <div>
+        <h4>Team & Mentorship Lead</h4>
+        <p>Guide junior PMs and analysts. Ensure high-quality execution. Drive cross-functional alignment across ambiguous problem spaces.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="stitle" style="font-size:19px; margin-top:20px;">Responsibility Breakdown</div>
+  <div class="ssub">JD language → what it really means → weight</div>
+
+  <table class="resp-table">
+    <thead><tr><th>JD Responsibility</th><th>What It Really Means</th><th>Weight</th></tr></thead>
+    <tbody>
+      <tr><td>Define product strategy and multi-quarter roadmap for Agentic AI and enterprise data products</td><td>You own the strategic plan for what AI products get built, in what order, and why. You present this to C-suite and defend prioritisation decisions against competing demands.</td><td class="wt-critical">CRITICAL</td></tr>
+      <tr><td>Lead design and scaling of Agentic AI solutions for complex enterprise decision support</td><td>Build AI agent architectures — multi-step workflows that autonomously gather data, reason over it, and surface recommendations. You define how agents behave, what guardrails exist, and how outputs get validated.</td><td class="wt-critical">CRITICAL</td></tr>
+      <tr><td>Drive integration of enterprise data ecosystems into product and AI solutions</td><td>You are the bridge between siloed data (Finance ERP, HR systems, Delivery trackers, Sales CRM) and usable AI product inputs. You define what data feeds into which AI agent and with what governance.</td><td class="wt-high">HIGH</td></tr>
+      <tr><td>Own quantification of value realization, linking product outputs to financial metrics</td><td>Every product you build must have a measurable P&L impact. You define the ROI model, track adoption metrics, and report financial impact to leadership.</td><td class="wt-high">HIGH</td></tr>
+      <tr><td>Act as trusted advisor to senior leadership on product direction, trade-offs, investments</td><td>You sit in rooms with Managing Directors and the COO's office. You influence resource allocation, technology investment decisions, and strategic direction. Executive presence is non-negotiable.</td><td class="wt-high">HIGH</td></tr>
+      <tr><td>Lead collaboration with CIO / Global IT on architecture, data access, security, deployment</td><td>You partner with engineering leadership to industrialise prototypes into production-grade solutions. You navigate security reviews, data access approvals, and scalability requirements.</td><td class="wt-high">HIGH</td></tr>
+      <tr><td>Guide and mentor junior product managers / analysts</td><td>You're not just an IC — you lead a small team. You set quality standards, review deliverables, and develop junior talent. This is a people-management overlay on top of product ownership.</td><td class="wt-medium">MEDIUM</td></tr>
+      <tr><td>Establish best practices for prompt engineering, agent orchestration, response governance</td><td>You write the playbook for how AI agents are prompted, how multi-agent workflows are orchestrated, and how outputs are validated before reaching executives. This is the AI governance layer.</td><td class="wt-medium">MEDIUM</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card">
+    <h3>The Unstated Requirements (What They Won't Tell You)</h3>
+    <p><strong>Internal consulting DNA:</strong> The Office of the COO operates like an internal strategy consulting team. You will be expected to structure ambiguous problems, build decision frameworks, and present like a top-tier consultant — even though this isn't a client-facing role.</p>
+    <p style="margin-top:8px"><strong>Political navigation:</strong> The "three towers" structure (Activation, Realization, Modernization) means you operate in a matrixed internal environment where alignment and stakeholder management are as important as technical excellence.</p>
+    <p style="margin-top:8px"><strong>Accenture's AI transformation agenda:</strong> GenAI accounted for $1.5B in Q3 FY2025 bookings. This role exists because Accenture is applying to itself the same AI transformation it sells to clients. You are proof-of-concept for the firm's own AI story.</p>
+    <p style="margin-top:8px"><strong>Experience stretch:</strong> 12–15 years is the stated range. CL7 Manager is the first managerial band at Accenture. Your ~6 years post-MBA is below threshold, but the scope of what you've managed (AED 12.97B, 77 people) is above what most 12-year candidates bring. Frame through scale, not tenure.</p>
+  </div>
+</div>
+
+<!-- ===================== TAB 2: YOUR FIT ===================== -->
+<div class="panel" id="fit">
+  <div class="stitle">Your Fit — Requirement by Requirement</div>
+  <div class="ssub">How your Sobha experience maps to every JD requirement</div>
+
+  <div class="card" style="border-left:3px solid var(--accent); margin-bottom:24px;">
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <div>
+        <div style="font-size:42px; font-family:'Instrument Serif',serif; color:#fff;">72<span style="color:var(--accent); font-size:24px; margin:0 8px;">→</span>83</div>
+        <div style="font-size:12px; color:var(--text-muted);">Current → Addressable Fit</div>
+      </div>
+      <div style="flex:1; min-width:200px;">
+        <p style="font-size:13px; color:var(--text-muted);">Addressable to 83/100 with AI portfolio builds (P7–P9 already scoped), Power BI crash course, and Accenture-specific vocabulary reframe. No new certifications required beyond what's already in your pipeline.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Strength matches -->
+  <div class="card">
+    <h3>Product Strategy & Full Lifecycle Ownership</h3>
+    <span class="badge b-green">STRONG MATCH</span>
+    <p style="margin-top:8px">Your 70+ report MI ecosystem is a product platform — built from zero, iterated over 6 years, consumed by 40+ users and C-suite daily. You defined the strategy (what to build), prioritised features (which reports solve which business problems), drove adoption (training, governance cadence), and measured impact (14.9x collections scaling, 74% delinquency reduction). This is full product lifecycle ownership at enterprise scale. The platform is still in production 6 years later — that's product-market fit by any definition.</p>
+  </div>
+
+  <div class="card">
+    <h3>Enterprise Data Integration → Actionable Intelligence</h3>
+    <span class="badge b-green">STRONG MATCH</span>
+    <p style="margin-top:8px">You unified data across 4 legal entities, 10 banking relationships, Finance, Sales, and Operations into a single intelligence layer. Your NPV model (AED 652M / AED 21.2M cost) is exactly "translating complex data into actionable intelligence tied to business levers" — the JD's precise language. You didn't just report data; you built the analytical framework that drove a specific financial outcome defended at MD/CEO level.</p>
+  </div>
+
+  <div class="card">
+    <h3>Profitability & Value Realization</h3>
+    <span class="badge b-green">STRONG MATCH</span>
+    <p style="margin-top:8px">Your NPV framework (248-day prepay acceleration, 32% cheaper than bank financing) directly embeds profit discipline into leadership decision-making. You quantified value (AED 652M inflow), linked it to cost metrics (AED 21.2M total cost), and defended the financial model under MD/CEO scrutiny — zero material concessions. This is the "own quantification of value realization" requirement word-for-word.</p>
+  </div>
+
+  <div class="card">
+    <h3>Stakeholder Leadership at C-Suite Altitude</h3>
+    <span class="badge b-green">STRONG MATCH</span>
+    <p style="margin-top:8px">Direct reporting to CCO Ashish Vishnu Rupani. Regular governance with CRO Mohammad Adnan Hamid. NPV presentations to MD/CEO Francis Alfred. You've operated at the senior leadership altitude this role demands. Your assertiveness proof points (PR rejection standard held at 49%, NPV defended under scrutiny, proactive risk escalations) counter the Low-D DISC concern.</p>
+  </div>
+
+  <div class="card">
+    <h3>Leading Cross-Functional Teams in Ambiguity</h3>
+    <span class="badge b-green">STRONG MATCH</span>
+    <p style="margin-top:8px">77-person team across Dubai + India, 4 sub-teams (12 RMs + Ops 38 + QCG 12 + MIS 15), 12 simultaneous programme deliverables — all on schedule. You built the operating model from scratch (no playbook, no predecessors). The PCC TAT transformation (20→3 days) required cross-functional orchestration across Operations, Finance, Legal, and IT. This is "leading problem structuring and solutioning" in an ambiguous environment.</p>
+  </div>
+
+  <!-- Partial matches -->
+  <div class="card">
+    <h3>CIO / Engineering Partnership</h3>
+    <span class="badge b-amber">PARTIAL MATCH</span>
+    <p style="margin-top:8px">Your Salesforce CRM architecture build (0→1) and current Azure SQL migration programme with Vijay Zakkala are technology partnership experiences — but they're not at the scale of partnering with a Global CIO to deploy production-grade AI solutions. The architecture is right; the altitude and tech stack depth need reframing. Frame: "Led solution design for the function's data infrastructure in partnership with IT leadership; currently governing a SQL migration programme."</p>
+  </div>
+
+  <div class="card">
+    <h3>Excel, PowerPoint, Power BI (Advanced)</h3>
+    <span class="badge b-amber">PARTIAL MATCH</span>
+    <p style="margin-top:8px">Excel and PowerPoint are already at advanced level — your NPV model, financial analysis, and executive presentations demonstrate this. Power BI is the gap. Your current BI stack is Salesforce dashboards + Excel. Power BI is a 2-week learning curve with your existing data literacy. Build 2 Power BI dashboards to close this gap visually.</p>
+  </div>
+
+  <!-- Gaps -->
+  <div class="card">
+    <h3>Agentic AI / GenAI Hands-On Experience</h3>
+    <span class="badge b-red">GAP — CRITICAL</span>
+    <p style="margin-top:8px">This is the single biggest gap. The JD explicitly requires "hands-on experience with Generative AI / Agentic AI, including prompt engineering and AI system design." You have AI portfolio projects conceptualised (P7–P12) but none built yet. The conceptual understanding is there (your AI differentiator pitch is well-articulated), but you need at least 2 working prototypes to make this credible. P7 (ORE Tracker) and P8 (Readiness Gate Checker) are the fastest path.</p>
+  </div>
+
+  <div class="card">
+    <h3>12–15 Years Experience</h3>
+    <span class="badge b-red">GAP — STRUCTURAL</span>
+    <p style="margin-top:8px">You have ~6 years post-MBA. Even counting pre-MBA, you're below the 12-year floor. However: CL7 is the first managerial band at Accenture, and the scope you've managed (AED 12.97B portfolio, 77-person team, MD/CEO decision support) is objectively larger than most 12-year candidates. This gap is addressed through narrative framing, not time. "I've compressed 12 years of scope into 6 years of tenure."</p>
+  </div>
+</div>
+
+<!-- ===================== TAB 3: GAPS & PLAN ===================== -->
+<div class="panel" id="gaps">
+  <div class="stitle">Gaps &amp; Action Plan</div>
+  <div class="ssub">What's missing, what's bridgeable, and the 4–6 week path to close every gap</div>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:28px;">
+    <div>
+      <div class="ssub" style="margin-bottom:8px; color:#fff; font-weight:600;">Strengths — Already Proven</div>
+      <div class="fit-item"><div class="fit-label"><span>Product Lifecycle Ownership</span><span>92%</span></div><div class="fit-bar"><div class="fit-fill fill-green" style="width:92%"></div></div></div>
+      <div class="fit-item"><div class="fit-label"><span>Enterprise Data → Intelligence</span><span>90%</span></div><div class="fit-bar"><div class="fit-fill fill-green" style="width:90%"></div></div></div>
+      <div class="fit-item"><div class="fit-label"><span>Profitability / Value Realization</span><span>88%</span></div><div class="fit-bar"><div class="fit-fill fill-green" style="width:88%"></div></div></div>
+      <div class="fit-item"><div class="fit-label"><span>C-Suite Stakeholder Influence</span><span>85%</span></div><div class="fit-bar"><div class="fit-fill fill-green" style="width:85%"></div></div></div>
+      <div class="fit-item"><div class="fit-label"><span>Cross-Functional Programme Orchestration</span><span>90%</span></div><div class="fit-bar"><div class="fit-fill fill-green" style="width:90%"></div></div></div>
+      <div class="fit-item"><div class="fit-label"><span>Team Leadership & Mentoring</span><span>82%</span></div><div class="fit-bar"><div class="fit-fill fill-green" style="width:82%"></div></div></div>
+    </div>
+    <div>
+      <div class="ssub" style="margin-bottom:8px; color:#fff; font-weight:600;">Gaps — What Needs Closing</div>
+      <div class="fit-item"><div class="fit-label"><span>Agentic AI / GenAI Hands-On</span><span>20%</span></div><div class="fit-bar"><div class="fit-fill fill-red" style="width:20%"></div></div></div>
+      <div class="fit-item"><div class="fit-label"><span>Power BI Proficiency</span><span>15%</span></div><div class="fit-bar"><div class="fit-fill fill-red" style="width:15%"></div></div></div>
+      <div class="fit-item"><div class="fit-label"><span>Accenture Internal Vocabulary</span><span>25%</span></div><div class="fit-bar"><div class="fit-fill fill-amber" style="width:25%"></div></div></div>
+      <div class="fit-item"><div class="fit-label"><span>Experience Years (6yr vs 12yr)</span><span>50%</span></div><div class="fit-bar"><div class="fit-fill fill-amber" style="width:50%"></div></div></div>
+      <div class="fit-item"><div class="fit-label"><span>Enterprise AI Architecture Vocabulary</span><span>30%</span></div><div class="fit-bar"><div class="fit-fill fill-amber" style="width:30%"></div></div></div>
+    </div>
+  </div>
+
+  <div class="stitle" style="font-size:19px;">4–6 Week Gap Closure Roadmap</div>
+  <div class="ssub">Most of this prep overlaps with your AmEx + Microsoft tracks</div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot now"></div>
+      <div class="tl-period">Week 1–2 · AI Portfolio Sprint</div>
+      <h4>Build P7 (ORE Tracker) + P8 (Readiness Gate Checker)</h4>
+      <p>These are already scoped in your pipeline. P7: AI-powered risk event dashboard (Python + Claude API + Streamlit, 2-day build). P8: Readiness assessment tool (Claude API + JSON, 2-hour build). Both demonstrate Agentic AI design thinking at a prototype level — exactly what this JD needs. Shared investment with AmEx and Microsoft tracks.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Week 2–3 · Power BI Crash Course</div>
+      <h4>2 Power BI Dashboards + Microsoft PL-300 Prep</h4>
+      <p>Build Dashboard 1: Portfolio Health (simulated collections data — delinquency, recovery rate, ageing distribution). Build Dashboard 2: Profitability Tracker (cost-to-recover ratio, NPV waterfall). Power BI Desktop is free. With your Salesforce dashboard experience, the learning curve is 2 weeks. Don't pursue PL-300 certification yet — just build working dashboards.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Week 3–4 · Vocabulary & Narrative Reframe</div>
+      <h4>Accenture Vocabulary Mastery + Resume Build</h4>
+      <p>Learn all terms in the Vocab Decoder tab. Study Accenture's SynOps platform (their AI-powered operations platform — this is the internal product family your role would contribute to). Read Accenture's "Cost & Productivity Reinvention" POV. Reframe your Sobha work using Accenture vocabulary. Build resume v1 with "Enterprise Operations & AI Product Leader" positioning.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Week 4–5 · Interview Preparation</div>
+      <h4>STAR Rehearsal + Case Study Practice</h4>
+      <p>Rehearse 6 STAR stories (see STAR Bank tab) using Accenture vocabulary. Practice case-study structure: problem → hypothesis → data → recommendation → trade-offs. Prepare "First 90 Days" narrative: Discovery (stakeholder mapping, product audit) → Quick Win (AI prototype for one exec pain point) → Roadmap (multi-quarter product strategy). Activate BITS Pilani + IIM Udaipur alumni at Accenture for referral.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Week 5–6 · Application + Network Activation</div>
+      <h4>Submit Application + Warm Referral</h4>
+      <p>Apply with updated resume + 2 AI portfolio project demos. LinkedIn connect with Accenture Office of COO team members in Bengaluru. Write a targeted cover note that speaks the Modernization Tower language: "reinvention," "structural efficiency," "enterprise AI adoption at scale."</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:3px solid var(--accent);">
+    <h3>Key Unlock Phrase for This Role</h3>
+    <p style="font-style:italic; color:var(--text);">"I've spent six years building the exact thing this role demands — AI-ready data products that drive profitability decisions at senior leadership level. I built an enterprise intelligence platform from zero that serves C-suite daily, designed the financial model that generated AED 652M in value, and led the programme that scaled collections 14.9x. The difference is I did it with Salesforce and Excel. At Accenture, I would do it with Agentic AI — and I've already started building the prototypes to prove it."</p>
+  </div>
+</div>
+
+<!-- ===================== TAB 4: SALARY INTEL ===================== -->
+<div class="panel" id="salary">
+  <div class="stitle">Salary Intelligence — Accenture CL7 Manager, India</div>
+  <div class="ssub">Based on Levels.fyi, Glassdoor, Blind, 6figr, Quora salary reports — April 2026</div>
+
+  <div class="card">
+    <h3>Level Context</h3>
+    <p>CL7 is the <strong>Manager</strong> band — the first managerial level at Accenture. It sits above Senior Analyst (CL8) and below Senior Manager (CL6). This is not a Director role — it's equivalent to an IC-heavy manager with product ownership. In Accenture's internal hierarchy, CL7 is where you get meaningful strategic ownership and P&L-adjacent accountability.</p>
+    <p style="margin-top:8px">This role sits in the <strong>Office of the COO (Corporate Functions)</strong>, not in a client-delivery unit. Internal corporate roles at Accenture typically pay 10–15% less than client-facing consulting roles at the same level, but offer better work-life balance and more stable career progression.</p>
+  </div>
+
+  <table class="sal-table">
+    <thead><tr><th>Component</th><th>CL7 Floor</th><th>CL7 Mid</th><th>CL7 Top</th></tr></thead>
+    <tbody>
+      <tr><td>Base Salary</td><td>₹25–28L</td><td>₹32–38L</td><td>₹42–48L</td></tr>
+      <tr><td>Variable / Bonus (21%)</td><td>₹5–6L</td><td>₹7–8L</td><td>₹9–10L</td></tr>
+      <tr><td>Total CTC Year 1</td><td>₹30–34L</td><td>₹39–46L</td><td>₹51–55L+</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card">
+    <h3>Negotiation Playbook</h3>
+    <table class="sal-table">
+      <thead><tr><th>Lever</th><th>Strategy</th><th>Target</th></tr></thead>
+      <tbody>
+        <tr><td>Level</td><td>Push for CL7 top-band citing scope: 77-person team, AED 12.97B portfolio, MD/CEO-level product ownership. "My scope maps to Senior Manager — I'm being conservative at CL7."</td><td>CL7 top-band (₹42L+ base)</td></tr>
+        <tr><td>Base</td><td>Anchor at mid-to-top band. Your current Dubai comp likely exceeds CL7 floor — use this as leverage without revealing exact number.</td><td>₹38–45L</td></tr>
+        <tr><td>Variable</td><td>Accenture variable is typically 21% of base. Negotiate for a guaranteed first-year payout (common for lateral hires).</td><td>Guaranteed Y1 variable</td></tr>
+        <tr><td>Joining Bonus</td><td>Request ₹3–5L joining bonus to offset transition costs from Dubai to Bengaluru.</td><td>₹3–5L</td></tr>
+        <tr><td>Relocation</td><td>If relocating from Dubai, negotiate relocation package including flights, temporary housing, and visa support.</td><td>Full relocation support</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Strategic Value Beyond CTC</h3>
+    <p><strong>Office of the COO access:</strong> Working inside the COO's office gives you direct access to Accenture's most senior leadership — including the global COO Kate Hogan and the enterprise operations leadership team. This network is disproportionately valuable for long-term career progression.</p>
+    <p style="margin-top:8px"><strong>AI product leadership credential:</strong> "Led Agentic AI product portfolio inside Accenture's Office of the COO" is an extraordinary resume line for any future product leadership role — at Accenture or externally.</p>
+    <p style="margin-top:8px"><strong>CL6 promotion track:</strong> CL7→CL6 (Senior Manager) is typically a 2–3 year progression at Accenture. CL6 compensation: ₹50–85L. The "Modernization Tower" is a high-visibility internal team — strong performers get promoted faster here than in client-delivery units.</p>
+    <p style="margin-top:8px"><strong>CTC context vs. your pipeline:</strong> At ₹30–55L, this is below your Uber (₹85–120L) and Microsoft (₹60–90L) ceilings. It's comparable to Oaktree (₹55–65L P50). The value proposition is strategic positioning, not maximum CTC.</p>
+  </div>
+</div>
+
+<!-- ===================== TAB 5: AI SOLUTIONS ===================== -->
+<div class="panel" id="ai">
+  <div class="stitle">AI Solutions — Your Interview Differentiator</div>
+  <div class="ssub">AI-powered tools that solve real problems for this exact role</div>
+
+  <div class="card">
+    <h3>Why AI Matters for This Role</h3>
+    <p>This is an <strong>AI product leadership role</strong> — AI isn't a bonus, it's the core JD. The hiring manager wants to see that you understand Agentic AI systems at a design level: how agents are orchestrated, how prompts are engineered for consistency, how outputs are validated before reaching executives, and how you'd scale a prototype into production. Your AI portfolio projects are not supplements — they ARE your candidacy proof.</p>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT · PRIMARY (Already Scoped as P7)</div>
+    <div class="ai-title">Enterprise Profitability Intelligence Dashboard with Agentic AI</div>
+    <div class="ai-body">Repurpose P7 (ORE Tracker) with a profitability lens. Input: mock enterprise data — revenue by business unit, cost allocation, margin trends, headcount efficiency ratios. An AI agent ingests this data, detects anomalies (margin compression, cost overruns, productivity drops), generates a natural-language profitability narrative, and surfaces "likely root causes" ranked by financial impact. A second agent drafts the executive briefing pack with recommended actions. This directly mirrors what this Manager would build for Accenture's COO office.</div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Python</span>
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Streamlit</span>
+      <span class="tag tag-blue">Pandas</span>
+      <span class="tag tag-gold">Priority 1 · 3-day build</span>
+    </div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT · SECONDARY (Already Scoped as P8)</div>
+    <div class="ai-title">AI Product Readiness Gate Checker</div>
+    <div class="ai-body">Input: a product initiative description in plain text. AI agent evaluates the initiative against a readiness framework — data dependencies identified? Stakeholder sign-off chain defined? Success KPIs specified? Risk considerations documented? Output: structured readiness score with specific gaps and recommended actions. Demonstrates you think in product governance frameworks and can automate the readiness process that this role would own.</div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">JSON Structured Output</span>
+      <span class="tag tag-blue">Prompt Engineering</span>
+      <span class="tag tag-gold">Priority 2 · 2-hour build</span>
+    </div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT · ROLE-SPECIFIC NEW</div>
+    <div class="ai-title">Multi-Agent Executive Decision Support System</div>
+    <div class="ai-body">Build a 3-agent orchestration prototype that mirrors the role's core function. Agent 1 (Data Ingestion): reads structured enterprise data and identifies key metrics. Agent 2 (Analysis): detects patterns, anomalies, and correlations across business units. Agent 3 (Executive Narrator): generates a C-suite-ready briefing with scenario analysis and trade-off recommendations. The orchestration layer manages agent handoffs, validates intermediate outputs, and applies guardrails. This is the most direct demonstration of Agentic AI system design — the JD's core technical requirement.</div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Python</span>
+      <span class="tag tag-blue">LangChain / CrewAI</span>
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Streamlit</span>
+      <span class="tag tag-purple">Highest Signal · 4-day build</span>
+    </div>
+  </div>
+
+  <div class="phrase">
+    "One of the structural inefficiencies in enterprise operations is that senior leaders spend 60–70% of their analytical time assembling data rather than acting on insights. At Sobha, I addressed this by building a 70+ report intelligence platform that automated data aggregation across 4 legal entities. But the next step is agentic — AI systems that don't just aggregate data, but reason over it, detect anomalies, and generate executive-ready recommendations autonomously. I've already prototyped this: my profitability intelligence dashboard uses a multi-agent architecture where one agent detects margin anomalies, another generates root-cause hypotheses, and a third drafts the executive briefing pack. That's the operating model I'd bring to the Modernization Tower."
+  </div>
+</div>
+
+<!-- ===================== TAB 6: STAR BANK ===================== -->
+<div class="panel" id="star">
+  <div class="stitle">STAR Story Bank</div>
+  <div class="ssub">Pre-mapped stories for every key JD responsibility — ready for interviews</div>
+
+  <div class="star-box">
+    <h4>Story 1 — Product Strategy & Full Lifecycle Ownership</h4>
+    <div class="star-maps">Maps to: "Define product strategy and multi-quarter roadmap" + "Own end-to-end accountability for product outcomes"</div>
+    <div class="star-row"><span class="star-label sl-s">SITUATION</span><span class="star-content">In 2021, Sobha's Collections function had no intelligence platform — decisions relied on informal data, manual calculations, and ad hoc spreadsheets across 36,000 units and AED 40B+ in future receivables.</span></div>
+    <div class="star-row"><span class="star-label sl-t">TASK</span><span class="star-content">Build the enterprise intelligence product from scratch — no tools budget, no engineering team, just Salesforce access and Excel.</span></div>
+    <div class="star-row"><span class="star-label sl-a">ACTION</span><span class="star-content">Ran discovery with 6 stakeholder groups to identify critical information gaps. Prioritised by business impact. Built 12 live data-connected reports in the first phase covering delinquency, risk, cohort tracking, and forecasting. Designed the Salesforce CRM architecture to support the data layer. Iterated over 4 years — added quality scorecards, automated distribution, governance dashboards. Managed the product roadmap across multiple quarterly release cycles.</span></div>
+    <div class="star-row"><span class="star-label sl-r">RESULT</span><span class="star-content">Platform now runs 70+ reports across 2 geographies, consumed by 40+ users and C-suite daily. Collections scaled 14.9x (AED 867M → AED 12.97B). Platform still in production 6 years later — evidence of product-market fit and sustainable adoption.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 2 — Profitability & Value Realization</h4>
+    <div class="star-maps">Maps to: "Lead initiatives that embed profit discipline into leadership decision-making" + "Own quantification of value realization"</div>
+    <div class="star-row"><span class="star-label sl-s">SITUATION</span><span class="star-content">Sobha needed a structured early payment incentive programme but had no financial model to quantify the value or compare against bank financing alternatives.</span></div>
+    <div class="star-row"><span class="star-label sl-t">TASK</span><span class="star-content">Design the financial model, build the business case, present to MD/CEO, and drive adoption — with the model surviving multiple rounds of senior scrutiny.</span></div>
+    <div class="star-row"><span class="star-label sl-a">ACTION</span><span class="star-content">Built the NPV framework from first principles — scenario modelling, sensitivity analysis, cost-benefit comparison against bank financing. Presented to MD/CEO Francis Alfred with structured decision framework. Defended the model through multiple scrutiny rounds — zero material concessions. Built the governance layer to track actual performance against projected value.</span></div>
+    <div class="star-row"><span class="star-label sl-r">RESULT</span><span class="star-content">AED 652M incremental inflow generated. AED 21.2M total programme cost. 248-day average prepay acceleration. 32% cheaper than bank financing benchmark. The model is now the permanent decision framework for all early payment incentive decisions.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 3 — Leading in Ambiguity & Problem Structuring</h4>
+    <div class="star-maps">Maps to: "Operate in ambiguity and lead problem structuring and solutioning"</div>
+    <div class="star-row"><span class="star-label sl-s">SITUATION</span><span class="star-content">Collections had no framework for identifying when a customer payment was at highest risk — decisions about collection intensity were made on intuition, not data.</span></div>
+    <div class="star-row"><span class="star-label sl-t">TASK</span><span class="star-content">Define the problem, structure the analytical framework, and build a scalable solution — with no precedent, no academic model, and no external benchmark.</span></div>
+    <div class="star-row"><span class="star-label sl-a">ACTION</span><span class="star-content">Analysed 4 years of payment data to identify the critical collection window. Discovered that the 55-day T−25/T+30 window around payment due dates captures the highest-leverage collection opportunity. Built the T−25/T+30 framework as the operational backbone — resource allocation, escalation triggers, and RM scheduling all now anchored to this window.</span></div>
+    <div class="star-row"><span class="star-label sl-r">RESULT</span><span class="star-content">Proprietary framework now governs all collection activity timing across the function. Portfolio delinquency reduced 74% (16.7% → 4.4%). The framework is original intellectual property — not adapted from any external model.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 4 — Cross-Functional Programme Orchestration</h4>
+    <div class="star-maps">Maps to: "Drive alignment across business, finance, and technology stakeholders"</div>
+    <div class="star-row"><span class="star-label sl-s">SITUATION</span><span class="star-content">Property Completion Certificate (PCC) processing took 20 days on average, creating cash flow delays and customer escalations. The process spanned Operations, Finance, Legal, and IT with no single owner.</span></div>
+    <div class="star-row"><span class="star-label sl-t">TASK</span><span class="star-content">Lead the cross-functional transformation to reduce PCC TAT dramatically while handling increasing volume.</span></div>
+    <div class="star-row"><span class="star-label sl-a">ACTION</span><span class="star-content">Mapped the end-to-end process across all 4 functions. Identified bottlenecks at handoff points. Designed a parallel processing workflow replacing sequential approvals. Built automated tracking and escalation triggers. Drove stakeholder alignment across function heads who didn't report to me — pure influence-based leadership.</span></div>
+    <div class="star-row"><span class="star-label sl-r">RESULT</span><span class="star-content">PCC TAT reduced from 20 days to 3 days (85% reduction). November 2025 volume: 281 PCCs processed at the new speed. Process redesign became the permanent operating model.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 5 — Data Governance & Quality Intelligence</h4>
+    <div class="star-maps">Maps to: "Define data architecture requirements, governance models, and guardrails"</div>
+    <div class="star-row"><span class="star-label sl-s">SITUATION</span><span class="star-content">Payment Request (PR) rejection rate hit 49% in December 2025. No monitoring system existed to detect quality issues, diagnose root causes, or track remediation.</span></div>
+    <div class="star-row"><span class="star-label sl-t">TASK</span><span class="star-content">Build the quality monitoring architecture, establish governance guardrails, and drive structural improvement — not just a one-time fix.</span></div>
+    <div class="star-row"><span class="star-label sl-a">ACTION</span><span class="star-content">Built a continuous monitoring scorecard with automated detection of quality deviations. Established documentation standards and held the line at 49% rejection despite internal pressure to relax standards. Designed root-cause diagnostic frameworks. Built feedback loops between rejection data and training programmes.</span></div>
+    <div class="star-row"><span class="star-label sl-r">RESULT</span><span class="star-content">Quality governance architecture is now permanent infrastructure. Position vindicated by data — the strict standard prevented downstream processing errors. This is directly analogous to AI output validation and response governance — the same pattern applies to validating AI agent outputs before they reach executives.</span></div>
+  </div>
+</div>
+
+<!-- ===================== TAB 7: INTERVIEW PREP ===================== -->
+<div class="panel" id="interview">
+  <div class="stitle">Interview Preparation</div>
+  <div class="ssub">Accenture CL7 Manager interview process — what to expect and how to win</div>
+
+  <div class="card">
+    <h3>Interview Process — CL7 Manager (Lateral)</h3>
+    <p>Accenture's lateral hiring process for CL7 typically involves 3–4 rounds:</p>
+    <p style="margin-top:8px"><strong>Round 1 — Recruiter Screen (30 min):</strong> Fit check on experience, motivation, salary expectations. This is a filter — be concise, structured, and demonstrate you understand the role context.</p>
+    <p style="margin-top:8px"><strong>Round 2 — Hiring Manager / Technical (60 min):</strong> Deep dive into your product management experience, AI understanding, and enterprise data capabilities. Expect case-study-style questions: "How would you design an AI system that helps leaders identify margin improvement opportunities?" Structure your answers using a product framework: problem → user → solution → metrics → trade-offs.</p>
+    <p style="margin-top:8px"><strong>Round 3 — Case Study / Presentation (45–60 min):</strong> You may be asked to present a case — either pre-prepared or live. Likely prompt: "Design an Agentic AI product that improves executive decision-making for profitability." Use your AI portfolio project as the demo. This is where P7 + the multi-agent prototype wins you the role.</p>
+    <p style="margin-top:8px"><strong>Round 4 — Senior Leadership / AA (30–45 min):</strong> Behavioural and strategic fit. Expect questions about operating in ambiguity, influencing without authority, and leading through complexity. This is where assertiveness proof points matter. The senior leader is assessing: "Can this person sit in a room with MDs and hold their own?"</p>
+  </div>
+
+  <div class="card">
+    <h3>Case Study Framework — Use This Structure</h3>
+    <p><strong>Problem:</strong> What decision are senior leaders struggling with? (e.g., "Where are we leaking margin?")</p>
+    <p><strong>User:</strong> Who is the executive user? What does their day look like? What information do they lack?</p>
+    <p><strong>Data:</strong> What enterprise data feeds are needed? Finance, HR, Sales, Delivery — what's available vs. what needs integration?</p>
+    <p><strong>AI Architecture:</strong> How do you design the agent workflow? Agent 1 ingests data → Agent 2 detects patterns → Agent 3 generates recommendations → Validation layer checks for accuracy and bias → Executive dashboard surfaces output.</p>
+    <p><strong>Governance:</strong> How do you ensure executives trust the output? Explainability, audit trails, human-in-the-loop review for critical decisions.</p>
+    <p><strong>Metrics:</strong> How do you measure success? Adoption rate, decision cycle time reduction, margin improvement attributable to the product, NPS from executive users.</p>
+    <p><strong>Trade-offs:</strong> Build vs. buy? Speed vs. accuracy? Automation vs. human judgment? Show you think in trade-offs, not certainties.</p>
+  </div>
+
+  <div class="card">
+    <h3>Questions You Should Ask the Interviewer</h3>
+    <p>"What's the current state of the Agentic AI product portfolio — are you building from zero, or scaling existing prototypes?"</p>
+    <p style="margin-top:6px">"How does the Modernization Tower interact with the Activation and Realization towers — is there a shared data platform, or are product stacks independent?"</p>
+    <p style="margin-top:6px">"What does the CIO partnership model look like day-to-day — is there an embedded engineering team, or do you request capacity from Global IT?"</p>
+    <p style="margin-top:6px">"What does success look like for this role in the first 6 months — is there a specific product or initiative you'd want the new Manager to own immediately?"</p>
+    <p style="margin-top:6px">"How is value realization currently measured — is there an established framework, or is defining the measurement model part of this role's mandate?"</p>
+  </div>
+
+  <div class="card">
+    <h3>Assertiveness Proof Points — Have These Ready</h3>
+    <p style="font-size:13px; color:var(--text-muted); margin-bottom:10px;">Your DISC profile shows Low-D. The senior leadership round probes for executive presence. These counter the concern.</p>
+    <p><strong>Proof Point 1:</strong> Held PR rejection documentation standard at 49% under pressure to relax — position vindicated by data.</p>
+    <p style="margin-top:6px"><strong>Proof Point 2:</strong> Defended NPV model at MD/CEO level through multiple scrutiny rounds — zero material concessions.</p>
+    <p style="margin-top:6px"><strong>Proof Point 3:</strong> Escalated 3 blocked risk register items to CCO proactively before due dates — didn't wait for them to become overdue.</p>
+  </div>
+
+  <div class="phrase">
+    First 90 Days Narrative: "In the first 30 days, I'd map stakeholders, audit the existing product portfolio, and understand the data infrastructure landscape — what's available, what's locked behind access barriers, and what's missing. In days 30–60, I'd identify the highest-value quick win — one executive pain point where an AI prototype can demonstrate immediate value. In days 60–90, I'd present the multi-quarter product roadmap to the Modernization Tower leadership, anchored in the quick-win proof point and aligned to the profitability KPIs that matter most to the COO's office."
+  </div>
+</div>
+
+<!-- ===================== TAB 8: VOCAB DECODER ===================== -->
+<div class="panel" id="vocab">
+  <div class="stitle">Vocabulary Decoder</div>
+  <div class="ssub">Translate your Sobha language into Accenture Modernization Tower language</div>
+
+  <div class="stitle" style="font-size:17px; margin-top:8px;">Sobha → Accenture Translation Map</div>
+  <div style="margin-bottom:24px;">
+    <div class="trans-row"><div class="trans-from">Collections function / Dues team</div><div class="trans-arrow">→</div><div class="trans-to">Enterprise Operations / Profitability Management</div></div>
+    <div class="trans-row"><div class="trans-from">70+ report MI ecosystem</div><div class="trans-arrow">→</div><div class="trans-to">Enterprise data product portfolio / AI-driven decision platform</div></div>
+    <div class="trans-row"><div class="trans-from">NPV model AED 652M</div><div class="trans-arrow">→</div><div class="trans-to">Value realization framework linked to enterprise financial KPIs</div></div>
+    <div class="trans-row"><div class="trans-from">Delinquency rate 16.7% → 4.4%</div><div class="trans-arrow">→</div><div class="trans-to">Portfolio risk reduction through data-driven operational intervention</div></div>
+    <div class="trans-row"><div class="trans-from">T−25/T+30 framework</div><div class="trans-arrow">→</div><div class="trans-to">Proprietary operational intelligence model (first-principles analytics)</div></div>
+    <div class="trans-row"><div class="trans-from">Salesforce CRM architecture (0→1)</div><div class="trans-arrow">→</div><div class="trans-to">Enterprise data platform design and deployment</div></div>
+    <div class="trans-row"><div class="trans-from">PR rejection quality scorecard</div><div class="trans-arrow">→</div><div class="trans-to">AI output validation and governance framework (response governance)</div></div>
+    <div class="trans-row"><div class="trans-from">14-finding risk register</div><div class="trans-arrow">→</div><div class="trans-to">Product risk management and controls governance</div></div>
+    <div class="trans-row"><div class="trans-from">PCC TAT 20→3 days</div><div class="trans-arrow">→</div><div class="trans-to">Process re-engineering driving structural efficiency</div></div>
+    <div class="trans-row"><div class="trans-from">77-person cross-geo team</div><div class="trans-arrow">→</div><div class="trans-to">Global distributed team leadership across matrixed org</div></div>
+    <div class="trans-row"><div class="trans-from">MD/CEO presentation</div><div class="trans-arrow">→</div><div class="trans-to">C-suite stakeholder influence and executive communication</div></div>
+    <div class="trans-row"><div class="trans-from">India hub deployment (42 people)</div><div class="trans-arrow">→</div><div class="trans-to">Operating model design and workforce scaling</div></div>
+    <div class="trans-row"><div class="trans-from">14.9x collections scaling</div><div class="trans-arrow">→</div><div class="trans-to">Enterprise-scale value delivery and structural profitability improvement</div></div>
+  </div>
+
+  <div class="stitle" style="font-size:17px;">Accenture-Specific Terms You Must Know</div>
+  <div class="ssub">These terms will surface in interviews — they must sound natural</div>
+
+  <div class="vocab-card">
+    <div class="vocab-term">Agentic AI / AI Agents</div>
+    <div class="vocab-def">AI systems that autonomously execute multi-step workflows — perceive data, plan actions, execute, and adapt without constant human instruction. This role leads the design of these systems for executive decision support.</div>
+    <div class="vocab-sobha">Your analogy: Your T−25/T+30 framework is a rules-based decision agent — trigger conditions → action sequence → outcome. AI agents do this with LLM reasoning instead of rules.</div>
+  </div>
+
+  <div class="vocab-card">
+    <div class="vocab-term">Agent Orchestration</div>
+    <div class="vocab-def">Managing how multiple AI agents coordinate — Agent 1 gathers data, hands off to Agent 2 for analysis, which hands off to Agent 3 for recommendation generation. You design the workflow, handoff logic, and failure modes.</div>
+    <div class="vocab-sobha">Your analogy: Your 4-sub-team coordination (RMs → Ops → QCG → MIS) is human agent orchestration — defined handoffs, quality gates, and escalation logic.</div>
+  </div>
+
+  <div class="vocab-card">
+    <div class="vocab-term">Prompt Engineering</div>
+    <div class="vocab-def">Designing the instructions given to AI models to produce consistent, accurate, enterprise-appropriate outputs. At this role's level, it means establishing organisational standards for how prompts are written, tested, and governed — not just writing individual prompts.</div>
+    <div class="vocab-sobha">Your analogy: Your PR documentation standards (what must be included, quality thresholds, rejection criteria) = prompt engineering for humans.</div>
+  </div>
+
+  <div class="vocab-card">
+    <div class="vocab-term">Response Governance</div>
+    <div class="vocab-def">The validation layer that checks AI outputs before they reach end users (executives). Includes accuracy checks, bias detection, explainability requirements, and human-in-the-loop review for high-stakes decisions.</div>
+    <div class="vocab-sobha">Your analogy: Your PR rejection scorecard IS response governance — checking outputs against quality standards before they proceed.</div>
+  </div>
+
+  <div class="vocab-card">
+    <div class="vocab-term">SynOps</div>
+    <div class="vocab-def">Accenture's proprietary AI-powered platform for enterprise operations. Combines data, automation, and human intelligence. The Modernization Tower likely uses SynOps as infrastructure. Know it exists — you may be building on top of it.</div>
+    <div class="vocab-sobha">Study: Accenture's SynOps page. Mention if asked about technology stack context.</div>
+  </div>
+
+  <div class="vocab-card">
+    <div class="vocab-term">Reinvention / Reinvention Partner</div>
+    <div class="vocab-def">Accenture's strategic brand language for large-scale enterprise transformation. CEO Julie Sweet uses this constantly. "Reinvention" = not incremental improvement, but fundamental redesign of operating models using AI and data.</div>
+    <div class="vocab-sobha">Your frame: "I led a reinvention of the collections operating model — from manual, intuition-based operations to a data-driven, AI-ready enterprise intelligence platform."</div>
+  </div>
+
+  <div class="vocab-card">
+    <div class="vocab-term">Structural Efficiency / Margin Expansion</div>
+    <div class="vocab-def">Not one-time cost cuts, but permanent changes to the operating model that reduce cost-to-serve or increase revenue per unit of effort. The JD explicitly asks you to "identify and scale opportunities that drive structural efficiency and margin expansion."</div>
+    <div class="vocab-sobha">Your proof: NPV programme (32% cheaper than bank financing) = structural efficiency. PCC TAT (20→3 days) = permanent process cost reduction. 14.9x scale with proportionally smaller team growth = margin expansion.</div>
+  </div>
+
+  <div class="vocab-card">
+    <div class="vocab-term">Value Realization</div>
+    <div class="vocab-def">The discipline of quantifying and tracking the actual financial impact of products and initiatives — not just delivering features, but proving they moved business metrics. At Accenture, every product must be "explicitly tied to enterprise KPIs and measurable outcomes."</div>
+    <div class="vocab-sobha">Your proof: AED 652M NPV quantification. 74% delinquency reduction. 14.9x collections scale. All tied to specific financial metrics with auditable tracking.</div>
+  </div>
+
+  <div class="vocab-card">
+    <div class="vocab-term">Modernization Tower</div>
+    <div class="vocab-def">One of three strategic towers within Enterprise Operations & Profitability Management (alongside Activation and Realization). Modernization is responsible for reimagining operating models, accelerating enterprise innovation, and shaping next-generation executive capabilities.</div>
+    <div class="vocab-sobha">Position: "My work at Sobha was modernization in practice — I reimagined the collections operating model from a manual, fragmented process into a data-driven, platform-enabled operation. That's what the Modernization Tower does at Accenture's enterprise scale."</div>
+  </div>
+
+  <div class="vocab-card">
+    <div class="vocab-term">Enterprise KPIs / Profitability Levers</div>
+    <div class="vocab-def">The financial metrics that drive Accenture's own profitability: revenue per FTE, utilisation rate, margin by service line, cost-to-deliver, client concentration risk, attrition cost. Your AI products must tie to these levers.</div>
+    <div class="vocab-sobha">Your equivalent: AED/FTE (₹168M per person), delinquency rate, cost-to-recover ratio, prepayment acceleration — you already think in profitability levers.</div>
+  </div>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const btns = document.querySelectorAll('.tab-btn');
+  const names = ['decode','fit','gaps','salary','ai','star','interview','vocab'];
+  const idx = names.indexOf(id);
+  if (idx >= 0 && btns[idx]) btns[idx].classList.add('active');
+}
+</script>
+
+</body>
+</html>
