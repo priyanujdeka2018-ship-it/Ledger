@@ -1,112 +1,126 @@
-
 ---
-
 title: CCC Library
-
 ---
-
-
 
 <!doctype html>
-
 <html lang="en">
-
 <head>
-
   <meta charset="utf-8" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>{{ page.title }}</title>
 
   <style>
+    :root {
+      --border: #e5e7eb;
+      --muted: #6b7280;
+      --link: #2563eb;
+      --bg: #ffffff;
+      --card: #f9fafb;
+      --text: #111827;
+    }
 
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      margin: 40px auto;
+      max-width: 1000px;
+      padding: 0 16px;
+      line-height: 1.5;
+      background: var(--bg);
+      color: var(--text);
+    }
 
-           margin: 40px auto; max-width: 1000px; padding: 0 16px; line-height: 1.5; }
+    h1 {
+      margin-bottom: 6px;
+    }
 
-    h1 { margin-bottom: 6px; }
+    h2 {
+      margin: 0 0 8px 0;
+      font-size: 21px;
+    }
 
-    .muted { color: #6b7280; margin-top: 0; }
+    .muted {
+      color: var(--muted);
+      margin-top: 0;
+    }
 
-    .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px 16px; margin: 14px 0; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin: 14px 0;
+    }
 
-    a { color: #2563eb; text-decoration: none; }
+    a {
+      color: var(--link);
+      text-decoration: none;
+    }
 
-    a:hover { text-decoration: underline; }
+    a:hover {
+      text-decoration: underline;
+    }
 
-    code { background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
 
-    ul { margin: 8px 0 0 20px; }
-
+    ul {
+      margin: 8px 0 0 20px;
+    }
   </style>
-
 </head>
 
-
-
 <body>
-
   <h1>{{ page.title }}</h1>
-
-  <p class="muted">Auto-generated list of <code>.html</code> files inside <code>/CCC</code>.</p>
-
-
+  <p class="muted">
+    Auto-generated list of <code>.html</code> files inside <code>/CCC</code>.
+  </p>
 
   <div class="card">
-
-    <h2 style="margin:0 0 8px 0;">Documents</h2>
-
-
+    <h2>Documents</h2>
 
     {% assign ccc_files = site.static_files
-
       | where_exp: "f", "f.path contains '/CCC/'"
-
       | where_exp: "f", "f.extname == '.html'"
-
+      | where_exp: "f", "f.name != 'index.html'"
       | sort: "name"
-
     %}
 
-    {% assign ccc_files = ccc_files | where_exp: "f", "f.name != 'index.html'" %}
+    {% if ccc_files.size > 0 %}
+      <ul>
+        {% for f in ccc_files %}
+          <li>
+            <a href="{{ f.path | relative_url }}">{{ f.name }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">
+        No static <code>.html</code> files were found inside <code>/CCC</code>.
+      </p>
+    {% endif %}
 
-
-
-    <ul>
-
-      {% for f in ccc_files %}
-
-        <li>{{ f.path | relative_url }}{{ f.name }}</a></li>
-
-      {% endfor %}
-
-    </ul>
-
-
-
-    <p class="muted" style="margin-top:12px;">Total files found: {{ ccc_files | size }}</p>
-
+    <p class="muted" style="margin-top:12px;">
+      Total files found: {{ ccc_files | size }}
+    </p>
   </div>
-
-
 
   <div class="card">
-
-    <h2 style="margin:0 0 8px 0;">Notes</h2>
-
+    <h2>Notes</h2>
     <p class="muted" style="margin:0;">
-
-      This page lists static assets using <code>site.static_files</code>.
-
-      Jekyll exposes static files (no front matter) via <code>site.static_files</code>. [3](https://elephas.app/blog/notebooklm-source-limits)[1](https://www.youtube.com/watch?v=QSCydUks7TY)
-
+      This page lists static HTML files using <code>site.static_files</code>.
+      Files with front matter are treated as Jekyll pages, not static files.
     </p>
-
   </div>
 
+  <div class="card">
+    <h2>Back</h2>
+    <p style="margin:0;">
+      <a href="{{ '/' | relative_url }}">Back to Ledger home</a>
+    </p>
+  </div>
 </body>
-
 </html>
-
-
