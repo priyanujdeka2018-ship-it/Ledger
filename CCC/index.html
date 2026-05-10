@@ -49,11 +49,7 @@ title: CCC Library
 
   <h1>{{ page.title }}</h1>
 
-  <p class="muted">
-
-    Auto-generated list of <code>.html</code> files inside <code>/CCC</code>.
-
-  </p>
+  <p class="muted">Auto-generated list of <code>.html</code> files inside <code>/CCC</code>.</p>
 
 
 
@@ -73,10 +69,6 @@ title: CCC Library
 
     %}
 
-
-
-    {%- comment -%}Exclude this folder's index page from the list + count{%- endcomment -%}
-
     {% assign ccc_files = ccc_files | where_exp: "f", "f.name != 'index.html'" %}
 
 
@@ -93,11 +85,7 @@ title: CCC Library
 
 
 
-    <p class="muted" style="margin-top:12px;">
-
-      Total files found: {{ ccc_files | size }}
-
-    </p>
+    <p class="muted" style="margin-top:12px;">Total files found: {{ ccc_files | size }}</p>
 
   </div>
 
@@ -109,11 +97,9 @@ title: CCC Library
 
     <p class="muted" style="margin:0;">
 
-      Built with Jekyll on GitHub Pages. Static assets are listed via <code>site.static_files</code>.
+      This page lists static assets using <code>site.static_files</code>.
 
-      See: <a href="https://jekyllrb.com/docs/static-files/">Jekyll static files</a> and
-
-      <a href="https://jekyllrb.com/docs/github-pages/">Jekyll + GitHub Pages</a>.
+      Jekyll exposes static files (no front matter) via <code>site.static_files</code>. [3](https://elephas.app/blog/notebooklm-source-limits)[1](https://www.youtube.com/watch?v=QSCydUks7TY)
 
     </p>
 
@@ -122,4 +108,5 @@ title: CCC Library
 </body>
 
 </html>
+
 
