@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mastercard Director, Revenue Assurance & BT — Career Playbook | Priyanuj Deka</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #18181f;
+    --border: #222230;
+    --mc-red: #eb001b;
+    --mc-orange: #f79e1b;
+    --mc-gold: #ff5f00;
+    --amber: #f59e0b;
+    --amber-dim: #92400e;
+    --green: #10b981;
+    --green-dim: #065f46;
+    --red: #ef4444;
+    --red-dim: #7f1d1d;
+    --blue: #3b82f6;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --text-muted: #4b5563;
+    --mono: 'DM Mono', monospace;
+    --head: 'Syne', sans-serif;
+    --body: 'Inter', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--body); font-size: 14px; line-height: 1.6; min-height: 100vh; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0d0d14 0%, #12121a 60%, #1a0f0a 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 300px;
+    background: radial-gradient(ellipse at right center, rgba(235,0,27,0.08) 0%, transparent 70%);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 80px; bottom: 0;
+    width: 200px;
+    background: radial-gradient(ellipse at right center, rgba(247,158,27,0.05) 0%, transparent 70%);
+  }
+  .header-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--mc-orange);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .header-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 6px var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .header h1 { font-family: var(--head); font-size: 28px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 4px; }
+  .header h1 span { color: var(--mc-red); }
+  .header-sub { color: var(--text-dim); font-size: 13px; margin-bottom: 20px; }
+  .header-meta {
+    display: flex; flex-wrap: wrap; gap: 20px; align-items: center;
+  }
+  .meta-chip {
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .meta-label { font-family: var(--mono); font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; }
+  .meta-value { font-family: var(--mono); font-size: 15px; font-weight: 500; }
+  .meta-value.fit { color: var(--mc-orange); }
+  .meta-value.ctc { color: var(--green); }
+  .meta-value.status { color: var(--mc-red); }
+  .meta-value.prep { color: var(--amber); }
+  .fit-bar-wrap { flex: 1; min-width: 200px; }
+  .fit-bar-track { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+  .fit-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--mc-red), var(--mc-orange)); width: 76%; position: relative; }
+  .fit-bar-target { position: absolute; right: -2px; top: -2px; width: 10px; height: 10px; border-radius: 50%; background: var(--mc-orange); box-shadow: 0 0 6px var(--mc-orange); }
+
+  /* MC LOGO PAIR */
+  .mc-logo {
+    position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+    display: flex; align-items: center;
+  }
+  .mc-circle {
+    width: 44px; height: 44px; border-radius: 50%; opacity: 0.7;
+  }
+  .mc-circle.r { background: var(--mc-red); margin-right: -14px; }
+  .mc-circle.o { background: var(--mc-orange); }
+
+  /* TABS */
+  .tabs { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 40px; display: flex; gap: 0; overflow-x: auto; }
+  .tab {
+    font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+    color: var(--text-muted); padding: 14px 18px; border-bottom: 2px solid transparent;
+    cursor: pointer; white-space: nowrap; transition: all 0.2s; text-transform: uppercase;
+  }
+  .tab:hover { color: var(--text-dim); }
+  .tab.active { color: var(--mc-orange); border-bottom-color: var(--mc-orange); }
+  .tab-num { color: var(--mc-red); margin-right: 5px; }
+
+  /* CONTENT */
+  .content { padding: 32px 40px; max-width: 1100px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 18px;
+  }
+  .card.amber-border { border-color: var(--amber-dim); }
+  .card.green-border { border-color: var(--green-dim); }
+  .card.red-border { border-color: var(--red-dim); }
+  .card.mc-border { border-color: rgba(235,0,27,0.25); }
+  .card-title {
+    font-family: var(--head); font-size: 14px; font-weight: 700;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .card-title .icon { font-size: 16px; }
+
+  /* SECTION HEADER */
+  .section-header { margin-bottom: 28px; }
+  .section-header h2 { font-family: var(--head); font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+  .section-header .sub { color: var(--text-dim); font-size: 13px; }
+  .section-header .num { color: var(--mc-red); font-family: var(--mono); font-size: 11px; display: block; margin-bottom: 6px; }
+
+  /* MISSION STATEMENT */
+  .mission {
+    background: linear-gradient(135deg, rgba(235,0,27,0.07) 0%, rgba(247,158,27,0.04) 100%);
+    border: 1px solid rgba(235,0,27,0.2);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 24px;
+    font-style: italic; font-size: 15px; line-height: 1.7; color: var(--text-dim);
+  }
+  .mission strong { color: var(--mc-orange); font-style: normal; }
+
+  /* ROLE ANATOMY GRID */
+  .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .role-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px; border-left: 3px solid var(--mc-red);
+  }
+  .role-card .emoji { font-size: 22px; margin-bottom: 10px; display: block; }
+  .role-card h4 { font-family: var(--head); font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--mc-orange); }
+  .role-card p { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+  /* REQUIREMENT TABLE */
+  .req-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+  .req-table th {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted); padding: 10px 14px;
+    border-bottom: 1px solid var(--border); text-align: left;
+    background: var(--surface2);
+  }
+  .req-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 12.5px; vertical-align: top; }
+  .req-table tr:hover td { background: rgba(247,158,27,0.03); }
+  .weight-chip {
+    font-family: var(--mono); font-size: 10px; padding: 2px 8px;
+    border-radius: 4px; display: inline-block;
+  }
+  .weight-chip.critical { background: rgba(239,68,68,0.15); color: #f87171; }
+  .weight-chip.high { background: rgba(245,158,11,0.15); color: var(--amber); }
+  .weight-chip.medium { background: rgba(59,130,246,0.15); color: #93c5fd; }
+
+  /* FIT MATCH CARDS */
+  .match-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px 20px; margin-bottom: 14px;
+  }
+  .match-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .match-title { font-family: var(--head); font-size: 13px; font-weight: 700; max-width: 70%; }
+  .match-badge {
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em;
+    padding: 3px 10px; border-radius: 4px; text-transform: uppercase; flex-shrink: 0;
+  }
+  .match-badge.headline { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
+  .match-badge.strong { background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+  .match-badge.moderate { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+  .match-badge.gap { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+  .match-jd { font-family: var(--mono); font-size: 10px; color: var(--mc-red); margin-bottom: 8px; font-style: italic; }
+  .match-proof { font-size: 12.5px; color: var(--text-dim); line-height: 1.55; }
+  .match-proof strong { color: var(--text); }
+
+  /* FIT SCORE BAR */
+  .fit-score-display {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px; margin-bottom: 24px;
+    display: flex; gap: 32px; align-items: center;
+  }
+  .score-big { font-family: var(--head); font-size: 56px; font-weight: 800; line-height: 1; }
+  .score-big.current { color: var(--mc-orange); }
+  .score-arrow { color: var(--text-muted); font-size: 24px; }
+  .score-big.target { color: var(--green); }
+  .score-details { flex: 1; }
+  .score-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: visible; position: relative; margin: 10px 0; }
+  .score-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--mc-red), var(--mc-orange)); }
+  .score-bar-target-marker {
+    position: absolute; top: -3px; height: 14px; width: 2px;
+    background: var(--green); box-shadow: 0 0 6px var(--green);
+  }
+
+  /* UNLOCK PHRASE */
+  .unlock {
+    background: linear-gradient(135deg, rgba(247,158,27,0.08) 0%, rgba(235,0,27,0.05) 100%);
+    border: 1px solid rgba(247,158,27,0.25);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 24px;
+  }
+  .unlock-label { font-family: var(--mono); font-size: 9px; color: var(--mc-orange); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 10px; }
+  .unlock-text { font-size: 14.5px; color: var(--text); line-height: 1.7; font-style: italic; }
+
+  /* REFRAME TABLE */
+  .reframe-table { width: 100%; border-collapse: collapse; }
+  .reframe-table th {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.1em; padding: 10px 14px; background: var(--surface2);
+    border: 1px solid var(--border); color: var(--text-muted); text-align: left;
+  }
+  .reframe-table td { padding: 11px 14px; border: 1px solid var(--border); font-size: 12.5px; vertical-align: top; }
+  .reframe-table tr:nth-child(even) td { background: rgba(255,255,255,0.01); }
+  .reframe-from { color: var(--text-dim); }
+  .reframe-to { color: var(--mc-orange); font-weight: 500; }
+
+  /* GAP CARDS */
+  .gap-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px 20px; margin-bottom: 14px;
+  }
+  .gap-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .gap-title { font-family: var(--head); font-size: 13px; font-weight: 700; }
+  .gap-meta { display: flex; gap: 8px; align-items: center; }
+  .timeline-chip {
+    font-family: var(--mono); font-size: 9px; padding: 2px 8px;
+    border-radius: 4px; background: rgba(245,158,11,0.1); color: var(--amber);
+  }
+  .severity-chip {
+    font-family: var(--mono); font-size: 9px; padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .severity-chip.high { background: rgba(239,68,68,0.1); color: #f87171; }
+  .severity-chip.medium { background: rgba(245,158,11,0.1); color: var(--amber); }
+  .severity-chip.low { background: rgba(16,185,129,0.1); color: var(--green); }
+  .gap-fix { margin-top: 12px; }
+  .gap-fix h5 { font-family: var(--mono); font-size: 10px; color: var(--mc-orange); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .gap-fix li { font-size: 12.5px; color: var(--text-dim); margin-left: 16px; margin-bottom: 5px; line-height: 1.5; }
+  .gap-fix li strong { color: var(--text); }
+
+  /* STAR STORIES */
+  .star-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 14px; overflow: hidden;
+  }
+  .star-header {
+    padding: 16px 20px; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: background 0.2s;
+  }
+  .star-header:hover { background: rgba(247,158,27,0.04); }
+  .star-id { font-family: var(--mono); font-size: 10px; color: var(--mc-red); margin-bottom: 3px; }
+  .star-title { font-family: var(--head); font-size: 13px; font-weight: 700; }
+  .star-line { font-family: var(--mono); font-size: 11px; color: var(--mc-orange); font-style: italic; margin-top: 4px; }
+  .star-expand { color: var(--text-muted); font-size: 16px; transition: transform 0.2s; }
+  .star-body {
+    padding: 0 20px 18px; display: none;
+  }
+  .star-body.open { display: block; }
+  .star-row { margin-bottom: 10px; }
+  .star-row-label { font-family: var(--mono); font-size: 9px; color: var(--mc-red); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 3px; }
+  .star-row-text { font-size: 12.5px; color: var(--text-dim); line-height: 1.55; }
+  .star-row-text strong { color: var(--text); }
+  .followup-box {
+    background: rgba(247,158,27,0.06); border: 1px solid rgba(247,158,27,0.15);
+    border-radius: 6px; padding: 10px 14px; margin-top: 12px;
+  }
+  .followup-box .label { font-family: var(--mono); font-size: 9px; color: var(--amber); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px; }
+  .followup-box .text { font-size: 12px; color: var(--text-dim); font-style: italic; }
+
+  /* COMP INTEL */
+  .comp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .comp-tile {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 18px; text-align: center;
+  }
+  .comp-tile .value { font-family: var(--head); font-size: 22px; font-weight: 800; color: var(--mc-orange); margin-bottom: 4px; }
+  .comp-tile .label { font-family: var(--mono); font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .neg-table { width: 100%; border-collapse: collapse; }
+  .neg-table th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); text-align: left; }
+  .neg-table td { padding: 12px 14px; border: 1px solid var(--border); font-size: 12.5px; vertical-align: top; }
+  .neg-table .param { font-family: var(--mono); color: var(--mc-orange); font-size: 12px; }
+
+  /* INTERVIEW PREP */
+  .bq-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+  .bq-table th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); text-align: left; }
+  .bq-table td { padding: 12px 14px; border: 1px solid var(--border); font-size: 12.5px; vertical-align: top; }
+  .bq-table tr:hover td { background: rgba(247,158,27,0.03); }
+  .story-ref { font-family: var(--mono); font-size: 11px; color: var(--mc-red); }
+  .key-line { font-style: italic; color: var(--text-dim); font-size: 12px; }
+
+  /* ROUND CARDS */
+  .round-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-left: 3px solid var(--mc-red); border-radius: 8px;
+    padding: 16px 20px; margin-bottom: 12px;
+  }
+  .round-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .round-title { font-family: var(--head); font-size: 13px; font-weight: 700; }
+  .round-meta { font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
+  .round-desc { font-size: 12.5px; color: var(--text-dim); line-height: 1.5; }
+
+  /* ASSERTIVENESS */
+  .assert-card {
+    background: linear-gradient(135deg, rgba(235,0,27,0.06) 0%, rgba(247,158,27,0.04) 100%);
+    border: 1px solid rgba(235,0,27,0.2); border-radius: 10px; padding: 22px 24px; margin-bottom: 24px;
+  }
+  .assert-card .header { font-family: var(--head); font-size: 14px; font-weight: 700; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .assert-point { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
+  .assert-num { font-family: var(--mono); font-size: 12px; color: var(--mc-red); font-weight: 500; flex-shrink: 0; margin-top: 2px; }
+  .assert-text { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  .assert-text strong { color: var(--text); }
+
+  /* VOCAB */
+  .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .vocab-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px; cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .vocab-card:hover { border-color: rgba(247,158,27,0.3); }
+  .vocab-term { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--mc-orange); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .vocab-hint { font-family: var(--mono); font-size: 9px; color: var(--text-muted); }
+  .vocab-def { font-size: 12px; color: var(--text-dim); line-height: 1.55; display: none; padding-top: 8px; border-top: 1px solid var(--border); margin-top: 8px; }
+  .vocab-def.open { display: block; }
+  .vocab-progress {
+    display: flex; gap: 8px; align-items: center; margin-bottom: 20px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 18px;
+  }
+  .vocab-progress .label { font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
+  .vocab-count { font-family: var(--mono); font-size: 14px; font-weight: 500; color: var(--mc-orange); }
+
+  /* AI PORTFOLIO */
+  .project-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 18px;
+    border-left: 3px solid var(--mc-red);
+  }
+  .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+  .project-id { font-family: var(--mono); font-size: 10px; color: var(--mc-red); }
+  .project-name { font-family: var(--head); font-size: 16px; font-weight: 700; margin-top: 2px; }
+  .project-subtitle { font-size: 12px; color: var(--text-dim); }
+  .project-status { font-family: var(--mono); font-size: 10px; padding: 3px 10px; border-radius: 4px; background: rgba(245,158,11,0.1); color: var(--amber); }
+  .project-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+  .project-meta-item .label { font-family: var(--mono); font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 3px; }
+  .project-meta-item .val { font-size: 12.5px; color: var(--text); }
+  .project-pitch { font-size: 13px; color: var(--text-dim); line-height: 1.6; padding: 14px; background: rgba(235,0,27,0.04); border: 1px solid rgba(235,0,27,0.1); border-radius: 6px; margin-bottom: 14px; }
+  .project-features h5 { font-family: var(--mono); font-size: 10px; color: var(--mc-orange); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+  .project-features li { font-size: 12.5px; color: var(--text-dim); margin-left: 16px; margin-bottom: 4px; }
+  .project-features li strong { color: var(--text); }
+
+  /* PSYCHOMETRIC */
+  .psych-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .psych-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px;
+  }
+  .psych-label { font-family: var(--mono); font-size: 9px; color: var(--mc-red); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 6px; }
+  .psych-title { font-family: var(--head); font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .psych-text { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+  /* 90 DAY PLAN */
+  .plan-row { display: grid; grid-template-columns: 120px 1fr; gap: 0; margin-bottom: 0; }
+  .plan-period {
+    padding: 18px 16px; display: flex; flex-direction: column; justify-content: flex-start;
+    border-right: 2px solid var(--mc-red); margin-right: 24px;
+  }
+  .plan-period .days { font-family: var(--head); font-size: 20px; font-weight: 800; color: var(--mc-red); }
+  .plan-period .label { font-family: var(--mono); font-size: 10px; color: var(--text-muted); }
+  .plan-content { padding: 18px 0; }
+  .plan-content h4 { font-family: var(--head); font-size: 13px; font-weight: 700; color: var(--mc-orange); margin-bottom: 8px; }
+  .plan-content li { font-size: 12.5px; color: var(--text-dim); margin-left: 16px; margin-bottom: 5px; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  /* SHARED SECTION LABELS */
+  .label-tag {
+    font-family: var(--mono); font-size: 9px; text-transform: uppercase;
+    letter-spacing: 0.12em; padding: 2px 8px; border-radius: 4px;
+    background: rgba(235,0,27,0.1); color: var(--mc-red);
+    display: inline-block; margin-bottom: 12px;
+  }
+  .label-tag.amber { background: rgba(245,158,11,0.1); color: var(--amber); }
+  .label-tag.green { background: rgba(16,185,129,0.1); color: var(--green); }
+
+  /* WHY YOU BOX */
+  .why-box {
+    background: linear-gradient(135deg, rgba(16,185,129,0.06) 0%, rgba(247,158,27,0.04) 100%);
+    border: 1px solid rgba(16,185,129,0.2); border-radius: 10px;
+    padding: 22px 24px; margin-bottom: 24px;
+  }
+  .why-box h3 { font-family: var(--head); font-size: 15px; font-weight: 700; color: var(--green); margin-bottom: 14px; }
+  .why-point { display: flex; gap: 12px; margin-bottom: 12px; }
+  .why-point .bullet { color: var(--green); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .why-point .text { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  .why-point .text strong { color: var(--text); }
+
+  @media (max-width: 768px) {
+    .header { padding: 20px; }
+    .content { padding: 20px; }
+    .tabs { padding: 0 20px; }
+    .role-grid, .comp-grid, .vocab-grid, .psych-grid { grid-template-columns: 1fr; }
+    .mc-logo { display: none; }
+    .fit-score-display { flex-direction: column; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-badge">Active Now · Mastercard Services · Pipeline Role #5 · Trio Cluster</div>
+  <h1>Mastercard <span>Services</span></h1>
+  <div class="header-sub">Director, Revenue Assurance &amp; Business Transformation · Pune / Gurgaon · Insights &amp; Enablement</div>
+  <div class="header-meta">
+    <div class="meta-chip">
+      <span class="meta-label">Fit Score</span>
+      <span class="meta-value fit">76→83/100</span>
+    </div>
+    <div class="meta-chip">
+      <span class="meta-label">Est. CTC</span>
+      <span class="meta-value ctc">₹70–90L</span>
+    </div>
+    <div class="meta-chip">
+      <span class="meta-label">Status</span>
+      <span class="meta-value status">APPLY NOW</span>
+    </div>
+    <div class="meta-chip">
+      <span class="meta-label">Prep Window</span>
+      <span class="meta-value prep">3–5 weeks</span>
+    </div>
+    <div class="meta-chip">
+      <span class="meta-label">Certs Required</span>
+      <span class="meta-value">0 (optional)</span>
+    </div>
+    <div class="fit-bar-wrap">
+      <span class="meta-label">Fit Progress</span>
+      <div class="fit-bar-track">
+        <div class="fit-bar-fill"><div class="fit-bar-target"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="mc-logo">
+    <div class="mc-circle r"></div>
+    <div class="mc-circle o"></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab(0)"><span class="tab-num">01</span>JD Decoded</div>
+  <div class="tab" onclick="switchTab(1)"><span class="tab-num">02</span>Your Fit</div>
+  <div class="tab" onclick="switchTab(2)"><span class="tab-num">03</span>Gaps &amp; Plan</div>
+  <div class="tab" onclick="switchTab(3)"><span class="tab-num">04</span>AI Portfolio</div>
+  <div class="tab" onclick="switchTab(4)"><span class="tab-num">05</span>STAR Bank</div>
+  <div class="tab" onclick="switchTab(5)"><span class="tab-num">06</span>Comp Intel</div>
+  <div class="tab" onclick="switchTab(6)"><span class="tab-num">07</span>Interview Prep</div>
+  <div class="tab" onclick="switchTab(7)"><span class="tab-num">08</span>Vocab Decoder</div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ===================== TAB 01: JD DECODED ===================== -->
+<div class="section active" id="tab-0">
+  <div class="section-header">
+    <span class="num">01 / ROLE DECODED</span>
+    <h2>What Mastercard Services Is Really Hiring For</h2>
+    <p class="sub">Beneath the job description language — the actual mandate, the unstated expectations, and why this role exists now.</p>
+  </div>
+
+  <div class="mission">
+    <strong>The Role in One Sentence:</strong> You are the internal operating partner who ensures Mastercard Services captures every dollar of earned revenue, fixes every leaking process, and transforms the order-to-cash lifecycle from a risk source into a competitive strength — serving as a first-principles problem solver and consulting partner to Sales, Finance, Controllership, and Risk.
+  </div>
+
+  <div class="label-tag">What Mastercard Services Is</div>
+  <div class="card mc-border" style="margin-bottom:24px;">
+    <div class="card-title"><span class="icon">🌐</span> Mastercard Services — The Business Context</div>
+    <p style="color:var(--text-dim);font-size:13px;line-height:1.7;margin-bottom:14px;">
+      Mastercard Services is the professional services arm of Mastercard — not the payments network itself, but the advisory and analytics overlay that helps clients extract value from the payments ecosystem. It offers consulting, data insights, marketing services, loyalty and analytics platforms, and digital enablement. Revenue is generated through B2B service contracts, platform licensing, and advisory engagements with financial institutions, merchants, and government clients across the globe.
+    </p>
+    <p style="color:var(--text-dim);font-size:13px;line-height:1.7;">
+      The <strong style="color:var(--text);">Insights &amp; Enablement team</strong> — where this role sits — is the internal intelligence and operational excellence function for Services. It doesn't serve external clients; it serves the business of Services itself, using data and technology to drive smarter decisions and operational efficiency across the Services P&amp;L.
+    </p>
+  </div>
+
+  <div class="label-tag">Role Anatomy</div>
+  <div class="role-grid">
+    <div class="role-card">
+      <span class="emoji">🛡️</span>
+      <h4>Revenue Assurance Owner</h4>
+      <p>Ensure every service delivered is billed correctly, collected completely, and at zero risk of revenue leakage. Build and run the control mechanisms — the monitoring layer, the exception queue, the escalation path — that prevent revenue from slipping through process gaps.</p>
+    </div>
+    <div class="role-card">
+      <span class="emoji">🔬</span>
+      <h4>Internal Consulting Partner</h4>
+      <p>Act as a trusted advisor to Sales, Finance, Controllership, and Risk — not a support function, but a strategic peer. Diagnose their process pain points using analytical frameworks, formulate hypotheses, test them with data, and prescribe solutions.</p>
+    </div>
+    <div class="role-card">
+      <span class="emoji">⚙️</span>
+      <h4>Business Transformation Lead</h4>
+      <p>Design and execute cross-functional process improvement programmes across the order-to-cash lifecycle. From SOP redesign to system enhancements to tactical automation — own the full change management journey from diagnosis to embedding.</p>
+    </div>
+    <div class="role-card">
+      <span class="emoji">📋</span>
+      <h4>Centralised Quality Governance</h4>
+      <p>Institute quality checks across the entire O2C lifecycle — billing, collections, compliance, risk controls. Lead the centralised team that runs these checks. Not just detection — prevention, monitoring, and continuous improvement.</p>
+    </div>
+    <div class="role-card">
+      <span class="emoji">📊</span>
+      <h4>KPI &amp; Continuous Improvement Engine</h4>
+      <p>Define, monitor, and drive process KPIs. Use data to identify efficiency gaps, test hypotheses, and deploy solutions — system enhancements, automation, or process redesign. Make improvement structural, not episodic.</p>
+    </div>
+    <div class="role-card">
+      <span class="emoji">👥</span>
+      <h4>Team Builder &amp; People Leader</h4>
+      <p>Lead the execution team responsible for quality checks and transformation delivery. Take on people management over time — building capability, not just managing throughput. Author a team that operates at Director altitude.</p>
+    </div>
+  </div>
+
+  <div class="label-tag">Requirement Breakdown</div>
+  <table class="req-table">
+    <thead>
+      <tr><th>JD Language</th><th>What It Actually Means</th><th>Weight</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>"Drive Quality and Revenue Assurance program — right control mechanisms to prevent revenue risks and compliance gaps"</td>
+        <td>You own the billing-to-collections control architecture. Build the monitoring layer that catches revenue leakage before it becomes a loss. Define KRIs, set thresholds, govern exception queues, escalate anomalies. This is the central mandate.</td>
+        <td><span class="weight-chip critical">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>"Engage with key stakeholders and act as Internal Consulting partner"</td>
+        <td>This is not a support function. You diagnose pain points at the same altitude as the heads of Sales, Finance, and Risk. You bring an analytical framework, not just a status report. Think internal McKinsey — but with execution authority.</td>
+        <td><span class="weight-chip critical">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>"Lead Centralised team to institute quality checks across business operations lifecycle (order to cash)"</td>
+        <td>You run the quality governance function. Your team is the checkpoint layer — every material transaction in the O2C cycle passes through your quality gate before it represents a revenue number. You design the gate and own its outcomes.</td>
+        <td><span class="weight-chip critical">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>"Use analytical frameworks and data-driven insights to identify improvements, test hypothesis and roll-out optimized process"</td>
+        <td>First-principles problem solving — not best-practice application. You map the current state, form a hypothesis about the root cause, design a test, measure, and productionise. Structured thinking under ambiguity is the core competency.</td>
+        <td><span class="weight-chip critical">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>"Ensure successful implementation with disciplined program management and change management"</td>
+        <td>You're not just the diagnostician — you own delivery. Every process change you design, you also land. That means project governance, stakeholder alignment, change communications, and measurement of adoption.</td>
+        <td><span class="weight-chip high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>"Develop appropriate documentation — SOPs, process flows, user journey maps"</td>
+        <td>The institutional knowledge you create must outlive you. Governance documentation, operating procedures, and journey maps are the artefacts that make transformation stick. This is structural, not bureaucratic.</td>
+        <td><span class="weight-chip high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>"Monitor process KPIs and drive continuous efficiency improvements"</td>
+        <td>You build a self-improving system. KPI monitoring isn't reporting — it's early-warning radar. When a metric moves, you know why, you have a response playbook, and you drive the fix through the organisation.</td>
+        <td><span class="weight-chip high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>"Experience in dealing with unstructured situations and applying first principles thinking"</td>
+        <td>The problems you'll encounter won't have existing templates. Revenue assurance in a B2B services firm involves novel billing models, custom contract structures, and cross-functional grey zones. First principles is not a nice-to-have — it's the hiring criterion.</td>
+        <td><span class="weight-chip high">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>"Exposure to B2B Sales processes, Salesforce CRM, CPQ; Tableau"</td>
+        <td>Domain knowledge that accelerates your effectiveness. The preferred list — not the knockout list. CPQ (Configure-Price-Quote) exposure is the highest-value gap to close; it's where revenue assurance starts in a B2B firm.</td>
+        <td><span class="weight-chip medium">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td>"Lead members and take up people management responsibilities over time"</td>
+        <td>"Over time" is JD softening — they want a leader who will grow the function. Demonstrate current team-building experience and a philosophy for developing the execution layer below you.</td>
+        <td><span class="weight-chip medium">MEDIUM</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="label-tag amber">Why This Role Exists Now</div>
+  <div class="card amber-border">
+    <div class="card-title"><span class="icon">💡</span> The Hiring Trigger</div>
+    <p style="color:var(--text-dim);font-size:13px;line-height:1.7;margin-bottom:12px;">
+      Mastercard Services is scaling its India GCC operations aggressively. As the business grows — more service contracts, more markets, more customised advisory engagements — the complexity of revenue assurance multiplies non-linearly. Manual controls that worked at $X of contract volume break at $10X. The Insights &amp; Enablement function needs a Director who can <strong style="color:var(--text);">architect the revenue control infrastructure</strong> for the next growth phase, not just manage the current one.
+    </p>
+    <p style="color:var(--text-dim);font-size:13px;line-height:1.7;">
+      The dual mandate — Revenue Assurance + Business Transformation — signals that Mastercard wants someone who can simultaneously <strong style="color:var(--text);">stabilise current revenue risk exposure</strong> (assurance) and <strong style="color:var(--text);">redesign the processes that create that risk</strong> (transformation). These are usually two separate hires. This role combines them, which means they want a profile that can operate at both detective and architect altitude.
+    </p>
+  </div>
+
+  <div class="label-tag">Unstated Requirements</div>
+  <div class="card" style="margin-bottom:0;">
+    <div class="card-title"><span class="icon">🔍</span> What They Won't Tell You</div>
+    <ul style="list-style:none;padding:0;">
+      <li style="display:flex;gap:12px;margin-bottom:12px;"><span style="color:var(--mc-red);font-weight:700;flex-shrink:0;">→</span><span style="font-size:13px;color:var(--text-dim);line-height:1.5;"><strong style="color:var(--text);">B2B services billing complexity:</strong> Mastercard Services revenue is contract-driven — milestone-based, outcome-based, and subscription models coexist. Revenue assurance here means understanding how each billing model maps to delivery milestones and where recognition risk lives.</span></li>
+      <li style="display:flex;gap:12px;margin-bottom:12px;"><span style="color:var(--mc-red);font-weight:700;flex-shrink:0;">→</span><span style="font-size:13px;color:var(--text-dim);line-height:1.5;"><strong style="color:var(--text);">Finance + Operations bilingualism:</strong> You will be in the room with Controllership (pure finance) and Sales (revenue-hungry). You need to translate between the two without losing either. The person who can speak GAAP and pipeline hygiene in the same sentence gets hired.</span></li>
+      <li style="display:flex;gap:12px;margin-bottom:12px;"><span style="color:var(--mc-red);font-weight:700;flex-shrink:0;">→</span><span style="font-size:13px;color:var(--text-dim);line-height:1.5;"><strong style="color:var(--text);">Controllership vocabulary is the actual filter:</strong> Revenue recognition, accruals, DSO, deferred revenue — these terms will appear in Round 1 interviews as a filter, not a detail. Fluency signals seniority; gaps signal junior profile.</span></li>
+      <li style="display:flex;gap:12px;"><span style="color:var(--mc-red);font-weight:700;flex-shrink:0;">→</span><span style="font-size:13px;color:var(--text-dim);line-height:1.5;"><strong style="color:var(--text);">Assertiveness under revenue pressure:</strong> Every revenue assurance role has the same dynamic — someone in Sales or Finance will push you to relax a control because "it's hurting the number." The hire who holds the standard with evidence wins. The hire who folds creates a risk event.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== TAB 02: YOUR FIT ===================== -->
+<div class="section" id="tab-1">
+  <div class="section-header">
+    <span class="num">02 / FIT ANALYSIS</span>
+    <h2>Your Evidence Against Every Requirement</h2>
+    <p class="sub">Requirement-by-requirement match. Sobha vocabulary translated into Mastercard Services language.</p>
+  </div>
+
+  <div class="fit-score-display">
+    <div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Current Fit</div>
+      <div class="score-big current">76</div>
+    </div>
+    <div class="score-arrow">→</div>
+    <div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Addressable Fit</div>
+      <div class="score-big target">83</div>
+    </div>
+    <div class="score-details">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text-muted);margin-bottom:6px;">SCORE BRIDGE</div>
+      <div class="score-bar-track">
+        <div class="score-bar-fill" style="width:76%;"></div>
+        <div class="score-bar-target-marker" style="left:83%;"></div>
+      </div>
+      <div style="font-size:12px;color:var(--text-dim);margin-top:8px;">+7 points addressable via: controllership vocabulary (3pt) · Tableau/BI framing (2pt) · B2B services context reframe (2pt). Zero certs blocking.</div>
+    </div>
+  </div>
+
+  <div class="unlock">
+    <div class="unlock-label">🔓 Unlock Phrase — Use This In Every Screen Call</div>
+    <div class="unlock-text">"I run revenue assurance and business transformation today — I just call it dues collections operations. I govern an AED 86.8B portfolio under a formalised control architecture: a 14-finding quality register feeding monthly to the CRO, a 12-person centralised quality function that gates every payment request, and a 55-day operating rhythm I built from first principles. The reframe from real estate dues to B2B services revenue is vocabulary, not capability."</div>
+  </div>
+
+  <div class="label-tag green">Requirement-by-Requirement Match</div>
+
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-title">Drive Quality and Revenue Assurance Program — control mechanisms to prevent revenue risks and compliance gaps</div>
+      <div class="match-badge headline">HEADLINE MATCH</div>
+    </div>
+    <div class="match-jd">"Ensure right control mechanisms are established to prevent any revenue risks and compliance gaps"</div>
+    <div class="match-proof">
+      Your QCG (Quality Control &amp; Governance) function is this — a <strong>12-person centralised team</strong> you designed and run, governing every Payment Request before it represents a collections event. The PR rejection rate hit 49% in Dec-2025 — your monitoring system caught it before it became a compliance failure, your root-cause analysis showed 73% were substantive gaps (not noise), and your response held the control standard under commercial pressure. That is the full revenue assurance lifecycle in one story: detection, analysis, hold-the-line, remediate. Your <strong>14-finding risk register</strong> — governs audit findings, tracks remediation, feeds monthly to CRO — is the compliance gap architecture the JD describes.
+    </div>
+  </div>
+
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-title">Engage with key stakeholders — Internal Consulting partner to Sales, Finance, Controllership, Risk</div>
+      <div class="match-badge headline">HEADLINE MATCH</div>
+    </div>
+    <div class="match-jd">"Understand pain-points related to their business model and operational processes"</div>
+    <div class="match-proof">
+      Your internal consulting track record: (1) <strong>NPV AED 652M model</strong> — built, defended, and landed at MD/CEO + CRO + CCO + Legal across three scrutiny rounds. That is consulting-partner altitude, not reporting altitude. (2) <strong>6-stakeholder Salesforce discovery</strong> — ran structured needs assessment across Sales, Operations, Finance, MIS, IT, and Compliance; translated pain points into a 70+ report architecture. (3) <strong>PCC TAT transformation</strong> — diagnosed a 20-day process bottleneck across Accounts, Legal, DLD, and Technology; redesigned it to 3 days without disruption. All three are the internal consulting partner profile the JD describes.
+    </div>
+  </div>
+
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-title">Lead Centralised Team — quality checks across business operations lifecycle (order to cash)</div>
+      <div class="match-badge headline">HEADLINE MATCH</div>
+    </div>
+    <div class="match-jd">"Institute quality checks across business operations lifecycle"</div>
+    <div class="match-proof">
+      You built this function from zero. <strong>QCG (Quality Control &amp; Governance) — 12 people, led by Garima Siddharth Shah</strong> — is a centralised quality layer governing documentation standards, PR approval gates, and compliance validation across the full collections lifecycle. Every payment request, every account action, every audit-facing artefact passes through this function. The order-to-cash analog: collections initiation → documentation → payment processing → receipt → reconciliation. You own quality gates at every stage.
+    </div>
+  </div>
+
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-title">Analytical frameworks and data-driven insights — test hypothesis and roll-out optimised process</div>
+      <div class="match-badge strong">STRONG MATCH</div>
+    </div>
+    <div class="match-jd">"Use analytical frameworks to identify improvements in current process, test hypothesis"</div>
+    <div class="match-proof">
+      Three documented examples: (1) <strong>T−25/T+30 Framework</strong> — built from first principles by analysing responsiveness data across the collections cycle; identified the 55-day critical window with no external playbook. (2) <strong>PCC workflow analysis</strong> — mapped 4 sequential handoffs, identified parallelisation opportunities and duplicative checks, redesigned flow, deployed in 2 weeks. (3) <strong>PR rejection root-cause</strong> — pulled rejection data by category, built the case for holding standards (73% substantive), presented to leadership. These are the hypothesis-test-deploy cycles the JD asks for.
+    </div>
+  </div>
+
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-title">Disciplined program management and change management with key stakeholders</div>
+      <div class="match-badge strong">STRONG MATCH</div>
+    </div>
+    <div class="match-jd">"Ensure successful implementation with disciplined program management and change management efforts"</div>
+    <div class="match-proof">
+      <strong>12 concurrent workstreams delivered on schedule in FY2025</strong> — all on time, no MD escalations, collections grew 62% YoY in the same period. The <strong>Salesforce 0→1 programme</strong> (2020–2021) is a documented change management case: 6-stakeholder discovery → architecture design → phased rollout → adoption governance → 70+ live reports embedded in daily workflow. The <strong>India Hub stand-up</strong> (42-person Hyderabad deployment in under 12 months) is the largest change management story — hiring, capability build, governance design, attrition control, zero operational gap.
+    </div>
+  </div>
+
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-title">SOPs, process flows, user journey maps — governance documentation</div>
+      <div class="match-badge strong">STRONG MATCH</div>
+    </div>
+    <div class="match-jd">"Develop appropriate documentation including SOPs, process flows, user journey maps"</div>
+    <div class="match-proof">
+      <strong>6 MD-approved process documents</strong> (COL-PF01 through COL-PF14) — authored or supervised, approved by MD Francis Alfred, now embedded in the operational SOPs for a 77-person organisation. These cover collections workflow, escalation protocols, quality gate standards, and audit documentation requirements. Your team members now autonomously author MD-approved documents — the capability build story proves documentation isn't a one-time deliverable but an institutionalised function.
+    </div>
+  </div>
+
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-title">Monitor process KPIs and drive continuous efficiency improvements</div>
+      <div class="match-badge strong">STRONG MATCH</div>
+    </div>
+    <div class="match-jd">"Using system enhancements, tactical automation or process changes"</div>
+    <div class="match-proof">
+      Your <strong>70+ report MIS ecosystem</strong> (Salesforce + SQL-migrating) is a real-time KPI monitoring architecture serving operational, tactical, and strategic audiences. You track: delinquency rate (–74%, 16.7%→4.4%), TAT (PCC 20→3 days), PR rejection rate (continuous), collections velocity (daily), portfolio health (monthly to MD). When a metric moves — you diagnose, design a response, and drive it through. The efficiency improvement mechanism: <strong>SQL migration (18/50 reports done)</strong>, projected 1,255 min/month MIS team savings.
+    </div>
+  </div>
+
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-title">Salesforce CRM / CPQ exposure — preferred, not essential</div>
+      <div class="match-badge strong">STRONG MATCH</div>
+    </div>
+    <div class="match-jd">"Sales productivity tools (e.g. Salesforce CRM, CPQ); Data visualization platforms (e.g. Tableau)"</div>
+    <div class="match-proof">
+      <strong>Salesforce: Led solution design</strong> of the Sobha CRM architecture — zero to 70+ live reports, 6-stakeholder discovery, 30,044+ active records under governance, quality scorecard embedded in workflow. This is not "exposure" — it's a build-from-zero implementation story. Tableau: Power BI PoC underway at Sobha (in progress) — different platform, same BI capability. Reframe: "I'm migrating our reporting suite to Power BI — the skill is evaluating which reports deliver the most value as interactive dashboards and managing the migration architecture."
+    </div>
+  </div>
+
+  <div class="match-card">
+    <div class="match-header">
+      <div class="match-title">B2B services organisation experience — "preferably"</div>
+      <div class="match-badge moderate">MODERATE — REFRAME REQUIRED</div>
+    </div>
+    <div class="match-jd">"Experience in driving revenue operations preferably for B2B services organizations"</div>
+    <div class="match-proof">
+      This is the most material vocabulary gap — Sobha is B2C real estate. The reframe: your internal stakeholders (Sales, Finance, Controllership, Legal, Operations) are your "clients" in a B2B internal consulting model. You don't serve one person — you serve four functions, each with its own P&amp;L logic. The governance discipline (3LOD model, audit SPOC, risk register) is exactly what a B2B RA function runs. The 10–15 year experience mention is the second gap — bridge via scope: <strong>AED 86.8B portfolio governance + Director-equivalent accountability already exercised at Sobha</strong>.
+    </div>
+  </div>
+
+  <div class="why-box">
+    <h3>Why You — Specifically</h3>
+    <div class="why-point">
+      <span class="bullet">✦</span>
+      <div class="text"><strong>Closest Functional Match in the Pipeline.</strong> This is not a reframe play — it is a direct function match. You run revenue assurance and quality governance today. The JD describes your current role. The only gap is domain vocabulary (real estate → B2B services), not capability.</div>
+    </div>
+    <div class="why-point">
+      <span class="bullet">✦</span>
+      <div class="text"><strong>Build-from-Zero DNA at Director Scale.</strong> You built the QCG function, the MIS ecosystem, the India hub, and the Salesforce platform — all from zero. Mastercard is hiring for a function that needs to be built and governed, not just maintained. Most candidates bring maintenance experience; you bring creation experience.</div>
+    </div>
+    <div class="why-point">
+      <span class="bullet">✦</span>
+      <div class="text"><strong>Rare Credential Stack for India RA Hiring.</strong> BITS Pilani Dual Degree (B.E. + M.Sc.) + IIM Udaipur PGDM satisfies the management degree criterion and creates genuine asymmetry — BFSI RA Directors typically have CA + MBA or CA + Big4 experience. A BITS+IIM profile with 6 years of hands-on programme execution is a credentialing gap that works in your favour.</div>
+    </div>
+    <div class="why-point">
+      <span class="bullet">✦</span>
+      <div class="text"><strong>Senior Forum Track Record.</strong> NPV AED 652M defended at MD/CEO across three rounds, zero concessions. The RA Director will defend findings, hold standards, and present to CFO/Controller equivalents. You have the proof point at the right altitude.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 03: GAPS & PLAN ===================== -->
+<div class="section" id="tab-2">
+  <div class="section-header">
+    <span class="num">03 / GAP CLOSURE</span>
+    <h2>Gaps &amp; 5-Week Prep Plan</h2>
+    <p class="sub">Honest gap inventory with a specific, executable closure plan. No gaps here are capability gaps — all are vocabulary and context.</p>
+  </div>
+
+  <div class="card amber-border" style="margin-bottom:24px;">
+    <div class="card-title"><span class="icon">⚡</span> Prep Philosophy</div>
+    <p style="font-size:13px;color:var(--text-dim);line-height:1.7;">
+      The gaps in this role are <strong style="color:var(--amber);">vocabulary and context, not capability</strong>. You have been running the functional equivalent of this role for 6 years. The prep investment is: 50% on controllership/B2B services vocabulary (the Round 1 filter), 30% on reframe practice (translating your stories into Services language fluently), 20% on Tableau/BI framing. No certifications required. The fastest TTO path is applying within 2 weeks with resume v1 and the unlock phrase internalized.
+    </p>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-title">Gap 1 — Controllership &amp; B2B Services Revenue Vocabulary</div>
+      <div class="gap-meta">
+        <span class="timeline-chip">2 weeks</span>
+        <span class="severity-chip high">HIGH PRIORITY</span>
+      </div>
+    </div>
+    <p style="font-size:12.5px;color:var(--text-dim);line-height:1.55;margin-bottom:12px;">This is the Round 1 filter. Interviewers will use terms like revenue recognition, accruals, DSO, deferred revenue, CPQ, and order-to-cash fluently. You need to use them back with the same ease. Not deep accounting expertise — conversational fluency that signals Director-level seniority.</p>
+    <div class="gap-fix">
+      <h5>The Fix</h5>
+      <ul>
+        <li><strong>Revenue Recognition (ASC 606 / IFRS 15):</strong> Understand the 5-step model. Services contracts involve milestone-based and outcome-based revenue recognition — know where leakage risk sits (when recognised ≠ when received).</li>
+        <li><strong>Accruals &amp; Deferred Revenue:</strong> Earned but not invoiced (accrued revenue) vs. invoiced but not earned (deferred revenue). This is where RA finds the largest leakage sources.</li>
+        <li><strong>DSO (Days Sales Outstanding):</strong> Your collections velocity metric, translated. You've been managing this for 6 years — you just haven't been calling it DSO.</li>
+        <li><strong>CPQ (Configure-Price-Quote):</strong> Salesforce CPQ is the B2B analogue of your Salesforce CRM work. Understand its role in the O2C cycle — quote → contract → order → invoice → collect.</li>
+        <li><strong>Resources:</strong> Stripe's B2B billing glossary (free). KPMG ASC 606 guide (free). NetSuite O2C primer (free). 2–3 hours total.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-title">Gap 2 — B2B Services Domain Context (Mastercard Services specifically)</div>
+      <div class="gap-meta">
+        <span class="timeline-chip">1 week</span>
+        <span class="severity-chip high">HIGH PRIORITY</span>
+      </div>
+    </div>
+    <p style="font-size:12.5px;color:var(--text-dim);line-height:1.55;margin-bottom:12px;">You need to speak the interviewer's product language. Mastercard Services revenue model, key products, and how the Insights &amp; Enablement team fits — should roll off your tongue naturally before Round 1.</p>
+    <div class="gap-fix">
+      <h5>The Fix</h5>
+      <ul>
+        <li><strong>Study Mastercard Services:</strong> Read mastercardservices.com — understand the four pillars (Consulting, Data &amp; Services, Marketing Services, Loyalty). Know 2–3 specific products and their revenue model.</li>
+        <li><strong>Understand the Insights &amp; Enablement mandate:</strong> This team is the internal COO function for Services — data-driven decisions + operational excellence. Your role sits here as the revenue governance pillar.</li>
+        <li><strong>B2B services O2C cycle:</strong> Quote → Contract → SOW → Delivery Milestone → Invoice → Revenue Recognition → Collections. Map your Sobha O2C to this cycle. The vocabulary changes; the control points don't.</li>
+        <li><strong>Mastercard India GCC scale:</strong> Read recent Mastercard India GCC announcements (Pune Technology Hub expansion, 2024–2025). Context for the scale of operations you'd be governing.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-title">Gap 3 — Experience Gap (10–15 years stated, ~6 post-MBA actual)</div>
+      <div class="gap-meta">
+        <span class="timeline-chip">Narrative only</span>
+        <span class="severity-chip medium">MEDIUM — MANAGE NARRATIVE</span>
+      </div>
+    </div>
+    <p style="font-size:12.5px;color:var(--text-dim);line-height:1.55;margin-bottom:12px;">The 10–15 year requirement is a proxy for seniority of scope, not a calendar gate. You need to bridge via scope, not timeline.</p>
+    <div class="gap-fix">
+      <h5>The Bridge</h5>
+      <ul>
+        <li><strong>Scope argument:</strong> AED 86.8B active portfolio under governance, 77-person cross-geography team, Director-equivalent accountability, MD/CEO-level presentation track record. The scope exceeds what many 12-year professionals have managed.</li>
+        <li><strong>Progression argument:</strong> MT to AGM in 6 years at one of the UAE's largest developers — accelerated career velocity signals readiness for Director scope earlier than the calendar suggests.</li>
+        <li><strong>BITS + IIM credential argument:</strong> Dual-degree BITS + IIM is a rare signal in India RA hiring. Use it as the credentialing substitute for the missing calendar years.</li>
+        <li><strong>Line to use in screen calls:</strong> "The 10–15 years in the JD is a scope signal — and on scope, I've been operating at Director altitude for the last 4 years. I govern an AED 86.8B portfolio, run a 77-person cross-geography organisation, and present monthly to CRO and quarterly to MD/CEO."</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-title">Gap 4 — Tableau / BI Tooling Framing</div>
+      <div class="gap-meta">
+        <span class="timeline-chip">Already in progress</span>
+        <span class="severity-chip low">LOW — ACCEPTABLE GAP</span>
+      </div>
+    </div>
+    <p style="font-size:12.5px;color:var(--text-dim);line-height:1.55;margin-bottom:12px;">JD mentions Tableau as preferred, not required. Power BI PoC is your proof point. This is a framing issue, not a capability gap.</p>
+    <div class="gap-fix">
+      <h5>The Reframe</h5>
+      <ul>
+        <li><strong>Line to use:</strong> "I'm leading our Power BI migration from Excel-based reporting — I'm the business owner on platform evaluation, data architecture requirements, and migration sequencing. Tableau is a different platform with the same underlying BI capability — I'd reach parity within 2–3 weeks of hands-on access."</li>
+        <li><strong>If pushed:</strong> Tableau Public is free — spend 2 hours creating one dashboard on a sample B2B dataset. You can now say "I've built dashboards in Tableau" without fabricating anything.</li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="label-tag">Reframe Dictionary — Sobha → Mastercard Services RA & BT</div>
+  <table class="reframe-table">
+    <thead>
+      <tr><th>What You Did at Sobha</th><th>How to Say It for Mastercard RA &amp; BT</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="reframe-from">Dues collections governance (AED 12.97B)</td><td class="reframe-to">Order-to-cash revenue assurance programme governing AED 86.8B active portfolio — billing controls, collection integrity, compliance gate management.</td></tr>
+      <tr><td class="reframe-from">QCG function (12 people — centralised quality layer)</td><td class="reframe-to">Centralised quality control &amp; governance function — 12-person team instituting quality checks across the O2C lifecycle, from documentation standards to compliance validation.</td></tr>
+      <tr><td class="reframe-from">14-finding risk register → monthly to CRO</td><td class="reframe-to">Revenue assurance findings register — tracks control gaps, remediation status, and compliance posture; feeds monthly to Chief Risk Officer and quarterly to MD/CEO.</td></tr>
+      <tr><td class="reframe-from">PR rejection rate 49% — held standard under pressure</td><td class="reframe-to">Quality gate enforcement at 49% exception rate — held the revenue assurance standard under commercial pressure, root-cause validated 73% substantive gaps, position vindicated by next-period data.</td></tr>
+      <tr><td class="reframe-from">Delinquency rate –74% (16.7% → 4.4%)</td><td class="reframe-to">Portfolio-at-risk rate reduced 74% — driven by control architecture redesign, early-warning KPI monitoring, and systematic remediation of identified risk pockets.</td></tr>
+      <tr><td class="reframe-from">PCC TAT transformation (20 → 3 days)</td><td class="reframe-to">End-to-end business process transformation — 85% cycle time reduction through first-principles workflow analysis, handoff redesign, and embedded quality checkpoints, at 3x volume.</td></tr>
+      <tr><td class="reframe-from">NPV AED 652M model defended at MD/CEO</td><td class="reframe-to">Senior-forum revenue optimisation model — AED 652M NPV case built and defended through multiple CFO/CEO scrutiny rounds; zero material concessions.</td></tr>
+      <tr><td class="reframe-from">55-day T−25/T+30 Framework</td><td class="reframe-to">Proprietary operational rhythm framework — built from first principles via responsiveness data analysis; now embedded in SOPs governing the O2C lifecycle across two geographies.</td></tr>
+      <tr><td class="reframe-from">Salesforce 0→1 architecture (70+ reports)</td><td class="reframe-to">Enterprise CRM platform deployment — led solution design for 0→1 implementation, 6-stakeholder discovery, 70+ live reports embedded as the MI backbone; direct CPQ-adjacent experience.</td></tr>
+      <tr><td class="reframe-from">6 MD-approved process documents</td><td class="reframe-to">Governance documentation suite — SOPs, process flows, and operating procedures authored and institutionalised across a 77-person organisation; MD-approved and in live use.</td></tr>
+      <tr><td class="reframe-from">Audit SPOC for Collections</td><td class="reframe-to">Revenue assurance audit interface — primary coordination point for all collections-related audit findings, remediation evidence, and compliance reporting to regulatory and internal oversight bodies.</td></tr>
+      <tr><td class="reframe-from">India hub stand-up (42 people, Hyderabad, &lt;12 months)</td><td class="reframe-to">Cross-geography operations build — deployed 42-person shared services hub in under 12 months; covers hiring, capability development, governance design, and attrition management.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===================== TAB 04: AI PORTFOLIO ===================== -->
+<div class="section" id="tab-3">
+  <div class="section-header">
+    <span class="num">04 / AI PORTFOLIO</span>
+    <h2>AI Project: P14 — Revenue Assurance Intelligence</h2>
+    <p class="sub">The AI portfolio project built specifically to demonstrate RA programme thinking for Mastercard Services. Builds on your existing MI ecosystem architecture.</p>
+  </div>
+
+  <div class="project-card">
+    <div class="project-header">
+      <div>
+        <div class="project-id">P14 · MASTERCARD-RA-BT · TO_BUILD · 1–2 WEEKS</div>
+        <div class="project-name">Revenue Assurance Intelligence Dashboard</div>
+        <div class="project-subtitle">AI-augmented O2C control monitoring, leakage detection, and programme health tracker</div>
+      </div>
+      <div class="project-status">TO_BUILD</div>
+    </div>
+
+    <div class="project-meta">
+      <div class="project-meta-item">
+        <div class="label">Tech Stack</div>
+        <div class="val">Python · Streamlit · Claude API · Pandas · Plotly</div>
+      </div>
+      <div class="project-meta-item">
+        <div class="label">Build Timeline</div>
+        <div class="val">1–2 weeks (parallel to application)</div>
+      </div>
+      <div class="project-meta-item">
+        <div class="label">Interview Hook</div>
+        <div class="val">"I've already built a version of what this team needs"</div>
+      </div>
+    </div>
+
+    <div class="project-pitch">
+      "The single biggest RA failure mode is not the absence of controls — it's the inability to see which controls are working, which aren't, and where the next leakage event will come from. I built a Revenue Assurance Intelligence Dashboard that does three things: monitors O2C control performance in real time, flags anomalies using AI-assisted pattern detection, and generates a weekly programme health digest for Finance leadership. It's the infrastructure that makes RA systematic instead of reactive."
+    </div>
+
+    <div class="project-features">
+      <h5>Core Features</h5>
+      <ul>
+        <li><strong>O2C Control Monitor:</strong> Tracks 8 control KPIs across the order-to-cash lifecycle (billing accuracy rate, invoice-to-cash TAT, exception queue depth, rejection rate by category, DSO trend, deferred revenue ageing, accrual variance, compliance gate pass rate).</li>
+        <li><strong>AI Leakage Detector:</strong> Claude API prompt chain — ingests daily exception queue, flags patterns that precede historical leakage events (e.g. rejection rate uptick → root-cause categorisation → risk probability score).</li>
+        <li><strong>Findings Register Integration:</strong> Structured tracking of open RA findings — owner, root cause, remediation action, target date, status. Auto-escalates items approaching due dates.</li>
+        <li><strong>Weekly Health Digest Generator:</strong> Claude API generates a structured 1-page summary of the week's RA signals — for Finance/Controllership leadership. Replaces 4 hours of manual report prep.</li>
+        <li><strong>Transformation Programme Tracker:</strong> Kanban view of active business transformation workstreams — milestone status, RAG, blockers, next action. Connects programme progress to RA impact (did the process change improve the control KPI?).</li>
+      </ul>
+    </div>
+
+    <div style="margin-top:16px;">
+      <div class="project-features">
+        <h5>Interview Application</h5>
+        <ul>
+          <li>Demonstrates you have already operationalised the thinking this role requires — not theoretical.</li>
+          <li>Shows AI-augmented operations capability — the Mastercard Services modernisation agenda.</li>
+          <li>Specific enough to spark a technical conversation: "How did you define the leakage detection logic?" → opens discussion of your analytical framework.</li>
+          <li>Reusable across Mastercard S&amp;R Ops playbook — the findings register and programme tracker are shared infrastructure.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:4px;">
+    <div class="card-title"><span class="icon">🔗</span> Shared Projects From Pipeline</div>
+    <p style="font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:12px;">Two existing projects from the pipeline also demonstrate relevant capability for this role:</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--mc-red);margin-bottom:6px;">P7 · AMEX-GMNS</div>
+        <div style="font-family:var(--head);font-size:13px;font-weight:700;margin-bottom:6px;">ORE Tracker w/ AI Risk Flagging</div>
+        <div style="font-size:12px;color:var(--text-dim);">Operational risk event tracker with AI-assisted pattern detection. Direct RA control monitoring analog — shows the control architecture thinking.</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--mc-red);margin-bottom:6px;">P9 · AMEX-GMNS</div>
+        <div style="font-family:var(--head);font-size:13px;font-weight:700;margin-bottom:6px;">Risk Committee Meeting Pack Generator</div>
+        <div style="font-size:12px;color:var(--text-dim);">AI-generated governance pack for senior leadership. Directly analogous to the Finance/Controllership reporting cadence this RA Director will own.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 05: STAR BANK ===================== -->
+<div class="section" id="tab-4">
+  <div class="section-header">
+    <span class="num">05 / STAR BANK</span>
+    <h2>Interview Stories — RA &amp; BT Framing</h2>
+    <p class="sub">6 core stories, each reframed for Mastercard Services vocabulary. Click any story to expand full STAR structure.</p>
+  </div>
+
+  <!-- S2 -->
+  <div class="star-card">
+    <div class="star-header" onclick="toggleStar(this)">
+      <div>
+        <div class="star-id">S2 · PRIMARY · "Tell me about holding a quality/revenue standard under pressure"</div>
+        <div class="star-title">PR 49% — Revenue Assurance Gate Held Under Commercial Pressure</div>
+        <div class="star-line">"The exception rate hit 49%. The data showed the gate was catching real leakage, not over-firing. I held the standard."</div>
+      </div>
+      <span class="star-expand">▼</span>
+    </div>
+    <div class="star-body">
+      <div class="star-row">
+        <div class="star-row-label">Mastercard RA Framing</div>
+        <div class="star-row-text">This story maps directly to the core RA scenario: control gate under commercial pressure. The "commercial team pushing to relax the documentation standard" = Sales/Finance pushing to relax the revenue assurance control because it's "hurting the number." This is the exact tension every RA Director navigates.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Situation</div>
+        <div class="star-row-text">December 2025. Payment Request rejection rate at our QCG quality gate hit <strong>49%</strong>. Commercial team pushed hard to relax the documentation standard — "the friction is killing velocity." Leadership pressure to reduce the exception rate quickly.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Task</div>
+        <div class="star-row-text">Decision: loosen the quality gate and accept downstream revenue risk exposure, or hold the standard and accept the commercial friction cost? Determine the right answer, then defend it with evidence.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Action</div>
+        <div class="star-row-text">Ran the root-cause analysis. Pulled rejection data by category — <strong>73% of rejections were for substantive documentation gaps</strong>, not procedural noise. Built a daily KPI governance pack breaking exception reasons by category. Presented to leadership: the 49% exception rate wasn't over-firing — it was functioning as designed. Held the gate. Parallel intervention: coached originators on documentation quality, reducing the rejection rate organically without relaxing the standard.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Result</div>
+        <div class="star-row-text">Standard held. Downstream error rate never spiked. Originator documentation quality improved measurably within 30 days. Position vindicated by next-period data — the controls were working.</div>
+      </div>
+      <div class="followup-box">
+        <div class="label">Most Common Follow-Up: "What would you do differently?"</div>
+        <div class="text">"I would have built the exception categorisation dashboard before the crisis hit — not after. The manual root-cause pull took 3 days. If the monitoring infrastructure had existed, I would have caught the trend at 35% rejection, not 49%, and had the coaching intervention already underway. The lesson: revenue assurance monitoring needs to be real-time, not retrospective."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S1 -->
+  <div class="star-card">
+    <div class="star-header" onclick="toggleStar(this)">
+      <div>
+        <div class="star-id">S1 · PRIMARY · "Tell me about your biggest achievement / largest programme you've governed"</div>
+        <div class="star-title">14.9x Scale with 74% Risk Reduction — Revenue Assurance at Portfolio Scale</div>
+        <div class="star-line">"We scaled the programme 14.9x while simultaneously cutting the portfolio-at-risk rate by 74%. The assurance architecture is why both numbers moved together."</div>
+      </div>
+      <span class="star-expand">▼</span>
+    </div>
+    <div class="star-body">
+      <div class="star-row">
+        <div class="star-row-label">Mastercard RA Framing</div>
+        <div class="star-row-text">This is the macro proof that revenue assurance and business transformation can coexist with growth — not be a brake on it. RA that works at AED 12.97B throughput while cutting risk 74% is exactly what Mastercard Services needs as it scales.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Situation</div>
+        <div class="star-row-text">2020: Sobha Realty dues collections programme at AED 867M annual throughput. Delinquency (portfolio-at-risk) rate at 16.7%. No established playbook for scale at this level.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Task</div>
+        <div class="star-row-text">Scale the programme aggressively while reducing revenue risk exposure — build the assurance architecture that allows both to happen simultaneously.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Action</div>
+        <div class="star-row-text">Built the full RA infrastructure from zero: centralised quality function (QCG, 12 people), MI ecosystem (70+ reports, live data), risk register and remediation framework, T−25/T+30 operating rhythm, and audit governance layer. Every control was designed for scale — not just the current volume, but 5x volume.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Result</div>
+        <div class="star-row-text"><strong>14.9x throughput growth</strong> (AED 867M → 12.97B). <strong>Delinquency –74%</strong> (16.7% → 4.4%). AED 86.8B active portfolio under governance. 77-person org across two geographies. The assurance architecture scaled with the business — zero control failures at the governance layer during the growth phase.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4 -->
+  <div class="star-card">
+    <div class="star-header" onclick="toggleStar(this)">
+      <div>
+        <div class="star-id">S4 · PRIMARY · "Tell me about presenting a complex recommendation to senior leadership"</div>
+        <div class="star-title">NPV AED 652M — Revenue Optimisation Model Defended at MD/CEO Level</div>
+        <div class="star-line">"AED 652M NPV case. Defended at MD and CEO across three scrutiny rounds. Zero material concessions."</div>
+      </div>
+      <span class="star-expand">▼</span>
+    </div>
+    <div class="star-body">
+      <div class="star-row">
+        <div class="star-row-label">Mastercard RA Framing</div>
+        <div class="star-row-text">The RA Director will present findings and recommendations to the CFO/Controller equivalent. This story proves you operate at the right altitude — not just with data, but with the intellectual conviction to hold your position through multiple rounds of senior challenge.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Situation</div>
+        <div class="star-row-text">Sobha was evaluating a large-scale mortgage collection programme — whether to pursue internal collection or bank-financed solutions. The decision involved AED 652M in NPV and had significant revenue recognition and risk implications across 4 legal entities.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Task</div>
+        <div class="star-row-text">Build the financial model, defend it at the highest executive forum, and secure a decision — with MD Francis Alfred and CEO in the room.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Action</div>
+        <div class="star-row-text">Built the NPV/DCF/IRR model. Incorporated all risk scenarios. Identified that the internal prepayment path was AED 21.2M cheaper than bank financing and 248 days faster. Presented across three rounds of scrutiny — MD, CEO, CRO, CFO, Legal all challenged different assumptions. Rebuilt sensitivity tables where needed. Held every material position.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Result</div>
+        <div class="star-row-text">Model approved. Programme funded. <strong>32% cheaper than bank financing</strong>. NPV AED 652M captured. Zero material concessions on the model's core assumptions.</div>
+      </div>
+      <div class="followup-box">
+        <div class="label">Most Common Follow-Up: "What would you do differently?"</div>
+        <div class="text">"I'd have brought a sensitivity analysis to round 1 instead of round 3. Two rounds of scrutiny were spent on questions a well-designed sensitivity table would have closed in 5 minutes. The lesson: senior forums don't challenge your conclusion — they challenge your assumptions. Surface the assumption map before they ask."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S3 -->
+  <div class="star-card">
+    <div class="star-header" onclick="toggleStar(this)">
+      <div>
+        <div class="star-id">S3 · PRIMARY · "Tell me about a business transformation you led end-to-end"</div>
+        <div class="star-title">PCC TAT Transformation — 85% Cycle Time Reduction at 3x Volume</div>
+        <div class="star-line">"20 days to 3 days. Volume tripled. Same team. Redesigned workflow, not headcount."</div>
+      </div>
+      <span class="star-expand">▼</span>
+    </div>
+    <div class="star-body">
+      <div class="star-row">
+        <div class="star-row-label">Mastercard RA Framing</div>
+        <div class="star-row-text">This is the Business Transformation half of the dual mandate. It demonstrates the full cycle: identify the process failure, diagnose it from first principles, redesign and deploy the solution, measure the outcome — without disrupting operations.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Situation</div>
+        <div class="star-row-text">Post-Commencement Certificate (PCC) issuance process: 20-day TAT with growing backlog. November 2025: volume tripled to 281 cases/month vs. historical ~90. TAT was creating a customer experience failure — PCC blocks unit occupancy.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Task</div>
+        <div class="star-row-text">Cut TAT from 20 to under 5 days without creating downstream quality failures, in a month of 3x normal volume.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Action</div>
+        <div class="star-row-text">Mapped the workflow end-to-end — identified 4 sequential handoffs that could be parallelised, 2 manual checks duplicative with QCG already performing, 1 approval loop replaceable by pre-authorised policy. Applied first-principles redesign: redesigned flow, deployed in 2 weeks, monitored daily.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Result</div>
+        <div class="star-row-text">TAT: <strong>20 days → 3 days (85% reduction)</strong>. Volume: 3x absorbed. Quality regressions: zero. This is the business transformation playbook the JD describes — diagnose, redesign, deploy, measure, hold.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S5 -->
+  <div class="star-card">
+    <div class="star-header" onclick="toggleStar(this)">
+      <div>
+        <div class="star-id">S5 · SUPPORTING · "Tell me about building operational infrastructure from zero"</div>
+        <div class="star-title">Salesforce 0→1 — MI Ecosystem from Discovery to 70+ Live Reports</div>
+        <div class="star-line">"6-stakeholder discovery, zero to 70+ live reports. It became the MI backbone for 4 years."</div>
+      </div>
+      <span class="star-expand">▼</span>
+    </div>
+    <div class="star-body">
+      <div class="star-row">
+        <div class="star-row-label">Mastercard RA Framing</div>
+        <div class="star-row-text">Demonstrates the "system enhancements and tactical automation" capability in the JD. Also proves Salesforce fluency — a preferred tool — and shows you've built the monitoring infrastructure RA needs.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Situation</div>
+        <div class="star-row-text">2020: Sobha's collections function had no systematic data infrastructure. Reporting was manual, fragmented, and non-real-time. Revenue assurance was reactive — problems discovered after the fact.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Action</div>
+        <div class="star-row-text">Ran a 6-stakeholder discovery (Sales, Operations, Finance, MIS, IT, Compliance). Defined data requirements, architecture, and report taxonomy. Led solution design — 0→1 Salesforce build. Governed phased deployment. Embedded quality scorecard and advance rebate calculator. Drove adoption to 40+ daily active users.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Result</div>
+        <div class="star-row-text"><strong>70+ live reports</strong> across operational, tactical, and strategic layers. Quality scorecard embedded in workflow. Advance rebate calculator automating a previously manual calculation. MIS backbone in continuous use for 4+ years.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S9 -->
+  <div class="star-card">
+    <div class="star-header" onclick="toggleStar(this)">
+      <div>
+        <div class="star-id">S9 · SUPPORTING · "Tell me about building team capability"</div>
+        <div class="star-title">Team Capability Build — Members Authoring MD-Approved Documents Autonomously</div>
+        <div class="star-line">"I built team capability so the senior layer could author MD-approved process documents independently. That's how an org scales without becoming a bottleneck."</div>
+      </div>
+      <span class="star-expand">▼</span>
+    </div>
+    <div class="star-body">
+      <div class="star-row">
+        <div class="star-row-label">Mastercard RA Framing</div>
+        <div class="star-row-text">Directly answers "Lead members and take up people management responsibilities over time." Shows you don't just manage — you build capability that outlives your direct involvement.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Situation + Action</div>
+        <div class="star-row-text">Built a structured capability development programme across the QCG and MIS functions — training on documentation standards, governance protocols, and MD-level communication requirements. Created templates, provided coaching, and progressively delegated ownership of governance documents.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-row-label">Result</div>
+        <div class="star-row-text">Team members now author MD-approved process documents autonomously. The 6 COL-PF series documents were authored by team members, not by me. The capability scales without a bottleneck at the Director level — exactly what a growing RA function needs.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 06: COMP INTEL ===================== -->
+<div class="section" id="tab-5">
+  <div class="section-header">
+    <span class="num">06 / COMPENSATION</span>
+    <h2>Compensation Intelligence &amp; Negotiation Strategy</h2>
+    <p class="sub">Mastercard Services India Director band — cash-heavy, no RSU. Negotiate strategically.</p>
+  </div>
+
+  <div class="comp-grid">
+    <div class="comp-tile">
+      <div class="value">₹55–65L</div>
+      <div class="label">Base Salary</div>
+    </div>
+    <div class="comp-tile">
+      <div class="value">15–20%</div>
+      <div class="label">Annual Bonus</div>
+    </div>
+    <div class="comp-tile">
+      <div class="value">None</div>
+      <div class="label">RSU / ESPP</div>
+    </div>
+    <div class="comp-tile">
+      <div class="value" style="color:var(--green);">₹70–90L</div>
+      <div class="label">Total Comp P50</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title"><span class="icon">📊</span> Level Mapping &amp; Data Sources</div>
+    <p style="font-size:13px;color:var(--text-dim);line-height:1.7;margin-bottom:12px;">
+      Mastercard India levels: L8 (Analyst) → L7 (Senior Analyst) → L6 (Manager) → <strong style="color:var(--mc-orange);">L5 (Director/Principal)</strong> → L4 (VP) → L3 (SVP). This Director title maps to L5. Mastercard Services India Director band (L5) per Levels.fyi and Glassdoor data as of 2025: base ₹55–65L typical, with 15–20% annual bonus. Cash-heavy structure — no equity at this level in India GCC operations.
+    </p>
+    <p style="font-size:13px;color:var(--text-dim);line-height:1.7;">
+      <strong style="color:var(--text);">Benefits:</strong> Mastercard India offers comprehensive health coverage, 40 days paternity leave, 6 months maternity leave. Hybrid policy: 3 days WFO + 2 days WFH + additional WFH days. Pune and Gurgaon are both Tier-1 cost-of-living locations — factor into walk-away calculation.
+    </p>
+  </div>
+
+  <div class="label-tag">Negotiation Strategy</div>
+  <table class="neg-table">
+    <thead>
+      <tr><th>Parameter</th><th>Your Position</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="param">Anchor</td>
+        <td>₹85L total compensation. Never name a number first — always ask their range first. Use "compensation" not "salary" to broaden the conversation to bonus structure and joining bonus.</td>
+      </tr>
+      <tr>
+        <td class="param">Walk-Away</td>
+        <td>₹65L total comp. Below this, the role doesn't justify the transition from an AED-denominated package. Do not reveal this number — it is your private floor.</td>
+      </tr>
+      <tr>
+        <td class="param">Joining Bonus</td>
+        <td>₹5–7L. Always ask separately — it's a different budget pool from the salary band. Compensates for deferred incentives left at Sobha. Frame as "transition support to offset deferred compensation forfeited at current employer."</td>
+      </tr>
+      <tr>
+        <td class="param">Director vs Senior Manager</td>
+        <td>Push for Director title, not Senior Manager. Your scope (AED 86.8B, 77-person team, MD/CEO engagement) significantly exceeds L6 Manager norms. Even if the band doesn't move, the Director title matters for your next move.</td>
+      </tr>
+      <tr>
+        <td class="param">Key Leverage</td>
+        <td>Cleanest functional match in the pipeline — they're not finding 10+ other Directors who currently run a quality-gated, risk-register-managed O2C governance function at this scale. BITS + IIM dual credential is rare for India RA. Parallel offers (AmEx, Oaktree) create genuine alternative optionality — do not bluff, but do reference them naturally.</td>
+      </tr>
+      <tr>
+        <td class="param">Timing Rule</td>
+        <td>Never accept or decline on the call. Always ask for 24–48 hours. This is the highest-ROI single negotiation habit — it creates space for counter-offer and removes pressure-response errors.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card green-border" style="margin-top:20px;">
+    <div class="card-title"><span class="icon">⚡</span> Mastercard vs Pipeline Comparison</div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th style="font-family:var(--mono);font-size:10px;color:var(--text-muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);">Role</th>
+            <th style="font-family:var(--mono);font-size:10px;color:var(--text-muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);">Total Comp P50</th>
+            <th style="font-family:var(--mono);font-size:10px;color:var(--text-muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);">Fit</th>
+            <th style="font-family:var(--mono);font-size:10px;color:var(--text-muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);">Structure</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:rgba(247,158,27,0.05);">
+            <td style="padding:10px 12px;font-size:12.5px;font-weight:600;color:var(--mc-orange);border-bottom:1px solid var(--border);">Mastercard Dir RA &amp; BT ← THIS ROLE</td>
+            <td style="padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border);">₹70–90L</td>
+            <td style="padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border);">76→83</td>
+            <td style="padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border);">Cash-heavy</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border);">AmEx GMNS Director</td>
+            <td style="padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border);">~₹82L</td>
+            <td style="padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border);">75→88</td>
+            <td style="padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border);">Base + bonus</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border);">Oaktree VP Info Solutions</td>
+            <td style="padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border);">₹55–65L</td>
+            <td style="padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border);">78→85</td>
+            <td style="padding:10px 12px;font-size:12.5px;border-bottom:1px solid var(--border);">Base + deferred LTI</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 12px;font-size:12.5px;">Uber Sr Risk Ops L5B (stretch)</td>
+            <td style="padding:10px 12px;font-size:12.5px;">₹110–120L</td>
+            <td style="padding:10px 12px;font-size:12.5px;">68→78</td>
+            <td style="padding:10px 12px;font-size:12.5px;">Base + RSU (highest ceiling)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 07: INTERVIEW PREP ===================== -->
+<div class="section" id="tab-6">
+  <div class="section-header">
+    <span class="num">07 / INTERVIEW PREP</span>
+    <h2>What They'll Ask &amp; How to Answer</h2>
+    <p class="sub">Expected round structure, BQ quick router, assertiveness proof points, and 90-day plan.</p>
+  </div>
+
+  <div class="label-tag">Expected Interview Structure</div>
+  <div class="round-card">
+    <div class="round-header">
+      <div class="round-title">Round 1 — Recruiter Screen</div>
+      <div class="round-meta">30 min</div>
+    </div>
+    <div class="round-desc">Motivation, salary expectations, logistics (Pune vs Gurgaon, notice period, current package). Keep it crisp. Lead with the unlock phrase when asked about your background. Do NOT over-narrate here — save depth for R2. <strong>Filter signal:</strong> if they don't use "revenue recognition" or "O2C" language, you're speaking to a sourcing recruiter, not a function recruiter — adjust vocabulary accordingly.</div>
+  </div>
+  <div class="round-card">
+    <div class="round-header">
+      <div class="round-title">Round 2 — Hiring Manager</div>
+      <div class="round-meta">60 min</div>
+    </div>
+    <div class="round-desc">Deep dive on RA programme experience. Expect: "Tell me about a time you built a revenue assurance control from scratch." "How do you identify revenue leakage?" "How do you manage a stakeholder who wants to relax a quality control?" <strong>Lead story:</strong> S2 (PR 49%) for the quality/control question; S1 (14.9x + 74% risk reduction) for the programme scale question; S4 (NPV AED 652M) for senior-forum credibility.</div>
+  </div>
+  <div class="round-card">
+    <div class="round-header">
+      <div class="round-title">Round 3 — Cross-Functional Peer (Finance / Controllership)</div>
+      <div class="round-meta">45 min</div>
+    </div>
+    <div class="round-desc">Tests Finance bilingualism and collaboration style. Expect vocabulary filter questions (revenue recognition, accruals, DSO). Expect: "How do you work with Finance on disputed revenue items?" "How do you balance Controllership rigour with operational speed?" <strong>Key prep:</strong> Vocab Decoder tab — complete all 12 terms before this round.</div>
+  </div>
+  <div class="round-card">
+    <div class="round-header">
+      <div class="round-title">Round 4 — Senior Leader / VP</div>
+      <div class="round-meta">45 min</div>
+    </div>
+    <div class="round-desc">Strategic thinking and culture fit. Expect: "What does great Revenue Assurance look like at scale?" "How would you measure success in the first 90 days?" "What transformation would you prioritise in the Mastercard Services O2C cycle?" <strong>Answer framework:</strong> Use the 90-Day Plan below. Reference P14 (Revenue Assurance Intelligence Dashboard) as a concrete first-90-days initiative.</div>
+  </div>
+
+  <hr class="divider">
+  <div class="label-tag">BQ Quick Router</div>
+  <table class="bq-table">
+    <thead>
+      <tr><th>Question Theme</th><th>Lead Story</th><th>Backup</th><th>Key Line</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Walk me through your career</td><td class="story-ref">S10</td><td class="story-ref">S1</td><td class="key-line">"MT to AGM in six years. I've been running revenue assurance at scale — I just haven't been calling it that."</td></tr>
+      <tr><td>Revenue assurance / control standard held under pressure</td><td class="story-ref">S2</td><td class="story-ref">S4</td><td class="key-line">"49% exception rate. Data showed 73% were real. I held the gate."</td></tr>
+      <tr><td>Business transformation you led end-to-end</td><td class="story-ref">S3</td><td class="story-ref">S5</td><td class="key-line">"20 days to 3 days, volume tripled, same team."</td></tr>
+      <tr><td>How you identify revenue leakage</td><td class="story-ref">S2</td><td class="story-ref">S1</td><td class="key-line">"I build monitoring systems that surface anomalies before they become losses. The 49% rejection spike — my system caught it first."</td></tr>
+      <tr><td>Senior stakeholder influence / defence</td><td class="story-ref">S4</td><td class="story-ref">S2</td><td class="key-line">"AED 652M NPV at MD/CEO, three scrutiny rounds, zero concessions."</td></tr>
+      <tr><td>Cross-functional programme management</td><td class="story-ref">S3</td><td class="story-ref">S1</td><td class="key-line">"12 concurrent workstreams across 4 sub-functions and 2 geographies. Zero MD escalations."</td></tr>
+      <tr><td>Building from scratch / 0→1</td><td class="story-ref">S5</td><td class="story-ref">S13</td><td class="key-line">"6-stakeholder discovery, 70+ live reports, 4-year MI backbone. Zero infrastructure at the start."</td></tr>
+      <tr><td>How you work with Finance / Controllership</td><td class="story-ref">S4</td><td class="story-ref">S2</td><td class="key-line">"I build the financial model they can't poke holes in. AED 652M NPV survived MD, CEO, CFO, and Legal in the same room."</td></tr>
+      <tr><td>Failure / lessons learned</td><td class="story-ref">S8</td><td class="story-ref">S11</td><td class="key-line">"80% adoption target, 17% actual. Skipped the behavioural change plan. Never again."</td></tr>
+      <tr><td>Building team capability / people leadership</td><td class="story-ref">S9</td><td class="story-ref">S13</td><td class="key-line">"Team members now author MD-approved process documents independently. That's how you scale RA without a bottleneck."</td></tr>
+      <tr><td>First 90 days plan</td><td colspan="2" style="font-family:var(--mono);font-size:11px;color:var(--mc-red);">FRAMEWORK</td><td class="key-line">"Map every O2C control point. Find the 3 highest-risk leakage nodes. Deploy monitoring first, redesign second."</td></tr>
+      <tr><td>What great RA looks like at scale</td><td colspan="2" style="font-family:var(--mono);font-size:11px;color:var(--mc-red);">FRAMEWORK</td><td class="key-line">"Proactive detection, not reactive investigation. Real-time KPI monitoring, structured exception management, and a quality gate that catches leakage before it hits the P&L."</td></tr>
+    </tbody>
+  </table>
+
+  <hr class="divider">
+  <div class="assert-card">
+    <div class="header">⚑ Assertiveness Proof Points — Critical for RA Director Credibility</div>
+    <p style="font-size:12.5px;color:var(--text-dim);margin-bottom:16px;">Your DISC profile is High-C/High-S. Every RA Director interview will test whether you hold standards under pressure. Surface these proactively — don't wait to be asked.</p>
+    <div class="assert-point">
+      <span class="assert-num">01</span>
+      <div class="assert-text"><strong>PR 49% Standard Held</strong> — Quality gate enforcement under commercial pressure. Led with data (73% substantive gaps), held the control standard, vindicated by next-period performance. This is RA assertiveness in its purest form.</div>
+    </div>
+    <div class="assert-point">
+      <span class="assert-num">02</span>
+      <div class="assert-text"><strong>NPV AED 652M Defended at MD/CEO</strong> — Three scrutiny rounds, Finance/Legal/CRO/CEO all in the room, zero material concessions. Revenue model defended to the highest internal forum. Senior-forum credibility established.</div>
+    </div>
+    <div class="assert-point">
+      <span class="assert-num">03</span>
+      <div class="assert-text"><strong>3 Proactive CCO Escalations</strong> — Surfaced blocked risk register items before due dates — not waiting for problems to surface on their own, surfacing them proactively. This is the RA posture that prevents audit findings.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="label-tag">90-Day Plan</div>
+  <div class="card">
+    <div class="card-title"><span class="icon">📅</span> First 90 Days — Mastercard Services RA &amp; BT Director</div>
+    <div class="plan-row">
+      <div class="plan-period">
+        <div class="days">D1–30</div>
+        <div class="label">Map</div>
+      </div>
+      <div class="plan-content">
+        <h4>Intelligence Gathering — No Redesign Yet</h4>
+        <ul>
+          <li>Map every O2C control point in Mastercard Services — from quote to contract to invoice to revenue recognition to collection.</li>
+          <li>Interview each stakeholder function (Sales, Finance, Controllership, Risk) using structured pain-point diagnostic. Identify top 3 friction areas per function.</li>
+          <li>Audit existing RA monitoring infrastructure — what KPIs exist, what's manual, what's blind-spotted.</li>
+          <li>Shadow QA team through one full O2C cycle. Understand the existing quality gate architecture before proposing changes.</li>
+          <li>Deliverable: O2C control map with risk-rated gap inventory. Presented to Finance leadership at Day 30.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="plan-row">
+      <div class="plan-period">
+        <div class="days">D31–60</div>
+        <div class="label">Design</div>
+      </div>
+      <div class="plan-content">
+        <h4>Prioritise and Design the Highest-Impact Interventions</h4>
+        <ul>
+          <li>From Day 30 gap inventory: select top 3 highest-risk leakage nodes. Design control enhancement for each.</li>
+          <li>Deploy P14 Revenue Assurance Intelligence Dashboard — establish real-time KPI monitoring baseline.</li>
+          <li>Design the centralised quality check layer — which O2C stages need structured quality gates, owned by a dedicated governance function.</li>
+          <li>Draft SOP v1 for the RA programme — scope, controls, escalation paths, reporting cadence.</li>
+          <li>Deliverable: RA programme design document + first-quarter transformation roadmap. Presented to VP/Director forum.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="plan-row">
+      <div class="plan-period">
+        <div class="days">D61–90</div>
+        <div class="label">Deploy</div>
+      </div>
+      <div class="plan-content">
+        <h4>Launch Controls, Embed Monitoring, Measure First Impact</h4>
+        <ul>
+          <li>Deploy first 3 control enhancements. Monitor KPIs daily for the first 2 weeks post-deployment.</li>
+          <li>Establish the stakeholder consultation cadence — monthly Finance + Controllership review, quarterly Risk governance forum.</li>
+          <li>Issue first RA programme health report to senior Finance leadership (P14 generates the digest).</li>
+          <li>Identify the first business transformation candidate — the highest-friction O2C process redesign opportunity for Q2.</li>
+          <li>Deliverable: Day 90 impact report — leakage detected, controls deployed, KPI baselines established, transformation pipeline identified.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px;">
+    <div class="card-title"><span class="icon">🧠</span> Psychometric Fit — Your Natural Advantage</div>
+    <div class="psych-grid">
+      <div class="psych-card">
+        <div class="psych-label">CliftonStrengths Alignment</div>
+        <div class="psych-title">Restorative</div>
+        <div class="psych-text">RA is fundamentally about finding what's broken and fixing it systematically. Restorative #1 = built for this function.</div>
+      </div>
+      <div class="psych-card">
+        <div class="psych-label">CliftonStrengths Alignment</div>
+        <div class="psych-title">Analytical</div>
+        <div class="psych-text">Hypothesis testing, root-cause analysis, data-driven defence — Analytical #2 drives the "use analytical frameworks" mandate in the JD.</div>
+      </div>
+      <div class="psych-card">
+        <div class="psych-label">CliftonStrengths Alignment</div>
+        <div class="psych-title">Arranger</div>
+        <div class="psych-text">Coordinating Sales, Finance, Controllership, and Risk simultaneously — Arranger optimises the multi-stakeholder internal consulting layer.</div>
+      </div>
+      <div class="psych-card">
+        <div class="psych-label">DISC Alignment</div>
+        <div class="psych-title">High-C / High-S</div>
+        <div class="psych-text">High-C = precision, control architecture, documentation rigour. High-S = trusted consulting partner relationship. The JD practically describes this profile. Low-D: mitigated by the three assertiveness proof points.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TAB 08: VOCAB DECODER ===================== -->
+<div class="section" id="tab-7">
+  <div class="section-header">
+    <span class="num">08 / VOCAB DECODER</span>
+    <h2>Master These 12 Terms Before Round 2</h2>
+    <p class="sub">Click any card to reveal the definition. Goal: move all from unknown to known within 2 weeks. These are the Round 1 &amp; 2 filters.</p>
+  </div>
+
+  <div class="vocab-progress">
+    <span class="label">Terms in this track:</span>
+    <span class="vocab-count">12</span>
+    <span class="label" style="margin-left:8px;">+ 8 Mastercard cluster-shared terms</span>
+    <span class="vocab-count">= 20 total</span>
+  </div>
+
+  <div class="label-tag">RA &amp; BT Core Vocabulary (12 role-specific)</div>
+  <div class="vocab-grid">
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Revenue Assurance <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">The discipline of ensuring all earned revenue is accurately captured, billed, and collected — with zero leakage between delivery and receipt. RA identifies where money should have come in but didn't, and implements controls to close those gaps permanently.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Revenue Leakage <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">Earned revenue that is not captured, billed, or collected due to process failures, system gaps, or control weaknesses. Can be caused by billing errors, contract mis-keying, unbilled services, or collection failures. RA's primary KPI to minimise.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Order-to-Cash (O2C) <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">The end-to-end business process from customer order through delivery, invoicing, and cash receipt. In B2B services: Quote → Contract / SOW → Delivery Milestone → Invoice → Revenue Recognition → Collections. RA governs control points at every stage.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Revenue Recognition <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">The accounting principle (ASC 606 / IFRS 15) governing when revenue is recorded — when the performance obligation is satisfied, not when cash is received. In B2B services, this is milestone- or delivery-based. RA risk: revenue recognised before the obligation is actually fulfilled.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Accrued Revenue <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">Revenue earned (performance obligation satisfied) but not yet invoiced or received. Sits as an asset on the balance sheet. RA risk: accrued revenue that never converts to an invoice — services delivered but never billed.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Deferred Revenue <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">Cash received from a client but not yet earned — sits as a liability until the performance obligation is met. Common in subscription and upfront-fee service models. RA risk: deferred revenue that's never recognised because the delivery obligation lapses.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">DSO (Days Sales Outstanding) <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">Average number of days between invoicing and cash receipt. Core RA/collections efficiency metric. Lower DSO = faster cash conversion. You've been managing this for 6 years — your delinquency rate metric is DSO's risk-adjusted cousin.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">CPQ (Configure-Price-Quote) <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">Software system (commonly Salesforce CPQ) that automates the quoting process for complex B2B products and services. Inputs: product configuration + pricing rules + discounting logic → Output: accurate sales quote that flows into the contract and billing system. RA risk: CPQ configuration errors that cause systematic mispricing.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Controllership <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">The finance function responsible for accounting accuracy, financial reporting integrity, and compliance with accounting standards. In the RA context, Controllership is your primary internal client — they own the P&L accuracy that your controls protect. They speak GAAP; you need to be bilingual.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Business Transformation (BT) <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">Cross-functional change initiatives that materially improve operational efficiency, revenue capture, or compliance posture. In this context: diagnosing O2C process failures, designing the fix, managing the change, and embedding the improvement through governance and documentation.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Revenue Risk <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">The probability that revenue earned will not be fully captured or collected. Risk sources: billing errors, contract disputes, unbilled services, collection failures, revenue recognition timing errors. RA's mandate is to identify, quantify, and mitigate revenue risk before it becomes a loss event.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">KRI (Key Risk Indicator) <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">A metric that signals increasing risk before it becomes a loss event. In RA: rejection rate trending up (→ documentation quality risk), DSO widening (→ collection failure risk), exception queue growing (→ control capacity risk). Your PR rejection rate at 49% was a KRI firing — you caught it before the loss.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+  <div class="label-tag amber">Mastercard Cluster-Shared Terms (8)</div>
+  <div class="vocab-grid">
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Interchange <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">The fee paid by the merchant's bank (acquirer) to the cardholder's bank (issuer) for processing a card transaction. Mastercard sets interchange rates as part of its network rules. Not directly relevant to Services RA — but shows up in conversation as context.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Scheme Rules <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">Mastercard's published rules governing how network participants (issuers, acquirers, merchants) must behave. The framework within which Mastercard Services sells — compliance with scheme rules is a constraint on service design.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Issuer / Acquirer / Processor <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">Issuer: the bank that issues the cardholder's card. Acquirer: the bank that processes payments for the merchant. Processor: technology entity handling transaction routing between issuer and acquirer. Mastercard Services sells analytics and advisory to all three.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">MCC (Merchant Category Code) <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">4-digit code classifying the type of business a merchant operates. Used for transaction data segmentation, interchange rate determination, and spending analytics. Relevant to Mastercard Services' data products — SpendingPulse uses MCC-level data.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">CoE (Centre of Excellence) <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">An internal function that consolidates specialised expertise and standardises best practices across business units. The RA &amp; BT Director is effectively building a CoE for revenue governance within Mastercard Services.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">GCC (Global Capability Centre) <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">Offshore/nearshore operations centres set up by global companies in India (Pune, Hyderabad, Bangalore, Gurgaon) to deliver back-office, technology, and analytics functions at scale. Mastercard's Pune Technology Hub is a GCC. Your role sits within this structure.</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">SOW (Statement of Work) <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">Contractual document specifying the scope, deliverables, timeline, and payment terms for a B2B services engagement. SOW-to-invoice accuracy is a primary RA control point — does what was billed match what the SOW committed to deliver?</div>
+    </div>
+    <div class="vocab-card" onclick="toggleVocab(this)">
+      <div class="vocab-term">Insights &amp; Enablement <span class="vocab-hint">click to reveal</span></div>
+      <div class="vocab-def">The internal intelligence and operational excellence function within Mastercard Services. Uses data and technology to drive smarter decisions and operational efficiency across the Services P&L. The team this Director role sits within — not a client-facing team, but an internal COO-equivalent function for Services.</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end content -->
+
+<script>
+  function switchTab(idx) {
+    document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+    document.querySelectorAll('.section').forEach((s, i) => s.classList.toggle('active', i === idx));
+  }
+
+  function toggleStar(header) {
+    const body = header.nextElementSibling;
+    const arrow = header.querySelector('.star-expand');
+    const isOpen = body.classList.toggle('open');
+    arrow.textContent = isOpen ? '▲' : '▼';
+  }
+
+  function toggleVocab(card) {
+    const def = card.querySelector('.vocab-def');
+    const hint = card.querySelector('.vocab-hint');
+    const isOpen = def.classList.toggle('open');
+    hint.textContent = isOpen ? 'click to close' : 'click to reveal';
+  }
+</script>
+</body>
+</html>
