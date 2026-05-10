@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mastercard MEI Manager, Product Operations — Career Playbook | Priyanuj Deka</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=IBM+Plex+Mono:wght@400;500;600&family=Playfair+Display:wght@700;800&display=swap');
+
+:root {
+  --bg: #0c0c14;
+  --surface: #14141f;
+  --surface2: #1a1a2a;
+  --surface3: #222236;
+  --border: #2a2a44;
+  --border-light: #353550;
+  --text: #e8e8f0;
+  --text-dim: #9090aa;
+  --text-muted: #6a6a88;
+  --mc-orange: #FF5F00;
+  --mc-red: #EB001B;
+  --mc-yellow: #F79E1B;
+  --mc-gold: #d4a017;
+  --accent: #FF5F00;
+  --accent-dim: rgba(255,95,0,0.12);
+  --accent-glow: rgba(255,95,0,0.25);
+  --green: #4ade80;
+  --green-dim: rgba(74,222,128,0.12);
+  --amber: #fbbf24;
+  --amber-dim: rgba(251,191,36,0.12);
+  --red: #f87171;
+  --red-dim: rgba(248,113,113,0.12);
+  --teal: #2dd4bf;
+  --purple: #a78bfa;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; line-height:1.6; min-height:100vh; }
+.mono { font-family:'IBM Plex Mono',monospace; }
+
+/* Header */
+.hero {
+  background: linear-gradient(135deg, #1a0a00 0%, #0c0c14 40%, #14141f 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 48px 40px 40px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute; top:0; right:0; width:400px; height:400px;
+  background: radial-gradient(circle, rgba(255,95,0,0.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background: var(--accent-dim); border:1px solid rgba(255,95,0,0.3); border-radius:20px;
+  padding:4px 14px; font-size:12px; font-weight:600; color:var(--mc-orange);
+  letter-spacing:0.5px; text-transform:uppercase; margin-bottom:16px;
+}
+.hero-badge .dot { width:6px; height:6px; border-radius:50%; background:var(--mc-orange); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.hero h1 {
+  font-family:'Playfair Display',serif; font-size:clamp(28px,4vw,44px); font-weight:800;
+  background: linear-gradient(135deg, var(--text) 30%, var(--mc-orange) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.2; margin-bottom:8px;
+}
+.hero-sub { font-size:16px; color:var(--text-dim); margin-bottom:24px; }
+.hero-sub span { color:var(--mc-orange); font-weight:600; }
+
+.hero-stats {
+  display:flex; flex-wrap:wrap; gap:20px;
+}
+.stat-card {
+  background: var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:16px 22px; min-width:140px;
+}
+.stat-card .stat-val {
+  font-family:'IBM Plex Mono',monospace; font-size:28px; font-weight:700;
+  background: linear-gradient(135deg, var(--mc-orange), var(--mc-yellow));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.stat-card .stat-label { font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-top:2px; }
+
+/* Tab Nav */
+.tab-nav {
+  display:flex; overflow-x:auto; background:var(--surface); border-bottom:1px solid var(--border);
+  padding:0 24px; gap:0; scrollbar-width:none;
+}
+.tab-nav::-webkit-scrollbar { display:none; }
+.tab-btn {
+  padding:14px 20px; border:none; background:none; color:var(--text-muted); cursor:pointer;
+  font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; white-space:nowrap;
+  border-bottom:2px solid transparent; transition:all 0.2s;
+  letter-spacing:0.3px;
+}
+.tab-btn:hover { color:var(--text-dim); background:rgba(255,255,255,0.02); }
+.tab-btn.active { color:var(--mc-orange); border-bottom-color:var(--mc-orange); }
+.tab-btn .tab-num { font-family:'IBM Plex Mono',monospace; font-size:11px; margin-right:6px; opacity:0.5; }
+
+/* Content */
+.content { max-width:1100px; margin:0 auto; padding:32px 24px 80px; }
+.panel { display:none; }
+.panel.active { display:block; }
+
+h2.sec-title {
+  font-family:'Playfair Display',serif; font-size:28px; font-weight:700; margin-bottom:6px;
+  color:var(--text);
+}
+.sec-sub { font-size:14px; color:var(--text-muted); margin-bottom:28px; text-transform:uppercase; letter-spacing:1px; }
+
+/* Cards */
+.card {
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:24px 28px; margin-bottom:16px; transition:border-color 0.2s;
+}
+.card:hover { border-color:var(--border-light); }
+.card h3 { font-size:17px; font-weight:700; margin-bottom:8px; color:var(--text); }
+.card p { font-size:14px; color:var(--text-dim); line-height:1.7; }
+
+.card-mc { border-left:3px solid var(--mc-orange); }
+.card-green { border-left:3px solid var(--green); }
+.card-amber { border-left:3px solid var(--amber); }
+.card-red { border-left:3px solid var(--red); }
+.card-teal { border-left:3px solid var(--teal); }
+
+/* Tables */
+.data-table { width:100%; border-collapse:separate; border-spacing:0; margin:16px 0 24px; border-radius:10px; overflow:hidden; }
+.data-table th {
+  background:var(--surface2); padding:12px 16px; text-align:left; font-size:12px;
+  text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted); font-weight:600;
+  border-bottom:1px solid var(--border);
+}
+.data-table td {
+  padding:12px 16px; font-size:14px; color:var(--text-dim); border-bottom:1px solid var(--border);
+  background:var(--surface);
+}
+.data-table tr:last-child td { border-bottom:none; }
+.data-table tr:hover td { background:var(--surface2); }
+
+/* Badges */
+.badge {
+  display:inline-block; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600;
+  letter-spacing:0.3px; text-transform:uppercase;
+}
+.badge-green { background:var(--green-dim); color:var(--green); }
+.badge-amber { background:var(--amber-dim); color:var(--amber); }
+.badge-red { background:var(--red-dim); color:var(--red); }
+.badge-mc { background:var(--accent-dim); color:var(--mc-orange); }
+
+/* Fit bar */
+.fit-container { margin:24px 0; }
+.fit-bar-track {
+  height:28px; background:var(--surface2); border-radius:14px; position:relative; overflow:hidden;
+  border:1px solid var(--border);
+}
+.fit-bar-fill {
+  height:100%; border-radius:14px; transition:width 0.8s ease;
+  background:linear-gradient(90deg, var(--mc-red), var(--mc-orange), var(--mc-yellow));
+}
+.fit-bar-target {
+  position:absolute; top:0; height:100%; width:2px; background:var(--green);
+}
+.fit-labels { display:flex; justify-content:space-between; margin-top:8px; font-size:12px; }
+.fit-labels span { color:var(--text-muted); }
+
+/* STAR boxes */
+.star-box {
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:24px; margin-bottom:20px;
+}
+.star-box h4 { font-size:16px; font-weight:700; margin-bottom:14px; color:var(--mc-orange); }
+.star-row { display:flex; gap:12px; margin-bottom:10px; }
+.star-label {
+  min-width:80px; padding:4px 10px; border-radius:8px; font-size:11px; font-weight:700;
+  text-align:center; text-transform:uppercase; letter-spacing:0.5px;
+  flex-shrink:0; height:fit-content; margin-top:2px;
+}
+.star-label-s { background:rgba(255,95,0,0.15); color:var(--mc-orange); }
+.star-label-t { background:rgba(45,212,191,0.15); color:var(--teal); }
+.star-label-a { background:rgba(167,139,250,0.15); color:var(--purple); }
+.star-label-r { background:rgba(74,222,128,0.15); color:var(--green); }
+.star-content { font-size:14px; color:var(--text-dim); line-height:1.7; }
+
+/* Gap cards */
+.gap-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.gap-timeline { font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--mc-orange); }
+
+/* Req table */
+.req-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:20px 24px; margin-bottom:12px; }
+.req-header { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:10px; flex-wrap:wrap; }
+.req-title { font-size:14px; font-weight:700; color:var(--text); flex:1; min-width:200px; }
+.match-high { background:var(--green-dim); color:var(--green); padding:3px 10px; border-radius:10px; font-size:11px; font-weight:600; white-space:nowrap; }
+.match-med { background:var(--amber-dim); color:var(--amber); padding:3px 10px; border-radius:10px; font-size:11px; font-weight:600; white-space:nowrap; }
+.match-low { background:var(--red-dim); color:var(--red); padding:3px 10px; border-radius:10px; font-size:11px; font-weight:600; white-space:nowrap; }
+.req-jd { font-size:13px; color:var(--text-muted); font-style:italic; margin-bottom:6px; }
+.req-proof { font-size:14px; color:var(--text-dim); line-height:1.7; }
+
+/* Grid */
+.grid-2 { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:16px; margin-bottom:24px; }
+
+/* Blockquote */
+.quote-box {
+  background: linear-gradient(135deg, rgba(255,95,0,0.06), rgba(247,158,27,0.04));
+  border-left:3px solid var(--mc-orange); border-radius:0 12px 12px 0;
+  padding:20px 24px; margin:24px 0; font-style:italic; font-size:15px;
+  color:var(--text); line-height:1.8;
+}
+
+/* Comp table */
+.comp-row { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+.comp-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:16px 20px; flex:1; min-width:160px; text-align:center;
+}
+.comp-card .comp-val { font-family:'IBM Plex Mono',monospace; font-size:22px; font-weight:700; color:var(--mc-orange); }
+.comp-card .comp-label { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; margin-top:4px; }
+
+/* Vocab */
+.vocab-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:14px 18px; margin-bottom:8px; cursor:pointer; transition:all 0.2s;
+}
+.vocab-card:hover { border-color:var(--mc-orange); }
+.vocab-term { font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; color:var(--mc-orange); }
+.vocab-def { font-size:13px; color:var(--text-dim); margin-top:6px; display:none; line-height:1.6; }
+.vocab-card.open .vocab-def { display:block; }
+.vocab-card .reveal-hint { font-size:11px; color:var(--text-muted); float:right; }
+.vocab-card.open .reveal-hint { display:none; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+/* Responsive */
+@media (max-width:768px) {
+  .hero { padding:28px 20px; }
+  .hero h1 { font-size:28px; }
+  .content { padding:20px 16px 60px; }
+  .tab-btn { padding:12px 14px; font-size:12px; }
+  .hero-stats { gap:12px; }
+  .stat-card { min-width:120px; padding:12px 16px; }
+  .stat-card .stat-val { font-size:22px; }
+  .grid-2 { grid-template-columns:1fr; }
+  .req-header { flex-direction:column; }
+  .star-row { flex-direction:column; gap:4px; }
+  .star-label { min-width:auto; width:fit-content; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span class="dot"></span>Parallel · Apply Now · Pipeline Role #14</div>
+  <h1>Mastercard MEI — Manager, Product Operations</h1>
+  <div class="hero-sub"><span>Mastercard Economic Intelligence</span> · Pune / Gurgaon · Data Products · L6</div>
+  <div class="hero-stats">
+    <div class="stat-card"><div class="stat-val">74→85</div><div class="stat-label">Fit Score / 100</div></div>
+    <div class="stat-card"><div class="stat-val">₹45–55L</div><div class="stat-label">Total Comp P50</div></div>
+    <div class="stat-card"><div class="stat-val">2–4 wks</div><div class="stat-label">Prep Window</div></div>
+    <div class="stat-card"><div class="stat-val">L6</div><div class="stat-label">Mastercard Level</div></div>
+    <div class="stat-card"><div class="stat-val">Lowest</div><div class="stat-label">Reframe Effort</div></div>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="showPanel(0)"><span class="tab-num">01</span>JD Decoded</button>
+  <button class="tab-btn" onclick="showPanel(1)"><span class="tab-num">02</span>Your Fit</button>
+  <button class="tab-btn" onclick="showPanel(2)"><span class="tab-num">03</span>Gaps & Plan</button>
+  <button class="tab-btn" onclick="showPanel(3)"><span class="tab-num">04</span>AI Portfolio</button>
+  <button class="tab-btn" onclick="showPanel(4)"><span class="tab-num">05</span>STAR Bank</button>
+  <button class="tab-btn" onclick="showPanel(5)"><span class="tab-num">06</span>Comp Intel</button>
+  <button class="tab-btn" onclick="showPanel(6)"><span class="tab-num">07</span>Interview Prep</button>
+  <button class="tab-btn" onclick="showPanel(7)"><span class="tab-num">08</span>Vocab Decoder</button>
+</div>
+
+<div class="content">
+
+<!-- PANEL 0: JD Decoded -->
+<div class="panel active" id="p0">
+  <h2 class="sec-title">The Role, Decoded</h2>
+  <div class="sec-sub">01 / What this actually is</div>
+
+  <div class="card card-mc">
+    <h3>Mastercard Economic Intelligence — The Business</h3>
+    <p>Mastercard Economic Intelligence (MEI) is the data products arm of Mastercard. It produces economic research, spend analytics, and forecasting tools for enterprise clients using anonymised, aggregated transaction data from Mastercard's global payments network. The crown jewel product is <strong>SpendingPulse™</strong> — near-real-time retail spend measurement. The <strong>Mastercard Economics Institute</strong> publishes macro/micro insights, economic outlooks, and sector reports. Clients include retailers, financial institutions, governments, and media organisations. The team includes economists, data scientists, visual artists, and storytellers — a multidisciplinary research-meets-product environment.</p>
+  </div>
+
+  <div class="card card-mc">
+    <h3>Role Essence — Translated Into Plain English</h3>
+    <p><strong>"COO of the Product Delivery Machine for MEI."</strong></p>
+    <p style="margin-top:10px">You don't own the products (economists and PMs do that). You own the <em>operating system</em> that ensures those products get built, published, quality-checked, and delivered to clients on time, every time. You build the planning cadences, the delivery workflows, the client access infrastructure, the quality checkpoints, and the cross-team coordination layer. When a PM wants to focus on strategy, you're the reason they can — because you've made the operational machinery reliable, repeatable, and visible.</p>
+    <p style="margin-top:10px">This is not a PM role. This is the operational backbone that scales a product organisation without adding chaos.</p>
+  </div>
+
+  <h3 style="margin:28px 0 16px; color:var(--mc-orange);">Top 10 Requirements, Reverse-Engineered</h3>
+
+  <table class="data-table">
+    <thead><tr><th>#</th><th>JD Language</th><th>What It Actually Means</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>"Own and evolve core product processes including planning, data publishing, client communications"</td><td>You run the content calendar — when data gets published, to whom, via what channel. You own the publishing pipeline end-to-end: schedule → QA → publish → verify receipt.</td></tr>
+      <tr><td>2</td><td>"Manage client access, contact information, and provisioning across systems"</td><td>You're the system-of-record owner. Who has access to which data product, on which platform. When a client onboards or a contact changes, you keep the infrastructure clean across multiple platforms.</td></tr>
+      <tr><td>3</td><td>"Drive adoption of tools and best practices to achieve efficiency"</td><td>You roll out tools (Jira, Confluence, Tableau, Salesforce) and make sure teams actually use them. Classic change management.</td></tr>
+      <tr><td>4</td><td>"Connective layer and operating rhythms across Product, Engineering, AI & Data Science, Economics Institute"</td><td>You're the glue. Weekly standups, cross-team status syncs, dependency tracking. You create the cadence so teams don't operate in silos.</td></tr>
+      <tr><td>5</td><td>"Capture product usage data, customer feedback, and operational signals"</td><td>Build dashboards and feedback loops. Which clients use which products? Where are adoption gaps? What are clients requesting? Feed these signals to PM leadership.</td></tr>
+      <tr><td>6</td><td>"Coordinate timelines — content development, data QA, asset management, platform hygiene"</td><td>Master project schedule across multiple workstreams. Multiple teams feeding one delivery pipeline = dependencies = conflict resolution = your job.</td></tr>
+      <tr><td>7</td><td>"Partner with PMs to assess operations and inform strategic decisions (expanding/deprecating features)"</td><td>You surface the operational data that helps PMs decide: should we keep this product? Is it worth the delivery cost? Where should we invest?</td></tr>
+      <tr><td>8</td><td>"Clarify and document product operations processes"</td><td>Write SOPs, process docs, runbooks. Make the how visible and repeatable so the org doesn't depend on tribal knowledge.</td></tr>
+      <tr><td>9</td><td>"Proactively identify and mitigate risks in the delivery pipeline"</td><td>Before the client sees a late delivery or bad data, you should have flagged it. Risk radar. Bottleneck detection. Escalation before impact.</td></tr>
+      <tr><td>10</td><td>"First point of contact for content and data issues"</td><td>Triage desk. When something breaks — wrong data, access issue, publishing delay — you own the response. Fix or escalate.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card card-teal">
+    <h3>Why Mastercard Is Hiring This Now</h3>
+    <p>MEI is in a growth phase. As the product portfolio expands (more SpendingPulse variants, more Economics Institute publications, more custom advisory), the operational complexity outstrips what PMs can handle alongside strategy. The JD explicitly says: "free up product managers to focus on go-to-market and strategic efforts." Translation: product ops has been an afterthought, and now scale demands a dedicated owner. This is a <strong>build-the-function</strong> role, not a maintain-the-function role. You're being hired to create the operating system, not just run an existing one.</p>
+  </div>
+</div>
+
+<!-- PANEL 1: Your Fit -->
+<div class="panel" id="p1">
+  <h2 class="sec-title">Fit Analysis</h2>
+  <div class="sec-sub">02 / Your Evidence Against Every Requirement</div>
+
+  <div class="fit-container">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+      <span class="mono" style="font-size:32px;font-weight:700;color:var(--mc-orange)">74 → 85 <span style="font-size:16px;color:var(--text-muted)">/100</span></span>
+      <span style="font-size:13px;color:var(--text-muted)">CURRENT → POST-PREP · 2–4 WEEKS</span>
+    </div>
+    <div class="fit-bar-track">
+      <div class="fit-bar-fill" style="width:74%"></div>
+      <div class="fit-bar-target" style="left:85%"></div>
+    </div>
+    <div class="fit-labels">
+      <span>0 STRETCH</span><span>50 COMPETITIVE</span><span>70 STRONG</span><span>85</span><span>100</span>
+    </div>
+  </div>
+
+  <div class="quote-box">
+    "I built the product operations function for a $6.3B real estate portfolio from zero — the planning cadence, the data publishing pipeline, the quality governance, the cross-functional coordination layer, and the client delivery infrastructure. I just called it 'collections operations' instead of 'product operations.'"
+  </div>
+
+  <h3 style="margin:28px 0 16px; color:var(--mc-orange);">Requirement-by-Requirement Match</h3>
+
+  <div class="req-card">
+    <div class="req-header"><div class="req-title">Own and evolve core product processes — planning, data publishing, client communications, delivery</div><div class="match-high">HEADLINE MATCH</div></div>
+    <div class="req-jd">"Own and evolve core product processes"</div>
+    <div class="req-proof">Your <strong>70+ report MI ecosystem</strong> is a data publishing pipeline. You own planning (55-day T−25/T+30 framework), data publishing (automated Salesforce reports to 40+ RMs and C-suite), client communications (customer broadcast system for advance rebates), and delivery (12 concurrent workstreams, all on schedule). The PCC workflow redesign (20→3 days) is a delivery pipeline optimisation story. The 6 MD-approved process documents (COL-PF01 through PF14) are published SOPs governing operations.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header"><div class="req-title">Manage client access, contact information, and provisioning across systems</div><div class="match-high">STRONG MATCH</div></div>
+    <div class="req-jd">"Ensure accuracy and continuity across disparate sources"</div>
+    <div class="req-proof">You manage <strong>30,044+ active booking records</strong> across Salesforce, with customer contact data, payment histories, and status tracking. Your 30 pending IT enhancement requests are a provisioning backlog. The Sobha One App provisioning (customer eligibility rules, payment journey flow, access management) is direct client provisioning experience. You maintain data integrity across Salesforce CRM, bank systems (10 banks), and Xpedeon ERP.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header"><div class="req-title">Drive adoption of tools and best practices to reduce operational friction</div><div class="match-high">STRONG MATCH</div></div>
+    <div class="req-jd">"Drive adoption, integration, and process improvements"</div>
+    <div class="req-proof">Three proven adoption stories: (1) <strong>Salesforce CRM</strong> — 0→1 build, 70+ live reports, 40+ daily users. (2) <strong>Sobha One App</strong> — 0→278 payment transactions, defined user journey. (3) <strong>SQL migration programme</strong> — 18/50 reports migrated, projected 1,255 min/month savings. Each involved tool rollout, training, resistance management, and adoption measurement.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header"><div class="req-title">Connective layer across Product, Engineering, AI & Data Science, and customer-facing teams</div><div class="match-high">STRONG MATCH</div></div>
+    <div class="req-jd">"Establish consistent operating rhythms"</div>
+    <div class="req-proof">You sit at the intersection of <strong>4 sub-functions</strong>: Operations (Mathews, 38 people), Quality Control (Garima, 12), MIS (Asjad, 15), and Dues (12 RMs). You coordinate across Technology (Salesforce, SQL, Power BI), Data/MI (your reporting ecosystem), and customer-facing teams (RMs). You interface with CCO, CRO, and MD/CEO. Your weekly governance cadence per workstream is an operating rhythm framework.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header"><div class="req-title">Capture product usage data, customer feedback, and operational signals</div><div class="match-high">STRONG MATCH</div></div>
+    <div class="req-jd">"Develop systems to harness insights for product leadership"</div>
+    <div class="req-proof"><strong>Quality scorecard</strong> embedded in Salesforce (8 workflow metrics). <strong>PR rejection monitoring</strong> (49% spike detected → corrective action → continuous KPI). <strong>Complaint tracking</strong> (~100/month). <strong>SLA TAT dashboards</strong>. <strong>CSAT/NPS tracking</strong> (90% CSAT target, NPS 60+). <strong>Sobha One App adoption metrics</strong> (17% actual vs 80% target — honest signal capture). These are operational signal systems feeding leadership decisions.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header"><div class="req-title">Coordinate timelines across multiple teams for on-time, high-quality delivery</div><div class="match-high">HEADLINE MATCH</div></div>
+    <div class="req-jd">"Coordinate timelines and activities across multiple teams"</div>
+    <div class="req-proof"><strong>12 concurrent workstreams</strong> delivered on schedule in 2025 while collections grew 62% YoY with zero timeline escalations to MD level. <strong>24-month mortgage programme</strong> (1,016 units across 3 legal entities, zero supervision). <strong>PCC TAT</strong> from 20→3 days while volume tripled. Timeline coordination is your most documented superpower.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header"><div class="req-title">Proactively identify and mitigate delivery pipeline risks</div><div class="match-high">STRONG MATCH</div></div>
+    <div class="req-jd">"Proactive identify and mitigate risks before they impact the client experience"</div>
+    <div class="req-proof"><strong>14-finding audit remediation</strong> (97.5% error reduction). <strong>PR rejection spike caught and controlled</strong> before it became an audit finding. <strong>3 blocked risk-register items escalated to CCO proactively</strong> before due dates. The T−25/T+30 framework itself is a proactive risk mitigation model — front-loading engagement where the data shows highest responsiveness.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header"><div class="req-title">Partner with PMs to assess operations and inform strategic decisions</div><div class="match-med">MODERATE MATCH</div></div>
+    <div class="req-jd">"Expanding or deprecating certain features or deliverables"</div>
+    <div class="req-proof">You do this implicitly — recommending process changes to CCO, defending NPV model at MD level, building the automation prioritisation framework (business impact × manual effort). Your framework is <em>exactly</em> how product ops informs expand/deprecate decisions. The framing gap is vocabulary: you've never explicitly used "product strategy" language for this work.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header"><div class="req-title">Clarify and document product operations processes</div><div class="match-high">STRONG MATCH</div></div>
+    <div class="req-jd">"Clearly communicate expectations across teams"</div>
+    <div class="req-proof"><strong>6 MD-approved process documents</strong> (COL-PF01 through COL-PF14) — all authored or supervised by you, all approved by MD Francis Alfred. Plus: MI report catalogue, workflow documentation, desktop procedures for 77-person team. Process documentation is a core competency, not an adjacent skill.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header"><div class="req-title">Economic Intelligence / data product domain knowledge</div><div class="match-low">GAP — RESEARCH</div></div>
+    <div class="req-jd">Implicit domain context</div>
+    <div class="req-proof">Zero financial data product experience. No exposure to SpendingPulse, Economics Institute publications, or economic advisory. However: this is a <strong>research gap, not an experience gap</strong>. The JD doesn't ask for economics expertise — it asks for operational infrastructure expertise applied to economics products. The domain can be learned in 2 weeks; the operational muscle takes 6 years to build.</div>
+  </div>
+
+  <div class="grid-2" style="margin-top:28px">
+    <div class="card card-green">
+      <h3>Why You, Specifically</h3>
+      <p><strong>Build-from-Zero DNA.</strong> The JD describes a function being built, not maintained. You've built operational infrastructure from zero three times: Salesforce MI ecosystem, quality governance function, and India hub stand-up. Most candidates will bring experience running existing product ops; you bring experience <em>creating</em> it.</p>
+    </div>
+    <div class="card card-green">
+      <h3>Over-Qualified on Scope</h3>
+      <p><strong>77 people, $6.3B portfolio, 4 entities, 2 geographies.</strong> The L6 Manager level at Mastercard typically oversees smaller scope. This creates <strong>negotiating leverage</strong> — push for Senior Manager (L5) or at minimum the upper band of L6 compensation. Your scope story makes the hiring manager's case for a strong hire to their leadership.</p>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 2: Gaps & Plan -->
+<div class="panel" id="p2">
+  <h2 class="sec-title">Gap Closure Plan — 4 Weeks</h2>
+  <div class="sec-sub">03 / The narrowest gap set in your pipeline</div>
+
+  <p style="color:var(--text-dim);margin-bottom:24px">Prep philosophy: This role has the <strong>lowest reframe effort</strong> of any role in the pipeline. The gaps are vocabulary and domain context, not capability. Invest 50% into Mastercard domain research, 30% into Jira/Agile tooling fluency, 20% into portfolio project P13.</p>
+
+  <div class="card card-amber">
+    <div class="gap-header"><h3>Gap 1 — MEI Product Suite Knowledge</h3><div class="gap-timeline">2 weeks · HIGH</div></div>
+    <p><strong>Why it matters:</strong> You need to speak the interviewer's language. "SpendingPulse" and "Economics Institute" should roll off your tongue as naturally as "PCC" and "DRR" do today. The goal isn't expertise — it's fluency.</p>
+    <p style="margin-top:10px"><strong>The fix:</strong></p>
+    <p>• Read the <strong>Mastercard Economics Institute 2026 Economic Outlook</strong> — understand their publication style and audience</p>
+    <p>• Study the <strong>SpendingPulse Forrester TEI report</strong> (commissioned 2025) — shows how clients use the product and what value they derive</p>
+    <p>• Read 5 recent Economics Institute insight reports — understand the data-to-insight-to-publication pipeline</p>
+    <p>• Study <strong>Test & Learn</strong> platform documentation — it's the experimentation arm, shows how MEI connects insights to client actions</p>
+    <p>• Follow Michelle Meyer (Chief Economist, MEI) on LinkedIn — understand the narrative style and publication cadence</p>
+  </div>
+
+  <div class="card card-amber">
+    <div class="gap-header"><h3>Gap 2 — Jira / Confluence / Agile Vocabulary</h3><div class="gap-timeline">1 week · MEDIUM</div></div>
+    <p><strong>Why it matters:</strong> JD explicitly lists "Agile methodologies, scrum, and kanban and tools such as Jira, Confluence." You've built equivalent tracking systems, but the tool fluency matters for credibility.</p>
+    <p style="margin-top:10px"><strong>The fix:</strong></p>
+    <p>• Complete <strong>Atlassian Jira free certification</strong> (~4 hours) — shared with Qualcomm track</p>
+    <p>• Complete <strong>Confluence Fundamentals</strong> (free, 2 hours) — process documentation tool</p>
+    <p>• PMI-ACP study already covers Agile/Scrum/Kanban vocabulary — accelerate this module</p>
+    <p>• Reframe language: your cross-workstream tracker → Kanban board; weekly governance cadence → sprint ceremonies; process documents → Confluence runbooks</p>
+  </div>
+
+  <div class="card card-amber">
+    <div class="gap-header"><h3>Gap 3 — Tableau / BI Tooling Framing</h3><div class="gap-timeline">Already in progress · LOW</div></div>
+    <p><strong>Why it matters:</strong> JD mentions Tableau or other BI tools. You're the <strong>Power BI PoC lead</strong> at Sobha — this is already addressed. Tableau is just a different BI platform.</p>
+    <p style="margin-top:10px"><strong>The fix:</strong></p>
+    <p>• Your Power BI PoC role is the proof point — no additional prep needed</p>
+    <p>• If interview asks about Tableau specifically, reframe: "I'm leading our Power BI migration from Excel — the platform differs, but the skill is evaluating which reports deliver the most value as interactive dashboards, defining the data architecture requirements, and managing the migration path."</p>
+  </div>
+
+  <div class="card card-green">
+    <div class="gap-header"><h3>Gap 4 — Salesforce / CRM Framing</h3><div class="gap-timeline">Zero gap · Already done</div></div>
+    <p><strong>Why it matters:</strong> JD mentions "Salesforce (or other CRMs)." You <strong>led solution design</strong> of the Salesforce CRM architecture at Sobha. 70+ live reports. Quality scorecard. Advance rebate calculator. This isn't a gap — it's a differentiator.</p>
+  </div>
+
+  <h3 style="margin:28px 0 16px; color:var(--mc-orange);">Reframe Dictionary — Sobha → Mastercard MEI</h3>
+
+  <table class="data-table">
+    <thead><tr><th>What You Did at Sobha</th><th>How to Say It for Mastercard MEI</th></tr></thead>
+    <tbody>
+      <tr><td>70+ report MI ecosystem</td><td>Built and owned the data publishing pipeline — 70+ automated reports serving operational, tactical, and strategic audiences, from daily operations to MD-level monthly publications.</td></tr>
+      <tr><td>55-day T−25/T+30 framework</td><td>Designed the core operating rhythm framework governing the entire product delivery lifecycle — a proprietary 55-day cadence model now embedded in daily SOPs across two geographies.</td></tr>
+      <tr><td>PCC TAT 20→3 days</td><td>Redesigned a client-facing deliverable pipeline end-to-end — 85% cycle time reduction at 3x volume without quality degradation. Same team, redesigned workflow.</td></tr>
+      <tr><td>PR rejection 49% governance</td><td>Built a content quality assurance system: detected a 49% error rate through operational signal analysis, implemented continuous monitoring KPI, designed automated escalation triggers — rate controlled within 30 days.</td></tr>
+      <tr><td>12 concurrent workstreams</td><td>Coordinated timelines and activities across 12 concurrent delivery workstreams involving multiple teams, ensuring on-time delivery while primary KPI (collections) grew 62% YoY.</td></tr>
+      <tr><td>Salesforce CRM architecture</td><td>Led solution design and adoption of the enterprise CRM platform — ran 6-stakeholder discovery, defined the data architecture, shipped 70+ live reports that became the operational backbone for 4 years.</td></tr>
+      <tr><td>6 MD-approved process documents</td><td>Authored and governed the product operations documentation suite — clarifying and documenting processes, communicating expectations across teams for successful delivery on set timelines.</td></tr>
+      <tr><td>30,044 active bookings managed in CRM</td><td>Managed client access, contact information, and provisioning across enterprise CRM — maintaining accuracy and continuity for a 30,000+ client portfolio across multiple systems.</td></tr>
+      <tr><td>Quality scorecard (8 metrics)</td><td>Developed a system to capture and harness operational signals — 8-metric quality scorecard driving clear insights for leadership on delivery quality and process adherence.</td></tr>
+      <tr><td>SQL migration programme (18/50)</td><td>Drove adoption of modern data infrastructure — migrating legacy manual processes to SQL-based automation, reducing operational friction and enabling scalable delivery.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- PANEL 3: AI Portfolio -->
+<div class="panel" id="p3">
+  <h2 class="sec-title">AI Portfolio Project P13</h2>
+  <div class="sec-sub">04 / Your differentiator build</div>
+
+  <div class="card card-mc">
+    <h3>P13: Product Operations Intelligence Dashboard</h3>
+    <p style="margin-bottom:12px"><span class="badge badge-mc">mastercard-mei</span> <span class="badge badge-amber">TO_BUILD</span> <span class="mono" style="font-size:12px;color:var(--text-muted)">1–2 weeks</span></p>
+    <p><strong>Stack:</strong> Python + Streamlit + Claude API + Pandas</p>
+    <p style="margin-top:10px"><strong>What it does:</strong> Simulates a product delivery pipeline with multiple data products, client SLAs, and cross-team dependencies. AI layer flags at-risk deliverables, identifies bottleneck patterns across teams, and generates weekly ops summaries for product leadership.</p>
+  </div>
+
+  <h3 style="margin:24px 0 12px">Architecture</h3>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Layer 1 — Data Simulation</h3>
+      <p>Mock dataset: 15 data products × 50 clients × 12-month history. Fields: product_name, client_id, delivery_date, SLA_date, quality_score, publishing_status, team_owner, dependencies, feedback_score. Simulates realistic patterns: seasonal spikes, dependency delays, quality variance.</p>
+    </div>
+    <div class="card">
+      <h3>Layer 2 — Pipeline Health Engine</h3>
+      <p>Calculates: on-time delivery rate per product/team, SLA adherence trends, dependency bottleneck frequency, quality score distribution, client feedback correlation with delivery timing. Surfaces: at-risk deliverables (SLA within 48hrs + quality below threshold).</p>
+    </div>
+    <div class="card">
+      <h3>Layer 3 — AI Risk Flagger</h3>
+      <p>Claude API analyses current pipeline state and generates: (1) Top 3 risks this week with root cause hypothesis, (2) Bottleneck patterns across teams, (3) Recommended interventions ranked by impact, (4) Weekly ops summary narrative for product leadership.</p>
+    </div>
+    <div class="card">
+      <h3>Layer 4 — Streamlit Dashboard</h3>
+      <p>Interactive views: Pipeline health overview (traffic-light grid), team workload heatmap, SLA trend charts, client satisfaction correlation, AI-generated risk alerts with dismiss/acknowledge workflow, weekly summary export.</p>
+    </div>
+  </div>
+
+  <div class="card card-teal" style="margin-top:16px">
+    <h3>Interview Pitch</h3>
+    <p>"The JD asks me to develop systems that capture operational signals and harness them into insights for product leadership. So I built one. This dashboard simulates a multi-product delivery pipeline, flags at-risk deliverables before they impact clients, identifies cross-team bottleneck patterns, and generates weekly ops summaries using AI. It demonstrates exactly the proactive risk identification and cross-functional visibility the role demands — and it shows I can translate operational data into leadership-ready insights."</p>
+  </div>
+</div>
+
+<!-- PANEL 4: STAR Bank -->
+<div class="panel" id="p4">
+  <h2 class="sec-title">STAR Stories — Mastercard MEI Frame</h2>
+  <div class="sec-sub">05 / Your proof points, reframed for this role</div>
+
+  <div class="star-box">
+    <h4>Story 1 — Building Product Operations Infrastructure from Zero (JD: "own and evolve core product processes")</h4>
+    <div class="star-row"><span class="star-label star-label-s">Situation</span><span class="star-content">Joined Sobha Realty with zero operational infrastructure — no reporting ecosystem, no MI architecture, no quality governance, no process documentation. The collections function had grown to AED 867M but was running on informal processes and ad-hoc communication.</span></div>
+    <div class="star-row"><span class="star-label star-label-t">Task</span><span class="star-content">Build the entire product operations function from scratch — the planning cadence, data publishing pipeline, quality governance, and cross-team coordination layer that would support 14.9x scale growth.</span></div>
+    <div class="star-row"><span class="star-label star-label-a">Action</span><span class="star-content">Ran a 6-stakeholder discovery process. Designed the Salesforce CRM architecture. Built 70+ automated reports across daily operations, weekly performance, and monthly strategic intelligence. Created the 55-day operating rhythm framework. Authored 6 MD-approved process documents. Deployed quality scorecard with 8 continuous monitoring metrics.</span></div>
+    <div class="star-row"><span class="star-label star-label-r">Result</span><span class="star-content">Collections scaled from AED 867M to AED 12.97B (14.9x) over 4 years. Portfolio delinquency reduced 74%. The operational infrastructure I built is still in production 6 years later — it became the backbone for 77 people across 2 geographies serving a $6.3B portfolio.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 2 — Delivery Pipeline Redesign at 3x Volume (JD: "on-time and high-quality delivery")</h4>
+    <div class="star-row"><span class="star-label star-label-s">Situation</span><span class="star-content">The Payment Completion Certificate — a client-facing deliverable — was taking 20 days to process. This delay blocked downstream activities, created client complaints, and represented a failure in the delivery pipeline.</span></div>
+    <div class="star-row"><span class="star-label star-label-t">Task</span><span class="star-content">Redesign the end-to-end delivery workflow to dramatically reduce cycle time while maintaining quality and audit integrity.</span></div>
+    <div class="star-row"><span class="star-label star-label-a">Action</span><span class="star-content">Mapped the full process flow, eliminated redundant verification steps, introduced daily TAT dashboards, rebuilt handover protocols between teams. Same team, redesigned workflow — no additional headcount.</span></div>
+    <div class="star-row"><span class="star-label star-label-r">Result</span><span class="star-content">Turnaround reduced from 20 days to 3 days (85% reduction) while monthly volume tripled (approximately 90 to 281). Quality maintained. Client complaints eliminated for this workflow.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 3 — Content Quality Governance (JD: "proactively identify and mitigate risks")</h4>
+    <div class="star-row"><span class="star-label star-label-s">Situation</span><span class="star-content">Payment Request rejection rate reached 49% in December 2025 — a quality failure that was invisible until it became critical because there was no systematic quality monitoring for the delivery pipeline.</span></div>
+    <div class="star-row"><span class="star-label star-label-t">Task</span><span class="star-content">Diagnose the root cause, build a continuous monitoring system, and create an early-warning mechanism so quality failures are caught before they reach 49%.</span></div>
+    <div class="star-row"><span class="star-label star-label-a">Action</span><span class="star-content">Multi-source data triangulation to identify root causes (53% document gaps, 47% manual errors). Built daily PR rejection KPI as a continuous monitoring metric. Designed automated escalation trigger. Held the quality documentation standard under pressure from leadership wanting to relax it.</span></div>
+    <div class="star-row"><span class="star-label star-label-r">Result</span><span class="star-content">Rate controlled within 30 days. Quality scorecard now monitors 8 workflow metrics continuously. The standard I defended was vindicated by the next quarter's data. Proactive escalation of 3 blocked risk-register items to CCO before due dates — demonstrating the risk radar habit this role needs.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 4 — Cross-Team Coordination at Scale (JD: "connective layer across teams")</h4>
+    <div class="star-row"><span class="star-label star-label-s">Situation</span><span class="star-content">Managing 12 concurrent operational workstreams in 2025 across 4 sub-functions (Operations, Quality Control, MIS, Dues), 2 geographies (Dubai + India, 77 people), without dedicated PM infrastructure or formal tracking tools.</span></div>
+    <div class="star-row"><span class="star-label star-label-t">Task</span><span class="star-content">Deliver all 12 workstreams on time while also hitting a personal collections target of AED 8.2B — acting as the connective layer across teams.</span></div>
+    <div class="star-row"><span class="star-label star-label-a">Action</span><span class="star-content">Built a cross-workstream tracking system. Established weekly governance cadence per stream. Prioritised by risk impact. Used Arranger strength to coordinate resource allocation across competing timelines and dependencies.</span></div>
+    <div class="star-row"><span class="star-label star-label-r">Result</span><span class="star-content">All 12 deliverables on schedule. Collections grew 62% YoY in the same period. Zero timeline escalations to MD level. This is the "operating rhythm" the JD asks you to establish — I built it for 12 workstreams simultaneously.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 5 — Honest Failure: Product Adoption Miss (JD: "low-ego leadership style")</h4>
+    <div class="star-row"><span class="star-label star-label-s">Situation</span><span class="star-content">Sobha One App payment channel — set an 80% adoption target for PR submissions via the app.</span></div>
+    <div class="star-row"><span class="star-label star-label-t">Task</span><span class="star-content">Drive adoption of the new digital channel across a 30,044-customer base.</span></div>
+    <div class="star-row"><span class="star-label star-label-a">Action</span><span class="star-content">Scoped 12 functional requirements, pushed vendor on 4 scope expansions, defined user eligibility rules and payment journey. But skipped the behavioural change plan — assumed the technology would drive adoption on its own.</span></div>
+    <div class="star-row"><span class="star-label star-label-r">Result</span><span class="star-content">17% actual adoption vs 80% target. The lesson: tool adoption isn't just a technology problem, it's a change management problem. The JD explicitly asks for "driving adoption of tools and best practices" — this story proves I've learned exactly that lesson, and the next roll-out (SQL migration) front-loaded the change management work.</span></div>
+  </div>
+</div>
+
+<!-- PANEL 5: Comp Intel -->
+<div class="panel" id="p5">
+  <h2 class="sec-title">Compensation Intelligence</h2>
+  <div class="sec-sub">06 / What Mastercard pays at L6 in India</div>
+
+  <div class="comp-row">
+    <div class="comp-card"><div class="comp-val">₹35–45L</div><div class="comp-label">Base Salary</div></div>
+    <div class="comp-card"><div class="comp-val">15–20%</div><div class="comp-label">Annual Bonus</div></div>
+    <div class="comp-card"><div class="comp-val">Minor</div><div class="comp-label">RSU / ESPP</div></div>
+    <div class="comp-card"><div class="comp-val">₹45–55L</div><div class="comp-label">Total Comp P50</div></div>
+  </div>
+
+  <div class="card card-mc">
+    <h3>Level Mapping & Data Sources</h3>
+    <p>Mastercard India levels: L8 (Engineer/Analyst) → L7 (Senior) → <strong>L6 (Manager/Lead)</strong> → L5 (Director/Principal) → L4 (VP) → L3 (SVP). This "Manager" title maps to L6.</p>
+    <p style="margin-top:10px"><strong>Levels.fyi:</strong> L6 Product Manager India median ₹52.3L total comp (range ₹41.4L–67.9L). <strong>Glassdoor:</strong> PM India median base ₹22L, 90th percentile ₹42.9L. Product Operations roles typically fall in PM band but at lower end due to non-revenue-generating nature.</p>
+    <p style="margin-top:10px"><strong>Benefits noted:</strong> 40 days paternity leave, 6 months maternity leave. Current hybrid policy: 3 days WFO, 2 days WFH, plus 21 additional WFH days per year.</p>
+  </div>
+
+  <h3 style="margin:24px 0 12px; color:var(--mc-orange);">Negotiation Strategy</h3>
+
+  <table class="data-table">
+    <thead><tr><th>Parameter</th><th>Your Position</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Anchor</strong></td><td>₹50–55L. Never name a number first — ask their range. Use "compensation" not "salary."</td></tr>
+      <tr><td><strong>Walk-Away</strong></td><td>₹42L total comp. Below this, the role doesn't justify the transition from your current AED-denominated package.</td></tr>
+      <tr><td><strong>Push for L5</strong></td><td>Your scope (77 people, $6.3B portfolio, 4 entities, 2 geographies) exceeds L6 norms. Push for Senior Manager / L5 title. Even if they can't move the level, it establishes you as an over-qualified hire at L6.</td></tr>
+      <tr><td><strong>Joining Bonus</strong></td><td>₹3–5L. Always ask separately — different budget pool. Compensates for deferred incentives left at Sobha.</td></tr>
+      <tr><td><strong>Key Leverage</strong></td><td>BITS + IIM profile is rare for operational roles. Scope gap (your AED 86.8B portfolio vs typical L6 scope). Build-from-zero capability — not easy to find. Parallel offers (AmEx, Oaktree) create genuine alternatives.</td></tr>
+      <tr><td><strong>RSU/ESPP</strong></td><td>Minor component at L6 India. Don't anchor on equity — focus on base + bonus + joining bonus. ESPP (employee stock purchase plan) is a benefit, not a negotiable.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card card-teal" style="margin-top:16px">
+    <h3>Universal Rule</h3>
+    <p>Never accept or decline on the call. Always ask 24–48 hours. This is your most powerful single negotiation habit.</p>
+  </div>
+</div>
+
+<!-- PANEL 6: Interview Prep -->
+<div class="panel" id="p6">
+  <h2 class="sec-title">Interview Preparation</h2>
+  <div class="sec-sub">07 / What they'll ask and how to answer</div>
+
+  <div class="card card-mc">
+    <h3>Expected Interview Structure (Mastercard India)</h3>
+    <p><strong>Round 1 — Recruiter Screen (30 min):</strong> Motivation, salary expectations, logistics (location, notice period, visa). Keep it crisp. Don't over-narrate.</p>
+    <p style="margin-top:8px"><strong>Round 2 — Hiring Manager (60 min):</strong> Deep dive on product ops experience. Expect: "Tell me about a time you built an operational process from scratch." "How do you coordinate across multiple teams with competing priorities?" "How do you handle a delivery delay?"</p>
+    <p style="margin-top:8px"><strong>Round 3 — Cross-Functional Peer (45 min):</strong> PM or Engineering lead. Tests collaboration style. Expect: "How would you work with a PM who doesn't want to follow the process?" "How do you prioritise when everything is urgent?"</p>
+    <p style="margin-top:8px"><strong>Round 4 — Senior Leader / VP (45 min):</strong> Strategic thinking + culture fit. Expect: "What does great product ops look like?" "How would you measure success in the first 90 days?"</p>
+  </div>
+
+  <h3 style="margin:24px 0 12px; color:var(--mc-orange);">BQ Quick Router for Mastercard MEI</h3>
+
+  <table class="data-table">
+    <thead><tr><th>Question Theme</th><th>Lead Story</th><th>Key Line</th></tr></thead>
+    <tbody>
+      <tr><td>Walk me through your career</td><td>S10 (MT→AGM)</td><td>"MT to AGM in six years. I built the operational backbone for a $6.3B portfolio. I'm looking for the next build-from-zero challenge."</td></tr>
+      <tr><td>Built ops process from scratch</td><td>S5 (Salesforce 0→1)</td><td>"6-stakeholder discovery, 70+ live reports, 4-year MI backbone. Built the product operations infrastructure from zero."</td></tr>
+      <tr><td>Cross-team coordination</td><td>S1 + S13</td><td>"12 concurrent workstreams across 4 sub-functions and 2 geographies. Zero timeline escalations to MD."</td></tr>
+      <tr><td>Delivery pipeline improvement</td><td>S3 (PCC TAT)</td><td>"20 days to 3 days, volume tripled, same team. Redesigned workflow, not headcount."</td></tr>
+      <tr><td>Quality issue caught proactively</td><td>S2 (PR 49%)</td><td>"49% rejection rate — invisible until I built the monitoring. Held the standard under pressure. Next quarter vindicated the decision."</td></tr>
+      <tr><td>Failed / lessons learned</td><td>S8 (One App 17%)</td><td>"80% target, 17% actual. Tool adoption isn't a technology problem — it's change management. Next rollout, I front-loaded it."</td></tr>
+      <tr><td>Senior stakeholder influence</td><td>S4 (NPV AED 652M)</td><td>"Defended AED 652M model at MD/CEO, three scrutiny rounds, zero concessions."</td></tr>
+      <tr><td>How do you measure success?</td><td>Framework answer</td><td>"On-time delivery rate, SLA adherence, operational signal capture rate, PM time freed for strategy work, cross-team friction index."</td></tr>
+      <tr><td>First 90 days plan</td><td>Framework answer</td><td>"30 days: map every product, every deliverable, every timeline, every team interface. 60 days: identify the 3 highest-friction workflows and redesign them. 90 days: deploy the operating rhythm and quality monitoring that makes the improvements permanent."</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card card-teal" style="margin-top:20px">
+    <h3>Assertiveness Proof Points (For Senior-Forum Rounds)</h3>
+    <p>These directly address the DISC Low-D development area:</p>
+    <p style="margin-top:8px">1. <strong>PR 49% — Quality gate enforcement.</strong> Held documentation standard despite leadership pressure to relax. Position vindicated by data.</p>
+    <p style="margin-top:8px">2. <strong>NPV AED 652M — Senior-forum defence.</strong> Defended model at MD/CEO through multiple scrutiny rounds. Zero material concessions.</p>
+    <p style="margin-top:8px">3. <strong>3 proactive escalations to CCO.</strong> Blocked risk-register items escalated before due dates — not waiting for problems to surface, surfacing them myself.</p>
+  </div>
+
+  <div class="card card-green" style="margin-top:16px">
+    <h3>Psychometric Fit — Your Natural Advantage</h3>
+    <p>The JD practically describes your DISC profile:</p>
+    <p style="margin-top:8px"><strong>"Organized, ambitious self-starter"</strong> → High-C systematic execution</p>
+    <p><strong>"Simplify, clarify, and document processes"</strong> → High-C/High-S core strength</p>
+    <p><strong>"Low-ego leadership style"</strong> → High-S collaborative orientation</p>
+    <p><strong>"Work autonomously in ambiguous circumstances"</strong> → Proven: 24-month mortgage programme, zero supervision</p>
+    <p><strong>"Analytical mindset with product metrics"</strong> → CliftonStrengths Analytical #5</p>
+    <p style="margin-top:10px">CliftonStrengths alignment: <strong>Arranger</strong> (coordinate across 5+ teams), <strong>Restorative</strong> (fix delivery pipeline bottlenecks), <strong>Analytical</strong> (product usage data → insights), <strong>Individualization</strong> (understand what different teams need from the ops layer), <strong>Relator</strong> (deep trust with cross-functional partners).</p>
+  </div>
+</div>
+
+<!-- PANEL 7: Vocab Decoder -->
+<div class="panel" id="p7">
+  <h2 class="sec-title">Vocab Decoder</h2>
+  <div class="sec-sub">08 / Master these 14 terms before the interview</div>
+
+  <p style="color:var(--text-dim);margin-bottom:20px">Click any term to reveal its definition. Goal: move all from "unknown" to "known" within 2 weeks.</p>
+
+  <div id="vocab-container"></div>
+</div>
+
+</div><!-- end content -->
+
+<script>
+// Tab navigation
+function showPanel(i) {
+  document.querySelectorAll('.panel').forEach((p,j) => {
+    p.classList.toggle('active', j === i);
+  });
+  document.querySelectorAll('.tab-btn').forEach((b,j) => {
+    b.classList.toggle('active', j === i);
+  });
+}
+
+// Vocab cards
+const vocabData = [
+  { term: 'SpendingPulse\u2122', def: 'Mastercard\'s flagship near-real-time retail spend measurement platform. Tracks in-store + online sales across all payment types using anonymised aggregate transaction data. Updated weekly with ~5-7 day lag. Geographic granularity down to metro/county level. Core MEI product — the one clients talk about most.' },
+  { term: 'Mastercard Economics Institute', def: 'In-house research arm producing macro and micro economic insights. Team of economists, data scientists, visual artists, and storytellers. Publishes reports on consumer spending, travel, economic outlook, and sector-specific trends. Chief Economist: Michelle Meyer.' },
+  { term: 'MEI (Economic Intelligence)', def: 'Mastercard Economic Intelligence — the parent division housing SpendingPulse, Economics Institute, advisory services, and custom data products. This role sits within MEI\'s Product organization.' },
+  { term: 'Data Publishing', def: 'The end-to-end process of preparing, quality-checking, and delivering economic data products to clients on schedule. Includes: data pipeline validation, content review, platform upload, client notification. Your 70+ report ecosystem is a data publishing pipeline.' },
+  { term: 'Content Calendar', def: 'Master schedule governing when reports, insights, and data updates are published to clients. Coordinates across research (content creation), data science (analysis), and product ops (delivery). You will own this.' },
+  { term: 'Client Provisioning', def: 'Managing client access, credentials, and entitlements across platforms and data products. When a client onboards or changes, you ensure they can access the right products on the right platforms. Your Salesforce CRM management of 30,044+ records is this.' },
+  { term: 'Platform Hygiene', def: 'Ongoing maintenance of data quality, access permissions, user accounts, and system integrity across delivery platforms. Preventing stale data, orphaned accounts, or broken access. Your CRM data integrity work maps here.' },
+  { term: 'Asset Management (Product Ops)', def: 'Managing deliverable assets — reports, datasets, visualisations, client decks — through their lifecycle. Version control, archival, refresh scheduling. Not financial asset management.' },
+  { term: 'Operating Rhythm', def: 'Recurring cadence of planning, review, and delivery activities across cross-functional teams. Weekly standups, monthly reviews, quarterly planning. Your T\u221225/T+30 framework and weekly governance cadence are operating rhythms.' },
+  { term: 'Test & Learn\u00AE', def: 'Mastercard\'s proprietary analytics platform enabling clients to test the true impact of business decisions using controlled experiments. Connects insights to action. Shows MEI doesn\'t just report — it helps clients act on the data.' },
+  { term: 'Product Lifecycle', def: 'Full journey of a data product from ideation through development, launch, maintenance, enhancement, and potential deprecation. The JD asks you to partner with PMs on "expanding or deprecating features" — that\'s product lifecycle management.' },
+  { term: 'Jira', def: 'Atlassian project tracking tool. Standard for Agile/Scrum/Kanban workflows. Key concepts: Boards (Kanban/Scrum), Sprints, Epics (large features), Stories (user requirements), Tasks, Backlog. Your cross-workstream tracker is a manual Jira board.' },
+  { term: 'Confluence', def: 'Atlassian documentation and wiki platform. Used for process documentation, runbooks, meeting notes, and cross-team knowledge sharing. Your 6 MD-approved process documents + MI report catalogue would live in Confluence.' },
+  { term: 'SLA (Service Level Agreement)', def: 'Contractual commitment on delivery timelines, data freshness, and quality standards to clients. "Data updated within 7 days of week-end" is an SLA. Your PCC TAT target is an internal SLA equivalent.' },
+];
+
+const vc = document.getElementById('vocab-container');
+vocabData.forEach(v => {
+  const card = document.createElement('div');
+  card.className = 'vocab-card';
+  card.innerHTML = `<div class="vocab-term">${v.term}<span class="reveal-hint">tap to reveal</span></div><div class="vocab-def">${v.def}</div>`;
+  card.addEventListener('click', () => card.classList.toggle('open'));
+  vc.appendChild(card);
+});
+</script>
+
+</body>
+</html>

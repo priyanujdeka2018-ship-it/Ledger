@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google gTech — Scaled Delivery Manager | Priyanuj Deka Career Intelligence Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface-2: #1c2333;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #4ade80;
+    --accent-dim: rgba(74, 222, 128, 0.12);
+    --accent-2: #38bdf8;
+    --accent-2-dim: rgba(56, 189, 248, 0.12);
+    --warn: #f59e0b;
+    --warn-dim: rgba(245, 158, 11, 0.10);
+    --danger: #f87171;
+    --danger-dim: rgba(248, 113, 113, 0.10);
+    --google-blue: #4285f4;
+    --google-green: #34a853;
+    --google-yellow: #fbbc05;
+    --google-red: #ea4335;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ═══ HEADER ═══ */
+  .hero {
+    background: linear-gradient(135deg, #0d1117 0%, #1a2744 40%, #0f2027 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 0 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(74,222,128,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(56,189,248,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  .hero-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 400;
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .hero-sub {
+    font-size: 16px;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+  }
+
+  .hero-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    max-width: 750px;
+  }
+  .metric-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: center;
+  }
+  .metric-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--accent);
+  }
+  .metric-value.blue { color: var(--accent-2); }
+  .metric-value.warn { color: var(--warn); }
+  .metric-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ═══ TABS ═══ */
+  .tab-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-bar::-webkit-scrollbar { height: 0; }
+  .tab-inner {
+    display: flex;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 32px;
+    gap: 0;
+  }
+  .tab-btn {
+    background: none; border: none; color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 14px 18px;
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ═══ SECTIONS ═══ */
+  .section {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 36px;
+  }
+
+  /* ═══ CARDS ═══ */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .card-accent { border-left: 3px solid var(--accent); }
+  .card-blue { border-left: 3px solid var(--accent-2); }
+  .card-warn { border-left: 3px solid var(--warn); }
+  .card-danger { border-left: 3px solid var(--danger); }
+  .card-gold {
+    background: linear-gradient(135deg, rgba(245,158,11,0.06) 0%, var(--surface) 100%);
+    border: 1px solid rgba(245,158,11,0.2);
+  }
+
+  .card h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin-bottom: 12px;
+  }
+  .card h4 {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  .card p { color: var(--text-muted); line-height: 1.75; }
+  .card p + p { margin-top: 10px; }
+
+  /* ═══ RESPONSIBILITY CARDS ═══ */
+  .resp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .resp-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--accent);
+    opacity: 0.5;
+    float: left;
+    margin-right: 20px;
+    line-height: 1;
+  }
+  .resp-title {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  .resp-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  .tag-green { background: var(--accent-dim); color: var(--accent); }
+  .tag-blue { background: var(--accent-2-dim); color: var(--accent-2); }
+  .tag-warn { background: var(--warn-dim); color: var(--warn); }
+
+  /* ═══ FIT BAR ═══ */
+  .fit-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .fit-label {
+    flex: 0 0 260px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .fit-bar-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .fit-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+  .fill-green { background: var(--accent); }
+  .fill-blue { background: var(--accent-2); }
+  .fill-warn { background: var(--warn); }
+  .fill-danger { background: var(--danger); }
+  .fit-pct {
+    flex: 0 0 40px;
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* ═══ TABLES ═══ */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+    font-size: 14px;
+  }
+  .data-table th {
+    text-align: left;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+  }
+  .data-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    vertical-align: top;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+
+  /* ═══ GRID ═══ */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  /* ═══ STAR STORIES ═══ */
+  .star-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .star-card h4 { color: var(--accent); margin-bottom: 6px; }
+  .star-jd-link {
+    font-size: 12px;
+    color: var(--accent-2);
+    font-family: 'IBM Plex Mono', monospace;
+    margin-bottom: 16px;
+  }
+  .star-grid {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 6px 12px;
+  }
+  .star-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 1px;
+    padding-top: 2px;
+  }
+  .star-text { color: var(--text-muted); font-size: 14px; }
+
+  /* ═══ TIMELINE ═══ */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: var(--border);
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -24px; top: 8px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+  .tl-week {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .tl-title {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+  .tl-desc { color: var(--text-muted); font-size: 14px; }
+
+  /* ═══ VOCAB TABLE ═══ */
+  .vocab-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .vocab-row:last-child { border-bottom: none; }
+  .vocab-from, .vocab-to {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  .vocab-from {
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.02);
+  }
+  .vocab-to {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* ═══ BADGES ═══ */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+  .badge-green { background: var(--accent-dim); color: var(--accent); }
+  .badge-blue { background: var(--accent-2-dim); color: var(--accent-2); }
+  .badge-warn { background: var(--warn-dim); color: var(--warn); }
+  .badge-danger { background: var(--danger-dim); color: var(--danger); }
+
+  /* ═══ QUOTE ═══ */
+  .quote {
+    border-left: 3px solid var(--accent);
+    padding: 16px 20px;
+    margin: 20px 0;
+    background: var(--accent-dim);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  /* ═══ FOOTER ═══ */
+  .footer {
+    padding: 32px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width: 768px) {
+    .container { padding: 0 16px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .fit-label { flex: 0 0 160px; font-size: 12px; }
+    .star-grid { grid-template-columns: 1fr; }
+    .star-label { margin-top: 8px; }
+    .vocab-row { grid-template-columns: 1fr; }
+    .tab-btn { padding: 12px 12px; font-size: 10.5px; }
+    .hero { padding: 36px 0 32px; }
+    .section { padding: 36px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Career Intelligence Brief — Google gTech Ads</div>
+    <h1>Scaled Delivery Manager</h1>
+    <div class="hero-sub">gTech Ads · Customer Support · Vendor Operations at Scale&ensp;|&ensp;Hyderabad / Gurgaon</div>
+    <div class="hero-metrics">
+      <div class="metric-card">
+        <div class="metric-value">72</div>
+        <div class="metric-label">Current Fit</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value blue">85</div>
+        <div class="metric-label">Target Fit</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value warn">₹70–95L</div>
+        <div class="metric-label">Est. CTC (L5/L6)</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-value">3–4 mo</div>
+        <div class="metric-label">Prep Timeline</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ TABS ═══════════════ -->
+<nav class="tab-bar">
+  <div class="tab-inner">
+    <button class="tab-btn active" onclick="showTab('decode')">Role Decode</button>
+    <button class="tab-btn" onclick="showTab('fit')">Fit & Gaps</button>
+    <button class="tab-btn" onclick="showTab('prep')">Prep Roadmap</button>
+    <button class="tab-btn" onclick="showTab('ai')">AI Leverage</button>
+    <button class="tab-btn" onclick="showTab('vocab')">Google Vocab</button>
+    <button class="tab-btn" onclick="showTab('interview')">Interview Prep</button>
+    <button class="tab-btn" onclick="showTab('narrative')">Your Narrative</button>
+    <button class="tab-btn" onclick="showTab('salary')">Salary Intel</button>
+  </div>
+</nav>
+
+<!-- ═══════════════ TAB 1: ROLE DECODE ═══════════════ -->
+<div id="decode" class="tab-panel active">
+<section class="section">
+<div class="container">
+  <h2 class="section-title">What This Role Really Is</h2>
+  <p class="section-sub">Stripping away the Google-speak to reveal the actual job</p>
+
+  <div class="card card-accent">
+    <h3>The Plain-English Summary</h3>
+    <p>Google's advertising products — Search Ads, YouTube Ads, Display & Video 360, etc. — are supported by a massive customer support infrastructure. Much of this support is delivered through <strong>managed service partners</strong> (outsourced vendor firms like Accenture, TCS, Wipro, Concentrix) operating contact centres globally. The Scaled Delivery Manager owns the operational relationship with these vendor partners: ensuring they hit their KPIs, maintaining service quality, managing budgets, and driving AI-first transformation across the vendor ecosystem.</p>
+    <p>You are <strong>not</strong> selling ads. You are <strong>not</strong> doing technical support. You are the <strong>operations leader</strong> who ensures Google's outsourced customer support machine runs at peak performance — through vendor governance, process optimization, AI automation, and cross-functional stakeholder management.</p>
+    <p>Think of it as: <strong>Head of Vendor Operations + AI Transformation Driver + Cross-Functional Programme Leader</strong> for Google's customer support delivery engine.</p>
+  </div>
+
+  <h3 style="margin: 32px 0 16px; font-size: 18px;">The Five Responsibilities Decoded</h3>
+
+  <div class="resp-card">
+    <div class="resp-number">1</div>
+    <div class="resp-title">Lead Operations & Inspire Vendor Teams to Deliver Positive CX</div>
+    <div class="resp-tags">
+      <span class="tag tag-green">Vendor Ops Leadership</span>
+      <span class="tag tag-green">Your Strongest Match</span>
+    </div>
+    <p style="color: var(--text-muted)">You own the day-to-day operational relationship with managed service partners. You set KPI expectations, run governance reviews, and ensure vendor teams deliver consistent customer experiences across channels. You are the escalation point when things break.</p>
+    <p style="color: var(--text-muted); margin-top: 8px;"><strong style="color: var(--text);">Your analog:</strong> You lead a 77-person, two-geography (Dubai + India) operation where 42 of 77 team members are in a remote hub — functionally an outsourced operations centre. You designed the governance model, quality control architecture (QCG team of 12), and performance frameworks. You manage through influence, governance, and data — not direct authority. This is vendor operations management by another name.</p>
+  </div>
+
+  <div class="resp-card">
+    <div class="resp-number">2</div>
+    <div class="resp-title">Optimize Processes, Ensure Training & Resources</div>
+    <div class="resp-tags">
+      <span class="tag tag-green">Process Excellence</span>
+      <span class="tag tag-blue">AI Automation</span>
+    </div>
+    <p style="color: var(--text-muted)">You maintain and improve the operational playbooks vendor teams run on — SOPs, training materials, escalation protocols, quality standards. You ensure every vendor agent has the resources to resolve customer issues efficiently.</p>
+    <p style="color: var(--text-muted); margin-top: 8px;"><strong style="color: var(--text);">Your analog:</strong> You authored 6 MD-approved process documents, built the 70+ report MI ecosystem that serves as the operational data layer, and designed the QCG quality assurance framework that governs output standards across all practitioners. PCC TAT compression from 20 to 3 days was exactly this — process re-engineering at operational scale.</p>
+  </div>
+
+  <div class="resp-card">
+    <div class="resp-number">3</div>
+    <div class="resp-title">Drive AI-First Efficiency, Deliver KPIs, Secure Budgets</div>
+    <div class="resp-tags">
+      <span class="tag tag-blue">AI Transformation</span>
+      <span class="tag tag-green">Budget Ownership</span>
+    </div>
+    <p style="color: var(--text-muted)">This is the role's sharpest differentiator. Google is aggressively replacing L1/L2 human support with Gemini-powered AI agents. You drive this transformation — managing the shift from human vendor agents to AI-assisted workflows, measuring AI's impact on resolution rates and CSAT, and making the financial case for automation investments.</p>
+    <p style="color: var(--text-muted); margin-top: 8px;"><strong style="color: var(--text);">Your analog:</strong> NPV AED 652M business case defended at MD/CEO level — budget and business case ownership. 12-project AI-augmented operations portfolio. Salesforce 0→1 transformation while maintaining operational continuity. You know how to build the case for technology investment and execute the transition.</p>
+  </div>
+
+  <div class="resp-card">
+    <div class="resp-number">4</div>
+    <div class="resp-title">Collaborate with Cross-Functional Stakeholders Globally</div>
+    <div class="resp-tags">
+      <span class="tag tag-green">Stakeholder Management</span>
+      <span class="tag tag-blue">Global VMO</span>
+    </div>
+    <p style="color: var(--text-muted)">You operate at the intersection of vendor management teams, sourcing/procurement, strategy & operations, tools & automation, HR, legal, and finance. This is a hub-and-spoke coordination role requiring diplomatic stakeholder management across functions and geographies.</p>
+    <p style="color: var(--text-muted); margin-top: 8px;"><strong style="color: var(--text);">Your analog:</strong> You coordinate across Legal, Accounts, DLD, Technology, Sales, and executive leadership (CRO, CCO, MD/CEO) daily. The CX Journey 1.0 initiative involved 11 cross-functional signatories. Your stakeholder map is deep and structurally similar — you just haven't called it "vendor management" and "sourcing."</p>
+  </div>
+
+  <div class="resp-card">
+    <div class="resp-number">5</div>
+    <div class="resp-title">Manage Operations at Scale with AI-First Mindset</div>
+    <div class="resp-tags">
+      <span class="tag tag-green">Scale Operations</span>
+      <span class="tag tag-blue">Business Continuity</span>
+    </div>
+    <p style="color: var(--text-muted)">You manage vendor service providers to deliver performance seamlessly, meet metrics, and ensure business continuity. You work closely with managed service partners, Googlers in gTech, LCS (Large Customer Sales), and GCS (Google Customer Solutions).</p>
+    <p style="color: var(--text-muted); margin-top: 8px;"><strong style="color: var(--text);">Your analog:</strong> 14.9x scale growth (AED 867M → 12.97B) while reducing delinquency 74% — you scaled massively without breaking operational continuity. Multi-entity expansion (1 → 4 entities) on a unified governance framework. This is exactly "operations at scale."</p>
+  </div>
+
+  <div class="card card-gold" style="margin-top: 32px;">
+    <h3>Role Architecture Verdict</h3>
+    <p><strong style="color: var(--warn);">This Is a Vendor Operations Delivery Leadership Role with AI Transformation Mandate.</strong></p>
+    <p>Unlike the gTech Ads CX S&O role (internal strategy consulting), this role is explicitly about <strong>running the vendor operations machine</strong> — owning KPIs, managing partner relationships, driving AI automation, and maintaining service delivery. This is closer to your Sobha operating model than any other Google role in your pipeline.</p>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <h3>How This Differs from Your Other Google Tracks</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>GBO Tools S&O</th>
+          <th>gTech SDM</th>
+          <th style="color: var(--accent);">This Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Org</td>
+          <td>GBO Tools (internal tooling)</td>
+          <td>Extended Workforce / VMO</td>
+          <td style="color: var(--accent);">gTech Ads · Customer Support</td>
+        </tr>
+        <tr>
+          <td>Focus</td>
+          <td>Internal systems for sellers</td>
+          <td>Vendor cost optimisation</td>
+          <td style="color: var(--accent);">Vendor ops delivery + AI transformation</td>
+        </tr>
+        <tr>
+          <td>Core Skill</td>
+          <td>AI tooling + sales enablement</td>
+          <td>MSP/VMS cost governance</td>
+          <td style="color: var(--accent);">Ops leadership + vendor KPI delivery + AI-first</td>
+        </tr>
+        <tr>
+          <td>Your Best Match</td>
+          <td>MI ecosystem + Salesforce</td>
+          <td>NPV model + vendor governance</td>
+          <td style="color: var(--accent);">India hub + 14.9x scale + AI portfolio + process re-engineering</td>
+        </tr>
+        <tr>
+          <td>Domain Gap</td>
+          <td>SMB ads ecosystem (HIGH)</td>
+          <td>MSP/VMS vocabulary (MED)</td>
+          <td style="color: var(--accent);">Ads support ops vocab (MED)</td>
+        </tr>
+        <tr>
+          <td>Fit Score</td>
+          <td>63→80</td>
+          <td>74→82</td>
+          <td style="color: var(--accent);">72→85</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+</div>
+
+<!-- ═══════════════ TAB 2: FIT & GAPS ═══════════════ -->
+<div id="fit" class="tab-panel">
+<section class="section">
+<div class="container">
+  <h2 class="section-title">Fit Assessment — Honest Scoring</h2>
+  <p class="section-sub">Current 72 → Target 85 / 100</p>
+
+  <div class="card">
+    <h3>Requirement-by-Requirement Fit</h3>
+    <div style="margin-top: 20px;">
+      <div class="fit-row">
+        <div class="fit-label">Operations Management (5yr min)</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-green" style="width:95%"></div></div>
+        <div class="fit-pct" style="color:var(--accent)">95%</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-label">Stakeholder Relationship Building (5yr)</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-green" style="width:92%"></div></div>
+        <div class="fit-pct" style="color:var(--accent)">92%</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-label">Cross-Functional Process Improvement (5yr)</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-green" style="width:90%"></div></div>
+        <div class="fit-pct" style="color:var(--accent)">90%</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-label">People Leadership (77-person team)</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-green" style="width:90%"></div></div>
+        <div class="fit-pct" style="color:var(--accent)">90%</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-label">MBA / Master's Degree (preferred)</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-green" style="width:100%"></div></div>
+        <div class="fit-pct" style="color:var(--accent)">100%</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-label">KPI Delivery & Budget Management</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-green" style="width:88%"></div></div>
+        <div class="fit-pct" style="color:var(--accent)">88%</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-label">AI-First Mindset / AI Automation</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-blue" style="width:75%"></div></div>
+        <div class="fit-pct" style="color:var(--accent-2)">75%</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-label">Data Analysis & Business Insights (5yr pref.)</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-blue" style="width:72%"></div></div>
+        <div class="fit-pct" style="color:var(--accent-2)">72%</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-label">Vendor/Managed Service Partner Mgmt</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-warn" style="width:60%"></div></div>
+        <div class="fit-pct" style="color:var(--warn)">60%</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-label">Six Sigma / COPC / Lean Certification</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-warn" style="width:20%"></div></div>
+        <div class="fit-pct" style="color:var(--warn)">20%</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-label">SQL & Analytics Tools</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-danger" style="width:25%"></div></div>
+        <div class="fit-pct" style="color:var(--danger)">25%</div>
+      </div>
+      <div class="fit-row">
+        <div class="fit-label">Ads / Customer Support Domain</div>
+        <div class="fit-bar-track"><div class="fit-bar-fill fill-danger" style="width:15%"></div></div>
+        <div class="fit-pct" style="color:var(--danger)">15%</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+    <span class="badge badge-green">Operations ✓</span>
+    <span class="badge badge-green">People Leadership ✓</span>
+    <span class="badge badge-green">Stakeholder Mgmt ✓</span>
+    <span class="badge badge-green">Cross-Functional ✓</span>
+    <span class="badge badge-green">IIM MBA ✓</span>
+    <span class="badge badge-green">Budget/KPI ✓</span>
+    <span class="badge badge-blue">AI Portfolio △</span>
+    <span class="badge badge-blue">Data Analysis △</span>
+    <span class="badge badge-warn">Vendor Ops △</span>
+    <span class="badge badge-warn">Six Sigma ✗</span>
+    <span class="badge badge-danger">SQL ✗</span>
+    <span class="badge badge-danger">Ads Domain ✗</span>
+  </div>
+
+  <h3 style="font-size: 18px; margin-bottom: 16px;">Gap Analysis — Closing Strategies</h3>
+
+  <div class="card card-danger">
+    <h4>Gap 1: Ads / Customer Support Domain <span class="badge badge-danger">HIGH</span></h4>
+    <p>You don't speak Google Ads product stack or customer support operations vocabulary — CSAT, ticket deflection, escalation tiers, SLA structures.</p>
+    <p><strong style="color:var(--text)">Closing strategy:</strong> Google Ads Search + Measurement Skillshop certifications (free, ~8 hours total). Study COPC framework concepts (don't cert — understand the model). Study Google's public AI-in-support announcements. Shared investment with all Google tracks. <strong>Timeline: 3–4 weeks.</strong></p>
+  </div>
+
+  <div class="card card-warn">
+    <h4>Gap 2: Six Sigma / COPC / Lean Certification <span class="badge badge-warn">MEDIUM-HIGH</span></h4>
+    <p>Explicitly listed as preferred qualification. You have zero process excellence certifications currently.</p>
+    <p><strong style="color:var(--text)">Closing strategy:</strong> Six Sigma Green Belt online certification (₹15–25K, 4–6 weeks). This is the single highest-ROI cert for this role — it also benefits gTech SDM and broader pipeline. COPC awareness (study the CX Standard framework, 1 week study, no cert). <strong>Timeline: 4–6 weeks.</strong></p>
+  </div>
+
+  <div class="card card-warn">
+    <h4>Gap 3: SQL & Analytics Tooling <span class="badge badge-warn">MEDIUM</span></h4>
+    <p>Listed as preferred — "experience using tech and analytics tools, with knowledge on SQL." Your known pipeline blocker (Uber, both Google tracks).</p>
+    <p><strong style="color:var(--text)">Closing strategy:</strong> Mode Analytics free SQL course + Kaggle practice datasets. Shared blocker resolution with Uber Sr Risk Ops and GBO Tools tracks. <strong>Timeline: 4–6 weeks (ongoing).</strong></p>
+  </div>
+
+  <div class="card card-blue">
+    <h4>Gap 4: Vendor/Managed Service Partner Framing <span class="badge badge-blue">MEDIUM</span></h4>
+    <p>Your India hub is <em>internal</em>, not a third-party vendor relationship with SLAs and commercial terms. The JD expects experience managing outsourced vendor partners with contractual obligations.</p>
+    <p><strong style="color:var(--text)">Closing strategy:</strong> Reframe only — no new learning required. Your India hub (42 people, managed through governance/data not direct authority) IS the vendor management model. Add NICE management as explicit technology vendor governance. Add 10-bank infrastructure as multi-partner service delivery management. <strong>Timeline: 1–2 weeks (reframing only).</strong></p>
+  </div>
+
+  <div class="card card-accent" style="margin-top: 24px;">
+    <h3>Why 72 Starting Fit Is Your Strongest Google Position</h3>
+    <p>This role's minimum qualifications — 5 years operations management, 5 years stakeholder relationships, 5 years cross-functional process improvement — are your <strong>exact core</strong>. Unlike gTech SDM (which requires solution design vocabulary) or GBO Tools (which requires internal tooling framing), this JD describes what you actually do every day: run operations through distributed teams, hit KPIs, manage budgets, drive transformation. The gaps are domain vocabulary and certifications, not structural capability.</p>
+  </div>
+</div>
+</section>
+</div>
+
+<!-- ═══════════════ TAB 3: PREP ROADMAP ═══════════════ -->
+<div id="prep" class="tab-panel">
+<section class="section">
+<div class="container">
+  <h2 class="section-title">12-Week Preparation Roadmap</h2>
+  <p class="section-sub">Structured sprint to close the 72→85 gap — 85% shared with existing Google tracks</p>
+
+  <div class="card card-accent" style="margin-bottom: 32px;">
+    <p><strong>Principle:</strong> 85% of this prep is shared with your gTech SDM and GBO Tools tracks. The incremental effort for this role is: (a) Six Sigma Green Belt certification, and (b) vendor operations reframing. Do not treat this as separate preparation.</p>
+  </div>
+
+  <h3 style="margin-bottom: 16px;">Sprint 1 — Domain Foundation (Weeks 1–4)</h3>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-week">Weeks 1–2</div>
+      <div class="tl-title">Google Ads Skillshop Certifications</div>
+      <div class="tl-desc">Complete Google Ads Search + Measurement + GA4 certifications (free, ~14 hours total). Shared with GBO Tools + SDM tracks. This gives you the vocabulary of the advertiser ecosystem whose support infrastructure you'd be managing.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Week 3</div>
+      <div class="tl-title">Customer Support Operations Mental Model</div>
+      <div class="tl-desc">Study: CSAT/NPS measurement, support ticket lifecycle, escalation tier management (L1/L2/L3), SLA structures, first-contact resolution, average handle time, ticket deflection. Map each concept to your existing governance: QCG team = quality assurance, PR rejection 49% = first-pass yield, PCC TAT = resolution velocity.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Week 4</div>
+      <div class="tl-title">Google Vendor Landscape & AI-First CX Research</div>
+      <div class="tl-desc">Study how Google structures outsourced support: key vendors (Accenture, TCS, Wipro, Concentrix), SLA models, how Gemini AI is replacing L1 support. Read Google's published AI-in-support strategy. LinkedIn-research profiles of current gTech Scaled Delivery Managers and Vendor Operations leads.</div>
+    </div>
+  </div>
+
+  <h3 style="margin: 32px 0 16px;">Sprint 2 — Certification & Capability (Weeks 5–8)</h3>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-week">Weeks 5–8</div>
+      <div class="tl-title">Six Sigma Green Belt Certification</div>
+      <div class="tl-desc">Online certification (~₹15–25K, ~40 hours study). Directly addresses the preferred qualification. Covers DMAIC, process mapping, root cause analysis, statistical process control — all concepts you practice instinctively but haven't formalised. Also benefits gTech SDM track.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Weeks 5–6 (parallel)</div>
+      <div class="tl-title">SQL Foundations — Mode Analytics</div>
+      <div class="tl-desc">Complete Mode Analytics SQL tutorial (free). Practice on Kaggle datasets. Shared blocker resolution across Uber + GBO Tools + this role. Target: write basic SELECT/JOIN/GROUP BY queries confidently. Not expert-level — "knowledge on SQL" per the JD.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Weeks 7–8</div>
+      <div class="tl-title">Looker Studio Dashboards — Vendor Performance Focus</div>
+      <div class="tl-desc">Build 2 Looker Studio dashboards: (1) Vendor Performance Scorecard — mock SLA tracking, CSAT by vendor, resolution rate by tier. (2) AI Transformation Tracker — ticket deflection rate, AI-handled vs human-handled, cost-per-resolution trends. Portfolio proof + interview talking points.</div>
+    </div>
+  </div>
+
+  <h3 style="margin: 32px 0 16px;">Sprint 3 — AI Portfolio, Resume & Application (Weeks 9–12)</h3>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-week">Weeks 9–10</div>
+      <div class="tl-title">Build AI Portfolio Project — P14: Vendor Delivery Intelligence Dashboard</div>
+      <div class="tl-desc">Design and demo-build an AI-powered vendor performance monitoring tool. Full spec in the AI Leverage tab. This is the "I already built a working version of the job" interview weapon.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Week 11</div>
+      <div class="tl-title">Resume Build (Shared Base with gTech SDM)</div>
+      <div class="tl-desc">Build on the gTech SDM resume base. Adjust framing: lead with vendor operations delivery, AI-first transformation, KPI governance, budget ownership. Shared resume base = one build, two outputs.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-week">Week 12</div>
+      <div class="tl-title">Apply with Referral + Full Arsenal</div>
+      <div class="tl-desc">Apply with: Google-reframed resume, Six Sigma Green Belt, 3+ Skillshop certifications, AI portfolio demo link, and warm referral (IIM/BITS alumni at Google India). Preferred location: Hyderabad (mention Gurgaon as secondary).</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 32px;">
+    <h3>Certification Priority Stack</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>#</th><th>Certification</th><th>Platform</th><th>Cost</th><th>Why It Matters</th><th>Shared With</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Six Sigma Green Belt</td><td>ASQ / Coursera / Udemy</td><td>₹15–25K</td><td>Preferred qualification — directly named</td><td>gTech SDM, all ops roles</td></tr>
+        <tr><td>2</td><td>Google Ads Search</td><td>Skillshop</td><td>Free</td><td>Ads domain vocabulary</td><td>GBO Tools, SDM</td></tr>
+        <tr><td>3</td><td>Google Ads Measurement</td><td>Skillshop</td><td>Free</td><td>Analytics credibility</td><td>GBO Tools, SDM</td></tr>
+        <tr><td>4</td><td>GA4</td><td>Skillshop</td><td>Free</td><td>Data analysis credibility</td><td>GBO Tools, SDM</td></tr>
+        <tr><td>5</td><td>Looker Studio</td><td>Self-built dashboards</td><td>Free</td><td>Google BI platform fluency</td><td>GBO Tools, SDM</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+</div>
+
+<!-- ═══════════════ TAB 4: AI LEVERAGE ═══════════════ -->
+<div id="ai" class="tab-panel">
+<section class="section">
+<div class="container">
+  <h2 class="section-title">AI Portfolio Leverage</h2>
+  <p class="section-sub">Projects that demonstrate you can do this job — before you're hired</p>
+
+  <div class="card card-gold">
+    <h3>Project P14 — NEW</h3>
+    <h4 style="color: var(--warn);">Vendor Delivery Intelligence Dashboard</h4>
+    <p>An AI-powered dashboard that monitors outsourced vendor delivery performance, detects emerging quality issues before they impact customer satisfaction, auto-generates executive briefing packs for vendor governance reviews, and models AI automation impact on cost-per-resolution.</p>
+    <div style="margin-top: 16px;">
+      <p><strong style="color: var(--text);">Input:</strong> Mock vendor performance data — ticket volumes, resolution rates, CSAT scores, escalation rates, handle time, SLA adherence by vendor by region by support tier.</p>
+      <p><strong style="color: var(--text);">AI Layer:</strong> Claude API anomaly detection on CSAT trends. Automated root cause hypothesis generation when KPIs deviate. AI-first impact modeler: "If L1 tickets are deflected to AI at X%, the cost-per-resolution drops Y% and vendor headcount adjusts by Z."</p>
+      <p><strong style="color: var(--text);">Output:</strong> Looker Studio dashboard + AI-generated weekly vendor governance briefing + AI automation scenario planner.</p>
+      <p><strong style="color: var(--text);">Tech Stack:</strong> Python + Claude API + Streamlit (interactive demo) + Looker Studio (reporting layer).</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 16px;">
+    <h3>Architecture & Data Model</h3>
+    <h4>Mock Data Structure</h4>
+    <p>Generate synthetic data for 5 vendor partners across 4 regions (APAC, EMEA, Americas, India), 3 support tiers (L1/L2/L3), and 6 months of daily granularity. Metrics: ticket volume, first-contact resolution rate, average handle time, CSAT score, escalation rate, SLA adherence %, agent utilisation rate, AI-handled ticket %.</p>
+    <h4 style="margin-top: 16px;">AI Intelligence Layer</h4>
+    <p><strong>Anomaly Detection:</strong> Flag when a vendor's CSAT drops &gt;5% from trailing 30-day average. Flag when escalation rate exceeds regional benchmark by &gt;2σ. Flag when SLA adherence falls below contractual threshold.</p>
+    <p><strong>Root Cause Hypothesis:</strong> When an anomaly triggers, Claude API analyses surrounding data and generates structured hypothesis: "Vendor X's CSAT drop in EMEA correlates with a 23% ticket volume spike without corresponding agent capacity increase — likely a staffing gap, not a quality issue."</p>
+    <p><strong>AI Automation Modeler:</strong> "If L1 ticket deflection via Gemini reaches 40%, Vendor A's required headcount decreases by 18% while cost-per-resolution drops 22%. Recommended action: renegotiate SOW scope by Q3."</p>
+    <p><strong>Executive Briefing:</strong> Weekly auto-generated vendor governance pack: traffic-light status by vendor/region, anomaly summary, AI automation scorecard, action items, trend visualisations.</p>
+  </div>
+
+  <div class="card card-accent" style="margin-top: 16px;">
+    <h3>Interview Pitch for P14</h3>
+    <p>"I built a prototype of what I'd want to deploy in this role: an AI-powered vendor delivery monitoring system that detects CSAT anomalies before they surface in monthly reviews, generates root cause hypotheses automatically, and models the impact of AI-first automation on vendor economics. I've done the manual equivalent at Sobha — 70+ reports, weekly governance reviews, proactive escalation of blocked items. This project shows how I'd bring AI augmentation to that same discipline at Google's scale — and specifically, how I'd model the business case for shifting from human-delivered to AI-delivered support."</p>
+  </div>
+
+  <div style="margin-top: 24px;">
+    <h3 style="margin-bottom: 16px;">Existing AI Projects — Cross-Role Leverage</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Project P7 — Built <span class="badge badge-green">LIVE</span></h4>
+        <p><strong>ORE Tracker</strong> — Python + Claude + Streamlit. AI risk flagging, drafts governance reports. <strong>For this role:</strong> Demonstrates automated governance reporting and risk-aware operations management — directly transferable to vendor risk governance.</p>
+      </div>
+      <div class="card">
+        <h4>Project P9 — Built <span class="badge badge-green">LIVE</span></h4>
+        <p><strong>Risk Committee Meeting Pack Generator</strong> — Claude + Python. KRI/KCI → executive briefing pack. <strong>For this role:</strong> Automated executive communication from operational data — exactly what vendor governance reviews require.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-accent" style="margin-top: 16px;">
+    <h3>Why the AI Portfolio Wins This Role</h3>
+    <p>The JD explicitly calls for "AI first mindset" and "efficiency driven by AI, automation leading to reduced effort." Most candidates will talk about AI theoretically. You walk in with:</p>
+    <p>• 5 built AI projects (P7, P8, P9 + P14 new + Salesforce 0→1 as platform transformation)</p>
+    <p>• A working prototype of the exact vendor monitoring system the role needs</p>
+    <p>• A narrative that connects AI-augmented operations to measurable operational outcomes (14.9x scale, 74% delinquency reduction)</p>
+    <p>Nothing beats "I already built a working version."</p>
+  </div>
+</div>
+</section>
+</div>
+
+<!-- ═══════════════ TAB 5: GOOGLE VOCAB ═══════════════ -->
+<div id="vocab" class="tab-panel">
+<section class="section">
+<div class="container">
+  <h2 class="section-title">Google Vocabulary Translation Map</h2>
+  <p class="section-sub">Sobha language → Google gTech Scaled Delivery language</p>
+
+  <div class="card">
+    <h3>Your Current Language → Google-Translated Language</h3>
+    <div style="margin-top: 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;">
+      <div class="vocab-row" style="background: rgba(255,255,255,0.04);">
+        <div class="vocab-from" style="font-weight: 600; color: var(--text-muted);">SOBHA TERM</div>
+        <div class="vocab-to" style="font-weight: 600; color: var(--accent);">GOOGLE TRANSLATION</div>
+      </div>
+      <div class="vocab-row"><div class="vocab-from">India Hub (42-person team)</div><div class="vocab-to">Managed Service Partner Operations Hub</div></div>
+      <div class="vocab-row"><div class="vocab-from">QCG Team (12 people)</div><div class="vocab-to">Quality Assurance Function for Vendor Operations</div></div>
+      <div class="vocab-row"><div class="vocab-from">MIS Team (15 people)</div><div class="vocab-to">Business Intelligence & Delivery Analytics Function</div></div>
+      <div class="vocab-row"><div class="vocab-from">Dues Collections Programme</div><div class="vocab-to">Customer Revenue Operations Programme / Scaled Delivery Programme</div></div>
+      <div class="vocab-row"><div class="vocab-from">70+ MI Reports</div><div class="vocab-to">Operational Intelligence Platform / Vendor Performance Data Layer</div></div>
+      <div class="vocab-row"><div class="vocab-from">PR Rejection Rate (49%)</div><div class="vocab-to">First-Pass Yield / Process Quality Control Rate</div></div>
+      <div class="vocab-row"><div class="vocab-from">PCC TAT (20→3 days)</div><div class="vocab-to">Customer Resolution Velocity Programme / SLA Optimisation</div></div>
+      <div class="vocab-row"><div class="vocab-from">Portfolio Delinquency Rate</div><div class="vocab-to">Portfolio At-Risk Rate / Customer Health Score</div></div>
+      <div class="vocab-row"><div class="vocab-from">T−25/T+30 Window</div><div class="vocab-to">Critical Intervention Framework / Operational Intensity Calendar</div></div>
+      <div class="vocab-row"><div class="vocab-from">10-Bank Infrastructure</div><div class="vocab-to">Multi-Partner Service Delivery Infrastructure</div></div>
+      <div class="vocab-row"><div class="vocab-from">CX Journey 1.0</div><div class="vocab-to">Enterprise Customer Experience Framework — Cross-Functional</div></div>
+      <div class="vocab-row"><div class="vocab-from">NICE Omnichannel Management</div><div class="vocab-to">CX Technology Platform Governance / Vendor Tech Stack Mgmt</div></div>
+      <div class="vocab-row"><div class="vocab-from">Annual Target (AED 8.2B)</div><div class="vocab-to">Annual Delivery OKR — AED 8.2B Objective</div></div>
+      <div class="vocab-row"><div class="vocab-from">Incentive IOM</div><div class="vocab-to">Performance Incentive Framework / Vendor Commission Governance</div></div>
+      <div class="vocab-row"><div class="vocab-from">Audit SPOC + 14-Finding Register</div><div class="vocab-to">Controls & Compliance Programme Owner / Risk Register Governance</div></div>
+      <div class="vocab-row"><div class="vocab-from">MD/CRO/CCO Reporting</div><div class="vocab-to">Executive Stakeholder Management (VP/Director Level)</div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <h3>Google-Specific Terms You Must Know</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>Term</th><th>What It Means</th><th>Your Equivalent</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>gTech</strong></td><td>Google's Technical Services division — owns customer-facing support, troubleshooting, advisory</td><td>Your collections function is a customer-facing operational service</td></tr>
+        <tr><td><strong>GBO</strong></td><td>Global Business Organization — the commercial + customer services engine</td><td>Your company's entire revenue operations apparatus</td></tr>
+        <tr><td><strong>LCS</strong></td><td>Large Customer Sales — serves enterprise advertisers</td><td>Your Key Account / VIP customer management</td></tr>
+        <tr><td><strong>GCS</strong></td><td>Google Customer Solutions — SMB sales organisation</td><td>N/A but GCS customers are the advertisers you'd support</td></tr>
+        <tr><td><strong>Managed Service Partner</strong></td><td>Outsourced vendor firm (e.g., Accenture, TCS) running customer support</td><td>Your India hub managed through governance frameworks</td></tr>
+        <tr><td><strong>OKR</strong></td><td>Objectives & Key Results — Google's goal framework</td><td>Your AED 8.2B target with 60% personal weightage</td></tr>
+        <tr><td><strong>CSAT</strong></td><td>Customer Satisfaction Score — primary CX metric</td><td>Your CSAT policy participation (March 2026)</td></tr>
+        <tr><td><strong>Ticket Deflection</strong></td><td>% of queries resolved by AI/self-service without human agent</td><td>New concept — core to AI-first transformation</td></tr>
+        <tr><td><strong>SLA Adherence</strong></td><td>% of tickets resolved within contracted time</td><td>Your PCC TAT governance (20→3 days)</td></tr>
+        <tr><td><strong>FCR</strong></td><td>First Contact Resolution — resolved without re-contact</td><td>Your PR first-pass yield / one-touch resolution rate</td></tr>
+        <tr><td><strong>AHT</strong></td><td>Average Handle Time — minutes per customer interaction</td><td>Your per-case processing time metrics</td></tr>
+        <tr><td><strong>Business Continuity</strong></td><td>Maintaining service delivery through vendor transitions, outages, ramp-ups</td><td>Your 14.9x scale with zero operational disruption</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</section>
+</div>
+
+<!-- ═══════════════ TAB 6: INTERVIEW PREP ═══════════════ -->
+<div id="interview" class="tab-panel">
+<section class="section">
+<div class="container">
+  <h2 class="section-title">Interview Preparation</h2>
+  <p class="section-sub">STAR stories mapped to this role's evaluation criteria</p>
+
+  <div class="card card-accent" style="margin-bottom: 24px;">
+    <h3>Google Interview Format for gTech Ops Roles</h3>
+    <p>Typically 4–5 rounds: (1) Recruiter screen — fit + motivation, (2) Hiring manager — vendor ops depth + operational leadership, (3) Cross-functional panel — stakeholder management, analytical thinking, ambiguity navigation, (4) Leadership round — executive communication + AI-first vision. Every story needs a quantified outcome. Google evaluates "Googleyness" — intellectual curiosity, comfort with ambiguity, collaborative leadership, and <strong>AI-first thinking</strong>.</p>
+  </div>
+
+  <h3 style="margin-bottom: 16px;">STAR Stories Mapped to JD Responsibilities</h3>
+
+  <div class="star-card">
+    <h4>Story 1 — Scaled Vendor Operations Leadership</h4>
+    <div class="star-jd-link">JD: "Lead operations, inspire vendor teams, enable ecosystem of vendors/partner teams"</div>
+    <div class="star-grid">
+      <div class="star-label">STORY</div>
+      <div class="star-text"><strong>India Hub Build (9.1):</strong> Designed and deployed a 42-person remote operations hub across 3 sub-functions (Ops 38, QCG 12, MIS 15), with dedicated governance, reporting, and quality architecture — managed through frameworks and data, not direct authority.</div>
+      <div class="star-label">OUTCOME</div>
+      <div class="star-text">42-person hub. 39 reports in production. Zero quality gap with onshore team. Structurally identical to managing a managed service partner.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>Story 2 — AI-First Efficiency & Process Optimisation</h4>
+    <div class="star-jd-link">JD: "Drive impact through efficiency driven by AI, automation leading to reduced effort"</div>
+    <div class="star-grid">
+      <div class="star-label">STORY</div>
+      <div class="star-text"><strong>PCC TAT Transformation (3.1) + AI Portfolio:</strong> Compressed process TAT from 20 to 3 days while handling 3x volume growth — process re-engineering at operational scale. Built 5 AI-augmented operations tools that automate governance reporting, risk flagging, and executive briefing generation.</div>
+      <div class="star-label">OUTCOME</div>
+      <div class="star-text">TAT: 20→3 days (85% reduction). Volume: ~90→281 transactions. AI portfolio: 5 production-targeted tools eliminating ~8-10 hours per reporting cycle.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>Story 3 — KPI Delivery & Budget Ownership</h4>
+    <div class="star-jd-link">JD: "Deliver KPIs, maintain infrastructure, and secure budgets"</div>
+    <div class="star-grid">
+      <div class="star-label">STORY</div>
+      <div class="star-text"><strong>NPV Model (7.2) + OKR Governance (1.3):</strong> Built financial model demonstrating AED 652M incremental inflow at AED 21.2M cost, defended at MD/CEO level. Led annual planning cycle — AED 8.2B target, 60% personal weightage, 77-person alignment.</div>
+      <div class="star-label">OUTCOME</div>
+      <div class="star-text">AED 652M inflow. 32% below bank financing. Zero material concessions. AED 8.2B annual OKR delivered. Demonstrates budget-case ownership + KPI governance at executive level.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>Story 4 — Cross-Functional Stakeholder Management</h4>
+    <div class="star-jd-link">JD: "Collaborate with cross-functional stakeholders... vendor management, sourcing, HR, legal, finance"</div>
+    <div class="star-grid">
+      <div class="star-label">STORY</div>
+      <div class="star-text"><strong>CX Journey 1.0 (7.1) + PCC Cross-Functional:</strong> Defined 5 Collections touchpoints in the MD-approved enterprise CX framework with 11 cross-functional signatories. PCC TAT transformation required removing roadblocks across Accounts, Legal, DLD, and Technology simultaneously.</div>
+      <div class="star-label">OUTCOME</div>
+      <div class="star-text">11 cross-functional signatories. 5 touchpoints integrated. 4 departments coordinated for PCC transformation. Weekly governance cadence with CRO, CCO, MD/CEO.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>Story 5 — Quality Assurance & Vendor Performance Governance</h4>
+    <div class="star-jd-link">JD: "Optimize and maintain processes, ensuring comprehensive training and resources"</div>
+    <div class="star-grid">
+      <div class="star-label">STORY</div>
+      <div class="star-text"><strong>PR Rejection 49% (10.1) + QCG Architecture:</strong> Built a 12-person quality assurance function governing output standards across 77 practitioners. When rejection rate hit 49%, held the documentation standard under executive pressure — position vindicated by downstream data showing the control was catching errors before they reached customers.</div>
+      <div class="star-label">OUTCOME</div>
+      <div class="star-text">49% rejection rate = quality control working as designed. 12-person QCG team. 6 MD-approved process documents. Demonstrates quality-first vendor governance.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>Story 6 — Scaling Operations While Maintaining Business Continuity</h4>
+    <div class="star-jd-link">JD: "Manage operations serving Google's customers at scale... ensure business continuity"</div>
+    <div class="star-grid">
+      <div class="star-label">STORY</div>
+      <div class="star-text"><strong>14.9x Scale (1.1) + Multi-Entity (9.2):</strong> Scaled programme from AED 867M to AED 12.97B over 4 years while simultaneously reducing at-risk rate 74%. Expanded from 1 to 4 legal entities on a unified governance framework without duplicating teams — business continuity across transformative growth.</div>
+      <div class="star-label">OUTCOME</div>
+      <div class="star-text">14.9x growth. 74% delinquency reduction. 4-entity unified operations. Zero operational disruption during transformation.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top: 24px;">
+    <h3>Vendor Operations–Specific Questions — Prepare These</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>Likely Question</th><th>Your Lead Story</th><th>Key Line</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>"Tell me about managing distributed/outsourced teams"</td><td>India Hub (9.1) + Team Capability (6.1)</td><td>"42 people across 3 functions, 39 reports in production, zero quality gap — managed through governance and data, not direct authority"</td></tr>
+        <tr><td>"How do you ensure quality at scale?"</td><td>PR Rejection 49% (10.1) + QCG</td><td>"I built a 12-person QA function governing 77 practitioners. When the rejection rate hit 49%, the system was working — catching errors before they reached customers"</td></tr>
+        <tr><td>"How would you drive AI-first transformation?"</td><td>AI Portfolio (P7/P9/P14) + Salesforce 0→1</td><td>"I've built 5 AI tools that automate governance reporting. At Sobha I led a 0→1 platform transformation. I'd apply the same playbook: pilot AI on high-volume L1 tickets, measure deflection rate, prove the business case, then scale"</td></tr>
+        <tr><td>"Tell me about driving transformation while maintaining BAU"</td><td>14.9x Scale (1.1) + PCC TAT (3.1)</td><td>"We scaled 14.9x while simultaneously reducing risk by 74%. The PCC transformation happened without a single day of operational disruption"</td></tr>
+        <tr><td>"How do you handle vendor performance issues?"</td><td>PR Rejection (10.1) + 14-Finding Audit (10.2)</td><td>"I escalated 3 blocked risk register items to CCO proactively before due dates. When you govern through data, the conversation is about evidence, not blame"</td></tr>
+        <tr><td>"How do you secure budgets for new initiatives?"</td><td>NPV Model (7.2)</td><td>"AED 652M case, defended across MD, CRO, CFO, Legal. Multiple rounds, zero concessions. The data was right."</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card card-warn" style="margin-top: 16px;">
+    <h3>Assertiveness Signal — Critical for Google</h3>
+    <p>Google values intellectual courage and "disagree and commit" culture. Your DISC profile (High C, High S, Low D) means you need to <strong>actively demonstrate</strong> assertiveness — don't wait for them to ask.</p>
+    <p style="margin-top: 8px;">Deploy these unprompted: (1) PR 49% — held quality standard under executive pressure. (2) NPV defence — zero material concessions at MD/CEO level. (3) Three proactive CCO escalations before due dates.</p>
+  </div>
+</div>
+</section>
+</div>
+
+<!-- ═══════════════ TAB 7: NARRATIVE ═══════════════ -->
+<div id="narrative" class="tab-panel">
+<section class="section">
+<div class="container">
+  <h2 class="section-title">Your Narrative Framing</h2>
+  <p class="section-sub">The story that makes your profile click for this role</p>
+
+  <div class="card card-accent">
+    <h3>The 30-Second Pitch</h3>
+    <div class="quote">"For six years, I've led what is essentially a scaled vendor delivery operation — a 77-person, two-geography team delivering revenue operations across a AED 86.8B portfolio. I built the quality governance architecture, the operational intelligence platform, and the performance frameworks that let this distributed team scale 14.9x with 74% less risk. I've done this while building AI-augmented tools that automate governance reporting and risk detection. Now I want to bring that delivery leadership — combined with an AI-first operational mindset — to Google's customer support ecosystem at global scale."</div>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <h3>The "Why This Role?" Answer</h3>
+    <div class="quote">"Three things drew me to this specific role. First, the vendor delivery model — I've managed exactly this: a distributed operations team where I govern through frameworks, data, and quality standards, not direct authority. Second, the AI-first mandate — I'm not just interested in AI; I've built AI tools that automate the exact kind of operational governance this role requires. And third, the scale — managing operations serving Google's customers at scale is the kind of challenge where my experience scaling 14.9x while maintaining service quality directly applies."</div>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <h3>The Master Unlock Phrase — Adapted</h3>
+    <div class="quote">"I've been running scaled vendor delivery operations for six years — I just haven't been calling it that."</div>
+    <p style="margin-top: 12px;">Back it up with: "My 42-person India operations hub, 12-person quality assurance team, 70+ report performance monitoring system, and weekly governance cadence — that's exactly how Google manages its managed service partners. Same discipline, same governance-through-data model, different domain."</p>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <h3>Resume Summary — Scaled Delivery Manager Version</h3>
+    <p style="color: var(--text); line-height: 1.8;">Operations and delivery leader with 6+ years driving scaled programme management for distributed, vendor-model operations teams. Led a 77-specialist, two-geography organisation (Dubai + India) — designing quality governance architecture, vendor performance frameworks, and operational intelligence platforms that enabled 14.9x programme growth while reducing portfolio at-risk rate by 74%. Built AI-augmented operational tools that automate governance reporting and risk detection, redirecting team effort from administration to judgment. Proven ability to deliver KPIs at AED 8.2B annual scale, secure budgets through rigorous financial modelling (AED 652M business case), and drive process transformation (85% TAT reduction at 3x volume) while maintaining business continuity. IIM Udaipur PGDM · BITS Pilani Dual Degree.</p>
+  </div>
+
+  <div class="card card-accent" style="margin-top: 20px;">
+    <h3>The Three Reframes That Close the Biggest Perception Gaps</h3>
+    <h4 style="margin-top: 16px;">Reframe #1: India Hub = Managed Service Partner Operations</h4>
+    <p>Your 42-person India hub is structurally identical to an outsourced vendor operation. You don't have direct line authority over 65 of 77 team members — you manage through influence, governance frameworks, and data. This is exactly how Google manages its managed service partners: SLAs, quality audits, performance dashboards.</p>
+
+    <h4 style="margin-top: 20px;">Reframe #2: AI Portfolio = AI-First Mindset in Action</h4>
+    <p>Most candidates will talk about wanting to use AI. You walk in with 5 built AI tools, a working prototype of the vendor monitoring system, and a track record of using AI to automate governance reporting. Frame: "I didn't wait for someone to give me an AI strategy — I built one."</p>
+
+    <h4 style="margin-top: 20px;">Reframe #3: 14.9x Scale = Business Continuity Under Transformation</h4>
+    <p>The JD says "ensure business continuity." Your proof: you scaled 14.9x while simultaneously reducing risk 74%, expanded from 1 to 4 entities on a unified framework, and compressed PCC TAT 85% without a single day of operational disruption. This is the definition of business continuity under transformation pressure.</p>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <h3>Application Positioning — Critical Steps</h3>
+    <p><strong>Do not apply cold.</strong> Google's ATS for gTech ops roles filters on keyword match. Before applying:</p>
+    <p>1. Get Six Sigma Green Belt + Google Ads Skillshop certifications visible on LinkedIn.</p>
+    <p>2. Rewrite LinkedIn headline: "Scaled Delivery & Operations Leadership | Vendor Operations Governance | AI-Augmented Operations | IIM Udaipur · BITS Pilani"</p>
+    <p>3. Connect with 2–3 IIM/BITS alumni at Google India for a referral conversation. The referral multiplier at Google is 5–8x on screening chance.</p>
+    <p>4. Preferred working location: Hyderabad (mention Gurgaon as secondary if asked).</p>
+  </div>
+</div>
+</section>
+</div>
+
+<!-- ═══════════════ TAB 8: SALARY ═══════════════ -->
+<div id="salary" class="tab-panel">
+<section class="section">
+<div class="container">
+  <h2 class="section-title">Salary Intelligence</h2>
+  <p class="section-sub">Google India — gTech Ads — Scaled Delivery Manager</p>
+
+  <div class="card">
+    <h3>Google India Levelling — gTech Ops Roles</h3>
+    <p>This role — leading vendor delivery operations, managing managed service partners, driving AI transformation — reads as <strong>L5 (Senior)</strong> to low <strong>L6 (Lead/Principal)</strong>. The "5 years" minimum + "MBA preferred" signals L5 entry with L6 aspiration. Google India S&O / Ops compensation includes base + bonus + RSU (4-year vesting, GSU).</p>
+  </div>
+
+  <div class="grid-2" style="margin-top: 20px;">
+    <div class="card card-blue">
+      <h4>L5 — Scaled Delivery Manager (Hyderabad/Gurgaon)</h4>
+      <p><strong style="color: var(--accent-2);">Total Comp: ₹70L – ₹88L</strong></p>
+      <p>Base: ~₹42–55L | Bonus: 15–20% | RSU: ~₹15–25L/yr vesting</p>
+    </div>
+    <div class="card card-accent">
+      <h4>L6 — Senior Delivery Manager (Hyderabad/Gurgaon)</h4>
+      <p><strong style="color: var(--accent);">Total Comp: ₹90L – ₹115L</strong></p>
+      <p>Base: ~₹58–72L | Bonus: 15–20% | RSU: ~₹25–40L/yr vesting</p>
+    </div>
+  </div>
+
+  <div class="card card-warn" style="margin-top: 20px;">
+    <h3>Realistic Landing Zone for Priyanuj</h3>
+    <p><strong style="color: var(--warn);">Target Range: ₹70L – ₹95L (L5 entry, negotiate toward L6)</strong></p>
+    <p>Your 77-person team and AED 12.97B programme scale justify L6-level scope. Use team size and programme scale as primary anchors.</p>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <h3>Negotiation Strategy</h3>
+    <h4>Your Anchors</h4>
+    <p><strong>Scale anchor:</strong> "I manage a AED 12.97B annual programme with 77 people — that's L6-scale programme ownership."</p>
+    <p><strong>CTC anchor:</strong> Your current Dubai CTC (converting AED to INR at ~22.5x) provides a legitimate anchor. Use total comp including housing/transport allowances.</p>
+    <p><strong>Competing offers:</strong> If AmEx or Uber conversations are active simultaneously, signal competing interest without specifics.</p>
+    <p style="margin-top: 12px;"><strong>Push for:</strong> L6 level classification given team scale. Front-loaded RSU grant. Signing bonus as bridge if base is locked at band.</p>
+  </div>
+
+  <div class="card" style="margin-top: 20px;">
+    <h3>Cross-Pipeline Comparison</h3>
+    <table class="data-table">
+      <thead>
+        <tr><th>Role</th><th>P50 Total Comp</th><th>Fit Score</th><th>Note</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Uber Sr Risk Ops L5B</td><td>₹110–120L</td><td>68→78</td><td>Highest CTC ceiling</td></tr>
+        <tr><td style="color: var(--accent);">This role: Scaled Delivery Mgr</td><td style="color: var(--accent);">₹70–95L</td><td style="color: var(--accent);">72→85</td><td style="color: var(--accent);">Strongest vendor-ops match</td></tr>
+        <tr><td>Google GBO Tools L5/L6</td><td>₹70–95L</td><td>63→80</td><td>Best shared prep</td></tr>
+        <tr><td>Google gTech SDM L6</td><td>₹65–95L</td><td>74→82</td><td>Highest starting Google fit</td></tr>
+        <tr><td>AmEx GMNS Director</td><td>~₹82L</td><td>75→88</td><td>Highest overall fit</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card card-accent" style="margin-top: 20px;">
+    <h3>Strategic Note</h3>
+    <p>This role is best pursued as a <strong>parallel track to gTech SDM and GBO Tools</strong> — 85% of the prep is shared. Running three Google applications simultaneously creates internal negotiation leverage if any progresses to offer stage. The CTC ceiling is identical across all three. The differentiator is that this role has the <strong>highest structural match</strong> to your current operating model: you are already a Scaled Delivery Manager in everything but title.</p>
+  </div>
+</div>
+</section>
+</div>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer class="footer">
+  <div class="container">
+    Priyanuj Deka — Google gTech Scaled Delivery Manager Career Intelligence Brief &ensp;|&ensp; gTech Ads · Vendor Operations &ensp;|&ensp; May 2026 &ensp;|&ensp; Confidential
+  </div>
+</footer>
+
+<!-- ═══════════════ TAB SCRIPT ═══════════════ -->
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: document.querySelector('.tab-bar').offsetTop, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mastercard S&R Ops Manager — Career Playbook | Priyanuj Deka</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c10;
+    --surface: #0e1520;
+    --s2: #141e2c;
+    --s3: #1a2738;
+    --border: #243244;
+    --border2: #2e4460;
+    --brand: #cf4520;
+    --brand-bright: #ff5c33;
+    --brand-glow: rgba(207,69,32,0.12);
+    --gold: #f0b429;
+    --gold-dim: rgba(240,180,41,0.08);
+    --green: #22c55e;
+    --red: #ef4444;
+    --amber: #f59e0b;
+    --text: #d4dde8;
+    --muted: #6b8099;
+    --dim: #2a3d55;
+    --accent: #cf4520;
+    --mc-red: #cf4520;
+    --mc-yellow: #f0b429;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0a0500 0%, #1a0c04 50%, #0a0800 100%);
+    border-bottom: 1px solid var(--border2);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -10%;
+    width: 50%; height: 200%;
+    background: radial-gradient(ellipse, rgba(207,69,32,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: 'MC';
+    position: absolute;
+    right: -10px; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'DM Serif Display', serif;
+    font-size: 200px;
+    color: rgba(207,69,32,0.04);
+    pointer-events: none;
+    letter-spacing: -5px;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 32px 36px;
+    position: relative; z-index: 1;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center; gap: 8px;
+    background: rgba(207,69,32,0.12);
+    border: 1px solid rgba(207,69,32,0.3);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--brand-bright);
+    margin-bottom: 16px;
+  }
+  .header-badge::before { content: '●'; font-size: 8px; }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .header-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .header-stats {
+    display: flex; gap: 32px; flex-wrap: wrap;
+  }
+  .stat { text-align: left; }
+  .stat-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 22px; font-weight: 700;
+    color: var(--brand-bright);
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex; flex-wrap: wrap; gap: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 100;
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 12px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .tab:hover { color: var(--text); background: rgba(207,69,32,0.04); }
+  .tab.active { color: var(--brand-bright); border-bottom-color: var(--brand); background: var(--s2); }
+
+  /* SECTIONS */
+  .section { display: none; }
+  .section.active { display: block; }
+  .section-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 32px 60px;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px; color: #fff;
+    margin-bottom: 6px;
+  }
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--brand-bright);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .section-desc {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .card h3 {
+    font-size: 16px; color: #fff;
+    margin-bottom: 8px;
+  }
+  .card p { color: var(--text); }
+
+  /* REQUIREMENT CARDS */
+  .req-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+  .req-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+  .req-title { font-size: 15px; font-weight: 700; color: #fff; flex: 1; }
+  .req-match {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding: 3px 10px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .match-headline { background: rgba(34,197,94,0.15); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+  .match-strong { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+  .match-moderate { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+  .match-gap { background: rgba(239,68,68,0.12); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+  .req-jd {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+  .req-proof { color: var(--text); font-size: 13px; line-height: 1.7; }
+  .req-proof strong { color: #fff; }
+
+  /* SCORE BAR */
+  .score-bar-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .score-bar {
+    height: 8px;
+    background: var(--s3);
+    border-radius: 4px;
+    position: relative;
+    margin: 16px 0 8px;
+  }
+  .score-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--brand) 0%, var(--brand-bright) 100%);
+  }
+  .score-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .score-big {
+    font-family: 'DM Mono', monospace;
+    font-size: 28px;
+    color: #fff;
+    font-weight: 700;
+  }
+  .score-big span { color: var(--brand-bright); }
+
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 16px;
+  }
+  th, td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  th {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--s2);
+  }
+  td { color: var(--text); }
+  tr:last-child td { border-bottom: none; }
+
+  /* STAR CARDS */
+  .star-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .star-card h4 {
+    font-size: 15px; color: #fff;
+    margin-bottom: 4px;
+  }
+  .star-jd-link {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--brand-bright);
+    margin-bottom: 12px;
+  }
+  .star-grid {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 8px 16px;
+    font-size: 13px;
+  }
+  .star-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--brand-bright);
+    letter-spacing: 0.06em;
+    padding-top: 2px;
+  }
+  .star-text { color: var(--text); line-height: 1.7; }
+
+  /* GAP CARDS */
+  .gap-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+  .gap-card.closed {
+    border-left-color: var(--green);
+  }
+  .gap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .gap-title { font-size: 15px; font-weight: 700; color: #fff; }
+  .gap-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--amber);
+    letter-spacing: 0.06em;
+  }
+  .gap-card.closed .gap-meta { color: var(--green); }
+
+  /* REFRAME TABLE */
+  .reframe-table {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  /* VOCAB */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .vocab-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .vocab-item:hover { border-color: var(--brand); }
+  .vocab-term {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--brand-bright);
+    font-weight: 600;
+  }
+  .vocab-def {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+    display: none;
+  }
+  .vocab-item.open .vocab-def { display: block; }
+  .vocab-item.open { border-color: var(--brand); background: var(--s2); }
+
+  /* BLOCKQUOTE */
+  .unlock {
+    background: linear-gradient(135deg, rgba(207,69,32,0.08) 0%, rgba(240,180,41,0.06) 100%);
+    border: 1px solid rgba(207,69,32,0.2);
+    border-left: 3px solid var(--brand);
+    border-radius: 0 8px 8px 0;
+    padding: 20px 24px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    font-style: italic;
+  }
+
+  /* PILLS */
+  .pill {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .pill-green { background: rgba(34,197,94,0.15); color: #22c55e; }
+  .pill-amber { background: rgba(245,158,11,0.15); color: #f59e0b; }
+  .pill-red { background: rgba(239,68,68,0.12); color: #ef4444; }
+  .pill-brand { background: rgba(207,69,32,0.15); color: var(--brand-bright); }
+
+  /* NEGOTIATION */
+  .neg-grid {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0;
+  }
+  .neg-label {
+    padding: 12px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--brand-bright);
+    border-bottom: 1px solid var(--border);
+    background: var(--s2);
+  }
+  .neg-val {
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+
+  @media(max-width:700px) {
+    .header-stats { gap: 20px; }
+    .stat-val { font-size: 18px; }
+    .section-inner { padding: 24px 16px 40px; }
+    .req-header { flex-direction: column; }
+    .neg-grid { grid-template-columns: 1fr; }
+    .star-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-inner">
+    <div class="header-badge">ACTIVE · APPLY NOW · PIPELINE ROLE #6</div>
+    <h1>Mastercard — Manager, Sales & Revenue Operations</h1>
+    <div class="header-sub">Mastercard Services / Sales Operations · Gurugram · Revenue Ops Platform Governance · L5/L6</div>
+    <div class="header-stats">
+      <div class="stat"><div class="stat-val">77→84</div><div class="stat-label">Fit Score / 100</div></div>
+      <div class="stat"><div class="stat-val">₹50–65L</div><div class="stat-label">Total Comp P50</div></div>
+      <div class="stat"><div class="stat-val">4–6 wks</div><div class="stat-label">Prep Window</div></div>
+      <div class="stat"><div class="stat-val">L5/L6</div><div class="stat-label">Mastercard Level</div></div>
+      <div class="stat"><div class="stat-val">Low</div><div class="stat-label">Reframe Effort</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="showTab(0)"><span style="color:var(--brand-bright)">01</span> JD Decoded</div>
+  <div class="tab" onclick="showTab(1)"><span style="color:var(--brand-bright)">02</span> Your Fit</div>
+  <div class="tab" onclick="showTab(2)"><span style="color:var(--brand-bright)">03</span> Gaps & Plan</div>
+  <div class="tab" onclick="showTab(3)"><span style="color:var(--brand-bright)">04</span> AI Portfolio</div>
+  <div class="tab" onclick="showTab(4)"><span style="color:var(--brand-bright)">05</span> STAR Bank</div>
+  <div class="tab" onclick="showTab(5)"><span style="color:var(--brand-bright)">06</span> Comp Intel</div>
+  <div class="tab" onclick="showTab(6)"><span style="color:var(--brand-bright)">07</span> Interview Prep</div>
+  <div class="tab" onclick="showTab(7)"><span style="color:var(--brand-bright)">08</span> Vocab Decoder</div>
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 1: JD DECODED -->
+<!-- ============================================ -->
+<div class="section active" id="sec0">
+<div class="section-inner">
+  <div class="section-num">01 / What this actually is</div>
+  <div class="section-title">The Role, Decoded</div>
+  <div class="section-desc">Mastercard Services — Sales & Revenue Operations</div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Mastercard Services — The Business Context</h3>
+    <p>Mastercard Services is the technology, data, and consulting arm of Mastercard — generating ~35% of total revenue. It sells products like fraud detection (Decision Intelligence), loyalty solutions, consulting, and data analytics to banks, merchants, and governments globally. The Sales & Revenue Operations team is the operational backbone ensuring that the sales, order management, billing, and CRM platforms work seamlessly for the go-to-market engine.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Role Essence — Translated Into Plain English</h3>
+    <p style="font-family:'DM Serif Display',serif; font-size:18px; color:#fff; margin-bottom:12px">"COO of the Salesforce & Order-to-Cash Platform Support Function."</p>
+    <p>You lead a team of analysts who run the platform support desk — handling tickets, resolving operational issues, and maintaining system hygiene across Salesforce CRM, CPQ (Configure-Price-Quote), CLM (Contract Lifecycle Management), Order Management, and Billing systems. But you're not just a ticket queue manager. Your real mandate is continuous improvement: analysing ticket trends to find upstream root causes, reducing support demand through process fixes, monitoring SLA performance, and onboarding new products and teams onto the platform.</p>
+    <p style="margin-top:12px">This is the person who makes the revenue infrastructure reliable, measurable, and continuously improving. When Sales can focus on selling instead of fighting systems, that's because you've made the plumbing work.</p>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Top 10 Requirements, Reverse-Engineered</h3>
+    <table>
+      <thead><tr><th>#</th><th>JD Language</th><th>What It Actually Means</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>"Lead and manage a team of Analysts responsible for operational platform supports"</td><td>You own the people, the process, and the output quality. This is a people-leadership role, not a solo IC seat. You set priorities, develop analysts, and own team performance metrics.</td></tr>
+        <tr><td>2</td><td>"Oversee platform help inquiries and ensure timely resolution in line with established SLAs"</td><td>Ticket queue governance. You ensure nothing sits too long, nothing gets lost, and resolution quality meets the bar. SLA dashboards are your daily operating view.</td></tr>
+        <tr><td>3</td><td>"Monitor ticket queues, resolution timelines, and service levels"</td><td>Operational tempo management. You watch the flow in real-time and intervene before SLAs breach — reassigning, escalating, or pulling in specialists.</td></tr>
+        <tr><td>4</td><td>"Analyze ticket data and trends to identify recurring issues, root causes, and opportunities to reduce support volume"</td><td>This is the strategic layer. Most candidates will stop at ticket resolution. The JD wants someone who analyses <em>why</em> tickets exist and eliminates the upstream cause. Continuous improvement, not just firefighting.</td></tr>
+        <tr><td>5</td><td>"Conduct quality control reviews of resolved tickets"</td><td>Audit your own team's work. Check that resolutions are accurate, consistent, and follow documented procedures. Build the QC muscle so quality doesn't depend on your personal review.</td></tr>
+        <tr><td>6</td><td>"Develop and maintain reporting and dashboards"</td><td>Build the visibility layer: ticket volume trends, SLA adherence rates, team productivity, root cause distribution, backlog aging. This is your governance infrastructure.</td></tr>
+        <tr><td>7</td><td>"Support the integration of new products, teams, and workflows onto operational platforms"</td><td>Platform onboarding. When Mastercard launches a new product or a new team comes online, you coordinate the setup — data flows, workflows, user access, testing, and go-live support.</td></tr>
+        <tr><td>8</td><td>"Test system enhancements and fixes and coordinate user testing activities"</td><td>UAT coordination. When the platform team ships a fix or enhancement, you validate it works in context before it hits production. You're the quality gate between engineering and users.</td></tr>
+        <tr><td>9</td><td>"Conduct periodic quality control checks and data audits"</td><td>Regular hygiene reviews: data accuracy, process adherence, documentation completeness. Proactive, not reactive quality management.</td></tr>
+        <tr><td>10</td><td>"Support operational initiatives, process improvement efforts, and special projects"</td><td>Catch-all for transformation work. When the org wants to redesign a billing workflow, automate a manual process, or roll out a new tool — you're on the project team, often leading the ops workstream.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Why Mastercard Is Hiring This Now</h3>
+    <p>Mastercard Services has been scaling rapidly — more products, more customers, more complexity in the order-to-cash pipeline. The Salesforce/CRM platform has become mission-critical infrastructure, and the support function needs a leader who can move it from reactive ticket resolution to proactive operational excellence. The JD's emphasis on "upstream improvements" and "reducing support demand" signals that ticket volume is growing faster than capacity, and they need someone who can bend the curve — not just add more analysts. This is a maturation role: taking an existing support function and professionalising it with data-driven governance, quality frameworks, and systematic root cause elimination.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 2: YOUR FIT -->
+<!-- ============================================ -->
+<div class="section" id="sec1">
+<div class="section-inner">
+  <div class="section-num">02 / Your Evidence Against Every Requirement</div>
+  <div class="section-title">Fit Analysis</div>
+
+  <div class="score-bar-wrap">
+    <div class="score-big">77 → <span>84</span> <span style="font-size:14px;color:var(--muted);font-weight:400">/100 CURRENT → POST-PREP · 4–6 WEEKS</span></div>
+    <div class="score-bar"><div class="score-fill" style="width:77%"></div></div>
+    <div class="score-labels">
+      <span>0 STRETCH</span><span>50 COMPETITIVE</span><span>70 STRONG</span><span>85</span><span>100</span>
+    </div>
+  </div>
+
+  <div class="unlock">"I built the Salesforce CRM platform from zero for a $6.3B revenue portfolio, govern a 77-person operations team with SLA dashboards and quality scorecards, manage a 30-item platform enhancement backlog, and built root cause analysis systems that caught a 49% rejection rate before it became a crisis. I just called it 'collections operations' instead of 'sales & revenue operations.'"</div>
+
+  <h3 style="color:#fff; margin-bottom:16px">Requirement-by-Requirement Match</h3>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Lead and manage a team of Analysts responsible for operational platform support</div>
+      <div class="req-match match-headline">HEADLINE MATCH</div>
+    </div>
+    <div class="req-jd">"Lead and manage a team of Analysts"</div>
+    <div class="req-proof">You lead a <strong>77-person team across 2 geographies</strong> (35 Dubai + 42 India) spanning 4 sub-functions: Operations (38), Quality Control (12), MIS Analytics (15), and Dues RMs (12). Your MIS team of 15 analysts produces 70+ operational reports — directly analogous to the analyst team this role manages. Your QCG team of 12 runs quality reviews on operational outputs — exactly the QC function described in the JD.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Salesforce experience — must have</div>
+      <div class="req-match match-headline">HEADLINE MATCH</div>
+    </div>
+    <div class="req-jd">"Salesforce experience mandatory"</div>
+    <div class="req-proof"><strong>Led solution design of the Salesforce CRM platform from 0→1.</strong> Conducted 6-stakeholder discovery, defined data architecture, built 70+ live reports, deployed quality scorecard with 8 continuous monitoring metrics. Manage 30,044+ active records. Own a 30-item Salesforce enhancement backlog constrained by IT capacity. This isn't just "experience" — you architected the platform.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Monitor ticket queues, SLA adherence, and resolution timelines</div>
+      <div class="req-match match-strong">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Monitor ticket queues, resolution timelines, and service levels to ensure SLA adherence"</div>
+    <div class="req-proof"><strong>PCC TAT governance: reduced turnaround from 20 days to 3 days</strong> while monthly volume tripled (~90→281). Built daily TAT dashboards for real-time monitoring. CSAT policy deploys auto-triggered surveys on Salesforce case closure with <strong>2-day SLA on negative feedback response</strong>. NICE dialler system includes real-time agent productivity monitoring with intraday intervention triggers (DRR every 2 hours). The SLA governance muscle is documented and proven.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Analyze ticket data → root causes → upstream improvements to reduce support volume</div>
+      <div class="req-match match-headline">HEADLINE MATCH</div>
+    </div>
+    <div class="req-jd">"Identify recurring issues, root causes, and opportunities to reduce support volume through upstream process improvements"</div>
+    <div class="req-proof"><strong>PR rejection 49% root cause analysis.</strong> Multi-source data triangulation revealed 53% document gaps + 47% manual errors. Built daily monitoring KPI, designed Salesforce quality scorecard with automated escalation triggers. Rate controlled within 30 days. This is precisely the pattern the JD describes: detect trend → diagnose root cause → implement upstream fix → monitor continuously. Also: <strong>14-finding audit remediation</strong> — built risk register, designed corrective actions, achieved 97.5% error rate reduction.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Quality control reviews of resolved tickets</div>
+      <div class="req-match match-headline">HEADLINE MATCH</div>
+    </div>
+    <div class="req-jd">"Ensure accuracy, consistency, and adherence to established processes"</div>
+    <div class="req-proof">You have a <strong>dedicated 12-person Quality Control Group (QCG)</strong> under Garima Shah that performs exactly this function — reviewing completed operational outputs for accuracy, process adherence, and documentation completeness. 6 MD-approved process documents (COL-PF01 through PF14) define the standards. Quality scorecard monitors 8 workflow metrics continuously. PR rejection KPI runs daily. This is institutionalised QC, not ad-hoc checking.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Develop and maintain reporting and dashboards for SLA, ticket trends, and KPIs</div>
+      <div class="req-match match-headline">HEADLINE MATCH</div>
+    </div>
+    <div class="req-jd">"Monitor ticket trends, SLA performance, operational metrics, and key performance indicators"</div>
+    <div class="req-proof"><strong>70+ report MI ecosystem</strong> — daily operations, weekly performance, monthly strategic intelligence. SLA TAT dashboards. Quality scorecard. PR rejection trend monitoring. DRR (every 2 hours). Priority Disposition report (daily RM ranking). Complaint tracking (~100/month). CSAT/NPS infrastructure. This is the most documented dashboard-building capability in the pipeline.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Support integration of new products, teams, and workflows onto platforms</div>
+      <div class="req-match match-strong">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Including planning, coordination, and ongoing operational support"</div>
+    <div class="req-proof">Three platform onboarding stories: (1) <strong>Sobha One App</strong> — scoped 12 functional requirements, defined user eligibility rules, built payment journey, drove vendor coordination. (2) <strong>NICE Omnichannel Dialler</strong> — evaluated, implemented, built 2 dedicated reports for live monitoring. (3) <strong>SQL migration programme</strong> — 18/50 reports migrated, projected 1,255 min/month savings. Each involved planning, coordination, testing, and ongoing operational support.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Test system enhancements and coordinate UAT</div>
+      <div class="req-match match-strong">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Test system enhancements and fixes and coordinate user testing activities"</div>
+    <div class="req-proof"><strong>30-item Salesforce enhancement backlog</strong> — you identify, document, prioritise, and track enhancements constrained by IT capacity. Each enhancement involves requirements definition, coordination with IT, testing, and user rollout. The Sobha One App required 4 scope expansion negotiations with vendor + UAT before go-live. This is product backlog ownership with UAT coordination.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Data audits and periodic quality checks</div>
+      <div class="req-match match-headline">HEADLINE MATCH</div>
+    </div>
+    <div class="req-jd">"Conduct periodic quality control checks and data audits"</div>
+    <div class="req-proof"><strong>4-year Audit SPOC for Collections.</strong> 14-finding register across 3 entities. 97.5% error rate reduction through systematic corrective action. Data integrity maintained across Salesforce CRM, 10 bank systems, and Xpedeon ERP. Proactive escalation of 3 blocked risk-register items to CCO before due dates. Audit and data quality governance is a career-defining competency.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">CPQ, CLM, and Order Management / Billing systems</div>
+      <div class="req-match match-moderate">VOCABULARY GAP</div>
+    </div>
+    <div class="req-jd">"Order Management, Sales (Salesforce.com), Salesforce CRM, CPQ, Contract Lifecycle Management, Order Management / Billing"</div>
+    <div class="req-proof">Your Salesforce CRM experience is direct and deep. The CPQ, CLM, and Order Management platforms are <strong>vocabulary gaps, not capability gaps</strong>. Your PR workflow governance (document completeness → approval → processing) is functionally analogous to CPQ quote-to-order flow. Your payment plan management and advance rebate calculations mirror billing/invoicing logic. The gap is learning the specific tools and their integration points within Mastercard's revenue tech stack — closeable in 2–3 weeks of platform research.</div>
+  </div>
+
+  <div class="card" style="margin-top:24px">
+    <h3>Why You, Specifically</h3>
+    <p><strong>Builder, Not Just Operator.</strong> Most candidates for this role will have managed an existing Salesforce support desk. You <em>built</em> the Salesforce platform, <em>built</em> the reporting ecosystem, <em>built</em> the quality governance layer, and <em>built</em> the root cause analysis capability — all from zero. The JD's emphasis on "continuous improvement" and "upstream process improvements" requires a builder mindset, not a steady-state operator.</p>
+    <p style="margin-top:12px"><strong>Over-Qualified on Scale.</strong> 77 people, AED 12.97B portfolio ($3.5B), 4 sub-functions, 2 geographies. The L5/L6 Manager level at Mastercard typically oversees smaller scope. This creates negotiating leverage for title and compensation.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 3: GAPS & PLAN -->
+<!-- ============================================ -->
+<div class="section" id="sec2">
+<div class="section-inner">
+  <div class="section-num">03 / The gap set is narrow — vocabulary, not capability</div>
+  <div class="section-title">Gap Closure Plan — 4–6 Weeks</div>
+  <div class="section-desc">Prep philosophy: This role has low reframe effort. Gaps are platform vocabulary and B2B SaaS RevOps context — not operational capability. Invest 40% into CPQ/CLM/Order Mgmt platform research, 30% into RevOps vocabulary, 20% into Salesforce Admin depth, 10% into SQL acceleration.</div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-title">Gap 1 — CPQ / CLM / Order Management Platform Knowledge</div>
+      <div class="gap-meta">3 WEEKS · HIGH</div>
+    </div>
+    <p style="font-size:13px;color:var(--text);margin-bottom:8px"><strong>Why it matters:</strong> The JD explicitly names CPQ, CLM, and Order Management/Billing as platforms you'll govern. You need to understand the data flows: Lead → Opportunity → Quote (CPQ) → Contract (CLM) → Order → Invoice (Billing). This is the order-to-cash pipeline your team will support.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>The fix:</strong></p>
+    <p style="font-size:13px;color:var(--muted)">• Salesforce Trailhead: CPQ Basics module (free, ~4 hours) — understand quote configuration, pricing rules, approval workflows<br>
+    • Salesforce Trailhead: Revenue Cloud module (free, ~3 hours) — covers Order Management and Billing<br>
+    • Research CLM platforms (Conga CLM, Icertis, DocuSign CLM) — understand contract lifecycle: authoring → negotiation → approval → execution → renewal<br>
+    • Map your existing knowledge: PR workflow = quote approval flow; advance rebate calculation = pricing logic; payment plan = billing schedule<br>
+    • Build a one-pager: "How Sobha's order-to-cash maps to Mastercard's revenue tech stack" — this becomes an interview artifact</p>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-title">Gap 2 — B2B SaaS RevOps Vocabulary</div>
+      <div class="gap-meta">2 WEEKS · HIGH</div>
+    </div>
+    <p style="font-size:13px;color:var(--text);margin-bottom:8px"><strong>Why it matters:</strong> The role sits in "Sales & Revenue Operations" — a function with established vocabulary you need to speak fluently: pipeline hygiene, quota planning, forecast accuracy, attainment, OTE. The 10-term vocab block in Tab 08 closes most of this.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>The fix:</strong></p>
+    <p style="font-size:13px;color:var(--muted)">• Read Pavilion (formerly Revenue Collective) RevOps frameworks — free resources on LinkedIn<br>
+    • Study the RevOps Co-op salary survey and maturity model — understand where this function sits in a tech company<br>
+    • Listen to 5 episodes of the Revenue Operations podcast — builds vocabulary passively<br>
+    • Reframe language: your "collections target" = their "quota"; your "delinquency rate" = their "pipeline-at-risk rate"; your "MI ecosystem" = their "revenue intelligence platform"<br>
+    • Master the 10-term role-specific vocab block (Tab 08) + 8-term Mastercard cluster-shared foundation</p>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-title">Gap 3 — Salesforce Admin Depth</div>
+      <div class="gap-meta">1 WEEK · MEDIUM</div>
+    </div>
+    <p style="font-size:13px;color:var(--text);margin-bottom:8px"><strong>Why it matters:</strong> You led solution design and built 70+ reports, but the JD implies platform administration depth — user management, permission sets, workflow rules, validation rules, data loader operations. You need to speak the admin vocabulary even if your team handles execution.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>The fix:</strong></p>
+    <p style="font-size:13px;color:var(--muted)">• Salesforce Trailhead: Admin Beginner + Intermediate trails (free, ~8 hours total)<br>
+    • Focus on: permission sets, profiles, workflow rules, process builder, validation rules, report types, dashboard filters<br>
+    • Your 0→1 build story covers architecture; this closes the admin operations layer<br>
+    • Optional: Salesforce Certified Administrator — not required for the role, but a strong signal if you can complete it within prep window</p>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-header">
+      <div class="gap-title">Gap 4 — SQL Fundamentals</div>
+      <div class="gap-meta">ONGOING · MEDIUM</div>
+    </div>
+    <p style="font-size:13px;color:var(--text);margin-bottom:8px"><strong>Why it matters:</strong> Not explicitly in the JD, but ticket trend analysis and dashboard building at Mastercard's scale will involve SQL queries against data warehouses. This gap is shared with Uber (highest CTC ceiling in pipeline) and is actively being closed via Mode Analytics study.</p>
+    <p style="font-size:13px;color:var(--text)"><strong>The fix:</strong></p>
+    <p style="font-size:13px;color:var(--muted)">• Mode Analytics tutorial — already in progress (shared with Uber track)<br>
+    • DataCamp SQL Fundamentals — parallel track<br>
+    • Kaggle IEEE-CIS fraud dataset — practice on payments-adjacent data<br>
+    • Not a blocking gap for this role, but a differentiator if demonstrated</p>
+  </div>
+
+  <div class="gap-card closed">
+    <div class="gap-header">
+      <div class="gap-title">Gap 5 — Salesforce CRM / Reporting</div>
+      <div class="gap-meta">ZERO GAP · CLOSED</div>
+    </div>
+    <p style="font-size:13px;color:var(--text)">Led solution design of Salesforce CRM. 70+ live reports. Quality scorecard. 30-item enhancement backlog. 30,044+ records managed. This is not a gap — it is your single strongest differentiator for this role.</p>
+  </div>
+
+  <div class="gap-card closed">
+    <div class="gap-header">
+      <div class="gap-title">Gap 6 — Team Leadership in Ops Support</div>
+      <div class="gap-meta">ZERO GAP · CLOSED</div>
+    </div>
+    <p style="font-size:13px;color:var(--text)">77-person team across 2 geographies, 4 sub-functions, including a dedicated QCG quality review team. Capability maturity building, India hub stand-up, successor development. This exceeds the JD's "preferred" team leadership requirement by an order of magnitude.</p>
+  </div>
+
+  <!-- REFRAME DICTIONARY -->
+  <h3 style="color:#fff; margin:32px 0 16px">Reframe Dictionary — Sobha → Mastercard S&R Ops</h3>
+  <div class="reframe-table">
+    <table>
+      <thead><tr><th>What You Did at Sobha</th><th>How to Say It for Mastercard S&R Ops</th></tr></thead>
+      <tbody>
+        <tr><td>70+ report MI ecosystem</td><td>Built and owned the revenue operations intelligence layer — 70+ automated dashboards monitoring SLA adherence, ticket trends, team productivity, and executive KPIs.</td></tr>
+        <tr><td>PR rejection 49% root cause</td><td>Detected a 49% defect rate through operational signal analysis, diagnosed upstream root causes via data triangulation, and implemented continuous monitoring that reduced support-triggering errors within 30 days.</td></tr>
+        <tr><td>PCC TAT 20→3 days</td><td>Redesigned an order-to-cash process end-to-end — 85% cycle time reduction at 3x volume. Same team, redesigned workflow, no additional headcount.</td></tr>
+        <tr><td>30-item Salesforce backlog</td><td>Managed platform enhancement backlog of 30 items — triaging, prioritising, documenting requirements, and coordinating with engineering under constrained capacity.</td></tr>
+        <tr><td>QCG team (12 people)</td><td>Built and managed a dedicated quality control function — 12 analysts reviewing resolved tickets for accuracy, consistency, and process adherence.</td></tr>
+        <tr><td>CSAT auto-trigger on case closure</td><td>Designed customer satisfaction measurement system — auto-triggered on ticket closure, with negative feedback escalation SLA of 2 working days.</td></tr>
+        <tr><td>14-finding audit remediation</td><td>Led enterprise-wide data audit remediation — 14 findings, 97.5% error rate reduction, built risk register as permanent governance tool.</td></tr>
+        <tr><td>Salesforce 0→1 build</td><td>Led solution design and deployment of the CRM platform from zero — 6-stakeholder discovery, data architecture, 70+ reports, quality scorecard. Platform still in production 6 years later.</td></tr>
+        <tr><td>Collections target AED 8.2B</td><td>Revenue operations target equivalent to $2.2B — personal accountability for revenue realisation while simultaneously governing platform operations.</td></tr>
+        <tr><td>Delinquency rate 16.7%→4.4%</td><td>Portfolio-at-risk rate reduced from 16.7% to 4.4% — driven by upstream process improvements, proactive monitoring, and data-driven intervention.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 4: AI PORTFOLIO -->
+<!-- ============================================ -->
+<div class="section" id="sec3">
+<div class="section-inner">
+  <div class="section-num">04 / Your differentiator build</div>
+  <div class="section-title">AI Portfolio Projects</div>
+  <div class="section-desc">Reuses existing portfolio — P12 (B2B Fraud Signal Dashboard) + P13 (Product Operations Intelligence). No new project required.</div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>P12: B2B Fraud Signal Dashboard <span class="pill pill-green">BUILT</span></h3>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:8px">Python + Streamlit + Claude API + Pandas</p>
+    <p><strong>Relevance to this role:</strong> Demonstrates AI-augmented operational analytics — anomaly detection on transaction data, automated risk flagging, pattern recognition across large datasets. Directly transferable to ticket trend analysis, SLA anomaly detection, and automated root cause hypothesis generation. The dashboard shows you can build the intelligence layer that transforms raw operational data into actionable insights.</p>
+    <p style="margin-top:12px"><strong>Interview pitch:</strong> "I built an AI-powered operational analytics dashboard that detects anomalies in transaction patterns and generates root cause hypotheses automatically. The same architecture applies to support ticket analysis — detecting recurring issues, flagging SLA risks before they breach, and generating weekly ops intelligence summaries for leadership."</p>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>P13: Product Operations Intelligence Dashboard <span class="pill pill-green">BUILT</span></h3>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);margin-bottom:8px">Python + Streamlit + Claude API + Pandas</p>
+    <p><strong>Relevance to this role:</strong> Simulates a multi-product delivery pipeline with SLAs, cross-team dependencies, and quality metrics. AI layer flags at-risk deliverables, identifies bottleneck patterns, and generates weekly ops summaries. This is precisely what the JD describes — ticket trend analysis, SLA monitoring, and dashboard-driven governance — but with an AI augmentation layer that most candidates won't bring.</p>
+    <p style="margin-top:12px"><strong>Architecture layers:</strong></p>
+    <p style="font-size:13px;color:var(--muted)">Layer 1 — Data Simulation: 15 products × 50 clients × 12-month history. Ticket volumes, resolution rates, SLA dates, quality scores.<br>
+    Layer 2 — Pipeline Health Engine: On-time resolution rate, SLA adherence trends, bottleneck frequency, team workload distribution.<br>
+    Layer 3 — AI Risk Flagger: Claude API analyses current state → top 3 risks, root cause hypotheses, recommended interventions, weekly narrative summary.<br>
+    Layer 4 — Streamlit Dashboard: Traffic-light grid, team heatmap, SLA trend charts, AI-generated alerts with dismiss/acknowledge workflow.</p>
+  </div>
+
+  <div class="card">
+    <h3>Combined Interview Pitch — AI Differentiator</h3>
+    <p style="font-family:'DM Serif Display',serif;font-size:15px;color:#fff;line-height:1.6">"The JD asks me to analyse ticket trends, identify root causes, and build dashboards. I've done all of that manually — 70+ reports, quality scorecard, daily monitoring KPIs. But I've also built AI-augmented versions that go further: they detect anomalies before humans notice them, generate root cause hypotheses automatically, and produce leadership-ready intelligence summaries. I bring both the operational discipline and the modern tooling to evolve the support function."</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 5: STAR BANK -->
+<!-- ============================================ -->
+<div class="section" id="sec4">
+<div class="section-inner">
+  <div class="section-num">05 / Your proof points, reframed for this role</div>
+  <div class="section-title">STAR Stories — Mastercard S&R Ops Frame</div>
+
+  <div class="star-card">
+    <h4>Story 1 — Salesforce Platform Build from Zero</h4>
+    <div class="star-jd-link">JD: "Salesforce experience mandatory" + "Develop and maintain reporting and dashboards"</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div>
+      <div class="star-text">Team of 35+ operating on fragmented spreadsheets. No CRM, no shared data layer, no governance visibility. Collections function at AED 867M with zero platform infrastructure.</div>
+      <div class="star-label">TASK</div>
+      <div class="star-text">Design and deploy a revenue operations intelligence platform from scratch — no vendor PM, no technical PM, no existing playbook.</div>
+      <div class="star-label">ACTION</div>
+      <div class="star-text">Conducted 6-stakeholder discovery process. Led solution design with Salesforce implementation team. Built 70+ report MI ecosystem spanning daily operations to MD-level strategic intelligence. Deployed quality scorecard with 8 continuous monitoring metrics. Managed 30,044+ active records.</div>
+      <div class="star-label">RESULT</div>
+      <div class="star-text">Platform scaled to support 14.9x programme growth (AED 867M → 12.97B). 77 practitioners operating from shared real-time data layer. Zero additional headcount for reporting function. Platform still in production 6 years later.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>Story 2 — Root Cause Analysis: 49% Defect Rate → Continuous Monitoring</h4>
+    <div class="star-jd-link">JD: "Analyze ticket data and trends to identify recurring issues, root causes, and opportunities to reduce support volume"</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div>
+      <div class="star-text">Payment Request rejection rate reached 49% in December 2025 — a quality failure that was invisible until critical because there was no systematic quality monitoring for the resolution pipeline.</div>
+      <div class="star-label">TASK</div>
+      <div class="star-text">Diagnose root cause, build continuous monitoring system, and create early-warning mechanism so quality failures are caught upstream — before they generate support tickets.</div>
+      <div class="star-label">ACTION</div>
+      <div class="star-text">Multi-source data triangulation: 53% document gaps + 47% manual errors. Built daily rejection KPI as governance metric. Designed Salesforce quality scorecard — continuous monitoring → pattern detection → automated escalation trigger. Held the quality standard under leadership pressure to relax it.</div>
+      <div class="star-label">RESULT</div>
+      <div class="star-text">Rate controlled within 30 days. Quality scorecard now monitors 8 workflow metrics continuously. Standard vindicated by next quarter's data. Proactive escalation of 3 blocked risk-register items to CCO before due dates.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>Story 3 — SLA Transformation: 20-Day → 3-Day TAT at 3x Volume</h4>
+    <div class="star-jd-link">JD: "Oversee platform help inquiries and ensure timely resolution in line with established SLAs"</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div>
+      <div class="star-text">Post-Completion Certificate process averaging 20-day turnaround. Creating revenue leakage, customer complaints, and handover delays — a critical SLA failure in the order-to-cash pipeline.</div>
+      <div class="star-label">TASK</div>
+      <div class="star-text">Redesign the end-to-end workflow to dramatically reduce cycle time while maintaining quality and audit integrity. No additional headcount.</div>
+      <div class="star-label">ACTION</div>
+      <div class="star-text">Mapped full process flow. Identified bottlenecks at verification and approval stages. Eliminated redundant steps. Introduced daily TAT dashboards. Rebuilt handover protocols between teams. Same team, redesigned workflow.</div>
+      <div class="star-label">RESULT</div>
+      <div class="star-text">20 days → 3 days (85% reduction). Monthly volume tripled (~90 to 281 in Nov-25). Quality maintained. Client complaints eliminated for this workflow. This is exactly the "upstream improvement that reduces support demand" the JD describes.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>Story 4 — Platform Enhancement Backlog Management</h4>
+    <div class="star-jd-link">JD: "Test system enhancements and fixes" + "Support operational initiatives"</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div>
+      <div class="star-text">Salesforce CRM had accumulated 30 enhancement requests — improvement ideas across reporting, automation, PR workflows, communication, and data quality. IT had limited capacity, creating prioritisation decisions.</div>
+      <div class="star-label">TASK</div>
+      <div class="star-text">Own the platform enhancement backlog — identifying, documenting, prioritising, and tracking enhancements while managing stakeholder expectations against constrained engineering capacity.</div>
+      <div class="star-label">ACTION</div>
+      <div class="star-text">Built prioritisation framework: business impact × manual effort. Documented requirements for each enhancement. Coordinated with IT on sprint planning. Managed stakeholder expectations on timelines. Tested delivered enhancements before production rollout.</div>
+      <div class="star-label">RESULT</div>
+      <div class="star-text">Structured backlog management replaced ad-hoc requests. IT team received clear requirements documentation. Prioritisation framework ensured highest-impact items shipped first. This is platform product ownership — the exact discipline this role requires.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>Story 5 — Revenue Model Defence at MD/CEO Level</h4>
+    <div class="star-jd-link">JD: "Strong communication, analytics and stakeholder management skills"</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div>
+      <div class="star-text">Proposed a mortgage-based revenue acceleration model with NPV AED 652M and AED 21.2M cost — requiring MD/CEO approval in a risk-averse organisation with no precedent for this structure.</div>
+      <div class="star-label">TASK</div>
+      <div class="star-text">Secure executive approval through multiple scrutiny rounds against finance and legal objections. Defend the analytical model without material concessions.</div>
+      <div class="star-label">ACTION</div>
+      <div class="star-text">Built DCF model from first principles. Prepared sensitivity analysis across 5 scenarios. Presented to MD/CEO, CFO, and CRO in three separate review rounds. Fielded objections on assumptions, risk exposure, and operational feasibility. Held position on core model parameters.</div>
+      <div class="star-label">RESULT</div>
+      <div class="star-text">Model approved with zero material concessions. 248-day prepay advantage. 32% cheaper than bank financing. Demonstrates senior-forum communication and analytical rigour under executive scrutiny.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>Story 6 — Cross-Geography Operations Scale-Up</h4>
+    <div class="star-jd-link">JD: "Support the integration of new products, teams, and workflows onto operational platforms"</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div>
+      <div class="star-text">India operations hub needed to scale from a small support function to 42 people across 3 sub-functions (Operations, QCG, MIS) — a new "team" being onboarded onto the operational platform with Dubai as the primary.</div>
+      <div class="star-label">TASK</div>
+      <div class="star-text">Stand up a fully operational cross-geography team that could execute independently on the same platform, same processes, same quality standards as the Dubai hub.</div>
+      <div class="star-label">ACTION</div>
+      <div class="star-text">Designed operating model for India hub. Built training and onboarding programmes. Deployed same Salesforce platform access and reporting infrastructure. Established quality governance parity. Created escalation protocols between geographies.</div>
+      <div class="star-label">RESULT</div>
+      <div class="star-text">42-person India hub operational. Team members authored MD-approved documents autonomously. Two functions still growing. This is platform onboarding and team integration at scale — precisely what the JD describes.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>Story 7 — Honest Failure: Tool Adoption Miss</h4>
+    <div class="star-jd-link">JD: "Drive adoption of tools and best practices" (learning story)</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div>
+      <div class="star-text">Sobha One App payment channel — set an 80% adoption target for digital submissions across 30,044-customer base.</div>
+      <div class="star-label">TASK</div>
+      <div class="star-text">Drive adoption of the new platform workflow. Success = reduced manual tickets and improved process efficiency.</div>
+      <div class="star-label">ACTION</div>
+      <div class="star-text">Scoped 12 functional requirements, pushed vendor on 4 scope expansions, defined user eligibility rules. But skipped the behavioural change plan — assumed the technology would drive adoption on its own.</div>
+      <div class="star-label">RESULT</div>
+      <div class="star-text">17% actual adoption vs 80% target. The lesson: platform adoption isn't a technology problem — it's a change management problem. The next rollout (SQL migration) front-loaded the change management work. This role explicitly asks for driving tool adoption — I've learned that lesson the hard way and applied the fix.</div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 6: COMP INTEL -->
+<!-- ============================================ -->
+<div class="section" id="sec5">
+<div class="section-inner">
+  <div class="section-num">06 / What Mastercard pays at L5/L6 in India</div>
+  <div class="section-title">Compensation Intelligence</div>
+
+  <div class="header-stats" style="margin-bottom:32px">
+    <div class="stat"><div class="stat-val">₹40–50L</div><div class="stat-label">Base Salary</div></div>
+    <div class="stat"><div class="stat-val">15–20%</div><div class="stat-label">Annual Bonus</div></div>
+    <div class="stat"><div class="stat-val">Minor</div><div class="stat-label">RSU / ESPP</div></div>
+    <div class="stat"><div class="stat-val">₹50–65L</div><div class="stat-label">Total Comp P50</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Level Mapping & Data Sources</h3>
+    <p>Mastercard India levels: L8 (Engineer/Analyst) → L7 (Senior) → L6 (Manager/Lead) → L5 (Director/Principal) → L4 (VP). This "Manager" title maps to L5 or L6 — title-fit ambiguity flagged. "Manager" at Mastercard sometimes denotes IC band (L5) and sometimes people-leader (L6). Confirm in screening.</p>
+    <p style="margin-top:8px;color:var(--muted);font-size:12px">Mastercard India Gurugram GCC. Levels.fyi: L6 PM India median ₹52.3L total comp (range ₹41.4L–67.9L). Glassdoor: Ops Manager India range ₹35–55L. Sales Ops roles typically at parity with PM band due to revenue-adjacent nature.</p>
+    <p style="margin-top:8px">Benefits: 40 days paternity leave, 26 weeks maternity leave. Hybrid: 3 days WFO / 2 days WFH + 21 additional WFH days per year. 24+ annual leave days.</p>
+  </div>
+
+  <div class="card">
+    <h3>Negotiation Strategy</h3>
+    <div class="neg-grid">
+      <div class="neg-label">Anchor</div>
+      <div class="neg-val"><strong>₹60–65L.</strong> Never name a number first — ask their range. Use "compensation" not "salary." Frame: "Given the scope I've operated at — $3.5B portfolio, 77-person team, Salesforce platform architecture — I'd expect the upper range of your band."</div>
+      <div class="neg-label">Walk-Away</div>
+      <div class="neg-val"><strong>₹48L total comp.</strong> Below this, the role doesn't justify the transition from your current AED-denominated package.</div>
+      <div class="neg-label">Push for L5/SM</div>
+      <div class="neg-val">Your scope (77 people, $3.5B portfolio, 4 entities, 2 geographies) exceeds L6 norms. Push for Senior Manager / L5 title. Even if they can't move the level, it establishes you as over-qualified at L6.</div>
+      <div class="neg-label">Joining Bonus</div>
+      <div class="neg-val"><strong>₹3–5L.</strong> Always ask separately — different budget pool. Compensates for deferred incentives left at Sobha. Sometimes has 1-year clawback.</div>
+      <div class="neg-label">Key Leverage</div>
+      <div class="neg-val">Revenue scale (AED 12.97B). MD-level sign-off track record. Salesforce 0→1 is rare — most candidates inherit, not build. BITS + IIM dual credential = asymmetry for India ops hiring. Parallel offers (AmEx, Oaktree, Uber) create genuine alternatives.</div>
+      <div class="neg-label">RSU/ESPP</div>
+      <div class="neg-val">Minor component at Manager tier India. Cash-heavy structure. Don't anchor on equity — focus on base + bonus + joining bonus.</div>
+      <div class="neg-label">Universal Rule</div>
+      <div class="neg-val"><strong>Never accept or decline on the call.</strong> Always ask 24–48 hours. This is your most powerful single negotiation habit.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 7: INTERVIEW PREP -->
+<!-- ============================================ -->
+<div class="section" id="sec6">
+<div class="section-inner">
+  <div class="section-num">07 / What they'll ask and how to answer</div>
+  <div class="section-title">Interview Preparation</div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Expected Interview Structure (Mastercard India)</h3>
+    <p><strong>Round 1 — Recruiter Screen (30 min):</strong> Motivation, salary expectations, logistics (location, notice period, visa). Keep it crisp. Don't over-narrate. Confirm L5 vs L6 level mapping.</p>
+    <p style="margin-top:8px"><strong>Round 2 — Hiring Manager (60 min):</strong> Deep dive on Salesforce experience, team management, and ticket operations. Expect: "Tell me about your Salesforce experience." "How do you ensure SLA adherence?" "How do you identify and fix recurring issues?" "Walk me through how you manage a team of analysts."</p>
+    <p style="margin-top:8px"><strong>Round 3 — Cross-Functional Peer (45 min):</strong> Sales or Platform Engineering lead. Tests collaboration. Expect: "How do you handle a critical ticket escalation from a sales VP?" "How do you prioritise enhancements when every team thinks their request is urgent?"</p>
+    <p style="margin-top:8px"><strong>Round 4 — Senior Leader / Director (45 min):</strong> Strategic thinking + culture fit. Expect: "What does a world-class RevOps support function look like?" "How would you reduce ticket volume by 30% in 12 months?" "Tell me about a process you redesigned."</p>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>BQ Quick Router for Mastercard S&R Ops</h3>
+    <table>
+      <thead><tr><th>Question Theme</th><th>Lead Story</th><th>Key Line</th></tr></thead>
+      <tbody>
+        <tr><td>Walk me through your career</td><td>S10 (MT→AGM)</td><td>"MT to AGM in six years. Built the Salesforce platform and operational backbone for a $3.5B revenue portfolio."</td></tr>
+        <tr><td>Salesforce experience</td><td>S1 (Salesforce 0→1)</td><td>"I didn't just use Salesforce — I led the architecture. 6-stakeholder discovery, 70+ live reports, quality scorecard. Still in production 6 years later."</td></tr>
+        <tr><td>Root cause analysis / reducing ticket volume</td><td>S2 (PR 49%)</td><td>"49% rejection rate — invisible until I built the monitoring. Multi-source root cause. Upstream fix. 30-day resolution. Continuous monitoring."</td></tr>
+        <tr><td>SLA management</td><td>S3 (PCC TAT)</td><td>"20 days to 3 days, volume tripled, same team. Redesigned workflow, not headcount. SLA compliance maintained throughout."</td></tr>
+        <tr><td>Team management</td><td>S6 (India hub)</td><td>"Stood up a 42-person cross-geography operations centre. Same platform, same quality standards, same SLAs."</td></tr>
+        <tr><td>System enhancement / testing</td><td>S4 (Backlog)</td><td>"30-item enhancement backlog. Prioritisation framework. Requirements documentation. UAT coordination. Stakeholder expectation management."</td></tr>
+        <tr><td>Failed / lessons learned</td><td>S7 (One App)</td><td>"80% target, 17% actual. Tool adoption needs change management, not just technology. Applied the lesson to every subsequent rollout."</td></tr>
+        <tr><td>Senior stakeholder influence</td><td>S5 (NPV AED 652M)</td><td>"Defended a $178M revenue model at MD/CEO level, three scrutiny rounds, zero concessions."</td></tr>
+        <tr><td>Data audits / quality</td><td>S2 + 14-finding audit</td><td>"4-year audit SPOC. 14-finding register. 97.5% error reduction. Proactive escalation before deadlines."</td></tr>
+        <tr><td>How would you reduce ticket volume?</td><td>Framework answer</td><td>"Categorise tickets by root cause taxonomy. Pareto the top 5 sources. For each: build upstream fix, measure impact, iterate. Target: eliminate 30% of recurring tickets in 6 months."</td></tr>
+        <tr><td>First 90 days plan</td><td>Framework answer</td><td>"30 days: shadow analysts, map every ticket category, understand platform architecture, meet stakeholders. 60 days: build root cause taxonomy, identify top 5 upstream fixes, deploy SLA dashboard. 90 days: ship first upstream fix, establish weekly governance cadence, present first monthly ops intelligence report."</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3>Assertiveness Proof Points (For Senior-Forum Rounds)</h3>
+    <p style="color:var(--muted);font-size:12px;margin-bottom:12px">These directly address the DISC Low-D development area:</p>
+    <p><strong>1. PR 49%</strong> — Held quality standard despite leadership pressure to relax documentation requirements. Position vindicated by subsequent quarter's data. = Forecast accuracy or pipeline hygiene standard held against revenue-pressure stakeholders.</p>
+    <p style="margin-top:8px"><strong>2. NPV AED 652M</strong> — Defended revenue model at MD/CEO through 3 scrutiny rounds, zero material concessions. = Revenue model defence to senior leadership across multiple review cycles.</p>
+    <p style="margin-top:8px"><strong>3. Three proactive CCO escalations.</strong> Blocked risk-register items escalated before due dates — surfacing pipeline risks or deal-desk concerns before quarter-end exposure.</p>
+  </div>
+
+  <div class="card">
+    <h3>Psychometric Fit — Your Natural Advantage</h3>
+    <p>The JD practically describes your DISC profile:</p>
+    <p style="margin-top:8px"><strong>"Strong attention to detail"</strong> → High-C systematic precision</p>
+    <p><strong>"Strong organizational, planning, and follow-up skills"</strong> → High-C + Arranger</p>
+    <p><strong>"Team-oriented with strong collaboration skills"</strong> → High-S collaborative orientation</p>
+    <p><strong>"Analyze operational data and translate insights"</strong> → CliftonStrengths Analytical</p>
+    <p><strong>"Flexible and adaptable in a fast-paced environment"</strong> → Arranger (juggle multiple priorities)</p>
+    <p style="margin-top:12px"><strong>CliftonStrengths alignment:</strong> Restorative (fix platform issues, diagnose root causes), Analytical (ticket data → insights → upstream fixes), Arranger (coordinate across multiple teams and ticket queues), Individualization (understand different analyst capabilities), Relator (build trust with cross-functional stakeholders).</p>
+    <p style="margin-top:12px"><strong>Risk area:</strong> Low-D/Low-I may surface when pushing back on sales VPs about data hygiene or ticket prioritisation. The three assertiveness proof points above are your prepared counters.</p>
+  </div>
+</div>
+</div>
+
+<!-- ============================================ -->
+<!-- TAB 8: VOCAB DECODER -->
+<!-- ============================================ -->
+<div class="section" id="sec7">
+<div class="section-inner">
+  <div class="section-num">08 / Master these terms before the interview</div>
+  <div class="section-title">Vocab Decoder</div>
+  <div class="section-desc">Click any term to reveal its definition. Two layers: 8 Mastercard cluster-shared terms + 10 role-specific terms. Goal: move all from "unknown" to "known" within 4 weeks.</div>
+
+  <h3 style="color:#fff; margin-bottom:12px">Mastercard Cluster-Shared Foundation (8 terms)</h3>
+  <div class="vocab-grid" style="margin-bottom:24px">
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">Interchange</div><div class="vocab-def">Fee paid by the merchant's bank (acquirer) to the cardholder's bank (issuer) every time a card transaction occurs. Mastercard sets the rates; they're the primary economics of the network. Typically 1.5–3% of transaction value.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">Scheme Rules</div><div class="vocab-def">Mastercard's binding regulations governing how issuers, acquirers, and merchants interact on the network. Covers everything from settlement timing to dispute resolution. Non-compliance = fines.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">Network Economics</div><div class="vocab-def">Mastercard earns revenue from assessments (per-transaction fees), cross-border fees, and services. They don't lend, don't issue cards, don't bear credit risk — they run the rails and sell data/services.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">Processor</div><div class="vocab-def">The tech company that handles transaction routing, authorisation, and settlement between issuer and acquirer. Examples: FIS, Fiserv, Global Payments. They plug into Mastercard's network.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">Acquirer</div><div class="vocab-def">The bank or financial institution that processes card payments on behalf of the merchant. They provide POS terminals, settle funds, and bear merchant risk.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">Issuer</div><div class="vocab-def">The bank that issues cards to consumers — HDFC, SBI, Chase. They bear credit risk, set cardholder terms, and earn interchange revenue.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">BIN</div><div class="vocab-def">Bank Identification Number — the first 6–8 digits of a card number. Identifies the issuing bank. BIN management is a core platform operations function.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">MCC</div><div class="vocab-def">Merchant Category Code — 4-digit code classifying merchant business type. Drives interchange rates and fraud rules. MCC accuracy is a data quality concern for platform ops.</div></div>
+  </div>
+
+  <h3 style="color:#fff; margin-bottom:12px">Role-Specific — Sales & Revenue Operations (10 terms)</h3>
+  <div class="vocab-grid">
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">CPQ (Configure-Price-Quote)</div><div class="vocab-def">Salesforce module that automates the quote-generation process. Sales rep selects products → system applies pricing rules, discounts, and approvals → generates accurate quote. Your team will support tickets about configuration errors, pricing exceptions, and approval workflow issues.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">CLM (Contract Lifecycle Management)</div><div class="vocab-def">Software managing contracts from creation through negotiation, approval, execution, and renewal. Common platforms: Conga CLM, Icertis, DocuSign CLM. Tickets often involve: template issues, approval routing errors, renewal notifications, and data sync with CRM.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">Order Management</div><div class="vocab-def">System handling the order-to-fulfilment pipeline: order capture → validation → fulfilment → invoicing → revenue recognition. In Mastercard's context, orders are typically for Services products (analytics, consulting, fraud tools).</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">Quota Planning</div><div class="vocab-def">Process of setting sales targets per rep, territory, or segment based on historical performance, market opportunity, and growth strategy. RevOps owns the data and models; Sales leadership owns the decisions.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">Pipeline Hygiene</div><div class="vocab-def">Discipline of keeping CRM data accurate: deal stages, close dates, deal sizes, contact associations. Prerequisites for accurate forecasting. Your team will audit and enforce this through data quality reviews.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">Attainment</div><div class="vocab-def">Percentage of quota achieved by a rep, team, or org. Core compensation and forecasting input. E.g., "APAC attainment was 112% in Q3" means the region exceeded quota by 12%.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">OTE (On-Target Earnings)</div><div class="vocab-def">Total annual compensation if a sales rep achieves 100% of quota. OTE = Base salary + variable at plan. E.g., ₹20L base + ₹10L variable at plan = ₹30L OTE. RevOps supports comp planning calculations.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">RevOps (Revenue Operations)</div><div class="vocab-def">Unified function spanning sales ops, marketing ops, and customer success ops. Owns the revenue tech stack (Salesforce, CPQ, CLM, billing), data integrity, reporting, and process governance. This role is a RevOps function.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">ARR (Annual Recurring Revenue)</div><div class="vocab-def">Normalised annualised value of subscription contracts. Core SaaS metric. For Mastercard Services: some products are recurring subscriptions (fraud tools, data feeds), others are project-based (consulting). ARR applies to the former.</div></div>
+    <div class="vocab-item" onclick="this.classList.toggle('open')"><div class="vocab-term">Order-to-Cash (O2C)</div><div class="vocab-def">The full pipeline from customer order through invoicing to cash collection. Lead → Opportunity → Quote → Contract → Order → Invoice → Payment → Revenue Recognition. The platforms you'll govern (CRM, CPQ, CLM, Billing) sit across this entire lifecycle.</div></div>
+  </div>
+
+</div>
+</div>
+
+<script>
+function showTab(idx) {
+  document.querySelectorAll('.section').forEach((s,i) => {
+    s.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active', i === idx);
+  });
+}
+</script>
+
+</body>
+</html>

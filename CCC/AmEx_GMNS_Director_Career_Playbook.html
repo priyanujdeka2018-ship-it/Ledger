@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmEx GMNS Director — Career Playbook | Priyanuj Deka</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050d18;
+    --surface: #0a1628;
+    --s2: #0f1f38;
+    --s3: #162744;
+    --border: #1c3354;
+    --border2: #264870;
+    --blue: #006fcf;
+    --blue-bright: #1a8fff;
+    --blue-glow: rgba(0,111,207,0.15);
+    --gold: #c8a832;
+    --gold-dim: rgba(200,168,50,0.1);
+    --green: #1db87a;
+    --red: #e84545;
+    --amber: #f0a030;
+    --text: #d4e4f7;
+    --muted: #6888a8;
+    --dim: #2a4060;
+    --accent: #006fcf;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #000d1f 0%, #001830 50%, #000a16 100%);
+    border-bottom: 1px solid var(--border2);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -10%;
+    width: 50%;
+    height: 200%;
+    background: radial-gradient(ellipse, rgba(0,111,207,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: 'AMEX';
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'DM Serif Display', serif;
+    font-size: 180px;
+    color: rgba(0,111,207,0.04);
+    pointer-events: none;
+    letter-spacing: -5px;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 32px 36px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,111,207,0.12);
+    border: 1px solid rgba(0,111,207,0.3);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--blue-bright);
+    margin-bottom: 16px;
+  }
+  .header-badge::before { content: '●'; font-size: 8px; }
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 46px);
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .header h1 span { color: var(--blue-bright); }
+  .header-sub {
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    margin-bottom: 24px;
+  }
+  .header-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .hstat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .hstat-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--blue-bright);
+    line-height: 1;
+  }
+  .hstat-val.gold { color: var(--gold); }
+  .hstat-val.green { color: var(--green); }
+  .hstat-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .hstat-divider {
+    width: 1px;
+    background: var(--border);
+    align-self: stretch;
+  }
+
+  /* NAVIGATION */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    padding: 14px 18px;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active {
+    color: var(--blue-bright);
+    border-bottom-color: var(--blue-bright);
+  }
+
+  /* MAIN */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px;
+  }
+
+  /* SECTIONS */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--blue);
+    border-radius: 8px 0 0 8px;
+  }
+  .card.gold::before { background: var(--gold); }
+  .card.green::before { background: var(--green); }
+  .card.red::before { background: var(--red); }
+  .card.amber::before { background: var(--amber); }
+  .card.purple::before { background: #8866ff; }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue-bright);
+    margin-bottom: 12px;
+  }
+  .card.gold .card-title { color: var(--gold); }
+  .card.green .card-title { color: var(--green); }
+  .card.red .card-title { color: var(--red); }
+  .card.amber .card-title { color: var(--amber); }
+  .card.purple .card-title { color: #9977ff; }
+
+  /* SECTION TITLES */
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  @media(max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .header-stats { gap: 20px; }
+    .main { padding: 16px; }
+  }
+
+  /* TABLE */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0;
+  }
+  th {
+    background: var(--s3);
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(0,111,207,0.03); }
+  .td-highlight { color: var(--blue-bright); font-weight: 600; }
+  .td-gold { color: var(--gold); font-weight: 600; }
+  .td-green { color: var(--green); }
+  .td-red { color: var(--red); }
+  .td-amber { color: var(--amber); }
+
+  /* TAGS */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 2px 2px 2px 0;
+  }
+  .tag-blue { background: rgba(0,111,207,0.15); color: var(--blue-bright); }
+  .tag-green { background: rgba(29,184,122,0.12); color: var(--green); }
+  .tag-red { background: rgba(232,69,69,0.12); color: var(--red); }
+  .tag-gold { background: rgba(200,168,50,0.12); color: var(--gold); }
+  .tag-amber { background: rgba(240,160,48,0.12); color: var(--amber); }
+  .tag-purple { background: rgba(136,102,255,0.12); color: #9977ff; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin: 8px 0; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .progress-bar {
+    height: 6px;
+    background: var(--s3);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1s ease;
+  }
+  .fill-blue { background: linear-gradient(90deg, var(--blue), var(--blue-bright)); }
+  .fill-green { background: linear-gradient(90deg, #0d9e5a, var(--green)); }
+  .fill-amber { background: linear-gradient(90deg, #c07820, var(--amber)); }
+  .fill-red { background: linear-gradient(90deg, #b03030, var(--red)); }
+
+  /* STAR BOX */
+  .star-box {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    margin: 12px 0;
+  }
+  .star-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .star-content { color: var(--text); font-size: 13px; line-height: 1.65; }
+  .star-row { display: grid; grid-template-columns: 80px 1fr; gap: 12px; margin: 8px 0; align-items: start; }
+  .star-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--blue-bright);
+    padding-top: 1px;
+  }
+  .star-key.gold { color: var(--gold); }
+  .star-key.green { color: var(--green); }
+  .star-key.red { color: var(--red); }
+
+  /* ACTION ITEM */
+  .action-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .action-item:last-child { border-bottom: none; }
+  .action-num {
+    width: 28px;
+    height: 28px;
+    background: var(--blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .action-body h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .action-body p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--border2);
+  }
+  .tl-item {
+    position: relative;
+    padding-bottom: 24px;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -25px;
+    top: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--blue);
+    border: 2px solid var(--bg);
+  }
+  .tl-item.gold::before { background: var(--gold); }
+  .tl-item.green::before { background: var(--green); }
+  .tl-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--blue-bright);
+    margin-bottom: 4px;
+  }
+  .tl-item.gold .tl-time { color: var(--gold); }
+  .tl-item.green .tl-time { color: var(--green); }
+  .tl-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .tl-body { font-size: 12px; color: var(--muted); line-height: 1.6; }
+
+  /* VOCAB ROW */
+  .vocab-row {
+    display: grid;
+    grid-template-columns: 1fr 20px 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .vocab-row:last-child { border-bottom: none; }
+  .vocab-from { color: var(--muted); }
+  .vocab-arrow { color: var(--blue); text-align: center; font-size: 16px; }
+  .vocab-to { color: var(--blue-bright); font-weight: 600; }
+
+  /* AI BOX */
+  .ai-box {
+    background: linear-gradient(135deg, #050d18, #081525);
+    border: 1px solid rgba(0,111,207,0.3);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 16px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .ai-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--blue), transparent);
+  }
+  .ai-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--blue-bright);
+    margin-bottom: 8px;
+  }
+  .ai-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .ai-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .ai-stack {
+    margin-top: 12px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  /* FIT METER */
+  .fit-meter {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .fit-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 72px;
+    line-height: 1;
+    color: var(--blue-bright);
+    margin-bottom: 4px;
+  }
+  .fit-label { font-size: 11px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+  .fit-bar-wrap { margin: 16px 0; }
+  .fit-bar-bg {
+    height: 8px;
+    background: var(--s3);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .fit-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--blue-bright));
+    border-radius: 4px;
+    width: 75%;
+  }
+
+  /* REQUIREMENT CARD */
+  .req-card {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  .req-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    gap: 12px;
+  }
+  .req-title { font-size: 13px; font-weight: 700; color: var(--text); flex: 1; }
+  .req-match {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .match-high { background: rgba(29,184,122,0.15); color: var(--green); }
+  .match-med { background: rgba(240,160,48,0.15); color: var(--amber); }
+  .match-low { background: rgba(232,69,69,0.15); color: var(--red); }
+  .req-jd { font-size: 12px; color: var(--muted); margin-bottom: 10px; font-style: italic; padding-left: 10px; border-left: 2px solid var(--border2); }
+  .req-proof { font-size: 12px; color: var(--text); }
+  .req-proof strong { color: var(--blue-bright); }
+
+  /* PHRASE */
+  .phrase {
+    background: var(--s3);
+    border-left: 3px solid var(--blue);
+    padding: 10px 14px;
+    margin: 8px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: var(--text);
+    font-style: italic;
+  }
+  .phrase.gold { border-left-color: var(--gold); }
+  .phrase.red { border-left-color: var(--red); }
+
+  /* CERT STACK */
+  .cert-item {
+    display: flex;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .cert-item:last-child { border-bottom: none; }
+  .cert-priority {
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+  }
+  .cert-priority.p1 { background: rgba(232,69,69,0.2); color: var(--red); }
+  .cert-priority.p2 { background: rgba(240,160,48,0.15); color: var(--amber); }
+  .cert-priority.p3 { background: rgba(0,111,207,0.15); color: var(--blue-bright); }
+  .cert-body h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .cert-body p { font-size: 12px; color: var(--muted); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+  /* QUOTE BLOCK */
+  .quote {
+    background: var(--gold-dim);
+    border: 1px solid rgba(200,168,50,0.2);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--text);
+    font-style: italic;
+    position: relative;
+  }
+  .quote::before {
+    content: '"';
+    font-family: 'DM Serif Display', serif;
+    font-size: 60px;
+    color: var(--gold);
+    opacity: 0.3;
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    line-height: 1;
+  }
+  .quote-attr {
+    display: block;
+    font-size: 11px;
+    color: var(--gold);
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 8px;
+  }
+
+  .mono { font-family: 'DM Mono', monospace; }
+  .small { font-size: 12px; }
+  .muted { color: var(--muted); }
+  .bold { font-weight: 700; }
+  .mt16 { margin-top: 16px; }
+  .mt8 { margin-top: 8px; }
+  ul { padding-left: 18px; }
+  li { margin-bottom: 6px; font-size: 13px; color: var(--text); }
+
+  /* WHAT THEY WANT highlight grid */
+  .want-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .want-card {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .want-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  .want-card h4 { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .want-card p { font-size: 12px; color: var(--muted); line-height: 1.55; }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-badge">ACTIVE TARGET · APPLY NOW</div>
+    <h1>AmEx GMNS <span>Director</span><br>Business Operations</h1>
+    <div class="header-sub">Global Merchant & Network Services · Product Risk, Control & Operational Readiness</div>
+    <div class="header-stats">
+      <div class="hstat">
+        <div class="hstat-val">75</div>
+        <div class="hstat-label">Current Fit /100</div>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat-val" style="align-self:center; font-size:20px; color:var(--muted)">→</div>
+      <div class="hstat">
+        <div class="hstat-val gold">88</div>
+        <div class="hstat-label">Addressable Fit</div>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat">
+        <div class="hstat-val green">14.9x</div>
+        <div class="hstat-label">Programme Scale Proof</div>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat">
+        <div class="hstat-val" style="color:var(--amber)">₹52–82L</div>
+        <div class="hstat-label">Target CTC Range</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showTab('decode')">JD Decoded</button>
+    <button class="nav-btn" onclick="showTab('fit')">Your Fit</button>
+    <button class="nav-btn" onclick="showTab('gaps')">Gaps & Plan</button>
+    <button class="nav-btn" onclick="showTab('ai')">AI Solutions</button>
+    <button class="nav-btn" onclick="showTab('stars')">STAR Bank</button>
+    <button class="nav-btn" onclick="showTab('plan')">30-60-90 Plan</button>
+    <button class="nav-btn" onclick="showTab('interview')">Interview Prep</button>
+    <button class="nav-btn" onclick="showTab('vocab')">Vocab Decoder</button>
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- ======================== TAB 1: JD DECODED ======================== -->
+<div class="section active" id="tab-decode">
+  <div class="section-title">JD Decoded</div>
+  <div class="section-sub">What AmEx is actually looking for beneath the job description language</div>
+
+  <div class="card gold">
+    <div class="card-title">The Core Mission — What This Role Really Is</div>
+    <p>AmEx GMNS is a $1.7 trillion payments network. This Director role is essentially the <strong style="color:var(--gold)">COO of Risk & Controls for GMNS Product</strong> — the person who makes sure that as products are built, changed, and scaled, nothing operationally breaks, no regulator gets surprised, and no risk event goes untracked. They need a disciplined executor who can run governance infrastructure at enterprise scale, translate between Product/Tech and Risk/Audit, and drive accountability across multi-functional teams. This is not a strategy role. It is a <em>high-trust execution and controls ownership role.</em></p>
+  </div>
+
+  <div class="want-grid">
+    <div class="want-card">
+      <div class="want-icon">🔴</div>
+      <h4>Operational Risk Event (ORE) Owner</h4>
+      <p>Track, escalate, and close risk events. Know what's aged, why it's stuck, who owns it, and drive it to resolution. Think: governance programme manager for a risk portfolio.</p>
+    </div>
+    <div class="want-card">
+      <div class="want-icon">📋</div>
+      <h4>Operational Readiness Architect</h4>
+      <p>Build and embed a framework that ensures every product change or launch passes a readiness gate — documentation, approvals, risk review — before going live.</p>
+    </div>
+    <div class="want-card">
+      <div class="want-icon">🔗</div>
+      <h4>1LOD ↔ 2LOD Bridge</h4>
+      <p>Be the connective tissue between the business line (first line of defense) and risk oversight / compliance (second line). Prevent friction before it escalates to audit.</p>
+    </div>
+    <div class="want-card">
+      <div class="want-icon">📊</div>
+      <h4>Risk Committee Operator</h4>
+      <p>Prepare, run, and follow up on GMNS Product Risk Committee meetings — metrics, materials, action tracking. The VP can't do this alone; this Director makes it happen.</p>
+    </div>
+    <div class="want-card">
+      <div class="want-icon">⚙️</div>
+      <h4>Policy & Mandate Champion</h4>
+      <p>When new policies drop, this person owns adoption — intake, review coordination, training, and evidence that teams are complying. The last line before audit finds a gap.</p>
+    </div>
+    <div class="want-card">
+      <div class="want-icon">📁</div>
+      <h4>Documentation Governance Owner</h4>
+      <p>Ensure every risk, control, and readiness document is produced, reviewed, approved, and stored correctly. Audit-readiness at all times, not just when auditors arrive.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title">Breaking Down Every Responsibility</div>
+    <table>
+      <tr>
+        <th>JD Responsibility</th>
+        <th>What It Means in Plain Language</th>
+        <th>Weight</th>
+      </tr>
+      <tr>
+        <td>Own monitoring, tracking, and progression of OREs and Past Due Findings</td>
+        <td>Run a live risk register for all open issues. Know the status, age, blocker, and owner of every item. Drive resolution proactively.</td>
+        <td><span class="tag tag-red">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>Support closure readiness — documentation, approvals, evidence meet 1LOD/2LOD expectations</td>
+        <td>Before you mark anything closed, make sure the paper trail is complete. Audit-proof every closure.</td>
+        <td><span class="tag tag-red">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>Design and rollout GMNS Product operational readiness framework</td>
+        <td>Build the SOP and gate-review process that every product team must follow before launching or changing anything. Embed it into delivery workflows.</td>
+        <td><span class="tag tag-red">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>Partner with Product and Technology on handoffs, readiness criteria, risk in delivery plans</td>
+        <td>Sit in product delivery conversations and ensure risk considerations are baked in — not added as an afterthought before launch.</td>
+        <td><span class="tag tag-amber">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Drive consistency in mandate prioritisation and intake</td>
+        <td>When new regulatory or policy mandates come in, triage them, route them to the right owner, and track execution. No mandate falls through the cracks.</td>
+        <td><span class="tag tag-amber">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Support preparation and execution of Risk Committee meetings</td>
+        <td>Build the deck, pull the metrics, track the actions, send the follow-ups. The Risk Committee is a governance body — this Director keeps it running smoothly.</td>
+        <td><span class="tag tag-amber">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Manage alignment across 1LOD and 2LOD teams</td>
+        <td>Identify friction points between the business and the risk/compliance functions before they escalate. Resolve at working level, not at VP level.</td>
+        <td><span class="tag tag-amber">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Contribute to Control Management governance forums</td>
+        <td>Represent GMNS Product's perspective in company-wide risk governance meetings. Carry feedback back and action it.</td>
+        <td><span class="tag tag-blue">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td>Support risk/control capability uplift — training and change management</td>
+        <td>When the team's risk capability is low, build training programmes. When new frameworks land, manage change so adoption actually happens.</td>
+        <td><span class="tag tag-blue">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td>Champion adoption of new management policies</td>
+        <td>New policy arrives → you own the intake, review, communication, and confirmation of compliance. Own the full lifecycle.</td>
+        <td><span class="tag tag-blue">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td>Ensure documentation is produced, reviewed, stored per policy</td>
+        <td>Audit-readiness at all times. Every document in the right system, at the right version, with the right sign-off.</td>
+        <td><span class="tag tag-blue">MEDIUM</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">The Unstated Requirements (What They Won't Tell You)</div>
+    <p class="small muted" style="margin-bottom:12px">These are what actually get you selected. Read between the lines.</p>
+    <ul>
+      <li><strong>Ambiguity tolerance:</strong> GMNS Product operates in a fast-moving, global payments context. The frameworks you're building may not exist yet. You need to design under uncertainty.</li>
+      <li><strong>Senior stakeholder management:</strong> "VP of GMNS Product Business Operations" is your boss. You'll interface with Product VPs, Technology leads, GCO, Internal Audit. You need to influence without authority.</li>
+      <li><strong>Proactive problem surfacing:</strong> The phrase "proactively identifying blockers" is key. AmEx does not want someone who waits to be asked. They want someone who sees the train coming and moves it off the tracks early.</li>
+      <li><strong>Cross-functional translation:</strong> Product teams speak roadmaps. Risk teams speak controls. You need to be fluent in both and translate between them without friction.</li>
+      <li><strong>Zero-defect documentation discipline:</strong> In a regulated financial services environment, incomplete documentation is a regulatory violation. This person must be personally obsessive about paper trails.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================== TAB 2: YOUR FIT ======================== -->
+<div class="section" id="tab-fit">
+  <div class="section-title">Your Fit</div>
+  <div class="section-sub">How your Sobha experience maps — requirement by requirement — to this JD</div>
+
+  <div class="fit-meter">
+    <div class="fit-number">75</div>
+    <div class="fit-label">Current Fit Score</div>
+    <div class="fit-bar-wrap">
+      <div class="fit-bar-bg"><div class="fit-bar-fill"></div></div>
+    </div>
+    <p class="small muted">Addressable to 88/100 with vocabulary reframe + CRISC + one AI portfolio project</p>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Own monitoring, tracking, and progression of OREs and Past Due Findings</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Proactively identifying blockers and driving resolution in partnership with Product, Technology, and Operations teams"</div>
+    <div class="req-proof">You ran a live <strong>14-finding risk register</strong> that drove a 97.5% error rate reduction across the collections operation. Every finding had an owner, a target date, and a closure criterion. You tracked it weekly, escalated blockers, and reported to the CCO and CRO. This is identical to ORE management — same governance discipline, different domain vocabulary.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Support closure readiness — documentation, approvals, evidence meet 1LOD/2LOD expectations</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Ensuring documentation, approvals, and evidence meet 1LOD and 2LOD expectations"</div>
+    <div class="req-proof">Your <strong>49% PR rejection rate governance programme</strong> is this exact capability. You identified that payment requests were being rejected due to documentation failures. You designed a quality scorecard, implemented a daily monitoring architecture, and drove closure criteria that every request had to meet before submission. 1LOD documentation quality = what you built at Sobha.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Design and rollout of GMNS Product operational readiness framework</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Embedding it into product delivery and change execution processes"</div>
+    <div class="req-proof">You designed and embedded the <strong>55-day critical collection window framework (T−25 to T+30)</strong> — a proprietary operational readiness model that every Dues RM and collections team follows. This is a from-scratch framework design that was embedded into execution workflows, not simply documented. Same capability AmEx needs for product delivery readiness.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Partner with Product and Technology on handoffs, readiness criteria, risk in delivery plans</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Ensure clear handoffs, readiness criteria, and risk considerations are incorporated into delivery plans"</div>
+    <div class="req-proof">You partnered with tech teams to design the <strong>Salesforce CRM platform (0→1 build)</strong> — led solution design, defined data requirements, drove 70+ report architecture with 6-stakeholder discovery. You also drove the <strong>PCC TAT transformation</strong> (20 days → 3 days) by redesigning handoff protocols across operations and documentation teams. Handoff management at scale is a documented strength.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Support preparation and execution of Risk Committee meetings</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Including metric review, materials, action tracking, and follow-ups"</div>
+    <div class="req-proof">You serve as the <strong>Audit SPOC for Collections</strong> at Sobha — you prepare findings briefings, coordinate audit responses across 3 entities, ensure documentation completeness, and follow up on remediation actions. Your 70+ report MI ecosystem is the metrics layer for these governance forums. Risk Committee operations = audit governance operations, different name.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Manage alignment across 1LOD and 2LOD teams; anticipate friction, resolve before escalation</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Actively manage alignment across 1LOD and 2LOD teams"</div>
+    <div class="req-proof">Your <strong>Three Lines of Defense structure at Sobha</strong>: 1st Line = Collections operations (your team), 2nd Line = Governance reports (your MI ecosystem), 3rd Line = Internal audit (Priyanuj as SPOC). You manage the interface between all three. The fact that PR rejection rate was caught and resolved at 49% before it became an audit finding proves proactive issue management between lines.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Drive mandate prioritisation, intake, and execution ownership</div>
+      <div class="req-match match-med">MODERATE MATCH</div>
+    </div>
+    <div class="req-jd">"Ensuring appropriate routing and execution ownership"</div>
+    <div class="req-proof">You manage 12 simultaneous deliverable streams across Dubai and India. However, the specific vocabulary of "mandate intake" from a regulatory/compliance angle is less explicit in your history. <strong>Frame this as:</strong> policy change management from Sobha's RERA compliance interface — when regulatory requirements changed, you owned intake, translated to operational requirements, and tracked execution across teams.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Lead complex cross-functional initiatives in risk, control, operations, product, or technology</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Proven experience leading complex, cross-functional initiatives"</div>
+    <div class="req-proof">The <strong>Mortgage Programme (1,016 units, 24 months, zero supervision)</strong> and the <strong>14.9x collections scale-up</strong> are both complex, cross-functional, multi-stakeholder achievements. The Salesforce 0→1 build involved Product, Tech, Operations, and leadership sign-off across functions. Cross-functional programme leadership is your strongest card.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Strong communication — influence and partner with senior leaders</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Ability to influence and partner effectively with senior leaders and diverse stakeholder groups"</div>
+    <div class="req-proof">You present directly to the <strong>MD/CEO (Francis Alfred) and CRO (Mohammad Adnan Hamid)</strong> on collections performance. You interface with Legal, Finance, Tech, and Operations on NPV model decisions worth AED 652M. The NPV model approval required influencing MD-level leadership on a complex financial product design — highest-bar senior influence example available.</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card amber">
+    <div class="card-title">Your Unique Differentiator for This Role</div>
+    <p>Most candidates for this role will come from financial services risk teams — they know the vocabulary but have never <em>built</em> a governance infrastructure from scratch. You built yours. The 70+ report MI ecosystem, the quality scorecard, the risk register, the T−25/T+30 framework — these are designed and owned by you, not inherited. <strong>This is your asymmetric advantage.</strong> Frame every answer around the fact that you are a builder, not just an operator of existing controls.</p>
+  </div>
+</div>
+
+<!-- ======================== TAB 3: GAPS & PLAN ======================== -->
+<div class="section" id="tab-gaps">
+  <div class="section-title">Gaps & Closure Plan</div>
+  <div class="section-sub">Honest gaps, their severity, and exactly how to close each one</div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card red">
+        <div class="card-title">Gap 1 — ORE/RCSA Formal Terminology</div>
+        <p class="small" style="margin-bottom:10px">You've done the work. You don't yet speak the language AmEx will test you on.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Severity</span><span>HIGH</span></div>
+          <div class="progress-bar"><div class="progress-fill fill-red" style="width:75%"></div></div>
+        </div>
+        <p class="small muted mt8"><strong style="color:var(--text)">Close it:</strong> Learn the 12 core ORM terms from ISACA CRISC materials. Create a personal Sobha→AmEx mapping document. Practice using ORE, RCSA, KRI, KCI, 1LOD/2LOD naturally in sentences about your own work. This is a 2-week self-study exercise, not a years-long gap.</p>
+      </div>
+
+      <div class="card red">
+        <div class="card-title">Gap 2 — Financial Services / Payments Domain</div>
+        <p class="small" style="margin-bottom:10px">No direct financial services or merchant acquiring background.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Severity</span><span>MODERATE-HIGH</span></div>
+          <div class="progress-bar"><div class="progress-fill fill-amber" style="width:60%"></div></div>
+        </div>
+        <p class="small muted mt8"><strong style="color:var(--text)">Close it:</strong> Study GMNS basics — merchant acquiring, payment facilitators, ISVs, network rules. AmEx's annual reports and GMNS-specific content are public. You need enough to not be tripped up in interviews, not to be a domain expert. 5 hours of focused reading will cover the essentials. Key terms: acquirer, ISV, PayFac, network connectivity, interchange, operational readiness in payments.</p>
+      </div>
+
+      <div class="card amber">
+        <div class="card-title">Gap 3 — CRISC Certification</div>
+        <p class="small" style="margin-bottom:10px">AmEx strongly values certified risk professionals. CRISC is the gold standard for this role.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Severity</span><span>MODERATE</span></div>
+          <div class="progress-bar"><div class="progress-fill fill-amber" style="width:55%"></div></div>
+        </div>
+        <p class="small muted mt8"><strong style="color:var(--text)">Close it:</strong> CRISC is a 3–4 month prep commitment. Start ISACA CRISC QAE materials immediately. You don't need to be certified before applying — you need to be able to say "I am actively preparing for CRISC" and demonstrate knowledge of the framework. Register for the exam to signal commitment. Timeline: appear for CRISC within 6 months of joining if hired pre-certification.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="card amber">
+        <div class="card-title">Gap 4 — Formal 1LOD/2LOD Documentation Protocols</div>
+        <p class="small" style="margin-bottom:10px">You manage this informally. AmEx's version has specific documentation standards, systems, and audit trail requirements.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Severity</span><span>MODERATE</span></div>
+          <div class="progress-bar"><div class="progress-fill fill-amber" style="width:50%"></div></div>
+        </div>
+        <p class="small muted mt8"><strong style="color:var(--text)">Close it:</strong> Study how regulated financial institutions structure 1LOD/2LOD documentation — evidence packages, control testing attestation, closure sign-off chains. The ISACA CRISC framework covers this. Frame your PR rejection governance programme as a 1LOD documentation quality assurance exercise. Your Sobha audit interface is your 3LOD bridge — state it explicitly.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Gap 5 — Assertiveness in Senior Forums (Soft Skill)</div>
+        <p class="small" style="margin-bottom:10px">High-C/High-S DISC profile means you may defer when you should hold ground. At Director level, AmEx needs someone who will push back on VPs when the risk posture demands it.</p>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Severity</span><span>MODERATE</span></div>
+          <div class="progress-bar"><div class="progress-fill fill-blue" style="width:45%"></div></div>
+        </div>
+        <p class="small muted mt8"><strong style="color:var(--text)">Close it:</strong> Prepare 2 stories where you held a position against senior pressure and were right. Frame your 49% PR rejection rate story — you flagged an escalating control failure and maintained the governance stance despite pressure to approve. Your NPV model is another: you presented a financially complex proposal to MD/CEO level and defended it. These are your assertiveness proof points.</p>
+      </div>
+
+      <div class="card green">
+        <div class="card-title">NOT a Gap — Financial Scale</div>
+        <p class="small muted">Some candidates will try to position your real estate background as a disqualifier. Pre-empt this: AED 12.97B portfolio management, AED 652M NPV design, AED 8.2B annual target — these are financial services-grade numbers. You have managed a financial portfolio at scale that many career financial services professionals haven't. This is an asset, not a gap.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title">Certification Stack for This Role</div>
+    <div class="cert-item">
+      <div class="cert-priority p1">1</div>
+      <div class="cert-body">
+        <h4>CRISC — Certified in Risk and Information Systems Control (ISACA)</h4>
+        <p>The single most important credential for this role. Covers IT/operational risk identification, assessment, response, and monitoring. Directly maps to ORE management and 1LOD/2LOD governance. Start QAE study materials immediately. Exam: schedule within 90 days of offer acceptance if not certified before applying.</p>
+      </div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-priority p2">2</div>
+      <div class="cert-body">
+        <h4>PMI-ACP — Already in Progress</h4>
+        <p>Demonstrates programme management discipline and agile delivery understanding. Relevant for the "partnering with Product and Technology teams on delivery plans" requirement. Continue on current timeline — do not deprioritise.</p>
+      </div>
+    </div>
+    <div class="cert-item">
+      <div class="cert-priority p3">3</div>
+      <div class="cert-body">
+        <h4>ISACA CISM (Optional / Long-term)</h4>
+        <p>Certified Information Security Manager. Lower priority than CRISC but valuable if AmEx roles evolve toward cyber risk governance. Consider after CRISC is achieved.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== TAB 4: AI SOLUTIONS ======================== -->
+<div class="section" id="tab-ai">
+  <div class="section-title">AI-Integrated Solutions</div>
+  <div class="section-sub">Problems this role solves — and how you can demonstrate AI-augmented capability to solve them better</div>
+
+  <div class="card gold">
+    <div class="card-title">Your AI Differentiator Pitch</div>
+    <p>The GMNS Product Business Operations team will be managing dozens of open OREs, dozens of policy mandates, and multiple governance forums simultaneously. The person who can use AI to turn a 3-day manual risk compilation into a 30-minute automated intelligence output will be the highest-leverage individual in the team. This is your asymmetric edge. You've already built a 70+ report MI ecosystem at Sobha. At AmEx, you bring the same architecture — with AI augmentation built in from day one.</p>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT 1 · AMEX-SPECIFIC PORTFOLIO BUILD</div>
+    <div class="ai-title">Operational Risk Event (ORE) Tracker with AI Risk Flagging</div>
+    <div class="ai-body">
+      Build an AI-powered ORE status dashboard. Input: a mock portfolio of 25 open risk events with owner, age, last update, and blockers. Claude API classifies each ORE by risk severity, generates a "blocker hypothesis" for aged items, and drafts a weekly status report for the Risk Committee. Output: a Streamlit dashboard that mimics what this Director would own at AmEx. This is the most direct proof-of-concept for the core JD requirement.
+    </div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Python</span>
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Streamlit</span>
+      <span class="tag tag-blue">Pandas</span>
+      <span class="tag tag-gold">Priority 1</span>
+    </div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT 2 · GOVERNANCE INTELLIGENCE</div>
+    <div class="ai-title">Operational Readiness Gate Checker</div>
+    <div class="ai-body">
+      Build a readiness assessment tool. Input: a product change description in plain text. Claude API checks the description against a readiness framework (documentation complete? risk considerations listed? sign-off chain defined? handoff criteria specified?). Output: a structured readiness score with specific gaps flagged and a recommended action list. Demonstrates you understand the product-risk interface and can automate the readiness review process.
+    </div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Structured Prompting</span>
+      <span class="tag tag-blue">JSON Output Parsing</span>
+      <span class="tag tag-gold">Priority 2</span>
+    </div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT 3 · RISK COMMITTEE AUTOMATION</div>
+    <div class="ai-title">Risk Committee Meeting Pack Generator</div>
+    <div class="ai-body">
+      Input: raw KRI/KCI metrics + open ORE list + past action items. Claude API drafts the Risk Committee briefing pack — executive summary, metric commentary, aged item escalations, and recommended actions. This is exactly the material this Director would produce weekly. A working prototype signals that you're not just describing the role — you've already solved one of its hardest problems.
+    </div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Document Generation</span>
+      <span class="tag tag-blue">Python</span>
+      <span class="tag tag-gold">Priority 3</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title">How to Pitch AI Capability in the Interview</div>
+    <div class="phrase">
+      "One of the structural inefficiencies I see in large risk operations teams is that programme managers spend 60–70% of their time assembling status reports rather than acting on them. At Sobha, I addressed this by building a 70+ report MI ecosystem that automated intelligence aggregation across two geographies. At AmEx, I would apply the same architecture — but AI-augmented, so that ORE status synthesis, aged item escalation flagging, and Risk Committee materials are generated automatically, freeing the Director to spend time on resolution and stakeholder engagement rather than data assembly."
+    </div>
+    <div class="phrase gold">
+      "I've already built a prototype ORE tracking tool using AI that classifies risk events by severity, generates blocker hypotheses, and drafts executive summaries. I can walk you through it — it took me two days to build and would save a team like this approximately 6–8 hours of manual compilation per week."
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">AI Capability — What's Already Provable From Sobha</div>
+    <ul>
+      <li><strong>MI ecosystem architecture (70+ reports):</strong> Frame as an internal intelligence platform — data aggregation, automated distribution, live-data-connected dashboards. This is AI-adjacent infrastructure thinking.</li>
+      <li><strong>PR rejection quality scorecard:</strong> Frame as an AI-ready quality monitoring architecture. The scorecard logic (threshold → flag → escalate → remediate) is the same pattern as AI-driven anomaly detection. You built the manual version; AI makes it real-time.</li>
+      <li><strong>Risk register with 14 findings:</strong> Frame as a structured risk data model — the same data structure you'd need to build an ORE tracking tool. You already know what fields matter: owner, age, blocker, severity, target closure date.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================== TAB 5: STAR BANK ======================== -->
+<div class="section" id="tab-stars">
+  <div class="section-title">STAR Story Bank</div>
+  <div class="section-sub">Pre-mapped STAR stories for every key JD requirement — ready to deploy in interviews</div>
+
+  <div class="card">
+    <div class="card-title">Story 1 — Risk Register & ORE Management (Core JD Match)</div>
+    <p class="small muted" style="margin-bottom:12px">Maps to: "Own monitoring, tracking, and progression of OREs and Past Due Findings"</p>
+    <div class="star-box">
+      <div class="star-row">
+        <div class="star-key">SITUATION</div>
+        <div class="star-content">In 2023, an internal audit of Sobha's collections operations identified 14 control findings across documentation, approval protocols, and data governance. The findings carried risk of recurrence if not structurally resolved — not just fixed for the audit cycle.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key">TASK</div>
+        <div class="star-content">As the Collections audit SPOC, I was responsible for owning the remediation programme — not just tracking it, but driving each finding to verifiable, sustainable closure across a team of 77 people in two geographies.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key">ACTION</div>
+        <div class="star-content">I built a structured risk register for all 14 findings — each with an owner, root cause analysis, remediation action, target closure date, and evidence criterion. I implemented a weekly governance cadence with the relevant team leads, identified blockers proactively (3 items were stuck due to system access dependencies — I escalated these to the CCO before they became overdue). I designed process controls that made recurrence structurally impossible, not just compliance-period-specific.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key green">RESULT</div>
+        <div class="star-content">97.5% reduction in error rate. All 14 findings closed within the remediation window. Zero recurrence findings in subsequent audit cycles. The risk register became a standing governance tool beyond the audit — it now serves as the team's continuous controls monitoring framework.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 2 — Closure Readiness & Documentation Quality (1LOD/2LOD)</div>
+    <p class="small muted" style="margin-bottom:12px">Maps to: "Support closure readiness — documentation, approvals, and evidence meet 1LOD/2LOD expectations"</p>
+    <div class="star-box">
+      <div class="star-row">
+        <div class="star-key">SITUATION</div>
+        <div class="star-content">By December 2025, the Payment Request rejection rate had reached 49% — meaning nearly half of all collections-related financial requests were being sent back by the approvals function due to documentation failures. The volume had tripled (from ~90 to 281 per month) while quality collapsed.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key">TASK</div>
+        <div class="star-content">I needed to diagnose the root causes of rejection, design a sustainable documentation quality architecture, and reduce the rejection rate without slowing down collections velocity — the AED 8.2B annual target depended on payment processing speed.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key">ACTION</div>
+        <div class="star-content">I conducted a root cause analysis across all rejection categories, created a quality scorecard with mandatory pre-submission checklist fields, implemented a daily KPI monitoring system with team-level visibility, and introduced a peer review step before submission. I trained the team on closure evidence standards and built a tracker that flagged any request exceeding the documentation threshold before it was submitted for approval.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key green">RESULT</div>
+        <div class="star-content">PR TAT dropped from 20 days to 3 days. Rejection rate declined sharply from 49%. The documentation quality architecture is now a permanent part of the collections operating model — not a fix, but a structural control. This is a 1LOD quality gate built and owned by the business team, exactly the 1LOD ownership AmEx describes in the JD.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 3 — Operational Readiness Framework Design</div>
+    <p class="small muted" style="margin-bottom:12px">Maps to: "Design and rollout GMNS Product operational readiness framework embedded into product delivery"</p>
+    <div class="star-box">
+      <div class="star-row">
+        <div class="star-key">SITUATION</div>
+        <div class="star-content">Collections performance at Sobha was highly volatile — teams would intensify activity randomly, causing customer friction at non-critical payment windows and underperforming at the highest-risk moments. There was no structured readiness model for the 55-day window around each payment due date.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key">TASK</div>
+        <div class="star-content">Design a proprietary framework that defined what "operational readiness" meant at each stage of the collections cycle — so every Dues RM, operations associate, and manager knew exactly what actions to take, and when, relative to the payment date.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key">ACTION</div>
+        <div class="star-content">I developed the T−25 to T+30 Critical Collection Window Framework — a 55-day operational readiness model with defined activities, escalation triggers, customer touchpoint sequences, and documentation requirements at each stage. I embedded it into team SOPs, trained all 77 staff, and built the monitoring layer into the MI reporting ecosystem so adherence was visible in real time.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key green">RESULT</div>
+        <div class="star-content">The framework became the operating backbone for AED 12.97B in collections across 36,000+ units. Portfolio delinquency declined 74% (16.7% → 4.4%) over 4 years. This framework is now the standard model across the collections function — a designed, documented, embedded operational readiness architecture. This is exactly what AmEx needs built for GMNS Product.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 4 — Cross-Functional Platform Build (Tech Partnership)</div>
+    <p class="small muted" style="margin-bottom:12px">Maps to: "Partner with Product and Technology on handoffs, readiness criteria, risk in delivery plans"</p>
+    <div class="star-box">
+      <div class="star-row">
+        <div class="star-key">SITUATION</div>
+        <div class="star-content">In 2021, Sobha Collections had no systematic CRM infrastructure. Data lived in disparate Excel files, reporting was manual and error-prone, and there was no real-time visibility into portfolio health across geographies. The business was scaling rapidly — AED 867M → growth trajectory — without the operational infrastructure to support it.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key">TASK</div>
+        <div class="star-content">Lead the design and implementation of a Salesforce CRM solution as the business's first-line owner — not just as a user, but as the stakeholder who defined what the platform needed to do, validated against operational requirements, and drove adoption across the team.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key">ACTION</div>
+        <div class="star-content">I conducted a 6-stakeholder discovery process across Collections, Operations, MIS, Finance, Legal, and leadership. I defined 70+ reporting requirements, validated the data architecture against collections workflows, and partnered with the technology team to ensure handoff criteria were built into the implementation plan. I owned the readiness review before each deployment milestone — ensuring documentation, user training, and data validation were complete before any go-live.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key green">RESULT</div>
+        <div class="star-content">The platform scaled with the business from AED 867M to AED 12.97B — a 14.9x scale without a platform rebuild. Zero significant data integrity failures. The 70+ report ecosystem now supports real-time decision-making for the MD/CEO and CRO. This is a technology partnership, readiness governance, and delivery execution story rolled into one.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 5 — Senior Stakeholder Influence (NPV Model)</div>
+    <p class="small muted" style="margin-bottom:12px">Maps to: "Strong communication — influence and partner effectively with senior leaders"</p>
+    <div class="star-box">
+      <div class="star-row">
+        <div class="star-key">SITUATION</div>
+        <div class="star-content">Sobha's collections model relied on payment collection at contractual due dates. I identified an opportunity to create a structured incentive for early payment — but this required building a financial case complex enough to satisfy both the CRO and MD, and designing a product-like incentive mechanism without a formal Product function to support it.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key">TASK</div>
+        <div class="star-content">Design, financially model, and get approved an NPV-based early payment incentive programme — presenting it to MD/CEO level, defending the assumptions, and managing the cross-functional implementation.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key">ACTION</div>
+        <div class="star-content">I built a full NPV model: AED 652M incremental inflow, AED 21.2M cost, 248-day average prepayment acceleration, 32% cheaper than bank financing equivalent. I presented this to the CRO and MD with scenario modelling and risk sensitivity analysis. I managed objections from Finance (cost concern), Legal (contract compliance), and Operations (execution complexity) — synthesising feedback and incorporating it before the final approval presentation.</div>
+      </div>
+      <div class="star-row">
+        <div class="star-key green">RESULT</div>
+        <div class="star-content">Programme approved and implemented. AED 652M in incremental cash inflow. 32% cheaper than the alternative. This required influencing the highest levels of the organisation with a complex financial argument — and successfully holding the position through multiple rounds of scrutiny. This is the senior stakeholder influence story for AmEx.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== TAB 6: 30-60-90 ======================== -->
+<div class="section" id="tab-plan">
+  <div class="section-title">30-60-90 Day Action Plan</div>
+  <div class="section-sub">Concrete, sequenced steps from today to offer acceptance</div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <div class="card-title">Days 1–30 · Preparation & Application</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">WEEK 1</div>
+            <div class="tl-title">Vocabulary Mastery Sprint</div>
+            <div class="tl-body">Learn all 12 core AmEx ORM/RCSA terms. Create your Sobha→AmEx translation map. Practice 10 sentences using each term about your own work. Read ISACA CRISC Domain 1 overview (free online). This is the gap with highest interview impact — close it first.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">WEEK 1</div>
+            <div class="tl-title">GMNS Domain Crash Course</div>
+            <div class="tl-body">Read AmEx 2024 Annual Report GMNS section. Study merchant acquiring, ISVs, payment facilitators. Understand what "operational readiness" means in a payments network context. 5 focused hours is enough to not be caught flat-footed on domain questions.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">WEEK 2</div>
+            <div class="tl-title">Apply with AmEx v4 Resume</div>
+            <div class="tl-body">Submit application. Ensure your resume headline and summary use AmEx vocabulary (see Vocab Decoder tab). Activate IIM Udaipur alumni network at AmEx India — this is an underused asset. A warm referral changes shortlist probability dramatically.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">WEEK 2-3</div>
+            <div class="tl-title">CRISC Study Begins</div>
+            <div class="tl-body">Purchase ISACA CRISC Review Manual. Begin Domain 1 (IT Risk Identification) study. Register for upcoming exam sitting — commitment signal that you can mention in interviews. Target: appear for exam within 6 months.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">WEEK 3-4</div>
+            <div class="tl-title">Build AI Portfolio Project 1</div>
+            <div class="tl-body">Build the ORE Tracker with AI Risk Flagging (see AI Solutions tab). Even a working prototype demonstrates you've operationalised the core JD function. GitHub + short LinkedIn post about the build increases visibility.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card gold">
+        <div class="card-title">Days 31–60 · Interview Preparation</div>
+        <div class="timeline">
+          <div class="tl-item gold">
+            <div class="tl-time">WEEK 5-6</div>
+            <div class="tl-title">STAR Story Drilling</div>
+            <div class="tl-body">Rehearse all 5 STAR stories from the STAR Bank tab until they take under 3 minutes each. Record yourself. Check: are you using AmEx vocabulary (ORE, RCSA, 1LOD/2LOD) or Sobha vocabulary (collections, delinquency)? The content is the same — the language must be AmEx's.</div>
+          </div>
+          <div class="tl-item gold">
+            <div class="tl-time">WEEK 6</div>
+            <div class="tl-title">IIM Alumni Activation</div>
+            <div class="tl-body">Contact IIM Udaipur alumni working at AmEx India (Mumbai/Gurugram). Ask for a 20-minute informational conversation — not a referral request yet. Understand the team culture, interview process, and what the VP cares about. Referral request comes after the conversation has established rapport.</div>
+          </div>
+          <div class="tl-item gold">
+            <div class="tl-time">WEEK 7-8</div>
+            <div class="tl-title">Mock Interviews</div>
+            <div class="tl-body">Run 3 mock interviews focused on behavioural questions. Specific questions to rehearse: "Tell me about a time you managed a complex risk programme," "How have you handled a situation where business teams resisted a control requirement?", "Describe your approach to managing across 1LOD and 2LOD teams."</div>
+          </div>
+          <div class="tl-item gold">
+            <div class="tl-time">WEEK 8</div>
+            <div class="tl-title">Build AI Portfolio Project 2</div>
+            <div class="tl-body">Build the Operational Readiness Gate Checker. This pairs perfectly with Project 1 — together they demonstrate you've thought deeply about both sides of the Director's mandate: tracking active risks and preventing new ones through readiness gates.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">Days 61–90 · Offer & Negotiation</div>
+    <div class="timeline">
+      <div class="tl-item green">
+        <div class="tl-time">WEEK 9-11</div>
+        <div class="tl-title">Interview Rounds</div>
+        <div class="tl-body">AmEx typically runs 3–4 rounds: recruiter screen → hiring manager → panel (cross-functional) → possibly VP-level final. Each round: open with your 14.9x scale anchor, close with your AI-augmented operations pitch. Every answer should use AmEx vocabulary, not Sobha vocabulary.</div>
+      </div>
+      <div class="tl-item green">
+        <div class="tl-time">WEEK 11-12</div>
+        <div class="tl-title">Offer Negotiation</div>
+        <div class="tl-body">Target: ₹52–82L depending on Director vs Senior Manager offer level. Your BITS+IIM profile is rare. Your 14.9x scale achievement is rarer. The AI portfolio projects are uniquely differentiating. Push for CRISC study time, joining bonus (compensating for Dubai relocation), and Director-level title if offered Senior Manager — the scope matches Director.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== TAB 7: INTERVIEW PREP ======================== -->
+<div class="section" id="tab-interview">
+  <div class="section-title">Interview Preparation</div>
+  <div class="section-sub">Key phrases, tough questions, and the exact language to use with AmEx interviewers</div>
+
+  <div class="card gold">
+    <div class="card-title">Opening Anchor — Use This in Every First Round</div>
+    <div class="quote">
+      "Over the past six years, I've built and operated a risk governance and operational intelligence infrastructure that managed a portfolio scaling from AED 867 million to AED 12.97 billion — a 14.9x growth — while simultaneously reducing portfolio delinquency 74%. What I learned is that operational scale and control quality are not in tension if the governance architecture is designed correctly from the start. That's exactly what this GMNS Director role is asking for — and it's the work I've been doing."
+      <span class="quote-attr">Your Opening Frame — adapt to context</span>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <div class="card-title">Key Phrases to Use Naturally</div>
+        <div class="phrase">"I own the first line of defense for..."</div>
+        <div class="phrase">"The control framework I designed ensures..."</div>
+        <div class="phrase">"I escalated with a structured problem definition and proposed remediation before it became a finding..."</div>
+        <div class="phrase">"The governance architecture I built..."</div>
+        <div class="phrase">"My risk register captured 14 findings — each with an owner, target date, and evidence criterion..."</div>
+        <div class="phrase">"I manage the 1LOD/2LOD interface by..."</div>
+        <div class="phrase">"Proactive identification of blockers is how I prevented three items from becoming overdue..."</div>
+        <div class="phrase">"The operational readiness framework I designed embedded risk considerations into execution — not as an afterthought..."</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card red">
+        <div class="card-title">Tough Questions & Response Frames</div>
+
+        <p class="small bold" style="margin-bottom:6px; color:var(--red)">Q: "You're not from financial services."</p>
+        <div class="phrase red">"The risk governance disciplines are structurally identical — RCSA maps directly to my audit SPOC role. ORE management is my risk register work. 1LOD/2LOD is the three-lines-of-defense framework I've operated for 6 years. The vocabulary is different; the frameworks are the same. And my portfolio scale — AED 12.97B — is financial services-grade."</div>
+
+        <p class="small bold" style="margin-bottom:6px; color:var(--red); margin-top:14px">Q: "What do you know about merchant acquiring / GMNS?"</p>
+        <div class="phrase red">"I've studied the GMNS model specifically. The operational readiness challenge in payments — ensuring every product change passes risk and documentation gates before going live into a $1.7 trillion network — is architecturally similar to the readiness framework I built for a 36,000-unit portfolio. The stakes and domain differ; the governance design principles are the same."</div>
+
+        <p class="small bold" style="margin-bottom:6px; color:var(--red); margin-top:14px">Q: "How do you handle pushback from senior leaders on control requirements?"</p>
+        <div class="phrase red">"I use data to hold the position. When my PR rejection quality governance flagged a 49% failure rate, there was pressure to relax the documentation standard to accelerate collections velocity. I held the governance line by showing that rejection-rate-driven delays were more costly than the time investment in documentation quality — and backed it with data. The standard held. Velocity improved as quality did."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Questions to Ask the Interviewer — Shows You Think Like This Director</div>
+    <ul>
+      <li>"What is the current state of the GMNS Product ORE portfolio — are there chronic aged items, or is it mostly current risk events?"</li>
+      <li>"How mature is the operational readiness framework today — is this a build-from-scratch mandate or an uplift of an existing structure?"</li>
+      <li>"How does the team currently manage the 1LOD/2LOD alignment — is there a standing cadence, or is it primarily issue-driven?"</li>
+      <li>"What does success look like for this Director at 6 months versus 18 months — what would need to be meaningfully different?"</li>
+      <li>"What's the relationship between this role and the Control Management function — is it collaborative or does it create friction today?"</li>
+    </ul>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">Your Assertiveness Proof Points — Use When Challenged</div>
+    <p class="small muted" style="margin-bottom:10px">High-C/High-S profiles can appear overly deferential in senior forums. Pre-empt this with these proof points:</p>
+    <ul>
+      <li><strong>PR Rejection Stance:</strong> Maintained the documentation quality gate at 49% rejection despite pressure to relax standards. Position held. Vindicated by subsequent performance data.</li>
+      <li><strong>NPV Model Defence:</strong> Presented and defended a complex financial model to MD/CEO level across multiple rounds of scrutiny. The model was approved as designed — zero material concessions to Finance's initial cost objections.</li>
+      <li><strong>Risk Register Escalation:</strong> Escalated 3 blocked risk register items to CCO level before they became overdue — proactively raising a problem upward rather than absorbing it at team level.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================== TAB 8: VOCAB ======================== -->
+<div class="section" id="tab-vocab">
+  <div class="section-title">Vocabulary Decoder</div>
+  <div class="section-sub">Every Sobha/collections term translated into AmEx GMNS language — use this in resumes, LinkedIn, and interviews</div>
+
+  <div class="card">
+    <div class="card-title">Core Vocabulary Translation — Sobha → AmEx</div>
+    <div class="vocab-row">
+      <div class="vocab-from">Dues Collections Programme</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Revenue Portfolio Operations / Receivables Management Programme</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">Portfolio Delinquency Rate</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Portfolio Risk Exposure Rate / Credit Risk Indicator (KRI)</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">Collections Governance</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Operational Risk Controls Framework</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">Audit SPOC</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Controls Governance Owner / First Line Risk Owner (1LOD)</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">14-Finding Risk Register</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Operational Risk Event (ORE) Portfolio with Structured Remediation Tracking</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">Escalation Management</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Risk Mitigation & Issue Resolution Protocol</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">NPV Model (early payment incentive)</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Financial Incentive Product Design / Risk-Adjusted Return Optimisation</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">MIS / MI Reports</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Operational Risk Intelligence Platform / KRI/KCI Dashboard Ecosystem</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">PR Rejection Quality Governance</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">1LOD Documentation Quality Assurance / Closure Readiness Control</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">T−25 to T+30 Critical Window Framework</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Operational Readiness Framework / Stage-Gated Execution Model</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">Incentive IOM</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Performance Compensation Governance Framework / Incentive Policy Document</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">Three Lines of Defense (informal)</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">1LOD (Collections Operations) → 2LOD (Governance Reports) → 3LOD (Internal Audit Interface)</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">PCC TAT Transformation (20→3 days)</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">End-to-End Process Velocity Improvement / Operational Readiness Cycle Optimisation</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">SOP / Process Document</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Control Policy / Standard Operating Procedure per 1LOD Documentation Requirements</div>
+    </div>
+    <div class="vocab-row">
+      <div class="vocab-from">Salesforce 70+ Report Suite</div>
+      <div class="vocab-arrow">→</div>
+      <div class="vocab-to">Enterprise Risk Intelligence Platform / Integrated KRI-KCI Dashboard Architecture</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">AmEx ORM Terms You Must Know Cold</div>
+    <table>
+      <tr><th>Term</th><th>Definition</th><th>Your Sobha Analogy</th></tr>
+      <tr>
+        <td class="td-highlight">ORE (Operational Risk Event)</td>
+        <td>An event — actual or potential — that represents a failure or near-miss in operational processes, people, systems, or external factors</td>
+        <td>Each of the 14 audit findings is an ORE. Your PR rejection spike was a developing ORE you caught before it escalated.</td>
+      </tr>
+      <tr>
+        <td class="td-highlight">RCSA</td>
+        <td>Risk & Control Self Assessment — structured process for identifying operational risks and evaluating control effectiveness</td>
+        <td>Your risk register process — identifying gaps, rating severity, assigning owners, tracking closure — is an informal RCSA cycle.</td>
+      </tr>
+      <tr>
+        <td class="td-highlight">1LOD</td>
+        <td>First Line of Defense — the business unit that owns and operates the risk. Responsible for day-to-day risk management.</td>
+        <td>Your collections operations team. You are the 1LOD risk owner.</td>
+      </tr>
+      <tr>
+        <td class="td-highlight">2LOD</td>
+        <td>Second Line of Defense — risk oversight function (Risk, Compliance, Control Management). Sets standards, monitors 1LOD.</td>
+        <td>The audit and governance function at Sobha that reviews your collections documentation. Your governance reports serve the 2LOD visibility need.</td>
+      </tr>
+      <tr>
+        <td class="td-highlight">KRI</td>
+        <td>Key Risk Indicator — metric that signals increasing risk before it becomes a loss event</td>
+        <td>PR rejection rate is a KRI. When it hit 49%, it signalled a control deterioration before it became an audit finding.</td>
+      </tr>
+      <tr>
+        <td class="td-highlight">KCI</td>
+        <td>Key Control Indicator — measures effectiveness of a control</td>
+        <td>PR rejection rate trending downward after your scorecard implementation = a positive KCI movement — control is working.</td>
+      </tr>
+      <tr>
+        <td class="td-highlight">Operational Readiness</td>
+        <td>The state of being prepared — systems, processes, people, documentation — to execute a change or launch without introducing new risk</td>
+        <td>Your T−25/T+30 framework. Before any collections cycle intensification, readiness criteria must be met.</td>
+      </tr>
+      <tr>
+        <td class="td-highlight">Past Due Finding</td>
+        <td>An identified control gap or risk event whose remediation target date has passed without closure — highest priority for a Business Operations Director</td>
+        <td>Any of your 14 risk register items that missed their target closure date before you escalated to CCO level.</td>
+      </tr>
+      <tr>
+        <td class="td-highlight">Closure Readiness</td>
+        <td>The documentation package — evidence, approvals, sign-offs — that confirms a finding has been genuinely remediated vs paper-closed</td>
+        <td>Your audit evidence packages for each of the 14 findings. Not "we fixed it" — "here is the evidence, here is the approval chain, here is the monitoring control that prevents recurrence."</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card amber">
+    <div class="card-title">The Reframe Mantra</div>
+    <div class="quote">
+      "I have not been working in collections. I have been operating a risk governance and programme management function for a $4B enterprise — using a three-lines-of-defense model, owning first-line risk management, building control infrastructure from scratch, and managing a portfolio of 36,000 accounts across two geographies. The domain is real estate. The governance disciplines are financial services."
+      <span class="quote-attr">Your bridging statement — use when interviewers raise the domain gap</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Animate fit bar on load
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const fill = document.querySelector('.fit-bar-fill');
+    if (fill) fill.style.width = '75%';
+  }, 300);
+});
+</script>
+</body>
+</html>

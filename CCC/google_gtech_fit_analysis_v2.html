@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Fit Analysis v2 — Google gTech Ads × Priyanuj Deka</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; font-size: 15px; line-height: 1.65; }
+  header { background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%); color: white; padding: 32px 40px; }
+  header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  header p { font-size: 13px; opacity: 0.85; }
+  .version-badge { display: inline-block; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 700; margin-top: 8px; }
+  .score-bar { background: white; border-bottom: 1px solid #e0e0e0; padding: 18px 40px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .score-pill { background: #e6f4ea; border: 2px solid #34a853; border-radius: 50px; padding: 8px 22px; font-weight: 700; font-size: 20px; color: #137333; }
+  .score-old { background: #fce8e6; border: 2px solid #ea4335; border-radius: 50px; padding: 6px 16px; font-weight: 700; font-size: 14px; color: #c5221f; text-decoration: line-through; opacity: 0.7; }
+  .score-label { font-size: 12px; color: #555; margin-bottom: 2px; }
+  .verdict { font-size: 13px; color: #1a73e8; font-weight: 600; max-width: 500px; }
+  .correction-banner { background: #fef7e0; border: 1px solid #fbc02d; border-radius: 8px; padding: 12px 18px; margin: 16px 40px 0; font-size: 13px; display: flex; gap: 10px; align-items: flex-start; }
+  .correction-banner span { color: #856404; }
+  nav { background: white; border-bottom: 2px solid #e8eaf6; padding: 0 40px; display: flex; gap: 0; overflow-x: auto; margin-top: 16px; }
+  nav button { background: none; border: none; padding: 14px 18px; font-size: 13px; font-weight: 600; color: #555; cursor: pointer; border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s; }
+  nav button.active, nav button:hover { color: #1a73e8; border-bottom-color: #1a73e8; }
+  .content { max-width: 900px; margin: 28px auto; padding: 0 20px 60px; }
+  .section { display: none; }
+  .section.active { display: block; }
+  .card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 28px; margin-bottom: 20px; }
+  h2 { font-size: 17px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #e8eaf6; }
+  h3 { font-size: 14px; font-weight: 700; color: #333; margin: 18px 0 8px; }
+  p { margin-bottom: 12px; color: #333; }
+  ul { padding-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 6px; color: #333; }
+  .tag { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; margin: 2px; }
+  .tag-green { background: #e6f4ea; color: #137333; }
+  .tag-yellow { background: #fef7e0; color: #856404; }
+  .tag-red { background: #fce8e6; color: #c5221f; }
+  .tag-blue { background: #e8f0fe; color: #1a73e8; }
+  .gap-block { border-left: 4px solid #ea4335; padding: 14px 18px; background: #fef9f9; border-radius: 0 8px 8px 0; margin-bottom: 14px; }
+  .gap-block h3 { color: #c5221f; margin-top: 0; }
+  .strength-block { border-left: 4px solid #34a853; padding: 14px 18px; background: #f6fef8; border-radius: 0 8px 8px 0; margin-bottom: 14px; }
+  .partial-block { border-left: 4px solid #fbbc04; padding: 14px 18px; background: #fffdf0; border-radius: 0 8px 8px 0; margin-bottom: 14px; }
+  .new-strength { border-left: 4px solid #1a73e8; padding: 14px 18px; background: #e8f0fe; border-radius: 0 8px 8px 0; margin-bottom: 14px; }
+  .reframe-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .reframe-before { background: #fce8e6; border-radius: 8px; padding: 14px; }
+  .reframe-after { background: #e6f4ea; border-radius: 8px; padding: 14px; }
+  .reframe-before .label, .reframe-after .label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .reframe-before .label { color: #c5221f; }
+  .reframe-after .label { color: #137333; }
+  .priority-item { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
+  .priority-num { background: #1a73e8; color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+  .priority-body h3 { margin-top: 0; }
+  .ai-project { background: linear-gradient(135deg, #e8f0fe, #f3e8fd); border-radius: 10px; padding: 20px; margin-bottom: 16px; border: 1px solid #c5cae9; }
+  .ai-project h3 { color: #1a1a2e; margin-top: 0; font-size: 15px; }
+  .problem-tag { display: inline-block; background: #fff3cd; border: 1px solid #ffc107; border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 600; color: #856404; margin-bottom: 10px; }
+  .comp-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .comp-table th { background: #1a73e8; color: white; padding: 10px 14px; text-align: left; font-size: 13px; }
+  .comp-table td { padding: 10px 14px; border-bottom: 1px solid #e8eaf6; font-size: 13px; }
+  .comp-table tr:nth-child(even) td { background: #f8f9fe; }
+  .highlight { color: #1a73e8; font-weight: 700; }
+  .score-breakdown-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 16px 0; }
+  .score-box { border-radius: 10px; padding: 16px; text-align: center; }
+  .score-box .pts { font-size: 26px; font-weight: 800; }
+  .score-box .lbl { font-size: 12px; margin-top: 4px; }
+  .score-box.green { background: #e6f4ea; color: #137333; }
+  .score-box.yellow { background: #fef7e0; color: #856404; }
+  .score-box.red { background: #fce8e6; color: #c5221f; }
+  .iim-badge { display: inline-flex; align-items: center; gap: 8px; background: #1a1a2e; color: #ffd700; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+  .nuance-note { background: #fff8e1; border: 1px solid #ffe082; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #6d4c00; margin-top: 8px; }
+  @media (max-width: 600px) {
+    .reframe-row, .score-breakdown-grid { grid-template-columns: 1fr; }
+    header { padding: 20px; } nav { padding: 0 12px; } .content { padding: 0 12px 40px; }
+    .correction-banner { margin: 16px 12px 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Career Fit Analysis — Google gTech Ads Strategy & Operations</h1>
+  <p>Candidate: Priyanuj Deka &nbsp;|&nbsp; Target Location: Hyderabad &nbsp;|&nbsp; Status: Exploratory &nbsp;|&nbsp; March 2026</p>
+  <div class="version-badge">v2 — MBA Correction Applied</div>
+</header>
+
+<div class="correction-banner">
+  <span>⚠️</span>
+  <span><strong>v1 Error Corrected:</strong> Previous analysis incorrectly flagged "No MBA" as a gap. Priyanuj holds a PGDM (MBA equivalent) from IIM Udaipur, Batch 2018–2020, CGPA 2.8/4. This is a confirmed preferred qualification. Score revised upward from <strong>45/100 → 55/100</strong>.</span>
+</div>
+
+<div class="score-bar">
+  <div>
+    <div class="score-label">Revised Fit Score</div>
+    <div style="display:flex; align-items:center; gap:12px; margin-top:4px;">
+      <div class="score-pill">55 / 100</div>
+      <div class="score-old">45 / 100</div>
+    </div>
+  </div>
+  <div class="verdict">IIM PGDM confirmed — MBA gap eliminated. Two genuine gaps remain: no tech/internet industry experience and no Google Ads ecosystem knowledge. Consulting methodology gap now partially mitigated by IIM case-based curriculum. Addressable to ~72/100 in 4 months.</div>
+</div>
+
+<nav>
+  <button class="active" onclick="show('overview')">Overview</button>
+  <button onclick="show('mba')">MBA + IIM Impact</button>
+  <button onclick="show('gaps')">Gap Analysis</button>
+  <button onclick="show('reframe')">Reframe Strategy</button>
+  <button onclick="show('ai')">AI Portfolio</button>
+  <button onclick="show('timeline')">Prep Timeline</button>
+  <button onclick="show('comp')">Compensation</button>
+</nav>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="overview" class="section active">
+    <div class="card">
+      <h2>Role Context — What This Is Really Asking For</h2>
+      <p><strong>gTech Ads Solutions</strong> is Google's client-facing consultative arm within gTech (~5,000 people globally). Its mission: "trusted experts accelerating growth at global scale." The <strong>gSO (Strategy & Operations)</strong> sub-team is Google's internal consulting function — think McKinsey engagement manager permanently embedded in Google's advertising operations.</p>
+      <p>The India role (Hyderabad) sits within <strong>gSO GCS</strong> — the strategic and operational backbone of Google Customer Solutions, which serves SMBs across India and globally.</p>
+      <p><strong>Day-to-day reality:</strong> Structure ambiguous business problems → deliver data-driven recommendations → manage cross-functional projects across Sales, Product, and Engineering → run leadership business reviews → remove execution roadblocks.</p>
+      <h3>Why Hyderabad?</h3>
+      <p>Google is building its <strong>largest campus outside the US</strong> in Hyderabad's Financial District — a 23-story, 3M sq ft facility targeting 18,000–25,500 employees. Multiple gTech Ads Strategy & Operations roles are listed for Hyderabad. This is a genuine, growing hub for the exact team being targeted.</p>
+      <h3>Likely Level: L6 (Principal)</h3>
+      <p>8-year minimum experience requirement + "Advanced" descriptor + executive stakeholder management emphasis → L6. At L6, Priyanuj would own outcomes, solve ambiguous problems, and influence senior stakeholders independently.</p>
+    </div>
+
+    <div class="card">
+      <h2>Revised Score Breakdown</h2>
+      <div class="score-breakdown-grid">
+        <div class="score-box green"><div class="pts">+28</div><div class="lbl">Clearly Met</div></div>
+        <div class="score-box yellow"><div class="pts">+27</div><div class="lbl">Partial / Reframeable</div></div>
+        <div class="score-box red"><div class="pts">−27</div><div class="lbl">Genuine Gaps (3)</div></div>
+      </div>
+
+      <div class="strength-block">
+        <h3>✅ Clearly Met (~28 pts) — Up from 20</h3>
+        <ul>
+          <li>8+ years operations & program management experience — confirmed</li>
+          <li>Executive stakeholder management — MD/CRO/CEO level, 6 MD-approved process documents, 7 MD-approved IOMs</li>
+          <li>Cross-functional initiative leadership — 77 people, 2 countries, 4 sub-teams</li>
+          <li>Project management, problem-solving, people management — at scale</li>
+          <li>N-2 Leadership Development Programme selection</li>
+          <li><strong>MBA (PGDM) from IIM Udaipur</strong> — preferred qualification now fully met ✅</li>
+        </ul>
+      </div>
+
+      <div class="partial-block">
+        <h3>⚠️ Partial / Reframeable (~27 pts) — Up from 15</h3>
+        <ul>
+          <li>"Business strategy / sales operations" background — reframeable at AED 13B scale</li>
+          <li>"Customer solutions" expertise — maps to customer lifecycle management angle</li>
+          <li>Data & analytics — Salesforce 70+ report BI ecosystem reframeable as intelligence infrastructure</li>
+          <li>NPV Policy (31:1 ROI) — reframeable as executive-level strategic business case</li>
+          <li><strong>Management consulting methodology</strong> — IIM PGDM case-based curriculum provides partial foundation; needs active reinforcement via McKinsey Forward + case interview prep</li>
+        </ul>
+      </div>
+
+      <div class="gap-block">
+        <h3>❌ Genuine Gaps Remaining — Only 3 (Down from 4)</h3>
+        <ul>
+          <li>No tech/internet/media industry experience (most critical, –15)</li>
+          <li>No Google Ads ecosystem knowledge (most closable, –7)</li>
+          <li>Consulting methodology expression — IIM helps but not sufficient alone (–5)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MBA IMPACT TAB -->
+  <div id="mba" class="section">
+    <div class="card">
+      <h2>IIM Udaipur PGDM — How This Changes the Picture</h2>
+
+      <div class="iim-badge">🎓 IIM Udaipur &nbsp;|&nbsp; PGDM 2018–2020 &nbsp;|&nbsp; CGPA 2.8 / 4.0</div>
+
+      <h3>What this qualification does for this application</h3>
+      <p>IIM Udaipur is an IIM — an Indian Institute of Management, one of India's premier business school institutions. The PGDM from an IIM is formally equivalent to an MBA in the Indian market and is recognized as such by Google's India hiring teams. This directly satisfies the "MBA degree" preferred qualification in the JD.</p>
+
+      <div class="new-strength">
+        <h3 style="color: #1a73e8; margin-top:0;">What it unlocks in the application</h3>
+        <ul>
+          <li><strong>Preferred qualification fully met</strong> — The JD says "MBA degree" as preferred. IIM PGDM checks this box without qualification.</li>
+          <li><strong>Partial consulting methodology signal</strong> — IIM programs are case-method intensive. Priyanuj has exposure to structured problem-solving, issue framing, and business case analysis from the curriculum. This partially addresses the consulting methodology gap — not fully, but meaningfully.</li>
+          <li><strong>Credibility with Google's India hiring team</strong> — Google India actively recruits from IIMs. The IIM brand is a recognized signal to local hiring managers and helps the résumé pass initial screening.</li>
+          <li><strong>Narrative continuity</strong> — IIM → operations leadership → scale → strategic program management is a coherent career arc that a Google gSO hiring manager can follow.</li>
+        </ul>
+      </div>
+
+      <div class="nuance-note">
+        <strong>Honest note on CGPA:</strong> 2.8/4.0 (~70%) is a functional pass — adequate, not exceptional. At this stage of career (6+ years post-MBA), the CGPA carries negligible weight. The IIM brand matters far more than the grade. Do not volunteer the CGPA unless asked. If asked, frame it as: "I was working part-time during the program to build early career experience" — or simply state it factually and move the conversation to post-MBA achievements, which are dramatically stronger.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>How to Use the IIM Credential Strategically</h2>
+      <h3>On the résumé</h3>
+      <p>Lead with institution name and program prominently. Format: <em>Post Graduate Diploma in Management (PGDM) — Indian Institute of Management Udaipur | 2018–2020</em>. Do not include CGPA on the résumé. Optionally add 1–2 relevant coursework areas (strategy, operations, analytics) if space permits.</p>
+      <h3>In the cover letter / application narrative</h3>
+      <p>Frame the IIM as the analytical and strategic foundation that your operational career then validated at scale: "An IIM education gave me the strategic frameworks; leading a 77-person revenue operations organization across two countries gave me the proof points." This is a powerful combination.</p>
+      <h3>In interviews</h3>
+      <p>The IIM signals you can speak the structured problem-solving language Google's gSO teams use. Activate this by opening case-style answers with hypothesis framing: "My initial hypothesis would be X, because Y and Z. Let me test that against the data." This is the IIM case-method in action — and it is exactly what Google interviewers are assessing for.</p>
+    </div>
+  </div>
+
+  <!-- GAPS -->
+  <div id="gaps" class="section">
+
+    <div class="card" style="background: #e6f4ea; border: 1px solid #34a853;">
+      <h2 style="border-color: #a8d5b5;">✅ Gap 4 (MBA) — Eliminated</h2>
+      <p>PGDM from IIM Udaipur confirmed. This gap is fully closed. The preferred qualification is met. Score impact: <strong>+10 points</strong> (gap removed + partial consulting methodology credit from IIM curriculum).</p>
+    </div>
+
+    <div class="card">
+      <h2>Gap 1 — No Tech/Internet Industry Experience</h2>
+      <div class="gap-block">
+        <h3>Difficulty: High &nbsp;|&nbsp; Most Critical Remaining Gap &nbsp;|&nbsp; Timeline: Ongoing, demonstrable in 3 months</h3>
+        <p>The JD explicitly prefers "strategy function experience in software, internet, or media industries." Real estate collections is the furthest possible context from this. Cannot be fully closed without actually working in tech, but substantially mitigated through:</p>
+        <ul>
+          <li><strong>Complete all 6 Google Ads certifications</strong> via Google Skillshop (free, ~40–60 hours). Search, Display, Video, Shopping, Apps, Measurement. Non-negotiable first action.</li>
+          <li><strong>Complete Google Analytics 4 certification</strong> (Skillshop).</li>
+          <li><strong>Domain immersion:</strong> Think with Google India reports, Performance Max mechanics, SMB advertiser lifecycle, AI Max for Search, Demand Gen. Follow gTech leaders on LinkedIn.</li>
+          <li><strong>Build one AI portfolio project</strong> (see AI Portfolio tab) — proves tech-industry problem-solving capability with concrete, demonstrable evidence.</li>
+          <li><strong>India SMB digital marketing context:</strong> Study Google's Digital Unlocked initiative, MSME digital adoption data, Bharat-tier advertiser landscape.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Gap 2 — Consulting Methodology Expression</h2>
+      <div class="gap-block">
+        <h3>Difficulty: Medium → Low (IIM provides foundation) &nbsp;|&nbsp; Timeline: 4–6 weeks activation</h3>
+        <p>IIM PGDM provides the case-method foundation. The gap is now about <em>activating and expressing</em> this methodology in interviews and portfolio work — not learning it from scratch. Three focused actions:</p>
+        <ul>
+          <li><strong>McKinsey Forward</strong> (free, 8 weeks) or Coursera "Strategic Business Analysis" — refreshes MECE, issue trees, hypothesis-driven analysis, executive communication structures</li>
+          <li><strong>Rewrite 2 Sobha achievements as consulting case studies</strong> using: Situation → Complication → Question → Hypothesis → Analysis → Recommendation → Impact. NPV Policy and 14.9x scaling story are the two best candidates.</li>
+          <li><strong>Practice 15–20 case interviews</strong> via CaseCoach or PrepLounge. Google S&O interviews include structured case discussions — IIM training means Priyanuj can reactivate this muscle faster than a non-MBA candidate.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Gap 3 — No Google Ads Ecosystem Knowledge</h2>
+      <div class="gap-block">
+        <h3>Difficulty: Low &nbsp;|&nbsp; Most Easily Closable &nbsp;|&nbsp; Timeline: 3–4 weeks</h3>
+        <ul>
+          <li>Complete all Google Ads certifications (see Gap 1 above — same action, double benefit)</li>
+          <li>Understand gTech org structure: gTech Ads → gSO → gSO GCS pipeline and how roles interlock</li>
+          <li>Learn Google's OKR framework — how business reviews, QBRs, and strategic planning operate at Google</li>
+          <li>Deep-dive: Performance Max migration challenges, Smart Bidding mechanics, AI-driven campaign management — these are the live operational problems gTech Ads teams are navigating in 2026</li>
+          <li>Study the GCS (Google Customer Solutions) SMB model: acquisition → onboarding → activation → optimization → retention → churn — this is the "customer solutions" context the JD references</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFRAME -->
+  <div id="reframe" class="section">
+    <div class="card">
+      <h2>Core Narrative — The Pivot Statement</h2>
+      <p>Priyanuj is <strong>not a collections manager</strong>. He is a <strong>strategic operations leader — IIM-trained, with a quantified track record of designing and scaling a $3.5B+ annual revenue engine across two countries</strong> through program management, data infrastructure, and executive-level strategic initiative design.</p>
+      <p style="font-style: italic; color: #1a73e8; background: #e8f0fe; padding: 14px; border-radius: 8px; border-left: 4px solid #1a73e8;">"IIM-trained operations strategist. Scaled a 14.9x revenue program while cutting portfolio risk 74%. Built the analytics infrastructure that ran it. Now applying the same strategic-operational toolkit to Google's most important growth market."</p>
+    </div>
+
+    <div class="card">
+      <h2>Achievement Translation Table</h2>
+
+      <div class="reframe-row">
+        <div class="reframe-before"><div class="label">❌ Collections Language</div>Scaled collections 14.9x (AED 867M → AED 13B) while reducing delinquency 74%</div>
+        <div class="reframe-after"><div class="label">✅ Google gSO Language</div>Designed and executed a multi-year strategic transformation program driving <strong>14.9x revenue growth</strong> while simultaneously improving portfolio quality 74% — proving scale and risk are not trade-offs when operational initiatives are correctly structured.</div>
+      </div>
+
+      <div class="reframe-row">
+        <div class="reframe-before"><div class="label">❌ Collections Language</div>NPV Advance Rebate Policy (AED 652M inflow, AED 21.2M cost)</div>
+        <div class="reframe-after"><div class="label">✅ Google gSO Language</div>Developed and presented a data-driven NPV business case to C-suite; secured executive approval for a new revenue acceleration mechanism generating <strong>AED 652M incremental inflow at 31:1 ROI</strong>. Owned end-to-end: financial modeling → stakeholder alignment → implementation.</div>
+      </div>
+
+      <div class="reframe-row">
+        <div class="reframe-before"><div class="label">❌ Collections Language</div>77-person team across Dubai and India in 4 sub-teams</div>
+        <div class="reframe-after"><div class="label">✅ Google gSO Language</div>Led a <strong>cross-geography matrixed operations organization</strong> of 77 across four functional pods in two countries — continuous alignment of priorities, capacity planning, and performance management across different regulatory and operational contexts.</div>
+      </div>
+
+      <div class="reframe-row">
+        <div class="reframe-before"><div class="label">❌ Collections Language</div>70+ reports on Salesforce</div>
+        <div class="reframe-after"><div class="label">✅ Google gSO Language</div>Led solution design of a <strong>live data-connected business intelligence infrastructure</strong> on Salesforce CRM — 70+ operational reports across two geographies — enabling data-informed decision-making from frontline leads to MD-level business reviews.</div>
+      </div>
+
+      <div class="reframe-row">
+        <div class="reframe-before"><div class="label">❌ Collections Language</div>Additional charges revenue: AED 1.6M → AED 54.5M (34x)</div>
+        <div class="reframe-after"><div class="label">✅ Google gSO Language</div>Identified, structured, and scaled a <strong>new revenue stream 34x</strong> — from concept to AED 54.5M — by designing incentive structures, operational processes, and team accountability frameworks from scratch.</div>
+      </div>
+
+      <div class="reframe-row">
+        <div class="reframe-before"><div class="label">❌ Collections Language</div>PCC TAT: 20 days → 3 days, volume 3x</div>
+        <div class="reframe-after"><div class="label">✅ Google gSO Language</div>Reengineered a critical customer-facing process — reduced cycle time <strong>85% while handling 3x the volume</strong>, a combined productivity improvement of ~20x. Eliminated the upstream data quality failure driving a 49% rejection rate.</div>
+      </div>
+
+      <div class="reframe-row">
+        <div class="reframe-before"><div class="label">❌ Collections Language</div>Named audit SPOC 4+ years</div>
+        <div class="reframe-after"><div class="label">✅ Google gSO Language</div>Selected as <strong>single point of cross-functional accountability</strong> for all operational audit and governance — coordinating across legal, finance, operations, and executive leadership for 4+ consecutive years.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Key Vocabulary Shifts</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <div style="background: #f8f9fa; border-radius: 8px; padding: 10px 14px; font-size: 13px;"><span style="color:#c5221f; font-weight:600;">Collections</span> → <span style="color:#137333; font-weight:600;">Revenue operations</span></div>
+        <div style="background: #f8f9fa; border-radius: 8px; padding: 10px 14px; font-size: 13px;"><span style="color:#c5221f; font-weight:600;">Dues recovery</span> → <span style="color:#137333; font-weight:600;">Cash-flow optimization & revenue assurance</span></div>
+        <div style="background: #f8f9fa; border-radius: 8px; padding: 10px 14px; font-size: 13px;"><span style="color:#c5221f; font-weight:600;">Delinquency reduction</span> → <span style="color:#137333; font-weight:600;">Portfolio health improvement</span></div>
+        <div style="background: #f8f9fa; border-radius: 8px; padding: 10px 14px; font-size: 13px;"><span style="color:#c5221f; font-weight:600;">Sobha Realty</span> → <span style="color:#137333; font-weight:600;">$4B+ real estate enterprise, UAE & India</span></div>
+        <div style="background: #f8f9fa; border-radius: 8px; padding: 10px 14px; font-size: 13px;"><span style="color:#c5221f; font-weight:600;">MD-approved</span> → <span style="color:#137333; font-weight:600;">C-suite approved / executive-sponsored</span></div>
+        <div style="background: #f8f9fa; border-radius: 8px; padding: 10px 14px; font-size: 13px;"><span style="color:#c5221f; font-weight:600;">Team of 77</span> → <span style="color:#137333; font-weight:600;">Cross-geography org, four functional pods</span></div>
+        <div style="background: #f8f9fa; border-radius: 8px; padding: 10px 14px; font-size: 13px;"><span style="color:#c5221f; font-weight:600;">AGM Dues Collections</span> → <span style="color:#137333; font-weight:600;">Strategic Operations Leader</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI PORTFOLIO -->
+  <div id="ai" class="section">
+    <div class="card">
+      <h2>Three AI Portfolio Projects — Evidence of Capability</h2>
+      <p>These projects replace the missing tech-industry credential with something more compelling: demonstrated ability to identify real Google business problems and propose AI-integrated operational solutions. All buildable in 4–8 weeks. Host on GitHub with clear README and business impact narrative.</p>
+    </div>
+
+    <div class="ai-project">
+      <div class="problem-tag">🔴 Priority 1 — Build First</div>
+      <h3>SMB Advertiser Health Score — Predictive Churn Prevention</h3>
+      <p><strong>Problem:</strong> Annual SMB advertiser churn exceeds 50% globally. In India, only 13% of MSMEs use digital marketing; 43% cite budget constraints as barriers. Early structured intervention has proven to improve retention — but manual identification of at-risk accounts is too slow at Google's scale.</p>
+      <p><strong>The build:</strong> Predictive dashboard using gradient-boosted trees scoring accounts on 30/60/90-day churn probability. India-specific features: language of account setup vs. regional support availability, Tier 1 vs. Tier 2/3 city location, first-campaign performance trajectory, mobile-only account management correlation with lower optimization behavior. Output: traffic-light dashboard with automated intervention triggers and prescriptive action recommendations per account segment.</p>
+      <p><strong>How to build:</strong> Synthetic dataset in Python → XGBoost classifier → Streamlit dashboard. Include a business impact model: quantify preserved revenue if churn improves by 1% across 100K Indian SMB accounts.</p>
+      <p><strong>JD mapping:</strong> "Enable critical business decision making" + "Drive business analysis with effective project communication"</p>
+    </div>
+
+    <div class="ai-project">
+      <div class="problem-tag">🟡 Priority 2</div>
+      <h3>Bhasha Ads Assistant — Multilingual Campaign Builder for Tier 2/3 India</h3>
+      <p><strong>Problem:</strong> India has 800M+ internet users but only ~100M English speakers. Google Ads is English-dominant. A Jaipur saree shop owner or Chennai restaurateur cannot effectively create or manage Google Ads campaigns. Millions of potential SMB advertisers are locked out by language alone.</p>
+      <p><strong>The build:</strong> WhatsApp-first conversational AI (Gemini API) guiding SMBs through campaign creation in Hindi/Tamil/Telugu. Flow: describe business in native language → AI extracts keywords, generates campaign structure and ad copy → simplified performance reporting in native language ("आज 47 लोगों ने आपकी दुकान का पता देखा, 12 ने कॉल किया"). Festival-season campaign templates auto-triggered from regional calendars (Diwali, Pongal, Navratri).</p>
+      <p><strong>How to build:</strong> Gemini API + Google Ads API (sandbox) + WhatsApp Business API prototype. Demo 3 language use cases. Demonstrate time-to-first-campaign reduction from days to under 15 minutes.</p>
+      <p><strong>JD mapping:</strong> "Partner with gTech Ads Solutions leadership in end-to-end driving of strategic initiatives" + cross-functional program thinking across Product, Localization, and Sales</p>
+    </div>
+
+    <div class="ai-project">
+      <div class="problem-tag">🟢 Priority 3 — Most Directly Role-Relevant</div>
+      <h3>gTech Ops Intelligence — Cross-Functional Initiative Tracker with NLP Insights</h3>
+      <p><strong>Problem:</strong> gTech Ads teams manage cross-functional initiatives across GCS, Product, Engineering, and regional teams — each with different OKRs. Customer feedback mining across millions of multilingual interactions is manual. Product migrations (like Smart Shopping → Performance Max) require coordinated communications across thousands of accounts simultaneously.</p>
+      <p><strong>The build:</strong> NLP pipeline processing simulated support tickets across languages, auto-categorizing issues, surfacing emerging trends in real-time (e.g., "PMax budget reset complaints up 340% this week in South India"). Cross-functional initiative tracker mapping dependencies and surfacing execution conflicts. Capacity planning module predicting support volume by region, language, and season.</p>
+      <p><strong>How to build:</strong> Synthetic ticket dataset in English + Hindi → multilingual BERT classification → trend analysis dashboard. Host on GitHub with clear business impact narrative. This is literally the kind of tool the Strategic Initiatives role would commission — building it proves you already think like the role.</p>
+      <p><strong>JD mapping:</strong> "Define, structure, launch and drive strategic and operational initiatives" + "Provide oversight and connectivity to business-focused standalone initiatives" + "Remove roadblocks to execution"</p>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div id="timeline" class="section">
+    <div class="card">
+      <h2>Minimum Prep: 4 Months Before Active Application</h2>
+      <p>Score is currently 55/100, addressable to ~72/100 with focused preparation. Applying before 4 months risks wasting a shot on a role that won't reopen for 6–12 months. Google's hiring process takes 6–10 weeks, so total timeline from today to potential offer: approximately <strong>6–7 months</strong>.</p>
+    </div>
+
+    <div class="card">
+      <h2>5 Most Critical Moves — In Strict Priority Order</h2>
+
+      <div class="priority-item">
+        <div class="priority-num">1</div>
+        <div class="priority-body">
+          <h3>Complete All Google Ads Certifications + GA4 &nbsp;<span class="tag tag-blue">Weeks 1–4</span></h3>
+          <p>All 6 certifications via Google Skillshop (Search, Display, Video, Shopping, Apps, Measurement) + Google Analytics 4. ~40–60 hours total. Cost: free. Without this, résumé is filtered before reaching a hiring manager. <strong>Non-negotiable. Start immediately.</strong></p>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="priority-num">2</div>
+        <div class="priority-body">
+          <h3>Rewrite Résumé & LinkedIn in Consulting/Tech Language &nbsp;<span class="tag tag-blue">Weeks 2–3</span></h3>
+          <p>Apply every reframe from the Reframe tab. Lead with "IIM Udaipur PGDM + Strategic Operations Leader" positioning. Remove all collections/recovery vocabulary. Have 2–3 Google or consulting professionals review it. Must pass a 6-second recruiter scan for "consulting," "strategy," and "operations" keywords.</p>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="priority-num">3</div>
+        <div class="priority-body">
+          <h3>Build the SMB Health Score AI Portfolio Project &nbsp;<span class="tag tag-blue">Weeks 3–8</span></h3>
+          <p>This is the single action that does the most to close Gap 1 (tech industry experience). Demonstrates ability to identify a real Google business problem, apply data science, and propose a concrete operational solution. Host on GitHub. Reference it explicitly in your application letter.</p>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="priority-num">4</div>
+        <div class="priority-body">
+          <h3>Secure a Google Internal Referral &nbsp;<span class="tag tag-blue">Weeks 4–8</span></h3>
+          <p>Referred candidates are processed differently at Google. Target: connect with 10–15 Google employees in India (especially gTech, gSO, GCS) via LinkedIn. Attend Google-sponsored events. Join Google Developer Groups Hyderabad. Your IIM alumni network is an underused asset here — check for IIM Udaipur alumni at Google India on LinkedIn immediately. One strong referral from someone adjacent to gTech Ads may be the difference between getting an interview and being filtered.</p>
+        </div>
+      </div>
+
+      <div class="priority-item">
+        <div class="priority-num">5</div>
+        <div class="priority-body">
+          <h3>Reactivate Case Interview Skills + McKinsey Forward &nbsp;<span class="tag tag-blue">Weeks 4–16</span></h3>
+          <p>IIM PGDM means this is muscle memory reactivation, not learning from scratch. McKinsey Forward (free, 8 weeks) refreshes MECE and structured communication. Practice 15–20 cases via CaseCoach or PrepLounge. Structure every answer with: Situation → Hypothesis → Data → Recommendation — this is both IIM case-method and Google gSO interview format.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>The Target Narrative at Application Time</h2>
+      <p style="font-size: 15px; font-style: italic; color: #1a73e8; padding: 16px; background: #e8f0fe; border-radius: 8px; border-left: 4px solid #1a73e8;">"IIM-trained operations strategist. Built and scaled a $3.5B annual revenue operations engine across two countries — 14.9x growth, 74% delinquency reduction, 31:1 ROI on strategic policy design. Now applying the same program management and data-driven leadership capability to Google's most important growth market."</p>
+    </div>
+  </div>
+
+  <!-- COMPENSATION -->
+  <div id="comp" class="section">
+    <div class="card">
+      <h2>Compensation Benchmarks — Google Hyderabad (2025–2026)</h2>
+      <p>Role most likely sits at <strong>L6 (Principal)</strong>. With IIM PGDM confirmed, the career-switcher discount narrows — expect lower-to-mid L5, with a reasonable shot at L6 if the interview process demonstrates consulting-level strategic thinking. RSUs constitute 30–40% of total compensation and vest over 4 years.</p>
+
+      <table class="comp-table">
+        <thead>
+          <tr><th>Level</th><th>Base (₹ LPA)</th><th>Annual Bonus</th><th>RSUs (annualized)</th><th>Total CTC Estimate</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>L5 (Senior)</td><td>₹30–55 LPA</td><td>~15% (₹4.5–8.3L)</td><td>₹15–32 LPA</td><td class="highlight">₹50–95 LPA · median ~₹70L</td></tr>
+          <tr><td>L6 (Principal)</td><td>₹45–85 LPA</td><td>~15% (₹7–13L)</td><td>₹25–55 LPA</td><td class="highlight">₹77–153 LPA · median ~₹115L</td></tr>
+          <tr><td><strong>Priyanuj — realistic offer</strong></td><td colspan="3">IIM PGDM + career-switcher context → lower L5 to mid-L5 likely; L6 possible if interview performance is strong</td><td class="highlight">₹60–85 LPA</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top: 20px;">Context & Negotiation Notes</h3>
+      <ul>
+        <li>IIM PGDM confirmation pushes the realistic offer estimate up from ₹55–75L to <strong>₹60–85L</strong> — the credential improves the floor</li>
+        <li>Bangalore offers run 5–10% higher than Hyderabad; Hyderabad discount is partially offset by lower cost of living</li>
+        <li>RSU value fluctuates with GOOG stock — factor this into any comparison vs. current Dubai package on a net-of-tax, purchasing-power-parity basis</li>
+        <li>Google is known for negotiating; come in with a specific number, anchored at the top of the realistic range</li>
+        <li>Source basis: levels.fyi verified Google Program Manager L5/L6 India data, Blind-sourced L6 offer data, Glassdoor India verified reports</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>

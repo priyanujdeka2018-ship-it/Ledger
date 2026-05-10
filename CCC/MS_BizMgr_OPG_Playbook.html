@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft Business Manager OPG — Career Playbook | Priyanuj Deka</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #04090f;
+    --surface: #0b1520;
+    --s2: #10202e;
+    --s3: #152a3a;
+    --border: #1a3248;
+    --border2: #22466a;
+    --ms-teal: #00a4ef;
+    --ms-teal-bright: #3cc8ff;
+    --ms-glow: rgba(0,164,239,0.12);
+    --ms-green: #7fba00;
+    --ms-orange: #f25022;
+    --ms-yellow: #ffb900;
+    --ms-purple: #737bff;
+    --green: #2dd88a;
+    --red: #f25022;
+    --amber: #ffb900;
+    --text: #d0e6f8;
+    --muted: #6a90b0;
+    --dim: #253d55;
+    --accent: #00a4ef;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #020610 0%, #071828 40%, #0a1e35 70%, #050e18 100%);
+    border-bottom: 1px solid var(--border2);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: 5%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0,164,239,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: 'MSFT';
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Playfair Display', serif;
+    font-size: 200px;
+    color: rgba(0,164,239,0.03);
+    pointer-events: none;
+    letter-spacing: -8px;
+    font-weight: 700;
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 44px 32px 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,164,239,0.1);
+    border: 1px solid rgba(0,164,239,0.28);
+    border-radius: 4px;
+    padding: 5px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--ms-teal-bright);
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+  .header-badge::before { content: '●'; font-size: 7px; animation: pulse-dot 2s infinite; }
+  @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .ms-logo-bar {
+    display: flex;
+    gap: 3px;
+    margin-bottom: 14px;
+  }
+  .ms-logo-bar span {
+    width: 12px;
+    height: 12px;
+    display: block;
+  }
+  .ms-logo-bar span:nth-child(1) { background: #f25022; }
+  .ms-logo-bar span:nth-child(2) { background: #7fba00; }
+  .ms-logo-bar span:nth-child(3) { background: #00a4ef; }
+  .ms-logo-bar span:nth-child(4) { background: #ffb900; }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 4vw, 44px);
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .header h1 span { color: var(--ms-teal-bright); }
+  .header-sub {
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    margin-bottom: 26px;
+  }
+  .header-stats {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .hstat { display: flex; flex-direction: column; gap: 2px; }
+  .hstat-val {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    color: var(--ms-teal-bright);
+    line-height: 1;
+    font-weight: 700;
+  }
+  .hstat-val.gold { color: var(--ms-yellow); }
+  .hstat-val.green { color: var(--green); }
+  .hstat-val.orange { color: var(--ms-orange); }
+  .hstat-label {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .hstat-divider {
+    width: 1px;
+    background: var(--border);
+    align-self: stretch;
+  }
+
+  /* NAV */
+  .nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-btn {
+    padding: 14px 16px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { color: var(--text); }
+  .nav-btn.active { color: var(--ms-teal-bright); border-bottom-color: var(--ms-teal-bright); }
+
+  /* MAIN */
+  .main { max-width: 1200px; margin: 0 auto; padding: 32px; }
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--ms-teal);
+    border-radius: 8px 0 0 8px;
+  }
+  .card.gold::before { background: var(--ms-yellow); }
+  .card.green::before { background: var(--green); }
+  .card.red::before { background: var(--ms-orange); }
+  .card.amber::before { background: var(--amber); }
+  .card.purple::before { background: var(--ms-purple); }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ms-teal-bright);
+    margin-bottom: 12px;
+  }
+  .card.gold .card-title { color: var(--ms-yellow); }
+  .card.green .card-title { color: var(--green); }
+  .card.red .card-title { color: var(--ms-orange); }
+  .card.amber .card-title { color: var(--amber); }
+  .card.purple .card-title { color: var(--ms-purple); }
+
+  /* SECTION TITLES */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: #fff;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+  }
+
+  /* GRIDS */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  @media(max-width:768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .header-stats { gap: 16px; }
+    .main { padding: 16px; }
+  }
+
+  /* TABLE */
+  table { width:100%; border-collapse:collapse; font-size:13px; margin:12px 0; }
+  th {
+    background: var(--s3);
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td { padding:11px 14px; border-bottom:1px solid var(--border); vertical-align:top; line-height:1.5; }
+  tr:last-child td { border-bottom:none; }
+  tr:hover td { background:rgba(0,164,239,0.03); }
+  .td-h { color: var(--ms-teal-bright); font-weight: 600; }
+  .td-gold { color: var(--ms-yellow); font-weight: 600; }
+  .td-green { color: var(--green); }
+  .td-red { color: var(--ms-orange); }
+
+  /* TAGS */
+  .tag {
+    display:inline-block; padding:2px 8px; border-radius:3px;
+    font-size:10px; font-weight:700; letter-spacing:0.06em;
+    text-transform:uppercase; margin:2px 2px 2px 0;
+  }
+  .tag-blue { background:rgba(0,164,239,0.15); color:var(--ms-teal-bright); }
+  .tag-green { background:rgba(45,216,138,0.12); color:var(--green); }
+  .tag-red { background:rgba(242,80,34,0.12); color:var(--ms-orange); }
+  .tag-gold { background:rgba(255,185,0,0.12); color:var(--ms-yellow); }
+  .tag-purple { background:rgba(115,123,255,0.12); color:var(--ms-purple); }
+
+  /* WANT GRID */
+  .want-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .want-card {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .want-icon { font-size: 24px; margin-bottom: 8px; }
+  .want-card h4 { font-size:13px; font-weight:700; color:var(--text); margin-bottom:6px; }
+  .want-card p { font-size:12px; color:var(--muted); line-height:1.55; }
+
+  /* FIT METER */
+  .fit-meter {
+    background: var(--s2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .fit-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px;
+    line-height: 1;
+    color: var(--ms-teal-bright);
+    margin-bottom: 4px;
+    font-weight: 700;
+  }
+  .fit-label { font-size:11px; letter-spacing:0.1em; color:var(--muted); text-transform:uppercase; }
+  .fit-bar-bg { height:8px; background:var(--s3); border-radius:4px; overflow:hidden; margin:16px 0; }
+  .fit-bar-fill { height:100%; background:linear-gradient(90deg, var(--ms-teal), var(--ms-teal-bright)); border-radius:4px; }
+
+  /* REQ CARD */
+  .req-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .req-header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+  .req-title { font-size:14px; font-weight:700; color:var(--text); flex:1; min-width:200px; }
+  .req-match {
+    font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700;
+    letter-spacing:0.08em; padding:4px 10px; border-radius:3px; white-space:nowrap;
+  }
+  .match-high { background:rgba(45,216,138,0.12); color:var(--green); }
+  .match-med { background:rgba(255,185,0,0.12); color:var(--ms-yellow); }
+  .match-low { background:rgba(242,80,34,0.12); color:var(--ms-orange); }
+  .req-jd {
+    font-size:12px; color:var(--muted); font-style:italic;
+    padding:10px 14px; background:var(--s2); border-radius:4px; margin-bottom:10px;
+  }
+  .req-proof { font-size:13px; color:var(--text); line-height:1.6; }
+
+  /* PROGRESS BAR */
+  .progress-wrap { margin:8px 0; }
+  .progress-label { display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px; }
+  .progress-label span:first-child { color:var(--text); font-weight:600; }
+  .progress-label span:last-child { color:var(--muted); }
+  .progress-bg { height:6px; background:var(--s3); border-radius:3px; overflow:hidden; }
+  .progress-fill { height:100%; border-radius:3px; }
+  .progress-fill.blue { background:var(--ms-teal); }
+  .progress-fill.green { background:var(--green); }
+  .progress-fill.amber { background:var(--amber); }
+  .progress-fill.red { background:var(--ms-orange); }
+
+  /* STAR */
+  .star-box { margin:8px 0; }
+  .star-row { display:flex; gap:14px; padding:8px 0; border-bottom:1px solid var(--border); }
+  .star-row:last-child { border-bottom:none; }
+  .star-key {
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500;
+    color:var(--ms-teal-bright); padding-top:1px; min-width:80px;
+  }
+  .star-key.green { color:var(--green); }
+  .star-key.gold { color:var(--ms-yellow); }
+  .star-content { font-size:13px; color:var(--text); line-height:1.6; }
+
+  /* VOCAB */
+  .vocab-row {
+    display:grid; grid-template-columns:1fr 24px 1fr; gap:12px; align-items:center;
+    padding:10px 0; border-bottom:1px solid var(--border); font-size:13px;
+  }
+  .vocab-row:last-child { border-bottom:none; }
+  .vocab-from { color:var(--muted); }
+  .vocab-arrow { color:var(--ms-teal); text-align:center; font-size:16px; }
+  .vocab-to { color:var(--ms-teal-bright); font-weight:600; }
+
+  /* TIMELINE */
+  .timeline { position:relative; padding-left:28px; }
+  .timeline::before {
+    content:''; position:absolute; left:6px; top:0; bottom:0;
+    width:2px; background:var(--border2);
+  }
+  .tl-item { position:relative; padding-bottom:24px; }
+  .tl-item::before {
+    content:''; position:absolute; left:-25px; top:5px;
+    width:10px; height:10px; border-radius:50%;
+    background:var(--ms-teal); border:2px solid var(--bg);
+  }
+  .tl-item.gold::before { background:var(--ms-yellow); }
+  .tl-item.green::before { background:var(--green); }
+  .tl-item.red::before { background:var(--ms-orange); }
+  .tl-time {
+    font-family:'JetBrains Mono',monospace; font-size:10px;
+    letter-spacing:0.1em; color:var(--ms-teal-bright); margin-bottom:4px;
+  }
+  .tl-item.gold .tl-time { color:var(--ms-yellow); }
+  .tl-item.green .tl-time { color:var(--green); }
+  .tl-title { font-size:14px; font-weight:700; color:var(--text); margin-bottom:6px; }
+  .tl-body { font-size:12px; color:var(--muted); line-height:1.6; }
+
+  /* AI BOX */
+  .ai-box {
+    background: linear-gradient(135deg, #04090f, #0a1828);
+    border: 1px solid rgba(0,164,239,0.25);
+    border-radius: 8px;
+    padding: 20px;
+    margin: 16px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .ai-box::before {
+    content:''; position:absolute; top:0; left:0; right:0;
+    height:2px; background:linear-gradient(90deg, transparent, var(--ms-teal), transparent);
+  }
+  .ai-tag {
+    font-family:'JetBrains Mono',monospace; font-size:10px;
+    letter-spacing:0.15em; color:var(--ms-teal-bright); margin-bottom:8px;
+  }
+  .ai-title { font-size:15px; font-weight:700; color:#fff; margin-bottom:8px; }
+  .ai-body { font-size:13px; color:var(--muted); line-height:1.6; }
+  .ai-stack { margin-top:12px; display:flex; gap:6px; flex-wrap:wrap; }
+
+  /* PHRASE */
+  .phrase {
+    background:var(--s2); border-left:3px solid var(--ms-teal); border-radius:0 6px 6px 0;
+    padding:14px 18px; margin:12px 0; font-size:13px; color:var(--text); line-height:1.6;
+  }
+  .phrase.gold { border-left-color:var(--ms-yellow); }
+  .phrase.red { border-left-color:var(--ms-orange); }
+
+  /* QUOTE */
+  .quote {
+    background: rgba(0,164,239,0.06);
+    border: 1px solid rgba(0,164,239,0.15);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--text);
+    font-style: italic;
+    position: relative;
+  }
+  .quote::before {
+    content:'"'; font-family:'Playfair Display',serif; font-size:60px;
+    color:var(--ms-teal); opacity:0.2; position:absolute; top:-10px; left:10px; line-height:1;
+  }
+  .quote-attr {
+    display:block; font-size:11px; color:var(--ms-teal-bright); font-style:normal;
+    font-weight:700; letter-spacing:0.06em; text-transform:uppercase; margin-top:8px;
+  }
+
+  /* SALARY TABLE */
+  .sal-row {
+    display:grid; grid-template-columns:120px 1fr 1fr 1fr; gap:0;
+    border-bottom:1px solid var(--border); font-size:13px;
+  }
+  .sal-row.head { background:var(--s3); font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); font-weight:600; }
+  .sal-cell { padding:10px 14px; }
+  .sal-cell.label { color:var(--ms-teal-bright); font-weight:600; }
+
+  .divider { height:1px; background:var(--border); margin:24px 0; }
+  .mono { font-family:'JetBrains Mono',monospace; }
+  .small { font-size:12px; }
+  .muted { color:var(--muted); }
+  .bold { font-weight:700; }
+  .mt16 { margin-top:16px; }
+  .mt8 { margin-top:8px; }
+  ul { padding-left:18px; }
+  li { margin-bottom:6px; font-size:13px; color:var(--text); }
+
+  /* CERT ITEM */
+  .cert-item { display:flex; gap:14px; padding:12px 0; border-bottom:1px solid var(--border); align-items:flex-start; }
+  .cert-item:last-child { border-bottom:none; }
+  .cert-priority {
+    width:26px; height:26px; border-radius:4px; display:flex; align-items:center;
+    justify-content:center; font-size:12px; font-weight:700; flex-shrink:0;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .cert-priority.p1 { background:rgba(242,80,34,0.2); color:var(--ms-orange); }
+  .cert-priority.p2 { background:rgba(255,185,0,0.15); color:var(--ms-yellow); }
+  .cert-priority.p3 { background:rgba(0,164,239,0.15); color:var(--ms-teal-bright); }
+  .cert-body h4 { font-size:13px; font-weight:700; color:var(--text); margin-bottom:3px; }
+  .cert-body p { font-size:12px; color:var(--muted); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width:6px; height:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+
+  /* NOTE BOX */
+  .note-box {
+    background: rgba(255,185,0,0.06);
+    border: 1px solid rgba(255,185,0,0.18);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* NEGOT TABLE */
+  .neg-row {
+    display:grid; grid-template-columns:1fr 1fr 1fr; gap:0;
+    border-bottom:1px solid var(--border); font-size:13px;
+  }
+  .neg-row.head { background:var(--s3); font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); font-weight:600; }
+  .neg-cell { padding:10px 14px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="ms-logo-bar"><span></span><span></span><span></span><span></span></div>
+    <div class="header-badge">Active Target · Apply Now</div>
+    <h1>Microsoft <span>Business Manager</span><br>OPG · Noida</h1>
+    <div class="header-sub">Operations & Partner Group · Strategic & Operational Partner to Senior Director</div>
+    <div class="header-stats">
+      <div class="hstat">
+        <div class="hstat-val">75</div>
+        <div class="hstat-label">Current Fit /100</div>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat-val" style="align-self:center;font-size:20px;color:var(--muted)">→</div>
+      <div class="hstat">
+        <div class="hstat-val gold">88</div>
+        <div class="hstat-label">Addressable Fit</div>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat">
+        <div class="hstat-val green">0</div>
+        <div class="hstat-label">Certs Required</div>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat">
+        <div class="hstat-val orange">₹53–85L</div>
+        <div class="hstat-label">Est. CTC (L62–L63)</div>
+      </div>
+      <div class="hstat-divider"></div>
+      <div class="hstat">
+        <div class="hstat-val" style="color:var(--ms-purple)">2–4 wk</div>
+        <div class="hstat-label">Prep Timeline</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showTab('decode')">JD Decoded</button>
+    <button class="nav-btn" onclick="showTab('fit')">Your Fit</button>
+    <button class="nav-btn" onclick="showTab('gaps')">Gaps & Plan</button>
+    <button class="nav-btn" onclick="showTab('salary')">Salary Intel</button>
+    <button class="nav-btn" onclick="showTab('ai')">AI Solutions</button>
+    <button class="nav-btn" onclick="showTab('stars')">STAR Bank</button>
+    <button class="nav-btn" onclick="showTab('interview')">Interview Prep</button>
+    <button class="nav-btn" onclick="showTab('vocab')">Vocab Decoder</button>
+  </div>
+</nav>
+
+<div class="main">
+
+<!-- ======================== TAB 1: JD DECODED ======================== -->
+<div class="section active" id="tab-decode">
+  <div class="section-title">JD Decoded</div>
+  <div class="section-sub">What Microsoft OPG is actually looking for — beyond the job description language</div>
+
+  <div class="card gold">
+    <div class="card-title">The Core Mission — What This Role Really Is</div>
+    <p>This is a <strong style="color:var(--ms-yellow)">Chief of Staff</strong> to a Senior Director inside Microsoft's Operations & Partner Group (OPG). OPG manages Microsoft's global Delivery Partner ecosystem — the outsourced workforce (companies like Infosys, Wipro, HCL, Accenture, and specialised vendors) that execute contracted services across Microsoft's business. This Business Manager is the person who makes the leadership machine run: translating strategy into executable plans, owning the operating rhythm, tracking budgets, orchestrating cross-functional programmes, and preparing the Senior Director for every high-impact engagement. You don't own a product or a P&L — you own the <em>operating system of leadership execution.</em></p>
+  </div>
+
+  <div class="want-grid">
+    <div class="want-card">
+      <div class="want-icon">🎯</div>
+      <h4>Strategy-to-Execution Translator</h4>
+      <p>Take the Senior Director's vision and turn it into milestones, business plans, and measurable outcomes. Bridge the gap between "what we want" and "what gets done this quarter."</p>
+    </div>
+    <div class="want-card">
+      <div class="want-icon">⚙️</div>
+      <h4>Operating Rhythm Owner</h4>
+      <p>Design, run, and enforce the leadership team's cadence — LT meetings, MBRs, QBRs, executive syncs. Own decision tracking and accountability follow-through.</p>
+    </div>
+    <div class="want-card">
+      <div class="want-icon">🏗️</div>
+      <h4>Programme Orchestrator</h4>
+      <p>Coordinate complex, cross-functional initiatives — Delivery Partner Summits, vendor onboarding, compliance pilots. Remove blockers. Maintain execution velocity across parallel global workstreams.</p>
+    </div>
+    <div class="want-card">
+      <div class="want-icon">📊</div>
+      <h4>Financial Governance Partner</h4>
+      <p>Track vendor spend, discretionary budgets, accruals, and overruns. Build dashboards that give leadership data-driven visibility into financial performance vs. plan.</p>
+    </div>
+    <div class="want-card">
+      <div class="want-icon">📝</div>
+      <h4>Executive Communications Architect</h4>
+      <p>Synthesise complex data into decision frameworks. Draft executive-ready memos, presentations, and business narratives. Prepare the Senior Director for every high-stakes conversation.</p>
+    </div>
+    <div class="want-card">
+      <div class="want-icon">🤝</div>
+      <h4>Trusted Advisor & Culture Builder</h4>
+      <p>Serve as a neutral confidant to leadership. Support workforce planning, org design, and change management. Amplify team sentiment and ensure psychological safety.</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title">Breaking Down Every Responsibility</div>
+    <table>
+      <tr>
+        <th>JD Responsibility</th>
+        <th>What It Really Means</th>
+        <th>Weight</th>
+      </tr>
+      <tr>
+        <td>Translate strategy into executable business plans, milestones, and measurable outcomes</td>
+        <td>Take a VP's 3-year vision and turn it into a quarterly OKR framework with owners, deadlines, and success metrics. You are the bridge between aspiration and execution.</td>
+        <td><span class="tag tag-red">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>Drive annual/quarterly business planning — priority alignment, workforce planning, resource allocation</td>
+        <td>Own the annual planning cycle end to end. Facilitate headcount discussions, budget allocation, and priority stacking. Ensure everyone leaves the room aligned.</td>
+        <td><span class="tag tag-red">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>Own LT operating cadence — MBRs, QBRs, executive syncs</td>
+        <td>Design and run the "Rhythm of Business" (RoB). Every leadership meeting has an agenda, pre-reads, decision points, and action items that get tracked to closure.</td>
+        <td><span class="tag tag-red">CRITICAL</span></td>
+      </tr>
+      <tr>
+        <td>Coordinate Delivery Partner Summits, strategic pilots, vendor onboarding</td>
+        <td>Manage multi-stakeholder events and programmes. This includes logistics, content, stakeholder alignment, compliance, and post-event follow-through across global time zones.</td>
+        <td><span class="tag tag-gold">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Support budget planning — track vendor and discretionary spend, monitor actuals vs. forecast</td>
+        <td>You're the financial eyes of the org. Flag accruals, vendor overruns, and under-spend. The Senior Director relies on you to catch financial risks before they materialise.</td>
+        <td><span class="tag tag-gold">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Develop dashboards and reporting frameworks for data-driven leadership insights</td>
+        <td>Build the MI layer — OKR trackers, vendor performance dashboards, financial health views. Not just reporting — intelligence that drives decisions.</td>
+        <td><span class="tag tag-gold">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Develop executive-ready presentations, memos, and business narratives</td>
+        <td>Write the materials that the Senior Director presents to CVPs and partners. You ghost-write at the VP level. Clarity, brevity, and strategic framing are non-negotiable.</td>
+        <td><span class="tag tag-gold">HIGH</span></td>
+      </tr>
+      <tr>
+        <td>Support workforce planning, org design, change management</td>
+        <td>Partner with HR on headcount models, org restructures, and transformation programmes. Ensure change lands smoothly and teams feel heard.</td>
+        <td><span class="tag tag-blue">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td>Serve as confidential and neutral advisor to leadership</td>
+        <td>You are the Senior Director's sounding board. You surface problems others won't say out loud. You translate team sentiment into leadership action.</td>
+        <td><span class="tag tag-blue">MEDIUM</span></td>
+      </tr>
+      <tr>
+        <td>Foster psychological safety, inclusion, and accountability</td>
+        <td>Not just a culture statement — you design feedback mechanisms, run engagement pulse checks, and ensure the org lives its values.</td>
+        <td><span class="tag tag-blue">MEDIUM</span></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">The Unstated Requirements (What They Won't Tell You)</div>
+    <ul>
+      <li><strong>Chief of Staff mindset:</strong> You are not the leader — you are the person who makes the leader 10x effective. Ego-free execution at senior altitudes is the core competency.</li>
+      <li><strong>Ambiguity as default state:</strong> OPG operates in a complex global environment. Vendor strategies shift, budgets get reallocated mid-cycle, and priorities change quarterly. You thrive when there's no playbook.</li>
+      <li><strong>Cross-functional fluency:</strong> Finance, Legal (CELA), HR, Engineering, Procurement — you need to speak all of these languages and translate between them without friction.</li>
+      <li><strong>Political awareness without political behaviour:</strong> You see the currents in the organisation. You navigate stakeholder dynamics. But you stay neutral and trusted by all sides.</li>
+      <li><strong>"Right altitude" enablement:</strong> The JD uses this phrase explicitly. Your job is to ensure the Senior Director operates strategically — not getting pulled into tactical details. You absorb the tactical load.</li>
+      <li><strong>Microsoft internal culture signals:</strong> Growth mindset language, One Microsoft collaboration, Model-Coach-Care leadership framework. These aren't clichés — they're interview scoring criteria.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================== TAB 2: YOUR FIT ======================== -->
+<div class="section" id="tab-fit">
+  <div class="section-title">Your Fit</div>
+  <div class="section-sub">How your Sobha experience maps — requirement by requirement — to this JD</div>
+
+  <div class="fit-meter">
+    <div class="fit-number">75</div>
+    <div class="fit-label">Current Fit Score</div>
+    <div class="fit-bar-bg"><div class="fit-bar-fill" style="width:75%"></div></div>
+    <p class="small muted">Addressable to 88/100 with vocabulary reframe + Microsoft culture prep. No certs needed.</p>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Translate strategy into executable business plans with measurable outcomes</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Partner with leadership to translate strategy into executable business plans, milestones, and measurable outcomes"</div>
+    <div class="req-proof">You translated the FY2026 AED 8.2B collections target into a quarterly execution plan with team-level OKR decomposition across 77 people in 2 geographies. You designed the milestone architecture — monthly targets, weekly KPI cadence, individual performance weightage (60% of appraisal) — and governed its execution. This is strategy-to-execution at an operational scale larger than most Business Managers at Microsoft manage.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Drive annual/quarterly business planning — workforce planning, resource allocation</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Drive annual and quarterly business planning, including priority alignment, workforce planning, and resource allocation"</div>
+    <div class="req-proof">You own the annual planning cycle for Sobha's collections function. This includes headcount allocation (35 Dubai + 42 India), team structure design (4 sub-teams: 12 RMs + Ops 38 + QCG 12 + MIS 15), incentive IOM governance, and resource rebalancing across geographies based on portfolio shifts. You deployed a <strong>42-person hub in Hyderabad in under 12 months</strong> — hiring, capability build, governance, and attrition control. That's workforce planning at scale.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Own LT operating cadence — MBRs, QBRs, executive syncs</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Leadership Team meetings, Monthly/Quarterly Business Reviews, driving clarity on decisions, actions, and accountability"</div>
+    <div class="req-proof">You designed and run the management review cadence at Sobha — weekly team reviews, monthly business reviews with CRO Mohammad Adnan Hamid, and quarterly performance governance with CCO Ashish Vishnu Rupani. You prepare the data packs, set the agenda, drive action items, and track accountability. The NPV model survived <strong>multiple rounds of MD/CEO scrutiny</strong> because your decision framework was rigorous enough to withstand Francis Alfred's challenge process.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Coordinate complex, high-visibility initiatives</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Delivery Partner Summits, strategic pilots, vendor onboarding, compliance-sensitive programmes"</div>
+    <div class="req-proof">You built collection infrastructure across <strong>10 banks</strong> — escrow accounts, RERA compliance, virtual accounts, payment rails. Each bank is a vendor onboarding and compliance programme. The PCC TAT programme (20→3 days) was a cross-functional initiative spanning Operations, Finance, Legal, and IT — exactly the multi-stakeholder orchestration this role demands. You manage 12 simultaneous programme deliverables, all on schedule.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Budget planning — track vendor spend, monitor actuals vs. forecast</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Support budget planning, track vendor and discretionary spend, identify risks like accruals and vendor overruns"</div>
+    <div class="req-proof">Your NPV model (AED 652M inflow / AED 21.2M cost) is a financial governance artefact that required tracking actuals vs. forecast across multiple time horizons. You monitor vendor costs (10-bank infrastructure, QCG vendor performance), flag overruns, and report financial performance to MD/CEO level. Your 32% cost advantage vs. bank benchmark was derived from rigorous financial tracking and variance analysis.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Executive-ready presentations, memos, business narratives</div>
+      <div class="req-match match-med">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Synthesise complex operational data into clear decision frameworks. Prepare leaders for high-impact engagements."</div>
+    <div class="req-proof">You routinely prepare MD/CEO-level presentations — the NPV decision framework, delinquency trend analyses, and risk register summaries. You synthesise data from 70+ Salesforce reports into executive narratives that drive decisions. The NPV presentation itself is a case study in decision support — scenario modelling, sensitivity analysis, and stakeholder-ready framing.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-header">
+      <div class="req-title">Organisational health, workforce planning, change management</div>
+      <div class="req-match match-high">STRONG MATCH</div>
+    </div>
+    <div class="req-jd">"Support workforce planning, organisational design, change management. Foster psychological safety and accountability."</div>
+    <div class="req-proof">You built team capability so <strong>senior-layer members could author MD-approved process documents independently</strong> — that's delegation and empowerment architecture. Your PR rejection governance programme changed team behaviour structurally, not through mandate but through designed feedback loops. The India hub deployment (42 people) required org design, capability planning, and attrition management — with sustained operational delivery from day one.</div>
+  </div>
+
+  <div class="note-box">
+    <strong>⚠ Qualification Fit Note:</strong> JD requires Master's + 8 years OR Bachelor's + 12 years. You have PGDM (MBA equivalent from IIM Udaipur) + ~6 years post-graduation. Slightly under on years, but the <em>scope</em> of what you've managed — AED 12.97B portfolio, 77-person cross-geo team, MD/CEO-level decision support — is larger than what most 8-year candidates bring. Frame the gap through scale, not tenure.
+  </div>
+</div>
+
+<!-- ======================== TAB 3: GAPS & PLAN ======================== -->
+<div class="section" id="tab-gaps">
+  <div class="section-title">Gaps & Action Plan</div>
+  <div class="section-sub">What's missing, what's bridgeable, and the 2–4 week path to close every gap</div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card green">
+        <div class="card-title">Strengths — Already Proven</div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Strategy → Execution Translation</span><span>95%</span></div>
+          <div class="progress-bg"><div class="progress-fill green" style="width:95%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Operating Rhythm & Governance</span><span>90%</span></div>
+          <div class="progress-bg"><div class="progress-fill green" style="width:90%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Programme Orchestration</span><span>92%</span></div>
+          <div class="progress-bg"><div class="progress-fill green" style="width:92%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Financial Management</span><span>85%</span></div>
+          <div class="progress-bg"><div class="progress-fill green" style="width:85%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Executive Communications</span><span>82%</span></div>
+          <div class="progress-bg"><div class="progress-fill blue" style="width:82%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Change Management & Org Health</span><span>80%</span></div>
+          <div class="progress-bg"><div class="progress-fill blue" style="width:80%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Cross-Functional Leadership</span><span>88%</span></div>
+          <div class="progress-bg"><div class="progress-fill green" style="width:88%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card red">
+        <div class="card-title">Gaps — What Needs Closing</div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Microsoft OPG Domain Vocabulary</span><span>25%</span></div>
+          <div class="progress-bg"><div class="progress-fill red" style="width:25%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Microsoft Culture Signals (Growth Mindset, MCC)</span><span>30%</span></div>
+          <div class="progress-bg"><div class="progress-fill red" style="width:30%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Tech Industry Delivery Partner Ecosystem</span><span>35%</span></div>
+          <div class="progress-bg"><div class="progress-fill red" style="width:35%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Experience Years (6yr vs. 8yr preferred)</span><span>75%</span></div>
+          <div class="progress-bg"><div class="progress-fill amber" style="width:75%"></div></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label"><span>Senior-Forum Assertiveness (Low-D DISC)</span><span>60%</span></div>
+          <div class="progress-bg"><div class="progress-fill amber" style="width:60%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title">2–4 Week Gap Closure Plan</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">WEEK 1 — VOCABULARY SPRINT</div>
+        <div class="tl-title">Microsoft OPG & Culture Vocabulary Mastery</div>
+        <div class="tl-body">Learn all terms in the Vocab Decoder tab. Study Microsoft's "Rhythm of Business" (RoB) framework. Read Satya Nadella's "Hit Refresh" key chapters. Memorise Model-Coach-Care (MCC) leadership framework. Practice describing your Sobha work using Microsoft vocabulary — 10 sentences for each major achievement. 5 focused hours is enough.</div>
+      </div>
+      <div class="tl-item gold">
+        <div class="tl-time">WEEK 1 — DOMAIN IMMERSION</div>
+        <div class="tl-title">OPG & Delivery Partner Ecosystem Research</div>
+        <div class="tl-body">Read Microsoft's Supplier Code of Conduct. Study the outsourced services landscape — MSPs, VMOs, Statement of Work models. Understand how tech companies manage extended workforces (Infosys, Wipro, HCL as Microsoft delivery partners). Read LinkedIn articles from Microsoft BizMgrs and Chiefs of Staff. Map your 10-bank vendor infrastructure experience to this ecosystem.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">WEEK 2 — RESUME & APPLICATION</div>
+        <div class="tl-title">Build Resume v1 & Submit Application</div>
+        <div class="tl-body">Resume subtitle: "Business Operations & Strategic Execution Leader." Reframe collections ops → business planning, governance, financial management, executive decision support. Use Microsoft vocab throughout. Activate BITS Pilani + IIM Udaipur alumni network at Microsoft India for warm referral.</div>
+      </div>
+      <div class="tl-item green">
+        <div class="tl-time">WEEK 2–3 — INTERVIEW PREP</div>
+        <div class="tl-title">STAR Story Rehearsal + Microsoft Behavioural Questions</div>
+        <div class="tl-body">Rehearse 6 STAR stories (see STAR Bank tab) using Microsoft vocabulary. Practice Growth Mindset framing for every "failure" question. Prepare 3 assertiveness proof points. Mock interview with Microsoft BQ format: "Tell me about a time when..." × 6 scenarios minimum.</div>
+      </div>
+      <div class="tl-item gold">
+        <div class="tl-time">WEEK 3–4 — AI PORTFOLIO</div>
+        <div class="tl-title">Build Business Operations Intelligence Dashboard (Optional but high-impact)</div>
+        <div class="tl-body">Build the AI-powered MBR/QBR pack generator (see AI Solutions tab). Even a working prototype signals that you've already automated one of the role's most time-consuming functions. Host on GitHub with a short LinkedIn post.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card purple">
+    <div class="card-title">Key Unlock Phrase for This Role</div>
+    <div class="quote">
+      I've been operating as a Chief of Staff for six years — I just didn't have the title. I translate strategy into execution, I own the operating rhythm for a 77-person organisation across two geographies, I build the financial models that senior leaders use to make decisions, and I orchestrate the cross-functional programmes that keep the business moving. That's this role.
+      <span class="quote-attr">— Use in Cover Note + Interview Opening</span>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== TAB 4: SALARY INTEL ======================== -->
+<div class="section" id="tab-salary">
+  <div class="section-title">Salary Intelligence</div>
+  <div class="section-sub">Based on Levels.fyi, Glassdoor, Blind, TeamBlind, 6figr — April 2026</div>
+
+  <div class="card">
+    <div class="card-title">Level Mapping & Market Context</div>
+    <p>Microsoft India Business Manager roles map to the <strong style="color:var(--ms-teal-bright)">L62 (Senior) or L63 (Principal)</strong> band. With 6 years post-MBA from IIM Udaipur + BITS Pilani dual degree, you'll likely be offered L62 with potential to negotiate L63 based on scope. OPG Noida is a strategic operations centre — compensation reflects that.</p>
+    <p class="mt8 small muted">Business Manager ≈ Business Program Manager track at Microsoft. Not SWE — but same levelling framework applies.</p>
+  </div>
+
+  <div class="card gold">
+    <div class="card-title">Compensation Bands — Microsoft India</div>
+    <table>
+      <tr>
+        <th>Component</th>
+        <th>L62 (Likely Entry)</th>
+        <th>L63 (Negotiate For)</th>
+      </tr>
+      <tr>
+        <td>Base Salary</td>
+        <td class="td-h">₹38–45L</td>
+        <td class="td-gold">₹45–55L</td>
+      </tr>
+      <tr>
+        <td>Target Bonus</td>
+        <td>10–20% (₹4–9L)</td>
+        <td>15–30% (₹7–16L)</td>
+      </tr>
+      <tr>
+        <td>RSU Grant (4yr vest)</td>
+        <td>$60–80K (₹12–16L/yr)</td>
+        <td>$100–150K (₹20–30L/yr)</td>
+      </tr>
+      <tr>
+        <td>Joining Bonus</td>
+        <td>₹2–4L (negotiable)</td>
+        <td>₹4–8L (negotiable)</td>
+      </tr>
+      <tr>
+        <td class="bold">Total Comp Year 1</td>
+        <td class="td-h" style="font-size:15px">₹53–65L</td>
+        <td class="td-gold" style="font-size:15px">₹65–85L</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card green">
+    <div class="card-title">Strategic Value Beyond CTC</div>
+    <ul>
+      <li><strong>Internal mobility to Redmond/London/Singapore:</strong> Microsoft's internal transfer ecosystem is world-class. A Business Manager at L63 in Noida can target Principal BizMgr in Redmond within 2–3 years. Seattle ceiling for Principal BizMgr: $250–350K TC.</li>
+      <li><strong>RSU appreciation:</strong> MSFT stock has historically appreciated 15–20% annually. RSU grants become significantly more valuable over the 4-year vest period.</li>
+      <li><strong>Chief of Staff trajectory:</strong> Microsoft BizMgrs frequently graduate to Director of Operations, Chief of Staff to VP/CVP, or General Manager roles — all at L64–L66 ($400K+ TC globally).</li>
+      <li><strong>Network effect:</strong> Working directly with a Senior Director gives you access to CVP-level stakeholders. The network you build in OPG is disproportionately senior relative to your level.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Negotiation Playbook</div>
+    <table>
+      <tr>
+        <th>Lever</th>
+        <th>Strategy</th>
+        <th>Floor / Target</th>
+      </tr>
+      <tr>
+        <td>Level</td>
+        <td>Push for L63 citing scope: 77-person team, AED 12.97B portfolio, MD/CEO decision support. "My scope at Sobha was at the Principal level."</td>
+        <td>Floor: L62 / Target: L63</td>
+      </tr>
+      <tr>
+        <td>Base</td>
+        <td>Anchor at L63 mid-band. If L62, push for top-of-band (₹45L).</td>
+        <td>Floor: ₹40L / Target: ₹48L</td>
+      </tr>
+      <tr>
+        <td>RSU</td>
+        <td>Request front-loaded vesting or enhanced grant. Cite current total comp + deferred comp forfeited from Sobha.</td>
+        <td>Floor: $60K / Target: $100K+</td>
+      </tr>
+      <tr>
+        <td>Joining Bonus</td>
+        <td>Use relocation to Noida as leverage. Always ask — Microsoft frequently offers ₹4–8L.</td>
+        <td>Target: ₹5–8L</td>
+      </tr>
+      <tr>
+        <td>Relocation</td>
+        <td>If moving from Dubai, negotiate relocation package covering flights, temporary housing, visa support.</td>
+        <td>Ask explicitly</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ======================== TAB 5: AI SOLUTIONS ======================== -->
+<div class="section" id="tab-ai">
+  <div class="section-title">AI Solutions</div>
+  <div class="section-sub">AI-powered tools that solve real problems for this role — your interview differentiator</div>
+
+  <div class="card">
+    <div class="card-title">Why AI Matters for This Role</div>
+    <p>A Business Manager spends 60–70% of their time assembling MBR materials, tracking action items, compiling vendor reports, and drafting executive briefs. AI can automate the assembly and shift your time to judgment, influence, and decision support. This is your strongest interview differentiator — you're not just describing the role, you're showing how to do it 3x better.</p>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT · PRIMARY</div>
+    <div class="ai-title">Business Operations Intelligence Dashboard</div>
+    <div class="ai-body">
+      Input: raw OKR progress data + vendor performance metrics + budget actuals + action items from last LT meeting. Claude API generates a complete MBR/QBR executive summary — status narrative, risk flags, variance commentary, and recommended decisions. This is exactly what a Business Manager produces weekly. A working prototype signals you've already automated the role's most time-intensive function.
+    </div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Python</span>
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Streamlit</span>
+      <span class="tag tag-gold">Priority 1 · 2-day build</span>
+    </div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT · SECONDARY</div>
+    <div class="ai-title">Vendor Performance Risk Flagging System</div>
+    <div class="ai-body">
+      Tracks delivery partner KPIs (SLA adherence, quality scores, budget burn rate, escalation frequency) across a simulated multi-vendor portfolio. AI classifies vendor health as green/amber/red, generates blocker hypotheses, and drafts escalation recommendations. Mirrors OPG's core governance function — vendor oversight across a global delivery partner ecosystem.
+    </div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Python</span>
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Streamlit</span>
+      <span class="tag tag-purple">Priority 2 · 3-day build</span>
+    </div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-tag">AI PROJECT · SUPPORTING</div>
+    <div class="ai-title">Executive Decision Framework Generator</div>
+    <div class="ai-body">
+      Input: a decision question + 3–5 options + constraints. Claude API generates a structured decision memo — criteria weighting, trade-off analysis, recommendation with rationale, and risks. The format mirrors Microsoft's executive decision documents. This tool demonstrates that you think in frameworks, not just narratives.
+    </div>
+    <div class="ai-stack">
+      <span class="tag tag-blue">Claude API</span>
+      <span class="tag tag-blue">Document Generation</span>
+      <span class="tag tag-green">Priority 3 · 1-day build</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card">
+    <div class="card-title">How to Pitch AI Capability in the Interview</div>
+    <div class="phrase">
+      "One of the structural inefficiencies I see in business operations teams is that 60–70% of a Business Manager's time goes into assembling status reports rather than acting on them. At Sobha, I addressed this by building a 70+ report MI ecosystem that automated intelligence aggregation across two geographies. At Microsoft, I would apply the same architecture — but AI-augmented, so that MBR materials, vendor health assessments, and executive decision memos are generated automatically, freeing the Business Manager to spend time on strategic influence rather than data assembly."
+    </div>
+    <div class="phrase gold">
+      "I've already built a prototype Business Operations Intelligence Dashboard using AI that classifies programme health, generates variance commentary, and drafts executive summaries. I can walk you through it — it took me two days to build and would save a team like this approximately 8–10 hours of manual compilation per review cycle."
+    </div>
+  </div>
+</div>
+
+<!-- ======================== TAB 6: STAR BANK ======================== -->
+<div class="section" id="tab-stars">
+  <div class="section-title">STAR Story Bank</div>
+  <div class="section-sub">Pre-mapped STAR stories for every key JD responsibility — ready to deploy in interviews</div>
+
+  <div class="card">
+    <div class="card-title">Story 1 — Strategy-to-Execution Translation (Core JD Match)</div>
+    <p class="small muted" style="margin-bottom:12px">Maps to: "Translate strategy into executable business plans, milestones, and measurable outcomes"</p>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">In FY2026, Sobha's leadership set an AED 8.2B collections target — the most ambitious in the function's history. There was no structured framework to decompose this target into team-level milestones across 77 people in two geographies (Dubai + India).</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">I was responsible for translating this top-level strategic target into an executable quarterly plan with individual-level accountability, KPI tracking infrastructure, and a governance cadence that kept execution on track.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I designed a multi-layered OKR decomposition: function-level quarterly targets → team-level monthly milestones → individual weekly KPIs. I built the tracking infrastructure using our 70+ report Salesforce ecosystem, established weekly review cadences at team-lead level and monthly business reviews at CRO level. Performance weightage was set at 60% of appraisal to ensure alignment. I identified early-warning signals (delinquency rate creep, payment velocity drops) and built automated flagging.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">Collections performance reached +62% YoY. All 12 programme deliverables are on schedule. The framework scales — it's the same architecture used for the prior 14.9x growth from AED 867M to AED 12.97B. The planning infrastructure I built is now the permanent operating model for the function.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 2 — Operating Rhythm & Governance (MBR/QBR Ownership)</div>
+    <p class="small muted" style="margin-bottom:12px">Maps to: "Own LT operating cadence, MBRs/QBRs, driving clarity on decisions and accountability"</p>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">When I joined Sobha as a Management Trainee in 2020, the collections function had no structured management review cadence. Decisions were made ad hoc, follow-ups were inconsistent, and there was no systematic tracking of leadership action items across the organisation.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Build and embed a governance operating rhythm — from weekly team reviews to monthly CRO-level business reviews to quarterly CCO-level strategic reviews — with decision tracking, action item accountability, and data-driven pre-reads.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I designed a 3-tier review cadence: (1) Weekly team KPI reviews with each sub-team lead; (2) Monthly business reviews with CRO including portfolio health, delinquency trends, vendor performance, and financial actuals vs. forecast; (3) Quarterly strategic reviews with CCO. For each tier, I built standardised data packs from our Salesforce MI ecosystem, created decision tracking logs, and enforced action item follow-through. I prepared the NPV decision framework for MD/CEO — scenario modelling, sensitivity analysis, and stakeholder-ready framing — which survived multiple rounds of scrutiny.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">The governance cadence is now the operating backbone for the entire collections function. Decision cycle time reduced significantly — issues that previously took weeks to resolve now close within one review cycle. The NPV programme was approved (AED 652M incremental inflow) because the governance infrastructure ensured it reached the right decision-makers with the right data at the right time.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 3 — Programme Orchestration (PCC TAT Transformation)</div>
+    <p class="small muted" style="margin-bottom:12px">Maps to: "Coordinate complex, high-visibility initiatives — partnering cross-functionally to remove blockers"</p>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">Payment Completion Certificate (PCC) processing was taking 20 days on average — creating customer friction, delaying handovers, and consuming disproportionate management attention. The process spanned Operations, Finance, Legal, and Customer Service with no single owner.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Reduce PCC TAT to under 5 days while maintaining compliance rigour — requiring cross-functional alignment across 4 departments and process redesign for a monthly volume of 281 transactions.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I mapped the end-to-end process, identified 6 bottlenecks (3 systemic, 3 handoff-related), and designed a parallel processing workflow that eliminated sequential dependencies. I partnered with Legal to pre-approve standard templates, with Finance to create an automated clearance trigger, and with Operations to restructure the verification sequence. I implemented daily monitoring to track TAT at each handoff point and escalated blockers within 24 hours.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">PCC TAT reduced from 20 days to 3 days — an 85% reduction. Monthly volume scaled to 281 transactions without additional headcount. The cross-functional process redesign is now embedded as a permanent workflow. This is a programme orchestration story — multiple stakeholders, competing priorities, compliance constraints, and measurable outcomes.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 4 — Financial Management & Executive Decision Support (NPV Model)</div>
+    <p class="small muted" style="margin-bottom:12px">Maps to: "Budget planning, financial management, dashboards for data-driven leadership insights"</p>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">Sobha's collections model relied on payment collection at contractual due dates. I identified an opportunity to create a structured incentive for early payment — but this required building a complex financial case for MD/CEO approval and managing the cross-functional implementation.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Design, financially model, and get approved an NPV-based early payment incentive programme — presenting it to MD/CEO level, defending the assumptions, and tracking financial outcomes against projections.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I built a full NPV model: AED 652M incremental inflow, AED 21.2M cost, 248-day average prepayment acceleration, 32% cheaper than bank financing equivalent. I created scenario modelling and sensitivity analysis for the MD/CEO presentation. I managed objections from Finance (cost concern), Legal (contract compliance), and Operations (execution complexity) — synthesising feedback and incorporating it before final approval. Post-launch, I tracked actuals vs. forecast and reported variance to leadership monthly.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">Programme approved and implemented. AED 652M in incremental cash inflow. 32% cheaper than the bank alternative. Zero material concessions during the approval process. The financial tracking infrastructure became a permanent governance tool — exactly the dashboard and reporting framework this JD demands.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 5 — Workforce Planning & Org Health (India Hub Deployment)</div>
+    <p class="small muted" style="margin-bottom:12px">Maps to: "Support workforce planning, organisational design, and change management"</p>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">Sobha's collections function was entirely Dubai-based. The business needed to build an India hub to handle operational delivery, quality governance, and MIS — but there was no existing infrastructure, hiring pipeline, or governance model for a cross-geography operation.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Stand up a 42-person hub in Hyderabad in under 12 months — including hiring, capability build, governance design, and integration with the Dubai operation — while maintaining uninterrupted service delivery.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I designed the org structure: Operations (38), Quality Control Group (12), MIS (15). I built role specifications, capability frameworks, and training programmes. I designed the cross-timezone governance model — ensuring that the India hub operated with the same standards as the Dubai team. I managed attrition risk through structured onboarding, career path clarity, and capability-based growth opportunities. I embedded accountability through the same KPI and review cadence used in Dubai.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">42-person hub operational in under 12 months. The hub now handles operational delivery for the AED 86.8B portfolio. Attrition managed within industry norms. Team members independently author MD-approved process documents — a capability build metric, not just a headcount metric. This is workforce planning, org design, and change management at scale.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Story 6 — Assertiveness Under Pressure (PR Rejection Standard)</div>
+    <p class="small muted" style="margin-bottom:12px">Maps to: "Driving clarity on decisions — accountability — governance rigor"</p>
+    <div class="star-box">
+      <div class="star-row"><div class="star-key">SITUATION</div><div class="star-content">By December 2025, Payment Request rejection rate had reached 49%. There was pressure from multiple stakeholders to relax the documentation standards to improve throughput — essentially trading quality for speed.</div></div>
+      <div class="star-row"><div class="star-key">TASK</div><div class="star-content">Maintain the documentation quality standard while finding a sustainable way to improve throughput — without compromising governance rigour.</div></div>
+      <div class="star-row"><div class="star-key">ACTION</div><div class="star-content">I held the quality standard, presenting data showing that relaxing it would create downstream compliance risk. I designed a structural solution — a quality scorecard with pre-submission checklist, daily monitoring, and peer review — that improved throughput through capability, not by lowering the bar. I made the case to leadership with data, not opinion.</div></div>
+      <div class="star-row"><div class="star-key green">RESULT</div><div class="star-content">Position vindicated by subsequent data — PR TAT dropped from 20 to 3 days while maintaining quality. The standard was held, throughput improved, and the governance architecture became permanent. This is an accountability story: holding a difficult position when it's easier to compromise, and being proven right.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== TAB 7: INTERVIEW PREP ======================== -->
+<div class="section" id="tab-interview">
+  <div class="section-title">Interview Prep</div>
+  <div class="section-sub">Microsoft behavioural questions, Growth Mindset framing, and ready-to-deploy answers</div>
+
+  <div class="card gold">
+    <div class="card-title">Microsoft Interview Format — What to Expect</div>
+    <p>Microsoft interviews follow the <strong style="color:var(--ms-yellow)">Model-Coach-Care (MCC)</strong> leadership framework. Every behavioural question is scored against these dimensions. Additionally, <strong>Growth Mindset</strong> is a core cultural signal — every failure story must end with what you learned and how you changed. Interviewers use a "As Appropriate" (AA) round where a senior leader makes the final hire/no-hire decision.</p>
+    <p class="mt8 small muted">Expect 4–5 rounds: 1 Recruiter Screen → 2–3 Behavioural + Case → 1 AA Round (Senior Leader)</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Behavioural Question → STAR Story Routing</div>
+    <table>
+      <tr>
+        <th>Likely Question</th>
+        <th>Primary Story</th>
+        <th>Key Line</th>
+      </tr>
+      <tr>
+        <td>Tell me about a time you translated strategy into execution</td>
+        <td class="td-h">Story 1 (FY2026 OKR)</td>
+        <td>"I decomposed an AED 8.2B target into individual-level weekly KPIs across 77 people in two geographies."</td>
+      </tr>
+      <tr>
+        <td>How do you run operating rhythm for a leadership team?</td>
+        <td class="td-h">Story 2 (MBR/QBR)</td>
+        <td>"I designed a 3-tier governance cadence — weekly, monthly, quarterly — with data-driven pre-reads and action item tracking."</td>
+      </tr>
+      <tr>
+        <td>Tell me about a complex cross-functional programme you orchestrated</td>
+        <td class="td-h">Story 3 (PCC TAT)</td>
+        <td>"I reduced processing time from 20 to 3 days across 4 departments by redesigning the workflow from sequential to parallel."</td>
+      </tr>
+      <tr>
+        <td>How do you support financial management and budget governance?</td>
+        <td class="td-h">Story 4 (NPV Model)</td>
+        <td>"I built an NPV model that generated AED 652M in incremental inflow at 32% lower cost than the alternative."</td>
+      </tr>
+      <tr>
+        <td>How have you supported workforce planning or org design?</td>
+        <td class="td-h">Story 5 (India Hub)</td>
+        <td>"I stood up a 42-person hub in under 12 months — hiring, governance, capability build, attrition management."</td>
+      </tr>
+      <tr>
+        <td>Tell me about a time you held a difficult position under pressure</td>
+        <td class="td-h">Story 6 (PR Rejection)</td>
+        <td>"I held the quality standard at 49% rejection rate when there was pressure to relax it. Data proved me right."</td>
+      </tr>
+      <tr>
+        <td>What's a failure or mistake you've made?</td>
+        <td class="td-gold">SQL delegation story (S11)</td>
+        <td>"I delegated SQL learning instead of investing 4 weeks myself. I'm fixing that now — it taught me that delegating skill-building doesn't build your own capability."</td>
+      </tr>
+      <tr>
+        <td>Walk me through your career</td>
+        <td class="td-gold">S10 (MT → AGM)</td>
+        <td>"Management Trainee to AGM in 6 years. I'm looking for the next 14.9x challenge."</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card green">
+    <div class="card-title">Growth Mindset Framing Guide</div>
+    <p class="small muted" style="margin-bottom:12px">Every answer at Microsoft must demonstrate a Growth Mindset signal. Here's how to embed it.</p>
+    <ul>
+      <li><strong>For failure questions:</strong> Always end with "What I learned" + "What I changed." Never just describe the failure. Example: "I delegated SQL learning → I learned that skill-building can't be outsourced → I'm now completing Mode Analytics and DataCamp to close this gap permanently."</li>
+      <li><strong>For success questions:</strong> Include "What I'd do differently next time." Example: "The NPV model succeeded, but I'd have brought a sensitivity analysis to round 1 instead of round 3 — that would have closed two rounds of scrutiny in 5 minutes."</li>
+      <li><strong>For conflict questions:</strong> Frame disagreements as "learn-it-all, not know-it-all." Example: "I sought to understand their perspective first before presenting mine. I discovered they had a valid constraint I hadn't considered."</li>
+      <li><strong>Culture signal words to use:</strong> "growth mindset," "learn-it-all," "customer obsession," "One Microsoft," "Model-Coach-Care," "diverse and inclusive," "empower every person."</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Questions You Should Ask the Interviewer</div>
+    <ul>
+      <li>"What does the Rhythm of Business look like for the LT, and what would you want the Business Manager to change about it?"</li>
+      <li>"How does OPG's Delivery Partner strategy interact with CELA and Procurement today — where are the friction points?"</li>
+      <li>"What does success look like for this role in the first 6 months — is there a specific initiative or transformation you'd want the BizMgr to own immediately?"</li>
+      <li>"How does this role interact with the CVP's office — is there direct access, or is it primarily through the Senior Director?"</li>
+      <li>"What's the biggest ambiguity in OPG right now that this person would need to navigate?"</li>
+    </ul>
+  </div>
+
+  <div class="card purple">
+    <div class="card-title">Assertiveness Proof Points (Prepare for AA Round)</div>
+    <p class="small muted" style="margin-bottom:12px">Your DISC profile shows Low-D. Microsoft's AA round probes for executive presence. Have these ready.</p>
+    <ul>
+      <li><strong>Proof Point 1:</strong> Held PR rejection documentation standard at 49% under pressure to relax — position vindicated by data.</li>
+      <li><strong>Proof Point 2:</strong> Defended NPV model at MD/CEO level through multiple scrutiny rounds — zero material concessions.</li>
+      <li><strong>Proof Point 3:</strong> Escalated 3 blocked risk register items to CCO proactively before due dates — didn't wait for them to become overdue.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================== TAB 8: VOCAB DECODER ======================== -->
+<div class="section" id="tab-vocab">
+  <div class="section-title">Vocabulary Decoder</div>
+  <div class="section-sub">Translate your Sobha language into Microsoft OPG language — use these in resume, interviews, and cover note</div>
+
+  <div class="card">
+    <div class="card-title">Sobha → Microsoft OPG Translation Map</div>
+    <div class="vocab-row"><div class="vocab-from">Collections function</div><div class="vocab-arrow">→</div><div class="vocab-to">Business Operations / Ops Excellence</div></div>
+    <div class="vocab-row"><div class="vocab-from">Delinquency rate</div><div class="vocab-arrow">→</div><div class="vocab-to">Portfolio at-risk rate / SLA adherence</div></div>
+    <div class="vocab-row"><div class="vocab-from">MBR/QBR with CRO & CCO</div><div class="vocab-arrow">→</div><div class="vocab-to">Rhythm of Business (RoB)</div></div>
+    <div class="vocab-row"><div class="vocab-from">FY2026 AED 8.2B target governance</div><div class="vocab-arrow">→</div><div class="vocab-to">Annual planning & OKR alignment</div></div>
+    <div class="vocab-row"><div class="vocab-from">10-bank infrastructure (escrow, RERA, virtual accounts)</div><div class="vocab-arrow">→</div><div class="vocab-to">Delivery Partner onboarding & compliance</div></div>
+    <div class="vocab-row"><div class="vocab-from">42-person India hub deployment</div><div class="vocab-arrow">→</div><div class="vocab-to">Workforce planning & org design</div></div>
+    <div class="vocab-row"><div class="vocab-from">NPV model AED 652M</div><div class="vocab-arrow">→</div><div class="vocab-to">Business case development & executive decision support</div></div>
+    <div class="vocab-row"><div class="vocab-from">PR rejection quality scorecard</div><div class="vocab-arrow">→</div><div class="vocab-to">Governance controls / quality assurance framework</div></div>
+    <div class="vocab-row"><div class="vocab-from">70+ report Salesforce MI ecosystem</div><div class="vocab-arrow">→</div><div class="vocab-to">Dashboards & reporting frameworks for data-driven insights</div></div>
+    <div class="vocab-row"><div class="vocab-from">14-finding risk register</div><div class="vocab-arrow">→</div><div class="vocab-to">Programme risk tracking & compliance oversight</div></div>
+    <div class="vocab-row"><div class="vocab-from">T−25/T+30 framework</div><div class="vocab-arrow">→</div><div class="vocab-to">Operational readiness framework / engagement cadence</div></div>
+    <div class="vocab-row"><div class="vocab-from">77-person cross-geo team</div><div class="vocab-arrow">→</div><div class="vocab-to">Global team operations across multiple delivery locations</div></div>
+    <div class="vocab-row"><div class="vocab-from">4 legal entities governance</div><div class="vocab-arrow">→</div><div class="vocab-to">Cross-BU / cross-entity alignment</div></div>
+    <div class="vocab-row"><div class="vocab-from">MD/CEO-level presentation</div><div class="vocab-arrow">→</div><div class="vocab-to">CVP/VP-level executive engagement</div></div>
+    <div class="vocab-row"><div class="vocab-from">PCC TAT 20→3 days</div><div class="vocab-arrow">→</div><div class="vocab-to">Process re-engineering / operational excellence initiative</div></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="card gold">
+    <div class="card-title">Microsoft-Specific Terms You Must Know</div>
+    <table>
+      <tr><th>Term</th><th>Definition</th><th>How You'll Use It</th></tr>
+      <tr>
+        <td class="td-gold">Rhythm of Business (RoB)</td>
+        <td>Microsoft's structured operating cadence — weekly, monthly, quarterly, annual reviews. Drives priority alignment and accountability across the org.</td>
+        <td>Frame your MBR/QBR governance as "I designed and owned the RoB for a 77-person function."</td>
+      </tr>
+      <tr>
+        <td class="td-gold">Model-Coach-Care (MCC)</td>
+        <td>Microsoft's leadership framework: Model the behaviour you expect; Coach your team's growth; Care for the person behind the work.</td>
+        <td>Use in every "leadership style" answer. "I model accountability by owning my commitments first, coach capability through structured training, and care by designing career paths."</td>
+      </tr>
+      <tr>
+        <td class="td-gold">Growth Mindset</td>
+        <td>Satya Nadella's core culture principle: "learn-it-all beats know-it-all." Failure is learning. Curiosity is valued over certainty.</td>
+        <td>End every failure story with Growth Mindset language. "That experience taught me... I changed my approach to..."</td>
+      </tr>
+      <tr>
+        <td class="td-gold">CELA</td>
+        <td>Corporate, External, and Legal Affairs — Microsoft's legal and policy function. You'll partner with CELA on vendor compliance.</td>
+        <td>Analogous to your Legal team partnership on RERA compliance and contract governance.</td>
+      </tr>
+      <tr>
+        <td class="td-gold">Delivery Partner</td>
+        <td>Third-party companies (Infosys, Wipro, HCL, Accenture, etc.) that execute contracted services for Microsoft. OPG manages this ecosystem.</td>
+        <td>Your 10-bank vendor infrastructure is the direct analog. Frame as "vendor ecosystem governance."</td>
+      </tr>
+      <tr>
+        <td class="td-gold">MCAPS</td>
+        <td>Microsoft Customer and Partner Solutions — the commercial and partner-facing engine of Microsoft.</td>
+        <td>OPG likely sits within or adjacent to MCAPS. Understand the org structure before your interview.</td>
+      </tr>
+      <tr>
+        <td class="td-gold">One Microsoft</td>
+        <td>Cross-functional collaboration culture. No siloed thinking — teams work together across boundaries for customer and business outcomes.</td>
+        <td>Frame every cross-functional story as "One Microsoft" behaviour: "I brought Finance, Legal, Ops, and IT together — that's a One Microsoft approach."</td>
+      </tr>
+      <tr>
+        <td class="td-gold">AA / As Appropriate</td>
+        <td>The final-round interview with a senior leader who makes the hire/no-hire decision. Focuses on executive presence and cultural fit.</td>
+        <td>Prepare your strongest assertiveness proof points for this round. The AA interviewer is looking for leadership maturity.</td>
+      </tr>
+      <tr>
+        <td class="td-gold">v-Team</td>
+        <td>Virtual team — cross-functional group assembled for a specific initiative. Common in Microsoft's matrixed structure.</td>
+        <td>Your cross-functional task forces (PCC TAT, NPV programme, Salesforce build) are v-Teams.</td>
+      </tr>
+      <tr>
+        <td class="td-gold">OHI / Organizational Health Index</td>
+        <td>Microsoft's internal survey measuring team health, psychological safety, and manager effectiveness.</td>
+        <td>Frame your team sentiment amplification and feedback translation work using this term.</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Career Reframe — The Core Narrative</div>
+    <div class="quote">
+      I've spent six years building and running the operational engine for a function that scaled 14.9x — from AED 867M to AED 12.97B. I've done strategy-to-execution translation, operating rhythm design, financial governance, cross-functional programme orchestration, workforce planning, and executive decision support. At Sobha, the title is AGM Dues Collections. But the job I've been doing is Business Manager to a senior leadership team. I'm ready to do it at Microsoft's scale.
+      <span class="quote-attr">— Core Interview Narrative</span>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top: document.querySelector('.nav').offsetTop, behavior:'smooth'});
+}
+</script>
+</body>
+</html>

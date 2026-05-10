@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uber Sr. Risk Analytics & Ops Mgr — Career Playbook | Priyanuj Deka</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,800;1,400&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #000000;
+    --surface: #0a0a0a;
+    --s2: #141414;
+    --s3: #1c1c1c;
+    --border: #262626;
+    --border2: #3a3a3a;
+    --white: #ffffff;
+    --text: #e8e8e8;
+    --muted: #8a8a8a;
+    --dim: #4a4a4a;
+    --accent: #ffffff;
+    --green: #18d26e;
+    --amber: #f5a623;
+    --red: #ff4d4d;
+    --blue: #4d9aff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .header {
+    background: #000;
+    border-bottom: 1px solid var(--border2);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: 'UBER';
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Fraunces', serif;
+    font-weight: 800;
+    font-size: 240px;
+    color: rgba(255,255,255,0.025);
+    pointer-events: none;
+    letter-spacing: -12px;
+    line-height: 1;
+  }
+  .header-inner { max-width: 1200px; margin: 0 auto; padding: 44px 32px 36px; position: relative; z-index: 1; }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 2px; padding: 5px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--white); margin-bottom: 18px; text-transform: uppercase;
+  }
+  .header-badge::before { content: '●'; font-size: 7px; color: var(--green); }
+  .header h1 {
+    font-family: 'Fraunces', serif; font-weight: 600;
+    font-size: clamp(30px, 4.2vw, 50px);
+    line-height: 1.1; color: #fff; margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+  .header h1 em { font-style: italic; font-weight: 400; color: var(--muted); }
+  .header-sub {
+    color: var(--muted); font-size: 13px;
+    letter-spacing: 0.04em; margin-bottom: 28px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .header-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+  .hstat { display: flex; flex-direction: column; gap: 3px; }
+  .hstat-val {
+    font-family: 'Fraunces', serif; font-weight: 600;
+    font-size: 28px; color: #fff; line-height: 1;
+  }
+  .hstat-val.green { color: var(--green); }
+  .hstat-val.amber { color: var(--amber); }
+  .hstat-lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .tabs-wrap {
+    background: #000;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .tabs {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 16px 20px; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--muted); background: transparent;
+    border: none; text-transform: uppercase;
+    white-space: nowrap; position: relative;
+    transition: color 0.2s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--white); }
+  .tab.active::after {
+    content: ''; position: absolute; bottom: 0; left: 20px; right: 20px;
+    height: 2px; background: var(--white);
+  }
+  .tab-num {
+    font-size: 9px; color: var(--dim);
+    margin-right: 6px; font-weight: 500;
+  }
+  .tab.active .tab-num { color: var(--white); }
+  .content { max-width: 1200px; margin: 0 auto; padding: 40px 32px 80px; }
+  .panel { display: none; animation: fadeIn 0.3s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-head {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 28px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-head h2 {
+    font-family: 'Fraunces', serif; font-weight: 600;
+    font-size: 28px; color: #fff; letter-spacing: -0.01em;
+  }
+  .section-head .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  h3 {
+    font-family: 'Fraunces', serif; font-weight: 600;
+    font-size: 20px; color: #fff;
+    margin: 28px 0 14px; letter-spacing: -0.005em;
+  }
+  h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin: 24px 0 12px;
+  }
+  p { margin-bottom: 14px; color: var(--text); }
+  strong { color: #fff; font-weight: 600; }
+  em { color: var(--muted); font-style: italic; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 22px 24px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .card-header {
+    display: flex; justify-content: space-between;
+    align-items: baseline; margin-bottom: 12px;
+    padding-bottom: 10px; border-bottom: 1px solid var(--border);
+  }
+  .card-title {
+    font-family: 'Fraunces', serif; font-weight: 600;
+    font-size: 17px; color: #fff;
+  }
+  .card-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--muted);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 900px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+  .kv { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--border); font-size: 13px; }
+  .kv:last-child { border-bottom: none; }
+  .kv-k { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .kv-v { color: #fff; font-weight: 500; text-align: right; }
+
+  .fit-meter { background: var(--s2); border: 1px solid var(--border); padding: 24px; margin-bottom: 20px; }
+  .fit-bar-wrap { position: relative; height: 6px; background: var(--s3); border-radius: 0; margin: 20px 0 10px; overflow: hidden; }
+  .fit-bar { position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, var(--amber), var(--green)); }
+  .fit-mark { position: absolute; top: -6px; width: 2px; height: 18px; background: #fff; }
+  .fit-mark::after { content: attr(data-lbl); position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); white-space: nowrap; }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 20px; font-size: 13px; }
+  th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.1em;
+    color: var(--muted); text-transform: uppercase;
+    background: var(--s2); font-weight: 500;
+    border-bottom: 1px solid var(--border2);
+  }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .tag {
+    display: inline-block; padding: 2px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.05em;
+    text-transform: uppercase; border-radius: 2px;
+    margin-right: 4px;
+  }
+  .tag.g { background: rgba(24,210,110,0.1); color: var(--green); border: 1px solid rgba(24,210,110,0.3); }
+  .tag.a { background: rgba(245,166,35,0.1); color: var(--amber); border: 1px solid rgba(245,166,35,0.3); }
+  .tag.r { background: rgba(255,77,77,0.1); color: var(--red); border: 1px solid rgba(255,77,77,0.3); }
+  .tag.n { background: var(--s3); color: var(--text); border: 1px solid var(--border2); }
+
+  .star-story {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--white);
+    padding: 24px; margin-bottom: 18px;
+  }
+  .star-story .q {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 16px; color: #fff; margin-bottom: 16px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--border);
+  }
+  .star-row { display: grid; grid-template-columns: 80px 1fr; gap: 16px; padding: 8px 0; }
+  .star-row .lbl {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--muted);
+    letter-spacing: 0.1em; padding-top: 3px;
+  }
+  .star-row .txt { font-size: 13px; line-height: 1.7; }
+
+  ul.clean { list-style: none; padding: 0; }
+  ul.clean li {
+    padding: 8px 0 8px 20px; position: relative;
+    border-bottom: 1px dashed var(--border);
+    font-size: 13px;
+  }
+  ul.clean li:last-child { border-bottom: none; }
+  ul.clean li::before {
+    content: '—'; position: absolute;
+    left: 0; top: 8px; color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  ul.check li::before { content: '✓'; color: var(--green); font-weight: 700; }
+  ul.warn li::before { content: '!'; color: var(--amber); font-weight: 700; }
+  ul.x li::before { content: '×'; color: var(--red); font-weight: 700; }
+
+  .quote {
+    background: var(--s2); border: 1px solid var(--border);
+    border-left: 3px solid var(--white);
+    padding: 18px 22px; margin: 18px 0;
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 16px; color: #fff; line-height: 1.6;
+  }
+  .quote::before {
+    content: '“'; font-size: 48px; line-height: 0;
+    vertical-align: -10px; color: var(--muted); margin-right: 6px;
+  }
+
+  .ai-proj {
+    background: linear-gradient(180deg, var(--surface) 0%, #000 100%);
+    border: 1px solid var(--border2);
+    padding: 26px; margin-bottom: 20px;
+    position: relative; overflow: hidden;
+  }
+  .ai-proj::before {
+    content: attr(data-num);
+    position: absolute; top: 20px; right: 24px;
+    font-family: 'Fraunces', serif; font-size: 64px;
+    color: rgba(255,255,255,0.04); font-weight: 800;
+    line-height: 1;
+  }
+  .ai-proj h3 { margin-top: 0; }
+  .stack-tags { margin-top: 14px; }
+  .stack-tags .tag { margin-bottom: 4px; }
+
+  .timeline-item {
+    display: grid; grid-template-columns: 100px 1fr;
+    gap: 20px; padding: 18px 0;
+    border-bottom: 1px dashed var(--border);
+  }
+  .timeline-item:last-child { border-bottom: none; }
+  .timeline-week {
+    font-family: 'Fraunces', serif; font-weight: 600;
+    font-size: 22px; color: var(--white); line-height: 1;
+  }
+  .timeline-week-lbl {
+    display: block; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-top: 4px; font-weight: 400;
+  }
+
+  .verdict-box {
+    background: #000;
+    border: 1px solid var(--green);
+    padding: 28px 30px; margin: 22px 0;
+    position: relative;
+  }
+  .verdict-box::before {
+    content: 'VERDICT';
+    position: absolute; top: -10px; left: 24px;
+    background: #000; padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--green);
+  }
+
+  .pitch-box {
+    background: linear-gradient(135deg, #000 0%, var(--s2) 100%);
+    border: 1px solid var(--border2);
+    padding: 30px 32px; margin: 22px 0;
+    position: relative;
+  }
+  .pitch-box::before {
+    content: 'ELEVATOR PITCH';
+    position: absolute; top: -10px; left: 24px;
+    background: #000; padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.15em;
+    color: var(--white);
+  }
+  .pitch-box p {
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 17px; line-height: 1.7; color: #fff;
+    margin-bottom: 0;
+  }
+
+  .comp-row {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    padding: 14px 16px; border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .comp-row.head {
+    background: var(--s2); font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .comp-row .lbl { font-weight: 500; color: #fff; }
+  .comp-row .val { font-family: 'Fraunces', serif; font-size: 16px; color: #fff; text-align: right; }
+  .comp-row.hi { background: rgba(24,210,110,0.06); border-left: 2px solid var(--green); }
+
+  .callout {
+    background: rgba(77,154,255,0.05);
+    border: 1px solid rgba(77,154,255,0.2);
+    padding: 16px 20px; margin: 16px 0;
+    font-size: 13px;
+  }
+  .callout strong { color: var(--blue); }
+
+  .warn-callout {
+    background: rgba(245,166,35,0.05);
+    border: 1px solid rgba(245,166,35,0.2);
+    padding: 16px 20px; margin: 16px 0;
+    font-size: 13px;
+  }
+  .warn-callout strong { color: var(--amber); }
+
+  .footer {
+    border-top: 1px solid var(--border); padding: 30px 32px;
+    max-width: 1200px; margin: 40px auto 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--muted); letter-spacing: 0.05em;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-badge">Active · Parallel Track · Pipeline Role #13</div>
+    <h1>Uber Sr. Risk Analytics <em>&</em> Operations Manager</h1>
+    <div class="header-sub">Hyderabad · Uber for Business · Financial Fraud Mitigation · L5A</div>
+    <div class="header-stats">
+      <div class="hstat"><div class="hstat-val green">68→78</div><div class="hstat-lbl">Fit Score / 100</div></div>
+      <div class="hstat"><div class="hstat-val">₹75–110L</div><div class="hstat-lbl">L5A Total Comp</div></div>
+      <div class="hstat"><div class="hstat-val amber">6–8 wks</div><div class="hstat-lbl">Prep Window</div></div>
+      <div class="hstat"><div class="hstat-val">L5A</div><div class="hstat-lbl">Level Mapping</div></div>
+      <div class="hstat"><div class="hstat-val">RSU+Cash</div><div class="hstat-lbl">Comp Structure</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="showTab(0)"><span class="tab-num">01</span>JD Decoded</button>
+    <button class="tab" onclick="showTab(1)"><span class="tab-num">02</span>Your Fit</button>
+    <button class="tab" onclick="showTab(2)"><span class="tab-num">03</span>Gaps & Plan</button>
+    <button class="tab" onclick="showTab(3)"><span class="tab-num">04</span>AI Portfolio</button>
+    <button class="tab" onclick="showTab(4)"><span class="tab-num">05</span>STAR Bank</button>
+    <button class="tab" onclick="showTab(5)"><span class="tab-num">06</span>Comp Intel</button>
+    <button class="tab" onclick="showTab(6)"><span class="tab-num">07</span>Interview Prep</button>
+    <button class="tab" onclick="showTab(7)"><span class="tab-num">08</span>Vocab Decoder</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ============== PANEL 1: JD DECODED ============== -->
+<div class="panel active">
+  <div class="section-head">
+    <span class="num">01 /</span>
+    <h2>The Role, Decoded</h2>
+  </div>
+
+  <p>Uber for Business (U4B) is Uber's B2B arm — corporate travel, employee commute, meal programs, courier services sold to enterprises. <strong>Financial fraud on U4B is structurally different from consumer fraud:</strong> higher per-transaction values, invoice fraud, expense fraud, account takeover on corporate accounts, synthetic employee profiles. This role exists because U4B fraud losses and false-positive friction are both meaningful line items — and the business needs someone to own the tradeoff.</p>
+
+  <div class="quote">The core tension of this role: every control you tighten reduces fraud loss but also blocks legitimate corporate customers. Every control you loosen the other way. Your job is to find the curve — with data.</div>
+
+  <h3>Role Translated Into Plain English</h3>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">"COO of Risk & Controls for Uber for Business"</div>
+      <div class="card-meta">Role Essence</div>
+    </div>
+    <p>You own the operational side of fraud strategy for U4B — not the ML models (those sit with Data Science), not the policy (that sits with Risk Leadership), but <strong>everything that happens between the signal firing and the customer experience resolving</strong>. That includes: designing rules and tests, running queue operations, managing false-positive recovery, presenting loss/CX tradeoffs to leadership, and scaling processes as U4B grows.</p>
+  </div>
+
+  <h3>Top 5 Requirements, Reverse-Engineered</h3>
+  <table>
+    <tr><th style="width:5%">#</th><th style="width:35%">JD Language</th><th style="width:60%">What It Actually Means</th></tr>
+    <tr><td>1</td><td>"Data fluency — manipulate datasets, design test plans, translate insights into strategies"</td><td>You will live in SQL + Google Sheets. Every strategy proposal needs a query behind it. "Test plans" = A/B test design on fraud rules (treatment vs control holdout).</td></tr>
+    <tr><td>2</td><td>"Building, managing, scaling complex processes in fast-moving environments"</td><td>U4B is growing fast. Today's queue at 500 cases/day becomes 5,000 in 18 months. You need to design processes that don't break at 10x volume.</td></tr>
+    <tr><td>3</td><td>"Presenting data-driven insights to senior, sophisticated audiences"</td><td>You will present to the U4B GM, Global Risk leadership, and likely Finance. Your NPV defense at MD/CEO level is directly relevant experience.</td></tr>
+    <tr><td>4</td><td>"Stakeholder management, cross-functional matrices, change management"</td><td>You navigate: Data Science (models), Engineering (tooling), Product (CX), Ops (queues), Finance (loss), Legal (disputes). Six stakeholders minimum.</td></tr>
+    <tr><td>5</td><td>"Independently, make sound judgments, influence through data"</td><td>Your manager is US-based. You own your patch. "Influence" = persuade Product to accept more friction, or Finance to accept more loss, based on your analysis.</td></tr>
+  </table>
+
+  <h3>What "Financial Fraud Mitigation on U4B" Specifically Involves</h3>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">The Fraud Surface</div><div class="card-meta">What you'll see</div></div>
+      <ul class="clean">
+        <li><strong>Account Takeover:</strong> Stolen corporate credentials → unauthorized rides/deliveries booked</li>
+        <li><strong>Invoice/Expense Fraud:</strong> Legitimate employees gaming the system (personal rides billed to company)</li>
+        <li><strong>Synthetic Accounts:</strong> Fake corporate accounts set up to exploit promos/credit</li>
+        <li><strong>Chargebacks:</strong> Corporate cardholders disputing valid charges</li>
+        <li><strong>Collusion:</strong> Driver/rider pairs exploiting expense programs</li>
+        <li><strong>Payment Fraud:</strong> Stolen cards on corporate profiles</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">The Operational Loop</div><div class="card-meta">Your daily mechanic</div></div>
+      <ul class="clean">
+        <li>Signal fires → case enters queue</li>
+        <li>Queue ops investigates or auto-actions</li>
+        <li>Legitimate customer impacted? → false-positive recovery</li>
+        <li>Chargeback comes in? → dispute workflow</li>
+        <li>Weekly: review FPR, precision, loss rate, CX NPS</li>
+        <li>Monthly: propose rule changes, test them, roll out</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Why Uber is Hiring This Now</h3>
+  <div class="card">
+    <p><strong>U4B scale inflection.</strong> Uber for Business crossed material revenue scale in 2024-25. As B2B volume grows, fraud vectors that didn't matter at small scale become material line items. The company needs someone who has <em>managed operational risk at scale</em>, not someone who has only done policy or modeling. Your AED 86.8B portfolio and 14.9x throughput scale story land perfectly here.</p>
+  </div>
+
+  <div class="warn-callout">
+    <strong>Watch signal:</strong> This role was listed with 4+ years minimum but JD says "5+ years" — suggests the role is calibrated for experienced operators with real scale stories, not mid-career transitioners. Your 6+ years with AED-scale operations clears the bar. Your collections background is a positive differentiator here — arrears management at Uber is a real line item.
+  </div>
+</div>
+
+<!-- ============== PANEL 2: YOUR FIT ============== -->
+<div class="panel">
+  <div class="section-head">
+    <span class="num">02 /</span>
+    <h2>Fit Analysis</h2>
+  </div>
+
+  <div class="fit-meter">
+    <div style="display:flex; justify-content:space-between; align-items:baseline;">
+      <div style="font-family:'Fraunces',serif; font-size:32px; color:#fff;">68 <span style="color:var(--muted); font-size:18px;">→ 78</span> <span style="font-size:14px; color:var(--muted);">/100</span></div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:0.1em;">CURRENT → POST-PREP · 6–8 WEEKS</div>
+    </div>
+    <div class="fit-bar-wrap">
+      <div class="fit-bar" style="width:78%;"></div>
+      <div class="fit-mark" style="left:68%;" data-lbl="NOW"></div>
+      <div class="fit-mark" style="left:78%;" data-lbl="TARGET"></div>
+    </div>
+    <div style="display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted);">
+      <span>0</span><span>STRETCH 50</span><span>COMPETITIVE 70</span><span>STRONG 85</span><span>100</span>
+    </div>
+  </div>
+
+  <h3>Sobha → Uber: The Translation Matrix</h3>
+  <table>
+    <tr>
+      <th style="width:35%">JD Requirement</th>
+      <th style="width:45%">Your Evidence</th>
+      <th style="width:20%">Strength</th>
+    </tr>
+    <tr>
+      <td>Building & scaling complex processes in fast-moving environments</td>
+      <td><strong>14.9x throughput scale</strong> (AED 867M → 12.97B, 2021–2025) across 4 legal entities, 77-person org</td>
+      <td><span class="tag g">Headline Match</span></td>
+    </tr>
+    <tr>
+      <td>5+ yrs Fraud/Risk/Marketplace Ops, deep operational understanding</td>
+      <td>6+ yrs running dues/collections risk ops; <strong>14-finding risk register → 97.5% error reduction</strong>; <strong>PR rejection 49% governance</strong></td>
+      <td><span class="tag g">Strong</span></td>
+    </tr>
+    <tr>
+      <td>False positive & CX management</td>
+      <td><strong>PCC TAT 20d → 3d with 3x volume</strong> (Nov-25: 281 vs prior ~90) — direct analog to false-positive queue management</td>
+      <td><span class="tag g">Direct Analog</span></td>
+    </tr>
+    <tr>
+      <td>Presenting to senior, sophisticated audiences</td>
+      <td><strong>NPV AED 652M defended at MD/CEO</strong> through multiple scrutiny rounds, zero material concessions</td>
+      <td><span class="tag g">Strong</span></td>
+    </tr>
+    <tr>
+      <td>Influence decisions through data</td>
+      <td>Salesforce 0→1 build with 70+ live reports; 6-stakeholder discovery; MI architecture for exec decisions</td>
+      <td><span class="tag g">Strong</span></td>
+    </tr>
+    <tr>
+      <td>Stakeholder management, cross-functional matrices</td>
+      <td>Dubai + India two-geography org; Ops (38) / QCG (12) / MIS (15) / Dues (12) four-function matrix reporting to CCO</td>
+      <td><span class="tag g">Strong</span></td>
+    </tr>
+    <tr>
+      <td>Independent ownership, sound judgment</td>
+      <td><strong>3 proactive CCO escalations</strong> before due dates; NPV defense; 55-day T−25/T+30 proprietary framework</td>
+      <td><span class="tag g">Strong</span></td>
+    </tr>
+    <tr>
+      <td>Advanced SQL proficiency</td>
+      <td>You approve SQL migration work; don't author queries yet (Vijay Zakkala leads)</td>
+      <td><span class="tag r">Primary Gap</span></td>
+    </tr>
+    <tr>
+      <td>Fraud domain vocabulary (FPR, precision, chargebacks, ATO)</td>
+      <td>Risk/controls/collections vocabulary — adjacent but not fraud-native</td>
+      <td><span class="tag a">Fixable</span></td>
+    </tr>
+    <tr>
+      <td>A/B test design (treatment vs control holdout)</td>
+      <td>Never formally run controlled experiments</td>
+      <td><span class="tag a">Fixable</span></td>
+    </tr>
+    <tr>
+      <td>Marketplace / two-sided platform ops framing</td>
+      <td>Collections vocabulary needs translating to marketplace/trust & safety language</td>
+      <td><span class="tag a">Reframe Work</span></td>
+    </tr>
+  </table>
+
+  <div class="pitch-box">
+    <p>"I've spent six years running risk-and-controls operations for an AED 86.8B portfolio — scaling throughput 14.9x while cutting delinquency 74%. The judgment calls I make daily — where to tighten controls versus where false positives cost more than the risk they prevent — are exactly the tradeoff this role exists to make. At Uber for Business scale, I'd bring proven operating-model design, senior-forum influence, and AI-augmented tooling to the fraud–CX balance."</p>
+  </div>
+
+  <h3>Why You, Specifically</h3>
+  <div class="grid3">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Scale Credibility</div><div class="card-meta">Rare at this level</div></div>
+      <p>Most Sr. Manager candidates have run fraud ops, not <em>scaled</em> them through a 14.9x volume inflection. That specific experience is scarce.</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Tradeoff Judgment</div><div class="card-meta">The PR 49% story</div></div>
+      <p>Holding a documentation standard under pressure — vindicated by data — is the exact muscle this role needs when deciding to loosen/tighten fraud rules.</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Senior-Forum Presence</div><div class="card-meta">MD/CEO defense</div></div>
+      <p>You've defended a AED 652M model at MD/CEO multiple rounds. This role presents weekly to U4B GM — you operate comfortably above your level.</p>
+    </div>
+  </div>
+
+  <h3>Honest Risks in the Process</h3>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Risk 1: SQL Screen</div><div class="card-meta">Stage 2 likely</div></div>
+      <p>Uber will test SQL — either live coding or take-home. Without 4–6 weeks of prep, you will fail this round. <strong>This is the single biggest process risk.</strong></p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Risk 2: Fraud-Native Competition</div><div class="card-meta">Blind spot</div></div>
+      <p>You will compete against candidates from PayPal, Razorpay, PhonePe, Paytm who've done fraud ops natively. You win on scale, they win on domain depth. Your job: close enough of the vocabulary gap that the scale story dominates.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============== PANEL 3: GAPS & PLAN ============== -->
+<div class="panel">
+  <div class="section-head">
+    <span class="num">03 /</span>
+    <h2>Gap Closure Plan — 8 Weeks</h2>
+  </div>
+
+  <div class="callout">
+    <strong>Prep philosophy:</strong> Invest 60% into SQL (benefits Uber + Google GBO + AmEx), 25% into fraud domain vocab (Uber-specific but transferable), 15% into one portfolio project. Do NOT start fraud certifications — time those only after interview invite lands.
+  </div>
+
+  <h3>The Four Gaps, Ranked</h3>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Gap 1 — SQL Fluency <span class="tag r">CRITICAL</span></div>
+      <div class="card-meta">4–6 weeks</div>
+    </div>
+    <p><strong>Why it matters:</strong> JD explicitly says "advanced SQL proficiency." Uber runs Mode Analytics internally. An SQL coding screen is near-certain. Without this, you fail at Round 2 regardless of the strength of your narrative.</p>
+    <p><strong>The fix (ordered):</strong></p>
+    <ul class="clean">
+      <li><strong>Week 1–2:</strong> Mode Analytics SQL Tutorial (free) — basic → intermediate → advanced. Mode is literally what Uber uses. Builds your muscle in their tool.</li>
+      <li><strong>Week 2–3:</strong> StrataScratch or LeetCode SQL Hard problems — 30 problems minimum. Focus on window functions (ROW_NUMBER, RANK, LAG, LEAD), CTEs, self-joins, cohort analysis.</li>
+      <li><strong>Week 3–4:</strong> Download <strong>Kaggle IEEE-CIS Fraud Detection dataset</strong> — run EDA queries in BigQuery free tier. This is a real fraud dataset, and your queries become portfolio evidence.</li>
+      <li><strong>Week 4–5:</strong> DataCamp "SQL for Data Science" track certification — LinkedIn-displayable.</li>
+      <li><strong>Week 5–6:</strong> Mock SQL interview questions — 10 fraud-specific prompts ("calculate 7-day rolling FPR by rule", "find chargeback clusters by merchant", "compute precision/recall from a confusion matrix table").</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Gap 2 — Fraud Domain Vocabulary <span class="tag a">HIGH</span></div>
+      <div class="card-meta">2 weeks parallel</div>
+    </div>
+    <p><strong>Why it matters:</strong> You need to speak fraud in the interview. Every second you spend defining a term is a second you're not storytelling. The goal isn't fraud expertise — it's fluency sufficient to be treated as a peer.</p>
+    <p><strong>The fix:</strong></p>
+    <ul class="clean">
+      <li>Read 3 foundational blog posts: Stripe Radar docs, Sift Science blog (top 5 posts), Signifyd "State of Fraud" report</li>
+      <li>Memorize 40 terms from Vocab Decoder tab (Panel 8)</li>
+      <li>Listen to 2–3 episodes of "Fraud Stories" or "What The Fraud" podcast</li>
+      <li>Read the <a href="https://www.kaggle.com/c/ieee-fraud-detection/discussion" style="color:var(--blue);">IEEE-CIS Fraud Kaggle discussion forums</a> — top solutions explain industry framing</li>
+      <li>Learn specifically: chargeback codes (4837, 4855, 10.4), SCA/3DS2, velocity checks, device fingerprinting, step-up authentication, synthetic ID, B2B fraud vectors (invoice, expense, collusion, account takeover)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Gap 3 — A/B Test Design <span class="tag a">MEDIUM</span></div>
+      <div class="card-meta">1 week</div>
+    </div>
+    <p><strong>Why it matters:</strong> JD says "design test plans." Fraud rule changes must be tested, not rolled out globally on day one. Missing this concept signals immaturity.</p>
+    <p><strong>The fix:</strong></p>
+    <ul class="clean">
+      <li>Complete Udacity's <strong>free A/B Testing course</strong> (abridged version) — 6 hours</li>
+      <li>Learn: treatment/control split, minimum detectable effect, Type I/II error, Sample Ratio Mismatch, novelty effect, primary vs guardrail metrics</li>
+      <li>Fraud-specific: shadow mode deployment, holdout groups, sequential testing, false-positive recovery windows</li>
+      <li>Write one mock test plan: "Test plan: tightening velocity rule X on U4B cohort Y" — 1 page, structure: hypothesis, metric, MDE, sample size, duration, decision criteria</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Gap 4 — Marketplace/Trust & Safety Framing <span class="tag a">MEDIUM</span></div>
+      <div class="card-meta">Ongoing reframe</div>
+    </div>
+    <p><strong>Why it matters:</strong> Your collections vocabulary ("dues", "delinquency", "customer engagement") must translate to Uber vocabulary ("marketplace health", "platform integrity", "trust & safety"). Same muscle, different words.</p>
+    <p><strong>The fix:</strong></p>
+    <ul class="clean">
+      <li>Reframe 3 STAR stories into marketplace vocabulary (done in Panel 5)</li>
+      <li>Substitute vocabulary in elevator pitch: "portfolio health" → "platform integrity", "delinquency" → "payment risk exposure", "dues collection" → "recovery operations"</li>
+      <li>Read 1 Uber engineering blog post on fraud/trust (eng.uber.com) — pick up native phrasing</li>
+      <li>Reference "two-sided marketplace" once in interview — drivers + riders on Rides, customers + delivery partners on Eats, corporate admins + employees on U4B</li>
+    </ul>
+  </div>
+
+  <h3>Certifications — Strategic Sequencing</h3>
+  <div class="warn-callout">
+    <strong>Do NOT pursue fraud certs pre-interview.</strong> CAFE / CFE / ACFE certs take 3–6 months and won't be done in time. They also don't move Uber recruiters. <strong>Pursue only AFTER interview invite, if at all.</strong>
+  </div>
+  <table>
+    <tr><th>Cert</th><th>Value</th><th>Effort</th><th>When</th></tr>
+    <tr><td>DataCamp SQL for Data Science</td><td><span class="tag g">High</span></td><td>~20 hrs</td><td>Weeks 1–4, required</td></tr>
+    <tr><td>Google Data Analytics (Coursera)</td><td><span class="tag a">Medium</span></td><td>~40 hrs</td><td>Optional, parallel with GBO prep</td></tr>
+    <tr><td>Udacity A/B Testing (free)</td><td><span class="tag a">Medium</span></td><td>~6 hrs</td><td>Week 5, required</td></tr>
+    <tr><td>CFE (Certified Fraud Examiner)</td><td><span class="tag n">Low pre-interview</span></td><td>3–6 months</td><td>Post-offer only, if at all</td></tr>
+    <tr><td>CAMS (Anti-Money Laundering)</td><td><span class="tag n">Low</span></td><td>3 months</td><td>Not recommended</td></tr>
+  </table>
+</div>
+
+<!-- ============== PANEL 4: AI PORTFOLIO ============== -->
+<div class="panel">
+  <div class="section-head">
+    <span class="num">04 /</span>
+    <h2>AI Portfolio — The Differentiator</h2>
+  </div>
+
+  <p>Your universal AI-augmented positioning — <strong>"I use AI to eliminate administrative burden and redirect time to judgment and influence work"</strong> — maps exceptionally well to Uber's risk function, where analyst time is the scarcest resource. Build ONE polished project. Ship it to GitHub. Link it in your resume.</p>
+
+  <div class="callout">
+    <strong>Priority:</strong> Build P12 first. If time permits, P13 as a stretch. P14 is a nice-to-have narrative prop if you get deep into the process.
+  </div>
+
+  <div class="ai-proj" data-num="P12">
+    <h3>P12 — B2B Fraud Signal Intelligence Dashboard <span class="tag g">PRIMARY</span></h3>
+    <p><strong>The Problem:</strong> Fraud analysts on U4B spend 60%+ of their time assembling context — pulling transaction history, cross-referencing velocity signals, checking device fingerprints across three different tools — before they can even start investigating. By the time they have context, they've burned 15 minutes per case.</p>
+    <p><strong>The Build:</strong> A Streamlit dashboard that ingests mock B2B transaction data (synthetic Uber for Business invoices + employee rides + chargeback records), computes key fraud signals (velocity, geo-impossible travel, amount anomaly, new-device flags), and uses Claude API to generate a one-paragraph "investigator's brief" per case ranking likelihood and suggesting next investigative step.</p>
+    <div class="stack-tags">
+      <span class="tag n">Python</span><span class="tag n">Streamlit</span><span class="tag n">DuckDB/SQL</span><span class="tag n">Claude API</span><span class="tag n">Kaggle IEEE-CIS dataset</span><span class="tag n">Looker Studio export</span>
+    </div>
+    <p style="margin-top:14px;"><strong>The Pitch:</strong> <em>"I built a prototype of the exact tool this team should have — AI-drafted investigator briefs, FPR/precision tradeoff slider, queue prioritization scoring. Happy to walk through it."</em></p>
+    <p><strong>Time:</strong> 3–4 weekends. <strong>Doubles as:</strong> SQL practice (Kaggle dataset), portfolio evidence, and conversation artifact for interviews.</p>
+  </div>
+
+  <div class="ai-proj" data-num="P13">
+    <h3>P13 — Fraud Rule A/B Test Plan Generator <span class="tag a">STRETCH</span></h3>
+    <p><strong>The Problem:</strong> Every fraud rule change needs a test plan — hypothesis, metrics, sample size, holdout design, decision criteria. Writing these from scratch takes 2–4 hours. Most analysts skip steps.</p>
+    <p><strong>The Build:</strong> A Claude-powered tool where you paste a rule description and it outputs a structured test plan in the format U4B Risk uses: primary metric, guardrail metrics, MDE calculation, sample size, shadow-mode period, decision matrix. Trained on 3–5 example test plans (you write the examples from public fraud/A-B testing blog content).</p>
+    <div class="stack-tags">
+      <span class="tag n">Claude API</span><span class="tag n">Python</span><span class="tag n">JSON schema</span><span class="tag n">Streamlit</span>
+    </div>
+    <p style="margin-top:14px;"><strong>Time:</strong> 1 weekend. <strong>Value:</strong> Shows you understand testing discipline AND AI tooling.</p>
+  </div>
+
+  <div class="ai-proj" data-num="P14">
+    <h3>P14 — Weekly Fraud Committee Deck Generator <span class="tag n">NICE-TO-HAVE</span></h3>
+    <p><strong>The Problem:</strong> Weekly fraud review prep eats 4+ hours. Same structure every week: FPR by rule, loss by vector, top escalations, proposed changes.</p>
+    <p><strong>The Build:</strong> Python script + Claude API that takes weekly CSV exports (mock data) and outputs a structured Markdown/PDF fraud committee pack — trends, callouts, recommended actions. Narrative drafted by Claude, reviewed by human.</p>
+    <div class="stack-tags">
+      <span class="tag n">Python</span><span class="tag n">pandas</span><span class="tag n">Claude API</span><span class="tag n">Markdown/ReportLab</span>
+    </div>
+    <p style="margin-top:14px;"><strong>Time:</strong> 1 weekend. <strong>Pitch:</strong> "Redirect analyst time from deck assembly to actual fraud judgment."</p>
+  </div>
+
+  <h3>The 30-Second AI Differentiator Story</h3>
+  <div class="pitch-box">
+    <p>"At Sobha, I've started automating the lowest-judgment parts of my team's day — the weekly deck assembly, the risk-register status pulls. The time saved goes back into actual judgment work: which findings to escalate, which RMs need coaching, which rules are over-firing. I'd bring that same philosophy to Uber — AI as a force multiplier on the analyst's judgment, not a replacement for it."</p>
+  </div>
+</div>
+
+<!-- ============== PANEL 5: STAR BANK ============== -->
+<div class="panel">
+  <div class="section-head">
+    <span class="num">05 /</span>
+    <h2>STAR Stories — Uber-Framed</h2>
+  </div>
+
+  <p>Five core stories, each re-framed from your master STAR bank into Uber's vocabulary (marketplace, platform integrity, fraud–CX tradeoff). Every story ends with a "So what for Uber" bridge.</p>
+
+  <div class="star-story">
+    <div class="q">S1 — "Tell me about a time you built a process from scratch under volume pressure." [Building/scaling complex processes]</div>
+    <div class="star-row"><div class="lbl">SITUATION</div><div class="txt">At Sobha Realty Dubai, dues collections were routed through ad-hoc Excel trackers across 4 legal entities with zero unified reporting. 2021 volume: AED 867M. Projected growth trajectory: 15x over 4 years. Delinquency was 16.7% and rising.</div></div>
+    <div class="star-row"><div class="lbl">TASK</div><div class="txt">Build the operating system — tooling, process, MI — that could absorb that volume without delinquency breaking.</div></div>
+    <div class="star-row"><div class="lbl">ACTION</div><div class="txt">Led Salesforce 0→1 build with 6-stakeholder discovery, architected 70+ live reports, designed the 55-day T−25 to T+30 critical collection window as the operational backbone. Stood up a 77-person two-geography org (Dubai + India) across four functions — collections RMs, Ops, QCG, MIS. Every rule and workflow was documented, versioned, owned.</div></div>
+    <div class="star-row"><div class="lbl">RESULT</div><div class="txt"><strong>14.9x throughput scale (AED 867M → 12.97B), delinquency −74% (16.7% → 4.4%), FY26 target AED 8.2B across 4 entities.</strong> System currently carrying AED 86.8B active portfolio.</div></div>
+    <div class="star-row"><div class="lbl">SO WHAT</div><div class="txt">U4B is at an inflection point. Today's 500 cases/day queue becomes 5,000 in 18 months. I've done the 15x scale-out already — different domain, same discipline of designing processes that don't break at 10x volume.</div></div>
+  </div>
+
+  <div class="star-story">
+    <div class="q">S2 — "Tell me about a time you had to hold a controls standard under pressure." [Independent judgment, fraud–CX tradeoff]</div>
+    <div class="star-row"><div class="lbl">SITUATION</div><div class="txt">Dec-2025: Payment Request rejection rate hit 49% on our QCG review gate. Commercial team pushed hard to relax the documentation standard — "the friction is killing velocity."</div></div>
+    <div class="star-row"><div class="lbl">TASK</div><div class="txt">Decide: loosen the gate and accept downstream risk exposure, or hold the gate and accept the friction cost?</div></div>
+    <div class="star-row"><div class="lbl">ACTION</div><div class="txt">Ran the data. Pulled root-cause analysis on rejected PRs — 73% were rejected for substantive documentation gaps, not procedural nits. Built a daily KPI governance pack breaking rejection reasons by category. Presented to leadership: the 49% rejection wasn't over-firing — it was catching real quality gaps. Held the line. Parallel fix: coached originators on documentation quality, which brought rejection rate down organically without relaxing the rule.</div></div>
+    <div class="star-row"><div class="lbl">RESULT</div><div class="txt">Position vindicated by data. Standards held. Downstream error rate never spiked. Originator documentation quality improved.</div></div>
+    <div class="star-row"><div class="lbl">SO WHAT</div><div class="txt">This is literally the fraud–CX tradeoff in a different uniform. Commercial team wanted lower FPR; the data said the "false positives" were real positives. I trust the data over the pressure. That's the muscle Uber is hiring for.</div></div>
+  </div>
+
+  <div class="star-story">
+    <div class="q">S3 — "Tell me about managing a false-positive queue or exception workflow at scale." [False positive & CX management]</div>
+    <div class="star-row"><div class="lbl">SITUATION</div><div class="txt">Post-Commencement Certificate (PCC) issuance had a 20-day TAT and a growing backlog. In November 2025, volume tripled to 281 cases/month vs. historical ~90. TAT was killing customer experience — PCC blocks their ability to occupy units.</div></div>
+    <div class="star-row"><div class="lbl">TASK</div><div class="txt">Cut TAT without creating downstream errors, in a month when volume was 3x normal.</div></div>
+    <div class="star-row"><div class="lbl">ACTION</div><div class="txt">Mapped the workflow end-to-end — found 4 sequential handoffs that could be parallelized, 2 manual checks that were duplicative with QCG, 1 approval loop that could be pre-authorized by policy rather than case-by-case. Redesigned the flow, deployed in 2 weeks, monitored daily.</div></div>
+    <div class="star-row"><div class="lbl">RESULT</div><div class="txt"><strong>TAT collapsed from 20 days to 3 days, volume 3x absorbed, zero quality regressions.</strong></div></div>
+    <div class="star-row"><div class="lbl">SO WHAT</div><div class="txt">This is exactly false-positive recovery queue management. Legitimate customer flagged by a fraud rule → TAT to resolution is the CX metric that matters. I've done this tradeoff — volume up, TAT down, quality held — at meaningful scale.</div></div>
+  </div>
+
+  <div class="star-story">
+    <div class="q">S4 — "Tell me about presenting a complex recommendation to senior leadership." [Senior-forum influence]</div>
+    <div class="star-row"><div class="lbl">SITUATION</div><div class="txt">I built an NPV model for a prepayment incentive program — AED 652M incremental inflow opportunity at AED 21.2M cost, 32% cheaper than bank financing on an average 248-day prepayment window.</div></div>
+    <div class="star-row"><div class="lbl">TASK</div><div class="txt">Get it approved by MD/CEO. The model touched finance, treasury, sales, and legal — each with a reason to push back.</div></div>
+    <div class="star-row"><div class="lbl">ACTION</div><div class="txt">Presented through <em>multiple</em> rounds of scrutiny. Each round I came back with new sensitivity analyses, cohort breakdowns, edge-case stress tests. Pre-briefed each stakeholder 1:1 before the group meeting so no one was surprised in the room. Defended the assumptions, conceded nothing material.</div></div>
+    <div class="star-row"><div class="lbl">RESULT</div><div class="txt">Approved. <strong>AED 652M program in execution, zero material concessions on the model.</strong></div></div>
+    <div class="star-row"><div class="lbl">SO WHAT</div><div class="txt">This role presents weekly to the U4B GM and periodically to Global Risk leadership. MD/CEO-level defense is a higher-intensity version of the same muscle — structured argumentation, data that holds up, pre-briefing stakeholders.</div></div>
+  </div>
+
+  <div class="star-story">
+    <div class="q">S5 — "Tell me about a time you drove change through a cross-functional matrix." [Stakeholder management]</div>
+    <div class="star-row"><div class="lbl">SITUATION</div><div class="txt">2021: Sobha's collections were running on Excel. Needed a Salesforce implementation that would satisfy six stakeholder groups — Commercial, Finance, Legal, IT, Ops, and Leadership — each with different pain points.</div></div>
+    <div class="star-row"><div class="lbl">TASK</div><div class="txt">Lead the solution design — not as the PM, but as the business owner who actually had to use the thing — and get all six groups aligned.</div></div>
+    <div class="star-row"><div class="lbl">ACTION</div><div class="txt">Ran a 6-stakeholder discovery process. Pulled explicit requirements from each group, built a RACI, published the build plan. Co-drove solution architecture decisions with IT. Held weekly standups with a cross-functional steering committee. Escalated 3 blocked decisions to CCO proactively before they hit the due-date wall.</div></div>
+    <div class="star-row"><div class="lbl">RESULT</div><div class="txt"><strong>70+ live reports, full adoption across 4 legal entities, became the MI backbone for the next 4 years of scale.</strong></div></div>
+    <div class="star-row"><div class="lbl">SO WHAT</div><div class="txt">Uber risk ops sits at the intersection of Data Science, Engineering, Product, Ops, Finance, Legal. Six stakeholder groups. I've done this dance before.</div></div>
+  </div>
+
+  <h3>Quick Reference — Story Router</h3>
+  <table>
+    <tr><th>If they ask about...</th><th>Use</th><th>Headline</th></tr>
+    <tr><td>Scaling processes / volume pressure</td><td>S1</td><td>14.9x scale, 77-person org</td></tr>
+    <tr><td>Holding a controls standard / judgment call</td><td>S2</td><td>PR 49% defense</td></tr>
+    <tr><td>Queue management / TAT / false positives</td><td>S3</td><td>PCC 20d → 3d with 3x volume</td></tr>
+    <tr><td>Senior presentations / data-driven influence</td><td>S4</td><td>NPV AED 652M at MD/CEO</td></tr>
+    <tr><td>Cross-functional stakeholders</td><td>S5</td><td>Salesforce 0→1, 6 stakeholders</td></tr>
+    <tr><td>AI / automation / modern tooling</td><td>P12</td><td>B2B Fraud Signal Dashboard</td></tr>
+    <tr><td>Failure / what you'd do differently</td><td>Sobha One App (17% vs 80% target)</td><td>Honest self-aware story</td></tr>
+  </table>
+</div>
+
+<!-- ============== PANEL 6: COMP INTEL ============== -->
+<div class="panel">
+  <div class="section-head">
+    <span class="num">06 /</span>
+    <h2>Compensation Intelligence</h2>
+  </div>
+
+  <div class="verdict-box">
+    <p style="margin-bottom:8px;"><strong style="font-size:16px;">Uber L5A comp likely beats AmEx P75 and matches Google P50.</strong></p>
+    <p style="margin-bottom:0;">P50 total comp of <strong>₹85–95L</strong> with RSU upside, monthly vesting, and <strong>AmEx + Google offers as active leverage</strong>, this is the highest-ceiling parallel in your pipeline.</p>
+  </div>
+
+  <h3>Level Mapping — Where Uber L5A Sits</h3>
+  <table>
+    <tr><th>Uber Level</th><th>Uber Title</th><th>Google</th><th>AmEx</th><th>Microsoft</th><th>Amazon</th></tr>
+    <tr><td>L4</td><td>Manager / IC II</td><td>L4</td><td>Band 30–35</td><td>L62</td><td>L5</td></tr>
+    <tr style="background:rgba(24,210,110,0.06);"><td><strong>L5A</strong></td><td><strong>Senior Manager I</strong></td><td><strong>L5</strong></td><td>Band 35 upper</td><td>L63</td><td>L6 lower</td></tr>
+    <tr><td>L5B</td><td>Sr Manager II / Staff</td><td>L5–L6</td><td>Band 40 lower</td><td>L64</td><td>L6 upper</td></tr>
+    <tr><td>L6</td><td>Sr Staff / Sr Mgr</td><td>L6–L7</td><td>Band 40 upper</td><td>L65–66</td><td>Principal</td></tr>
+  </table>
+  <p><em>This role almost certainly calibrates to L5A. If the scope includes managing managers, it could be L5B. Push for L5B in the negotiation if the JD allows.</em></p>
+
+  <h3>L5A Compensation Band — Hyderabad, Sr. Risk Analytics & Ops Mgr</h3>
+  <div style="background:var(--s2); border:1px solid var(--border); margin-bottom:20px;">
+    <div class="comp-row head">
+      <div>Component</div><div style="text-align:right;">P25</div><div style="text-align:right;">P50</div><div style="text-align:right;">P75</div>
+    </div>
+    <div class="comp-row"><div class="lbl">Base / Fixed salary</div><div class="val">₹35L</div><div class="val">₹42–48L</div><div class="val">₹55L</div></div>
+    <div class="comp-row"><div class="lbl">Target bonus (15–20%)</div><div class="val">₹5.5L</div><div class="val">₹7–9L</div><div class="val">₹11L</div></div>
+    <div class="comp-row"><div class="lbl">RSU grant (annualized)</div><div class="val">₹12L</div><div class="val">₹18–22L</div><div class="val">₹32L</div></div>
+    <div class="comp-row"><div class="lbl">4-yr grant (USD)</div><div class="val">~$55K</div><div class="val">~$85–100K</div><div class="val">~$150K</div></div>
+    <div class="comp-row"><div class="lbl">Sign-on bonus</div><div class="val">₹0</div><div class="val">₹5L</div><div class="val">₹10L</div></div>
+    <div class="comp-row hi"><div class="lbl"><strong>Year 1 Total</strong></div><div class="val"><strong>~₹75L</strong></div><div class="val"><strong>~₹85–95L</strong></div><div class="val"><strong>~₹110L</strong></div></div>
+    <div class="comp-row"><div class="lbl">Steady-state TC (excl. sign-on)</div><div class="val">~₹55L</div><div class="val">~₹70–80L</div><div class="val">~₹98L</div></div>
+  </div>
+
+  <h3>If Leveled Up to L5B</h3>
+  <div style="background:var(--s2); border:1px solid var(--border); margin-bottom:20px;">
+    <div class="comp-row head">
+      <div>Component</div><div style="text-align:right;">P25</div><div style="text-align:right;">P50</div><div style="text-align:right;">P75</div>
+    </div>
+    <div class="comp-row"><div class="lbl">Base salary</div><div class="val">₹48L</div><div class="val">₹58L</div><div class="val">₹68L</div></div>
+    <div class="comp-row"><div class="lbl">Bonus + RSU (annualized)</div><div class="val">₹28L</div><div class="val">₹41L</div><div class="val">₹56L</div></div>
+    <div class="comp-row"><div class="lbl">Sign-on</div><div class="val">₹5L</div><div class="val">₹10L</div><div class="val">₹15L</div></div>
+    <div class="comp-row hi"><div class="lbl"><strong>Year 1 Total</strong></div><div class="val"><strong>~₹95L</strong></div><div class="val"><strong>~₹110–120L</strong></div><div class="val"><strong>~₹140L</strong></div></div>
+  </div>
+
+  <h3>Head-to-Head: Your Pipeline</h3>
+  <table>
+    <tr><th>Role</th><th>P25</th><th>P50</th><th>P75</th><th>Equity</th><th>Edge</th></tr>
+    <tr style="background:rgba(24,210,110,0.06);"><td><strong>Uber L5A (this)</strong></td><td>₹75L</td><td>₹85–95L</td><td>₹110L</td><td>UBER RSUs</td><td>Front-loaded vesting, discount upside</td></tr>
+    <tr><td>Uber L5B (stretch)</td><td>₹95L</td><td>₹110–120L</td><td>₹140L</td><td>UBER RSUs</td><td>Highest ceiling in pipeline</td></tr>
+    <tr><td>AmEx Director (Band 40)</td><td>₹50–55L</td><td>₹60–70L</td><td>₹75–82L</td><td>None</td><td>Cash stability, zero stock risk</td></tr>
+    <tr><td>Google GBO Tools (L5)</td><td>₹70L</td><td>₹80–85L</td><td>₹95L</td><td>GOOGL RSUs</td><td>Most stable equity</td></tr>
+    <tr><td>Microsoft Sr PM (L63)</td><td>₹63L</td><td>₹73L</td><td>₹90L</td><td>MSFT RSUs</td><td>Stable equity, similar base</td></tr>
+    <tr><td>HSBC VP (GCB4)</td><td>₹38L</td><td>₹48L</td><td>₹55–65L</td><td>None</td><td>Lowest in pipeline</td></tr>
+  </table>
+
+  <h3>The UBER Stock Tailwind</h3>
+  <div class="card">
+    <p>UBER trades at <strong>~$75</strong> as of April 2026 — down 26% from the <strong>$102 September 2025 all-time high</strong>. Q4 2025 EPS miss triggered the pullback, but fundamentals are strong: record <strong>$2.8B quarterly FCF</strong>, revenue +20% YoY, full-year 2025 FCF <strong>$9.7B</strong> (up 41.6%). P/E of ~15x is well below 3-year average of 44x.</p>
+    <p><strong>For you:</strong> RSUs granted at $75 have material recovery potential toward analyst consensus of $103–105. A $100K 4-year grant priced at $75 could be worth <strong>~$136K</strong> if stock recovers to prior highs — a 36% unrealized uplift on stated offer.</p>
+    <p><strong>Buyback protection:</strong> Uber's <strong>$20B buyback authorization</strong> repurchased $6.5B in 2025, driving shares outstanding down 1.43%. Buybacks now exceed dilution. SBC-to-revenue dropped from 5.2% (2023) to ~4.1% (2024) — disciplined equity management.</p>
+  </div>
+
+  <h3>Unusual Uber Mechanics to Understand</h3>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Front-Loaded Vesting</div><div class="card-meta">Ask for it</div></div>
+      <p>Uber offers <strong>monthly vesting with no cliff</strong>, often <strong>35/30/20/15</strong> across years 1–4. This is meaningfully better than standard 25/25/25/25. <strong>Negotiate for the front-loaded schedule</strong> — it materially boosts Y1 TC.</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">ESPP 15% + Lookback</div><div class="card-meta">Guaranteed ~15% return</div></div>
+      <p>ESPP offers 15% discount with lookback provision (lower of start/end price). Contribute the max 15% of base. In a rising UBER environment, returns can be 20–40%+.</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">India-Specific Benefits</div><div class="card-meta">Quantifiable</div></div>
+      <p><strong>₹4,000/month Uber credits</strong>, 17% ride discount, <strong>18 weeks parental leave</strong>, $10K fertility assistance, free meals 5 days/week, mobile phone, ~₹4,200/mo phone bill, 3x CTC life insurance, unlimited PTO.</p>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">The Parent-Coverage Gap</div><div class="card-meta">Real drawback</div></div>
+      <p><strong>Employee's parents NOT covered</strong> under Uber India health insurance. AmEx typically covers parents. If you have aging parents, factor ₹50K–1L/yr external premium into your comp comparison.</p>
+    </div>
+  </div>
+
+  <h3>Negotiation Playbook</h3>
+  <div class="card">
+    <p><strong>The AmEx + Google competing offers are your weapon.</strong> Uber India has auto-generated initial offers. Sign-on bonus is the most negotiable component. Base is tight. RSU has moderate flex. Competing-offer uplifts of <strong>20–40%</strong> are documented on Blind for Uber India.</p>
+    <ul class="clean">
+      <li><strong>Lead with the Google signal</strong> — FAANG competing offers carry most weight with Uber recruiters</li>
+      <li>AmEx Director adds <em>title/scope credibility</em> but less comp-pressure weight</li>
+      <li><strong>Push sign-on hard</strong> — Uber has most discretion here, can match competing offers fastest</li>
+      <li><strong>Request front-loaded 35/30/20/15 vesting</strong> explicitly if initial offer has 25/25/25/25</li>
+      <li>If recruiter says "Uber pays top 70% not top of market" — this is a documented anchor tactic; don't accept it at face value</li>
+      <li>Don't reveal exact competing numbers early — share ranges only after Uber's initial offer is on the table</li>
+      <li>Push to be leveled at <strong>L5B instead of L5A</strong> using your 77-person org scope, 4-entity portfolio, and MD/CEO-level stakeholder exposure</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============== PANEL 7: INTERVIEW PREP ============== -->
+<div class="panel">
+  <div class="section-head">
+    <span class="num">07 /</span>
+    <h2>Interview Process & Prep</h2>
+  </div>
+
+  <h3>Expected Process</h3>
+  <div class="card">
+    <div class="kv"><div class="kv-k">Round 1</div><div class="kv-v">Recruiter Screen (30 min) · background, comp expectation, why-Uber</div></div>
+    <div class="kv"><div class="kv-k">Round 2</div><div class="kv-v">Hiring Manager (45–60 min) · scope probing, fraud–CX tradeoff discussion</div></div>
+    <div class="kv"><div class="kv-k">Round 3</div><div class="kv-v">SQL / Analytical Take-Home (2–4 hrs) — this is where SQL prep pays off</div></div>
+    <div class="kv"><div class="kv-k">Round 4</div><div class="kv-v">Case Study / Presentation (60 min) · "here's a dataset, propose a fraud strategy"</div></div>
+    <div class="kv"><div class="kv-k">Round 5</div><div class="kv-v">Cross-functional panel — Data Science, Product, Ops stakeholders</div></div>
+    <div class="kv"><div class="kv-k">Round 6</div><div class="kv-v">Bar Raiser / Leadership / Skip-level</div></div>
+  </div>
+
+  <h3>Top 12 Likely Behavioral Questions</h3>
+  <table>
+    <tr><th>#</th><th>Question</th><th>Use Story</th></tr>
+    <tr><td>1</td><td>Tell me about a time you scaled a complex process in a fast-moving environment</td><td>S1</td></tr>
+    <tr><td>2</td><td>Describe a judgment call where data and stakeholder pressure pointed different directions</td><td>S2</td></tr>
+    <tr><td>3</td><td>How have you managed an exception/false-positive/recovery queue at scale?</td><td>S3</td></tr>
+    <tr><td>4</td><td>Walk me through your most complex senior-leadership presentation</td><td>S4</td></tr>
+    <tr><td>5</td><td>Tell me about driving change across a cross-functional matrix</td><td>S5</td></tr>
+    <tr><td>6</td><td>Describe a time a rule/control over-fired — what did you do?</td><td>S2 reframed</td></tr>
+    <tr><td>7</td><td>When did you last make a decision with incomplete data?</td><td>NPV defense S4</td></tr>
+    <tr><td>8</td><td>How do you measure success in operational risk/fraud ops?</td><td>Framework answer (see below)</td></tr>
+    <tr><td>9</td><td>Tell me about a failure and what you learned</td><td>Sobha One App (17% vs 80% adoption)</td></tr>
+    <tr><td>10</td><td>How do you use AI/automation in your current role?</td><td>P12 dashboard + automation philosophy</td></tr>
+    <tr><td>11</td><td>What would your first 90 days look like?</td><td>See 30-60-90 below</td></tr>
+    <tr><td>12</td><td>Why Uber / why this role / why now?</td><td>Pitch + career arc</td></tr>
+  </table>
+
+  <h3>Case Study Prep — The Likely Case</h3>
+  <div class="card">
+    <p><strong>Expected format:</strong> "Here's a dataset of U4B transactions flagged by 3 fraud rules. Some were confirmed fraud, some were false positives. Propose a strategy to improve the FPR–recall tradeoff."</p>
+    <p><strong>Framework to use (memorize):</strong></p>
+    <ol style="padding-left:20px;">
+      <li><strong>Diagnose first:</strong> What's the current FPR, precision, recall by rule? What's the loss rate?</li>
+      <li><strong>Segment:</strong> Are false positives clustered by customer segment, transaction type, rule?</li>
+      <li><strong>Hypothesize:</strong> Which rule is over-firing? Why?</li>
+      <li><strong>Propose:</strong> Rule tightening/loosening, threshold change, new signal, ML model swap</li>
+      <li><strong>Test plan:</strong> Holdout group, shadow mode, primary metric (fraud loss $), guardrail (FPR, chargeback recovery TAT)</li>
+      <li><strong>Rollout & monitor:</strong> Staged rollout %, weekly review cadence, rollback criteria</li>
+      <li><strong>Communicate:</strong> To Product (CX impact), to Finance (loss impact), to Ops (queue volume impact)</li>
+    </ol>
+  </div>
+
+  <h3>Your 30-60-90 Day Plan</h3>
+  <div class="timeline-item">
+    <div class="timeline-week">30<span class="timeline-week-lbl">Days</span></div>
+    <div>
+      <strong>Learn the surface.</strong> Shadow the current queue ops. Map all active fraud rules and their owners. Pull 90 days of FPR/precision/loss-rate data by rule. Meet every cross-functional stakeholder 1:1 (DS, Product, Eng, Ops, Finance, Legal). Read every major fraud incident retro from the last 12 months. <em>Do not propose changes yet.</em>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-week">60<span class="timeline-week-lbl">Days</span></div>
+    <div>
+      <strong>Diagnose.</strong> Publish a "State of U4B Fraud Ops" memo — loss trend, top 3 vectors, worst-performing rules, biggest queue bottlenecks. Identify 2–3 quick wins (TAT compression, rule retirement, dashboard automation). Ship one. Present the memo to the hiring manager and U4B GM. <em>This is the equivalent of my 14-finding risk register at Sobha.</em>
+    </div>
+  </div>
+  <div class="timeline-item">
+    <div class="timeline-week">90<span class="timeline-week-lbl">Days</span></div>
+    <div>
+      <strong>Commit to the roadmap.</strong> Quarterly plan: 2–3 strategic bets (new rule family, model swap, process redesign), each with a test plan. Establish the weekly fraud review cadence with standardized dashboards. Align with DS on one joint initiative. First AI/automation project shipped (investigator brief generator). <em>This is my 55-day T−25/T+30 framework applied to a fraud ops context.</em>
+    </div>
+  </div>
+
+  <h3>Questions to Ask the Interviewer</h3>
+  <ul class="clean">
+    <li>What is U4B fraud loss as a % of GMV today, and where does the business want it by end of year?</li>
+    <li>How is success measured for this role in 90 days, 6 months, 12 months?</li>
+    <li>What's the split of time expected between policy/strategy work and operational execution?</li>
+    <li>How does this team interact with Data Science — do we own rules, or do they?</li>
+    <li>What are the known weak points in the current fraud ops stack that this role is expected to fix?</li>
+    <li>What does the current cadence look like with U4B GM and Global Risk leadership?</li>
+    <li>What's the team structure I'd inherit, and where are the hiring gaps?</li>
+  </ul>
+</div>
+
+<!-- ============== PANEL 8: VOCAB DECODER ============== -->
+<div class="panel">
+  <div class="section-head">
+    <span class="num">08 /</span>
+    <h2>Vocabulary Decoder</h2>
+  </div>
+
+  <p>Forty terms to master. Memorize these cold. Fluency — not expertise — is the goal.</p>
+
+  <h3>Core Fraud Metrics</h3>
+  <table>
+    <tr><th>Term</th><th>Definition</th><th>Sobha Analog</th></tr>
+    <tr><td><strong>FPR (False Positive Rate)</strong></td><td>% of legitimate transactions wrongly flagged as fraud</td><td>PR rejection rate (your 49%)</td></tr>
+    <tr><td><strong>Precision</strong></td><td>Of flagged transactions, % that were actually fraud</td><td>14-finding register true-positive %</td></tr>
+    <tr><td><strong>Recall / TPR</strong></td><td>Of actual fraud, % caught by rules</td><td>% of delinquency caught pre-T+30</td></tr>
+    <tr><td><strong>F1 score</strong></td><td>Harmonic mean of precision and recall</td><td>Composite QCG quality score</td></tr>
+    <tr><td><strong>Loss rate / bps</strong></td><td>Fraud $ / Total GMV, in basis points</td><td>Delinquency % (your 4.4%)</td></tr>
+    <tr><td><strong>Approval rate</strong></td><td>% of attempted transactions approved</td><td>Collections success rate</td></tr>
+    <tr><td><strong>Chargeback rate</strong></td><td>% of transactions disputed by cardholder</td><td>Payment disputes %</td></tr>
+  </table>
+
+  <h3>Fraud Types</h3>
+  <table>
+    <tr><th>Term</th><th>Definition</th></tr>
+    <tr><td><strong>Account Takeover (ATO)</strong></td><td>Attacker gains credentials → uses victim's account</td></tr>
+    <tr><td><strong>Synthetic ID fraud</strong></td><td>Fabricated identity combining real + fake PII</td></tr>
+    <tr><td><strong>Friendly fraud</strong></td><td>Legitimate purchase disputed as unauthorized by cardholder</td></tr>
+    <tr><td><strong>First-party fraud</strong></td><td>Customer themselves commits the fraud</td></tr>
+    <tr><td><strong>Third-party fraud</strong></td><td>External attacker using stolen credentials</td></tr>
+    <tr><td><strong>Promo abuse</strong></td><td>Gaming promotional credits via multi-account, fake accounts</td></tr>
+    <tr><td><strong>Invoice fraud (B2B)</strong></td><td>Fake invoices or inflated invoices in corporate expense</td></tr>
+    <tr><td><strong>Collusion</strong></td><td>Two or more parties coordinating to defraud (e.g., driver + rider)</td></tr>
+    <tr><td><strong>Arrears</strong></td><td>Overdue payments — Uber's term for delinquency-equivalent exposure</td></tr>
+  </table>
+
+  <h3>Controls & Authentication</h3>
+  <table>
+    <tr><th>Term</th><th>Definition</th></tr>
+    <tr><td><strong>3DS / 3DS2</strong></td><td>3D Secure — issuer-side authentication step for card transactions</td></tr>
+    <tr><td><strong>SCA (Strong Customer Auth)</strong></td><td>EU/UK regulation requiring 2FA on payments</td></tr>
+    <tr><td><strong>Step-up auth</strong></td><td>Requiring additional verification when risk signals trigger</td></tr>
+    <tr><td><strong>Velocity check</strong></td><td>Rate-limit rule (e.g., N transactions in X minutes)</td></tr>
+    <tr><td><strong>Device fingerprinting</strong></td><td>Identifying unique devices via browser/OS signals</td></tr>
+    <tr><td><strong>Geo-impossible travel</strong></td><td>Same account used in two locations impossibly far apart</td></tr>
+    <tr><td><strong>Rules engine</strong></td><td>Deterministic logic layer evaluating transactions</td></tr>
+    <tr><td><strong>Shadow mode</strong></td><td>Rule/model runs but doesn't take action — for testing</td></tr>
+    <tr><td><strong>Holdout group</strong></td><td>Control group where the new rule is NOT applied</td></tr>
+    <tr><td><strong>Allow-list / Deny-list</strong></td><td>Pre-approved / pre-blocked entities</td></tr>
+  </table>
+
+  <h3>Operations & Testing</h3>
+  <table>
+    <tr><th>Term</th><th>Definition</th></tr>
+    <tr><td><strong>MDE (Minimum Detectable Effect)</strong></td><td>Smallest impact an A/B test can reliably detect</td></tr>
+    <tr><td><strong>SRM (Sample Ratio Mismatch)</strong></td><td>When treatment/control split deviates from expected — invalidates test</td></tr>
+    <tr><td><strong>Guardrail metric</strong></td><td>Secondary metric that must not regress (e.g., CX NPS while reducing fraud)</td></tr>
+    <tr><td><strong>Primary metric</strong></td><td>The main success metric of a test</td></tr>
+    <tr><td><strong>Novelty effect</strong></td><td>Temporary impact from change being new rather than intrinsically better</td></tr>
+    <tr><td><strong>Retro / Post-mortem</strong></td><td>Structured review after a fraud incident or failed launch</td></tr>
+    <tr><td><strong>RCA (Root Cause Analysis)</strong></td><td>Structured diagnosis of why something happened</td></tr>
+    <tr><td><strong>TAT (Turn-Around Time)</strong></td><td>Time from case open to case resolve</td></tr>
+    <tr><td><strong>SLA</strong></td><td>Service-level agreement — committed resolution time</td></tr>
+  </table>
+
+  <h3>Uber-Specific Vocabulary</h3>
+  <table>
+    <tr><th>Term</th><th>Definition</th></tr>
+    <tr><td><strong>U4B (Uber for Business)</strong></td><td>B2B arm — corporate travel, commute, meals, courier</td></tr>
+    <tr><td><strong>GMV (Gross Merchandise Value)</strong></td><td>Total $ transacted on platform</td></tr>
+    <tr><td><strong>Two-sided marketplace</strong></td><td>Platform with supply (drivers) and demand (riders) sides</td></tr>
+    <tr><td><strong>Trust & Safety (T&S)</strong></td><td>Umbrella for fraud + physical safety + platform integrity</td></tr>
+    <tr><td><strong>Mode</strong></td><td>Mode Analytics — Uber's internal SQL/BI tool</td></tr>
+    <tr><td><strong>Michelangelo</strong></td><td>Uber's internal ML platform</td></tr>
+    <tr><td><strong>OKR</strong></td><td>Objectives & Key Results — Uber's planning framework</td></tr>
+  </table>
+
+  <h3>Chargeback Reason Codes — Know These Exist</h3>
+  <table>
+    <tr><th>Code</th><th>Meaning</th></tr>
+    <tr><td>4837 / 10.4</td><td>No cardholder authorization (fraud dispute)</td></tr>
+    <tr><td>4855 / 13.1</td><td>Merchandise/service not received</td></tr>
+    <tr><td>4863 / 10.1</td><td>Cardholder does not recognize the transaction</td></tr>
+    <tr><td>4870 / 10.3</td><td>No chip fraud dispute</td></tr>
+  </table>
+
+  <div class="callout">
+    <strong>How to deploy vocabulary:</strong> Use it naturally, not performatively. Saying "FPR was too high on rule X so we tightened the threshold and monitored precision in shadow mode for two weeks before full rollout" is fluency. Saying "Let me tell you about FPR, precision, and recall" is memorization. Weave, don't lecture.
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <div>Uber Sr. Risk Analytics & Ops Mgr Playbook · Priyanuj Deka · v1 · April 2026</div>
+  <div>Pipeline Role #13 · Active · Parallel Track</div>
+</div>
+
+<script>
+function showTab(i) {
+  document.querySelectorAll('.tab').forEach((t, j) => t.classList.toggle('active', i === j));
+  document.querySelectorAll('.panel').forEach((p, j) => p.classList.toggle('active', i === j));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
