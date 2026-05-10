@@ -1,0 +1,131 @@
+
+---
+
+title: CCC Library
+
+---
+
+
+
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>{{ page.title }}</title>
+
+  <style>
+
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+
+           margin: 40px auto; max-width: 1000px; padding: 0 16px; line-height: 1.5; }
+
+    h1 { margin-bottom: 6px; }
+
+    .muted { color: #6b7280; margin-top: 0; }
+
+    .card { border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px 16px; margin: 14px 0; }
+
+    a { color: #2563eb; text-decoration: none; }
+
+    a:hover { text-decoration: underline; }
+
+    code { background: #f3f4f6; padding: 2px 6px; border-radius: 6px; }
+
+    ul { margin: 8px 0 0 20px; }
+
+  </style>
+
+</head>
+
+
+
+<body>
+
+  <h1>{{ page.title }}</h1>
+
+  <p class="muted">
+
+    Auto-generated list of <code>.html</code> files inside <code>/CCC</code>.
+
+  </p>
+
+
+
+  <div class="card">
+
+    <h2 style="margin:0 0 8px 0;">Documents</h2>
+
+
+
+    {% assign ccc_files = site.static_files
+
+      | where_exp: "f", "f.path contains '/CCC/'"
+
+      | where_exp: "f", "f.extname == '.html'"
+
+    %}
+
+
+
+    {%- comment -%}
+
+      Optional: sort by filename (name).
+
+      Liquid 'sort' exists in Jekyll; if it ever fails on GitHub Pages, remove the sort line.
+
+    {%- endcomment -%}
+
+    {% assign ccc_files = ccc_files | sort: "name" %}
+
+
+
+    <ul>
+
+      {% for f in ccc_files %}
+
+        {% if f.name != "index.html" %}
+
+          <li>{{ f.path | relative_url }}{{ f.name }}</a></li>
+
+        {% endif %}
+
+      {% endfor %}
+
+    </ul>
+
+
+
+    <p class="muted" style="margin-top:12px;">
+
+      Total files found: {{ ccc_files | size }}
+
+    </p>
+
+  </div>
+
+
+
+  <div class="card">
+
+    <h2 style="margin:0 0 8px 0;">Notes</h2>
+
+    <p class="muted" style="margin:0;">
+
+      This page uses Jekyll/Liquid to loop through <code>site.static_files</code>.
+
+      Your playbook HTML files remain static assets (no front matter), so they appear in that list. [2](https://jekyllrb.com/docs/static-files/)[1](https://jekyllrb.com/docs/github-pages/)
+
+    </p>
+
+  </div>
+
+</body>
+
+</html>
+
