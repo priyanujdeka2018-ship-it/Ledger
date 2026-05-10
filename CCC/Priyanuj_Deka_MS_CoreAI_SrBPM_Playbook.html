@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Microsoft CoreAI Sr Business & Strategy PM — Career Playbook | Priyanuj Deka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-deep: #0a0e1a;
+    --bg-card: #131829;
+    --bg-card-hover: #1a2138;
+    --bg-card-elevated: #1d2541;
+    --border: #233055;
+    --border-light: #2d3a64;
+    --primary: #0078D4;
+    --primary-light: #2ea2ff;
+    --primary-dim: rgba(0, 120, 212, 0.12);
+    --accent: #00B7C3;
+    --accent-dim: rgba(0, 183, 195, 0.12);
+    --ai: #8B5CF6;
+    --ai-dim: rgba(139, 92, 246, 0.12);
+    --gold: #FFB900;
+    --gold-dim: rgba(255, 185, 0, 0.12);
+    --success: #10b981;
+    --warning: #f59e0b;
+    --critical: #ef4444;
+    --text: #e5e7eb;
+    --text-muted: #9ca3af;
+    --text-dim: #6b7280;
+  }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.6;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(0, 120, 212, 0.06), transparent 50%),
+      radial-gradient(ellipse at top right, rgba(139, 92, 246, 0.05), transparent 50%),
+      radial-gradient(ellipse at bottom, rgba(0, 183, 195, 0.04), transparent 50%);
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
+
+  /* HEADER */
+  .header {
+    border: 1px solid var(--border);
+    background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-card-elevated) 100%);
+    border-radius: 16px;
+    padding: 36px 32px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.18), transparent 70%);
+    pointer-events: none;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 240px; height: 240px;
+    background: radial-gradient(circle, rgba(0, 120, 212, 0.15), transparent 70%);
+    pointer-events: none;
+  }
+  .badge-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; position: relative; z-index: 1; }
+  .badge {
+    padding: 5px 12px;
+    background: var(--primary-dim);
+    border: 1px solid var(--primary);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary-light);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .badge.ai { background: var(--ai-dim); border-color: var(--ai); color: #b794ff; }
+  .badge.gold { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+  }
+  h1 .accent-coreai {
+    background: linear-gradient(90deg, var(--primary-light), var(--ai));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .subtitle { font-size: 15px; color: var(--text-muted); margin-bottom: 24px; position: relative; z-index: 1; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+    position: relative;
+    z-index: 1;
+  }
+  .stat {
+    background: rgba(10, 14, 26, 0.55);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 14px;
+    backdrop-filter: blur(8px);
+  }
+  .stat-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--primary-light);
+    line-height: 1.1;
+  }
+  .stat-value.ai { color: var(--ai); }
+  .stat-value.accent { color: var(--accent); }
+  .stat-value.gold { color: var(--gold); }
+  .stat-label {
+    font-size: 10.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-top: 6px;
+  }
+  .stat-arrow {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin: 0 6px;
+  }
+
+  /* TABS */
+  .tabs-nav {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+    scrollbar-width: thin;
+  }
+  .tab-btn {
+    padding: 12px 18px;
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.18s;
+    letter-spacing: 0.01em;
+  }
+  .tab-btn:hover { color: var(--text); background: var(--bg-card); }
+  .tab-btn.active {
+    color: var(--primary-light);
+    border-bottom-color: var(--primary);
+    background: var(--primary-dim);
+  }
+
+  .tab-content { display: none; animation: fadeIn 0.25s ease; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* SECTION HEADINGS */
+  .section-head { margin-bottom: 22px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+  .section-sub { font-size: 13.5px; color: var(--text-muted); margin-top: 4px; }
+
+  h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 26px 0 14px;
+    color: var(--text);
+    letter-spacing: -0.005em;
+  }
+  h3 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 18px 0 10px;
+    color: var(--text);
+  }
+
+  p { color: var(--text); font-size: 14.5px; margin-bottom: 12px; }
+  p.muted { color: var(--text-muted); font-size: 13.5px; }
+
+  /* CARDS */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 16px;
+    transition: border-color 0.18s, transform 0.18s;
+  }
+  .card:hover { border-color: var(--border-light); }
+  .card.elevated { background: var(--bg-card-elevated); }
+  .card.primary-edge { border-left: 3px solid var(--primary); }
+  .card.ai-edge { border-left: 3px solid var(--ai); }
+  .card.accent-edge { border-left: 3px solid var(--accent); }
+  .card.gold-edge { border-left: 3px solid var(--gold); }
+  .card.warning-edge { border-left: 3px solid var(--warning); }
+  .card.critical-edge { border-left: 3px solid var(--critical); }
+  .card.success-edge { border-left: 3px solid var(--success); }
+
+  .card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .card-tag {
+    display: inline-block;
+    padding: 3px 9px;
+    background: var(--primary-dim);
+    color: var(--primary-light);
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+  .card-tag.ai { background: var(--ai-dim); color: #b794ff; }
+  .card-tag.accent { background: var(--accent-dim); color: var(--accent); }
+  .card-tag.gold { background: var(--gold-dim); color: var(--gold); }
+  .card-tag.critical { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+  .card-tag.warning { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
+  .card-tag.success { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+
+  /* GRIDS */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+
+  .pillar-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+    transition: all 0.18s;
+  }
+  .pillar-card:hover { border-color: var(--primary); transform: translateY(-2px); }
+  .pillar-icon { font-size: 24px; margin-bottom: 10px; }
+  .pillar-title { font-weight: 600; font-size: 14px; color: var(--text); margin-bottom: 6px; }
+  .pillar-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.55; }
+
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 18px;
+    background: var(--bg-card);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+  th {
+    background: var(--bg-card-elevated);
+    padding: 12px 14px;
+    text-align: left;
+    color: var(--primary-light);
+    font-weight: 600;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border-light);
+  }
+  td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+    line-height: 1.55;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(0, 120, 212, 0.04); }
+  td.tight { font-size: 12.5px; }
+  td.label { font-weight: 600; color: var(--accent); white-space: nowrap; }
+  td .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  td .pill.crit { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+  td .pill.high { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
+  td .pill.med { background: rgba(0, 183, 195, 0.15); color: var(--accent); }
+  td .pill.strong { background: rgba(16, 185, 129, 0.18); color: #6ee7b7; }
+
+  /* PROGRESS BARS */
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; font-size: 13px; }
+  .bar-label { flex: 0 0 280px; color: var(--text); font-weight: 500; }
+  .bar-track { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 4px; transition: width 1s ease; }
+  .bar-fill.ai { background: linear-gradient(90deg, var(--ai), var(--primary)); }
+  .bar-fill.gap { background: linear-gradient(90deg, var(--warning), var(--critical)); }
+  .bar-value { flex: 0 0 50px; text-align: right; font-family: 'IBM Plex Mono', monospace; color: var(--accent); font-size: 12.5px; font-weight: 600; }
+
+  /* CALLOUTS */
+  .callout {
+    background: var(--primary-dim);
+    border-left: 3px solid var(--primary);
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .callout.ai { background: var(--ai-dim); border-color: var(--ai); }
+  .callout.accent { background: var(--accent-dim); border-color: var(--accent); }
+  .callout.warning { background: rgba(245, 158, 11, 0.1); border-color: var(--warning); }
+  .callout.critical { background: rgba(239, 68, 68, 0.08); border-color: var(--critical); }
+  .callout-title { font-weight: 600; margin-bottom: 6px; color: var(--primary-light); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .callout.ai .callout-title { color: #b794ff; }
+  .callout.accent .callout-title { color: var(--accent); }
+  .callout.warning .callout-title { color: #fcd34d; }
+  .callout.critical .callout-title { color: #fca5a5; }
+
+  /* STAR STORY */
+  .star-story {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 10px;
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+  .star-story-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .star-story-map {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+  .star-block { margin-bottom: 12px; }
+  .star-label {
+    display: inline-block;
+    width: 86px;
+    color: var(--primary-light);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+  .star-text { font-size: 13.5px; color: var(--text); line-height: 1.6; }
+
+  /* QUOTES */
+  blockquote {
+    border-left: 3px solid var(--ai);
+    background: var(--ai-dim);
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 14px 0;
+    font-style: italic;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* LISTS */
+  ul, ol { margin: 8px 0 14px 22px; }
+  li { margin: 6px 0; font-size: 14px; line-height: 1.6; color: var(--text); }
+  li strong { color: var(--primary-light); }
+
+  /* CODE / MONO */
+  .mono { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--accent); }
+  code {
+    font-family: 'IBM Plex Mono', monospace;
+    background: var(--bg-card-elevated);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12.5px;
+  }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 36px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+
+  @media (max-width: 720px) {
+    .container { padding: 18px 12px; }
+    h1 { font-size: 26px; }
+    .header { padding: 22px 18px; }
+    .bar-label { flex: 0 0 160px; font-size: 12px; }
+    .stat-value { font-size: 20px; }
+    th, td { padding: 9px 10px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="badge-row">
+      <span class="badge">Active · Now · Apply Window Open</span>
+      <span class="badge ai">AI-Native Org</span>
+      <span class="badge gold">Hyderabad · Relocation Match</span>
+    </div>
+    <h1>Microsoft <span class="accent-coreai">CoreAI</span> · Sr Business &amp; Strategy Program Manager</h1>
+    <p class="subtitle">Chief-of-Staff to Site Leader · 600+ person organisation · India Development Center · Hybrid · L62–L64 band</p>
+
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-value">78<span class="stat-arrow">→</span><span style="color: var(--ai)">88</span></div>
+        <div class="stat-label">Fit Score · Current → Addressable</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value ai">₹65–110L</div>
+        <div class="stat-label">Est. Total Comp Range (incl. AI Premium)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value accent">2–4 wk</div>
+        <div class="stat-label">Prep Timeline</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value gold">AI-900</div>
+        <div class="stat-label">Recommended Cert (sit before applying)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="showTab('jd')">JD Decoded</button>
+    <button class="tab-btn" onclick="showTab('fit')">Your Fit</button>
+    <button class="tab-btn" onclick="showTab('gaps')">Gaps &amp; Plan</button>
+    <button class="tab-btn" onclick="showTab('salary')">Salary Intel</button>
+    <button class="tab-btn" onclick="showTab('ai')">AI Solutions</button>
+    <button class="tab-btn" onclick="showTab('star')">STAR Bank</button>
+    <button class="tab-btn" onclick="showTab('interview')">Interview Prep</button>
+    <button class="tab-btn" onclick="showTab('vocab')">Vocab Decoder</button>
+  </div>
+
+  <!-- ========== TAB 1: JD DECODED ========== -->
+  <div id="jd" class="tab-content active">
+
+    <div class="section-head">
+      <div class="section-title">JD Decoded</div>
+      <div class="section-sub">What CoreAI is actually looking for — beyond the job description language</div>
+    </div>
+
+    <h2>The Core Mission — What This Role Really Is</h2>
+    <p>This is a <strong>Chief of Staff to the Site Leader of CoreAI India</strong> — a 600+ person organisation that ships Microsoft's bleeding-edge AI products: GitHub Copilot, Microsoft Foundry, agentic AI tooling for developers worldwide. Unlike a generic Business Manager role, this one sits inside Microsoft's most strategically important division — the one Satya Nadella has explicitly named as the future of the company. The Site Leader runs a distributed engineering and product organisation across Hyderabad, Bengaluru, and Noida, in dual-geography rhythm with US leadership.</p>
+    <p>You don't own a product, a P&amp;L, or a team in the traditional sense. You own <strong>the operating system of the Site Leader's leadership</strong> — the rhythm of business, the executive narratives, the culture signals, the financial discipline, and the strategic special projects that keep a 600-person AI organisation moving in coordinated direction. When the Site Leader walks into a Customer Advisory Board, an MBR with the CoreAI CVP, or an Executive Briefing Center session — the materials, the talking points, the data, and the follow-through are yours.</p>
+
+    <div class="grid-3" style="margin: 20px 0;">
+      <div class="pillar-card">
+        <div class="pillar-icon">🏗️</div>
+        <div class="pillar-title">Cross-City Workflow Architect</div>
+        <div class="pillar-desc">Design and scale operating workflows across Hyderabad, Bengaluru, and Noida as the org grows from 600 to 1000+. Dual-geography (India ↔ US) RoB synchronisation.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">⚙️</div>
+        <div class="pillar-title">Rhythm of Business Owner</div>
+        <div class="pillar-desc">Own the LT cadence — weekly all-hands, monthly business reviews, quarterly strategy sessions. Drive decision tracking and accountability across India + US stakeholders.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">📊</div>
+        <div class="pillar-title">Financial Discipline Partner</div>
+        <div class="pillar-desc">Own headcount, budget, and fiscal planning for 600+ people. Track actuals vs. forecast. Partner with GTA and URT on hiring, campus programmes, and Springboard.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">🤝</div>
+        <div class="pillar-title">Pulse of the Organisation</div>
+        <div class="pillar-desc">Surface employee signals, synthesise feedback into actionable insight, monitor Thriving/Signals scores, OHI metrics, and translate sentiment into leadership action.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">📈</div>
+        <div class="pillar-title">Product Strategy Translator</div>
+        <div class="pillar-desc">Align India RoB with global CoreAI product goals. Partner with MCAPS and field teams on India-specific motions. Cultivate top customer relationships across India and Asia.</div>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon">🎯</div>
+        <div class="pillar-title">Strategic Special Projects Lead</div>
+        <div class="pillar-desc">Own ad-hoc, high-visibility initiatives that the Site Leader can't delegate to anyone else. Customer Advisory Boards, EBC sessions, executive narrative design, leadership forums.</div>
+      </div>
+    </div>
+
+    <h2>Breaking Down Every Responsibility</h2>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 32%">JD Responsibility</th>
+          <th>What It Really Means</th>
+          <th style="width: 12%">Weight</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Architect and scale workflows across Hyd/Blr/Noida</strong></td>
+          <td>Design the operating fabric for a 600+ person, 3-city, 2-geography org. As CoreAI scales, you build the workflows — onboarding, programme governance, cross-team coordination — that prevent fragmentation.</td>
+          <td><span class="pill crit">Critical</span></td>
+        </tr>
+        <tr>
+          <td><strong>Own budget, headcount, fiscal planning</strong></td>
+          <td>You are the Site Leader's financial partner. You track headcount actuals, manage discretionary spend, run the annual planning cycle, and ensure transparency to US stakeholders. This is where financial acumen earns its place.</td>
+          <td><span class="pill crit">Critical</span></td>
+        </tr>
+        <tr>
+          <td><strong>Lead RoB across India and US stakeholders</strong></td>
+          <td>Microsoft's "Rhythm of Business" framework — weekly LT, monthly MBR, quarterly QBR, annual planning. You design it, run it, and enforce decision tracking. Dual time-zone coordination is non-negotiable.</td>
+          <td><span class="pill crit">Critical</span></td>
+        </tr>
+        <tr>
+          <td><strong>Partner with GTA and URT on hiring, campus, Springboard</strong></td>
+          <td>Global Talent Acquisition (GTA) and University Recruiting Team (URT) are Microsoft's hiring engines. You drive hiring strategy execution, campus programme coverage (IIT/IIM/BITS), and apprentice/Springboard initiatives that build the talent pipeline.</td>
+          <td><span class="pill high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Manage compliance, continuity planning, headcount admin</strong></td>
+          <td>Operational hygiene — Microsoft Cloud background check governance, business continuity plans (BCP), headcount governance with Finance. Catch issues before they become incidents.</td>
+          <td><span class="pill high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Drive cross-org initiatives and special projects</strong></td>
+          <td>Site Leader's strategic deliverables. Examples: organising the CoreAI India offsite, leading a 600-person all-hands restructure, designing the India hiring strategy for the next FY, building the EBC narrative for top customers.</td>
+          <td><span class="pill high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Prepare executive briefings, ensure follow-through</strong></td>
+          <td>Every CVP review, MD/CEO touchpoint, customer EBC session, board presentation — the materials are yours. You ghost-write at the executive altitude. Action items get tracked to closure.</td>
+          <td><span class="pill crit">Critical</span></td>
+        </tr>
+        <tr>
+          <td><strong>Extend impact of Site Leader and LT</strong></td>
+          <td>Your job is to make the Site Leader 10x more effective. You absorb the tactical load so they can operate strategically. This is "right altitude" leadership enablement.</td>
+          <td><span class="pill crit">Critical</span></td>
+        </tr>
+        <tr>
+          <td><strong>Build trust, enable fact-based decisions</strong></td>
+          <td>You bring data, not opinion. You synthesise complex inputs into decision frameworks. The Site Leader trusts your synthesis because it's rigorous.</td>
+          <td><span class="pill high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Pulse of the organisation — feedback synthesis</strong></td>
+          <td>Microsoft Poll, MS Listens, Thriving/Signals — the listening tools generate enormous data. You convert it into 1-page insights that drive cultural and operational change. This is org psychology + data synthesis.</td>
+          <td><span class="pill high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Champion employee engagement in hybrid environment</strong></td>
+          <td>600 people, hybrid, three cities. Engagement doesn't happen by accident. You design the cadences, the touchpoints, the recognition mechanisms that keep culture intact.</td>
+          <td><span class="pill med">Medium</span></td>
+        </tr>
+        <tr>
+          <td><strong>Monitor org health metrics — training, dev plans, OHI</strong></td>
+          <td>Microsoft's Organizational Health Index (OHI) is a core leadership KPI. You track it, diagnose what's moving, and design interventions. Same for training completion and individual development plans.</td>
+          <td><span class="pill med">Medium</span></td>
+        </tr>
+        <tr>
+          <td><strong>Align India RoB with global product/business goals</strong></td>
+          <td>CoreAI is a global division with Redmond as HQ. You ensure India's operating cadence locks into the global rhythm — quarterly priorities, OKR alignment, milestone synchronisation.</td>
+          <td><span class="pill high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Partner with CoreAI GTM leaders, MCAPS, field</strong></td>
+          <td>Microsoft Customer and Partner Solutions (MCAPS) is the commercial arm. You drive India-specific go-to-market motions for CoreAI products in collaboration with field sales and partners.</td>
+          <td><span class="pill med">Medium</span></td>
+        </tr>
+        <tr>
+          <td><strong>Cultivate strategic relationships with top CoreAI customers</strong></td>
+          <td>Top customers across India and Asia (TCS, Infosys, Wipro, Reliance, banks adopting Copilot at scale). You support the Site Leader in nurturing these — not as a sales person, but as a strategic operations partner.</td>
+          <td><span class="pill med">Medium</span></td>
+        </tr>
+        <tr>
+          <td><strong>Represent CoreAI at IDC EBC and Customer Advisory Boards</strong></td>
+          <td>Executive Briefing Center sessions are where Microsoft hosts top customers for product and strategy showcases. You design the narrative, brief the executives, and manage the orchestration.</td>
+          <td><span class="pill high">High</span></td>
+        </tr>
+        <tr>
+          <td><strong>Support executive comms with product/strategy inputs</strong></td>
+          <td>Site Leader's external talks, internal all-hands, executive memos. You provide the product/strategy substrate so the comms are credible and well-positioned.</td>
+          <td><span class="pill med">Medium</span></td>
+        </tr>
+        <tr>
+          <td><strong>Lead high-visibility, high-impact special projects</strong></td>
+          <td>The catch-all that defines a great Chief of Staff. Things like: designing the next FY org structure, running a culture-rebuild after attrition spike, launching a new India-specific Foundry agent programme.</td>
+          <td><span class="pill crit">Critical</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>The Unstated Requirements (What They Won't Tell You)</h2>
+
+    <div class="card primary-edge">
+      <div class="card-title">1 · CoreAI Domain Fluency — You Must Speak the AI Stack</div>
+      <p>Unlike a generic OPG Business Manager, this role sits inside the AI division. You don't need to be an engineer, but you must speak fluently about <strong>GitHub Copilot</strong> (the developer agent), <strong>Microsoft Foundry</strong> (the agent platform — formerly Azure AI Foundry), <strong>Agentic AI</strong> primitives (agents, tools, memory, orchestration), <strong>Responsible AI</strong> framework, and the broader Microsoft AI strategy. The Site Leader speaks to engineers and PMs all day — your credibility hinges on understanding what they're building.</p>
+    </div>
+
+    <div class="card ai-edge">
+      <div class="card-title">2 · Site-Leader Altitude — 600 People, Not 60</div>
+      <p>The scope is materially larger than typical Business Manager roles. A 600-person org with 3-city footprint and US dual-geography means decisions cascade through multiple layers. Your synthesis, frameworks, and operating cadences must scale to that altitude. Tactical detail is the noise floor — strategic patterns are the signal.</p>
+    </div>
+
+    <div class="card accent-edge">
+      <div class="card-title">3 · India ↔ US RoB Synchronisation Is the Hardest Skill</div>
+      <p>Two time zones, two leadership chains, two priorities. The CoreAI HQ is in Redmond. Most CVP-level decisions happen in PST. The Site Leader's job is to ensure India is heard, integrated, and accountable. Your job is to make that synchronisation operational. Late-night calls, pre-read packaging in time for US morning, cross-time-zone action item closure.</p>
+    </div>
+
+    <div class="card success-edge">
+      <div class="card-title">4 · The Pulse Job — Sense Before They Tell You</div>
+      <p>"Act as the pulse of the organisation" is the JD's most underrated phrase. You hear things in the corridor, in the 1:1s, in the Slack channels that the Site Leader doesn't hear. You synthesise these into pattern recognition: morale shift, attrition risk, pre-burnout signals, cultural fault lines. You bring it forward as a structured insight, not gossip. This is org psychology applied to leadership enablement.</p>
+    </div>
+
+    <div class="card warning-edge">
+      <div class="card-title">5 · Microsoft Cultural Mastery — Growth Mindset Is Not Optional</div>
+      <p>Satya Nadella's "Hit Refresh" cultural transformation — Growth Mindset, learn-it-all over know-it-all, customer obsession, One Microsoft, Model-Coach-Care — these are not slogans. They are scoring criteria in every interview round and every performance conversation. CoreAI is at the cultural epicentre because it's the most visible division. You must embody this language.</p>
+    </div>
+
+    <div class="card critical-edge">
+      <div class="card-title">6 · The "Background in Product Design or Strategy is a Plus" Tell</div>
+      <p>Read this preferred qualification carefully. CoreAI is a product organisation, and the Site Leader spends most of their time in product reviews. The role wants someone who can sit in a product strategy meeting and contribute meaningfully — not just take notes. Your AI portfolio (P7–P9 ORE Tracker, Readiness Gate Checker, Risk Committee Pack Generator) is the bridge: these are product-shaped artifacts, not just dashboards. Pitch them as "I've designed AI products that solve operational problems" — that closes the gap.</p>
+    </div>
+
+    <div class="callout ai">
+      <div class="callout-title">The CoreAI-Specific Edge — Why This Role Is Different</div>
+      <p>OPG (Operations &amp; Partner Group) is about delivery partner ecosystems. STCI (Strategic Tier 1 Cloud Initiatives) is about cloud strategy. This is <strong>CoreAI</strong> — the AI engine of Microsoft. Three things make it different: (1) The work product itself is AI tools, so domain fluency matters more; (2) Velocity is exceptional — agentic AI is moving weekly, not quarterly; (3) Scrutiny is high — every CoreAI decision is visible to Satya and Kevin Scott. Your role is to make sure the India organisation operates at that bar.</p>
+    </div>
+
+  </div>
+
+  <!-- ========== TAB 2: YOUR FIT ========== -->
+  <div id="fit" class="tab-content">
+
+    <div class="section-head">
+      <div class="section-title">Your Fit</div>
+      <div class="section-sub">How your Sobha experience maps — requirement by requirement — to this JD</div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom: 22px;">
+      <div class="card primary-edge">
+        <div class="card-tag">Initial Score</div>
+        <div style="font-family: 'Space Grotesk'; font-size: 56px; font-weight: 700; color: var(--primary-light); line-height: 1; margin: 6px 0;">78</div>
+        <p class="muted">Strong fit on the operational backbone of the role — RoB, financial governance, executive enablement, cross-geo team management. CoreAI domain vocabulary is the largest single gap.</p>
+      </div>
+      <div class="card ai-edge">
+        <div class="card-tag ai">Addressable Score</div>
+        <div style="font-family: 'Space Grotesk'; font-size: 56px; font-weight: 700; color: var(--ai); line-height: 1; margin: 6px 0;">88</div>
+        <p class="muted">Achievable in 2–4 weeks via: AI-900 sat, CoreAI domain immersion (GitHub Copilot + Foundry), Microsoft cultural prep, AI Site Pulse prototype demonstrating product-strategy thinking.</p>
+      </div>
+    </div>
+
+    <h2>Requirement-by-Requirement Mapping</h2>
+
+    <div class="card success-edge">
+      <div class="card-title">Architect and scale workflows across Hyderabad, Bengaluru, Noida</div>
+      <span class="card-tag success">Strong Match</span>
+      <p>You've architected the operating fabric for a 77-person organisation across two countries (Dubai + India) and two timezones (GST + IST). The Hyderabad hub deployment of 42 people in under 12 months — Operations 38, QCG 12, MIS 15 — is exactly the workflow architecture this role demands. You designed the role specifications, capability frameworks, governance cadences, and integration mechanisms. CoreAI's 3-city, dual-geo scaling problem is structurally identical, just at a different surface area.</p>
+    </div>
+
+    <div class="card success-edge">
+      <div class="card-title">Own budget, headcount, fiscal planning</div>
+      <span class="card-tag success">Strong Match</span>
+      <p>Your NPV model — AED 652M incremental inflow, AED 21.2M cost, 248-day prepayment acceleration, 32% cheaper than bank financing — is a financial governance artifact at the strategic level. You defended it through multiple rounds of MD/CEO scrutiny with zero material concessions. You manage actuals vs. forecast across multiple time horizons, and you own the fiscal discipline of a function with an AED 12.97B portfolio. That's CFO-adjacent financial acumen at scope.</p>
+    </div>
+
+    <div class="card success-edge">
+      <div class="card-title">Lead RoB across India and US stakeholders</div>
+      <span class="card-tag success">Strong Match</span>
+      <p>You've designed and run a 3-tier review cadence: weekly KPI reviews with each sub-team lead, monthly business reviews with CRO Mohammad Adnan Hamid, quarterly strategic reviews with CCO Ashish Vishnu Rupani. You prepare the data packs, drive decision tracking, and enforce action item follow-through. Dual-geo synchronisation: you operate Dubai LT and India hub on the same governance fabric. The dual-time-zone challenge of CoreAI (India ↔ US) is a translation of your existing Dubai ↔ India rhythm.</p>
+    </div>
+
+    <div class="card success-edge">
+      <div class="card-title">Drive cross-org initiatives and special projects</div>
+      <span class="card-tag success">Strong Match</span>
+      <p>The 55-day T−25/T+30 framework is your proprietary cross-org programme — spanning Operations, Finance, Legal, IT, Customer Service. The PCC TAT transformation (20→3 days, 281 monthly volume) was a multi-stakeholder orchestration across 4 departments. The 14-finding risk register escalation programme is a governance and accountability artifact. You don't just run programmes — you design the architecture under them.</p>
+    </div>
+
+    <div class="card success-edge">
+      <div class="card-title">Prepare executive briefings, ensure follow-through</div>
+      <span class="card-tag success">Strong Match</span>
+      <p>You routinely prepare MD/CEO-level presentations — the NPV decision framework, delinquency trend analyses, risk register summaries, FY2026 portfolio reviews. You synthesise data from the 70+ Salesforce report ecosystem into executive narratives. Your written work has survived Francis Alfred's scrutiny — that is the bar for CoreAI Site Leader work. Action item closure is built into your governance cadence by design.</p>
+    </div>
+
+    <div class="card success-edge">
+      <div class="card-title">Pulse of the organisation — feedback synthesis</div>
+      <span class="card-tag success">Strong Match</span>
+      <p>Your CliftonStrengths profile — Relator + Individualization in the top 5 — is purpose-built for this dimension. You read team dynamics across 77 people, surface concerns before they escalate, and translate sentiment into structured leadership input. The PR rejection 49% defence wasn't just data — it was reading the team's quality intent and protecting it from short-term pressure. That's pulse work.</p>
+    </div>
+
+    <div class="card primary-edge">
+      <div class="card-title">Champion employee engagement in hybrid environment</div>
+      <span class="card-tag">Direct Match</span>
+      <p>You operate a hybrid, cross-country team daily. 35 in Dubai, 42 in Hyderabad, with permanent remote elements within each city. You've built engagement mechanisms — onboarding rituals, 1:1 cadences, capability-based growth paths, recognition forums — that keep two distant teams operating as one. CoreAI's 3-city hybrid challenge is your existing problem, scaled.</p>
+    </div>
+
+    <div class="card primary-edge">
+      <div class="card-title">Monitor org health metrics — training, dev plans, OHI equivalent</div>
+      <span class="card-tag">Direct Match</span>
+      <p>You track team capability progression, training completion, individual development goals as part of the appraisal architecture (60% performance weightage, 40% behavioural). You've built capability such that team members independently author MD-approved process documents — a hard org-health metric that goes beyond engagement scores. Translates directly to OHI / Thriving / Signals dashboards.</p>
+    </div>
+
+    <div class="card primary-edge">
+      <div class="card-title">Build trust, enable fact-based decisions</div>
+      <span class="card-tag">Direct Match</span>
+      <p>Your DISC profile (High C, High S, Low D, Low I) is the textbook trusted advisor profile. You bring data, not opinion. The NPV defence — multiple scrutiny rounds with zero material concessions — is the proof that your synthesis withstands executive challenge. CoreAI Site Leader needs exactly this trust pattern.</p>
+    </div>
+
+    <div class="card warning-edge">
+      <div class="card-title">Align India RoB with global product/business goals</div>
+      <span class="card-tag warning">Reframe Required</span>
+      <p>You haven't aligned with a "global product roadmap" in the Microsoft sense. But you have aligned a 14.9x scale-up with Sobha's broader corporate strategy — AED 8.2B FY2026 collections target tied to corporate revenue objectives. The structural skill is the same: take a global goal, translate it into local execution, ensure cadence alignment, report variances upward. Reframe in vocabulary, not capability.</p>
+    </div>
+
+    <div class="card warning-edge">
+      <div class="card-title">Partner with CoreAI GTM, MCAPS, field on India motions</div>
+      <span class="card-tag warning">Reframe Required</span>
+      <p>You haven't worked with a sales/GTM motion. But you've partnered with Sobha's commercial teams — sales, marketing, customer service, escrow banks — to align collections strategy with revenue strategy. The cross-functional fluency is real. The vocabulary (MCAPS, field, GTM, partner motions) is learnable in days.</p>
+    </div>
+
+    <div class="card warning-edge">
+      <div class="card-title">Cultivate strategic relationships with top CoreAI customers</div>
+      <span class="card-tag warning">Partial Match</span>
+      <p>You've built relationships with Sobha's 10-bank escrow ecosystem — Emirates NBD, ADCB, Mashreq, etc. You operate at the relationship-management altitude. The customer-relationship dimension here is more about strategic operational support to the Site Leader than direct customer ownership. That's well within your range.</p>
+    </div>
+
+    <div class="card warning-edge">
+      <div class="card-title">Represent CoreAI at IDC EBC and Customer Advisory Boards</div>
+      <span class="card-tag warning">Reframe Required</span>
+      <p>You haven't done EBC or CAB work. But you've represented Sobha collections in CRO and CCO governance forums, and your NPV programme survived MD/CEO presentation. The skill — synthesise complex content for executive stakeholders, manage the orchestration of high-stakes engagements, ensure post-engagement follow-through — is established. The EBC vocabulary is a 30-minute briefing.</p>
+    </div>
+
+    <div class="card critical-edge">
+      <div class="card-title">CoreAI domain fluency — Copilot, Foundry, Agentic AI</div>
+      <span class="card-tag critical">Active Gap</span>
+      <p>This is the largest single gap. You've built AI portfolio projects (P5 Agentic Test Gen, P7–P9 AmEx ORE/Readiness/Risk Committee, P11 Oaktree, P12 Uber). You speak AI-augmented operations fluently. But CoreAI-specific products — GitHub Copilot architecture, Microsoft Foundry agent platform, Azure AI Foundry, Responsible AI framework — require explicit study. Closeable in 1 week of focused reading + one Foundry hands-on.</p>
+    </div>
+
+    <div class="card critical-edge">
+      <div class="card-title">Background in product design or strategy</div>
+      <span class="card-tag critical">Reframe via Portfolio</span>
+      <p>You don't have a Microsoft-style product role. But your AI portfolio projects ARE products in shape — they have users, problem statements, value propositions, success metrics, iteration loops. Your "Career Command Center" is a product. The Site Pulse concept (next tab) is a product. Reframe: "I've been designing operational AI products for two years; what I haven't been doing is shipping them externally."</p>
+    </div>
+
+    <h2>Qualification Fit Summary</h2>
+    <div class="callout">
+      <div class="callout-title">Years &amp; Education Read</div>
+      <p>JD: Bachelor's + 4 years in financial management, business planning, operations, strategy, project management, HR, or business — OR equivalent experience. Preferred: 8+ years in PM/Corp Strategy/Biz Excellence + Business Manager / Chief of Staff experience.</p>
+      <p>You have: <strong>BITS Pilani dual degree (B.E. + M.Sc.) + IIM Udaipur PGDM</strong> + 6 years post-MBA at Sobha managing operations at AGM altitude. The required qualification is met. The preferred qualification (8+ years) is slightly under in tenure but materially exceeded in scope — AED 12.97B portfolio, 77-person team, MD/CEO decision support is more than typical 8-year candidates bring. <strong>Frame the gap through scale, not tenure.</strong></p>
+    </div>
+
+    <div class="callout accent">
+      <div class="callout-title">vs. MS BizMgr OPG Noida — Why CoreAI Wins</div>
+      <p>OPG Noida (current pipeline, fit 75) and CoreAI Hyderabad are non-cannibalising — apply to both. But CoreAI is the stronger play: (1) Hyderabad matches your Sobha internal AVP relocation track; (2) AI-native org makes your AI portfolio narrative the lead, not a footnote; (3) 600+ person scope vs OPG's narrower delivery-partner-ops scope; (4) AI premium on compensation; (5) Internal mobility to Redmond CoreAI is a higher-velocity path than OPG.</p>
+    </div>
+
+  </div>
+
+  <!-- ========== TAB 3: GAPS & PLAN ========== -->
+  <div id="gaps" class="tab-content">
+
+    <div class="section-head">
+      <div class="section-title">Gaps &amp; Action Plan</div>
+      <div class="section-sub">What's missing, what's bridgeable, the 2–4 week path to close every gap</div>
+    </div>
+
+    <h2>Strengths — Already Proven</h2>
+    <div class="bar-row"><div class="bar-label">Cross-Geo Workflow Architecture</div><div class="bar-track"><div class="bar-fill" style="width: 95%"></div></div><div class="bar-value">95%</div></div>
+    <div class="bar-row"><div class="bar-label">Operating Rhythm &amp; Governance</div><div class="bar-track"><div class="bar-fill" style="width: 90%"></div></div><div class="bar-value">90%</div></div>
+    <div class="bar-row"><div class="bar-label">Financial Management &amp; NPV-grade Decision Support</div><div class="bar-track"><div class="bar-fill" style="width: 88%"></div></div><div class="bar-value">88%</div></div>
+    <div class="bar-row"><div class="bar-label">Programme Orchestration (cross-functional)</div><div class="bar-track"><div class="bar-fill" style="width: 92%"></div></div><div class="bar-value">92%</div></div>
+    <div class="bar-row"><div class="bar-label">Executive Communications &amp; Briefings</div><div class="bar-track"><div class="bar-fill" style="width: 84%"></div></div><div class="bar-value">84%</div></div>
+    <div class="bar-row"><div class="bar-label">Workforce &amp; Org Health</div><div class="bar-track"><div class="bar-fill" style="width: 82%"></div></div><div class="bar-value">82%</div></div>
+    <div class="bar-row"><div class="bar-label">AI-Augmented Operations Portfolio</div><div class="bar-track"><div class="bar-fill ai" style="width: 90%"></div></div><div class="bar-value">90%</div></div>
+    <div class="bar-row"><div class="bar-label">Data-Driven Decision Architecture</div><div class="bar-track"><div class="bar-fill" style="width: 86%"></div></div><div class="bar-value">86%</div></div>
+
+    <h2>Gaps — What Needs Closing</h2>
+    <div class="bar-row"><div class="bar-label">CoreAI Domain (Copilot, Foundry, Agentic)</div><div class="bar-track"><div class="bar-fill gap" style="width: 28%"></div></div><div class="bar-value">28%</div></div>
+    <div class="bar-row"><div class="bar-label">Microsoft Cultural Vocabulary (MCC, Growth Mindset)</div><div class="bar-track"><div class="bar-fill gap" style="width: 32%"></div></div><div class="bar-value">32%</div></div>
+    <div class="bar-row"><div class="bar-label">Product Strategy Vocabulary (PMM, GTM, MCAPS)</div><div class="bar-track"><div class="bar-fill gap" style="width: 38%"></div></div><div class="bar-value">38%</div></div>
+    <div class="bar-row"><div class="bar-label">EBC / Customer Advisory Board Experience</div><div class="bar-track"><div class="bar-fill gap" style="width: 35%"></div></div><div class="bar-value">35%</div></div>
+    <div class="bar-row"><div class="bar-label">Senior-Forum Assertiveness (Low-D DISC)</div><div class="bar-track"><div class="bar-fill gap" style="width: 60%"></div></div><div class="bar-value">60%</div></div>
+    <div class="bar-row"><div class="bar-label">Years (6yr post-MBA vs. 8yr preferred)</div><div class="bar-track"><div class="bar-fill gap" style="width: 75%"></div></div><div class="bar-value">75%</div></div>
+
+    <h2>2–4 Week Gap Closure Plan</h2>
+
+    <div class="card primary-edge">
+      <span class="card-tag">Week 1 · Domain Sprint</span>
+      <div class="card-title">CoreAI Product Immersion</div>
+      <p>Read GitHub Copilot product documentation (focus: agent mode, code completion architecture, enterprise rollout). Spend 2 hours in Microsoft Foundry (formerly Azure AI Foundry) — build one agent with a tool integration. Read three Satya Nadella interviews from 2025-26 specific to AI strategy. Read Kevin Scott (CTO) blog posts on Foundry. Outcome: you can describe the CoreAI product portfolio in two coherent paragraphs and articulate one strategic implication for India.</p>
+    </div>
+
+    <div class="card primary-edge">
+      <span class="card-tag">Week 1 · Cultural Sprint</span>
+      <div class="card-title">Microsoft Vocabulary &amp; Culture Mastery</div>
+      <p>Master the Vocab Decoder (Tab 8). Re-read Satya Nadella's "Hit Refresh" Chapters 4–7 (cultural transformation). Memorise Model-Coach-Care framework. Practice 10 sentences for each Sobha achievement, restated in Microsoft language. Watch one full episode of Microsoft's "Inside CoreAI" or equivalent internal content (LinkedIn has segments). Outcome: vocabulary feels native, not memorised.</p>
+    </div>
+
+    <div class="card ai-edge">
+      <span class="card-tag ai">Week 2 · Certification</span>
+      <div class="card-title">Schedule and Sit AI-900</div>
+      <p>AZ-900 already in progress. AI-900 (Microsoft Azure AI Fundamentals) is the highest-leverage certification for this role. Schedule the exam <strong>before</strong> applying. Telling the recruiter "AI-900 sat on [date]" is significantly stronger than "in progress." Three days of focused prep. Microsoft Learn has the official path. Cost: $99. Outcome: cert badge live on LinkedIn, recruiter screen credibility doubled.</p>
+    </div>
+
+    <div class="card accent-edge">
+      <span class="card-tag accent">Week 2 · Resume &amp; Apply</span>
+      <div class="card-title">Resume v1 + Application Submission</div>
+      <p>Derivative from MS BizMgr OPG v1 with three swaps: (1) Lead summary with AI-augmented operations framing; (2) Replace Noida-specific language with Hyderabad/CoreAI/Site-Leader CoS framing; (3) Surface 55-day T−25/T+30 framework as "operational rhythm of business" artifact. Use BITS Pilani + IIM Udaipur alumni network at Microsoft India (LinkedIn search: BITS + Microsoft + Hyderabad/CoreAI). Outcome: application submitted via warm referral channel, not cold portal.</p>
+    </div>
+
+    <div class="card ai-edge">
+      <span class="card-tag ai">Week 2–3 · AI Differentiator</span>
+      <div class="card-title">Build the CoreAI Site Pulse Prototype</div>
+      <p>The single highest-leverage prep activity. Build a working prototype of the Site Pulse weekly brief generator (full architecture in AI Solutions tab). Even a barebones version with 3 input sources and a Claude API summarisation layer signals you've already automated the role's most time-consuming function. Host on GitHub. Write a 200-word LinkedIn post. Outcome: in interview, you can demo a working tool, not just describe one.</p>
+    </div>
+
+    <div class="card primary-edge">
+      <span class="card-tag">Week 3 · Interview Prep</span>
+      <div class="card-title">STAR Rehearsal + Microsoft BQ Format</div>
+      <p>Rehearse 8 STAR stories (see STAR Bank tab) with Microsoft vocabulary embedded. Practice Growth Mindset framing on every "failure" question. Drill 3 assertiveness proof points for the AA round. Mock interview format: "Tell me about a time when..." × 8 scenarios, recorded and reviewed. Outcome: every story is under 3 minutes, embeds Microsoft language, ends with a Growth Mindset signal.</p>
+    </div>
+
+    <div class="card accent-edge">
+      <span class="card-tag accent">Week 3–4 · Strategic Network</span>
+      <div class="card-title">Activate Referral Path + Information Interviews</div>
+      <p>Three LinkedIn connection requests: (1) A current CoreAI India BizMgr or similar role (information interview ask); (2) A BITS or IIM Udaipur alum at Microsoft India (referral ask); (3) The Site Leader's network — public appearances, panels — to understand priorities. Send tailored 3-line messages. Outcome: at least one referral, at least one info interview, one piece of insider context for the interview.</p>
+    </div>
+
+    <div class="card warning-edge">
+      <span class="card-tag warning">Ongoing · Assertiveness</span>
+      <div class="card-title">Assertiveness Proof Points (AA Round Prep)</div>
+      <p>DISC Low-D + High-S means you under-anchor in senior forums. Microsoft's "As Appropriate" (AA) round explicitly probes for executive presence. Have three proof points rehearsed verbatim: (1) Held PR rejection standard at 49% under pressure to relax — vindicated by data; (2) Defended NPV at MD/CEO through multiple scrutiny rounds — zero material concessions; (3) Escalated 3 blocked risk register items to CCO proactively before due dates. Use one in every senior round.</p>
+    </div>
+
+    <h2>Key Unlock Phrase for This Role</h2>
+    <blockquote>I've been operating as a Chief of Staff for six years — to a CRO and CCO of a function that scaled 14.9 times — I just didn't have the title or the AI division. I translate strategy into execution, I own the rhythm of business for a 77-person organisation across two countries, I build the financial models that survive MD/CEO scrutiny, and I orchestrate the cross-functional programmes that keep the business moving. What I'm bringing now that's distinct: I've also been quietly building AI-augmented operations tools — programme health trackers, risk synthesis agents, executive briefing automations. CoreAI is the place where that combination lands hardest. — <strong>Use in cover note + interview opening</strong></blockquote>
+
+  </div>
+
+  <!-- ========== TAB 4: SALARY INTEL ========== -->
+  <div id="salary" class="tab-content">
+
+    <div class="section-head">
+      <div class="section-title">Salary Intelligence</div>
+      <div class="section-sub">Levels.fyi, Glassdoor, Blind, TeamBlind, 6figr — May 2026 + AI division premium</div>
+    </div>
+
+    <h2>Level Mapping &amp; Market Context</h2>
+    <p>Microsoft India "Senior Business &amp; Strategy Program Manager" maps to <strong>L62 (Senior)</strong> at the floor, <strong>L63 (Principal)</strong> at the negotiated target, with <strong>L64 (Senior Principal / Director)</strong> as a stretch case if your scope arguments land — particularly the 77-person team and AED 12.97B programme size. The CoreAI division carries an <strong>AI premium</strong> of approximately 15–25% above standard Microsoft India bands because the talent market for AI roles is highly competitive and Microsoft is actively defending against hires by Google, Amazon, and AI-native startups.</p>
+
+    <div class="callout ai">
+      <div class="callout-title">CoreAI Specific — Why Compensation Is Higher Here</div>
+      <p>CoreAI is Microsoft's most strategically important division. Satya Nadella has named it as the future of the company. Internal compensation philosophy at Microsoft places higher RSU multipliers and joining grant ceilings on roles in CoreAI vs. equivalent levels in OPG, MCAPS, or Office. Expect base parity but <strong>RSU 30–50% higher</strong> than OPG benchmarks at the same level.</p>
+    </div>
+
+    <h2>Compensation Bands — Microsoft India CoreAI Sr BPM</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>L62 (Floor)</th>
+          <th>L63 (Target)</th>
+          <th>L64 (Stretch)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">Base Salary</td>
+          <td>₹40–48L</td>
+          <td>₹48–58L</td>
+          <td>₹58–72L</td>
+        </tr>
+        <tr>
+          <td class="label">Target Bonus</td>
+          <td>10–18% (₹4–9L)</td>
+          <td>15–25% (₹7–14L)</td>
+          <td>20–30% (₹12–22L)</td>
+        </tr>
+        <tr>
+          <td class="label">RSU Grant (4yr vest)</td>
+          <td>$70–100K (₹15–22L/yr)</td>
+          <td>$120–180K (₹26–39L/yr)</td>
+          <td>$200–300K (₹44–66L/yr)</td>
+        </tr>
+        <tr>
+          <td class="label">Joining Bonus</td>
+          <td>₹3–5L</td>
+          <td>₹5–10L</td>
+          <td>₹10–15L</td>
+        </tr>
+        <tr>
+          <td class="label">CoreAI AI Premium</td>
+          <td>+15% on RSU</td>
+          <td>+20% on RSU</td>
+          <td>+25% on RSU</td>
+        </tr>
+        <tr style="background: rgba(0, 120, 212, 0.08);">
+          <td class="label">Total Comp Year 1</td>
+          <td><strong>₹65–82L</strong></td>
+          <td><strong>₹82–110L</strong></td>
+          <td><strong>₹110–155L</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Strategic Value Beyond CTC</h2>
+
+    <div class="card primary-edge">
+      <div class="card-title">Internal Mobility — CoreAI Redmond / Dublin / Tel Aviv</div>
+      <p>CoreAI is a globally distributed division with HQ in Redmond. A Sr BPM at L63 in Hyderabad has a <strong>2–3 year path to a Principal BPM in Redmond</strong> at L64 with US compensation — base $200–280K + RSU $300–500K = TC $400–650K. Microsoft's internal transfer system within the same division is highly accessible after 18–24 months tenure. CoreAI also has growing footprints in Dublin (Foundry team) and Tel Aviv (specialised AI). This optionality is uniquely powerful — a Sobha career has zero international mobility built in.</p>
+    </div>
+
+    <div class="card ai-edge">
+      <div class="card-title">RSU Appreciation Mechanics</div>
+      <p>MSFT stock has appreciated 18–22% annually since the AI inflection (late 2022). At a $150K RSU grant vesting over 4 years, the appreciation alone adds ₹20–35L of value over the vest period if historical performance holds. This is the second-largest comp component after base. Negotiate the grant aggressively — RSU is the most flexible negotiation lever Microsoft has.</p>
+    </div>
+
+    <div class="card accent-edge">
+      <div class="card-title">Chief of Staff Trajectory at Microsoft</div>
+      <p>Microsoft Chiefs of Staff and Business Managers frequently graduate to Director of Operations, GM-level positions, or Chief of Staff to CVP roles — all at L64–L66 with TC ₹250–500L+ globally. The current role at L63 in CoreAI sets up exactly this trajectory. Two of Microsoft's most prominent Indian-origin CVPs started in BPM/Chief of Staff roles.</p>
+    </div>
+
+    <div class="card gold-edge">
+      <div class="card-title">Network Effect — Disproportionate Senior Access</div>
+      <p>Working directly under a CoreAI Site Leader gives you access to: CoreAI CVP (US), MCAPS India leadership, GTA/URT leadership, top India enterprise customers (Reliance, TCS, HDFC, etc.), Foundry product leadership, Copilot product leadership. This network is denser and more senior than what most Director-level roles outside Microsoft would give you in 5 years.</p>
+    </div>
+
+    <h2>Negotiation Playbook</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Lever</th>
+          <th>Strategy</th>
+          <th>Floor / Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">Level</td>
+          <td>Push for L63 citing scope: 600-person org analog (your 77 × 8x is structurally similar in cross-geo complexity), AED 12.97B portfolio, MD/CEO decision support, AI portfolio. "My current scope operates at the Principal level."</td>
+          <td>Floor: L62 / Target: L63</td>
+        </tr>
+        <tr>
+          <td class="label">Base</td>
+          <td>Anchor at L63 mid-band. If L62, push for top-of-band (₹48L). Cite IIM Udaipur + BITS Pilani dual degree as a rare combination commanding India-entry premium.</td>
+          <td>Floor: ₹45L / Target: ₹52L</td>
+        </tr>
+        <tr>
+          <td class="label">RSU</td>
+          <td>Front-load vesting (50% in first 2 years vs. standard 25/25/25/25). Or request enhanced grant citing AI division premium and current Sobha deferred comp forfeited. RSU is Microsoft's most flexible lever.</td>
+          <td>Floor: $80K / Target: $150K+</td>
+        </tr>
+        <tr>
+          <td class="label">Joining Bonus</td>
+          <td>Always ask. Use Dubai-to-Hyderabad relocation as anchor. Microsoft offers ₹5–10L routinely for senior IC roles in CoreAI. Explicit ask is the only trigger.</td>
+          <td>Target: ₹7–10L</td>
+        </tr>
+        <tr>
+          <td class="label">Relocation Package</td>
+          <td>If moving from Dubai: flights for family, temporary housing (90 days), school transition support if relevant, visa processing. Dubai-India relocation is a known pattern; Microsoft has standard packages.</td>
+          <td>Ask explicitly</td>
+        </tr>
+        <tr>
+          <td class="label">Sign-on RSU</td>
+          <td>Separate from regular grant — a one-time RSU that vests in year 1. Anchor at $30–50K. Used to bridge Sobha deferred comp loss.</td>
+          <td>Target: $40K</td>
+        </tr>
+        <tr>
+          <td class="label">Title</td>
+          <td>"Senior Business &amp; Strategy Program Manager" is the offered title. If L63, push for "Principal Business &amp; Strategy Program Manager" — same role, more weight on resume.</td>
+          <td>Soft ask</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Cross-Pipeline Salary Comparison</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Floor</th>
+          <th>Target</th>
+          <th>Stretch</th>
+          <th>Strategic Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">Microsoft CoreAI Sr BPM</td>
+          <td>₹65L</td>
+          <td>₹82L</td>
+          <td>₹110L+</td>
+          <td>AI premium · Hyd · Redmond mobility</td>
+        </tr>
+        <tr>
+          <td class="label">Microsoft BizMgr OPG (Noida)</td>
+          <td>₹53L</td>
+          <td>₹65L</td>
+          <td>₹85L</td>
+          <td>No AI premium · Noida only</td>
+        </tr>
+        <tr>
+          <td class="label">Uber L5A Sr Risk Ops Mgr</td>
+          <td>₹85L</td>
+          <td>₹95L</td>
+          <td>₹120L</td>
+          <td>Highest base ceiling · Bangalore</td>
+        </tr>
+        <tr>
+          <td class="label">Oaktree VP InfoSolutions</td>
+          <td>₹55L</td>
+          <td>₹65L</td>
+          <td>₹73L</td>
+          <td>No RSU · deferred cash · fastest TTO</td>
+        </tr>
+        <tr>
+          <td class="label">AmEx GMNS Director</td>
+          <td>₹70L</td>
+          <td>₹82L</td>
+          <td>₹100L</td>
+          <td>Director title · slower TTO</td>
+        </tr>
+        <tr>
+          <td class="label">Qualcomm Sr PM</td>
+          <td>₹46L</td>
+          <td>₹56L</td>
+          <td>₹68L</td>
+          <td>Hardware PM ceiling · India entry</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout warning">
+      <div class="callout-title">CoreAI vs. Uber — The Comp Decision</div>
+      <p>Uber L5A has the highest base ceiling at ₹95–120L total. CoreAI at L63 stretch can match or exceed it because of RSU + AI premium + appreciation. The decision rests on: (a) <strong>Equity exposure tolerance</strong> — Uber stock vs. MSFT, very different risk profiles; (b) <strong>City preference</strong> — Bangalore (Uber) vs. Hyderabad (CoreAI, matches your Sobha relocation track); (c) <strong>Long-term mobility</strong> — Microsoft's internal Redmond pathway is unique. If both offer concurrently, CoreAI wins on optionality. Uber wins on time-to-cash.</p>
+    </div>
+
+  </div>
+
+  <!-- ========== TAB 5: AI SOLUTIONS ========== -->
+  <div id="ai" class="tab-content">
+
+    <div class="section-head">
+      <div class="section-title">AI Solutions — The CoreAI Differentiator</div>
+      <div class="section-sub">AI tools designed for this role's exact problem space — your interview multiplier</div>
+    </div>
+
+    <h2>Why AI Matters Here Specifically</h2>
+    <p>This role is uniquely positioned for AI augmentation: (1) The Site Leader manages a 600-person AI organisation — they expect their CoS to think in AI; (2) The Pulse / RoB / executive briefing functions are <strong>synthesis problems</strong>, which is exactly what generative AI does best; (3) CoreAI ships GitHub Copilot and Microsoft Foundry — your portfolio demonstrating you've used these primitives is direct credibility.</p>
+    <p>Your differentiator is not "I can use AI." Most candidates can. Your differentiator is <strong>"I've already designed the AI tools this role needs — here's the architecture."</strong></p>
+
+    <h2 style="color: var(--ai)">PRIMARY · Build This One</h2>
+
+    <div class="card ai-edge elevated">
+      <span class="card-tag ai">P-CoreAI-1 · Priority 1 · 2-day build</span>
+      <div class="card-title" style="color: #b794ff; font-size: 20px;">CoreAI Site Pulse — Weekly Site Leader Brief Generator</div>
+      <p><strong>The unstated job of the Site Leader:</strong> they have 600 people, three cities, and dual-geography (India/US) RoB. They cannot personally read every signal. The Site Pulse is a weekly auto-generated executive brief that ingests organisation-health signals and outputs a 1-page leadership brief.</p>
+
+      <h3>Architecture (4-layer)</h3>
+      <ol>
+        <li><strong>Data Ingestion Layer:</strong> Pulls from (a) employee listening proxy — simulated MS Poll / Thriving / Signals scores; (b) hiring &amp; attrition tracker — open requisitions, time-to-fill, regrettable attrition rate; (c) RoB action item ageing — items past due from last LT meeting; (d) top-customer engagement status — from a synthetic CRM feed; (e) financial actuals vs. forecast for the quarter.</li>
+        <li><strong>Synthesis Layer:</strong> Claude API or Azure OpenAI (use Azure to demonstrate Microsoft-stack fluency) summarises across data sources. Prompt engineering: "Identify the 3 things that changed since last week, the 3 things that need decision this week, the 3 things at risk over the next month."</li>
+        <li><strong>Output Layer:</strong> Generates a 1-page exec brief in three sections — <em>What changed</em>, <em>What needs your decision</em>, <em>What's at risk</em>. Markdown-rendered, exportable as PDF or shareable URL.</li>
+        <li><strong>Feedback Loop:</strong> Site Leader can mark items as "addressed" or "escalated" — the system learns priority patterns over time.</li>
+      </ol>
+
+      <h3>Stack</h3>
+      <p>Python · Streamlit (front-end) · Azure OpenAI or Claude API (synthesis) · synthetic data CSVs (no real Microsoft data needed for prototype) · GitHub Pages or Azure App Service for hosting. <strong>Build time: 2 focused days.</strong></p>
+
+      <h3>Demo Script (90 seconds — for interview)</h3>
+      <blockquote>"This is a tool I built to demonstrate how I'd approach the Site Pulse function for a Site Leader. It ingests five data sources — employee signals, hiring/attrition, RoB actions, customer engagement, financial actuals. The synthesis layer uses Azure OpenAI to identify the three things that changed, the three decisions needed this week, and the three risks over the next 30 days. The output is a 1-page brief the Site Leader can read in under 5 minutes. I've already shipped two production versions of this pattern at Sobha — for collections risk and for vendor health. The architecture is the same. The data sources change. Here's the live tool."</blockquote>
+
+      <div class="callout ai">
+        <div class="callout-title">The One-Sentence Pitch</div>
+        <p>"I've built this pattern three times — for collections risk monitoring, for info-solutions health dashboards, and for vendor cost intelligence. The Site Leader's brief is structurally the same problem. I've already shown I can do this." That single sentence closes the "background in product design or strategy" preferred qualification.</p>
+      </div>
+    </div>
+
+    <h2 style="color: var(--primary-light)">SECONDARY · Build If Time Permits</h2>
+
+    <div class="card primary-edge">
+      <span class="card-tag">P-CoreAI-2 · Priority 2 · 3-day build</span>
+      <div class="card-title">RoB Action Item Closure Agent</div>
+      <p><strong>Problem:</strong> Microsoft's Rhythm of Business generates dozens of action items per LT meeting. Tracking closure across 3 cities, 2 time zones, 600 people is high-overhead and error-prone.</p>
+      <p><strong>Solution:</strong> An agentic AI tool (using Microsoft Foundry-style architecture — important signal that you understand Foundry's primitives) that ingests meeting transcripts or notes, extracts action items with owners and due dates, sends automated follow-up nudges via Teams/email, escalates ageing items to the Site Leader, and produces a weekly closure report.</p>
+      <p><strong>Stack:</strong> Microsoft Foundry agent OR LangChain/CrewAI for non-MS demo. Azure OpenAI. Demonstrates you can architect agentic workflows, not just prompt-and-pray.</p>
+      <p><strong>Why this matters in interview:</strong> Foundry is the new flagship CoreAI product. Demonstrating Foundry-shaped thinking is direct relevance.</p>
+    </div>
+
+    <div class="card primary-edge">
+      <span class="card-tag">P-CoreAI-3 · Priority 3 · 1-day build</span>
+      <div class="card-title">Org Health Signal Synthesiser</div>
+      <p><strong>Problem:</strong> Employee listening tools (MS Poll, Thriving, Signals, OHI) generate volumes of qualitative + quantitative data. Synthesis into actionable insight is human-time-intensive.</p>
+      <p><strong>Solution:</strong> A tool that ingests listening data (synthetic for prototype), uses LLM-based topic modeling to cluster themes, classifies sentiment, surfaces emerging concerns, and outputs a 1-page leadership input document with recommended interventions.</p>
+      <p><strong>Stack:</strong> Python · Claude/Azure OpenAI · simple Streamlit UI · synthetic data based on public OHI patterns.</p>
+      <p><strong>Why this matters:</strong> Directly addresses the JD phrase "leverage employee listening tools and champion employee engagement." Most candidates will gesture at this responsibility. You will demonstrate it.</p>
+    </div>
+
+    <h2 style="color: var(--accent)">SUPPORTING · Reference Architectures</h2>
+
+    <div class="card accent-edge">
+      <div class="card-title">Executive Briefing Document Generator</div>
+      <p>Input: a topic + 3-5 stakeholders + recent decisions. Output: a structured exec briefing document with situation, options, recommendation, risks, and pre-empted objections. Mirrors the Microsoft executive doc format. <strong>Reuse:</strong> P-AmEx-7 (ORE Tracker) is structurally adjacent — same template engine, different domain.</p>
+    </div>
+
+    <div class="card accent-edge">
+      <div class="card-title">EBC Customer Narrative Builder</div>
+      <p>Input: customer name + industry + product focus. Output: a tailored EBC narrative — context, customer pain points, CoreAI product positioning, differentiators, ROI framing, suggested demos. This is the orchestration layer for IDC EBC sessions.</p>
+    </div>
+
+    <div class="card accent-edge">
+      <div class="card-title">Cross-City Headcount Intelligence Dashboard</div>
+      <p>Input: hiring pipeline, attrition data, role demand by city. Output: visualised view of the 3-city (Hyd/Blr/Noida) talent flow, hot-spots for hiring, predicted gaps over the next quarter. <strong>Reuse:</strong> P-Google-10 (Extended Workforce Cost Intelligence Dashboard) is direct reuse — different metrics, same architecture.</p>
+    </div>
+
+    <h2>How to Pitch AI in the Interview</h2>
+
+    <div class="callout ai">
+      <div class="callout-title">Opening the AI Conversation (Round 1 or 2)</div>
+      <p>"One observation about Business &amp; Strategy PM roles — about 60–70% of the time goes into assembling materials rather than acting on them. Briefings, RoB packs, status reports, action item trackers. I've spent the last two years building AI-augmented operations tools that automate the assembly so the human can focus on judgment and influence. Specifically for this role, I've architected a CoreAI Site Pulse — weekly brief for the Site Leader that synthesises employee signals, RoB action ageing, and customer engagement data into a 1-page decision document. I'd be happy to walk you through the prototype."</p>
+    </div>
+
+    <div class="callout ai">
+      <div class="callout-title">If They Ask "Can You Show Us?" (Round 2 or 3)</div>
+      <p>"Yes — let me share my screen. This is the Site Pulse demo. The data is synthetic, but the architecture is production-shape. Three sources, two synthesis layers, one 1-page brief. I built this in two days using Azure OpenAI on the back-end. If I were here, I'd extend it to ingest from MS Poll and your existing RoB tools — but the architecture wouldn't change. The principle is: aggregation is automation work; synthesis is judgment work. AI handles the first; the BPM handles the second."</p>
+    </div>
+
+    <div class="callout ai">
+      <div class="callout-title">Closing the AI Pitch (Final Round)</div>
+      <p>"What I want you to take away: I'm not bringing AI as a buzzword. I've shipped this pattern three times — collections risk monitoring at Sobha, info-solutions health for an Oaktree pursuit, vendor cost intelligence for Uber. The Site Leader's weekly brief is the same shape of problem. The combination of operational rigour and AI-native thinking is what I'd bring on day one."</p>
+    </div>
+
+    <h2>The CoreAI-Specific Tells (Use These in Demos)</h2>
+    <ul>
+      <li><strong>Use Azure OpenAI, not OpenAI directly</strong> — signals Microsoft-stack fluency.</li>
+      <li><strong>Reference Microsoft Foundry by name</strong> — even if you didn't deploy on it, mention it as the production target.</li>
+      <li><strong>Mention Responsible AI</strong> — talk about prompt safety, output validation, enterprise governance. CoreAI cares about this.</li>
+      <li><strong>Frame outputs as "Copilot-shaped"</strong> — i.e., AI augmenting a human workflow, not replacing it. Microsoft's narrative is augmentation.</li>
+      <li><strong>Acknowledge data residency</strong> — for India operations, mention awareness that production data stays in compliant regions.</li>
+    </ul>
+
+  </div>
+
+  <!-- ========== TAB 6: STAR BANK ========== -->
+  <div id="star" class="tab-content">
+
+    <div class="section-head">
+      <div class="section-title">STAR Story Bank</div>
+      <div class="section-sub">8 pre-mapped stories for every key JD responsibility — ready to deploy in interviews</div>
+    </div>
+
+    <p class="muted">Maps to canonical S1–S34 from STAR_STORY_BANK_V2 with CoreAI-specific framing. Each story is under 3 minutes spoken. Microsoft vocabulary embedded. Growth Mindset signal included.</p>
+
+    <div class="star-story">
+      <div class="star-story-title">Story 1 — Cross-Geo Workflow Architecture (S5 · India Hub Deployment)</div>
+      <div class="star-story-map">Maps to: "Architect and scale workflows across Hyderabad, Bengaluru, Noida"</div>
+      <div class="star-block"><span class="star-label">SITUATION</span><span class="star-text">Sobha's collections function was entirely Dubai-based. The business needed an India hub to handle operational delivery, quality governance, and management information — but there was no infrastructure, no hiring pipeline, and no governance model for a cross-geography operation. We needed to build a 42-person hub in under 12 months while maintaining uninterrupted service to a portfolio of AED 12.97B.</span></div>
+      <div class="star-block"><span class="star-label">TASK</span><span class="star-text">I owned the design and stand-up — org structure, hiring, capability build, integration with the Dubai team, governance cadence, attrition risk management.</span></div>
+      <div class="star-block"><span class="star-label">ACTION</span><span class="star-text">I designed a 3-team structure: Operations 38, Quality Control Group 12, MIS 15. I built role specifications, capability frameworks, training programmes. I designed a cross-timezone governance model — same KPI dashboards, same review cadences, same documentation standards as Dubai. I embedded accountability through the same appraisal architecture (60% performance / 40% behavioural). I managed attrition risk through structured onboarding, career path clarity, and capability-based growth opportunities. I built daily/weekly/monthly Rhythm of Business tied directly to the Dubai LT.</span></div>
+      <div class="star-block"><span class="star-label">RESULT</span><span class="star-text">42-person hub fully operational in under 12 months. The hub now handles operational delivery for the AED 12.97B portfolio. Attrition managed within industry norms. Team members independently author MD-approved process documents — a hard capability metric. The structure scales: this is the architecture I'd extend across Hyderabad, Bengaluru, Noida for CoreAI.</span></div>
+    </div>
+
+    <div class="star-story">
+      <div class="star-story-title">Story 2 — Rhythm of Business at Scale (S2 · 3-Tier Governance)</div>
+      <div class="star-story-map">Maps to: "Lead RoB across India and US stakeholders"</div>
+      <div class="star-block"><span class="star-label">SITUATION</span><span class="star-text">When I joined as Management Trainee in 2020, the Sobha collections function had no structured management review cadence. Decisions were ad hoc, follow-ups inconsistent, and there was no systematic tracking of leadership action items.</span></div>
+      <div class="star-block"><span class="star-label">TASK</span><span class="star-text">Build and embed an end-to-end governance Rhythm of Business — from weekly team reviews to monthly CRO-level business reviews to quarterly CCO-level strategic reviews — with decision tracking and accountability follow-through.</span></div>
+      <div class="star-block"><span class="star-label">ACTION</span><span class="star-text">I designed a 3-tier cadence. Tier 1: weekly KPI reviews with each sub-team lead. Tier 2: monthly business reviews with CRO Mohammad Adnan Hamid covering portfolio health, delinquency trends, vendor performance, financial actuals vs. forecast. Tier 3: quarterly strategic reviews with CCO Ashish Vishnu Rupani. For each tier, I built standardised data packs from the 70+ report Salesforce ecosystem, created decision tracking logs, enforced action item follow-through. I prepared the NPV decision framework for MD/CEO — scenario modelling, sensitivity analysis, stakeholder-ready framing — which survived multiple rounds of scrutiny by Francis Alfred himself.</span></div>
+      <div class="star-block"><span class="star-label">RESULT</span><span class="star-text">The Rhythm of Business is now the operating backbone for the entire collections function. Decision cycle time reduced significantly — issues that previously took weeks to resolve close within one review cycle. The NPV programme was approved with AED 652M in incremental inflow because the governance infrastructure ensured the right data reached the right decision-makers at the right time. This is the same RoB design I'd architect for the CoreAI India ↔ US dual-timezone synchronisation.</span></div>
+    </div>
+
+    <div class="star-story">
+      <div class="star-story-title">Story 3 — Financial Discipline + Executive Decision Support (S3 · NPV Defence)</div>
+      <div class="star-story-map">Maps to: "Own budget, headcount, fiscal planning · Build trust, enable fact-based decisions"</div>
+      <div class="star-block"><span class="star-label">SITUATION</span><span class="star-text">Sobha's collections model relied on payment at contractual due dates. I identified a structural opportunity to incentivise early payment — but it required building a complex financial case for MD/CEO approval and managing cross-functional implementation through a sceptical leadership team.</span></div>
+      <div class="star-block"><span class="star-label">TASK</span><span class="star-text">Design, model, and get approved a Net Present Value-based early payment incentive programme. Present at MD/CEO level. Defend the assumptions. Track financial outcomes against projections.</span></div>
+      <div class="star-block"><span class="star-label">ACTION</span><span class="star-text">I built the full NPV model: AED 652M incremental inflow, AED 21.2M cost, 248-day average prepayment acceleration, 32% cheaper than the bank financing alternative. I created scenario modelling and sensitivity analysis. I managed objections from Finance (cost concern), Legal (contract compliance), Operations (execution complexity) — synthesising feedback and incorporating it before final approval. I presented to MD Francis Alfred through three rounds of scrutiny. Each round I returned with sharper data, never with concessions on the core thesis. Post-launch, I tracked actuals vs. forecast and reported variance to leadership monthly.</span></div>
+      <div class="star-block"><span class="star-label">RESULT</span><span class="star-text">Programme approved and implemented. AED 652M in incremental cash inflow. 32% cheaper than the bank alternative. <strong>Zero material concessions during the approval process.</strong> The financial tracking infrastructure became a permanent governance tool. The Growth Mindset signal: I learned that bringing sensitivity analysis to round 1 instead of round 3 would have closed two rounds in five minutes — that pattern is now my default for any executive financial proposal.</span></div>
+    </div>
+
+    <div class="star-story">
+      <div class="star-story-title">Story 4 — Cross-Functional Programme Orchestration (S4 · PCC TAT)</div>
+      <div class="star-story-map">Maps to: "Drive cross-org initiatives and special projects · Coordinate complex initiatives"</div>
+      <div class="star-block"><span class="star-label">SITUATION</span><span class="star-text">Payment Completion Certificate processing was taking 20 days on average — creating customer friction, delaying handovers, consuming disproportionate management attention. The process spanned Operations, Finance, Legal, Customer Service with no single owner.</span></div>
+      <div class="star-block"><span class="star-label">TASK</span><span class="star-text">Reduce PCC TAT to under 5 days while maintaining compliance rigour — requiring cross-functional alignment across 4 departments and process redesign for monthly volume of 281 transactions.</span></div>
+      <div class="star-block"><span class="star-label">ACTION</span><span class="star-text">I mapped the end-to-end process, identified 6 bottlenecks (3 systemic, 3 handoff-related), designed a parallel processing workflow that eliminated sequential dependencies. I partnered with Legal to pre-approve standard templates, with Finance to create an automated clearance trigger, with Operations to restructure the verification sequence. I implemented daily monitoring at each handoff point and escalated blockers within 24 hours. This is what Microsoft would call a One Microsoft v-Team approach — virtual cross-functional team assembled for a specific outcome.</span></div>
+      <div class="star-block"><span class="star-label">RESULT</span><span class="star-text">PCC TAT reduced from 20 days to 3 days — an 85% reduction. Monthly volume scaled to 281 transactions without additional headcount. The cross-functional process redesign is now embedded as a permanent workflow. This story shows multi-stakeholder orchestration with measurable outcomes — exactly what cross-org initiatives at CoreAI scale demand.</span></div>
+    </div>
+
+    <div class="star-story">
+      <div class="star-story-title">Story 5 — Strategy-to-Execution Translation (S1 · FY2026 OKR Decomposition)</div>
+      <div class="star-story-map">Maps to: "Align India RoB with global product/business goals · Translate strategy"</div>
+      <div class="star-block"><span class="star-label">SITUATION</span><span class="star-text">In FY2026, Sobha's leadership set an AED 8.2B collections target — the most ambitious in the function's history. There was no structured framework to decompose this into team-level milestones across 77 people in two countries.</span></div>
+      <div class="star-block"><span class="star-label">TASK</span><span class="star-text">Translate this top-level strategic target into an executable quarterly plan with individual-level accountability, KPI tracking infrastructure, and a governance cadence that kept execution on track.</span></div>
+      <div class="star-block"><span class="star-label">ACTION</span><span class="star-text">I designed a multi-layered OKR decomposition: function-level quarterly targets → team-level monthly milestones → individual weekly KPIs. I built tracking infrastructure using the 70+ report Salesforce ecosystem. I established weekly review cadences at team-lead level and monthly business reviews at CRO level. Performance weightage was set at 60% of appraisal to ensure alignment. I identified early-warning signals — delinquency rate creep, payment velocity drops — and built automated flagging.</span></div>
+      <div class="star-block"><span class="star-label">RESULT</span><span class="star-text">Collections performance reached +62% YoY. All 12 programme deliverables on schedule. The framework scales — it's the same architecture used for the prior 14.9x growth from AED 867M to AED 12.97B. This is exactly the strategy-to-execution skill needed to align India CoreAI RoB with global product and business goals.</span></div>
+    </div>
+
+    <div class="star-story">
+      <div class="star-story-title">Story 6 — Org Health &amp; Pulse (S6 · PR Rejection Quality Hold)</div>
+      <div class="star-story-map">Maps to: "Pulse of organisation · Champion engagement · Hold standards under pressure"</div>
+      <div class="star-block"><span class="star-label">SITUATION</span><span class="star-text">By December 2025, Payment Request rejection rate had reached 49%. There was pressure from multiple stakeholders to relax documentation standards to improve throughput — essentially trading quality for speed. The team was at risk of disengaging because they felt their quality intent was being undermined.</span></div>
+      <div class="star-block"><span class="star-label">TASK</span><span class="star-text">Maintain the documentation quality standard while finding a sustainable way to improve throughput — without compromising governance rigour. Protect team morale and quality intent.</span></div>
+      <div class="star-block"><span class="star-label">ACTION</span><span class="star-text">I read the team's signal — they cared about quality, but they were burning out on rework. I held the standard and presented data showing relaxation would create downstream compliance risk. Then I designed a structural solution: a quality scorecard with pre-submission checklist, daily monitoring, peer review — improving throughput through capability, not lower bars. I made the case to leadership with data, not opinion. I communicated to the team that their quality intent was being protected.</span></div>
+      <div class="star-block"><span class="star-label">RESULT</span><span class="star-text">Position vindicated by subsequent data — PR TAT dropped from 20 to 3 days while maintaining quality. The standard held. Throughput improved through capability. The team's engagement signal recovered because their quality voice was heard. This is what the JD calls "pulse of the organisation" — sensing the team signal, advocating for it with data, designing structural solutions.</span></div>
+    </div>
+
+    <div class="star-story">
+      <div class="star-story-title">Story 7 — AI-Augmented Operations (S15 · 70+ Report Salesforce Architecture + AI Layer)</div>
+      <div class="star-story-map">Maps to: "Background in product design or strategy · AI-native thinking"</div>
+      <div class="star-block"><span class="star-label">SITUATION</span><span class="star-text">Sobha's collections leadership needed visibility across multiple geographies, 4 sub-teams, and a complex portfolio. Before I built the MI ecosystem, decisions were lagging because data was assembled manually each cycle. The Sobha context is the same shape as a Site Leader's challenge — too many signals, too little synthesis time.</span></div>
+      <div class="star-block"><span class="star-label">TASK</span><span class="star-text">Architect a data infrastructure that provides leadership with real-time insight, then layer AI synthesis on top to compress 70+ reports into actionable executive briefs.</span></div>
+      <div class="star-block"><span class="star-label">ACTION</span><span class="star-text">I led the solution design for a 70+ report Salesforce MI ecosystem covering KPIs, portfolio health, vendor performance, financial actuals. I partnered with MIS lead Vijay Zakkala on SQL migration. Then I went a step further: I designed a Claude/Azure OpenAI synthesis layer that takes raw report data and generates executive briefs — pattern recognition across reports, anomaly flagging, and recommended decisions. I've extended this pattern across multiple AI portfolio projects: ORE Tracker, Risk Committee Pack Generator, Vendor Cost Intelligence Dashboard, Info Solutions Health Dashboard.</span></div>
+      <div class="star-block"><span class="star-label">RESULT</span><span class="star-text">Reporting time compressed from days to minutes for executive consumption. Decision cycle time on operational issues reduced. The pattern is portable — same architecture, different domains. For CoreAI, this is the foundation of the Site Pulse I'd build for the Site Leader. The Growth Mindset signal: I learned that "more reports" is not the answer — "better synthesis" is. AI changed my entire approach to operations infrastructure.</span></div>
+    </div>
+
+    <div class="star-story">
+      <div class="star-story-title">Story 8 — Failure / Growth Mindset (S11 · SQL Delegation Lesson)</div>
+      <div class="star-story-map">Maps to: "Tell me about a failure · Growth Mindset"</div>
+      <div class="star-block"><span class="star-label">SITUATION</span><span class="star-text">When the MI ecosystem build was at peak intensity, I made a deliberate decision to delegate SQL learning to Vijay (MIS lead) instead of investing 4 weeks of my own time. My reasoning at the time: my comparative advantage was strategy and stakeholder management; SQL was a craft skill I could direct without owning.</span></div>
+      <div class="star-block"><span class="star-label">TASK</span><span class="star-text">Stand up a 70+ report ecosystem efficiently across team capability levels.</span></div>
+      <div class="star-block"><span class="star-label">ACTION</span><span class="star-text">I delegated. Vijay learned SQL deeply. The reports got built. But what I missed was that without my own SQL fluency, I couldn't iterate as fast on report design — every change had to go through Vijay, which created a single-point dependency. More importantly, I couldn't do my own data exploration in moments of strategic uncertainty.</span></div>
+      <div class="star-block"><span class="star-label">RESULT</span><span class="star-text"><strong>What I learned:</strong> delegation works for execution scale, but skill-building cannot be outsourced for the leader. <strong>What I changed:</strong> I'm now actively building SQL fluency through Mode Analytics, DataCamp, and Kaggle datasets — not because I'll write production SQL, but because I want to think in data structures fluently. The same principle applies to AI tools: a leader who can prompt, evaluate, and iterate on AI outputs is materially more effective than one who delegates it. <em>Learn-it-all over know-it-all.</em></span></div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">STAR Bank Mapping Summary</div>
+      <table style="margin-top: 6px;">
+        <thead>
+          <tr><th>JD Pillar</th><th>Primary Story</th><th>Backup Story</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Cross-city workflow architecture</td><td>Story 1 (India Hub)</td><td>Story 4 (PCC TAT)</td></tr>
+          <tr><td>Budget / headcount / fiscal planning</td><td>Story 3 (NPV)</td><td>Story 5 (FY2026 OKR)</td></tr>
+          <tr><td>RoB across India + US stakeholders</td><td>Story 2 (3-Tier RoB)</td><td>Story 5 (FY2026 OKR)</td></tr>
+          <tr><td>Cross-org initiatives, special projects</td><td>Story 4 (PCC TAT)</td><td>Story 1 (India Hub)</td></tr>
+          <tr><td>Executive briefings, follow-through</td><td>Story 3 (NPV)</td><td>Story 2 (3-Tier RoB)</td></tr>
+          <tr><td>Pulse / org health / engagement</td><td>Story 6 (PR Rejection)</td><td>Story 1 (India Hub)</td></tr>
+          <tr><td>Strategy translation, alignment</td><td>Story 5 (FY2026 OKR)</td><td>Story 3 (NPV)</td></tr>
+          <tr><td>AI / Product Strategy edge</td><td>Story 7 (AI MI Ecosystem)</td><td>Site Pulse demo</td></tr>
+          <tr><td>Failure / Growth Mindset</td><td>Story 8 (SQL Lesson)</td><td>Story 3 round-1 sensitivity learning</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ========== TAB 7: INTERVIEW PREP ========== -->
+  <div id="interview" class="tab-content">
+
+    <div class="section-head">
+      <div class="section-title">Interview Prep</div>
+      <div class="section-sub">5-round Microsoft loop · Growth Mindset framing · 25 likely questions · ready-to-deploy answers</div>
+    </div>
+
+    <h2>Microsoft Interview Format — What to Expect</h2>
+    <p>CoreAI Sr BPM interviews follow Microsoft's standard 5-round loop with elevated rigour due to division visibility. Every behavioural question is scored against the Model-Coach-Care leadership framework. Growth Mindset is evaluated explicitly — every failure story must end with what you learned and how you changed. The "As Appropriate" (AA) round — usually round 5 — is where a senior leader makes the final hire/no-hire decision. For CoreAI, the AA is often the Site Leader themselves or their direct peer.</p>
+
+    <h2>Round-by-Round Structure</h2>
+
+    <div class="grid-2">
+      <div class="card primary-edge">
+        <span class="card-tag">Round 1 · 30 min</span>
+        <div class="card-title">Recruiter Screen</div>
+        <p>Microsoft India Talent Acquisition. Validates basic fit — qualifications, scope, motivation, comp expectations. Light on technical, heavy on narrative. <strong>Goal:</strong> get a strong handoff to hiring manager.</p>
+      </div>
+      <div class="card primary-edge">
+        <span class="card-tag">Round 2 · 60 min</span>
+        <div class="card-title">Hiring Manager (Site Leader's COS today, or proxy)</div>
+        <p>Deep dive on operational scope at Sobha. Probes RoB, financial governance, cross-functional orchestration. Expect 3 STAR questions and 1 case-style question. <strong>Goal:</strong> establish operational credibility.</p>
+      </div>
+      <div class="card ai-edge">
+        <span class="card-tag ai">Round 3 · 60 min</span>
+        <div class="card-title">Site Leader / Senior Director</div>
+        <p>The role's principal. Probes leadership altitude, executive presence, strategic mindset, AI-fluency. AI Site Pulse demo lands here. <strong>Goal:</strong> demonstrate Chief-of-Staff-level strategic synthesis.</p>
+      </div>
+      <div class="card accent-edge">
+        <span class="card-tag accent">Round 4 · 45 min × 2</span>
+        <div class="card-title">Cross-Functional Panel</div>
+        <p>Two interviews back-to-back. Likely: a CoreAI engineering or product peer + an HR/People Strategy partner. Probes collaboration, One Microsoft thinking, cultural fit. <strong>Goal:</strong> show v-Team fluency and culture alignment.</p>
+      </div>
+      <div class="card gold-edge" style="grid-column: 1 / -1;">
+        <span class="card-tag gold">Round 5 · 45 min</span>
+        <div class="card-title">AA (As Appropriate) — Senior Leader · Often CVP-level or Site Leader Peer</div>
+        <p>The hire/no-hire decision round. Tests executive presence, decision quality under pressure, Growth Mindset, scope ambition. Often a single behavioural deep-dive into a high-stakes decision. <strong>Goal:</strong> deploy your three assertiveness proof points. Hold strong positions with data.</p>
+      </div>
+    </div>
+
+    <h2>25 Likely Questions — Pre-Mapped Answers</h2>
+
+    <h3 style="color: var(--primary-light); margin-top: 18px;">Round 1 · Recruiter Screen (5 questions)</h3>
+
+    <div class="card">
+      <p><strong>Q1: Walk me through your career.</strong></p>
+      <p style="margin-top: 8px;"><em>Answer (60s):</em> Management Trainee at Sobha 2020 → AGM Dues Collections by 2025. Six years to scale a function 14.9x — AED 867M to AED 12.97B. Built a 77-person team across two countries. Designed the financial governance, the operational rhythm, the executive decision support that survives MD/CEO scrutiny. The last two years I've been quietly building AI-augmented operations tools — programme health trackers, risk synthesis dashboards. CoreAI is where this combination — operational depth plus AI-native thinking — lands hardest. That's why I'm here.</p>
+    </div>
+
+    <div class="card">
+      <p><strong>Q2: Why Microsoft? Why CoreAI specifically?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer (45s):</em> Three reasons. One — I've been operating as a Chief of Staff for six years without the title. CoreAI Sr BPM is the role I've been preparing for. Two — CoreAI is where Microsoft's bet on the future is concentrated. Working at the centre of agentic AI commercialisation is uniquely valuable for the next decade of my career. Three — Hyderabad. I'm relocating there regardless. If I can do it inside Microsoft's flagship division rather than on the outside looking in, that's the right move.</p>
+    </div>
+
+    <div class="card">
+      <p><strong>Q3: What's your compensation expectation?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer:</em> "I'm targeting total compensation in the L63 band — base in the ₹50–55L range with appropriate RSU and joining grant given the AI division premium. I'm flexible on structure but firm on total. I'd prefer to discuss specifics once we've validated mutual fit. What's your level mapping for this role?"</p>
+    </div>
+
+    <div class="card">
+      <p><strong>Q4: When can you start?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer:</em> "Standard 60-day notice at Sobha. I'll work with HR there to compress where possible. I'd target a start date 6–8 weeks after offer signature. I'm in Dubai today; I'd plan to relocate to Hyderabad immediately."</p>
+    </div>
+
+    <div class="card">
+      <p><strong>Q5: Why are you leaving Sobha?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer (Growth Mindset framing):</em> "Sobha has been an exceptional environment to build in — I owe a lot to the leadership there. The next phase of my career is about working at global product scale and AI-native depth, neither of which Sobha can offer. CoreAI is the right next environment for that. I'm leaving with my team capable of running independently and my operational architecture in place."</p>
+    </div>
+
+    <h3 style="color: var(--primary-light);">Round 2 · Hiring Manager (5 questions)</h3>
+
+    <div class="card primary-edge">
+      <p><strong>Q6: Tell me about a time you translated strategy into execution.</strong></p>
+      <p style="margin-top: 8px;"><em>Deploy:</em> Story 5 (FY2026 OKR Decomposition). Key line: "I decomposed an AED 8.2B annual target into individual-level weekly KPIs across 77 people in two countries with 60% appraisal weightage to ensure alignment. Collections performance reached +62% YoY."</p>
+    </div>
+
+    <div class="card primary-edge">
+      <p><strong>Q7: How do you run operating rhythm for a leadership team?</strong></p>
+      <p style="margin-top: 8px;"><em>Deploy:</em> Story 2 (3-Tier RoB). Key line: "I designed a 3-tier governance cadence — weekly, monthly, quarterly — with data-driven pre-reads, decision tracking, action item closure. The cadence supported a programme that delivered AED 652M in incremental inflow."</p>
+    </div>
+
+    <div class="card primary-edge">
+      <p><strong>Q8: Tell me about a complex cross-functional programme you orchestrated.</strong></p>
+      <p style="margin-top: 8px;"><em>Deploy:</em> Story 4 (PCC TAT). Key line: "I reduced processing time from 20 to 3 days across 4 departments by redesigning the workflow from sequential to parallel. Monthly volume scaled to 281 transactions without additional headcount. This is what I'd call a One Microsoft v-Team approach."</p>
+    </div>
+
+    <div class="card primary-edge">
+      <p><strong>Q9: How do you support financial management and budget governance?</strong></p>
+      <p style="margin-top: 8px;"><em>Deploy:</em> Story 3 (NPV Defence). Key line: "I built an NPV model that generated AED 652M in incremental inflow at 32% lower cost than the alternative — and defended it through three rounds of MD/CEO scrutiny with zero material concessions."</p>
+    </div>
+
+    <div class="card primary-edge">
+      <p><strong>Q10: How would you approach the first 90 days in this role?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer (3-part):</em> "Days 1–30: listen. Sit in every LT meeting, read every recent MBR/QBR pack, talk to 30 individuals across the three cities. Map the current Rhythm of Business and identify gaps. Days 31–60: synthesise. Build my version of the Site Pulse — the weekly leadership brief I'd architect. Map the top 5 special projects the Site Leader needs help on. Days 61–90: ship. Start running the RoB I've designed. Deliver the first Site Pulse. Move 2 special projects from blocked to in-flight. Build the year's planning calendar."</p>
+    </div>
+
+    <h3 style="color: var(--ai)">Round 3 · Site Leader / Senior Director (5 questions)</h3>
+
+    <div class="card ai-edge">
+      <p><strong>Q11: What's your read on what CoreAI India should prioritise this year?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer (preparation: read recent Microsoft AI announcements before this round):</em> "Three priorities, with humility that I'd recalibrate after my first 30 days. One — talent. CoreAI is in a hot market for AI talent; the URT and GTA partnership has to scale aggressively without diluting the bar. Two — Foundry adoption velocity in India. India enterprise customers — banks, IT services, public sector — are at an agentic AI inflection. CoreAI India should be the bridge to Microsoft customer success here. Three — operational coherence across the three cities. As you scale to 800–1000+, fragmentation becomes the silent risk. The Site Pulse and RoB architecture I'd build addresses exactly that."</p>
+    </div>
+
+    <div class="card ai-edge">
+      <p><strong>Q12: How do you think about your role relative to mine?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer:</em> "Your job is to be 10x more effective on the things only you can do. My job is to absorb everything else. I own the rhythm, the briefings, the financial discipline, the cross-org orchestration, the special projects. I bring you patterns and decisions, not raw data. I make sure you walk into every CVP review, every customer EBC, every all-hands prepared. I tell you what the org is feeling that you wouldn't otherwise hear. I do not replace your judgment — I extend your reach."</p>
+    </div>
+
+    <div class="card ai-edge">
+      <p><strong>Q13: Show me the AI Site Pulse you mentioned.</strong></p>
+      <p style="margin-top: 8px;"><em>Deploy:</em> 90-second demo from AI Solutions tab. Key line: "Aggregation is automation work. Synthesis is judgment work. AI handles the first; the BPM handles the second. I've shipped this pattern three times in different domains. The Site Leader's brief is the next deployment."</p>
+    </div>
+
+    <div class="card ai-edge">
+      <p><strong>Q14: Tell me about a decision you made under uncertainty.</strong></p>
+      <p style="margin-top: 8px;"><em>Deploy:</em> Story 6 (PR Rejection). Key line: "I held the documentation standard at 49% rejection when there was strong pressure to relax it. I made the case with data. The position was vindicated by subsequent results — TAT improved while quality held."</p>
+    </div>
+
+    <div class="card ai-edge">
+      <p><strong>Q15: What worries you about this role?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer (Growth Mindset):</em> "Honestly — CoreAI domain depth. I'm AI-fluent in the operations sense, but I haven't shipped GitHub Copilot or run a Foundry agent at production scale. I'm closing that gap actively — AI-900 sat, deep reading on Copilot architecture, hands-on Foundry build. I'd want my first 30 days to include shadowing engineering and product reviews so I can speak the technical language as well as the operational. The gap is real but addressable."</p>
+    </div>
+
+    <h3 style="color: var(--accent)">Round 4 · Cross-Functional Panel (5 questions)</h3>
+
+    <div class="card accent-edge">
+      <p><strong>Q16: How do you partner with Engineering / Product without owning their work?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer:</em> "By being useful, not intrusive. I learn the technical language — not to lead the work, but to translate it for senior stakeholders and back to the team. I bring operational rigour where engineers want to focus on building. I make sure the Rhythm of Business serves the engineering cadence rather than disrupting it. At Sobha, I worked closely with our Salesforce admin and IT teams — Vijay Zakkala leading SQL migration — without ever pretending to be technical. Same posture here, scaled to AI."</p>
+    </div>
+
+    <div class="card accent-edge">
+      <p><strong>Q17: Tell me about a time you disagreed with a senior leader.</strong></p>
+      <p style="margin-top: 8px;"><em>Deploy:</em> Story 6 (PR Rejection) + Story 3 (NPV defence). Key line: "I didn't relax the standard. I held with data. I designed a structural alternative that improved throughput without compromising the bar. The position was vindicated."</p>
+    </div>
+
+    <div class="card accent-edge">
+      <p><strong>Q18: How do you build trust with a team you don't manage?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer:</em> "Three ways. One — show up consistently. I'm in their reviews, their slacks, their wins. Two — bring value before asking. I share insights from across the org, not just take requests. Three — never take credit for their work. The Site Pulse I'd build surfaces engineering wins to the Site Leader; the engineers should see their work amplified, not appropriated. Microsoft's Model-Coach-Care framework matches my instinct here."</p>
+    </div>
+
+    <div class="card accent-edge">
+      <p><strong>Q19: What's your view on hybrid work for a 600-person org?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer:</em> "Hybrid is hard at scale, but solvable through intentional design. Three principles I've learned at Sobha running cross-country teams. One — establish anchor moments. Specific weeks/days where everyone is co-located, designed for collaboration that's hard remotely. Two — over-invest in async. The default state of distributed work is misunderstanding; great async written practice closes that. Three — ritualise belonging. Engagement doesn't survive on Slack alone. Quarterly offsites, function-level all-hands, recognition mechanisms. CoreAI's three-city distribution makes this even more important."</p>
+    </div>
+
+    <div class="card accent-edge">
+      <p><strong>Q20: How do you handle ambiguity?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer:</em> "Ambiguity is the default state of operations work, especially at growth-phase organisations. Three habits. One — start with stakeholder mapping; ambiguity often hides because people don't agree. Two — produce a strawman fast. A bad first draft accelerates clarity faster than a perfect blank page. Three — track decision-points explicitly so the org learns where it gets stuck. At Sobha, the FY2026 OKR cascade was ambiguous when I started — I produced the first decomposition draft within 5 days, took feedback for 2 weeks, and we shipped a final framework that's now the operating model."</p>
+    </div>
+
+    <h3 style="color: var(--gold)">Round 5 · AA — Senior Leader / Site Leader Peer (5 questions)</h3>
+
+    <div class="card gold-edge">
+      <p><strong>Q21: What's a failure you've had?</strong></p>
+      <p style="margin-top: 8px;"><em>Deploy:</em> Story 8 (SQL Delegation). Key line: "I delegated SQL learning instead of investing 4 weeks myself. I learned that delegation works for execution scale, but skill-building cannot be outsourced for the leader. I'm fixing that now — Mode Analytics, DataCamp, Kaggle. Same principle for AI: a leader who can prompt, evaluate, and iterate on AI outputs is materially more effective than one who delegates it. Learn-it-all, not know-it-all."</p>
+    </div>
+
+    <div class="card gold-edge">
+      <p><strong>Q22: Tell me about a time you took an unpopular position.</strong></p>
+      <p style="margin-top: 8px;"><em>Deploy:</em> Story 6 (PR Rejection). Key line — assertiveness proof point #1: "I held the standard at 49% PR rejection rate when leadership was pressuring me to relax it. I held with data, designed a structural solution, and the position was vindicated by subsequent results."</p>
+    </div>
+
+    <div class="card gold-edge">
+      <p><strong>Q23: Walk me through how you'd think about CoreAI India's biggest strategic risk.</strong></p>
+      <p style="margin-top: 8px;"><em>Answer (with humility):</em> "I'd offer three hypotheses, recognising I'd recalibrate inside the role. One — talent retention as the AI labour market overheats further. CoreAI talent is being aggressively recruited by Google, Anthropic, OpenAI, AI-native startups in India and abroad. Two — fragmentation across three cities as the org scales past 800 — culture and decision velocity can deteriorate silently. Three — relevance to the global product roadmap. India can become an execution centre rather than a co-creation centre if the RoB doesn't preserve voice. The last one is the one I'd watch most carefully."</p>
+    </div>
+
+    <div class="card gold-edge">
+      <p><strong>Q24: What's the assertiveness criticism you've received? What did you do about it?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer (assertiveness proof point #3 + Growth Mindset):</em> "My DISC profile is High-C, High-S, Low-D — naturally analytical and steady, less naturally assertive in senior forums. The criticism I've absorbed is that I sometimes wait too long to speak. What I've done about it: in the past year I've explicitly tracked moments where I'd hold back, and pushed myself to bring positions earlier. Three concrete examples — I escalated 3 blocked risk register items to CCO proactively before due dates rather than waiting; I defended the NPV model directly to MD/CEO through three scrutiny rounds; I held the PR quality standard at 49% under pressure. Assertiveness as a learned skill, not a fixed trait."</p>
+    </div>
+
+    <div class="card gold-edge">
+      <p><strong>Q25: What would make you walk away from this offer?</strong></p>
+      <p style="margin-top: 8px;"><em>Answer:</em> "Three things. One — if compensation reflects only the title and not the scope and AI division premium, I'd negotiate hard but eventually walk if it's misaligned. Two — if the role's actual scope is materially smaller than the JD describes — say, more administrative coordination than strategic Chief of Staff. I'd want to test that in the interview process. Three — if there's no clear path to expand into broader CoreAI work over 24 months. I'm joining for the trajectory, not just the role. None of these are likely concerns from what I've seen, but you asked."</p>
+    </div>
+
+    <h2>Growth Mindset Framing Guide</h2>
+
+    <div class="callout">
+      <div class="callout-title">For Failure Questions</div>
+      <p>Always end with "What I learned" + "What I changed." Never just describe the failure. Example: "I delegated SQL learning → I learned that skill-building cannot be outsourced → I'm now completing Mode Analytics, DataCamp, Kaggle. The same principle applies to AI."</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">For Success Questions</div>
+      <p>Include "What I'd do differently next time." Example: "The NPV model succeeded, but I'd have brought sensitivity analysis to round 1 instead of round 3 — that would have closed two scrutiny rounds in five minutes."</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">For Conflict Questions</div>
+      <p>Frame disagreements as "learn-it-all, not know-it-all." Example: "I sought to understand their perspective first before presenting mine. I discovered they had a valid constraint I hadn't considered — but my core position held with adjustments to the framing."</p>
+    </div>
+
+    <div class="callout ai">
+      <div class="callout-title">Culture Signal Words to Use Throughout</div>
+      <p><strong>Always:</strong> Growth Mindset · learn-it-all · customer obsession · One Microsoft · Model-Coach-Care · diverse and inclusive · empower every person · Rhythm of Business · v-Team · responsibly built AI</p>
+      <p><strong>For CoreAI specifically:</strong> Agentic · Foundry · Copilot · developer empowerment · Responsible AI · AI augmentation</p>
+    </div>
+
+    <h2>Questions YOU Should Ask the Interviewer</h2>
+
+    <div class="card primary-edge">
+      <p><strong>For Hiring Manager / Site Leader:</strong></p>
+      <ul>
+        <li>"What does the Rhythm of Business look like for the LT today, and what would you most want this role to change about it?"</li>
+        <li>"What's the biggest strategic ambiguity for CoreAI India this year that this role would help resolve?"</li>
+        <li>"How does CoreAI India interact with the CoreAI CVP's office today — direct access or through the Site Leader?"</li>
+        <li>"What does a successful first 90 days look like to you? Is there a specific initiative you'd want this role to own immediately?"</li>
+      </ul>
+    </div>
+
+    <div class="card accent-edge">
+      <p><strong>For Cross-Functional Panel:</strong></p>
+      <ul>
+        <li>"What's the operational friction you experience most often that you wish a Business &amp; Strategy PM could absorb?"</li>
+        <li>"How does Engineering / Product see the Business &amp; Strategy PM role today — partner, gatekeeper, overhead, or value-add?"</li>
+        <li>"What's working really well in the current culture that you'd want preserved as the org grows past 800?"</li>
+      </ul>
+    </div>
+
+    <div class="card gold-edge">
+      <p><strong>For AA Round (Senior Leader):</strong></p>
+      <ul>
+        <li>"From your altitude, what's the one thing CoreAI India must get right in the next 12 months — and where does the Business &amp; Strategy PM role sit relative to that?"</li>
+        <li>"What's a failure mode you've seen in this kind of Chief-of-Staff role at Microsoft, and what separated the people who avoided it?"</li>
+      </ul>
+    </div>
+
+    <h2>Assertiveness Proof Points (Rehearse Verbatim)</h2>
+    <ol>
+      <li><strong>Held PR rejection documentation standard at 49%</strong> under pressure to relax — position vindicated by data, throughput improved through capability not lower bars.</li>
+      <li><strong>Defended NPV model at MD/CEO level through three scrutiny rounds</strong> — zero material concessions; AED 652M in incremental inflow approved.</li>
+      <li><strong>Escalated 3 blocked risk register items to CCO proactively</strong> before due dates — didn't wait for them to become overdue.</li>
+    </ol>
+
+  </div>
+
+  <!-- ========== TAB 8: VOCAB DECODER ========== -->
+  <div id="vocab" class="tab-content">
+
+    <div class="section-head">
+      <div class="section-title">Vocabulary Decoder</div>
+      <div class="section-sub">Translate Sobha language into Microsoft CoreAI language — use in resume, interviews, cover note</div>
+    </div>
+
+    <h2>Sobha → Microsoft CoreAI Translation Map</h2>
+
+    <table>
+      <thead>
+        <tr><th style="width: 45%">Sobha Language</th><th style="width: 8%"></th><th>Microsoft CoreAI Language</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Collections function</td><td>→</td><td>Business operations / Operational excellence</td></tr>
+        <tr><td>AGM Dues Collections</td><td>→</td><td>Senior Operations Lead / Business &amp; Strategy Lead</td></tr>
+        <tr><td>Delinquency rate</td><td>→</td><td>Portfolio at-risk rate / SLA adherence</td></tr>
+        <tr><td>MBR / QBR with CRO &amp; CCO</td><td>→</td><td>Rhythm of Business (RoB)</td></tr>
+        <tr><td>FY2026 AED 8.2B target governance</td><td>→</td><td>Annual planning &amp; OKR alignment</td></tr>
+        <tr><td>10-bank infrastructure (escrow, RERA, virtual accounts)</td><td>→</td><td>Multi-vendor partner ecosystem governance</td></tr>
+        <tr><td>42-person India hub deployment in 12 months</td><td>→</td><td>Workforce planning &amp; cross-site org build</td></tr>
+        <tr><td>NPV model AED 652M</td><td>→</td><td>Business case development &amp; executive decision support</td></tr>
+        <tr><td>PR rejection quality scorecard</td><td>→</td><td>Governance controls &amp; quality assurance framework</td></tr>
+        <tr><td>70+ report Salesforce MI ecosystem</td><td>→</td><td>Dashboards &amp; data-driven leadership insight infrastructure</td></tr>
+        <tr><td>14-finding risk register escalation</td><td>→</td><td>Programme risk tracking &amp; compliance oversight</td></tr>
+        <tr><td>55-day T−25/T+30 framework</td><td>→</td><td>Operational readiness framework / engagement cadence</td></tr>
+        <tr><td>77-person cross-geo team (35 Dubai + 42 India)</td><td>→</td><td>Distributed organisation operations across multiple sites</td></tr>
+        <tr><td>4 legal entities governance</td><td>→</td><td>Cross-BU / cross-entity alignment</td></tr>
+        <tr><td>MD/CEO-level presentation</td><td>→</td><td>CVP/VP-level executive engagement</td></tr>
+        <tr><td>PCC TAT 20→3 days</td><td>→</td><td>Process re-engineering / operational excellence initiative</td></tr>
+        <tr><td>Salesforce co-architecture (led solution design)</td><td>→</td><td>Led solution design for enterprise reporting platform</td></tr>
+        <tr><td>AI-augmented operations tools</td><td>→</td><td>AI-augmented operations &amp; agentic workflow design</td></tr>
+        <tr><td>Programme health tracker</td><td>→</td><td>Operational intelligence dashboard</td></tr>
+        <tr><td>Risk synthesis dashboard</td><td>→</td><td>Risk &amp; compliance intelligence layer</td></tr>
+        <tr><td>Decision framework for MD/CEO</td><td>→</td><td>Executive decision document / strategic memo</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Microsoft General Vocabulary</h2>
+
+    <table>
+      <thead>
+        <tr><th style="width: 22%">Term</th><th style="width: 38%">Definition</th><th>How You'll Use It</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">Rhythm of Business (RoB)</td>
+          <td>Microsoft's structured operating cadence — weekly LT, monthly MBR, quarterly QBR, annual planning. Drives priority alignment and accountability.</td>
+          <td>"I designed and own the RoB for a 77-person organisation across two countries — 3-tier cadence, decision tracking, action item closure."</td>
+        </tr>
+        <tr>
+          <td class="label">Model-Coach-Care (MCC)</td>
+          <td>Microsoft's leadership framework — Model the behaviour you expect, Coach team growth, Care for the person behind the work.</td>
+          <td>Use in every leadership-style answer: "I model accountability by owning my commitments first, coach capability through structured training, and care by designing career paths."</td>
+        </tr>
+        <tr>
+          <td class="label">Growth Mindset</td>
+          <td>Satya Nadella's culture cornerstone — "learn-it-all over know-it-all." Failure is learning. Curiosity over certainty.</td>
+          <td>End every failure story with "what I learned" + "what I changed." Frame all difficult experiences as growth opportunities.</td>
+        </tr>
+        <tr>
+          <td class="label">One Microsoft</td>
+          <td>Cross-functional collaboration culture. No silos. Teams work across boundaries for customer and business outcomes.</td>
+          <td>Frame every cross-functional story as One Microsoft: "I brought Finance, Legal, Ops, IT together — that's a One Microsoft approach."</td>
+        </tr>
+        <tr>
+          <td class="label">v-Team</td>
+          <td>Virtual team — cross-functional group assembled for a specific initiative. Common in Microsoft's matrixed structure.</td>
+          <td>"My PCC TAT initiative was a v-Team — Finance, Legal, Ops, IT for one specific outcome."</td>
+        </tr>
+        <tr>
+          <td class="label">CVP / VP / GM</td>
+          <td>Corporate Vice President / Vice President / General Manager — Microsoft's senior leadership levels. CVP is L67+; this role's CoreAI CVP is in Redmond.</td>
+          <td>"I prepare the Site Leader for every CVP-level review and customer engagement."</td>
+        </tr>
+        <tr>
+          <td class="label">MCAPS</td>
+          <td>Microsoft Customer and Partner Solutions — the commercial / sales / partner-facing engine of Microsoft. CoreAI partners with MCAPS for India motions.</td>
+          <td>"This role partners with MCAPS field teams for India-specific GTM motions on CoreAI products."</td>
+        </tr>
+        <tr>
+          <td class="label">CELA</td>
+          <td>Corporate, External, and Legal Affairs — Microsoft's legal &amp; policy function.</td>
+          <td>"At Sobha I worked closely with our Legal team on RERA compliance — analogous to CELA partnership at Microsoft."</td>
+        </tr>
+        <tr>
+          <td class="label">GTA / URT</td>
+          <td>Global Talent Acquisition (GTA) — experienced hires. University Recruiting Team (URT) — campus.</td>
+          <td>"This role partners with GTA and URT to drive hiring strategy execution and campus programmes."</td>
+        </tr>
+        <tr>
+          <td class="label">Springboard</td>
+          <td>Microsoft's apprenticeship and emerging-talent programme — non-traditional pathways into the company.</td>
+          <td>Mention as you describe partnership with URT — shows JD literacy.</td>
+        </tr>
+        <tr>
+          <td class="label">OHI / Thriving / Signals / MS Poll</td>
+          <td>Organizational Health Index, Thriving employee survey, Signals pulse instrument, MS Poll. Microsoft's employee listening stack.</td>
+          <td>"Frame engagement signal synthesis using these tools: 'I'd ingest OHI / Thriving / Signals data and synthesise into a 1-page leadership input.'"</td>
+        </tr>
+        <tr>
+          <td class="label">EBC (Executive Briefing Center)</td>
+          <td>Microsoft's customer engagement venues. Top customers visit; product and strategy showcases are presented. The role represents CoreAI at IDC EBC.</td>
+          <td>"At IDC EBC, the Business &amp; Strategy PM designs the narrative, briefs the executives, and manages orchestration of customer sessions."</td>
+        </tr>
+        <tr>
+          <td class="label">CAB (Customer Advisory Board)</td>
+          <td>Structured forum where top customers provide feedback on product direction. CoreAI CAB likely meets quarterly.</td>
+          <td>"I'd represent the Site Leader at India CAB sessions — preparing materials, capturing customer signal, driving follow-through."</td>
+        </tr>
+        <tr>
+          <td class="label">AA / "As Appropriate"</td>
+          <td>Microsoft's final-round interview where a senior leader makes the hire/no-hire decision. Tests executive presence and cultural fit.</td>
+          <td>"Prepare your three assertiveness proof points for this round."</td>
+        </tr>
+        <tr>
+          <td class="label">L62 / L63 / L64</td>
+          <td>Microsoft's leveling system. L62 = Senior IC, L63 = Principal, L64 = Senior Principal / Director. This role is L62–L64 band.</td>
+          <td>Use in compensation negotiation: "I'd target L63 given my scope at Sobha."</td>
+        </tr>
+        <tr>
+          <td class="label">RSU / Stock Award</td>
+          <td>Restricted Stock Units — Microsoft's primary equity compensation. 4-year vest, 25% per year is standard. AI division has higher grants.</td>
+          <td>"I'd negotiate RSU front-loading or enhanced grant to reflect AI division premium."</td>
+        </tr>
+        <tr>
+          <td class="label">SHIP IT</td>
+          <td>Internal cultural norm at Microsoft — bias toward shipping working software over polishing roadmaps. Common in CoreAI specifically.</td>
+          <td>Reference if asked about velocity culture: "I'd model the SHIP IT bias by getting a v1 Site Pulse out in 30 days, not 90."</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>CoreAI-Specific Vocabulary (Critical for This Role)</h2>
+
+    <table>
+      <thead>
+        <tr><th style="width: 25%">Term</th><th>Definition &amp; Why It Matters</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">CoreAI</td>
+          <td>Microsoft's AI division housing the company's AI products — GitHub Copilot, Microsoft Foundry, Azure AI services, agentic AI tooling. Created in 2024 by consolidating multiple AI orgs. Reports to Jay Parikh / Kevin Scott structure. The most strategically important division at Microsoft.</td>
+        </tr>
+        <tr>
+          <td class="label">GitHub Copilot</td>
+          <td>Microsoft's flagship developer AI agent — completes code, refactors, generates tests, runs as agent mode. The AI product most monetised at Microsoft today. Probably the largest revenue line in CoreAI.</td>
+        </tr>
+        <tr>
+          <td class="label">Microsoft Foundry (formerly Azure AI Foundry)</td>
+          <td>Microsoft's enterprise platform for building, deploying, and managing AI agents. Includes models, tools, agent orchestration, evaluation, monitoring. The platform CoreAI is investing most aggressively in.</td>
+        </tr>
+        <tr>
+          <td class="label">Agentic AI</td>
+          <td>The current frontier of AI — systems that take actions, use tools, maintain state, work over long horizons. Distinct from "chat AI." CoreAI's strategic centre of gravity is agentic.</td>
+        </tr>
+        <tr>
+          <td class="label">Responsible AI (RAI)</td>
+          <td>Microsoft's framework for safe, fair, transparent, accountable AI. Mandatory part of every CoreAI product. Has its own governance bodies.</td>
+        </tr>
+        <tr>
+          <td class="label">Azure OpenAI Service</td>
+          <td>Microsoft's enterprise wrapper around OpenAI models — adds compliance, data residency, RAI controls. Mention "Azure OpenAI" not "OpenAI" in CoreAI conversations.</td>
+        </tr>
+        <tr>
+          <td class="label">Copilot Studio</td>
+          <td>Microsoft's low-code agent-building tool, layered on Foundry. Aimed at business users building Copilots without engineering.</td>
+        </tr>
+        <tr>
+          <td class="label">Frontier Model</td>
+          <td>The latest, largest models — GPT-4.x, GPT-5, equivalents. Microsoft hosts most major frontier models via Foundry.</td>
+        </tr>
+        <tr>
+          <td class="label">M365 Copilot</td>
+          <td>Microsoft's productivity Copilot — Word, Excel, Teams, Outlook integration. Distinct from GitHub Copilot. CoreAI may interact with this org tangentially.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>The Career Reframe — Your Core Narrative</h2>
+
+    <blockquote>I've spent six years building and running the operational engine for a function that scaled 14.9 times — from AED 867 million to AED 12.97 billion. I've done strategy-to-execution translation, Rhythm of Business design, financial governance at MD/CEO altitude, cross-functional programme orchestration across four legal entities, workforce planning across two countries, and executive decision support that survived three scrutiny rounds without concession. At Sobha the title is AGM Dues Collections. The job I've been doing is Chief of Staff to a senior leadership team. What I've added in the last two years is AI — I've been quietly designing AI-augmented operations tools that automate the assembly work so the human can focus on judgment. That combination — operational depth, executive altitude, AI-native thinking — is what CoreAI Senior Business &amp; Strategy Program Manager needs on day one. — <strong>Use as Cover Note + Interview Closing</strong></blockquote>
+
+    <div class="callout ai">
+      <div class="callout-title">Final Reminder — Three Things to Embed Everywhere</div>
+      <ol>
+        <li><strong>Microsoft vocabulary feels native, not memorised.</strong> Practice until it's reflex.</li>
+        <li><strong>Growth Mindset signal in every story.</strong> Failure → learning → change.</li>
+        <li><strong>AI is your differentiator, not a buzzword.</strong> Site Pulse demo is the proof.</li>
+      </ol>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Career Playbook · Microsoft CoreAI Sr Business &amp; Strategy Program Manager · Hyderabad · L62–L64 · v1.0 · May 2026<br>
+    Pipeline Reference: MS_CoreAI_SrBPM_Hyd · Active·NOW · Apply Window Open · Prep Timeline 2–4 weeks
+  </div>
+
+</div>
+
+<script>
+  function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
