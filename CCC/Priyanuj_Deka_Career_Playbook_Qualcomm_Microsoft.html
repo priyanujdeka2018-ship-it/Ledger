@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Intelligence Playbook — Qualcomm & Microsoft | Priyanuj Deka</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f4f1ec;
+    --muted: #6b6b7a;
+    --border: #d8d0be;
+    --white: #ffffff;
+
+    /* Qualcomm palette */
+    --q-primary: #3253a0;
+    --q-accent: #e31837;
+    --q-gold: #c8973a;
+    --q-light: #eef1f9;
+
+    /* Microsoft palette */
+    --m-primary: #0f4c81;
+    --m-accent: #00a4ef;
+    --m-green: #107c10;
+    --m-light: #e8f4fb;
+
+    /* active role */
+    --role-primary: var(--q-primary);
+    --role-accent: var(--q-accent);
+    --role-light: var(--q-light);
+
+    --green: #1e6b45;
+    --amber: #9a7010;
+    --red: #8b1a1a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── ROLE SWITCHER ──────────────────────────────────────────── */
+  .role-switcher {
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    padding: 10px 24px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .switcher-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.35);
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+  .role-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 7px 20px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 2px;
+    background: transparent;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .role-btn:hover { border-color: rgba(255,255,255,0.5); color: white; }
+  .role-btn.active-q { background: var(--q-primary); border-color: var(--q-primary); color: white; }
+  .role-btn.active-m { background: var(--m-primary); border-color: var(--m-primary); color: white; }
+  .role-badge {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+  }
+
+  /* ── HEADER ─────────────────────────────────────────────────── */
+  header {
+    padding: 44px 36px 32px;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    transition: background 0.3s;
+  }
+  .header-q { background: linear-gradient(135deg, #1e3272 0%, #3253a0 100%); }
+  .header-m { background: linear-gradient(135deg, #062a54 0%, #0f4c81 100%); }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 360px; height: 360px;
+    border: 70px solid rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 4px;
+  }
+  .header-q::after { background: linear-gradient(90deg, var(--q-accent), var(--q-gold), var(--q-primary)); }
+  .header-m::after { background: linear-gradient(90deg, var(--m-accent), var(--m-green), var(--m-primary)); }
+
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  header h1 em { font-style: normal; }
+  .header-q h1 em { color: var(--q-gold); }
+  .header-m h1 em { color: var(--m-accent); }
+  .header-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* ── FIT BANNER ──────────────────────────────────────────────── */
+  .fit-banner {
+    color: white;
+    padding: 18px 36px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    transition: background 0.3s;
+  }
+  .fit-banner-q { background: #0d1f4f; }
+  .fit-banner-m { background: #072040; }
+  .fit-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+  }
+  .fit-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .fit-score-q { color: var(--q-gold); }
+  .fit-score-m { color: var(--m-accent); }
+  .fit-score sub { font-size: 18px; color: rgba(255,255,255,0.3); }
+  .fit-verdict { flex: 1; min-width: 200px; }
+  .fit-verdict strong { display: block; font-size: 14px; margin-bottom: 3px; }
+  .fit-verdict-q strong { color: var(--q-gold); }
+  .fit-verdict-m strong { color: var(--m-accent); }
+  .fit-verdict p { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.45; }
+  .fit-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .fit-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+  }
+  .pill-green { background: #1e4d30; color: #7de0a8; }
+  .pill-amber { background: #5a3a00; color: #ffc96b; }
+  .pill-red   { background: #5a0f0f; color: #ff9999; }
+
+  /* ── NAV TABS ────────────────────────────────────────────────── */
+  .nav-tabs {
+    display: flex;
+    overflow-x: auto;
+    background: white;
+    border-bottom: 2px solid var(--border);
+    padding: 0 16px;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .tab-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 13px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--muted);
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    margin-bottom: -2px;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn.active-q { color: var(--q-primary); border-bottom-color: var(--q-primary); font-weight: 600; }
+  .tab-btn.active-m { color: var(--m-primary); border-bottom-color: var(--m-primary); font-weight: 600; }
+
+  /* ── PANEL ───────────────────────────────────────────────────── */
+  .tab-panel { display: none; padding: 32px 24px 48px; max-width: 920px; margin: 0 auto; }
+  .tab-panel.active { display: block; }
+
+  /* ── SECTION HEADER ─────────────────────────────────────────── */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    margin-top: 28px;
+  }
+  .section-title:first-child { margin-top: 0; }
+  .section-title-q { color: var(--q-primary); }
+  .section-title-m { color: var(--m-primary); }
+  .section-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  /* ── CARDS ───────────────────────────────────────────────────── */
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+  }
+  .card h3 { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+  .card p, .card li { font-size: 13px; color: #333; line-height: 1.6; }
+  .card ul { padding-left: 16px; }
+  .card li { margin-bottom: 4px; }
+  .card-q { border-left: 4px solid var(--q-primary); }
+  .card-qa { border-left: 4px solid var(--q-accent); }
+  .card-qg { border-left: 4px solid var(--q-gold); }
+  .card-m  { border-left: 4px solid var(--m-primary); }
+  .card-ma { border-left: 4px solid var(--m-accent); }
+  .card-mg { border-left: 4px solid var(--m-green); }
+  .card-warn { background: #fffbeb; border: 1px solid #e6c84a; border-left: 4px solid #c8973a; }
+  .card-warn h3 { color: #7a5200; }
+  .card-warn p  { color: #5c3d00; font-size: 13px; }
+  .card-insight { background: #f0f6ff; border: 1px solid #c2d8f5; border-left: 4px solid var(--m-primary); }
+  .card-insight h3 { color: var(--m-primary); }
+
+  /* ── BADGES ──────────────────────────────────────────────────── */
+  .badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.8px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-right: 5px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+  }
+  .badge-q  { background: #dde6f8; color: var(--q-primary); }
+  .badge-qr { background: #fde8ec; color: var(--q-accent); }
+  .badge-m  { background: #dbeefa; color: var(--m-primary); }
+  .badge-mg { background: #daf0da; color: var(--m-green); }
+  .badge-amber { background: #fdf0d5; color: #7a5200; }
+  .badge-red   { background: #fde8e8; color: var(--red); }
+  .badge-green { background: #dff5ea; color: var(--green); }
+
+  /* ── GRID ────────────────────────────────────────────────────── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  @media(max-width:650px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+  /* ── PROGRESS ────────────────────────────────────────────────── */
+  .progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
+  .progress-label { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); width: 190px; flex-shrink: 0; }
+  .progress-bar { flex: 1; height: 6px; background: #e4ddd0; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 3px; }
+  .fill-green { background: var(--green); }
+  .fill-amber { background: #c8973a; }
+  .fill-red   { background: #b03030; }
+  .progress-pct { font-family: 'DM Mono', monospace; font-size: 11px; width: 28px; text-align: right; color: var(--ink); font-weight: 600; }
+
+  /* ── TIMELINE ────────────────────────────────────────────────── */
+  .timeline { position: relative; padding-left: 30px; }
+  .timeline::before { content: ''; position: absolute; left: 7px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .timeline-item { position: relative; margin-bottom: 22px; }
+  .timeline-dot { position: absolute; left: -26px; top: 4px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; }
+  .dot-now  { background: #b03030; }
+  .dot-1m   { background: #c8973a; }
+  .dot-3m   { background: var(--q-primary); }
+  .dot-6m   { background: var(--m-primary); }
+  .dot-12m  { background: var(--green); }
+  .timeline-period { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: 1px; margin-bottom: 3px; }
+  .timeline-item h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .timeline-item p  { font-size: 12px; color: #444; line-height: 1.55; }
+
+  /* ── VOCAB ───────────────────────────────────────────────────── */
+  .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media(max-width:600px) { .vocab-grid { grid-template-columns: 1fr; } }
+  .vocab-card { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 12px 14px; }
+  .vocab-term { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; margin-bottom: 3px; }
+  .vocab-term-q { color: var(--q-primary); }
+  .vocab-term-m { color: var(--m-primary); }
+  .vocab-def  { font-size: 12px; color: #444; line-height: 1.45; }
+  .vocab-sobha { font-size: 11px; color: var(--muted); margin-top: 4px; font-style: italic; }
+
+  /* ── SALARY TABLE ────────────────────────────────────────────── */
+  .sal-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
+  .sal-table th { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 10px 12px; text-align: left; color: white; }
+  .sal-table-q th { background: var(--q-primary); }
+  .sal-table-m th { background: var(--m-primary); }
+  .sal-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: #333; line-height: 1.5; }
+  .sal-table tr:nth-child(even) td { background: rgba(0,0,0,0.02); }
+  .sal-highlight { font-weight: 700; }
+  .sal-q { color: var(--q-primary); }
+  .sal-m { color: var(--m-primary); }
+
+  /* ── STAR BOX ────────────────────────────────────────────────── */
+  .star-box { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 16px 18px; margin-bottom: 10px; }
+  .star-box h4 { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .star-row { display: grid; grid-template-columns: 60px 1fr; gap: 6px; margin-bottom: 5px; font-size: 12px; }
+  .star-label { font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 600; padding-top: 2px; text-transform: uppercase; }
+  .star-label-q { color: var(--q-primary); }
+  .star-label-m { color: var(--m-primary); }
+  .star-content { color: #333; line-height: 1.5; }
+
+  /* ── REFRAME TABLE ───────────────────────────────────────────── */
+  .rf-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 16px; }
+  .rf-table th { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 10px 12px; color: white; text-align: left; }
+  .rf-table-q th { background: var(--q-primary); }
+  .rf-table-m th { background: var(--m-primary); }
+  .rf-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .rf-table tr:nth-child(even) td { background: rgba(0,0,0,0.018); }
+  .from-col { color: var(--muted); font-size: 13px; }
+  .to-col-q { color: var(--q-primary); font-size: 13px; font-weight: 500; }
+  .to-col-m { color: var(--m-primary); font-size: 13px; font-weight: 500; }
+
+  /* ── AI PROMPT ───────────────────────────────────────────────── */
+  .ai-box {
+    background: #0b0b1a;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #b0c4de;
+    line-height: 1.65;
+  }
+  .ai-box::before { content: '⚡ AI PORTFOLIO PROJECT'; display: block; font-size: 10px; letter-spacing: 2px; color: #f0c040; margin-bottom: 10px; }
+  .ai-box em { color: #7fc4ff; font-style: normal; }
+  .ai-box strong { color: #a8e6aa; }
+
+  /* ── NOTE BOX ────────────────────────────────────────────────── */
+  .note-box { background: #fffbeb; border: 1px solid #e6c060; border-radius: 4px; padding: 12px 16px; font-size: 12px; color: #6b4a00; margin-top: 18px; font-family: 'DM Mono', monospace; }
+  .note-box strong { display: block; margin-bottom: 4px; }
+
+  /* ── NARRATIVE BLOCK ─────────────────────────────────────────── */
+  .narrative-q { background: #eef1f9; border-left: 4px solid var(--q-primary); border-radius: 0 4px 4px 0; padding: 20px 24px; font-size: 14px; line-height: 1.75; color: #222; margin-bottom: 12px; }
+  .narrative-m { background: #e8f4fb; border-left: 4px solid var(--m-primary); border-radius: 0 4px 4px 0; padding: 20px 24px; font-size: 14px; line-height: 1.75; color: #222; margin-bottom: 12px; }
+  .narrative-q p, .narrative-m p { margin-bottom: 10px; }
+  .narrative-q p:last-child, .narrative-m p:last-child { margin-bottom: 0; }
+
+  /* ── DISC CALLOUT ────────────────────────────────────────────── */
+  .disc-box { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 14px 18px; margin-bottom: 10px; display: flex; gap: 16px; align-items: flex-start; }
+  .disc-icon { font-size: 26px; flex-shrink: 0; }
+  .disc-text h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .disc-text p  { font-size: 12px; color: #444; line-height: 1.5; }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ── ROLE SWITCHER ──────────────────────────────────────────────── -->
+<div class="role-switcher">
+  <span class="switcher-label">Viewing Role:</span>
+  <button class="role-btn active-q" id="btn-q" onclick="switchRole('q')">🔴 Qualcomm — Sr. PM (ESG)</button>
+  <button class="role-btn" id="btn-m" onclick="switchRole('m')">🔵 Microsoft — Sr. PM AI (CIP)</button>
+  <span class="role-badge" id="role-timeline-tag">⏱ 3–4 Month Target</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- QUALCOMM ROLE                                                   -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div id="role-q">
+
+<header class="header-q">
+  <div class="header-eyebrow">Career Intelligence Brief — Confidential — Priyanuj Deka</div>
+  <h1>Qualcomm India — <em>Senior Program Manager</em><br>Engineering Services Group</h1>
+  <div class="header-sub">Hyderabad / Bangalore &nbsp;|&nbsp; 3–4 Month Prep Target &nbsp;|&nbsp; Current Fit: 57/100 → Target: 75/100</div>
+</header>
+
+<div class="fit-banner fit-banner-q">
+  <div>
+    <div class="fit-label">Current Fit</div>
+    <div class="fit-score fit-score-q">57<sub>/100</sub></div>
+  </div>
+  <div class="fit-verdict">
+    <strong class="fit-verdict-q">Viable Candidate — Active Bridge Work Required</strong>
+    <p>Strong multi-program execution backbone. Real gap is semiconductor/engineering context + formal PM certification. Addressable to 75/100 within 3–4 months with targeted preparation. Your IIM MBA + BITS engineering background is a surprise asset here.</p>
+  </div>
+  <div class="fit-pills">
+    <span class="fit-pill pill-green">Multi-Program ✓</span>
+    <span class="fit-pill pill-green">Risk Register ✓</span>
+    <span class="fit-pill pill-green">Matrixed Orgs ✓</span>
+    <span class="fit-pill pill-green">KPI Tracking ✓</span>
+    <span class="fit-pill pill-amber">Gantt / Tools △</span>
+    <span class="fit-pill pill-amber">Assertiveness △</span>
+    <span class="fit-pill pill-red">Semiconductor Domain ✗</span>
+    <span class="fit-pill pill-red">PMI Cert ✗</span>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-q">
+  <button class="tab-btn active-q" onclick="showTab('q','decode')">Role Decode</button>
+  <button class="tab-btn" onclick="showTab('q','salary')">Salary Intel</button>
+  <button class="tab-btn" onclick="showTab('q','fit')">Fit & Gaps</button>
+  <button class="tab-btn" onclick="showTab('q','roadmap')">Prep Roadmap</button>
+  <button class="tab-btn" onclick="showTab('q','vocab')">PM Vocab</button>
+  <button class="tab-btn" onclick="showTab('q','reframe')">Career Reframe</button>
+  <button class="tab-btn" onclick="showTab('q','interview')">Interview Prep</button>
+</div>
+
+<!-- Q TAB 1: ROLE DECODE -->
+<div class="tab-panel active" id="q-decode">
+
+  <div class="section-title section-title-q">What This Role Really Is</div>
+  <div class="section-sub">Stripping Away the Engineering Group Jargon</div>
+
+  <div class="card card-qg">
+    <h3>The Plain-English Summary</h3>
+    <p>Qualcomm India runs complex, multi-year semiconductor chip engineering programmes — modem chips, Snapdragon platforms, automotive chips, IoT SoCs. The ESG Senior PM is the <strong>programme delivery director</strong> sitting between engineering teams, business stakeholders, and external partners. You are not writing code. You are making sure the right things get built in the right order, on time, within budget, with all risks visible and controlled. Think of it as <strong>running a $200–500M engineering delivery programme</strong> with 50–200 engineers across India, the US, and potentially Europe — and making sure nothing falls through the cracks.</p>
+  </div>
+
+  <div class="section-title section-title-q">Five Core Functions — Decoded</div>
+  <div class="section-sub">What You Will Actually Do Every Day at Qualcomm</div>
+
+  <div class="card card-q">
+    <h3>1. Own the Plan of Record (PoR)</h3>
+    <span class="badge badge-q">Schedule</span><span class="badge badge-q">Budget</span><span class="badge badge-q">Milestone Gates</span>
+    <p style="margin-top:8px">Qualcomm's "Plan of Record" is the bible — the agreed schedule, budget, resources, and deliverables for a programme. Your job is to build it, maintain it, and defend it against scope creep and schedule pressure. When reality deviates from PoR, you escalate with a data-backed corrective plan. <em>This is identical to your monthly collections PoR governance — AED 17.7B target tracked week by week with MD-level accountability.</em></p>
+  </div>
+
+  <div class="card card-q">
+    <h3>2. Drive Delivery Across a Matrixed Organisation</h3>
+    <span class="badge badge-q">Cross-functional</span><span class="badge badge-q">No Direct Authority</span><span class="badge badge-q">Influence-Led</span>
+    <p style="margin-top:8px">At Qualcomm, the PM does not own the engineers — they belong to engineering managers. You coordinate without authority. You drive without commanding. You escalate without alienating. <em>You have been doing this for 6 years: your 77-person cross-functional team across Dubai and India, where you coordinate Ops, MIS, QCG, and 12 RMs — none of whom report linearly to you for all decisions.</em></p>
+  </div>
+
+  <div class="card card-q">
+    <h3>3. Track Metrics and Surface Deviations</h3>
+    <span class="badge badge-q">KPI Dashboards</span><span class="badge badge-q">Risk Flags</span><span class="badge badge-q">Escalation Protocols</span>
+    <p style="margin-top:8px">You define what "on track" looks like, build the dashboards that show it, and escalate the moment something deviates. Qualcomm PM interviews will test whether you can describe a specific metric that deviated, what you did about it, and how fast. <em>Your PCC TAT story (20 days → 3 days, 3x volume) and PR rejection rate story (49% → addressed) are exactly this.</em></p>
+  </div>
+
+  <div class="card card-q">
+    <h3>4. Manage Risk — Identify, Register, Mitigate</h3>
+    <span class="badge badge-qr">Risk Register</span><span class="badge badge-qr">Mitigation Plans</span><span class="badge badge-qr">Dependency Tracking</span>
+    <p style="margin-top:8px">Qualcomm expects a formal risk register with owners, severity classification, and mitigation plans — not just awareness of risks. This mirrors Six Sigma risk frameworks and standard PM risk methodology. <em>Your 14-finding audit risk register with High/Medium/Risk/Opportunity classification and owner-assigned mitigation plans is a direct match. You have lived this without knowing its formal name.</em></p>
+  </div>
+
+  <div class="card card-q">
+    <h3>5. Represent the Programme — Upward and Outward</h3>
+    <span class="badge badge-q">Director-Level Briefings</span><span class="badge badge-q">Stakeholder Alignment</span><span class="badge badge-q">Negotiation</span>
+    <p style="margin-top:8px">You are the programme's face to senior engineering leadership, business sponsors, and external partners. You synthesise complexity into clear status, escalate problems with recommendations, and build alignment across competing priorities. <em>Your monthly MD-level 14-slide + appendix governance presentation, and C-suite weekly interface at Sobha, directly address this requirement.</em></p>
+  </div>
+
+  <div class="note-box">
+    <strong>⚠ What This Role Is NOT</strong>
+    It is not a product management role — there is no roadmap ownership, customer discovery, or go-to-market. It is pure programme execution: schedule, budget, risk, delivery. Qualcomm's ESG is their engineering services arm, so this PM governs engineering delivery programmes — not consumer product features. This is actually a better fit for your Arranger + Analytical + Restorative strengths than a product role would be.
+  </div>
+</div>
+
+<!-- Q TAB 2: SALARY -->
+<div class="tab-panel" id="q-salary">
+
+  <div class="section-title section-title-q">Salary Intelligence — Qualcomm India, Senior PM</div>
+  <div class="section-sub">Based on Glassdoor, Levels.fyi, Fishbowl, Weekday.works, LinkedIn Salary — March 2026</div>
+
+  <div class="card card-qg" style="margin-bottom:16px">
+    <h3>Market Context</h3>
+    <p>Qualcomm India pays at the 75th–90th percentile of India tech PM salaries, but compensation is <strong>heavily backend-loaded</strong> with RSUs and performance bonuses. Base salaries are conservative by FAANG standards; total comp tells the real story. Hyderabad and Bangalore roles are compensated equally. Roles with "Engineering Services Group" in the title tend to pay slightly below product PM roles — but this gap narrows significantly at the senior level.</p>
+  </div>
+
+  <table class="sal-table sal-table-q">
+    <tr>
+      <th>Level / Experience</th>
+      <th>Base Salary (INR/yr)</th>
+      <th>Performance Bonus</th>
+      <th>RSU / ESPP</th>
+      <th>Total Comp (Est.)</th>
+    </tr>
+    <tr>
+      <td>PM II (4–6 yrs)</td>
+      <td>INR 22–28L</td>
+      <td>15–20% of base</td>
+      <td>INR 6–12L/yr vested</td>
+      <td><span class="sal-highlight sal-q">INR 30–42L</span></td>
+    </tr>
+    <tr>
+      <td><strong>Sr. PM (7–10 yrs) ← YOUR TARGET</strong></td>
+      <td><strong>INR 30–42L</strong></td>
+      <td>15–25% of base</td>
+      <td>INR 12–20L/yr vested</td>
+      <td><span class="sal-highlight sal-q">INR 46–68L</span></td>
+    </tr>
+    <tr>
+      <td>Staff PM / Principal (10+ yrs)</td>
+      <td>INR 48–65L</td>
+      <td>20–30% of base</td>
+      <td>INR 20–40L/yr vested</td>
+      <td><span class="sal-highlight sal-q">INR 80–110L</span></td>
+    </tr>
+  </table>
+
+  <div class="grid-2">
+    <div class="card card-q">
+      <h3>Your Likely Entry Band</h3>
+      <p>Given IIM Udaipur MBA, 6+ years at AGM level, and engineering background (BITS) — you would likely be slotted at <strong>Senior PM or upper PM II</strong>. With IIM on the CV, Qualcomm HR will bias toward the upper range of the band. Realistic offer: <strong>INR 34–40L base + 15–18% bonus + RSU grant of ~INR 40–60L over 4 years.</strong></p>
+    </div>
+    <div class="card card-qg">
+      <h3>Negotiation Levers</h3>
+      <ul>
+        <li>Push for Senior PM title (vs. PM II) — band difference is INR 8–14L/yr</li>
+        <li>RSU grant is most negotiable; ask for front-loaded vest or larger grant</li>
+        <li>Joining bonus is available — typically INR 2–5L if relocating or replacing forfeited ESOP</li>
+        <li>Don't anchor low — your AED 8.2B target accountability is rare context in India tech PM hiring</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card card-warn">
+    <h3>⚠ The Dubai → India Comp Reality Check</h3>
+    <p>Your current Sobha comp is in AED, tax-free. Any India move involves Indian income tax (30% slab above INR 15L). A Qualcomm CTC of INR 55L = approximately INR 38–40L in-hand. Factor this against housing (Hyderabad/Bangalore INR 30–60K/month), quality of life, and the career trajectory upside. This is a strategic career move, not a lateral comp move. Total comp parity with a Dubai AGM role is only achievable at Principal PM level (~3–4 years in). The payoff is the career trajectory into product and tech PM roles globally.</p>
+  </div>
+
+  <div class="section-title section-title-q">Benefits & Perks Worth Quantifying</div>
+  <table class="sal-table sal-table-q">
+    <tr>
+      <th>Benefit</th>
+      <th>Detail</th>
+      <th>Est. Value (INR/yr)</th>
+    </tr>
+    <tr><td>ESPP (Employee Stock Purchase)</td><td>15% discount on Qualcomm shares, up to 10% of CTC</td><td>INR 3–6L</td></tr>
+    <tr><td>Health Insurance</td><td>Family floater 5–10L sum insured</td><td>INR 0.5–1L</td></tr>
+    <tr><td>Gratuity</td><td>Statutory + top-up in some grades</td><td>Cumulative</td></tr>
+    <tr><td>Learning Budget</td><td>Formal certification reimbursement</td><td>INR 50K–1L</td></tr>
+    <tr><td>Relocation Allowance</td><td>If relocating from outside city</td><td>INR 1–3L</td></tr>
+  </table>
+
+  <div class="note-box">
+    <strong>💡 Compensation Strategy Principle</strong>
+    At Qualcomm India, the interview determines your band; negotiation determines where in the band you land. Arrive with a researched number (use Levels.fyi's Qualcomm India filter) and anchor 10–15% above your target. The IIM + BITS + AGM combination is unusual for an India-entry PM hire — you have genuine negotiating asymmetry.
+  </div>
+</div>
+
+<!-- Q TAB 3: FIT & GAPS -->
+<div class="tab-panel" id="q-fit">
+
+  <div class="section-title section-title-q">Dimension-by-Dimension Fit</div>
+  <div class="section-sub">Honest Assessment Against JD Requirements</div>
+
+  <div class="progress-row"><span class="progress-label">Multi-Program Execution</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:88%"></div></div><span class="progress-pct">88%</span></div>
+  <div class="progress-row"><span class="progress-label">Plan of Record Mgmt</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:85%"></div></div><span class="progress-pct">85%</span></div>
+  <div class="progress-row"><span class="progress-label">Risk Register & Mitigation</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:82%"></div></div><span class="progress-pct">82%</span></div>
+  <div class="progress-row"><span class="progress-label">Matrixed Stakeholder Mgmt</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:80%"></div></div><span class="progress-pct">80%</span></div>
+  <div class="progress-row"><span class="progress-label">KPI / Metrics Tracking</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:83%"></div></div><span class="progress-pct">83%</span></div>
+  <div class="progress-row"><span class="progress-label">Senior Leadership Interface</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:78%"></div></div><span class="progress-pct">78%</span></div>
+  <div class="progress-row"><span class="progress-label">Budget Responsibility</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:40%"></div></div><span class="progress-pct">40%</span></div>
+  <div class="progress-row"><span class="progress-label">Formal PM Tools (Gantt/JIRA)</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:35%"></div></div><span class="progress-pct">35%</span></div>
+  <div class="progress-row"><span class="progress-label">PMI Certification</span><div class="progress-bar"><div class="progress-fill fill-red" style="width:20%"></div></div><span class="progress-pct">20%</span></div>
+  <div class="progress-row"><span class="progress-label">Semiconductor/Eng Domain</span><div class="progress-bar"><div class="progress-fill fill-red" style="width:15%"></div></div><span class="progress-pct">15%</span></div>
+  <div class="progress-row"><span class="progress-label">Assertiveness Under Pressure</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:52%"></div></div><span class="progress-pct">52%</span></div>
+
+  <div class="section-title section-title-q" style="margin-top:24px">Your Strength Assets (Non-Negotiable Proof Points)</div>
+
+  <div class="grid-2">
+    <div class="card card-q">
+      <h3>12 Simultaneous Programmes — 2025</h3>
+      <p>Qualcomm's JD says "multiple small programs or a single complex program." You delivered 12 concurrent in one year. This is the single most powerful gap-closer you have. Lead with it.</p>
+    </div>
+    <div class="card card-q">
+      <h3>IIM + BITS Background</h3>
+      <p>Qualcomm India's preferred PM profile is engineering background + MBA. BITS Pilani dual degree + IIM Udaipur is almost exactly the target archetype. Use this proactively — most ops candidates lack engineering depth.</p>
+    </div>
+    <div class="card card-qg">
+      <h3>Risk Register in Action</h3>
+      <p>14-finding audit risk register with severity tiering, owner assignment, and closure dates. This is PM Risk Management 101 — you've done it without the PM title.</p>
+    </div>
+    <div class="card card-qg">
+      <h3>Cross-Geo Matrixed Delivery</h3>
+      <p>77-person team across Dubai and India, coordinating across 4 sub-functions without direct line authority over all. Qualcomm's ESG structure mirrors this exactly — engineers in Hyderabad reporting to engineering managers, not to you.</p>
+    </div>
+  </div>
+
+  <div class="section-title section-title-q" style="margin-top:24px">Critical Gaps — And How to Close Them</div>
+
+  <div class="card card-qa">
+    <h3>Gap 1: No Formal PM Certification (Preferred: PMP)</h3>
+    <span class="badge badge-amber">Severity: High</span><span class="badge badge-green">Closeable in 2–3 months</span>
+    <p style="margin-top:8px">The JD lists PMP as preferred. PMI-ACP is already in your pipeline. Recommendation: <strong>pursue PMI-ACP first</strong> (agile focus, faster to study, tech-relevant), but explicitly state "PMP pursuing" in your application. For Qualcomm's engineering services work, PMI-ACP demonstrates modern delivery methodology. PMP can follow in month 4–6.</p>
+  </div>
+
+  <div class="card card-qa">
+    <h3>Gap 2: Formal PM Tooling (Jira, MS Project, Gantt)</h3>
+    <span class="badge badge-amber">Severity: Medium</span><span class="badge badge-green">Closeable in 2–4 weeks</span>
+    <p style="margin-top:8px">You have built Excel-based Gantt-equivalent trackers. The JD asks for "Gantt charts, dashboards." Recommendation: complete a free Jira Project Management course (Atlassian University — 4 hours), create 1–2 sample programme plans in MS Project or Smartsheet. The concept is identical to your governance trackers — the tool is cosmetic. Build a Qualcomm-style programme dashboard as an AI portfolio project.</p>
+  </div>
+
+  <div class="card card-qa">
+    <h3>Gap 3: Semiconductor / Engineering Domain Context</h3>
+    <span class="badge badge-amber">Severity: Medium</span><span class="badge badge-green">Surface-Level Closeable in 3–4 weeks</span>
+    <p style="margin-top:8px">You do not need to understand chip architecture. You need to know enough vocabulary to ask smart questions and not look lost. Learn: SoC, IP block, RTL, tape-out, verification, silicon bring-up, yield, NPI (New Product Introduction). 5-hour YouTube deep dive + 1 Qualcomm Investor Day presentation will give you enough fluency for interview. Your BITS Mechanical + Maths background means you already understand engineering programme complexity intuitively.</p>
+  </div>
+
+  <div class="card card-qa">
+    <h3>Gap 4: Assertiveness / Independent Decision-Making (Low-D DISC)</h3>
+    <span class="badge badge-amber">Severity: Medium (Behavioural)</span><span class="badge badge-amber">Ongoing Development</span>
+    <p style="margin-top:8px">Qualcomm's JD emphasises "working independently with little supervision" and "making decisions of moderate impact." Your High-C/High-S profile means you are thorough but may seek reassurance before acting. Build 3 stories of decisions you made autonomously under uncertainty — the PCC redesign, the India ops deployment, the incentive automation decision. These demonstrate the independent decision muscle.</p>
+  </div>
+
+  <div class="disc-box">
+    <div class="disc-icon">🧠</div>
+    <div class="disc-text">
+      <h4>DISC Fit Note — Qualcomm PM</h4>
+      <p>Qualcomm's ESG PM role is a High-C, High-S natural fit: precision in planning, follow-through on detail, collaborative coordination across teams. Your Low-D and Low-I are not disqualifying — this role rewards analytical rigour over assertive leadership. However, Qualcomm will probe for "working independently" — prepare stories that show decisiveness in ambiguity, not just quality of analysis.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q TAB 4: ROADMAP -->
+<div class="tab-panel" id="q-roadmap">
+
+  <div class="section-title section-title-q">3–4 Month Preparation Roadmap</div>
+  <div class="section-sub">Week-by-Week Priority Stack — Apply by Month 4</div>
+
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-now"></div>
+      <div class="timeline-period">NOW — WEEK 1–2</div>
+      <h4>Foundation: Vocab + Tools Baseline</h4>
+      <p>Watch 2–3 Qualcomm Investor Day / Technology Briefings on YouTube (free). Learn 20 semiconductor PM vocabulary words (see Vocab tab). Create 1 sample programme schedule in MS Project or free Smartsheet trial. Register for PMI-ACP exam — confirms intent on application. Begin reading <em>Agile Practice Guide</em> (PMI, free for members).</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-1m"></div>
+      <div class="timeline-period">MONTH 1 — WEEK 3–6</div>
+      <h4>PMI-ACP Study Sprint + Portfolio Project 1</h4>
+      <p>PMI-ACP: 2 hours/day. Use PrepCast or Agile PrepSM. Parallel track: Build <strong>AI-Powered Programme Health Tracker</strong> — a Qualcomm-style dashboard (Python/Streamlit or Excel Power Query) that auto-flags milestone deviations from a programme schedule input. This becomes your AI portfolio proof point for the interview. Memorise your 5 STAR stories from the Interview Prep tab.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-3m"></div>
+      <div class="timeline-period">MONTH 2 — WEEK 7–10</div>
+      <h4>PMI-ACP Exam + Jira Proficiency</h4>
+      <p>Sit the PMI-ACP exam. Complete Atlassian Jira Project Management free certification (atlassian.com/university). Build a Jira board simulating a 6-month engineering programme — epics, sprints, risk flags, milestone tracking. Document this as a LinkedIn post or case study: "How I would manage a Qualcomm ESG programme using Agile PM principles." This signals active preparation to any Qualcomm recruiter who Googles you.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-3m"></div>
+      <div class="timeline-period">MONTH 3 — WEEK 11–13</div>
+      <h4>Application + Mock Interviews</h4>
+      <p>Apply with your Qualcomm v2 resume. Request IIM alumni referral from IIMA/IIMB/IIMC network — Qualcomm India has a strong IIM hiring track. Book 3 mock PM interviews with a peer or coach using the STAR bank below. Rehearse the "semiconductor PM vocabulary" until it sounds natural. Prepare 3 "programme failure / recovery" stories — Qualcomm interviewers heavily probe for how you handle adversity.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-12m"></div>
+      <div class="timeline-period">MONTH 4 — INTERVIEW WEEK</div>
+      <h4>Interview Execution</h4>
+      <p>Qualcomm typically runs 4–6 rounds: HR screen → Hiring Manager → 2–3 Panel PMs → Skip-level Director. Expect a written case study round. Lead with your 12-concurrent-deliverables proof point in round 1. Show your programme health tracker tool in round 2. Deploy semiconductor vocabulary naturally — don't cram it, weave it. Close with the "what I would do in my first 90 days" question answered with a structured PoR build-out plan.</p>
+    </div>
+
+  </div>
+
+  <div class="section-title section-title-q" style="margin-top:8px">AI Portfolio Projects — Qualcomm Specific</div>
+
+  <div class="ai-box">
+    <strong>Project 1: Programme Health Tracker with AI Risk Flagging</strong><br><br>
+    Build a dashboard that ingests a programme schedule (Excel/CSV) and uses an LLM to: (1) identify milestones at risk based on % complete vs. days elapsed, (2) auto-generate a 3-bullet risk summary for each at-risk workstream, (3) produce a weekly 1-page PM status report draft. Tools: <em>Python + Pandas + OpenAI API + Streamlit</em>. This directly maps to Qualcomm's "tracks all key metrics, escalates deviations" requirement. Show this in round 2 as your "what I would automate in your PM function."
+  </div>
+
+  <div class="ai-box">
+    <strong>Project 2: RAID Log Automator</strong><br><br>
+    Build a tool that accepts meeting notes or programme updates as text and uses an LLM to extract: Risks, Actions, Issues, Decisions (RAID) — auto-populating a structured tracker. <em>Python + Claude API</em>. In the interview: "I built a prototype RAID log extraction tool — want me to walk you through it?" This is a 2-hour build that signals genuine AI-augmented PM capability.
+  </div>
+</div>
+
+<!-- Q TAB 5: VOCAB -->
+<div class="tab-panel" id="q-vocab">
+
+  <div class="section-title section-title-q">Qualcomm PM — Domain Vocabulary</div>
+  <div class="section-sub">Words That Must Sound Natural in Your Interview</div>
+
+  <div class="vocab-grid">
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">Plan of Record (PoR)</div>
+      <div class="vocab-def">The official, agreed-upon baseline plan for a programme — schedule, budget, deliverables, resources. Any deviation from PoR is a formal event requiring escalation.</div>
+      <div class="vocab-sobha">Your equivalent: Monthly AED 17.7B collections PoR tracked against daily actuals in governance reports.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">RAID Log</div>
+      <div class="vocab-def">Risks, Actions, Issues, Decisions — the PM's central programme health tracker. A living document updated every sprint/week.</div>
+      <div class="vocab-sobha">Your equivalent: Your 9 governance reports covering SLA, AR ageing, escalations, and corrective actions.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">Milestone Gate Review</div>
+      <div class="vocab-def">A formal checkpoint at which programme deliverables are assessed before the next phase begins. Qualcomm calls these M0, M1, M2... through tape-out.</div>
+      <div class="vocab-sobha">Your equivalent: Monthly MD-level governance forum where you present collections PoR status and corrective actions.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">SoC (System on Chip)</div>
+      <div class="vocab-def">A single integrated circuit with all necessary components — CPU, GPU, modem, memory controller. Snapdragon is a Qualcomm SoC. As PM, you don't design it — you manage the delivery programme for it.</div>
+      <div class="vocab-sobha">—</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">Tape-Out</div>
+      <div class="vocab-def">The final step before a chip goes to manufacturing — the design files are "taped out" to the foundry (TSMC, Samsung). Missing tape-out is a programme failure with tens of millions in impact. Everything a Qualcomm PM does is ultimately about protecting tape-out date.</div>
+      <div class="vocab-sobha">Analogy: Your AED 8.2B dues collections year-end target. Everything you track protects it.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">IP Block / IP Integration</div>
+      <div class="vocab-def">Reusable circuit design components ("intellectual property blocks") that are integrated into larger chip designs. PM manages delivery timelines for each IP block from multiple engineering teams.</div>
+      <div class="vocab-sobha">Analogy: Individual programme workstreams in your 12-concurrent-deliverable model.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">RTL (Register Transfer Level)</div>
+      <div class="vocab-def">The stage of chip design where logic is written in HDL code. RTL freeze is a key milestone — after this, design changes are expensive.</div>
+      <div class="vocab-sobha">Analogy: Like your MD-approved process documents — once signed, changes require formal re-approval.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">Verification / Validation</div>
+      <div class="vocab-def">In chip engineering: Verification = checking that the design does what the spec says. Validation = checking the real silicon works in real conditions. PM tracks both milestones.</div>
+      <div class="vocab-sobha">Analogy: Your QCG (Quality Control) function tracking collections process compliance.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">NPI (New Product Introduction)</div>
+      <div class="vocab-def">The full process of taking a new product from concept to market availability. NPI programme management is a distinct PM discipline at Qualcomm — managing cross-functional readiness for a new chip launch.</div>
+      <div class="vocab-sobha">Analogy: Your entity expansion programme — applying Sobha's collections framework to Siniya Island and Downtown UAQ.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">Sprint / Velocity / Burndown</div>
+      <div class="vocab-def">Agile delivery concepts: Sprint = 2-week work cycle. Velocity = how much work a team completes per sprint. Burndown = chart showing remaining work vs. time. PMI-ACP covers these in detail.</div>
+      <div class="vocab-sobha">Your equivalent: Weekly collections milestone tracking — progress vs. target, velocity of receipts.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">Critical Path</div>
+      <div class="vocab-def">The sequence of dependent tasks that determines the minimum programme duration. A delay on the critical path delays the entire programme. PM must know and protect the critical path at all times.</div>
+      <div class="vocab-sobha">Your equivalent: Your 55-day critical collection window (T−25 to T+30) — the sequence that determines month-end outcome.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-q">Scope Creep</div>
+      <div class="vocab-def">Uncontrolled expansion of programme scope without corresponding adjustments to timeline, budget, or resources. Managing scope creep is a core PM discipline — requires formal change control.</div>
+      <div class="vocab-sobha">Your equivalent: Collections scope expanding from Sobha → Siniya → UAQ — you built replication frameworks to absorb this without breaking the core programme.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Q TAB 6: REFRAME -->
+<div class="tab-panel" id="q-reframe">
+
+  <div class="section-title section-title-q">Career Reframe Strategy</div>
+  <div class="section-sub">How to Translate Real Estate Operations into Programme Management Language</div>
+
+  <div class="card card-qg" style="margin-bottom:16px">
+    <h3>The Core Reframe Principle</h3>
+    <p>Qualcomm is hiring for <strong>programme management discipline</strong>, not industry domain expertise. Your job is to make every Sobha achievement sound like a textbook PM case study — because structurally, it already is. Use PM vocabulary to describe what you already did. Don't add new content; change the language.</p>
+  </div>
+
+  <table class="rf-table rf-table-q">
+    <tr>
+      <th>What You Did at Sobha</th>
+      <th>How to Say It for Qualcomm PM</th>
+    </tr>
+    <tr>
+      <td class="from-col">12 simultaneous programme deliverables in 2025</td>
+      <td class="to-col-q">Managed 12 concurrent work-streams against a shared PoR, each with defined milestones, resource owners, and risk-mitigation plans — zero schedule slippages on critical path items.</td>
+    </tr>
+    <tr>
+      <td class="from-col">Monthly MD-level 14-slide governance deck</td>
+      <td class="to-col-q">Owned the senior leadership reporting cadence for a $6.3B portfolio function — weekly KPI dashboards, monthly milestone gate reviews with C-suite, and ad-hoc risk escalation briefs.</td>
+    </tr>
+    <tr>
+      <td class="from-col">PCC TAT: 20 days → 3 days</td>
+      <td class="to-col-q">Identified a critical-path bottleneck with 600% over-SLA TAT; drove cross-functional programme to redesign the workflow — reduced processing time 85% and tripled throughput within 2 months.</td>
+    </tr>
+    <tr>
+      <td class="from-col">14-finding audit risk register</td>
+      <td class="to-col-q">Built and maintained a programme risk register — 14 findings classified by severity, each with assigned owner, mitigation plan, and target closure date. Achieved 97.5% error-rate reduction within 12 months.</td>
+    </tr>
+    <tr>
+      <td class="from-col">77-person team across Dubai + India</td>
+      <td class="to-col-q">Led programme delivery in a cross-geography, matrixed organisation — 35 Dubai + 42 India, 4 functional sub-teams, coordinating delivery without direct authority over all functions.</td>
+    </tr>
+    <tr>
+      <td class="from-col">NICE omnichannel implementation</td>
+      <td class="to-col-q">Served as sole SME and internal PM in a multi-business-unit vendor deployment — drove 100% of function-specific requirements into vendor scope; managed vendor interface and UAT readiness.</td>
+    </tr>
+    <tr>
+      <td class="from-col">India operations expansion (3 entities)</td>
+      <td class="to-col-q">Designed and deployed a replicable programme framework for new entity onboarding — scoped requirements, built playbook, trained teams, and governed post-launch performance across 3 deployments.</td>
+    </tr>
+    <tr>
+      <td class="from-col">Excel-based governance trackers</td>
+      <td class="to-col-q">Built programme scheduling equivalent using structured trackers — maintained milestone visibility for 10+ concurrent workstreams, surfacing blockers and dependencies for leadership decision-making.</td>
+    </tr>
+  </table>
+
+  <div class="disc-box">
+    <div class="disc-icon">⚡</div>
+    <div class="disc-text">
+      <h4>The One Sentence That Unlocks the Interview</h4>
+      <p>"I have been doing programme management for 6 years — I just haven't been calling it that. The PoR, the risk register, the milestone gates, the stakeholder escalation cadence — I built all of these from scratch for a $6.3B portfolio function. The vocabulary is new; the discipline is not." Rehearse this until it sounds natural. It reframes your entire narrative in the first 90 seconds.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Q TAB 7: INTERVIEW -->
+<div class="tab-panel" id="q-interview">
+
+  <div class="section-title section-title-q">Interview Preparation — Qualcomm Senior PM</div>
+  <div class="section-sub">STAR Story Bank Mapped to JD Requirements</div>
+
+  <div class="star-box">
+    <h4>Story 1 — Managing Multiple Simultaneous Programmes (JD: "multiple small programs or single complex")</h4>
+    <div class="star-row"><span class="star-label star-label-q">Situation</span><span class="star-content">In 2025, I was managing 12 simultaneous programme deliverables — technology implementations, process governance initiatives, capability builds, and cross-entity rollouts — each with distinct stakeholders, timelines, and risk profiles.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Task</span><span class="star-content">Deliver all 12 against the annual Plan of Record while maintaining normal collections operations targeting AED 17.7B.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Action</span><span class="star-content">Built a milestone tracking framework — each programme had a defined owner, success metric, weekly status checkpoint, and escalation path. Created a single-view dashboard consumed by MD-level leadership. Sequenced dependencies across programmes to protect the critical path items first.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Result</span><span class="star-content">All 12 delivered on schedule. Collections grew 62% YoY to AED 17.7B. No programme slippage on any critical milestone.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 2 — Risk Identification and Mitigation (JD: "identifies program issues/risks, creates mitigation plan")</h4>
+    <div class="star-row"><span class="star-label star-label-q">Situation</span><span class="star-content">Internal audit identified 14 operational risk findings in the Collections function — covering process gaps, data integrity issues, and control failures. The business had never had a formal risk framework.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Task</span><span class="star-content">Build a risk register from zero, classify findings, assign ownership, and drive remediation without disrupting live operations.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Action</span><span class="star-content">Created a risk register with severity tiers (High/Medium/Risk/Opportunity), assigned a named owner to each finding, defined target closure dates, and established a bi-weekly review cadence with audit and operations leadership.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Result</span><span class="star-content">Final Notice error rate reduced from 41% to under 1% (97.5% reduction) within 12 months. All high-severity findings closed. Function received clean audit rating in the following cycle.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 3 — Escalation and Corrective Action (JD: "escalates issues in timely manner, proposes corrective actions")</h4>
+    <div class="star-row"><span class="star-label star-label-q">Situation</span><span class="star-content">Payment request (PR) rejection rate reached 49% in December 2025 — nearly half of all customer payment requests being rejected due to upstream data and process failures. This was a critical-path risk to year-end collections target.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Task</span><span class="star-content">Diagnose root cause, escalate cross-functionally, and implement corrective governance without waiting for a process redesign cycle.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Action</span><span class="star-content">Ran root cause analysis across 3 data sources. Escalated to CRO with a structured problem statement and 3 corrective options. Implemented interim controls while permanent fix was designed. Established daily monitoring metric (PR rejection %) as a permanent KPI.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Result</span><span class="star-content">Rejection rate brought under control within 30 days. Now tracked daily as a governance KPI with SLA breach alert protocols.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 4 — Working Independently, Low Supervision (JD: "working independently with little supervision")</h4>
+    <div class="star-row"><span class="star-label star-label-q">Situation</span><span class="star-content">In 2021–2023, there was no formal programme structure, no PM tooling, and no precedent for managing the mortgage blockage resolution programme — 1,016 units, AED 2.5B+ portfolio, 4 stakeholder groups including DLD and banks.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Task</span><span class="star-content">Design and operate the entire programme infrastructure from scratch — no template, no supervisor blueprint, no external PM support.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Action</span><span class="star-content">Built a custom tracker enabling weekly release sequencing, bank coordination, and DLD approval tracking. Designed the stakeholder communication protocol. Made weekly disposition decisions independently on unit prioritisation — escalated only when MD-level approval was needed.</span></div>
+    <div class="star-row"><span class="star-label star-label-q">Result</span><span class="star-content">1,016 units resolved over 24 months. AED 2.5B+ in portfolio unblocked. Programme still referenced as a model for subsequent entity expansion initiatives.</span></div>
+  </div>
+
+  <div class="section-title section-title-q" style="margin-top:24px">Likely Tough Questions — and How to Answer Them</div>
+
+  <table class="sal-table sal-table-q">
+    <tr>
+      <th>Question</th>
+      <th>Your Answer Frame</th>
+    </tr>
+    <tr>
+      <td>"You don't have semiconductor background. How will you manage engineers who know more than you?"</td>
+      <td>PM manages delivery, not domain expertise. My BITS engineering background gives me the language to ask good questions. I've managed 77 specialists in CRM, legal, finance, and technology without domain expertise in each. The PM adds value through structured delivery, risk governance, and stakeholder alignment — not technical solutions.</td>
+    </tr>
+    <tr>
+      <td>"Have you used Jira / MS Project / formal PM tools?"</td>
+      <td>I built equivalent governance infrastructure in Excel and Salesforce — live-data-connected trackers, Gantt-equivalent milestone schedules. I've just completed Atlassian Jira certification and am building my PMI-ACP toolkit. The PM fundamentals are identical — I'm investing in the formal tooling now.</td>
+    </tr>
+    <tr>
+      <td>"Tell me about a programme that failed. What did you do?"</td>
+      <td>Use the PR rejection rate story — it was a near-failure at 49%. Be direct: the programme governance was insufficient, I caught it, I escalated with data, I implemented corrective controls. Don't hide failures — show you diagnose and act, not deflect.</td>
+    </tr>
+    <tr>
+      <td>"How do you manage stakeholders who resist programme timelines?"</td>
+      <td>Use the PCC redesign story — Accounts, Audit, and DLD all had competing priorities. I used data to show the business cost of delay (AED impact, audit exposure), created a shared urgency, and broke the 3-month problem down into 2-week milestones that each team could own.</td>
+    </tr>
+  </table>
+
+</div>
+</div>
+<!-- END QUALCOMM ROLE -->
+
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- MICROSOFT ROLE                                                  -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<div id="role-m" style="display:none">
+
+<header class="header-m">
+  <div class="header-eyebrow">Career Intelligence Brief — Confidential — Priyanuj Deka</div>
+  <h1>Microsoft AI (MAI) — <em>Senior PM, CIP</em><br>Crowd Intelligence Platform · STCI Hyderabad</h1>
+  <div class="header-sub">12–18 Month Target &nbsp;|&nbsp; Current Fit: 58/100 → Target: 78/100 with AI portfolio build</div>
+</header>
+
+<div class="fit-banner fit-banner-m">
+  <div>
+    <div class="fit-label">Current Fit</div>
+    <div class="fit-score fit-score-m">58<sub>/100</sub></div>
+  </div>
+  <div class="fit-verdict">
+    <strong class="fit-verdict-m">Strong Aspirational Candidate — 12–18 Month Track</strong>
+    <p>Exceptional platform operations DNA, strong internal customer discovery proof points, and OKR-driven execution experience. Critical gaps: AI/ML product lifecycle, vendor budget governance at millions scale, consumer product market fit experience, and 8+ years preferred exp. Addressable to 78/100 with 12–18 months of deliberate AI portfolio building.</p>
+  </div>
+  <div class="fit-pills">
+    <span class="fit-pill pill-green">Platform Roadmap ✓</span>
+    <span class="fit-pill pill-green">Internal Discovery ✓</span>
+    <span class="fit-pill pill-green">Cross-Functional ✓</span>
+    <span class="fit-pill pill-green">OKR Execution ✓</span>
+    <span class="fit-pill pill-amber">AI/ML PM △</span>
+    <span class="fit-pill pill-amber">Growth Strategy △</span>
+    <span class="fit-pill pill-red">Consumer Product Scale ✗</span>
+    <span class="fit-pill pill-red">$M Budget Ownership ✗</span>
+  </div>
+</div>
+
+<div class="nav-tabs" id="nav-m">
+  <button class="tab-btn active-m" onclick="showTab('m','decode')">Role Decode</button>
+  <button class="tab-btn" onclick="showTab('m','salary')">Salary Intel</button>
+  <button class="tab-btn" onclick="showTab('m','fit')">Fit & Gaps</button>
+  <button class="tab-btn" onclick="showTab('m','roadmap')">18-Month Roadmap</button>
+  <button class="tab-btn" onclick="showTab('m','vocab')">AI PM Vocab</button>
+  <button class="tab-btn" onclick="showTab('m','reframe')">Career Reframe</button>
+  <button class="tab-btn" onclick="showTab('m','interview')">Interview Prep</button>
+</div>
+
+<!-- M TAB 1: DECODE -->
+<div class="tab-panel active" id="m-decode">
+
+  <div class="section-title section-title-m">What This Role Really Is</div>
+  <div class="section-sub">Decoding the CIP Platform PM Role — Microsoft AI (MAI) Division</div>
+
+  <div class="card card-ma">
+    <h3>The Plain-English Summary</h3>
+    <p>CIP (Crowd Intelligence Platform) is Microsoft's internal AI-powered quality assurance engine for Bing, Edge, and Copilot. It uses AI agents and crowd-sourced signals to proactively detect product quality problems <em>before</em> users encounter them. This PM role is the <strong>strategic product owner of an agentic AI testing platform</strong> serving internal teams at one of the world's most influential tech companies. You are not building Bing — you are building the platform that ensures Bing, Edge, and Copilot never ship broken experiences to 1 billion+ users. Think of it as <strong>Chief Product Officer of an internal AI infrastructure product.</strong></p>
+  </div>
+
+  <div class="section-title section-title-m">Six Core Functions — Decoded</div>
+  <div class="section-sub">What You Will Actually Deliver Every Week at Microsoft</div>
+
+  <div class="card card-m">
+    <h3>1. Own the Strategic Roadmap for CIP</h3>
+    <span class="badge badge-m">Product Vision</span><span class="badge badge-m">Agentic Testing Strategy</span><span class="badge badge-m">3-Year Horizon</span>
+    <p style="margin-top:8px">You define what CIP becomes — which capabilities to build, in what order, to deliver the most quality improvement across MAI's product surface. This is a true PM strategy role: market analysis (internal), opportunity identification, prioritisation, and roadmap communication to senior engineering and business leadership. <em>Your closest proof point: the Salesforce intelligence platform roadmap you own at Sobha — 70+ reports, quality scorecard, automation pipeline — is exactly a platform roadmap, just at smaller scale.</em></p>
+  </div>
+
+  <div class="card card-m">
+    <h3>2. Engage Internal Customers — Understand Their Pain</h3>
+    <span class="badge badge-m">Discovery</span><span class="badge badge-m">Requirements</span><span class="badge badge-m">Adoption Strategy</span>
+    <p style="margin-top:8px">The "customers" here are Bing, Edge, and Copilot engineering teams. Your job is to understand their quality testing pain points, translate those into CIP platform requirements, and build adoption. This is internal B2B product management. <em>You've done this: your NICE omnichannel vendor sessions (sole SME), your Sobha One App requirements build, and your Salesforce CRM architecture work all involved discovery, requirements definition, and stakeholder-driven prioritisation.</em></p>
+  </div>
+
+  <div class="card card-m">
+    <h3>3. Drive Platform Adoption and Growth</h3>
+    <span class="badge badge-mg">Growth KPIs</span><span class="badge badge-mg">Partnership</span><span class="badge badge-mg">Change Management</span>
+    <p style="margin-top:8px">You don't just build CIP — you make sure teams use it. Internal adoption for a quality platform is a real growth problem: teams resist new tooling, have existing workflows, and need to see value quickly. You will partner across MAI divisions, run "show the value" campaigns, and measure adoption KPIs. <em>Your Sobha One App story — 0 to 278 transactions, defined user journey, measured adoption curve — is exactly this.</em></p>
+  </div>
+
+  <div class="card card-m">
+    <h3>4. Define and Track OKRs</h3>
+    <span class="badge badge-m">OKR Framework</span><span class="badge badge-m">Quality Metrics</span><span class="badge badge-m">Experimentation</span>
+    <p style="margin-top:8px">You define what "quality improved" means for MAI — and build the metrics infrastructure to measure it. This includes defining CIP's success metrics, running experiments to test feature impact, and reporting progress to VP/CVP level leadership. <em>Your first-ever Annual Goals framework for Collections — KPI hierarchy, tracking infrastructure, MD-level reporting — shows you have built this from zero before.</em></p>
+  </div>
+
+  <div class="card card-m">
+    <h3>5. Govern a Multi-Million Dollar Budget</h3>
+    <span class="badge badge-ma">Vendor Budget</span><span class="badge badge-ma">Compute Cost Optimisation</span><span class="badge badge-ma">ROI Frameworks</span>
+    <p style="margin-top:8px">CIP uses significant compute (AI inference is expensive) and external vendors. You optimise this spend against capability goals. This is one of the hardest gaps to bridge — you have not formally owned a $M technology budget. The Azure SQL proposal you're currently evaluating at Sobha is a stepping stone — build the governance framework for that decision into a structured case study.</p>
+  </div>
+
+  <div class="card card-m">
+    <h3>6. Deliver AI-Powered User Experiences</h3>
+    <span class="badge badge-m">UX Design</span><span class="badge badge-m">AI Feature Spec</span><span class="badge badge-m">Responsible AI</span>
+    <p style="margin-top:8px">You work with designers and engineers to build the CIP interface that quality testers actually use — dashboards, alert interfaces, issue triage flows. You also define how AI models are used (responsibly), how their outputs are surfaced to users, and how humans stay in the loop. AI governance (privacy, ethics, responsible AI) is an explicit requirement.</p>
+  </div>
+
+  <div class="note-box">
+    <strong>⚠ Why This is 12–18 Months, Not Now</strong>
+    Microsoft's preferred qualification is "8+ years in PM, preferably with MBA, with AI/ML product lifecycle experience." You have 6 years, an MBA, and zero AI/ML PM experience at product scale. The gap is real — but it is closeable. The 12–18 month window is for building 2–3 AI portfolio projects, completing Azure certifications (AZ-900 → PL-900 → AI-900), and generating a track record of AI-augmented product thinking. The stepping stone: a D365 implementation partner PM role or a Microsoft LEAP Business Program Manager application would dramatically accelerate this path.
+  </div>
+
+</div>
+
+<!-- M TAB 2: SALARY -->
+<div class="tab-panel" id="m-salary">
+
+  <div class="section-title section-title-m">Salary Intelligence — Microsoft India, Senior PM</div>
+  <div class="section-sub">Based on Levels.fyi, Glassdoor, Blind, TeamBlind, Pragmatic Engineer — March 2026</div>
+
+  <div class="card card-ma" style="margin-bottom:16px">
+    <h3>Market Context</h3>
+    <p>Microsoft India is one of the <strong>highest-paying PM employers in India</strong>, second only to Google. STCI (Search Technology Centre India) in Hyderabad is a strategic engineering centre — not a support centre — and compensates accordingly. AI-focused PM roles at Microsoft India command a 15–25% premium over standard PM roles. Senior PM (SDE equivalent to L62-L63) represents a step into the premium tier of Indian tech compensation.</p>
+  </div>
+
+  <table class="sal-table sal-table-m">
+    <tr>
+      <th>Level / Title</th>
+      <th>Base Salary (INR/yr)</th>
+      <th>Annual Bonus</th>
+      <th>RSU (4-yr vest)</th>
+      <th>Total Comp (Est.)</th>
+    </tr>
+    <tr>
+      <td>PM (IC4 / L61)</td>
+      <td>INR 28–38L</td>
+      <td>10–15% of base</td>
+      <td>INR 20–40L grant</td>
+      <td><span class="sal-highlight sal-m">INR 40–55L</span></td>
+    </tr>
+    <tr>
+      <td><strong>Senior PM (IC5 / L62–63) ← YOUR TARGET</strong></td>
+      <td><strong>INR 42–58L</strong></td>
+      <td>15–20% of base</td>
+      <td>INR 50–100L grant</td>
+      <td><span class="sal-highlight sal-m">INR 60–90L</span></td>
+    </tr>
+    <tr>
+      <td>Principal PM (IC6 / L64–65)</td>
+      <td>INR 65–90L</td>
+      <td>20–25% of base</td>
+      <td>INR 100–200L grant</td>
+      <td><span class="sal-highlight sal-m">INR 100–140L</span></td>
+    </tr>
+    <tr>
+      <td>GPM / Director (L66+)</td>
+      <td>INR 90–130L</td>
+      <td>20–30%</td>
+      <td>INR 150–300L+ grant</td>
+      <td><span class="sal-highlight sal-m">INR 140–200L+</span></td>
+    </tr>
+  </table>
+
+  <div class="grid-2">
+    <div class="card card-m">
+      <h3>AI PM Premium at STCI</h3>
+      <p>CIP is in Microsoft's highest-visibility AI division (MAI). Roles in this division typically attract a 15–25% TC premium vs. standard Microsoft India PM roles. The RSU grant for an AI-aligned Senior PM role can be front-loaded or increased at offer. Levels.fyi reports AI PM total comp at STCI ranging <strong>INR 80–110L for Senior PM.</strong></p>
+    </div>
+    <div class="card card-ma">
+      <h3>Your Target Offer Range</h3>
+      <p>Entering as Senior PM (L62) with 6–8 years exp + IIM MBA: <strong>Base INR 44–52L + 15% bonus + RSU grant of INR 60–80L over 4 years.</strong> Total year-1 effective comp (including RSU): <strong>INR 65–80L.</strong> By year-3 with promotion to Principal PM, this scales to INR 100–130L TC.</p>
+    </div>
+  </div>
+
+  <div class="section-title section-title-m" style="margin-top:24px">Total Rewards Beyond Salary</div>
+  <table class="sal-table sal-table-m">
+    <tr>
+      <th>Benefit</th>
+      <th>Detail</th>
+      <th>Est. Value</th>
+    </tr>
+    <tr><td>ESPP</td><td>10% discount on Microsoft shares, up to 15% of base</td><td>INR 5–9L/yr</td></tr>
+    <tr><td>Learning & Certification</td><td>Microsoft Learn budget + exam vouchers; AZ-900, AI-900, PL-900 covered</td><td>INR 1–2L/yr</td></tr>
+    <tr><td>Health & Wellness</td><td>Premium family cover + annual wellness credit</td><td>INR 1–2L/yr</td></tr>
+    <tr><td>Hackathon & Innovation Awards</td><td>One Hack + divisional AI innovation programmes — cash + RSU top-ups</td><td>Variable</td></tr>
+    <tr><td>Internal Mobility</td><td>After 18 months, eligible to transfer to US, UK, Singapore roles — STCI is a common stepping stone to Microsoft Redmond</td><td>Career defining</td></tr>
+  </table>
+
+  <div class="note-box">
+    <strong>💡 The Real Value Proposition of Microsoft STCI</strong>
+    The salary is excellent. But the compounding value is the <strong>global career optionality</strong>. Microsoft's internal mobility programme, combined with the AI PM credential built at STCI, creates a pathway to Redmond (Seattle), London, or Singapore within 2–3 years. For someone making a career transition from real estate operations to global tech PM, this is the highest-leverage move available in the India market. The compensation at year-5 is not INR 80L — it is a Microsoft Principal PM in Seattle at $300–400K TC.
+  </div>
+
+</div>
+
+<!-- M TAB 3: FIT -->
+<div class="tab-panel" id="m-fit">
+
+  <div class="section-title section-title-m">Dimension-by-Dimension Fit</div>
+  <div class="section-sub">Honest Assessment Against Microsoft Senior PM (AI) JD</div>
+
+  <div class="progress-row"><span class="progress-label">Platform Roadmap Ownership</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:72%"></div></div><span class="progress-pct">72%</span></div>
+  <div class="progress-row"><span class="progress-label">Internal Customer Discovery</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:78%"></div></div><span class="progress-pct">78%</span></div>
+  <div class="progress-row"><span class="progress-label">Cross-Functional Delivery</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:80%"></div></div><span class="progress-pct">80%</span></div>
+  <div class="progress-row"><span class="progress-label">OKR Definition & Tracking</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:70%"></div></div><span class="progress-pct">70%</span></div>
+  <div class="progress-row"><span class="progress-label">Stakeholder Communication</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:82%"></div></div><span class="progress-pct">82%</span></div>
+  <div class="progress-row"><span class="progress-label">Data-Driven Decision Making</span><div class="progress-bar"><div class="progress-fill fill-green" style="width:78%"></div></div><span class="progress-pct">78%</span></div>
+  <div class="progress-row"><span class="progress-label">AI/ML Product Lifecycle</span><div class="progress-bar"><div class="progress-fill fill-red" style="width:18%"></div></div><span class="progress-pct">18%</span></div>
+  <div class="progress-row"><span class="progress-label">Consumer Product Scale (1B+)</span><div class="progress-bar"><div class="progress-fill fill-red" style="width:10%"></div></div><span class="progress-pct">10%</span></div>
+  <div class="progress-row"><span class="progress-label">Budget Governance ($M+)</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:35%"></div></div><span class="progress-pct">35%</span></div>
+  <div class="progress-row"><span class="progress-label">UX / Product Design</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:40%"></div></div><span class="progress-pct">40%</span></div>
+  <div class="progress-row"><span class="progress-label">Growth Strategy Execution</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:55%"></div></div><span class="progress-pct">55%</span></div>
+  <div class="progress-row"><span class="progress-label">Entrepreneurial Bias for Action</span><div class="progress-bar"><div class="progress-fill fill-amber" style="width:50%"></div></div><span class="progress-pct">50%</span></div>
+
+  <div class="section-title section-title-m" style="margin-top:24px">Your Strongest Assets for This Role</div>
+
+  <div class="grid-2">
+    <div class="card card-m">
+      <h3>Platform Product Owner at Scale</h3>
+      <p>You own the Salesforce intelligence platform at Sobha — 70+ reports, quality scorecard, automation pipeline — as a product, not just a system. You have roadmapped it, prioritised features, driven adoption, and measured impact. This is the closest available analogue to CIP ownership.</p>
+    </div>
+    <div class="card card-m">
+      <h3>Internal Customer Discovery — Proven</h3>
+      <p>NICE omnichannel sessions, Sobha One App requirements build, Salesforce CRM architecture — in each, you ran internal discovery with engineering and operations teams, translated their pain into feature requirements, and drove scope decisions. This is textbook internal B2B PM.</p>
+    </div>
+    <div class="card card-ma">
+      <h3>Quality Governance DNA</h3>
+      <p>CIP is a quality platform. You built a quality governance function from zero — QCG team, quality scorecard embedded in Salesforce, process audit framework. Your quality governance instinct is precisely what CIP needs at the PM level.</p>
+    </div>
+    <div class="card card-ma">
+      <h3>AI-Augmented Operations Differentiator</h3>
+      <p>The JD asks for AI/ML lifecycle experience. Your unique angle: you are building AI-augmented programme management capability — programme health trackers, RAID log automation, dashboard AI. This is CIP's own use case turned into your portfolio. Show them you live the problem they're solving.</p>
+    </div>
+  </div>
+
+  <div class="section-title section-title-m" style="margin-top:24px">Critical Gaps — Closure Plan</div>
+
+  <div class="card card-ma">
+    <h3>Gap 1: AI/ML Product Lifecycle Experience</h3>
+    <span class="badge badge-red">Severity: Critical</span><span class="badge badge-amber">Closeable: 12–18 months</span>
+    <p style="margin-top:8px">This is the central gap. Microsoft needs a PM who understands model training, evaluation, deployment, and monitoring. Your path: (1) Complete Azure AI-900 and AI Fundamentals (2 months). (2) Build 2–3 AI portfolio projects demonstrating model-integrated product thinking — see Roadmap tab. (3) Write a LinkedIn article: "What I learned building AI-powered operations tools." (4) Apply to D365/Microsoft LEAP as stepping stone — gets you inside the Microsoft ecosystem with AI product exposure.</p>
+  </div>
+
+  <div class="card card-ma">
+    <h3>Gap 2: Consumer Product Scale (1 billion users)</h3>
+    <span class="badge badge-red">Severity: High</span><span class="badge badge-amber">Indirect Closure Only</span>
+    <p style="margin-top:8px">You cannot manufacture this experience directly. Indirect closure: (1) Frame your 36,000-unit, $6.3B portfolio as "enterprise-scale product serving a large, diverse user base." (2) Study how Microsoft measures quality at scale — read the Bing/Edge quality engineering blogs and GitHub repos. (3) Build your AI portfolio projects with scale in mind — design for 10,000+ users, not 10. (4) In the interview, acknowledge the gap honestly and articulate how your quality governance and platform ownership instinct transfers.</p>
+  </div>
+
+  <div class="card card-ma">
+    <h3>Gap 3: Vendor / Compute Budget Governance</h3>
+    <span class="badge badge-amber">Severity: Medium</span><span class="badge badge-green">Closeable: 3–6 months</span>
+    <p style="margin-top:8px">The Azure SQL evaluation you're currently doing at Sobha — turn this into a structured investment case study: problem definition, options analysis, cost-benefit modelling, approval recommendation. This is exactly the vendor budget governance CIP's PM must do. Build it as a 1-page decision memo and reference it in your interview as "here's how I approach build vs. buy technology investment decisions."</p>
+  </div>
+
+</div>
+
+<!-- M TAB 4: ROADMAP -->
+<div class="tab-panel" id="m-roadmap">
+
+  <div class="section-title section-title-m">18-Month Preparation Roadmap</div>
+  <div class="section-sub">Phase-by-Phase AI PM Track — Apply by Month 15–18</div>
+
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-now"></div>
+      <div class="timeline-period">NOW — MONTH 1–2 | Foundation</div>
+      <h4>Azure AI-900 + Inspired (Cagan) + PMI-ACP</h4>
+      <p>Complete Azure AZ-900 (already in progress). Immediately follow with AI-900 (Azure AI Fundamentals — 2 weeks study). This gives you credible AI vocabulary for early conversations. Simultaneously finish <em>Inspired</em> — Cagan's product thinking framework is the mental model Microsoft PMs use. Build your first AI portfolio project: Programme Health Tracker with AI risk narration.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-1m"></div>
+      <div class="timeline-period">MONTH 3–5 | AI Portfolio Build Sprint</div>
+      <h4>3 AI Projects + PL-900 Certification</h4>
+      <p>Build <strong>Project 1:</strong> AI-Powered Collections Quality Scorecard — uses an LLM to flag pattern deviations in quality metrics and generate weekly quality narrative. This mirrors CIP's exact use case (AI detecting quality issues before humans do). Build <strong>Project 2:</strong> Internal Platform Adoption Dashboard — tracks feature usage, surfaces under-adopted capabilities, and generates AI-suggested intervention recommendations. Complete PL-900 (Microsoft Power Platform Fundamentals). Publish 1 LinkedIn article: "How I used AI to transform quality monitoring in a $6.3B operations function."</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-3m"></div>
+      <div class="timeline-period">MONTH 6–9 | Ecosystem Entry</div>
+      <h4>Microsoft LEAP Application OR D365 PM Role</h4>
+      <p>Apply to Microsoft LEAP Business Program Manager (if available cycle) — this is the fastest pathway inside the Microsoft ecosystem. Alternatively, target a D365 implementation partner PM role (Avanade, Accenture Microsoft practice, Synoptek) — gets you Microsoft product PM experience on your CV within 6 months. Complete PL-200 (Power Platform Functional Consultant). Build <strong>Project 3:</strong> Agentic Quality Testing Prototype — a simple agent workflow (LangChain/CrewAI) that simulates CIP's core function: automated test generation from product spec → issue detection → prioritised bug report.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-6m"></div>
+      <div class="timeline-period">MONTH 10–14 | IIM Network Activation + AI-900 → DP-100</div>
+      <h4>Internal Referral + Azure Data Scientist Associate</h4>
+      <p>Activate IIM Udaipur alumni network on LinkedIn — filter for Microsoft India employees. Request a 20-minute informational coffee chat (not a job ask). Ask about the CIP team, STCI culture, and what separates successful Senior PM candidates. These conversations surface the unpublished requirements. Begin Azure DP-100 (Designing and Implementing a Data Science Solution) — this is the signal to Microsoft that you are serious about AI/ML product depth.</p>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-dot dot-12m"></div>
+      <div class="timeline-period">MONTH 15–18 | Apply + Interview Execution</div>
+      <h4>Application with AI Portfolio + STCI-Specific Storytelling</h4>
+      <p>Apply with updated Microsoft SPM v3 resume, 3 AI portfolio projects live on GitHub/LinkedIn, and AI-900 + PL-900 credentials. Microsoft interview process: (1) Phone screen — PM fundamentals, (2) Case study — 1-hour live PM problem (build for a hypothetical CIP feature), (3) Panel — 4 x 45-min behavioural/design rounds, (4) Hiring Manager + Skip-level. Prepare 5 platform product stories, 3 AI-augmented solutions demos, and a "what I would do in my first 90 days at CIP" answer structured around discovery, metrics definition, and quick win delivery.</p>
+    </div>
+
+  </div>
+
+  <div class="section-title section-title-m" style="margin-top:8px">AI Portfolio Projects — Microsoft CIP Specific</div>
+
+  <div class="ai-box">
+    <strong>Project 1: AI-Powered Quality Scorecard for Operations</strong><br><br>
+    Build an operational quality monitoring system that: (1) Ingests daily performance metrics, (2) Uses an LLM to detect anomaly patterns and generate a natural-language quality narrative, (3) Surfaces "likely root causes" and "recommended actions" ranked by impact. Tools: <em>Python + Pandas + OpenAI/Claude API + Streamlit</em>. In the Microsoft interview: "This is a simplified version of what CIP does for Bing — I built this for our collections function to understand the problem space." This is the single most powerful interview artefact you can bring.
+  </div>
+
+  <div class="ai-box">
+    <strong>Project 2: Agentic Test Generation Prototype (CIP Mimic)</strong><br><br>
+    Build a 3-agent workflow (LangChain or CrewAI): Agent 1 reads a product feature specification, Agent 2 generates test cases from the spec, Agent 3 runs the test cases and flags failures. This directly mirrors CIP's agentic testing model at a simple scale. Even a prototype with a 5-page mock spec and 20 test cases is sufficient to demonstrate understanding of agentic quality engineering — the concept CIP is built on.
+  </div>
+
+  <div class="ai-box">
+    <strong>Project 3: Platform Adoption Intelligence Dashboard</strong><br><br>
+    Build a tool that: (1) Tracks internal platform feature usage (simulated data), (2) Identifies under-adopted features, (3) Uses AI to generate hypothesis for low adoption and suggests interventions. This directly addresses CIP's "growth strategy" and "platform adoption" mandate — and shows you think in adoption metrics, not just feature delivery.
+  </div>
+
+</div>
+
+<!-- M TAB 5: VOCAB -->
+<div class="tab-panel" id="m-vocab">
+
+  <div class="section-title section-title-m">AI Product Management — Core Vocabulary</div>
+  <div class="section-sub">Words That Must Sound Natural in Your Microsoft Interview</div>
+
+  <div class="vocab-grid">
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">Agentic AI / AI Agents</div>
+      <div class="vocab-def">AI systems that can autonomously take sequences of actions — perceive, plan, act, and adapt — without constant human instruction. CIP uses agents to automatically detect quality issues across Bing/Edge/Copilot.</div>
+      <div class="vocab-sobha">Your analogy: Your automated incentive calculation engine — rule-based automation as the non-AI precursor to an agentic system.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">Model Evaluation / Evals</div>
+      <div class="vocab-def">The process of measuring how well an AI model performs against defined benchmarks. For CIP, "evals" might include accuracy of issue detection, false positive rate, and coverage across product surfaces. As PM, you define the success metrics for the AI model.</div>
+      <div class="vocab-sobha">Your analogy: Your quality scorecard — defining what "good quality" looks like and measuring it systematically.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">OKR (Objectives & Key Results)</div>
+      <div class="vocab-def">Microsoft's primary goal framework. Objective = qualitative aspiration. Key Result = measurable outcome. CIP's OKRs might include: "Detect 90% of P0 quality issues before user exposure" with KRs around detection rate, time-to-detect, and coverage breadth.</div>
+      <div class="vocab-sobha">Your equivalent: Your first-ever Annual Goals framework for Collections — you built OKRs without calling them OKRs.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">Responsible AI / RAI</div>
+      <div class="vocab-def">Microsoft's framework for building AI that is fair, reliable, safe, private, inclusive, transparent, and accountable. CIP PM must apply RAI principles: ensuring AI quality testing doesn't introduce bias, maintains data privacy, and keeps humans appropriately in the loop.</div>
+      <div class="vocab-sobha">Your analogy: Your process governance documents — formalising how decisions are made and who is accountable.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">North Star Metric</div>
+      <div class="vocab-def">The single most important metric that captures the essence of the product's value delivery. For CIP, the North Star might be "% of quality issues caught before user exposure." Everything else is an input metric that drives the North Star.</div>
+      <div class="vocab-sobha">Your equivalent: Delinquency rate (16.7% → 4.4%) — the single metric that captured portfolio health, driving all collection programme decisions.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">PRD (Product Requirements Document)</div>
+      <div class="vocab-def">The document that defines what a product feature should do, why, for whom, and how success is measured. Microsoft PMs write PRDs that drive engineering sprint planning. Equivalent to: problem statement + user story + acceptance criteria + success metrics.</div>
+      <div class="vocab-sobha">Your equivalent: Your 6 MD-approved process documents — structured requirements with owner sign-off and measurable acceptance criteria.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">User Story / Acceptance Criteria</div>
+      <div class="vocab-def">User Story: "As a [Bing engineer], I want [to see issues flagged before code merge], so that [I don't ship regressions]." Acceptance Criteria: the specific conditions the feature must meet to be considered done. PMs write these; engineers build to them.</div>
+      <div class="vocab-sobha">Your equivalent: Your feature requirements for Sobha One App payments — you defined what the payment flow needed to do for customers.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">Product-Market Fit (Internal)</div>
+      <div class="vocab-def">For an internal platform like CIP, PMF = teams genuinely adopting it because it solves a real pain, not because they're mandated to. Measured by: retention (are teams still using it after month 3?), NPS, and expansion (are they using more features over time?).</div>
+      <div class="vocab-sobha">Your equivalent: Sobha One App payment adoption — 0 to 278 transactions in year 1, measuring real voluntary uptake.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">Experimentation / A/B Testing</div>
+      <div class="vocab-def">Running controlled experiments to measure the causal impact of a product change. Microsoft runs thousands of A/B experiments across Bing/Edge/Copilot. CIP's quality testing may itself be validated through experiments: "Did teams using CIP ship 30% fewer P0 bugs than teams not using it?"</div>
+      <div class="vocab-sobha">Your equivalent: Your NPV model for the advance rebate policy — you modelled the impact of a policy change before committing to it.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">Compute / Inference Cost</div>
+      <div class="vocab-def">The cost of running AI models in production — every API call, every LLM inference, every agentic task costs money. CIP PM must balance capability (more AI) against cost (more compute spend). Budget management in this role is largely about compute cost optimisation.</div>
+      <div class="vocab-sobha">Your equivalent: Your Azure SQL licensing evaluation — should I buy this, what does it cost, what do I get?</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">Crowdsourcing / Crowd Intelligence</div>
+      <div class="vocab-def">Using large numbers of people (crowd) to perform tasks AI alone can't do well — labelling data, validating AI outputs, testing edge cases. "CIP" = Crowd Intelligence Platform — it uses both AI agents AND human crowd signals to detect quality issues. PM must balance AI automation with human-in-the-loop validation.</div>
+      <div class="vocab-sobha">Your equivalent: Your 12 Dues RMs as a "crowd" feeding real customer data signals into your collections intelligence system.</div>
+    </div>
+
+    <div class="vocab-card">
+      <div class="vocab-term vocab-term-m">Platform vs. Point Solution</div>
+      <div class="vocab-def">Platform: reusable infrastructure that many teams build on (CIP). Point Solution: a specific tool built for one use case. CIP's PM must think platform-first — every new capability should be reusable by multiple MAI teams, not just one.</div>
+      <div class="vocab-sobha">Your equivalent: Your Salesforce report infrastructure — built once, used by 40+ RMs, MD, and CRO. That's platform thinking.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- M TAB 6: REFRAME -->
+<div class="tab-panel" id="m-reframe">
+
+  <div class="section-title section-title-m">Career Reframe Strategy</div>
+  <div class="section-sub">Translating Real Estate Operations Platform Ownership into AI PM Language</div>
+
+  <div class="card card-ma" style="margin-bottom:16px">
+    <h3>The Core Reframe Principle for Microsoft</h3>
+    <p>Microsoft's CIP interview will look for: (1) Platform product ownership instinct, (2) Internal customer empathy, (3) Quality governance DNA, and (4) AI augmented thinking. You have all four — but described in real estate language. The reframe job is to translate each proof point into the PM vocabulary Microsoft interviewers are trained to evaluate against.</p>
+  </div>
+
+  <table class="rf-table rf-table-m">
+    <tr>
+      <th>What You Did at Sobha</th>
+      <th>How to Say It for Microsoft CIP PM</th>
+    </tr>
+    <tr>
+      <td class="from-col">Own Salesforce platform: 70+ reports, quality scorecard, rebate calculator</td>
+      <td class="to-col-m">Product-owned an internal intelligence platform — defined the roadmap, drove feature prioritisation based on stakeholder discovery, measured adoption, and iterated on platform capabilities for a 40+ person user base consuming C-suite dashboards.</td>
+    </tr>
+    <tr>
+      <td class="from-col">Built quality scorecard embedded in Salesforce</td>
+      <td class="to-col-m">Designed and shipped a quality monitoring product — defined the evaluation criteria, built the scoring model, embedded it in the operational workflow, and measured impact on quality outcomes (PR rejection rate governance).</td>
+    </tr>
+    <tr>
+      <td class="from-col">Drove Sobha One App payment adoption 0 → 278 transactions</td>
+      <td class="to-col-m">Led internal platform adoption growth from zero — defined user journey, identified friction points, iterated on the feature scope based on early adopter feedback, and measured adoption curve against a 15,000–25,000 eligible customer base.</td>
+    </tr>
+    <tr>
+      <td class="from-col">NICE omnichannel: sole SME in multi-BU vendor deployment</td>
+      <td class="to-col-m">Ran internal customer discovery for a platform deployment — conducted requirements sessions with cross-functional stakeholders, defined the feature taxonomy and workflow logic, and drove vendor scope decisions based on user needs.</td>
+    </tr>
+    <tr>
+      <td class="from-col">Built automated rebate calculator in Salesforce</td>
+      <td class="to-col-m">Designed and shipped an automated decisioning product — replaced manual calculation with a rule-based engine, reducing human error and improving auditability of a $890M programme. This is the pre-AI step toward agentic decisioning.</td>
+    </tr>
+    <tr>
+      <td class="from-col">PR rejection rate governance (49% → addressed)</td>
+      <td class="to-col-m">Identified a systemic quality failure signal from operational data, escalated with a structured problem definition and 3 corrective options, and implemented monitoring infrastructure to prevent recurrence. This is quality intelligence in action — what CIP does at AI scale.</td>
+    </tr>
+    <tr>
+      <td class="from-col">Annual Goals framework — first-ever, 2025</td>
+      <td class="to-col-m">Designed the OKR framework for a 60-person function from zero — defined objectives, key results hierarchy, and tracking infrastructure. Reported OKR progress monthly to MD and C-suite.</td>
+    </tr>
+  </table>
+
+  <div class="disc-box">
+    <div class="disc-icon">🎯</div>
+    <div class="disc-text">
+      <h4>The AI Differentiator Pitch — Practice This</h4>
+      <p>"I see AI as the leverage layer that eliminates administrative PM burden — routine status reporting, risk pattern detection, meeting note synthesis — freeing the PM to spend 100% of time on judgment and influence work. I've been building this capability deliberately: my programme health tracker uses AI to generate risk narratives from milestone data; my quality scorecard prototype uses anomaly detection to surface issues before they become governance escalations. This is the same problem CIP is solving for Bing at 1 billion-user scale. I understand the problem from the inside."</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- M TAB 7: INTERVIEW -->
+<div class="tab-panel" id="m-interview">
+
+  <div class="section-title section-title-m">Interview Preparation — Microsoft Senior PM (AI) CIP</div>
+  <div class="section-sub">STAR Story Bank + Case Framework for Microsoft PM Loops</div>
+
+  <div class="star-box">
+    <h4>Story 1 — Platform Product Ownership (JD: "strategic roadmap and product quality")</h4>
+    <div class="star-row"><span class="star-label star-label-m">Situation</span><span class="star-content">In 2021, the Collections function had no intelligence platform — decisions were made on informal data, manual calculations, and gut feel. There was no shared understanding of portfolio health across 36,000 units and AED 40B+ in future receivables.</span></div>
+    <div class="star-row"><span class="star-label star-label-m">Task</span><span class="star-content">Build the platform from scratch — no tools budget, no engineering team, just Excel and Salesforce access.</span></div>
+    <div class="star-row"><span class="star-label star-label-m">Action</span><span class="star-content">Ran discovery with 6 stakeholder groups (RMs, Accounts, MD office, Audit, CRM, Sales) to identify the most critical information gaps. Prioritised by business impact. Built 12 live data-connected reports covering delinquency, risk, cohort tracking, and forecasting. Built the Salesforce CRM architecture to support it. Added quality scorecard and automation in subsequent product iterations over 4 years.</span></div>
+    <div class="star-row"><span class="star-label star-label-m">Result</span><span class="star-content">Platform now runs 70+ reports across 2 geographies, consumed by 40+ RMs and C-suite daily. Collections scaled 14.9x. Platform still in production 6 years later — evidence of product-market fit. This is a 0-to-1 platform product story.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 2 — Internal Customer Discovery (JD: "customer engagement… integrate feedback into roadmap")</h4>
+    <div class="star-row"><span class="star-label star-label-m">Situation</span><span class="star-content">Sobha was launching a new payments section in its customer app. The vendor had defined a feature set. Collections team was a key internal customer — we had specific requirements the vendor had not considered.</span></div>
+    <div class="star-row"><span class="star-label star-label-m">Task</span><span class="star-content">Represent Collections as the internal customer — surface real requirements, push for scope expansion, and define the feature set that would drive genuine adoption.</span></div>
+    <div class="star-row"><span class="star-label star-label-m">Action</span><span class="star-content">Ran structured discovery sessions with RM team to map the exact payment journey (what do customers struggle with? what would make them prefer app over WhatsApp?). Defined 12 specific requirements. Pushed vendor beyond initial delivery scope on 4 of them. Defined user eligibility rules and payment journey flow.</span></div>
+    <div class="star-row"><span class="star-label star-label-m">Result</span><span class="star-content">Sobha One App payments launched with Collections-defined feature set. Drove 0 to 278 transactions in year 1 from a zero base. Identified friction points in month 2 and iterated — classic PM discovery-build-measure loop.</span></div>
+  </div>
+
+  <div class="star-box">
+    <h4>Story 3 — AI-Augmented Quality Monitoring (JD: "AI to continuously protect and elevate every experience")</h4>
+    <div class="star-row"><span class="star-label star-label-m">Situation</span><span class="star-content">In late 2025, the PR rejection rate reached 49% — a quality failure that was invisible until it became critical, because there was no systematic quality monitoring for the payment processing workflow.</span></div>
+    <div class="star-row"><span class="star-label star-label-m">Task</span><span class="star-content">Build a quality detection system that catches these failures earlier — before they become 49% rates. And simultaneously resolve the current crisis.</span></div>
+    <div class="star-row"><span class="star-label star-label-m">Action</span><span class="star-content">Diagnosed root cause using multi-source data analysis. Built a daily monitoring KPI (PR rejection rate %) that became a permanent governance metric. Escalated with structured problem definition. Designed the Salesforce quality scorecard (Q4 2025) to systematically detect quality deviations across all workflow steps — not just PR rejection. This is the same architecture CIP uses: instrument everything, detect early, escalate automatically.</span></div>
+    <div class="star-row"><span class="star-label star-label-m">Result</span><span class="star-content">Rejection rate controlled within 30 days. Quality scorecard now catches deviations across 8 workflow metrics before they escalate. The architecture — continuous monitoring → pattern detection → automated alert — directly mirrors CIP's quality intelligence model.</span></div>
+  </div>
+
+  <div class="section-title section-title-m" style="margin-top:24px">Microsoft PM Case Study Framework</div>
+
+  <div class="card card-insight">
+    <h3>Microsoft PM Case Template (Live in 1-Hour Round)</h3>
+    <p>Microsoft will give you a case like: <em>"Design a feature for CIP to improve issue detection coverage for Copilot experiences."</em> Use this framework:</p>
+    <ul style="margin-top:8px">
+      <li><strong>Clarify the goal:</strong> "Before I design, I want to make sure I understand what success looks like — is the goal detection coverage, detection speed, or detection accuracy?"</li>
+      <li><strong>Define the user:</strong> "Who is the primary user — the Copilot engineer, the QA lead, or the product manager?"</li>
+      <li><strong>Map the pain:</strong> "What does the workflow look like today without this feature? Where is the breakdown?"</li>
+      <li><strong>Prioritise solutions:</strong> Use a 2x2 (Impact vs. Effort). Pick the top-right quadrant. Explain your reasoning.</li>
+      <li><strong>Define success metrics:</strong> North Star + 2–3 input metrics. Include guardrail metrics (what should NOT get worse).</li>
+      <li><strong>Trade-offs:</strong> "The risk with this approach is [X]. Here's how I'd mitigate it."</li>
+    </ul>
+  </div>
+
+  <table class="sal-table sal-table-m">
+    <tr>
+      <th>Tough Question</th>
+      <th>Your Answer Frame</th>
+    </tr>
+    <tr>
+      <td>"You don't have AI/ML product experience. How would you PM an AI model?"</td>
+      <td>Acknowledge honestly. Then: "I've been building this deliberately — AI portfolio projects, Azure certifications, studying agentic workflows. My quality governance and data product background gives me the product instinct; the AI-specific lifecycle knowledge is what I'm actively building. I know what I don't know, and I have a plan to close it."</td>
+    </tr>
+    <tr>
+      <td>"How would you measure CIP's success?"</td>
+      <td>North Star: % of P0/P1 quality issues caught before user exposure. Input metrics: detection coverage (% of product surface instrumented), detection latency (time from issue occurrence to CIP alert), false positive rate (AI noise). Guardrail: don't increase engineering team review burden.</td>
+    </tr>
+    <tr>
+      <td>"Tell me about a product that failed."</td>
+      <td>Use the governance reports that teams stopped consuming in 2022 — built them, but some weren't used. Lesson: I built without enough discovery. Iterated to identify the 6 reports that were truly decision-driving vs. the 6 that were informational noise. Reduced volume, increased relevance. That's the discovery-iterate loop.</td>
+    </tr>
+  </table>
+
+</div>
+</div>
+<!-- END MICROSOFT ROLE -->
+
+<footer>
+  Priyanuj Deka — Dual Role Career Intelligence Playbook &nbsp;|&nbsp; Qualcomm Sr. PM + Microsoft Sr. PM (AI/CIP) &nbsp;|&nbsp; March 2026 &nbsp;|&nbsp; Confidential
+</footer>
+
+<script>
+  let activeRole = 'q';
+  let activeTabs = { q: 'decode', m: 'decode' };
+
+  function switchRole(role) {
+    activeRole = role;
+
+    // Show/hide role blocks
+    document.getElementById('role-q').style.display = role === 'q' ? 'block' : 'none';
+    document.getElementById('role-m').style.display = role === 'm' ? 'block' : 'none';
+
+    // Update switcher buttons
+    document.getElementById('btn-q').className = 'role-btn' + (role === 'q' ? ' active-q' : '');
+    document.getElementById('btn-m').className = 'role-btn' + (role === 'm' ? ' active-m' : '');
+
+    // Update timeline tag
+    document.getElementById('role-timeline-tag').textContent =
+      role === 'q' ? '⏱ 3–4 Month Target' : '⏱ 12–18 Month Target';
+
+    // Scroll to top of content
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showTab(role, tab) {
+    activeTabs[role] = tab;
+
+    // Hide all panels for this role
+    const panels = document.querySelectorAll(`#role-${role} .tab-panel`);
+    panels.forEach(p => p.classList.remove('active'));
+
+    // Show selected panel
+    const target = document.getElementById(`${role}-${tab}`);
+    if (target) target.classList.add('active');
+
+    // Update tab buttons
+    const buttons = document.querySelectorAll(`#nav-${role} .tab-btn`);
+    buttons.forEach(b => {
+      b.classList.remove('active-q', 'active-m');
+    });
+    event.target.classList.add(`active-${role}`);
+
+    // Scroll to nav
+    const nav = document.getElementById(`nav-${role}`);
+    if (nav) nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+</body>
+</html>
