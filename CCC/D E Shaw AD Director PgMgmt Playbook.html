@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>D.E. Shaw DESIS — AD/Director Program Management · Career Playbook · Priyanuj Deka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f3ece0;
+    --paper-deep: #ebe2d2;
+    --ink: #1a1814;
+    --ink-soft: #4a443a;
+    --ink-mute: #756d5e;
+    --rule: #c9bda5;
+    --rule-soft: #ddd0b8;
+    --oxblood: #6f1d24;
+    --oxblood-deep: #4d1218;
+    --gold: #9a7a3c;
+    --gold-soft: #c4a76a;
+    --paper-card: #f8f3e8;
+    --green: #4a6741;
+    --amber: #a86b1f;
+    --red: #7a1f2a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Geist', system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.55;
+    font-size: 15px;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(154,122,60,0.04) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(111,29,36,0.03) 0%, transparent 50%);
+  }
+  .container { max-width: 920px; margin: 0 auto; padding: 56px 48px 96px; }
+  
+  /* HEADER */
+  .masthead {
+    border-top: 4px solid var(--ink);
+    border-bottom: 1px solid var(--rule);
+    padding: 32px 0 28px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .masthead::after {
+    content: ""; position: absolute; top: -10px; left: 0; right: 0; height: 1px;
+    background: var(--ink);
+  }
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--oxblood);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .eyebrow .sep { color: var(--rule); margin: 0 10px; }
+  h1 {
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: 44px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    font-variation-settings: "opsz" 48;
+    margin-bottom: 8px;
+  }
+  h1 em { font-style: italic; color: var(--oxblood); font-weight: 400; }
+  .subhead {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 20px;
+    color: var(--ink-soft);
+    margin-top: 14px;
+    line-height: 1.4;
+  }
+  .meta {
+    margin-top: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.05em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .meta span { display: flex; gap: 6px; }
+  .meta span b { color: var(--ink); font-weight: 600; }
+  
+  /* STATS BAR */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--rule);
+    background: var(--paper-card);
+    margin: 32px 0 48px;
+  }
+  .stat {
+    padding: 20px 22px;
+    border-right: 1px solid var(--rule);
+    position: relative;
+  }
+  .stat:last-child { border-right: none; }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-family: 'Newsreader', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1;
+    font-variation-settings: "opsz" 36;
+  }
+  .stat-value .arrow { color: var(--oxblood); font-weight: 400; margin: 0 4px; }
+  .stat-sub { font-size: 11px; color: var(--ink-mute); margin-top: 4px; }
+  
+  /* TOC */
+  .toc {
+    border: 1px solid var(--rule);
+    background: var(--paper-card);
+    padding: 20px 24px;
+    margin-bottom: 48px;
+    columns: 2;
+    column-gap: 32px;
+  }
+  .toc-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--oxblood);
+    margin-bottom: 12px;
+    column-span: all;
+    border-bottom: 1px solid var(--rule-soft);
+    padding-bottom: 8px;
+  }
+  .toc a {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 4px 0;
+    border-bottom: 1px dotted transparent;
+    transition: color 0.15s, border-color 0.15s;
+    break-inside: avoid;
+  }
+  .toc a:hover { color: var(--oxblood); border-bottom-color: var(--oxblood); }
+  .toc a .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-mute);
+    margin-right: 10px;
+  }
+  
+  /* SECTIONS */
+  section { margin-bottom: 56px; scroll-margin-top: 20px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 10px;
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--oxblood);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  h2 {
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: 26px;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    font-variation-settings: "opsz" 32;
+  }
+  h3 {
+    font-family: 'Newsreader', serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--oxblood-deep);
+    margin: 28px 0 12px;
+    letter-spacing: -0.005em;
+  }
+  h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    margin: 20px 0 10px;
+    font-weight: 500;
+  }
+  p { margin-bottom: 14px; color: var(--ink-soft); }
+  p strong { color: var(--ink); font-weight: 600; }
+  
+  /* PULL QUOTE */
+  .pull {
+    font-family: 'Newsreader', serif;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.45;
+    color: var(--ink);
+    border-left: 3px solid var(--oxblood);
+    padding: 14px 0 14px 24px;
+    margin: 24px 0;
+    font-weight: 400;
+    font-variation-settings: "opsz" 24;
+  }
+  .pull-attrib {
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    font-size: 10px;
+    color: var(--ink-mute);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 10px;
+    display: block;
+  }
+  
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 20px;
+    font-size: 13.5px;
+    background: var(--paper-card);
+    border: 1px solid var(--rule);
+  }
+  th {
+    text-align: left;
+    padding: 11px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    background: var(--paper-deep);
+    border-bottom: 1px solid var(--rule);
+    font-weight: 500;
+    vertical-align: top;
+  }
+  td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--rule-soft);
+    color: var(--ink-soft);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  td:first-child { color: var(--ink); }
+  tr:last-child td { border-bottom: none; }
+  td strong, td b { color: var(--ink); font-weight: 600; }
+  .num-cell {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    color: var(--oxblood) !important;
+    text-align: right;
+    white-space: nowrap;
+  }
+  
+  /* FIT RUBRIC BAR */
+  .rubric-row {
+    display: grid;
+    grid-template-columns: 200px 60px 1fr 60px;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 13px;
+  }
+  .rubric-row:last-child { border-bottom: none; }
+  .rubric-row.total {
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    font-weight: 600;
+    padding: 12px 0;
+    margin-top: 6px;
+  }
+  .rubric-row.total .rubric-label { color: var(--ink); font-weight: 600; }
+  .rubric-label { color: var(--ink); font-weight: 500; }
+  .rubric-score {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    color: var(--oxblood);
+    text-align: right;
+  }
+  .rubric-bar {
+    height: 6px;
+    background: var(--rule-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .rubric-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--oxblood) 0%, var(--oxblood-deep) 100%);
+  }
+  .rubric-note {
+    font-size: 11px;
+    color: var(--ink-mute);
+    font-style: italic;
+  }
+  
+  /* CALLOUTS */
+  .callout {
+    background: var(--paper-card);
+    border-left: 3px solid var(--gold);
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 13.5px;
+  }
+  .callout.warn { border-left-color: var(--oxblood); }
+  .callout.strong { border-left-color: var(--green); }
+  .callout-head {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--oxblood);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .callout.strong .callout-head { color: var(--green); }
+  .callout p { margin-bottom: 8px; color: var(--ink-soft); }
+  .callout p:last-child { margin-bottom: 0; }
+  
+  /* LISTS */
+  ul.refined { list-style: none; padding-left: 0; margin: 12px 0 20px; }
+  ul.refined li {
+    padding: 7px 0 7px 24px;
+    position: relative;
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  ul.refined li:last-child { border-bottom: none; }
+  ul.refined li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--oxblood);
+    font-weight: 500;
+  }
+  ul.refined li strong { color: var(--ink); }
+  
+  /* NUMBERED LISTS */
+  ol.steps { list-style: none; counter-reset: step; padding: 0; }
+  ol.steps li {
+    counter-increment: step;
+    padding: 14px 0 14px 48px;
+    position: relative;
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+  ol.steps li:last-child { border-bottom: none; }
+  ol.steps li::before {
+    content: counter(step, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--oxblood);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  ol.steps li strong { color: var(--ink); }
+  
+  /* COLUMN GRID */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin: 16px 0;
+  }
+  .col-card {
+    background: var(--paper-card);
+    border: 1px solid var(--rule);
+    padding: 18px 20px;
+  }
+  .col-card h4 { margin-top: 0; color: var(--oxblood); }
+  
+  /* PRIORITY TAGS */
+  .pri {
+    display: inline-block;
+    padding: 2px 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .pri-high { color: var(--oxblood); border-color: var(--oxblood); background: rgba(111,29,36,0.06); }
+  .pri-med  { color: var(--gold); border-color: var(--gold); background: rgba(154,122,60,0.06); }
+  .pri-low  { color: var(--ink-mute); border-color: var(--rule); background: var(--paper-deep); }
+  
+  /* STATUS BADGES */
+  .badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .badge-parallel { background: var(--gold); color: var(--paper); }
+  .badge-active { background: var(--oxblood); color: var(--paper); }
+  
+  /* FOOTER */
+  footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.04em;
+  }
+  footer p { color: var(--ink-mute); margin-bottom: 6px; }
+  
+  /* RESPONSIVE */
+  @media (max-width: 720px) {
+    .container { padding: 32px 24px 64px; }
+    h1 { font-size: 32px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(2) { border-right: none; }
+    .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--rule); }
+    .toc { columns: 1; }
+    .two-col { grid-template-columns: 1fr; }
+    .rubric-row { grid-template-columns: 1fr 50px; }
+    .rubric-bar, .rubric-note { display: none; }
+    .meta { font-size: 10px; }
+  }
+  
+  @media print {
+    body { background: white; }
+    .container { padding: 0; max-width: none; }
+    section { page-break-inside: avoid; }
+    .toc { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="eyebrow">
+    Career Playbook <span class="sep">·</span> Confidential <span class="sep">·</span> v1.0 <span class="sep">·</span> May 2026
+  </div>
+  <h1>D.&nbsp;E.&nbsp;Shaw <em>DESIS</em><br>Associate Director / Director — Program Management</h1>
+  <p class="subhead">A program-management operating system, translated into discretionary investing — bridging US BUs, India research teams, and tech, with GenAI effectiveness baked in.</p>
+  <div class="meta">
+    <span><b>ROLE ID</b> deshaw-desis-pm-director</span>
+    <span><b>LOCATION</b> Gurugram · Bengaluru · Hyderabad</span>
+    <span><b>FOR</b> Priyanuj Deka</span>
+    <span><b>BUILT</b> 18 May 2026</span>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-label">Fit Score</div>
+    <div class="stat-value">74<span class="arrow">→</span>82</div>
+    <div class="stat-sub">After referral + framing</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Pipeline Status</div>
+    <div class="stat-value" style="font-size:18px;padding-top:6px;"><span class="badge badge-parallel">Parallel</span></div>
+    <div class="stat-sub">Apply after AmEx · Oaktree</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Total Comp (Est.)</div>
+    <div class="stat-value">₹85L–1.4Cr</div>
+    <div class="stat-sub">AD band ₹85–110L · Dir ₹1.1–1.4Cr</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Prep Window</div>
+    <div class="stat-value">4–6 wk</div>
+    <div class="stat-sub">No new certs required</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="toc-title">Contents</div>
+  <a href="#s1"><span class="num">01</span>Role Identity &amp; Why It Matters</a>
+  <a href="#s2"><span class="num">02</span>Unlock Phrase</a>
+  <a href="#s3"><span class="num">03</span>Reframe — Sobha to DESIS</a>
+  <a href="#s4"><span class="num">04</span>Fit Rubric (74 → 82)</a>
+  <a href="#s5"><span class="num">05</span>Strengths &amp; Gaps</a>
+  <a href="#s6"><span class="num">06</span>STAR Mapping</a>
+  <a href="#s7"><span class="num">07</span>AI Adoption Intelligence Layer</a>
+  <a href="#s8"><span class="num">08</span>Vocab Delta — Discretionary Investing</a>
+  <a href="#s9"><span class="num">09</span>4–6 Week Prep Plan</a>
+  <a href="#s10"><span class="num">10</span>Interview Prep — 20 Questions</a>
+  <a href="#s11"><span class="num">11</span>Experience-Gate Response Script</a>
+  <a href="#s12"><span class="num">12</span>Application Strategy</a>
+  <a href="#s13"><span class="num">13</span>Salary &amp; Negotiation</a>
+  <a href="#s14"><span class="num">14</span>Risk Register</a>
+  <a href="#s15"><span class="num">15</span>Action Pipeline</a>
+</nav>
+
+<!-- 1 ROLE IDENTITY -->
+<section id="s1">
+  <div class="section-header"><span class="section-num">01</span><h2>Role Identity &amp; Why It Matters</h2></div>
+
+  <h4>What This Role Actually Is</h4>
+  <p>Central liaison between D.&nbsp;E.&nbsp;Shaw's US discretionary investing business units, the India-based Financial Research-Credit team, local support functions, and specific technology teams. The mandate combines four operating layers: program management of strategic priorities from the front office; institutionalization of processes in a growing team; people leadership across hiring, coaching, and performance management; and tracking the effectiveness of the firm's generative-AI programme alongside cross-office best-practice exchange.</p>
+
+  <p>In plain operating terms: <strong>this is a Chief-of-Staff-to-DESIS-leadership role with a Program Management mandate.</strong> The person makes the operating system of US-India investment research collaboration run cleanly — designing workflows, tracking compliance, removing bottlenecks, building team capability, and instrumenting the GenAI portfolio with measurable outcomes.</p>
+
+  <h4>Why It Matters in Your Career Arc</h4>
+  <p>D.&nbsp;E.&nbsp;Shaw is among the most selective hedge funds globally. DESIS — the India operating arm — has been on a multi-year buildout to deepen front-office partnership with US discretionary investing businesses. A Program Management role at AD/Director altitude in DESIS sits at the intersection of three career-defining attributes: <strong>operating scope</strong> (cross-BU, cross-geo), <strong>compensation ceiling</strong> (one of the highest in India financial-services GCC tier), and <strong>brand equity</strong> (DESCO India is a marquee credential that opens any subsequent door — quant funds, alternative managers, PE/VC ops leadership, or principal investing roles).</p>
+
+  <p>Crucially, the JD names two attributes that are <em>uniquely yours</em>: program management of process institutionalization in a growing team (your last six years at Sobha, exactly), and tracking GenAI project effectiveness (your 12-project AI-augmented operations portfolio is the rarest hook in this candidate pool). The role is built for someone like you — the gap is tenure and FS continuity, not capability.</p>
+
+  <h4>Distinction from Existing D.E. Shaw Card</h4>
+  <div class="callout warn">
+    <div class="callout-head">Important — This Is Not Your MBOSS Card</div>
+    <p>Your existing pipeline contains a <strong>D.E. Shaw MBOSS Sr Manager</strong> card (role ID <code>deshaw-mboss</code>, fit 68, exploratory). That is a Middle/Back Office Support Services operating role focused on post-trade lifecycle — settlement, NAV, corporate actions, reconciliation. It is a different function at a lower level. This DESIS PM role is materially stronger fit and higher altitude. Treat it as a separate, parallel candidate. Both cards now coexist in the pipeline.</p>
+  </div>
+</section>
+
+<!-- 2 UNLOCK PHRASE -->
+<section id="s2">
+  <div class="section-header"><span class="section-num">02</span><h2>Unlock Phrase</h2></div>
+  <p>The first 60 seconds of any DESIS conversation. Deploy verbatim in recruiter screens and as interview opener.</p>
+
+  <div class="pull">
+    "I run a 77-person operations function that institutionalized processes through a 14-finding governance register, a T−25/T+30 operating rhythm, and a 12-project AI-augmented portfolio with measurable adoption tracking. The DESIS PM mandate is the same operating system applied to discretionary investing — bridging US BUs, India research teams, and tech, with GenAI effectiveness instrumentation baked in. I've been doing this work for six years — I just haven't been calling it Program Management."
+    <span class="pull-attrib">— Opening, 35 seconds</span>
+  </div>
+
+  <p>The phrase does three jobs at once: it names the operating system (not just achievements), it mirrors the JD's exact language ("institutionalize processes," "tracking and assessing GenAI projects"), and it pre-empts the title-translation question by reframing it on your terms.</p>
+</section>
+
+<!-- 3 REFRAME -->
+<section id="s3">
+  <div class="section-header"><span class="section-num">03</span><h2>Reframe — Sobha to DESIS</h2></div>
+  <p>The 1:1 operational mapping. Memorize this table; every interview question can route through it.</p>
+
+  <table>
+    <thead><tr><th>Your Sobha Asset</th><th>DESIS Equivalent</th></tr></thead>
+    <tbody>
+      <tr><td><strong>77-person two-geography team</strong> (35 Dubai + 42 India)</td><td>"Large groups across diverse workflows" (preferred qual) — direct match</td></tr>
+      <tr><td><strong>12-project AI-augmented operations portfolio</strong> with adoption tracking</td><td>"Tracking and assessing effectiveness of GenAI projects" — JD verbatim</td></tr>
+      <tr><td><strong>Salesforce 0→1</strong> with 6-stakeholder discovery → 70+ live reports</td><td>Cross-unit program execution with tech team partnership</td></tr>
+      <tr><td><strong>T−25/T+30 operating rhythm</strong> (proprietary 55-day cycle)</td><td>Designing workflow processes to streamline operations and ensure accountability</td></tr>
+      <tr><td><strong>14-finding risk register</strong> with proactive CCO escalations</td><td>Designing and maintaining detailed process documentation; tracking compliance</td></tr>
+      <tr><td><strong>PR rejection 49% standard</strong> held under stakeholder pressure</td><td>Implementing best practices across diverse teams under business-side pressure</td></tr>
+      <tr><td><strong>PCC TAT 20→3 days</strong> at 3× volume</td><td>Proactively identifying bottlenecks and implementing new solutions for efficiency</td></tr>
+      <tr><td><strong>MD/CEO altitude</strong> programme defence (NPV AED 652M)</td><td>Significant exposure to senior stakeholders across global offices</td></tr>
+      <tr><td><strong>4 legal entities</strong> · AED 86.8B portfolio · global multicultural team</td><td>Cross-BU / global multicultural operating context</td></tr>
+      <tr><td><strong>Sobha team capability build</strong> (members authored MD-approved docs autonomously)</td><td>Supporting the team with learning &amp; development resources; hiring + coaching</td></tr>
+    </tbody>
+  </table>
+
+  <p>Every preferred qualification on the JD maps to a delivered Sobha outcome. The gap is vocabulary, not capability — and vocabulary closes in four weeks.</p>
+</section>
+
+<!-- 4 FIT RUBRIC -->
+<section id="s4">
+  <div class="section-header"><span class="section-num">04</span><h2>Fit Rubric — 74 → 82</h2></div>
+  <p>Ten-dimension scoring. Raw 77, net adjustment −3, final 74. Addressable to 82 in 4–6 weeks through referral activation, cover-note framing, and AI Adoption Intelligence Layer pitch.</p>
+
+  <div style="margin: 20px 0;">
+    <div class="rubric-row">
+      <span class="rubric-label">Functional match</span>
+      <span class="rubric-score">9/10</span>
+      <div class="rubric-bar"><div class="rubric-bar-fill" style="width:90%"></div></div>
+      <span class="rubric-note">PM + process inst. = bullseye</span>
+    </div>
+    <div class="rubric-row">
+      <span class="rubric-label">Scale match</span>
+      <span class="rubric-score">8/10</span>
+      <div class="rubric-bar"><div class="rubric-bar-fill" style="width:80%"></div></div>
+      <span class="rubric-note">77-person matches preferred qual</span>
+    </div>
+    <div class="rubric-row">
+      <span class="rubric-label">Domain knowledge</span>
+      <span class="rubric-score">5/10</span>
+      <div class="rubric-bar"><div class="rubric-bar-fill" style="width:50%"></div></div>
+      <span class="rubric-note">Discretionary investing vocab gap</span>
+    </div>
+    <div class="rubric-row">
+      <span class="rubric-label">Tech tooling</span>
+      <span class="rubric-score">6/10</span>
+      <div class="rubric-bar"><div class="rubric-bar-fill" style="width:60%"></div></div>
+      <span class="rubric-note">Standard PM tools fine; SQL nice-to-have</span>
+    </div>
+    <div class="rubric-row">
+      <span class="rubric-label">People management</span>
+      <span class="rubric-score">9/10</span>
+      <div class="rubric-bar"><div class="rubric-bar-fill" style="width:90%"></div></div>
+      <span class="rubric-note">Hiring/coaching/perf-mgmt at 77-person scale</span>
+    </div>
+    <div class="rubric-row">
+      <span class="rubric-label">Stakeholder altitude</span>
+      <span class="rubric-score">9/10</span>
+      <div class="rubric-bar"><div class="rubric-bar-fill" style="width:90%"></div></div>
+      <span class="rubric-note">MD/CEO + cross-geo global multicultural</span>
+    </div>
+    <div class="rubric-row">
+      <span class="rubric-label">Process &amp; systems</span>
+      <span class="rubric-score">10/10</span>
+      <div class="rubric-bar"><div class="rubric-bar-fill" style="width:100%"></div></div>
+      <span class="rubric-note">T−25/T+30 + 14-finding + PR 49% + SF</span>
+    </div>
+    <div class="rubric-row">
+      <span class="rubric-label">Ambiguity / solution-centric</span>
+      <span class="rubric-score">8/10</span>
+      <div class="rubric-bar"><div class="rubric-bar-fill" style="width:80%"></div></div>
+      <span class="rubric-note">NPV defence + Sobha One App honest adoption</span>
+    </div>
+    <div class="rubric-row">
+      <span class="rubric-label">GenAI tracking</span>
+      <span class="rubric-score">9/10</span>
+      <div class="rubric-bar"><div class="rubric-bar-fill" style="width:90%"></div></div>
+      <span class="rubric-note">12-project portfolio — rare differentiator</span>
+    </div>
+    <div class="rubric-row">
+      <span class="rubric-label">Experience tenure</span>
+      <span class="rubric-score">4/10</span>
+      <div class="rubric-bar"><div class="rubric-bar-fill" style="width:40%"></div></div>
+      <span class="rubric-note">~9 yrs vs 12–20 yr qual — biggest gap</span>
+    </div>
+    <div class="rubric-row total">
+      <span class="rubric-label">RAW TOTAL</span>
+      <span class="rubric-score">77/100</span>
+      <div class="rubric-bar"><div class="rubric-bar-fill" style="width:77%"></div></div>
+      <span class="rubric-note">Pre-adjustment</span>
+    </div>
+  </div>
+
+  <h4>Net Adjustments</h4>
+  <ul class="refined">
+    <li><strong>BITS + IIM dual credential</strong> aligned with DESIS tier-1 hiring bar &nbsp; <span class="rubric-score" style="float:right">+2</span></li>
+    <li><strong>No financial services team management</strong> — recruiter screen risk &nbsp; <span class="rubric-score" style="float:right">−3</span></li>
+    <li><strong>Real-estate-to-quant cultural distance</strong> — industry continuity question &nbsp; <span class="rubric-score" style="float:right">−2</span></li>
+    <li><strong>12-project AI portfolio</strong> uniqueness in candidate pool &nbsp; <span class="rubric-score" style="float:right">+2</span></li>
+    <li><strong>Experience tenure gate</strong> compounding screening risk &nbsp; <span class="rubric-score" style="float:right">−2</span></li>
+  </ul>
+
+  <p><strong>Final fitCurrent: 74. fitTarget: 82</strong> after referral activation, cover-note experience-gate framing, and AI Adoption Intelligence Layer 1-pager prepared as interview artifact.</p>
+</section>
+
+<!-- 5 STRENGTHS & GAPS -->
+<section id="s5">
+  <div class="section-header"><span class="section-num">05</span><h2>Strengths &amp; Gaps</h2></div>
+
+  <div class="two-col">
+    <div class="col-card">
+      <h4>Strengths — Lead With These</h4>
+      <ul class="refined">
+        <li><strong>Program management operating system.</strong> T−25/T+30 + 14-finding register + PR 49% governance + Salesforce 0→1 — proven institutional plumbing.</li>
+        <li><strong>77-person cross-geo team leadership.</strong> Hiring, coaching, performance management at scale that meets the JD's preferred qual ceiling.</li>
+        <li><strong>12-project AI-augmented portfolio.</strong> Active adoption tracking is the rarest credential in this candidate pool — exact match for the GenAI effectiveness JD ask.</li>
+        <li><strong>Senior stakeholder altitude.</strong> MD/CEO defended programmes; CRO and CCO direct engagement — comfortable at Director-band exposure.</li>
+        <li><strong>BITS + IIM dual credential.</strong> Matches DESIS tier-1 hiring bar; mitigates tenure gap signal.</li>
+        <li><strong>Cultural fit profile.</strong> High-C / High-S / Restorative / Analytical aligns with DESCO rigor-first culture (lower High-D demand than Google or consulting).</li>
+        <li><strong>Solution-centric in ambiguity.</strong> Sobha One App honest-adoption story is interview gold — most candidates inflate; you don't.</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h4>Gaps — Close or Frame</h4>
+      <ul class="refined">
+        <li><strong>Experience tenure.</strong> ~9 years total vs 12–20 year basic qualification. Biggest gap; address head-on in cover note and interview opener — frame as scope-equivalence, not chronology.</li>
+        <li><strong>Financial services team management.</strong> Zero direct FS exposure. Reframe Sobha as financial-instrument receivables (AED 12.97B credit lifecycle portfolio) — closest defensible analog.</li>
+        <li><strong>Discretionary investing workflow.</strong> Front-office to credit-research handoff, sector coverage models, investment thesis lifecycle. Preferred-not-required qual. 4–6 hrs structured reading closes the basic literacy gap.</li>
+        <li><strong>DESCO culture intensity.</strong> Quant-first, fast-paced, low-tolerance for ambiguity-in-process. Acknowledge in interview without overclaiming familiarity.</li>
+        <li><strong>Real-estate to quant industry distance.</strong> Bridge via Howard Marks memos (3 most recent — same prep as Oaktree track) + DESCO investor letters.</li>
+        <li><strong>Credit research specifics.</strong> Coverage universe, internal rating frameworks, idea memos. Basic literacy only — you're a PM, not the credit analyst.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 6 STAR MAPPING -->
+<section id="s6">
+  <div class="section-header"><span class="section-num">06</span><h2>STAR Story Mapping</h2></div>
+  <p>Top six stories from your STAR Bank V3, reframed for DESIS PM. Full story text remains in <code>STAR_STORY_BANK_V3.txt</code> — search by ID. Reframe lines only below.</p>
+
+  <table>
+    <thead><tr><th style="width:60px">ID</th><th>Headline</th><th>DESIS PM Reframe</th></tr></thead>
+    <tbody>
+      <tr><td><strong>S1</strong></td><td>14.9× scale (AED 867M → 12.97B)</td><td>Program execution at scale without governance compromise — direct analog for institutionalizing process in a growing team.</td></tr>
+      <tr><td><strong>S2</strong></td><td>PR 49% rejection defence</td><td>Governance standard held under business-side pressure — proves assertiveness in senior forums, the known development area.</td></tr>
+      <tr><td><strong>S3</strong></td><td>PCC TAT 20→3 days at 3× volume</td><td>Bottleneck identification and process redesign — JD verbatim ("proactively identifying bottlenecks and implementing new solutions").</td></tr>
+      <tr><td><strong>S5</strong></td><td>Salesforce 0→1 with 6 stakeholders</td><td>Cross-functional program execution with tech team partnership — proves you can lead solution design across BUs.</td></tr>
+      <tr><td><strong>S9</strong></td><td>77-person team capability build</td><td>People leadership at scale; team authored MD-approved documents autonomously — proves L&amp;D operating mandate.</td></tr>
+      <tr><td><strong>S15</strong></td><td>SQL migration programme</td><td>Systems modernization discipline and tool adoption rigor — analog for tech team partnership on infrastructure programmes.</td></tr>
+    </tbody>
+  </table>
+
+  <p>Two additional stories worth prepping fresh from the V3 bank (search by category enum): one drawn from your AI-portfolio adoption-tracking experience (for the GenAI effectiveness JD ask), and one from the proactive-escalation pattern (3 CCO escalations) for the "solution-centric in ambiguity" theme.</p>
+</section>
+
+<!-- 7 AI LAYER -->
+<section id="s7">
+  <div class="section-header"><span class="section-num">07</span><h2>AI Adoption Intelligence Layer</h2></div>
+  <p>The differentiator that very few candidates in this pool can credibly offer. Build the 1-pager in Week 3 of prep; deliver as interview artifact.</p>
+
+  <h4>The Pitch (2-minute version)</h4>
+  <div class="pull">
+    "Every fund has built a GenAI use-case backlog. Few have built the operating system to measure which projects deserve more investment, which patterns replicate across offices, and where adoption is stalling. The Adoption Intelligence Layer is that operating system. It is how Program Management adds compounding value to a GenAI portfolio — not by running more pilots, but by industrializing the ones that work."
+  </div>
+
+  <h4>Three Components</h4>
+
+  <table>
+    <thead><tr><th style="width:30%">Component</th><th>What It Measures</th><th>Build Source</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>1. Project ROI Scorecard</strong></td>
+        <td>Adoption velocity (% of intended users active by week 4 / 12 / 26), value capture (hrs saved per week, error rate delta, decision time delta), and quality drift (error rate over time). Quarterly review cadence with kill / scale / hold decisions.</td>
+        <td>P3 analog — AI Quality Scorecard prototype already in your portfolio</td>
+      </tr>
+      <tr>
+        <td><strong>2. Cross-Office Pattern Library</strong></td>
+        <td>Structured catalogue of GenAI use cases across DESIS Gurugram, Bengaluru, Hyderabad with success / failure annotations and replication-readiness scoring (1–5). Surfaces what to copy versus what to localize.</td>
+        <td>New build — directly addresses JD ask: "facilitating exchange of best practices across offices and groups"</td>
+      </tr>
+      <tr>
+        <td><strong>3. Adoption Velocity Dashboard</strong></td>
+        <td>Leading and lagging indicators of tool adoption across discretionary investing workflows. Detects bottlenecks (training gap, integration friction, trust deficit) before they become structural. Auto-flagged to Program Mgmt + tool owner.</td>
+        <td>P5 analog — Platform Adoption Intelligence Dashboard in your Microsoft prep portfolio</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Why It Wins</h4>
+  <ul class="refined">
+    <li><strong>Mirrors the JD verbatim.</strong> The phrase "tracking and assessing the effectiveness of our Generative AI projects" is in the responsibilities list. Most candidates will respond with "I'm familiar with GenAI tools." You arrive with a 3-component operating framework.</li>
+    <li><strong>Mirrors the cross-office best-practice ask.</strong> The Pattern Library component directly answers the second strategic priority named in the JD.</li>
+    <li><strong>Maps to existing portfolio.</strong> Two components reuse P3 + P5 from your build pipeline — no new portfolio work required; only repositioning.</li>
+    <li><strong>Operating discipline framing.</strong> "Industrializing the ones that work" is the language of a Program Manager, not a PM or analyst — signals altitude.</li>
+  </ul>
+</section>
+
+<!-- 8 VOCAB DELTA -->
+<section id="s8">
+  <div class="section-header"><span class="section-num">08</span><h2>Vocab Delta — Discretionary Investing</h2></div>
+  <p>Fifteen terms beyond your existing MBOSS vocab block. The MBOSS block (T+1 settlement, NAV, corp actions, FIX, OMS) remains useful but is back-office heavy — this role is front-office-adjacent program management. Drop settlement minutiae; pick up investment-process and operating-rhythm language.</p>
+
+  <table>
+    <thead><tr><th style="width:30%">Term</th><th>Definition</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Discretionary investing</strong></td><td>Human-judgment-driven investment process (vs systematic/quant). DESCO runs both; DESIS PM supports the discretionary side.</td></tr>
+      <tr><td><strong>Front office</strong></td><td>Investment professionals making portfolio decisions — portfolio managers, sector analysts, traders.</td></tr>
+      <tr><td><strong>Financial Research-Credit team</strong></td><td>India-based credit analyst function producing investment recommendations to support US discretionary investing.</td></tr>
+      <tr><td><strong>Investment thesis</strong></td><td>Formal written rationale for an investment position — what we believe, why, what would prove us wrong.</td></tr>
+      <tr><td><strong>Sector coverage</strong></td><td>An analyst's named industry/asset specialization (e.g., Healthcare HY, Energy Distressed). Coverage maps are core team-design output.</td></tr>
+      <tr><td><strong>Portfolio Manager (PM)</strong></td><td>Accountable for buy/sell decisions on a strategy. Distinct from "Program Manager" — clarify when in doubt.</td></tr>
+      <tr><td><strong>BU optimization</strong></td><td>Business unit-level process, cost, or effectiveness improvement programmes — a recurring DESCO ops mandate.</td></tr>
+      <tr><td><strong>Operating rhythm</strong></td><td>The recurring leadership cadence — LT (leadership team) meetings, MBR / QBR (monthly / quarterly business review), executive syncs.</td></tr>
+      <tr><td><strong>L&amp;D (Learning &amp; Development)</strong></td><td>Formal capability-building programme — curricula, mentorship structures, certifications, internal training.</td></tr>
+      <tr><td><strong>GenAI effectiveness metrics</strong></td><td>Adoption velocity, value capture (time saved, decision speed), accuracy, capability uplift, ROI per project.</td></tr>
+      <tr><td><strong>Best-practice exchange</strong></td><td>Structured knowledge transfer across geographies — case libraries, communities of practice, learning forums.</td></tr>
+      <tr><td><strong>Workflow institutionalization</strong></td><td>Moving from individual heroics to documented, repeatable, scalable process — JD's first stated priority.</td></tr>
+      <tr><td><strong>Process documentation</strong></td><td>Formal capture of workflow steps, owners, SLAs, escalation paths, control points. Living documents.</td></tr>
+      <tr><td><strong>Bottleneck mapping</strong></td><td>Diagnostic technique for finding where flow breaks down — queue lengths, wait times, rework rates.</td></tr>
+      <tr><td><strong>Idea memo</strong></td><td>The internal write-up an analyst produces to pitch an investment idea to a PM. Lifecycle from idea to memo to vote is a candidate target for institutionalization.</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 9 PREP PLAN -->
+<section id="s9">
+  <div class="section-header"><span class="section-num">09</span><h2>4–6 Week Prep Plan</h2></div>
+  <p>No new certifications required. Existing tracks (PMI-ACP for Qualcomm, AZ-900 for Microsoft) auto-apply if completed. The prep here is reading + artifact build, not credentialing.</p>
+
+  <table>
+    <thead><tr><th style="width:18%">Week</th><th style="width:36%">Theme</th><th>Deliverables</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Week 1</strong></td>
+        <td>Discretionary investing primer</td>
+        <td>Read 3 most recent Howard Marks memos (cross-leverage Oaktree prep). Read D.E. Shaw public investing-philosophy materials. Skim Investopedia "credit research lifecycle." ~8 hrs.</td>
+      </tr>
+      <tr>
+        <td><strong>Week 2</strong></td>
+        <td>DESCO culture &amp; operating context</td>
+        <td>Read DESCO careers blog + interview accounts. Identify 2 DESIS leaders on LinkedIn for referral path. Map BITS + IIM-U alumni at DESCO. ~6 hrs.</td>
+      </tr>
+      <tr>
+        <td><strong>Week 3</strong></td>
+        <td>Build AI Adoption Intelligence Layer 1-pager</td>
+        <td>Single-page artifact — 3 components, sample metrics, interview-deliverable. Use existing P3 + P5 prototypes as reference. Print-ready. ~6 hrs.</td>
+      </tr>
+      <tr>
+        <td><strong>Week 4</strong></td>
+        <td>GenAI effectiveness frameworks</td>
+        <td>Read BCG and McKinsey 2025 GenAI ROI reports (free, public). Memorize 2 named frameworks. Build vocab fluency. ~5 hrs.</td>
+      </tr>
+      <tr>
+        <td><strong>Week 5 (optional)</strong></td>
+        <td>Interview drilling</td>
+        <td>Drill the 20-question bank (Section 10) end-to-end. Record self on 5 hardest. Refine experience-gate response. ~8 hrs.</td>
+      </tr>
+      <tr>
+        <td><strong>Week 6 (optional)</strong></td>
+        <td>Final positioning</td>
+        <td>Resume rewrite (single bullet at top: AI portfolio + adoption tracking). Cover note draft (3 paragraphs). Application submission window. ~4 hrs.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-head">Cross-Leverage Note</div>
+    <p>Howard Marks memos serve both this track and your Oaktree VP track — read once, deploy twice. DAMA-DMBOK Chapter 11 (Data Governance) optionally pairs with this for the JPMC CDO track. SQL via Mode Analytics is on the Uber blocker list; not required here but reinforces the "live data-connected" framing on your resume.</p>
+  </div>
+</section>
+
+<!-- 10 INTERVIEW PREP -->
+<section id="s10">
+  <div class="section-header"><span class="section-num">10</span><h2>Interview Prep — 20 Questions</h2></div>
+  <p>Three categories. Drill the experience-gate response (Q19) until it lands in 90 seconds without notes.</p>
+
+  <h4>Behavioral (8)</h4>
+  <ol class="steps">
+    <li><strong>Tell me about the most complex cross-functional program you've run.</strong> &nbsp;<em>Lead with NPV AED 652M defence — 4 entities, MD/CEO altitude, multiple scrutiny rounds.</em></li>
+    <li><strong>How do you institutionalize processes in a fast-growing team?</strong> &nbsp;<em>14-finding register + T−25/T+30 + PCC TAT 20→3 → operating system, not a one-off project.</em></li>
+    <li><strong>Describe a time you held a governance standard under stakeholder pressure.</strong> &nbsp;<em>PR rejection 49% — vindicated by data.</em></li>
+    <li><strong>Walk me through how you've managed a team across geographies.</strong> &nbsp;<em>35 Dubai + 42 India; QCG / MIS / Ops reporting structure; cadence design.</em></li>
+    <li><strong>Tell me about a time you tracked the ROI of an AI / automation initiative.</strong> &nbsp;<em>Pick one of the 12 projects with adoption % and time-saved metrics.</em></li>
+    <li><strong>How do you handle ambiguity in priorities?</strong> &nbsp;<em>Restorative + Analytical CliftonStrengths framing; sequencing under MD/CRO/CCO competing asks.</em></li>
+    <li><strong>Describe coaching an underperformer.</strong> &nbsp;<em>Use the team-capability story arc — members authoring MD-approved docs autonomously.</em></li>
+    <li><strong>Tell me about proactively surfacing a risk before it became a problem.</strong> &nbsp;<em>Three CCO escalations — pick the most consequential.</em></li>
+  </ol>
+
+  <h4>Scenario / Technical (7)</h4>
+  <ol class="steps" style="counter-reset: step 8;">
+    <li><strong>Front-office stakeholder wants a process change that bypasses controls. What do you do?</strong> &nbsp;<em>PR 49% playbook — name the principle, surface the cost of the workaround, propose a controlled alternative, escalate if needed.</em></li>
+    <li><strong>How would you measure the effectiveness of a GenAI tool deployed across analysts?</strong> &nbsp;<em>Deploy the Adoption Intelligence Layer pitch (Section 7).</em></li>
+    <li><strong>The Financial Research-Credit team is missing deadlines on 20% of reports. Diagnose and propose.</strong> &nbsp;<em>Bottleneck mapping → workflow audit → tooling gap vs capability gap vs prioritization gap. Don't jump to solution.</em></li>
+    <li><strong>Design an L&amp;D curriculum for a 50-person credit research team.</strong> &nbsp;<em>Three layers: technical (credit modelling), operational (process &amp; tools), and judgment (idea memo quality, peer review).</em></li>
+    <li><strong>You inherit a 200-person ops function with no documented processes. First 90 days?</strong> &nbsp;<em>30: listen + map. 60: prioritize 3 highest-impact workflows. 90: institutionalize one, document two, hand off operating rhythm.</em></li>
+    <li><strong>How would you set up best-practice exchange across Gurugram, Bengaluru, Hyderabad?</strong> &nbsp;<em>Pattern Library + monthly forum + named owners. Don't romanticize "culture" — instrument it.</em></li>
+    <li><strong>Walk me through a process documentation template.</strong> &nbsp;<em>Workflow steps + RACI + SLAs + escalation paths + control points + revision history.</em></li>
+  </ol>
+
+  <h4>Fit (5)</h4>
+  <ol class="steps" style="counter-reset: step 15;">
+    <li><strong>Why D.E. Shaw?</strong> &nbsp;<em>Three-beat answer: rigor-first culture matches your profile; operating-scope mandate at India level is unusual in FS GCC tier; GenAI-tracking JD priority is unusually aligned with your portfolio.</em></li>
+    <li><strong>Why are you leaving Sobha?</strong> &nbsp;<em>Honest, short: scaled the function 14.9x, built the team, transitioned the operating system to people you trained. Looking for next altitude. Don't denigrate Sobha.</em></li>
+    <li><strong>How does Sobha's work map to financial services?</strong> &nbsp;<em>Deploy the reframe table (Section 3) — credit lifecycle of an AED 12.97B receivables portfolio across 4 legal entities.</em></li>
+    <li><strong>You don't have 12 years of experience. Why should we consider you?</strong> &nbsp;<em>Deploy the experience-gate response (Section 11) — scope-equivalence, not chronology.</em></li>
+    <li><strong>What do you know about discretionary investing?</strong> &nbsp;<em>Modest, honest answer: read Howard Marks; understand human-judgment investment process; familiar with idea-memo lifecycle; eager to learn the operating specifics from the team.</em></li>
+  </ol>
+</section>
+
+<!-- 11 EXPERIENCE GATE -->
+<section id="s11">
+  <div class="section-header"><span class="section-num">11</span><h2>Experience-Gate Response Script</h2></div>
+  <p>The single most important answer in this interview cycle. Drill verbatim until you can deliver in 75 seconds without hesitation.</p>
+
+  <div class="pull">
+    "My total tenure is nine years, with six post-MBA. I understand the JD names twelve. I'd respectfully ask to be evaluated on operating scope and program complexity rather than chronology. Today I run a 77-person two-geography operations function. I defended an AED 652-million programme at MD and CEO level through multiple scrutiny rounds. I architected a 12-project AI-augmented operations portfolio with measurable adoption tracking. I hold governance standards under business-side pressure — my PR rejection rate sat at 49% in December because the standard was right, not because it was comfortable. That scope maps to Director-band operating mandates at most firms. The years are a proxy for that scope. I'm offering the scope directly."
+    <span class="pull-attrib">— Response, 75 seconds</span>
+  </div>
+
+  <p><strong>Delivery notes:</strong> No defensiveness. No apology. Acknowledge the gate first, then redirect on your terms. End with a confident sentence — not a question. Let the silence land.</p>
+</section>
+
+<!-- 12 APPLICATION STRATEGY -->
+<section id="s12">
+  <div class="section-header"><span class="section-num">12</span><h2>Application Strategy</h2></div>
+
+  <h4>Cardinal Rule</h4>
+  <div class="callout warn">
+    <div class="callout-head">Do Not Apply Cold</div>
+    <p>The experience-gate triggers an ATS screen-out at high probability for this role at this firm. Cold application has marginal expected value. <strong>Referral-quality submission only.</strong></p>
+  </div>
+
+  <h4>Referral Channels (Activate in This Order)</h4>
+  <ol class="steps">
+    <li><strong>IIM Udaipur alumni at DESIS</strong> — Gurugram + Hyderabad + Bengaluru. Highest credibility channel; your batch and one above/below.</li>
+    <li><strong>BITS Pilani alumni at D.E. Shaw</strong> — both India and US offices. Look for engineering and ops functions; engineers in DESCO regularly refer ops candidates.</li>
+    <li><strong>2nd-degree LinkedIn connections at DESCO India</strong> — anyone connecting your current network to a DESIS leader. Ask warm intros.</li>
+    <li><strong>Sobha leadership references</strong> — Francis Alfred (MD/CEO) and Mohammad Adnan Hamid (CRO) likely have buy-side investor relationships through Sobha's capital markets work. Discreet ask only.</li>
+  </ol>
+
+  <h4>Cover Note — 3-Paragraph Frame</h4>
+  <p><strong>Paragraph 1 (hook).</strong> Open with the scope-tenure equivalence. Name the 77-person scale + the 12-project AI portfolio in the first two sentences. Anchor on the JD's GenAI-tracking priority.</p>
+  <p><strong>Paragraph 2 (mapping).</strong> Three sentences mapping Sobha to JD priorities: process institutionalization (14-finding + T−25/T+30), people leadership (77-person + L&amp;D), cross-functional execution (Salesforce 0→1 + 4 entities). Use JD-verbatim language wherever possible.</p>
+  <p><strong>Paragraph 3 (why DESIS).</strong> Specific, not generic. Name the operating context (US BU partnership + India research collaboration), the cultural fit (rigor-first), and the role evolution opportunity (GenAI portfolio scaling). Close with a confident next-step ask.</p>
+
+  <h4>Resume Positioning</h4>
+  <ul class="refined">
+    <li><strong>Summary bullet (top of resume):</strong> "Program-managed 12-project AI-augmented operations portfolio with measurable adoption tracking across a 77-person two-geography team; defended AED 652M strategic programme at MD / CEO altitude through multiple scrutiny rounds." — single sentence, JD-mirror language.</li>
+    <li>Lead Sobha role section with <em>program management</em> framing rather than dues collection.</li>
+    <li>Keep AED 12.97B portfolio scale visible — credit lifecycle is the closest defensible FS analog.</li>
+    <li>Standing resume rules apply (no Director Business Operations subtitle; no salary bullet; "70+" reports not "85"; "led solution design" not "co-architect" — refer V6 databank).</li>
+  </ul>
+
+  <h4>Timing</h4>
+  <p>Apply <strong>only after AmEx GMNS and Oaktree first-round outcomes are known.</strong> This is a parallel pursuit, not displacement of priority-one roles. If AmEx converts: continue this track at lower intensity. If both fail: this becomes a leading candidate in the second wave alongside MS BizMgr OPG and the Google parallel tracks.</p>
+</section>
+
+<!-- 13 SALARY -->
+<section id="s13">
+  <div class="section-header"><span class="section-num">13</span><h2>Salary &amp; Negotiation</h2></div>
+  <p>Two bands. DESCO India compensates competitively at the top of FS GCC tier; structure is all-cash + deferred bonus (no RSUs, private firm). Confidence: Medium (limited public comp data — anchor conservatively).</p>
+
+  <table>
+    <thead><tr><th></th><th>AD Band</th><th>Director Band</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Anchor (ask)</strong></td><td class="num-cell">₹95L</td><td class="num-cell">₹1.30Cr</td></tr>
+      <tr><td><strong>Target (accept)</strong></td><td class="num-cell">₹88L</td><td class="num-cell">₹1.18Cr</td></tr>
+      <tr><td><strong>Walk-away</strong></td><td class="num-cell">₹78L</td><td class="num-cell">₹1.05Cr</td></tr>
+      <tr><td><strong>Joining bonus</strong></td><td class="num-cell">₹5–8L</td><td class="num-cell">₹8–12L</td></tr>
+      <tr><td><strong>Bonus structure</strong></td><td>20–35% target; deferred portion 12–18mo</td><td>30–50% target; deferred portion 18–24mo</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Leverage Points</h4>
+  <ul class="refined">
+    <li><strong>BITS + IIM dual credential</strong> — genuine asymmetry vs typical FS-only candidate background.</li>
+    <li><strong>12-project AI-augmented portfolio</strong> — rare in this candidate pool; pitches as Director-band differentiator.</li>
+    <li><strong>77-person scale</strong> at sub-tenure profile — proves accelerated scope progression.</li>
+    <li><strong>MD / CEO altitude credentials</strong> — Director-band engagement expectation already proven.</li>
+    <li><strong>Parallel pipeline pressure</strong> — when AmEx GMNS, Oaktree, or other senior offers are active, leverage compounds.</li>
+  </ul>
+
+  <h4>Realistic Banding Assessment</h4>
+  <p>Given the experience-gate friction, the more likely landing band is <strong>AD</strong> with a Director-track promotion conversation at 18–24 months. Targeting Director directly is feasible only with a strong referral path and an exceptional interview outcome. Plan for AD; don't reject Director-band conversation if it surfaces.</p>
+</section>
+
+<!-- 14 RISK -->
+<section id="s14">
+  <div class="section-header"><span class="section-num">14</span><h2>Risk Register</h2></div>
+
+  <table>
+    <thead><tr><th style="width:30%">Risk</th><th>Probability</th><th>Impact</th><th>Mitigation</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Experience-gate ATS screen-out</strong></td>
+        <td>High</td>
+        <td>Critical</td>
+        <td>Referral-only submission. Cover note pre-empts gate. Resume top-bullet frames scope explicitly.</td>
+      </tr>
+      <tr>
+        <td><strong>Real-estate to quant cultural distance</strong></td>
+        <td>Medium</td>
+        <td>High</td>
+        <td>Bridge via financial-instrument receivables framing. Howard Marks reading. Acknowledge industry distance in interview without overclaiming familiarity.</td>
+      </tr>
+      <tr>
+        <td><strong>FS team management basic-qual fail</strong></td>
+        <td>High</td>
+        <td>High</td>
+        <td>Reframe AED 12.97B as credit-lifecycle portfolio. Lean on cross-functional + multi-entity + multi-geography proof points. Don't claim "financial services" — claim "financial-instrument operations at scale."</td>
+      </tr>
+      <tr>
+        <td><strong>AmEx or Oaktree converts first; bandwidth lost</strong></td>
+        <td>Medium</td>
+        <td>Low</td>
+        <td>Acceptable trade. DESIS PM is parallel, not priority-one. Continue prep at lower intensity; revisit if priority-one offers stall.</td>
+      </tr>
+      <tr>
+        <td><strong>AI angle perceived as buzzword bingo</strong></td>
+        <td>Low</td>
+        <td>High</td>
+        <td>Prepare 2 concrete project metrics (adoption %, hours saved per week). Don't pitch frameworks — pitch outcomes. The Adoption Intelligence Layer 1-pager carries credibility on its own.</td>
+      </tr>
+      <tr>
+        <td><strong>DESCO culture-fit screen fails (intensity / assertiveness)</strong></td>
+        <td>Medium</td>
+        <td>Medium</td>
+        <td>Lead with assertiveness proof points (PR 49% defence, NPV defence, three CCO escalations). Acknowledge the known development area honestly if probed.</td>
+      </tr>
+      <tr>
+        <td><strong>Title confusion (Program Mgmt vs PM)</strong></td>
+        <td>Medium</td>
+        <td>Low</td>
+        <td>In every conversation, clarify "Program Manager" (your function) versus "Portfolio Manager" (DESCO's investment role). Use the JD's own language to anchor.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 15 ACTION PIPELINE -->
+<section id="s15">
+  <div class="section-header"><span class="section-num">15</span><h2>Action Pipeline</h2></div>
+  <p>Sequenced next steps. Apply ordering, not parallel chaos.</p>
+
+  <table>
+    <thead><tr><th style="width:14%">Priority</th><th style="width:24%">Action</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td><span class="pri pri-high">High</span></td><td><strong>Activate referrals</strong></td><td>3 outreach this week — 1 IIM-U alum at DESIS, 1 BITS alum at DESCO, 1 2nd-degree LinkedIn warm intro. Don't ask for a job; ask for 15 minutes to understand the function.</td></tr>
+      <tr><td><span class="pri pri-high">High</span></td><td><strong>Draft cover note</strong></td><td>3-paragraph frame (Section 12). Inline draft on next request. Keep under 350 words.</td></tr>
+      <tr><td><span class="pri pri-high">High</span></td><td><strong>Resume top-bullet rewrite</strong></td><td>Single JD-mirror sentence. AI portfolio + 77-person + AED 652M. Inline draft available on request.</td></tr>
+      <tr><td><span class="pri pri-med">Med</span></td><td><strong>Build Adoption Intelligence Layer 1-pager</strong></td><td>Single page. 3 components. Sample metrics. Print-ready interview artifact. Week 3 of prep.</td></tr>
+      <tr><td><span class="pri pri-med">Med</span></td><td><strong>Discretionary investing primer</strong></td><td>Howard Marks 3 most recent memos + 1 credit research lifecycle primer. ~8 hrs. Week 1.</td></tr>
+      <tr><td><span class="pri pri-med">Med</span></td><td><strong>CCC patch v3.8.x</strong></td><td>Add full card to architecture as deshaw-desis-pm-director. Inline patch text drafted alongside this playbook.</td></tr>
+      <tr><td><span class="pri pri-low">Low</span></td><td><strong>Drill 20-question bank</strong></td><td>Section 10. Record self on 5 hardest. Week 5.</td></tr>
+      <tr><td><span class="pri pri-low">Low</span></td><td><strong>Defer formal application</strong></td><td>Hold until AmEx GMNS + Oaktree first-round outcomes are known. Parallel pursuit, not displacement.</td></tr>
+      <tr><td><span class="pri pri-low">Low</span></td><td><strong>Scorecard v2 update</strong></td><td>Add full card. STAR tags: S1, S2, S3, S5, S9, S15 + 2 new from AI portfolio category.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout strong">
+    <div class="callout-head">One-Line Summary</div>
+    <p>This is a strong fit at the AD band with a referral. Without a referral, the experience-gate is likely fatal. The differentiator that wins the interview is the AI Adoption Intelligence Layer; the differentiator that wins the application is a credible referral. Build both. Apply when AmEx GMNS and Oaktree outcomes are known. Don't burn the application without the referral.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>D.&nbsp;E.&nbsp;Shaw DESIS — AD/Director Program Management · Career Playbook · v1.0</p>
+  <p>Built for Priyanuj Deka · 18 May 2026 · References STAR Story Bank V3, Master Databank V6, CCC Architecture v3.8</p>
+  <p>Companion CCC patch: v3.8.x — Role addition, separate inline delivery</p>
+</footer>
+
+</div>
+</body>
+</html>
