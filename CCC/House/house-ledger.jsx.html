@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>House Ledger</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+{/* ═══════════════════════════════════════════════════════════════
+    SECTION INDEX — view only the lines you need for surgical edits
+    ─────────────────────────────────────────────────────────────────
+    CSS-HEADER ..............  48    CSS-OVERVIEW-CARDS ...... 120
+    CSS-HERO-CARDS ..........  64    CSS-VENDOR-TAB .......... 131
+    CSS-TAB-BAR .............  87    CSS-TIMELINE ............ 141
+    CSS-ENTRY-LIST ..........  93    CSS-FAB ................. 152
+    CSS-MODAL-FORM .......... 155    CSS-CONFIRM-THEME ....... 176
+    CSS-MISC ................ 191
+
+    JS-FIREBASE ............. 205    JS-FORMATTING ........... 262
+    JS-CONSTANTS ............ 210    JS-HEADER-COMPONENT ..... 277
+    JS-PHASE-CAT-ACCT-CLR .. 220    JS-HERO-SPEND-CARD ..... 297
+    JS-THEMES ............... 225    JS-HERO-ACCOUNT-CARD ... 330
+    JS-FIRESTORE-HELPERS .... 242    JS-TAB-BAR .............. 371
+
+    JS-SUBTOTAL-BAR ......... 377    JS-VENDORS-TAB .......... 515
+    JS-ENTRY-ROW ............ 383    JS-TIMELINE-TAB ......... 550
+    JS-ENTRIES-TAB .......... 426    JS-ENTRY-FORM ........... 610
+    JS-OVERVIEW-CARDS ....... 454    JS-CONFIRM-DIALOG ....... 660
+    JS-PHASES-TAB ........... 485    JS-THEME-PICKER ......... 676
+    JS-ZONES-TAB ............ 500    JS-APP .................. 695
+    ═══════════════════════════════════════════════════════════════ */}
+
+<style>
+/* ─── CSS-HEADER ─── */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--bg:#e8f0f4;--card:#fff;--border:#d0dbe4;--t1:#1a2a3a;--t2:#4a5a6a;--t3:#8a9aaa;--accent:#0d7377;--accentDk:#095456;--accentLt:#e0f4f4;--accent2:#e94560;--accent2Dk:#b8354d;--accent2Lt:#fce8ec;--rose:#e94560;--roseLt:#fce8ec;--lav:#7c3aed;--lavLt:#ede9fe;--amber:#d97706;--amberLt:#fef3c7;--sky:#0284c7;--skyLt:#e0f2fe;--headerGrad:linear-gradient(135deg,#0d7377 0%,#14919b 100%);--tabActive:#0d7377;--scrollThumb:#0d7377}
+html{font-size:16px}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--t1);min-height:100vh;overflow-x:hidden;padding-bottom:80px}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:var(--scrollThumb);border-radius:3px}
+h1,h2,h3,.serif{font-family:'Playfair Display',serif}
+.header{background:var(--headerGrad);color:#fff;padding:14px 16px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.header h1{font-size:1.2rem;letter-spacing:.5px}
+.header-r{display:flex;gap:8px;align-items:center}
+.header-btn{background:rgba(255,255,255,.18);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sync-dot{width:8px;height:8px;border-radius:50%;margin-right:6px}
+.sync-live{background:#4ade80;animation:pulse 2s infinite}
+.sync-err{background:#ef4444}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ─── CSS-HERO-CARDS ─── */
+.hero-row{display:flex;gap:12px;padding:12px 12px 4px;overflow-x:auto;scroll-snap-type:x mandatory}
+.hero-card{flex:0 0 calc(50% - 6px);scroll-snap-align:start;background:var(--card);border-radius:20px;border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all .3s ease;min-width:0}
+.hero-card.expanded{flex:0 0 100%;position:relative}
+.hero-front{padding:16px 14px}
+.hero-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);font-weight:700;margin-bottom:6px}
+.hero-big{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:800;line-height:1.15;color:var(--t1);word-break:break-word;overflow-wrap:anywhere}
+.hero-sub{font-size:.72rem;color:var(--t2);margin-top:4px;font-weight:600}
+.hero-expand{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;padding:0 14px}
+.hero-card.expanded .hero-expand{max-height:500px;padding:0 14px 16px}
+.hero-chevron{text-align:center;font-size:.7rem;color:var(--t3);padding:2px 0 6px;transition:transform .3s}
+.hero-card.expanded .hero-chevron{transform:rotate(180deg)}
+.split-bar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin:8px 0 4px;gap:2px}
+.split-seg{border-radius:3px;transition:flex .3s}
+.budget-bar-wrap{margin:8px 0}
+.budget-bar{height:8px;border-radius:4px;background:var(--border);overflow:hidden;position:relative}
+.budget-fill{height:100%;border-radius:4px;transition:width .5s}
+.budget-labels{display:flex;justify-content:space-between;font-size:.65rem;color:var(--t3);margin-top:3px;font-weight:600}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:.78rem}
+.detail-row .label{color:var(--t2)}
+.detail-row .value{font-weight:700;color:var(--t1)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;flex-shrink:0}
+
+/* ─── CSS-TAB-BAR ─── */
+.tab-bar{display:flex;background:var(--card);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:40;padding:4px 0 env(safe-area-inset-bottom,4px)}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:.6rem;font-weight:700;color:var(--t3);cursor:pointer;border:none;background:none;transition:color .2s}
+.tab-item.active{color:var(--tabActive)}
+.tab-icon{font-size:1.15rem}
+
+/* ─── CSS-ENTRY-LIST ─── */
+.entry-list{padding:8px 12px}
+.search-bar{display:flex;gap:8px;margin-bottom:8px}
+.search-bar input{flex:1;padding:10px 14px;border-radius:14px;border:1px solid var(--border);background:var(--card);font-size:.85rem;color:var(--t1);font-family:'Nunito',sans-serif}
+.filter-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:var(--accentLt);color:var(--accent);font-size:.7rem;font-weight:700;margin-bottom:8px;cursor:pointer}
+.subtotal-bar{background:var(--accentLt);border-radius:14px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.subtotal-bar .crumb{font-size:.72rem;color:var(--accent);font-weight:600}
+.subtotal-bar .amt{font-family:'Playfair Display',serif;font-weight:700;color:var(--accent);font-size:1rem}
+.entry-row{background:var(--card);border-radius:16px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;position:relative;touch-action:pan-y}
+.entry-content{padding:12px 14px;position:relative;z-index:2;background:var(--card);transition:transform .15s}
+.entry-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.entry-vendor{font-weight:700;font-size:.88rem;color:var(--t1);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.entry-amt{font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;color:var(--t1);white-space:nowrap;flex-shrink:0}
+.entry-meta{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;align-items:center}
+.entry-date{font-size:.7rem;color:var(--t3)}
+.chip{display:inline-flex;padding:2px 8px;border-radius:10px;font-size:.62rem;font-weight:700;white-space:nowrap}
+.entry-detail{padding:0 14px;max-height:0;overflow:hidden;transition:max-height .3s}
+.entry-detail.open{max-height:400px;padding:8px 14px 14px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.detail-cell{font-size:.72rem}
+.detail-cell .lbl{color:var(--t3);font-size:.6rem;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.detail-cell .val{color:var(--t1);font-weight:600;margin-top:1px}
+.swipe-hint{text-align:center;font-size:.62rem;color:var(--t3);padding:4px 0 8px;font-style:italic}
+.swipe-underlay{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 20px;font-weight:700;font-size:.8rem;color:#fff;z-index:1}
+.swipe-underlay.left{right:0;background:#ef4444;border-radius:0 16px 16px 0}
+.swipe-underlay.right{left:0;background:#3b82f6;border-radius:16px 0 0 16px}
+
+/* ─── CSS-OVERVIEW-CARDS ─── */
+.overview-card{background:var(--card);border-radius:18px;border:1px solid var(--border);padding:16px;margin-bottom:10px;cursor:pointer;transition:transform .15s}
+.overview-card:active{transform:scale(.98)}
+.ov-header{display:flex;justify-content:space-between;align-items:flex-start}
+.ov-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem;color:var(--t1)}
+.ov-amount{font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;color:var(--t1);white-space:nowrap}
+.ov-meta{font-size:.7rem;color:var(--t3);margin-top:4px;font-weight:600}
+.ov-mini-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;margin-top:8px;gap:1px}
+.ov-mini-seg{border-radius:2px}
+.back-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:12px;background:var(--accentLt);color:var(--accent);font-size:.75rem;font-weight:700;border:none;cursor:pointer;margin-bottom:10px}
+
+/* ─── CSS-VENDOR-TAB ─── */
+.vendor-card{background:var(--card);border-radius:18px;border:1px solid var(--border);padding:16px;margin-bottom:10px;cursor:pointer;transition:transform .15s}
+.vendor-card:active{transform:scale(.98)}
+.v-header{display:flex;justify-content:space-between;align-items:flex-start}
+.v-name{font-weight:700;font-size:.92rem;color:var(--t1);flex:1;min-width:0}
+.v-total{font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem;color:var(--t1);white-space:nowrap;flex-shrink:0}
+.v-meta{font-size:.7rem;color:var(--t3);margin-top:4px;font-weight:600}
+.v-intermediary{font-size:.65rem;color:var(--lav);margin-top:4px;font-weight:600}
+.v-modes{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+
+/* ─── CSS-TIMELINE ─── */
+.tl-chart{padding:12px;background:var(--card);border-radius:18px;border:1px solid var(--border);margin-bottom:10px}
+.tl-bars{display:flex;align-items:flex-end;gap:4px;height:180px;padding:0 4px}
+.tl-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
+.tl-bar{width:100%;border-radius:4px 4px 0 0;cursor:pointer;transition:opacity .2s;min-height:2px}
+.tl-bar:hover{opacity:.8}
+.tl-month{font-size:.5rem;color:var(--t3);font-weight:700;transform:rotate(-45deg);white-space:nowrap;margin-top:4px}
+.tl-toggle{display:flex;gap:6px;justify-content:center;margin-bottom:10px}
+.tl-toggle button{padding:6px 14px;border-radius:12px;border:1px solid var(--border);background:var(--card);font-size:.72rem;font-weight:700;color:var(--t2);cursor:pointer;font-family:'Nunito',sans-serif}
+.tl-toggle button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ─── CSS-FAB ─── */
+.fab{position:fixed;bottom:70px;right:16px;width:52px;height:52px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:35;display:flex;align-items:center;justify-content:center}
+
+/* ─── CSS-MODAL-FORM ─── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:60;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:var(--card);border-radius:24px 24px 0 0;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;padding:20px 16px env(safe-area-inset-bottom,16px)}
+.modal h2{font-size:1.1rem;margin-bottom:14px;color:var(--t1)}
+.form-steps{display:flex;gap:6px;margin-bottom:16px}
+.form-step{flex:1;height:4px;border-radius:2px;background:var(--border)}
+.form-step.active{background:var(--accent)}
+.form-step.done{background:var(--accent);opacity:.5}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);font-size:.88rem;color:var(--t1);font-family:'Nunito',sans-serif}
+.field textarea{resize:vertical;min-height:60px}
+.toggle-group{display:flex;gap:6px}
+.toggle-btn{flex:1;padding:8px;border-radius:12px;border:1px solid var(--border);background:var(--card);font-size:.78rem;font-weight:600;cursor:pointer;text-align:center;color:var(--t2);font-family:'Nunito',sans-serif;transition:all .2s}
+.toggle-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.form-actions{display:flex;gap:8px;margin-top:16px}
+.form-actions button{flex:1;padding:12px;border-radius:14px;border:none;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-secondary{background:var(--border);color:var(--t2)}
+.btn-danger{background:#ef4444;color:#fff}
+
+/* ─── CSS-CONFIRM-THEME ─── */
+.confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:70;display:flex;align-items:center;justify-content:center;padding:20px}
+.confirm-box{background:var(--card);border-radius:20px;padding:24px;max-width:320px;width:100%;text-align:center}
+.confirm-box h3{margin-bottom:8px;font-size:1rem}
+.confirm-box p{font-size:.85rem;color:var(--t2);margin-bottom:16px}
+.theme-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:80;display:flex;align-items:center;justify-content:center}
+.theme-picker{background:var(--card);border-radius:24px;padding:24px;max-width:300px;width:90%}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
+.theme-opt{padding:14px 8px;border-radius:14px;border:2px solid var(--border);text-align:center;cursor:pointer;font-size:.75rem;font-weight:700;transition:all .2s}
+.theme-opt.active{border-color:var(--accent);background:var(--accentLt)}
+.theme-emoji{font-size:1.4rem;display:block;margin-bottom:4px}
+.user-menu{position:absolute;top:100%;right:8px;background:var(--card);border-radius:14px;border:1px solid var(--border);padding:6px;min-width:140px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:55}
+.user-opt{padding:8px 12px;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--t1)}
+.user-opt:hover,.user-opt.active{background:var(--accentLt);color:var(--accent)}
+
+/* ─── CSS-MISC ─── */
+.empty-state{text-align:center;padding:40px 20px;color:var(--t3)}
+.empty-state .icon{font-size:2.5rem;margin-bottom:8px}
+.empty-state p{font-size:.85rem}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback,useMemo}=React;
+
+// ─── JS-FIREBASE ───
+const PROJ='japan-2026-apr',AKEY='AIzaSyD372bOo6NQR6VxB-_kkv4zfLNt4B5HaAc';
+const FS_EXP=`https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-expenses`;
+const FS_BUD=`https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-budgets`;
+
+// ─── JS-CONSTANTS ───
+const PHASES=['Pre-Construction','Foundation','Structure','Finishing','Boundary & External','Furnishing','Landscaping','Decorating','Maintenance','Leasing'];
+const ZONES=['Whole House','Ground Floor','First Floor','Roof & Terrace','Foundation & Plinth','Boundary Wall','Exterior & Site','Old House'];
+const CATEGORIES={'Construction Materials':['General Hardware','Bricks','Timber','Sanitary & Plumbing Fittings','Insulation'],'Labour & Contractors':['Mason/Civil','Electrical','Painting','Carpentry','General Labour','Plumbing'],'Professional Fees':['Architect/Consultant','Regulatory/Bank'],'Fixtures & Installations':['Windows','Doors','Cupboards & Wardrobes','Electrical Fittings','Plumbing Fixtures'],'Site Work':['Land Clearing','Earth Filling','Boundary Wall'],'Furnishing':['Furniture','Appliances','Curtains & Blinds','Lighting','Kitchen'],'Landscaping':['Garden & Plants','Driveway & Paving','Irrigation','Outdoor Lighting','Fencing'],'Decorating':['Wall Art & Decor','Interior Accessories'],'Utilities & Systems':['Electrical Connection','Water Connection','Solar','Security','Borewell','Water Tank','Internet'],'Maintenance':['Repairs','Cleaning','Pest Control','AMC & Service Contracts'],'Leasing':['Agent Fee','Legal','Tenant Improvements','Deposit Accounting'],'Miscellaneous':['Test Transaction','Other']};
+const PAYMENT_MODES=['Cash','NEFT','GPay','UPI','IMPS'];
+const EXPENSE_TYPES=['Contract','Fee','Miscellaneous'];
+const STATUSES=['Paid','Partial','Pending','Overdue'];
+const FAMILY=['Jiten','Runa','Priyanuj','Devanuj'];
+const CONTRACT_BUDGET=7537510;
+
+// ─── JS-PHASE-CAT-ACCT-CLR ───
+const PHASE_CLR={'Pre-Construction':{bg:'#e8f0fe',text:'#1a56db',dot:'#3b82f6'},'Foundation':{bg:'#fef3e2',text:'#b45309',dot:'#f59e0b'},'Structure':{bg:'#e6f4ea',text:'#137333',dot:'#34a853'},'Finishing':{bg:'#fce8f0',text:'#b91c5c',dot:'#ec4899'},'Boundary & External':{bg:'#f3e8ff',text:'#6b21a8',dot:'#a855f7'},'Furnishing':{bg:'#fff7e6',text:'#92400e',dot:'#d97706'},'Landscaping':{bg:'#ecfdf5',text:'#065f46',dot:'#10b981'},'Decorating':{bg:'#fdf2f8',text:'#9d174d',dot:'#f472b6'},'Maintenance':{bg:'#f0f4f8',text:'#334155',dot:'#64748b'},'Leasing':{bg:'#eff6ff',text:'#1e40af',dot:'#3b82f6'}};
+const CAT_CLR={'Construction Materials':{bg:'#fef3c7',text:'#92400e',dot:'#d97706'},'Labour & Contractors':{bg:'#dbeafe',text:'#1e40af',dot:'#3b82f6'},'Professional Fees':{bg:'#e0e7ff',text:'#3730a3',dot:'#6366f1'},'Fixtures & Installations':{bg:'#fce7f3',text:'#9d174d',dot:'#ec4899'},'Site Work':{bg:'#d1fae5',text:'#065f46',dot:'#10b981'},'Furnishing':{bg:'#ffedd5',text:'#9a3412',dot:'#f97316'},'Landscaping':{bg:'#dcfce7',text:'#166534',dot:'#22c55e'},'Decorating':{bg:'#fdf2f8',text:'#831843',dot:'#f472b6'},'Utilities & Systems':{bg:'#e0f2fe',text:'#075985',dot:'#0ea5e9'},'Maintenance':{bg:'#f1f5f9',text:'#334155',dot:'#64748b'},'Leasing':{bg:'#ede9fe',text:'#5b21b6',dot:'#8b5cf6'},'Miscellaneous':{bg:'#f5f5f4',text:'#44403c',dot:'#78716c'}};
+const ACCT_CLR={'Self':{bg:'#dbeafe',text:'#1e40af',dot:'#3b82f6'},'Reemon':{bg:'#fce7f3',text:'#9d174d',dot:'#ec4899'}};
+
+// ─── JS-THEMES ───
+const THEMES={
+  blueprint:{name:'Blueprint',emoji:'🔷',dark:false,bg:'#e8f0f4',card:'#ffffff',border:'#d0dbe4',t1:'#1a2a3a',t2:'#4a5a6a',t3:'#8a9aaa',accent:'#0d7377',accentDk:'#095456',accentLt:'#e0f4f4',accent2:'#e94560',accent2Dk:'#b8354d',accent2Lt:'#fce8ec',rose:'#e94560',roseLt:'#fce8ec',lav:'#7c3aed',lavLt:'#ede9fe',amber:'#d97706',amberLt:'#fef3c7',sky:'#0284c7',skyLt:'#e0f2fe',headerGrad:'linear-gradient(135deg,#0d7377,#14919b)',tabActive:'#0d7377',scrollThumb:'#0d7377'},
+  sandstone:{name:'Sandstone',emoji:'🏗️',dark:false,bg:'#f5f0e8',card:'#fffdf8',border:'#e0d5c5',t1:'#3a2e1e',t2:'#6a5e4e',t3:'#9a8e7e',accent:'#b45309',accentDk:'#8a3f06',accentLt:'#fef3e2',accent2:'#dc2626',accent2Dk:'#b91c1c',accent2Lt:'#fef2f2',rose:'#dc2626',roseLt:'#fef2f2',lav:'#7c3aed',lavLt:'#ede9fe',amber:'#d97706',amberLt:'#fef3c7',sky:'#0284c7',skyLt:'#e0f2fe',headerGrad:'linear-gradient(135deg,#b45309,#d97706)',tabActive:'#b45309',scrollThumb:'#b45309'},
+  concrete:{name:'Concrete',emoji:'🌑',dark:true,bg:'#1a1a2e',card:'#242440',border:'#3a3a5c',t1:'#e8e8f0',t2:'#b0b0c8',t3:'#7878a0',accent:'#e94560',accentDk:'#b8354d',accentLt:'#3a1a28',accent2:'#f0c040',accent2Dk:'#c8a030',accent2Lt:'#3a3420',rose:'#e94560',roseLt:'#3a1a28',lav:'#a78bfa',lavLt:'#2e2650',amber:'#fbbf24',amberLt:'#3a3420',sky:'#38bdf8',skyLt:'#1a2e40',headerGrad:'linear-gradient(135deg,#1a1a2e,#2a2a48)',tabActive:'#e94560',scrollThumb:'#e94560'},
+  garden:{name:'Garden',emoji:'🌿',dark:false,bg:'#ecf4ec',card:'#f8fcf8',border:'#c8dcc8',t1:'#1a3a1a',t2:'#4a6a4a',t3:'#7a9a7a',accent:'#137333',accentDk:'#0e5a28',accentLt:'#e0f4e6',accent2:'#dc2626',accent2Dk:'#b91c1c',accent2Lt:'#fef2f2',rose:'#dc2626',roseLt:'#fef2f2',lav:'#7c3aed',lavLt:'#ede9fe',amber:'#d97706',amberLt:'#fef3c7',sky:'#0284c7',skyLt:'#e0f2fe',headerGrad:'linear-gradient(135deg,#137333,#22a852)',tabActive:'#137333',scrollThumb:'#137333'},
+  mahogany:{name:'Mahogany',emoji:'🪵',dark:true,bg:'#1e1410',card:'#2e221c',border:'#4a3a30',t1:'#f0e8e0',t2:'#c8b8a8',t3:'#8a7a6a',accent:'#d97706',accentDk:'#b45309',accentLt:'#3a2a18',accent2:'#ef4444',accent2Dk:'#dc2626',accent2Lt:'#3a1a1a',rose:'#ef4444',roseLt:'#3a1a1a',lav:'#a78bfa',lavLt:'#2e2240',amber:'#fbbf24',amberLt:'#3a3018',sky:'#38bdf8',skyLt:'#1a2830',headerGrad:'linear-gradient(135deg,#3a2618,#5a3a28)',tabActive:'#d97706',scrollThumb:'#d97706'},
+  nightwork:{name:'Nightwork',emoji:'⚫',dark:true,bg:'#000000',card:'#141414',border:'#2a2a2a',t1:'#f0f0f0',t2:'#a0a0a0',t3:'#606060',accent:'#f97316',accentDk:'#ea580c',accentLt:'#2a1a0a',accent2:'#ef4444',accent2Dk:'#dc2626',accent2Lt:'#2a0a0a',rose:'#ef4444',roseLt:'#2a0a0a',lav:'#a78bfa',lavLt:'#1a1430',amber:'#fbbf24',amberLt:'#2a2008',sky:'#38bdf8',skyLt:'#0a1a28',headerGrad:'linear-gradient(135deg,#1a1a1a,#0a0a0a)',tabActive:'#f97316',scrollThumb:'#f97316'}
+};
+
+function applyTheme(id){
+  const t=THEMES[id];if(!t)return;
+  const r=document.documentElement.style;
+  Object.entries(t).forEach(([k,v])=>{if(typeof v==='string'&&k!=='name'&&k!=='emoji')r.setProperty('--'+k,v);});
+  localStorage.setItem('hl-theme',id);
+}
+
+// ─── JS-FIRESTORE-HELPERS ───
+const toFS=e=>({fields:{date:{stringValue:e.date},category:{stringValue:e.category},subcategory:{stringValue:e.subcategory},description:{stringValue:e.description},amount:{doubleValue:e.amount},vendor:{stringValue:e.vendor},transferTo:{stringValue:e.transferTo},account:{stringValue:e.account},paymentMode:{stringValue:e.paymentMode},phase:{stringValue:e.phase},zone:{stringValue:e.zone},expenseType:{stringValue:e.expenseType},invoiceRef:{stringValue:e.invoiceRef||''},notes:{stringValue:e.notes||''},status:{stringValue:e.status},loggedBy:{stringValue:e.loggedBy},updatedAt:{stringValue:new Date().toISOString()}}});
+const fromFS=doc=>{const f=doc.fields||{};const id=doc.name.split('/').pop();const g=k=>f[k]?.stringValue||'';return{id,date:g('date'),category:g('category'),subcategory:g('subcategory'),description:g('description'),amount:f.amount?.doubleValue||f.amount?.integerValue||0,vendor:g('vendor'),transferTo:g('transferTo'),account:g('account'),paymentMode:g('paymentMode'),phase:g('phase'),zone:g('zone'),expenseType:g('expenseType'),invoiceRef:g('invoiceRef'),notes:g('notes'),status:g('status'),loggedBy:g('loggedBy'),updatedAt:g('updatedAt')};};
+
+async function fetchAll(url){
+  let all=[],token='';
+  do{
+    const u=`${url}?key=${AKEY}&pageSize=500${token?'&pageToken='+token:''}`;
+    const r=await fetch(u);if(!r.ok)throw new Error(r.statusText);
+    const d=await r.json();
+    if(d.documents)all.push(...d.documents.map(fromFS));
+    token=d.nextPageToken||'';
+  }while(token);
+  return all;
+}
+
+async function createEntry(e){const id='exp-'+Date.now();const r=await fetch(`${FS_EXP}?key=${AKEY}&documentId=${id}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(toFS(e))});if(!r.ok)throw new Error(await r.text());return id;}
+async function updateEntry(id,e){const fields=Object.keys(toFS(e).fields);const masks=fields.map(f=>'updateMask.fieldPaths='+f).join('&');const r=await fetch(`${FS_EXP}/${id}?key=${AKEY}&${masks}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(toFS(e))});if(!r.ok)throw new Error(await r.text());}
+async function deleteEntry(id){const r=await fetch(`${FS_EXP}/${id}?key=${AKEY}`,{method:'DELETE'});if(!r.ok)throw new Error(await r.text());}
+
+// ─── JS-FORMATTING ───
+function fmtAmt(n,opts={}){
+  const abs=Math.abs(n);const sign=n<0?'-':'';
+  if(opts.full)return sign+'₹'+abs.toLocaleString('en-IN');
+  if(abs>=10000000)return sign+'₹'+(abs/10000000).toFixed(2).replace(/\.?0+$/,'')+'Cr';
+  if(abs>=100000)return sign+'₹'+(abs/100000).toFixed(2).replace(/\.?0+$/,'')+'L';
+  if(abs>=1000)return sign+'₹'+(abs/1000).toFixed(1).replace(/\.?0+$/,'')+'K';
+  return sign+'₹'+abs.toLocaleString('en-IN');
+}
+function fmtFull(n){return '₹'+Math.abs(n).toLocaleString('en-IN');}
+function fmtDate(d){if(!d)return '';const[y,m,dd]=d.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return `${parseInt(dd)} ${mn[parseInt(m)-1]} ${y}`;}
+function fmtDateShort(d){if(!d)return '';const[y,m,dd]=d.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return `${parseInt(dd)} ${mn[parseInt(m)-1]} '${y.slice(2)}`;}
+function monthKey(d){return d.slice(0,7);}
+function monthLabel(k){const[y,m]=k.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return `${mn[parseInt(m)-1]}'${y.slice(2)}`;}
+
+// ─── JS-HEADER-COMPONENT ───
+function Header({syncStatus,themeId,onTheme,onRefresh,userName,onUserChange}){
+  const [showMenu,setShowMenu]=useState(false);
+  return(
+    <div className="header">
+      <div style={{display:'flex',alignItems:'center',gap:8}}>
+        <div className={`sync-dot ${syncStatus==='live'?'sync-live':'sync-err'}`}/>
+        <h1>House Ledger</h1>
+      </div>
+      <div className="header-r" style={{position:'relative'}}>
+        <button className="header-btn" onClick={onRefresh}>↻</button>
+        <button className="header-btn" onClick={onTheme}>🎨</button>
+        <button className="header-btn" onClick={()=>setShowMenu(!showMenu)} style={{fontSize:'.75rem',fontWeight:700}}>{userName?.slice(0,1)||'?'}</button>
+        {showMenu&&<div className="user-menu">{FAMILY.map(f=><div key={f} className={`user-opt ${f===userName?'active':''}`} onClick={()=>{onUserChange(f);setShowMenu(false);}}>{f}</div>)}</div>}
+      </div>
+      {showMenu&&<div style={{position:'fixed',inset:0,zIndex:54}} onClick={()=>setShowMenu(false)}/>}
+    </div>
+  );
+}
+
+// ─── JS-HERO-SPEND-CARD ───
+function HeroSpendCard({exps}){
+  const [expanded,setExpanded]=useState(false);
+  const total=useMemo(()=>exps.reduce((s,e)=>s+e.amount,0),[exps]);
+  const contract=useMemo(()=>exps.filter(e=>e.expenseType==='Contract').reduce((s,e)=>s+e.amount,0),[exps]);
+  const nonContract=total-contract;
+  const remaining=CONTRACT_BUDGET-contract;
+  const pct=Math.min((contract/CONTRACT_BUDGET)*100,100);
+  const barColor=pct>100?'#ef4444':pct>90?'#ef4444':pct>70?'#d97706':'#22c55e';
+  return(
+    <div className={`hero-card ${expanded?'expanded':''}`} onClick={()=>setExpanded(!expanded)}>
+      <div className="hero-front">
+        <div className="hero-label">Total Spent</div>
+        <div className="hero-big">{fmtAmt(total)}</div>
+        <div className="hero-sub">{exps.length} entries</div>
+      </div>
+      <div className="hero-chevron">▼</div>
+      <div className="hero-expand">
+        <div className="detail-row"><span className="label">Contract</span><span className="value">{fmtAmt(contract)}</span></div>
+        <div className="budget-bar-wrap">
+          <div className="budget-bar"><div className="budget-fill" style={{width:pct+'%',background:barColor}}/></div>
+          <div className="budget-labels">
+            <span>of {fmtAmt(CONTRACT_BUDGET)} budget</span>
+            <span style={{color:barColor}}>{pct.toFixed(1)}%</span>
+          </div>
+        </div>
+        <div className="detail-row"><span className="label">Non-contract</span><span className="value">{fmtAmt(nonContract)}</span></div>
+        <div className="detail-row"><span className="label">Remaining</span><span className="value" style={{color:remaining>=0?'#22c55e':'#ef4444'}}>{fmtAmt(remaining)}</span></div>
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-HERO-ACCOUNT-CARD ───
+function HeroAccountCard({exps,onNavigate}){
+  const [expanded,setExpanded]=useState(false);
+  const selfExps=useMemo(()=>exps.filter(e=>e.account==='Self'),[exps]);
+  const reemonExps=useMemo(()=>exps.filter(e=>e.account==='Reemon'),[exps]);
+  const selfTotal=selfExps.reduce((s,e)=>s+e.amount,0);
+  const reemonTotal=reemonExps.reduce((s,e)=>s+e.amount,0);
+  const total=selfTotal+reemonTotal;
+  const selfPct=total>0?(selfTotal/total)*100:50;
+  return(
+    <div className={`hero-card ${expanded?'expanded':''}`} onClick={e=>{if(e.target.closest('.acct-tap'))return;setExpanded(!expanded);}}>
+      <div className="hero-front">
+        <div className="hero-label">Accounts</div>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',gap:4}}>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:'.62rem',color:ACCT_CLR.Self.text,fontWeight:700}}>Self</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontWeight:800,fontSize:'1.05rem',color:'var(--t1)'}}>{fmtAmt(selfTotal)}</div>
+          </div>
+          <div style={{flex:1,minWidth:0,textAlign:'right'}}>
+            <div style={{fontSize:'.62rem',color:ACCT_CLR.Reemon.text,fontWeight:700}}>Reemon</div>
+            <div style={{fontFamily:"'Playfair Display',serif",fontWeight:800,fontSize:'1.05rem',color:'var(--t1)'}}>{fmtAmt(reemonTotal)}</div>
+          </div>
+        </div>
+        <div className="split-bar">
+          <div className="split-seg" style={{flex:selfPct,background:ACCT_CLR.Self.dot}}/>
+          <div className="split-seg" style={{flex:100-selfPct,background:ACCT_CLR.Reemon.dot}}/>
+        </div>
+      </div>
+      <div className="hero-chevron">▼</div>
+      <div className="hero-expand">
+        <div className="detail-row"><span className="label">Self entries</span><span className="value">{selfExps.length}</span></div>
+        <div className="detail-row"><span className="label">Reemon entries</span><span className="value">{reemonExps.length}</span></div>
+        <div style={{display:'flex',gap:8,marginTop:8}}>
+          <button className="acct-tap" onClick={()=>onNavigate({account:'Self'})} style={{flex:1,padding:'8px',borderRadius:12,border:'1px solid '+ACCT_CLR.Self.dot,background:ACCT_CLR.Self.bg,color:ACCT_CLR.Self.text,fontSize:'.72rem',fontWeight:700,cursor:'pointer',fontFamily:"'Nunito',sans-serif"}}>View Self →</button>
+          <button className="acct-tap" onClick={()=>onNavigate({account:'Reemon'})} style={{flex:1,padding:'8px',borderRadius:12,border:'1px solid '+ACCT_CLR.Reemon.dot,background:ACCT_CLR.Reemon.bg,color:ACCT_CLR.Reemon.text,fontSize:'.72rem',fontWeight:700,cursor:'pointer',fontFamily:"'Nunito',sans-serif"}}>View Reemon →</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-TAB-BAR ───
+function TabBar({tab,onTab}){
+  const tabs=[{id:'entries',icon:'📋',label:'Entries'},{id:'phases',icon:'🏗️',label:'Phases'},{id:'zones',icon:'🏠',label:'Zones'},{id:'vendors',icon:'👷',label:'Vendors'},{id:'timeline',icon:'📅',label:'Timeline'}];
+  return(<div className="tab-bar">{tabs.map(t=><button key={t.id} className={`tab-item ${tab===t.id?'active':''}`} onClick={()=>onTab(t.id)}><span className="tab-icon">{t.icon}</span>{t.label}</button>)}</div>);
+}
+
+// ─── JS-SUBTOTAL-BAR ───
+function SubtotalBar({label,entries}){
+  const total=entries.reduce((s,e)=>s+e.amount,0);
+  return(<div className="subtotal-bar"><span className="crumb">{label} · {entries.length} entries</span><span className="amt">{fmtAmt(total)}</span></div>);
+}
+
+// ─── JS-ENTRY-ROW ───
+function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
+  const ref=useRef(null);const startX=useRef(0);const dx=useRef(0);
+  const pc=PHASE_CLR[entry.phase]||{bg:'#f5f5f4',text:'#44403c'};
+  const ac=ACCT_CLR[entry.account]||{bg:'#f5f5f4',text:'#44403c'};
+  const handleStart=e=>{startX.current=e.touches[0].clientX;dx.current=0;};
+  const handleMove=e=>{dx.current=e.touches[0].clientX-startX.current;const el=ref.current;if(el)el.style.transform=`translateX(${Math.max(-80,Math.min(80,dx.current))}px)`;};
+  const handleEnd=()=>{const el=ref.current;if(!el)return;if(dx.current<-60)onDelete(entry);else if(dx.current>60)onEdit(entry);el.style.transform='translateX(0)';};
+  return(
+    <div className="entry-row">
+      <div className="swipe-underlay right">✏️ Edit</div>
+      <div className="swipe-underlay left">🗑 Delete</div>
+      <div ref={ref} className="entry-content" onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd} onClick={()=>onToggle(entry.id)}>
+        <div className="entry-top">
+          <span className="entry-vendor">{entry.vendor}</span>
+          <span className="entry-amt">{fmtAmt(entry.amount)}</span>
+        </div>
+        <div className="entry-meta">
+          <span className="entry-date">{fmtDateShort(entry.date)}</span>
+          <span className="chip" style={{background:pc.bg,color:pc.text}}>{entry.phase}</span>
+          <span className="chip" style={{background:ac.bg,color:ac.text}}>{entry.account}</span>
+        </div>
+      </div>
+      <div className={`entry-detail ${isExpanded?'open':''}`}>
+        <div className="detail-grid">
+          <div className="detail-cell"><div className="lbl">Amount</div><div className="val">{fmtFull(entry.amount)}</div></div>
+          <div className="detail-cell"><div className="lbl">Category</div><div className="val">{entry.category}</div></div>
+          <div className="detail-cell"><div className="lbl">Subcategory</div><div className="val">{entry.subcategory}</div></div>
+          <div className="detail-cell"><div className="lbl">Phase</div><div className="val">{entry.phase}</div></div>
+          <div className="detail-cell"><div className="lbl">Zone</div><div className="val">{entry.zone}</div></div>
+          <div className="detail-cell"><div className="lbl">Payment</div><div className="val">{entry.paymentMode}</div></div>
+          <div className="detail-cell"><div className="lbl">Type</div><div className="val">{entry.expenseType}</div></div>
+          <div className="detail-cell"><div className="lbl">Status</div><div className="val">{entry.status}</div></div>
+          {entry.transferTo&&entry.transferTo!==entry.vendor&&<div className="detail-cell"><div className="lbl">Transfer To</div><div className="val">{entry.transferTo}</div></div>}
+          {entry.invoiceRef&&<div className="detail-cell"><div className="lbl">Invoice</div><div className="val">{entry.invoiceRef}</div></div>}
+          {entry.notes&&<div className="detail-cell" style={{gridColumn:'1/-1'}}><div className="lbl">Notes</div><div className="val">{entry.notes}</div></div>}
+        </div>
+        <div className="swipe-hint">← swipe to edit or delete →</div>
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-ENTRIES-TAB ───
+function EntriesTab({exps,activeFilter,onClearFilter,onEdit,onDelete,expandId,onToggle}){
+  const [search,setSearch]=useState('');
+  const filtered=useMemo(()=>{
+    let list=[...exps];
+    if(activeFilter){
+      if(activeFilter.account)list=list.filter(e=>e.account===activeFilter.account);
+      if(activeFilter.phase)list=list.filter(e=>e.phase===activeFilter.phase);
+      if(activeFilter.zone)list=list.filter(e=>e.zone===activeFilter.zone);
+      if(activeFilter.vendor)list=list.filter(e=>e.vendor===activeFilter.vendor);
+      if(activeFilter.category)list=list.filter(e=>e.category===activeFilter.category);
+      if(activeFilter.dateRange){list=list.filter(e=>e.date>=activeFilter.dateRange.start&&e.date<=activeFilter.dateRange.end);}
+    }
+    if(search){const s=search.toLowerCase();list=list.filter(e=>[e.vendor,e.description,e.notes,e.invoiceRef,e.category,e.subcategory].some(f=>(f||'').toLowerCase().includes(s)));}
+    return list.sort((a,b)=>b.date.localeCompare(a.date)||b.amount-a.amount);
+  },[exps,activeFilter,search]);
+  const filterLabel=activeFilter?Object.entries(activeFilter).filter(([k,v])=>v).map(([k,v])=>typeof v==='object'?`${monthLabel(v.start.slice(0,7))}`:v).join(' · '):'';
+  return(
+    <div className="entry-list">
+      <div className="search-bar"><input placeholder="Search vendor, notes..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
+      {filterLabel&&<div className="filter-badge" onClick={onClearFilter}>{filterLabel} ✕</div>}
+      {(filterLabel||search)&&<SubtotalBar label={filterLabel||'Search results'} entries={filtered}/>}
+      {filtered.length===0&&<div className="empty-state"><div className="icon">📭</div><p>No entries found</p></div>}
+      {filtered.map(e=><EntryRow key={e.id} entry={e} isExpanded={expandId===e.id} onToggle={onToggle} onEdit={onEdit} onDelete={onDelete}/>)}
+    </div>
+  );
+}
+
+// ─── JS-OVERVIEW-CARDS ───
+function OverviewCards({groups,onSelect,labelKey}){
+  return groups.map(g=>{
+    const pc=labelKey==='phase'?PHASE_CLR[g.name]:null;
+    const total=g.entries.reduce((s,e)=>s+e.amount,0);
+    const catCounts={};g.entries.forEach(e=>{catCounts[e.category]=(catCounts[e.category]||0)+e.amount;});
+    const catEntries=Object.entries(catCounts).sort((a,b)=>b[1]-a[1]);
+    const biggest=g.entries.reduce((max,e)=>e.amount>max.amount?e:max,g.entries[0]);
+    return(
+      <div key={g.name} className="overview-card" onClick={()=>onSelect(g.name)}>
+        <div className="ov-header">
+          <div style={{flex:1,minWidth:0}}>
+            <div className="ov-title" style={{display:'flex',alignItems:'center',gap:6}}>
+              {pc&&<span className="dot" style={{background:pc.dot}}/>}
+              <span style={{overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{g.name}</span>
+            </div>
+          </div>
+          <div className="ov-amount">{fmtAmt(total)}</div>
+        </div>
+        <div className="ov-meta">{g.entries.length} entries · Largest: {fmtAmt(biggest?.amount||0)} ({biggest?.vendor})</div>
+        <div className="ov-mini-bar">
+          {catEntries.slice(0,5).map(([cat,amt])=>{
+            const cc=CAT_CLR[cat]||{dot:'#888'};
+            return <div key={cat} className="ov-mini-seg" style={{flex:amt,background:cc.dot}}/>;
+          })}
+        </div>
+      </div>
+    );
+  });
+}
+
+// ─── JS-PHASES-TAB ───
+function PhasesTab({exps,onNavigate}){
+  const [level,setLevel]=useState(0);const [selPhase,setSelPhase]=useState(null);const [selZone,setSelZone]=useState(null);
+  const phases=useMemo(()=>{
+    const m={};exps.forEach(e=>{if(!m[e.phase])m[e.phase]={name:e.phase,entries:[]};m[e.phase].entries.push(e);});
+    return PHASES.filter(p=>m[p]).map(p=>m[p]);
+  },[exps]);
+  const zones=useMemo(()=>{
+    if(!selPhase)return [];const pe=exps.filter(e=>e.phase===selPhase);const m={};pe.forEach(e=>{if(!m[e.zone])m[e.zone]={name:e.zone,entries:[]};m[e.zone].entries.push(e);});return Object.values(m).sort((a,b)=>b.entries.reduce((s,e)=>s+e.amount,0)-a.entries.reduce((s,e)=>s+e.amount,0));
+  },[exps,selPhase]);
+  if(level===0)return(<div className="entry-list"><OverviewCards groups={phases} labelKey="phase" onSelect={p=>{setSelPhase(p);setLevel(1);}}/></div>);
+  if(level===1)return(<div className="entry-list"><button className="back-btn" onClick={()=>setLevel(0)}>← All Phases</button><SubtotalBar label={selPhase} entries={exps.filter(e=>e.phase===selPhase)}/><OverviewCards groups={zones} labelKey="zone" onSelect={z=>{setSelZone(z);onNavigate({phase:selPhase,zone:z});}}/></div>);
+  return null;
+}
+
+// ─── JS-ZONES-TAB ───
+function ZonesTab({exps,onNavigate}){
+  const [level,setLevel]=useState(0);const [selZone,setSelZone]=useState(null);
+  const zones=useMemo(()=>{
+    const m={};exps.forEach(e=>{if(!m[e.zone])m[e.zone]={name:e.zone,entries:[]};m[e.zone].entries.push(e);});
+    return ZONES.filter(z=>m[z]).map(z=>m[z]);
+  },[exps]);
+  const phases=useMemo(()=>{
+    if(!selZone)return [];const ze=exps.filter(e=>e.zone===selZone);const m={};ze.forEach(e=>{if(!m[e.phase])m[e.phase]={name:e.phase,entries:[]};m[e.phase].entries.push(e);});return Object.values(m).sort((a,b)=>b.entries.reduce((s,e)=>s+e.amount,0)-a.entries.reduce((s,e)=>s+e.amount,0));
+  },[exps,selZone]);
+  if(level===0)return(<div className="entry-list"><OverviewCards groups={zones} labelKey="zone" onSelect={z=>{setSelZone(z);setLevel(1);}}/></div>);
+  if(level===1)return(<div className="entry-list"><button className="back-btn" onClick={()=>setLevel(0)}>← All Zones</button><SubtotalBar label={selZone} entries={exps.filter(e=>e.zone===selZone)}/><OverviewCards groups={phases} labelKey="phase" onSelect={p=>{onNavigate({zone:selZone,phase:p});}}/></div>);
+  return null;
+}
+
+// ─── JS-VENDORS-TAB ───
+function VendorsTab({exps,onNavigate}){
+  const [search,setSearch]=useState('');
+  const vendors=useMemo(()=>{
+    const m={};exps.forEach(e=>{const v=e.vendor;if(!m[v])m[v]={name:v,entries:[],total:0,intermediaries:new Set(),modes:new Set()};m[v].entries.push(e);m[v].total+=e.amount;m[v].modes.add(e.paymentMode);if(e.transferTo&&e.transferTo!==e.vendor)m[v].intermediaries.add(e.transferTo);});
+    return Object.values(m).sort((a,b)=>b.total-a.total);
+  },[exps]);
+  const filtered=search?vendors.filter(v=>v.name.toLowerCase().includes(search.toLowerCase())):vendors;
+  return(
+    <div className="entry-list">
+      <div className="search-bar"><input placeholder="Search vendors..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
+      {filtered.map(v=>{
+        const lastDate=v.entries.sort((a,b)=>b.date.localeCompare(a.date))[0]?.date;
+        const selfAmt=v.entries.filter(e=>e.account==='Self').reduce((s,e)=>s+e.amount,0);
+        const selfPct=v.total>0?(selfAmt/v.total)*100:50;
+        return(
+          <div key={v.name} className="vendor-card" onClick={()=>onNavigate({vendor:v.name})}>
+            <div className="v-header">
+              <span className="v-name">{v.name}</span>
+              <span className="v-total">{fmtAmt(v.total)}</span>
+            </div>
+            <div className="v-meta">{v.entries.length} payments · Last: {fmtDateShort(lastDate)}</div>
+            {v.intermediaries.size>0&&<div className="v-intermediary">Also paid via: {[...v.intermediaries].join(', ')}</div>}
+            <div className="split-bar" style={{height:4}}>
+              <div className="split-seg" style={{flex:selfPct,background:ACCT_CLR.Self.dot}}/>
+              <div className="split-seg" style={{flex:100-selfPct,background:ACCT_CLR.Reemon.dot}}/>
+            </div>
+            <div className="v-modes">{[...v.modes].map(m=><span key={m} className="chip" style={{background:'var(--accentLt)',color:'var(--accent)'}}>{m}</span>)}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── JS-TIMELINE-TAB ───
+function TimelineTab({exps,onNavigate}){
+  const [mode,setMode]=useState('phase');
+  const months=useMemo(()=>{
+    const m={};exps.forEach(e=>{const k=monthKey(e.date);if(!m[k])m[k]=[];m[k].push(e);});
+    return Object.keys(m).sort().map(k=>({key:k,label:monthLabel(k),entries:m[k],total:m[k].reduce((s,e)=>s+e.amount,0)}));
+  },[exps]);
+  const maxTotal=Math.max(...months.map(m=>m.total),1);
+  return(
+    <div className="entry-list">
+      <div className="tl-toggle">
+        <button className={mode==='phase'?'active':''} onClick={()=>setMode('phase')}>By Phase</button>
+        <button className={mode==='account'?'active':''} onClick={()=>setMode('account')}>By Account</button>
+      </div>
+      <div className="tl-chart">
+        <div className="tl-bars">
+          {months.map(m=>{
+            const h=(m.total/maxTotal)*160;
+            if(mode==='phase'){
+              const groups={};m.entries.forEach(e=>{groups[e.phase]=(groups[e.phase]||0)+e.amount;});
+              const segs=Object.entries(groups).sort((a,b)=>b[1]-a[1]);
+              return(
+                <div key={m.key} className="tl-bar-col" onClick={()=>{const start=m.key+'-01';const end=m.key+'-31';onNavigate({dateRange:{start,end}});}}>
+                  <div style={{height:h,display:'flex',flexDirection:'column',width:'100%'}}>
+                    {segs.map(([ph,amt])=>{const pc=PHASE_CLR[ph]||{dot:'#888'};return <div key={ph} className="tl-bar" style={{flex:amt,background:pc.dot}}/>;})}
+                  </div>
+                  <div className="tl-month">{m.label}</div>
+                </div>
+              );
+            }else{
+              const selfAmt=m.entries.filter(e=>e.account==='Self').reduce((s,e)=>s+e.amount,0);
+              const reemonAmt=m.total-selfAmt;
+              return(
+                <div key={m.key} className="tl-bar-col" onClick={()=>{const start=m.key+'-01';const end=m.key+'-31';onNavigate({dateRange:{start,end}});}}>
+                  <div style={{height:h,display:'flex',flexDirection:'column',width:'100%'}}>
+                    {selfAmt>0&&<div className="tl-bar" style={{flex:selfAmt,background:ACCT_CLR.Self.dot}}/>}
+                    {reemonAmt>0&&<div className="tl-bar" style={{flex:reemonAmt,background:ACCT_CLR.Reemon.dot}}/>}
+                  </div>
+                  <div className="tl-month">{m.label}</div>
+                </div>
+              );
+            }
+          })}
+        </div>
+      </div>
+      <div style={{marginTop:8}}>
+        {(() => {
+          const quarters={};months.forEach(m=>{const[y,mo]=m.key.split('-');const q=`Q${Math.ceil(parseInt(mo)/3)} ${y}`;if(!quarters[q])quarters[q]={total:0,count:0};quarters[q].total+=m.total;quarters[q].count+=m.entries.length;});
+          return Object.entries(quarters).map(([q,d])=>(
+            <div key={q} className="detail-row" style={{padding:'6px 4px'}}>
+              <span className="label" style={{fontSize:'.78rem'}}>{q}</span>
+              <span className="value" style={{fontSize:'.85rem'}}>{fmtAmt(d.total)} <span style={{fontSize:'.65rem',color:'var(--t3)',fontWeight:400}}>({d.count})</span></span>
+            </div>
+          ));
+        })()}
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-ENTRY-FORM ───
+function EntryForm({entry,onSave,onCancel,exps,userName}){
+  const isEdit=!!entry?.id;
+  const [step,setStep]=useState(1);
+  const [f,setF]=useState(entry||{date:new Date().toISOString().slice(0,10),amount:'',vendor:'',transferTo:'',account:'Self',category:'',subcategory:'',phase:'',zone:'Whole House',expenseType:'Contract',paymentMode:'NEFT',invoiceRef:'',notes:'',status:'Paid'});
+  const up=(k,v)=>setF(p=>({...p,[k]:v,...(k==='vendor'&&!isEdit&&p.transferTo===p.vendor?{transferTo:v}:{}),
+    ...(k==='category'?{subcategory:''}:{})}));
+  const vendors=useMemo(()=>[...new Set(exps.map(e=>e.vendor))].sort(),[exps]);
+  const subs=CATEGORIES[f.category]||[];
+  const canNext=step===1?(f.date&&f.amount&&f.vendor):step===2?(f.category&&f.subcategory&&f.phase):true;
+  const handleSave=()=>{
+    const entry={...f,amount:parseFloat(f.amount)||0,transferTo:f.transferTo||f.vendor,loggedBy:userName||'Unknown'};
+    onSave(entry);
+  };
+  return(
+    <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
+      <div className="modal">
+        <h2>{isEdit?'Edit Entry':'New Entry'}</h2>
+        <div className="form-steps"><div className={`form-step ${step>=1?'active':''} ${step>1?'done':''}`}/><div className={`form-step ${step>=2?'active':''} ${step>2?'done':''}`}/><div className={`form-step ${step>=3?'active':''}`}/></div>
+        {step===1&&<>
+          <div className="field"><label>Date</label><input type="date" value={f.date} onChange={e=>up('date',e.target.value)}/></div>
+          <div className="field"><label>Amount (₹)</label><input type="number" placeholder="0" value={f.amount} onChange={e=>up('amount',e.target.value)}/></div>
+          <div className="field"><label>Vendor</label><input list="vendors" value={f.vendor} onChange={e=>up('vendor',e.target.value)} placeholder="Who was paid"/><datalist id="vendors">{vendors.map(v=><option key={v} value={v}/>)}</datalist></div>
+          <div className="field"><label>Transfer To</label><input value={f.transferTo} onChange={e=>up('transferTo',e.target.value)} placeholder="Same as vendor unless intermediary"/></div>
+          <div className="field"><label>Account</label><div className="toggle-group">{['Self','Reemon'].map(a=><button key={a} type="button" className={`toggle-btn ${f.account===a?'active':''}`} onClick={()=>up('account',a)}>{a}</button>)}</div></div>
+        </>}
+        {step===2&&<>
+          <div className="field"><label>Category</label><select value={f.category} onChange={e=>up('category',e.target.value)}><option value="">Select...</option>{Object.keys(CATEGORIES).map(c=><option key={c} value={c}>{c}</option>)}</select></div>
+          <div className="field"><label>Subcategory</label><select value={f.subcategory} onChange={e=>up('subcategory',e.target.value)}><option value="">Select...</option>{subs.map(s=><option key={s} value={s}>{s}</option>)}</select></div>
+          <div className="field"><label>Phase</label><select value={f.phase} onChange={e=>up('phase',e.target.value)}><option value="">Select...</option>{PHASES.map(p=><option key={p} value={p}>{p}</option>)}</select></div>
+          <div className="field"><label>Zone</label><select value={f.zone} onChange={e=>up('zone',e.target.value)}>{ZONES.map(z=><option key={z} value={z}>{z}</option>)}</select></div>
+          <div className="field"><label>Expense Type</label><div className="toggle-group">{EXPENSE_TYPES.map(t=><button key={t} type="button" className={`toggle-btn ${f.expenseType===t?'active':''}`} onClick={()=>up('expenseType',t)}>{t}</button>)}</div></div>
+        </>}
+        {step===3&&<>
+          <div className="field"><label>Payment Mode</label><select value={f.paymentMode} onChange={e=>up('paymentMode',e.target.value)}>{PAYMENT_MODES.map(m=><option key={m} value={m}>{m}</option>)}</select></div>
+          <div className="field"><label>Invoice Ref</label><input value={f.invoiceRef} onChange={e=>up('invoiceRef',e.target.value)} placeholder="Optional"/></div>
+          <div className="field"><label>Notes</label><textarea value={f.notes} onChange={e=>up('notes',e.target.value)} placeholder="Optional"/></div>
+          <div className="field"><label>Status</label><div className="toggle-group">{STATUSES.map(s=><button key={s} type="button" className={`toggle-btn ${f.status===s?'active':''}`} style={{fontSize:'.7rem'}} onClick={()=>up('status',s)}>{s}</button>)}</div></div>
+        </>}
+        <div className="form-actions">
+          {step>1&&<button className="btn-secondary" onClick={()=>setStep(step-1)}>Back</button>}
+          {step<3&&<button className="btn-primary" onClick={()=>setStep(step+1)} disabled={!canNext}>Next</button>}
+          {step===3&&<button className="btn-primary" onClick={handleSave}>Save</button>}
+          <button className="btn-secondary" onClick={onCancel}>{step===1?'Cancel':'✕'}</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-CONFIRM-DIALOG ───
+function ConfirmDialog({title,message,onConfirm,onCancel}){
+  return(
+    <div className="confirm-overlay" onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
+      <div className="confirm-box">
+        <h3>{title}</h3>
+        <p>{message}</p>
+        <div className="form-actions">
+          <button className="btn-danger" onClick={onConfirm}>Delete</button>
+          <button className="btn-secondary" onClick={onCancel}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-THEME-PICKER ───
+function ThemePicker({themeId,onPick,onClose}){
+  return(
+    <div className="theme-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div className="theme-picker">
+        <h2 style={{fontSize:'1rem',textAlign:'center'}}>Choose Theme</h2>
+        <div className="theme-grid">
+          {Object.entries(THEMES).map(([id,t])=>(
+            <div key={id} className={`theme-opt ${themeId===id?'active':''}`} onClick={()=>onPick(id)}>
+              <span className="theme-emoji">{t.emoji}</span>
+              {t.name}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-APP ───
+function App(){
+  const [exps,setExps]=useState([]);
+  const [budgets,setBudgets]=useState([]);
+  const [tab,setTab]=useState('entries');
+  const [activeFilter,setActiveFilter]=useState(null);
+  const [themeId,setThemeId]=useState(()=>localStorage.getItem('hl-theme')||'blueprint');
+  const [expandId,setExpandId]=useState(null);
+  const [showForm,setShowForm]=useState(false);
+  const [editEntry,setEditEntry]=useState(null);
+  const [deleteTarget,setDeleteTarget]=useState(null);
+  const [showThemePicker,setShowThemePicker]=useState(false);
+  const [syncStatus,setSyncStatus]=useState('live');
+  const [userName,setUserName]=useState(()=>localStorage.getItem('hl-user')||'Jiten');
+
+  useEffect(()=>{applyTheme(themeId);},[themeId]);
+  useEffect(()=>{localStorage.setItem('hl-user',userName);},[userName]);
+
+  const loadData=useCallback(async()=>{
+    try{
+      const e=await fetchAll(FS_EXP);
+      setExps(e);setSyncStatus('live');
+    }catch(err){console.error(err);setSyncStatus('err');}
+  },[]);
+
+  useEffect(()=>{loadData();const iv=setInterval(loadData,10000);return()=>clearInterval(iv);},[loadData]);
+
+  const navigateToEntries=useCallback((filter)=>{setActiveFilter(filter);setTab('entries');setExpandId(null);},[]);
+
+  const handleSaveEntry=useCallback(async(entry)=>{
+    try{
+      if(editEntry?.id){await updateEntry(editEntry.id,entry);}
+      else{await createEntry(entry);}
+      setShowForm(false);setEditEntry(null);loadData();
+    }catch(err){alert('Error: '+err.message);}
+  },[editEntry,loadData]);
+
+  const handleDeleteEntry=useCallback(async()=>{
+    if(!deleteTarget)return;
+    try{await deleteEntry(deleteTarget.id);setDeleteTarget(null);loadData();}
+    catch(err){alert('Error: '+err.message);}
+  },[deleteTarget,loadData]);
+
+  const handleEdit=(entry)=>{setEditEntry(entry);setShowForm(true);};
+  const handleDeleteConfirm=(entry)=>{setDeleteTarget(entry);};
+
+  return(
+    <>
+      <Header syncStatus={syncStatus} themeId={themeId} onTheme={()=>setShowThemePicker(true)} onRefresh={loadData} userName={userName} onUserChange={setUserName}/>
+      <div className="hero-row">
+        <HeroSpendCard exps={exps}/>
+        <HeroAccountCard exps={exps} onNavigate={navigateToEntries}/>
+      </div>
+      <div style={{paddingBottom:70}}>
+        {tab==='entries'&&<EntriesTab exps={exps} activeFilter={activeFilter} onClearFilter={()=>setActiveFilter(null)} onEdit={handleEdit} onDelete={handleDeleteConfirm} expandId={expandId} onToggle={id=>setExpandId(expandId===id?null:id)}/>}
+        {tab==='phases'&&<PhasesTab exps={exps} onNavigate={navigateToEntries}/>}
+        {tab==='zones'&&<ZonesTab exps={exps} onNavigate={navigateToEntries}/>}
+        {tab==='vendors'&&<VendorsTab exps={exps} onNavigate={navigateToEntries}/>}
+        {tab==='timeline'&&<TimelineTab exps={exps} onNavigate={navigateToEntries}/>}
+      </div>
+      <TabBar tab={tab} onTab={setTab}/>
+      {tab==='entries'&&<button className="fab" onClick={()=>{setEditEntry(null);setShowForm(true);}}>+</button>}
+      {showForm&&<EntryForm entry={editEntry} onSave={handleSaveEntry} onCancel={()=>{setShowForm(false);setEditEntry(null);}} exps={exps} userName={userName}/>}
+      {deleteTarget&&<ConfirmDialog title="Delete Entry?" message={`${deleteTarget.vendor} — ${fmtFull(deleteTarget.amount)} on ${fmtDate(deleteTarget.date)}`} onConfirm={handleDeleteEntry} onCancel={()=>setDeleteTarget(null)}/>}
+      {showThemePicker&&<ThemePicker themeId={themeId} onPick={id=>{setThemeId(id);applyTheme(id);setShowThemePicker(false);}} onClose={()=>setShowThemePicker(false)}/>}
+    </>
+  );
+}
+
+ReactDOM.render(<App/>,document.getElementById('root'));
+</script>
+</body>
+</html>
