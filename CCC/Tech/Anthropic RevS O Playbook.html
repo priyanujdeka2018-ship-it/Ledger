@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anthropic · Revenue Strategy & Operations · India · Career Playbook</title>
+<style>
+  /* ===== ANTHROPIC OFFICIAL BRAND PALETTE ===== */
+  :root {
+    --bg: #faf9f5;
+    --bg-tint: #f5f3ed;
+    --surface: #ffffff;
+    --surface-2: #e8e6dc;
+    --text: #141413;
+    --text-mid: #5a584f;
+    --text-mute: #b0aea5;
+    --border: #e0ddd1;
+    --clay: #d97757;
+    --clay-dark: #b85f44;
+    --blue: #6a9bcc;
+    --green: #788c5d;
+    --serif: 'Lora', Georgia, 'Times New Roman', serif;
+    --sans: 'Poppins', Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--text); font-family: var(--serif); font-size: 15px; line-height: 1.6; }
+  ::selection { background: var(--clay); color: var(--bg); }
+  /* Layout */
+  .shell { display: flex; min-height: 100vh; max-width: 1440px; margin: 0 auto; }
+  .nav {
+    width: 260px; flex-shrink: 0; background: var(--bg-tint);
+    border-right: 1px solid var(--border); padding: 32px 0; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .nav-brand { padding: 0 28px 28px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+  .nav-brand-eyebrow { font-family: var(--sans); font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--clay); font-weight: 600; margin-bottom: 8px; }
+  .nav-brand-title { font-family: var(--sans); font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .nav-brand-sub { font-size: 12px; color: var(--text-mid); margin-top: 6px; font-style: italic; }
+  .nav-list { list-style: none; }
+  .nav-item {
+    padding: 11px 28px; font-family: var(--sans); font-size: 13px; font-weight: 500;
+    color: var(--text-mid); cursor: pointer; border-left: 3px solid transparent; transition: all .18s;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-item:hover { background: var(--surface-2); color: var(--text); }
+  .nav-item.active { background: var(--surface-2); color: var(--clay); border-left-color: var(--clay); font-weight: 600; }
+  .nav-item-num { font-size: 10px; color: var(--text-mute); font-weight: 400; min-width: 18px; }
+  .nav-item.active .nav-item-num { color: var(--clay); }
+  .nav-status {
+    margin: 24px 28px 0; padding: 14px; background: var(--surface-2); border-radius: 6px;
+    font-family: var(--sans); font-size: 10px; color: var(--text-mid); line-height: 1.6;
+  }
+  .nav-status strong { color: var(--text); display: block; margin-bottom: 4px; font-size: 11px; }
+  /* Content */
+  .main { flex: 1; padding: 48px 64px 96px; max-width: 1100px; }
+  .panel { display: none; animation: fadeIn .25s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  /* Section heads */
+  .sec-num { font-family: var(--sans); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--clay); font-weight: 600; margin-bottom: 12px; }
+  .sec-title { font-family: var(--sans); font-size: 36px; font-weight: 700; color: var(--text); line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .sec-sub { font-size: 16px; color: var(--text-mid); margin-bottom: 36px; max-width: 720px; line-height: 1.55; }
+  .h3 { font-family: var(--sans); font-size: 20px; font-weight: 600; color: var(--text); margin: 36px 0 16px; letter-spacing: -0.2px; }
+  .h4 { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); margin: 24px 0 10px; }
+  /* Cards */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 16px; }
+  .card-clay { border-left: 4px solid var(--clay); }
+  .card-blue { border-left: 4px solid var(--blue); }
+  .card-green { border-left: 4px solid var(--green); }
+  .card-tint { background: var(--bg-tint); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .pill {
+    display: inline-block; font-family: var(--sans); font-size: 10px; font-weight: 600;
+    padding: 4px 10px; border-radius: 100px; letter-spacing: 0.6px; text-transform: uppercase;
+  }
+  .pill-clay { background: var(--clay); color: var(--bg); }
+  .pill-blue { background: var(--blue); color: var(--bg); }
+  .pill-green { background: var(--green); color: var(--bg); }
+  .pill-outline { border: 1px solid var(--border); color: var(--text-mid); background: var(--bg); }
+  .pill-amber { background: #c9943b; color: var(--bg); }
+  .pill-red { background: #b85f44; color: var(--bg); }
+  /* Snapshot */
+  .snap-hero {
+    background: linear-gradient(135deg, var(--bg-tint) 0%, var(--surface-2) 100%);
+    border-radius: 14px; padding: 40px 44px; margin-bottom: 32px; border: 1px solid var(--border);
+  }
+  .snap-eyebrow { font-family: var(--sans); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--clay); margin-bottom: 14px; font-weight: 600; }
+  .snap-headline { font-family: var(--sans); font-size: 30px; font-weight: 700; line-height: 1.2; color: var(--text); margin-bottom: 12px; letter-spacing: -0.4px; }
+  .snap-thesis { font-size: 16px; color: var(--text-mid); font-style: italic; max-width: 760px; line-height: 1.6; }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .stat-label { font-family: var(--sans); font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-mute); margin-bottom: 6px; font-weight: 600; }
+  .stat-value { font-family: var(--sans); font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.1; }
+  .stat-sub { font-size: 11px; color: var(--text-mid); margin-top: 4px; }
+  /* Req cards */
+  .req {
+    background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--clay);
+    border-radius: 10px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .req-jd { font-family: var(--sans); font-size: 11px; color: var(--clay); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .req-quote { font-size: 14px; color: var(--text-mid); font-style: italic; margin-bottom: 12px; padding-left: 14px; border-left: 2px solid var(--surface-2); }
+  .req-mean { font-size: 14px; color: var(--text); }
+  .req-mean strong { color: var(--clay-dark); }
+  /* Vocab table */
+  table.vocab { width: 100%; border-collapse: collapse; margin: 14px 0 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  table.vocab th, table.vocab td { padding: 13px 18px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+  table.vocab th { background: var(--surface-2); font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text); }
+  table.vocab tr:last-child td { border-bottom: none; }
+  table.vocab td:first-child { color: var(--clay-dark); font-weight: 500; width: 38%; }
+  /* Gap cards */
+  .gap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 14px; }
+  .gap-genuine { border-left: 4px solid var(--clay); }
+  .gap-vocab { border-left: 4px solid var(--green); }
+  .gap-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .gap-title { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); }
+  .gap-body { font-size: 13.5px; color: var(--text-mid); line-height: 1.65; }
+  .gap-body strong { color: var(--text); }
+  /* STAR */
+  .star {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 22px 26px; margin-bottom: 16px;
+  }
+  .star-id { font-family: var(--sans); font-size: 11px; color: var(--clay); font-weight: 600; letter-spacing: 0.8px; margin-bottom: 6px; text-transform: uppercase; }
+  .star-title { font-family: var(--sans); font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .star-map { font-size: 12px; color: var(--text-mid); margin-bottom: 14px; padding: 8px 12px; background: var(--bg-tint); border-radius: 6px; border-left: 3px solid var(--blue); }
+  .star-row { display: grid; grid-template-columns: 90px 1fr; gap: 16px; margin-bottom: 8px; align-items: start; }
+  .star-label { font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 1.4px; color: var(--clay); padding-top: 2px; }
+  .star-text { font-size: 13.5px; color: var(--text); line-height: 1.6; }
+  .star-text strong { color: var(--clay-dark); }
+  /* Timeline */
+  .tl-phase { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 16px; border-left: 4px solid var(--clay); }
+  .tl-phase-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tl-phase-day { font-family: var(--sans); font-size: 13px; font-weight: 700; color: var(--clay); letter-spacing: 0.8px; text-transform: uppercase; }
+  .tl-phase-title { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--text); }
+  .tl-item { padding: 10px 0 10px 22px; position: relative; border-top: 1px solid var(--border); font-size: 13.5px; color: var(--text-mid); }
+  .tl-item:first-of-type { border-top: none; padding-top: 4px; }
+  .tl-item::before { content: '▸'; position: absolute; left: 0; top: 11px; color: var(--clay); font-size: 12px; }
+  .tl-item strong { color: var(--text); font-family: var(--sans); font-size: 13px; }
+  /* AI Projects */
+  .ai-proj { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 24px 28px; margin-bottom: 16px; border-left: 4px solid var(--blue); }
+  .ai-proj-head { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+  .ai-proj-id { font-family: var(--sans); font-size: 11px; color: var(--blue); font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; }
+  .ai-proj-title { font-family: var(--sans); font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .ai-proj-stack { font-family: var(--sans); font-size: 11px; color: var(--text-mute); margin-bottom: 12px; letter-spacing: 0.4px; }
+  .ai-proj-body { font-size: 13.5px; color: var(--text-mid); line-height: 1.65; }
+  .ai-proj-body strong { color: var(--text); }
+  .ai-pitch { background: linear-gradient(135deg, var(--bg-tint), var(--surface-2)); border-radius: 10px; padding: 22px 26px; margin-top: 14px; font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--text); line-height: 1.65; border-left: 4px solid var(--clay); }
+  /* Interview */
+  .iv-round { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 16px; }
+  .iv-round-head { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--clay); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .iv-q { padding: 11px 0 11px 22px; position: relative; font-size: 13.5px; color: var(--text); border-top: 1px solid var(--border); line-height: 1.55; }
+  .iv-q:first-of-type { border-top: none; }
+  .iv-q::before { content: 'Q'; position: absolute; left: 0; top: 11px; color: var(--clay); font-family: var(--sans); font-size: 11px; font-weight: 700; }
+  .iv-q-tag { font-family: var(--sans); font-size: 10px; color: var(--text-mute); margin-left: 8px; letter-spacing: 0.4px; }
+  .iv-anchor { background: var(--bg-tint); border-radius: 8px; padding: 16px 20px; margin: 12px 0; font-size: 13px; color: var(--text); border-left: 3px solid var(--green); font-style: italic; line-height: 1.6; }
+  .iv-anchor strong { font-style: normal; font-family: var(--sans); color: var(--green); display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; }
+  /* Comp */
+  .comp-conf { display: inline-block; padding: 8px 16px; border-radius: 100px; font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; background: var(--bg-tint); border: 1px solid var(--border); color: var(--text); margin-bottom: 18px; }
+  .comp-conf strong { color: var(--clay); }
+  .comp-band { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 14px; }
+  .comp-band-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+  .comp-band-name { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); }
+  .comp-band-range { font-family: var(--sans); font-size: 18px; font-weight: 700; color: var(--clay); }
+  .comp-rows { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 8px; }
+  .comp-row-label { font-family: var(--sans); font-size: 10px; color: var(--text-mute); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .comp-row-val { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); }
+  .source-list { font-size: 12.5px; color: var(--text-mid); line-height: 1.7; padding-left: 18px; }
+  .source-list li { margin-bottom: 6px; }
+  /* Placeholder */
+  .todo { background: repeating-linear-gradient(45deg, var(--bg-tint), var(--bg-tint) 10px, var(--surface-2) 10px, var(--surface-2) 20px); border: 1px dashed var(--clay); border-radius: 10px; padding: 32px; text-align: center; }
+  .todo-eyebrow { font-family: var(--sans); font-size: 11px; font-weight: 700; color: var(--clay); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+  .todo-title { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .todo-body { font-size: 13px; color: var(--text-mid); }
+  /* Mobile */
+  @media (max-width: 900px) {
+    .shell { flex-direction: column; }
+    .nav { width: 100%; height: auto; position: relative; padding: 18px 0; }
+    .nav-list { display: flex; overflow-x: auto; padding: 0 12px; gap: 4px; }
+    .nav-item { white-space: nowrap; padding: 8px 14px; border-left: none; border-bottom: 3px solid transparent; }
+    .nav-item.active { border-left: none; border-bottom-color: var(--clay); }
+    .main { padding: 28px 20px 64px; }
+    .stat-grid, .grid-2, .grid-3, .comp-rows { grid-template-columns: 1fr; }
+    .sec-title { font-size: 26px; }
+    .nav-brand, .nav-status { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-brand-eyebrow">Career Playbook · v1.0</div>
+    <div class="nav-brand-title">Anthropic · Revenue S&O</div>
+    <div class="nav-brand-sub">Bengaluru · India · Senior IC track</div>
+  </div>
+  <ul class="nav-list">
+    <li class="nav-item active" data-tab="snap"><span class="nav-item-num">01</span> Snapshot</li>
+    <li class="nav-item" data-tab="decode"><span class="nav-item-num">02</span> Role Decode</li>
+    <li class="nav-item" data-tab="fit"><span class="nav-item-num">03</span> Fit & Gap</li>
+    <li class="nav-item" data-tab="story"><span class="nav-item-num">04</span> STAR Mapping</li>
+    <li class="nav-item" data-tab="plan"><span class="nav-item-num">05</span> 30·60·90</li>
+    <li class="nav-item" data-tab="ai"><span class="nav-item-num">06</span> AI Differentiator</li>
+    <li class="nav-item" data-tab="iv"><span class="nav-item-num">07</span> Interview Kit</li>
+    <li class="nav-item" data-tab="comp"><span class="nav-item-num">08</span> Comp Intel</li>
+    <li class="nav-item" data-tab="cert"><span class="nav-item-num">09</span> Cert Roadmap</li>
+    <li class="nav-item" data-tab="close"><span class="nav-item-num">10</span> Close & Outreach</li>
+    <li class="nav-item" data-tab="risk"><span class="nav-item-num">11</span> Risk & Red Flags</li>
+    <li class="nav-item" data-tab="stake"><span class="nav-item-num">12</span> Stakeholder Decode</li>
+  </ul>
+  <div class="nav-status">
+    <strong>Build status</strong>
+    All 12 sections complete<br>
+    Fit: 40 · Exploratory<br>
+    Conv prob: 8–12%
+  </div>
+</nav>
+
+<!-- ===== MAIN ===== -->
+<main class="main">
+
+<!-- ============ 01 SNAPSHOT ============ -->
+<section class="panel active" id="snap">
+  <div class="sec-num">01 / The take</div>
+  <h1 class="sec-title">Anthropic · India Revenue Strategy & Operations</h1>
+  <p class="sec-sub">First India S&O hire on a 4-month-old GCC, reporting into a 5-month-old MD, executing for the AI lab with the largest installed-base growth curve in the country. A stretch role whose conversion math is poor — and whose strategic optionality is exceptional.</p>
+
+  <div class="snap-hero">
+    <div class="snap-eyebrow">Headline thesis</div>
+    <div class="snap-headline">"You haven't run B2B SaaS revenue ops — but you've built every primitive it requires, for an AI-native company that values builders."</div>
+    <p class="snap-thesis">The vocabulary gap is real. The capability gap is not. The differentiator is that the dues collections function at Sobha is, structurally, a revenue ops function — pipeline of receivables, CRM build, forecasting cadence, exec QBR materials, cross-functional governance — executed at 14.9x scale on Salesforce architecture you co-built. Anthropic, uniquely, will recognise this if framed correctly.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat"><div class="stat-label">Fit score</div><div class="stat-value">40 / 100</div><div class="stat-sub">Exploratory · stretch</div></div>
+    <div class="stat"><div class="stat-label">Conversion probability</div><div class="stat-value">8–12%</div><div class="stat-sub">Lottery ticket band</div></div>
+    <div class="stat"><div class="stat-label">YOE gate</div><div class="stat-value">10–12 yrs</div><div class="stat-sub">You: 6 post-MBA, ~8–10 total</div></div>
+    <div class="stat"><div class="stat-label">Office age</div><div class="stat-value">~4 mo</div><div class="stat-sub">Bengaluru launch Feb 2026</div></div>
+  </div>
+
+  <h2 class="h3">Why this role exists</h2>
+  <div class="card card-tint">
+    <p>Anthropic opened Bengaluru in <strong>February 2026</strong> at Embassy Golf Links Tech Park as their second APAC office after Tokyo. India is the company's <strong>second-largest Claude.ai market globally</strong>; run-rate revenue has <strong>doubled since October 2025</strong>. MD India <strong>Irina Ghose</strong> (24-year Microsoft India veteran, ex-MD Microsoft India) joined in January 2026 to lead the buildout. This S&O role is the operational backbone that lets the in-market sales hires actually sell — territory design, forecast hygiene, QBR cadence, Salesforce setup for a team that does not yet have a team. You are the second or third India hire on a function that has no incumbent.</p>
+  </div>
+
+  <h2 class="h3">The three things that decide this</h2>
+  <div class="grid-3">
+    <div class="card card-clay">
+      <span class="pill pill-clay">01 · Reframe</span>
+      <h3 class="h4">Position dues collections as revenue ops</h3>
+      <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.6;">AED 12.97B receivables pipeline, 30,044 active records, 70+ live dashboards, forecast model defended at MD/CEO. Drop "collections" — lead with "revenue pipeline ops at SaaS scale."</p>
+    </div>
+    <div class="card card-blue">
+      <span class="pill pill-blue">02 · AI-native edge</span>
+      <h3 class="h4">Be the only candidate who ships AI-augmented RevOps</h3>
+      <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.6;">Anthropic's competitive moat is AI. RevOps candidates from Salesforce, Adobe, Stripe will pitch process. P6 + P12 + P13 lets you pitch <em>AI-native</em> process. Different category entirely.</p>
+    </div>
+    <div class="card card-green">
+      <span class="pill pill-green">03 · APJ context</span>
+      <h3 class="h4">Demonstrate matrix competence</h3>
+      <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.6;">Role coordinates with Tokyo + Korea + Singapore + Australia + global RevOps + India sales + Finance. 6+ stakeholder surfaces. Sobha's 77-person multi-team coordination is the proof point.</p>
+    </div>
+  </div>
+
+  <h2 class="h3">Honest framing</h2>
+  <div class="card">
+    <p style="font-size: 14px; color: var(--text-mid); line-height: 1.7;">This is not AmEx (88) or Oaktree (85). The years-of-experience floor and B2B SaaS gate are real. <strong>Do not displace those tracks for this.</strong> The play here is a <strong>30-minute application</strong> with one bullet swap on the resume to lead with AI-native ops framing — and a parallel <strong>follow-strategy</strong> on Anthropic India sub-Director S&O roles (Sr Analyst, Manager) that will post over the next 12 months and match your YOE far better. This playbook prepares you for both scenarios.</p>
+  </div>
+</section>
+
+<!-- ============ 02 ROLE DECODE ============ -->
+<section class="panel" id="decode">
+  <div class="sec-num">02 / What they actually want</div>
+  <h1 class="sec-title">Role Decode — 12 requirement cards</h1>
+  <p class="sec-sub">Every line of the JD broken into what it actually means and what it tests for. Read this before interview prep.</p>
+
+  <div class="req">
+    <div class="req-jd">Req 01 · GTM planning cycles</div>
+    <p class="req-quote">"Support the GTM planning process for India, including quarterly and annual cycles, and help prepare inputs for target setting with Finance."</p>
+    <p class="req-mean"><strong>What it means:</strong> They want someone who can run an <strong>annual operating plan (AOP)</strong> in cycles — quarterly recalibration, annual reset. You drive top-down / bottom-up reconciliation between Finance and Sales leadership. <strong>Tests for:</strong> planning cadence discipline, Finance-Sales translation, comfort with iteration under ambiguity.</p>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">Req 02 · Territory & account segmentation</div>
+    <p class="req-quote">"Assist in territory and account segmentation, keeping assignments accurate and up to date as the business evolves."</p>
+    <p class="req-mean"><strong>What it means:</strong> India will start with broad territory definitions (enterprise / mid-market / startup; or vertical-led — BFSI / digital-natives / GovTech). As the team grows, you re-cut. <strong>Tests for:</strong> structured thinking on customer segmentation, willingness to redo work as the business changes, account hygiene rigour.</p>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">Req 03 · Pipeline & forecast reporting</div>
+    <p class="req-quote">"Build and maintain reporting on region-specific sales metrics, pipeline health, and forecast accuracy."</p>
+    <p class="req-mean"><strong>What it means:</strong> Pipeline coverage ratios, deal velocity by stage, forecast-to-actuals variance, stage-conversion rates, win-loss. You build the dashboards that show India leadership and APJ HQ where the business actually is. <strong>Tests for:</strong> reporting craftsmanship, signal-vs-noise judgement, comfort with leadership scrutiny on numbers.</p>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">Req 04 · Market & competitive intel</div>
+    <p class="req-quote">"Pull together market and competitive data to support regional expansion priorities."</p>
+    <p class="req-mean"><strong>What it means:</strong> OpenAI's India footprint, Google Gemini's enterprise traction, India's regulatory posture (DPDP Act), enterprise budget cycles, Indian language model demand. You produce the briefs that inform vertical prioritisation. <strong>Tests for:</strong> synthesis, secondary-research speed, ability to compress 40 pages into one slide.</p>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">Req 05 · Partner & alliance execution</div>
+    <p class="req-quote">"Support partner and alliance execution, including co-sell tracking, partner pipeline hygiene, and joint planning logistics."</p>
+    <p class="req-mean"><strong>What it means:</strong> Anthropic's India partners include Swiggy, Air India, CRED, Razorpay, Karya, Digital Green. Co-sell motions with hyperscalers (AWS, GCP) are likely. You run the partner pipeline, joint QBRs, attribution. <strong>Tests for:</strong> ecosystem instinct, multi-party logistics, comfort with attribution ambiguity.</p>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">Req 06 · Sales data → insights → recommendations</div>
+    <p class="req-quote">"Dig into sales data to surface trends, risks, and opportunities, and translate findings into clear recommendations for sales leadership."</p>
+    <p class="req-mean"><strong>What it means:</strong> Not just reporting — <strong>diagnosis</strong>. Why is BFSI conversion below target? Which AEs are over-relying on inbound? Where is the pipeline thinning two quarters out? You run the analysis and make the call. <strong>Tests for:</strong> first-principles analytics, willingness to recommend (not just report), seniority of voice.</p>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">Req 07 · Dashboards & recurring reports</div>
+    <p class="req-quote">"Build dashboards and recurring reports that give the team visibility into what's working and what isn't."</p>
+    <p class="req-mean"><strong>What it means:</strong> Hands-on dashboard building — Salesforce reports, Tableau / Looker views, automated weekly / monthly delivery. India sales team and APJ HQ both consume. <strong>Tests for:</strong> data viz craft, automation discipline, audience awareness (the rep dashboard ≠ the QBR dashboard).</p>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">Req 08 · QBR & leadership materials</div>
+    <p class="req-quote">"Prepare materials for business reviews, QBRs, and leadership updates — pulling the data, building the slides, and helping shape the narrative."</p>
+    <p class="req-mean"><strong>What it means:</strong> Quarterly business review packs for Irina Ghose locally and global RevOps / Finance / Sales leadership at HQ. You shape the narrative — what gets emphasised, what gets debated, what the ask is. <strong>Tests for:</strong> executive storytelling, slide craft, prioritisation under length constraints, political instinct.</p>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">Req 09 · Day-to-day operational execution</div>
+    <p class="req-quote">"Execute day-to-day operational processes including account transitions, CRM updates, opportunity hygiene, and data management."</p>
+    <p class="req-mean"><strong>What it means:</strong> Hands-on, in-the-weeds work. Account moves when reps change, opportunity stage hygiene, ensuring CRM reflects reality. This is the operational floor. <strong>Tests for:</strong> attention to detail, willingness to do unglamorous work, bias toward action.</p>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">Req 10 · Salesforce administration</div>
+    <p class="req-quote">"Help maintain and improve our Salesforce setup, reports, and dashboards for the India team."</p>
+    <p class="req-mean"><strong>What it means:</strong> Salesforce admin-adjacent work — custom reports, dashboards, field config, validation rules, light flow / process builder, integration hygiene. Likely not formal admin cert required but hands-on fluency expected. <strong>Tests for:</strong> Salesforce muscle memory, comfort with platform, ability to debug.</p>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">Req 11 · Rep & leader troubleshooting + global RevOps partnership</div>
+    <p class="req-quote">"Troubleshoot issues for sales reps and leaders, and partner with global RevOps to implement improvements."</p>
+    <p class="req-mean"><strong>What it means:</strong> You are the first line of support for India sellers when something breaks — and the bridge to global RevOps (US-based) for upstream fixes. APJ S&O peers (Japan, Korea, Singapore, Australia) are your lateral network. <strong>Tests for:</strong> service mindset, escalation judgement, cross-timezone communication.</p>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">Req 12 · Sales tool adoption + enablement</div>
+    <p class="req-quote">"Support adoption of sales tools and enablement resources across the India team."</p>
+    <p class="req-mean"><strong>What it means:</strong> Adoption of the RevTech stack — Salesforce, Gong / Chorus equivalents, Outreach / Salesloft equivalents, Tableau / Looker, internal Claude tooling for sales (this is a tell — Anthropic almost certainly uses Claude internally for prep, research, draft outreach). <strong>Tests for:</strong> change management instinct, training delivery, willingness to be a power-user advocate.</p>
+  </div>
+
+  <h2 class="h3">What the JD does <em>not</em> say (and you should read for)</h2>
+  <div class="card card-tint">
+    <p style="font-size: 14px; color: var(--text); line-height: 1.7;">No mention of: SQL, Python, or modelling stack specifics. No quota / comp design as <em>required</em> (listed under "strong candidates"). No people management. <strong>Implication:</strong> this is an <strong>individual contributor</strong> role, not a manager role — the title "Director" you may see internally is more a senior-IC band than a people-leader band. That matches Anthropic's broader pattern of flat IC bands at high comp. <strong>Read the 10–12 YOE bar as "we want someone who has done this work themselves, recently, for a real B2B SaaS sales team."</strong></p>
+  </div>
+</section>
+
+<!-- ============ 03 FIT & GAP ============ -->
+<section class="panel" id="fit">
+  <div class="sec-num">03 / Your translation layer</div>
+  <h1 class="sec-title">Fit & Gap — vocabulary bridge + honest gap classification</h1>
+  <p class="sec-sub">Most of what they want, you've done — under different vocabulary. A few things you genuinely haven't. This section names both.</p>
+
+  <h2 class="h3">Vocab mappings — "their term → your equivalent"</h2>
+  <table class="vocab">
+    <thead><tr><th>Anthropic Revenue S&O term</th><th>Your Sobha equivalent</th></tr></thead>
+    <tbody>
+      <tr><td>Pipeline health, coverage ratio, deal velocity</td><td>AED 12.97B collections pipeline, monthly velocity tracking on 30,044 active records, T−25/T+30 framework as the velocity model</td></tr>
+      <tr><td>Forecast accuracy, top-down / bottom-up reconciliation</td><td>AED 8.2B annual collection target — bottom-up unit-level build vs top-down board commitment, monthly variance tracking, MD review</td></tr>
+      <tr><td>CRM build, Salesforce administration, opportunity hygiene</td><td>Salesforce 0→1 co-architecture — 6-stakeholder discovery, 70+ live reports shipped, 30,044 records under continuous hygiene governance</td></tr>
+      <tr><td>Sales metrics dashboard, BI reporting</td><td>70+ live reports across daily / weekly / monthly / quarterly cadences serving 40+ RMs and C-suite</td></tr>
+      <tr><td>Territory design, account segmentation</td><td>RM territory assignment across Dubai + India hubs, cohort segmentation by booking vintage, project phase, and risk band</td></tr>
+      <tr><td>QBR pack, business review materials</td><td>Monthly MD pack, quarterly board review, AED 652M NPV defended at MD/CEO through multiple scrutiny rounds</td></tr>
+      <tr><td>Annual operating plan (AOP), planning cycle</td><td>Annual Goals framework (first-ever, 2025) — OKR hierarchy for 60-person function, monthly OKR-to-MD reporting</td></tr>
+      <tr><td>Partner / alliance pipeline, co-sell tracking</td><td>10-bank partnership ecosystem, AED 442M daily reconciled across counterparties, mortgage MOU governance</td></tr>
+      <tr><td>Cross-functional revenue program, GTM execution</td><td>14.9x revenue scale (AED 867M → 12.97B) executed across Sales, Ops, Finance, Compliance, MIS without governance compromise</td></tr>
+      <tr><td>Data management, opportunity hygiene</td><td>982-document audit population — 14 findings addressed with controls evidence; daily PR rejection KPI as permanent governance</td></tr>
+      <tr><td>Sales analytics, deal-stage conversion</td><td>PR-to-SOA 0–2 day conversion improved 24.8% → 51.3% through structural quality intervention</td></tr>
+      <tr><td>Pipeline hygiene under commercial pressure</td><td>PR rejection standard held at 49% under leadership pressure — data vindicated, rate controlled in 30 days without standard relaxation</td></tr>
+      <tr><td>Process governance, cycle-time reduction</td><td>PCC TAT 20 days → 3 days (85% reduction) at 3x volume — same team, redesigned workflow</td></tr>
+      <tr><td>Tool adoption, enablement</td><td>Salesforce adoption to 40+ daily active users; SQL migration programme (18/50 reports migrated)</td></tr>
+      <tr><td>Sales operations cadence</td><td>T−25/T+30 critical collection window — 55-day proprietary operating model now embedded in SOPs across 2 geographies</td></tr>
+      <tr><td>Risk register, exception management</td><td>14-finding internal audit response; 3 proactive CCO escalations of blocked risk register items before due dates</td></tr>
+      <tr><td>Variance analysis, root-cause diagnostics</td><td>49% PR rejection root cause — 53% document gaps + 47% manual errors triangulated across 3 data sources</td></tr>
+      <tr><td>Scaled operations, multi-geo coordination</td><td>77-person team across Dubai (35) + India (42), 4 sub-functions (Sales, Ops, QCG, MIS) operating from shared data layer</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="h3">Gap cards — classified honestly</h2>
+  <p style="color: var(--text-mid); margin-bottom: 14px; font-size: 13.5px;">Per fit-scoring discipline: genuine vs vocabulary gaps named separately. Inflating fit by conflating these is the standard failure mode.</p>
+
+  <div class="gap gap-genuine">
+    <div class="gap-head"><span class="pill pill-clay">Gap 01 · Genuine</span><span class="gap-title">10–12 year YOE floor</span></div>
+    <p class="gap-body"><strong>The gap:</strong> JD specifies 10–12 years. You have ~6 post-PGDM (≈8–10 total counting pre-MBA BITS-era roles). <strong>Closure plan:</strong> Cannot bridge by reframing. Mitigation: lead with scope and quantum, not tenure (AED 12.97B managed beats 10 years at smaller scale). Be honest if asked — "8 years total work experience, 6 post-MBA at increasing scope." Don't argue the gap; argue the substitute proof point.</p>
+  </div>
+
+  <div class="gap gap-genuine">
+    <div class="gap-head"><span class="pill pill-clay">Gap 02 · Genuine</span><span class="gap-title">B2B SaaS / enterprise software domain</span></div>
+    <p class="gap-body"><strong>The gap:</strong> Real estate dues collections is downstream of contract signature; SaaS revenue ops is upstream — pipeline, quota, deal velocity, ARR / NRR / GRR mechanics. SaaS unit economics (LTV, CAC, payback), motion design (PLG vs sales-led), pricing & packaging — you have not done these. <strong>Closure plan:</strong> 3-week intensive: read "From Impossible to Inevitable" + Lenny's Newsletter + RevOps Co-op archives. Build a one-page Anthropic India revenue motion hypothesis (PLG → sales-assisted → enterprise) as a leave-behind interview artifact. This converts a gap into a demonstration of curiosity.</p>
+  </div>
+
+  <div class="gap gap-genuine">
+    <div class="gap-head"><span class="pill pill-clay">Gap 03 · Genuine</span><span class="gap-title">APJ region context</span></div>
+    <p class="gap-body"><strong>The gap:</strong> Zero exposure to Japan / Korea / Singapore / Australia sales motion, partner ecosystems, or regional rev rollup norms. Asian B2B SaaS comes with localised quirks (Japan's procurement cycles, Australia's compliance posture, Korea's reseller model). <strong>Closure plan:</strong> Read the Anthropic Tokyo office launch posts + scan APJ S&O LinkedIn posts from Salesforce, Atlassian, MongoDB, Snowflake APJ leaders. Frame the gap as <em>"India-first with curiosity to learn the APJ pattern from Tokyo S&O counterparts."</em></p>
+  </div>
+
+  <div class="gap gap-vocab">
+    <div class="gap-head"><span class="pill pill-green">Gap 04 · Vocab</span><span class="gap-title">Quota setting, sales comp design, accelerators</span></div>
+    <p class="gap-body"><strong>The gap (less than it appears):</strong> "Strong candidates" preference, not requirement. You have not designed AE quotas, OTE structures, accelerator curves, or SPIF programmes. <strong>Closure plan:</strong> 8-hour primer — Xactly resources, SBI quota-setting frameworks, basic OTE structure (50/50, 60/40, 70/30 splits), accelerator design (1× → 1.5× → 2× at threshold). You don't need to <em>have done</em> this — you need to <em>understand it as a peer</em> when global RevOps designs and rolls down.</p>
+  </div>
+
+  <div class="gap gap-vocab">
+    <div class="gap-head"><span class="pill pill-green">Gap 05 · Vocab</span><span class="gap-title">SaaS-specific BI tools (Tableau, Looker)</span></div>
+    <p class="gap-body"><strong>The gap (mostly familiarity):</strong> You have not built dashboards in Tableau or Looker. Your reporting muscle is Salesforce-native + Excel + Power BI. <strong>Closure plan:</strong> Looker Studio you already have (cert track). Tableau Public 10-hour intensive — rebuild one Sobha dashboard in Tableau as a portfolio artifact. Frame in interview: <em>"I've shipped 70+ production dashboards in Salesforce + Power BI; Tableau / Looker is a tool swap, not a capability swap. Here's the Tableau rebuild I did last week."</em></p>
+  </div>
+
+  <div class="gap gap-vocab">
+    <div class="gap-head"><span class="pill pill-green">Gap 06 · Vocab</span><span class="gap-title">SaaS unit economics vocabulary</span></div>
+    <p class="gap-body"><strong>The gap:</strong> ARR, NRR, GRR, magic number, Rule of 40, payback period, CAC ratio. You have lived these mechanics in different vocabulary — NPV, IRR, collection velocity, LTV-equivalent thinking — but cannot say them in the SaaS dialect fluently. <strong>Closure plan:</strong> 4-hour primer + flashcards. Read Christoph Janz's "5 Ways to Build a $100M Business" + David Skok's SaaS metrics canon. Lock 12 terms cold before any interview.</p>
+  </div>
+</section>
+
+<!-- ============ 04 STAR MAPPING ============ -->
+<section class="panel" id="story">
+  <div class="sec-num">04 / Your proof points, reframed</div>
+  <h1 class="sec-title">STAR mapping — 6 stories tuned for Anthropic Revenue S&O</h1>
+  <p class="sec-sub">From the 36-story bank, six selected for direct JD alignment. Each carries the Sobha facts intact but with vocabulary translated for the SaaS revenue ops audience.</p>
+
+  <div class="star">
+    <div class="star-id">S5 · Primary · "Tell me about building operational infrastructure"</div>
+    <h3 class="star-title">Salesforce 0→1 — from zero CRM to 70+ live reports across two geographies</h3>
+    <div class="star-map"><strong>JD mapping:</strong> Req 10 (Salesforce admin) + Req 03 (pipeline reporting) + Req 07 (dashboards). The closest one-story proof point you have to the entire Operations & Systems block.</div>
+    <div class="star-row"><div class="star-label">Situation</div><div class="star-text">2020 · Sobha's collections function ran on fragmented spreadsheets across 35+ practitioners. No CRM, no shared data layer, no governance visibility. <strong>AED 867M revenue pipeline operating with zero platform infrastructure.</strong></div></div>
+    <div class="star-row"><div class="star-label">Task</div><div class="star-text">Co-architect the revenue operations intelligence platform from scratch — no vendor PM, no inherited playbook, no precedent in the company.</div></div>
+    <div class="star-row"><div class="star-label">Action</div><div class="star-text">Ran 6-stakeholder discovery (Sales, Ops, Finance, MIS, IT, Compliance). Defined the data architecture, record taxonomy, and reporting hierarchy. Led the Salesforce implementation partnership end-to-end. Built and shipped <strong>70+ live reports</strong> spanning daily ops to MD-level strategic intelligence. Embedded the quality scorecard with 8 continuous-monitoring metrics. Drove adoption to 40+ daily active users.</div></div>
+    <div class="star-row"><div class="star-label">Result</div><div class="star-text">Platform now serving <strong>14.9x scale (AED 867M → 12.97B)</strong>, 77 practitioners on a shared real-time data layer, zero additional reporting headcount across 6 years. <strong>Still in production.</strong> Currently leading the SQL / Power BI modernisation programme as next-gen evolution.</div></div>
+  </div>
+
+  <div class="star">
+    <div class="star-id">S1 · Primary · "Tell me about driving revenue at scale"</div>
+    <h3 class="star-title">14.9x revenue scale without governance compromise</h3>
+    <div class="star-map"><strong>JD mapping:</strong> Snapshot of overall scope. Anchors your credibility on the scale dimension — directly counters the YOE objection.</div>
+    <div class="star-row"><div class="star-label">Situation</div><div class="star-text">2020: collections function at AED 867M annual revenue with manual processes, no governance infrastructure, single-geography (Dubai only).</div></div>
+    <div class="star-row"><div class="star-label">Task</div><div class="star-text">Scale the revenue operations engine to support the company's growth trajectory without proportional headcount expansion or governance degradation.</div></div>
+    <div class="star-row"><div class="star-label">Action</div><div class="star-text">Built the operating system: 70+ report MI ecosystem, T−25/T+30 critical collection window framework, 8-metric quality scorecard, India hub stand-up (42 ppl), Salesforce platform, governance documentation (6 MD-approved process docs). Each layer compounded.</div></div>
+    <div class="star-row"><div class="star-label">Result</div><div class="star-text"><strong>AED 867M → AED 12.97B (14.9x).</strong> Single geography → two geographies. Manual → systemic. 35 practitioners → 77. Zero material control failures across the scale. <strong>This is the closest analog to scaling a sales engine that I can offer.</strong></div></div>
+  </div>
+
+  <div class="star">
+    <div class="star-id">S4 · Primary · "Tell me about a high-stakes business case"</div>
+    <h3 class="star-title">NPV AED 652M defended at MD/CEO through multiple scrutiny rounds</h3>
+    <div class="star-map"><strong>JD mapping:</strong> Req 08 (QBR / leadership materials) + Req 06 (translate analysis to recommendations). The proof you can shape narrative and hold ground under executive scrutiny.</div>
+    <div class="star-row"><div class="star-label">Situation</div><div class="star-text">Strategic rebate programme proposal — multi-year NPV impact AED 652M. Required MD/CEO approval. Finance pushed back on cost; Legal flagged compliance complexity; Operations questioned execution feasibility.</div></div>
+    <div class="star-row"><div class="star-label">Task</div><div class="star-text">Build the business case, defend it across multiple review rounds, and secure approval — with zero material concessions on the economic model.</div></div>
+    <div class="star-row"><div class="star-label">Action</div><div class="star-text">Built the NPV / IRR / DCF model with full sensitivity analysis. Pre-empted Finance objections with scenario modelling; pre-empted Legal with compliance framing; pre-empted Ops with phased execution plan. Held the position through <strong>3 review cycles</strong> at MD/CEO level. Built monthly actuals-vs-forecast tracking infrastructure for post-launch governance.</div></div>
+    <div class="star-row"><div class="star-label">Result</div><div class="star-text">Programme approved. <strong>AED 652M incremental NPV captured.</strong> 32% cheaper than the bank-financed alternative. Zero material concessions. The financial tracking infrastructure became a permanent governance tool. <em>This is what defending a revenue forecast at QBR looks like, executed at NPV scale.</em></div></div>
+  </div>
+
+  <div class="star">
+    <div class="star-id">S3 · Supporting · "Tell me about cycle-time / process redesign"</div>
+    <h3 class="star-title">PCC TAT 20 days → 3 days at 3x volume — same team, redesigned workflow</h3>
+    <div class="star-map"><strong>JD mapping:</strong> Req 09 (day-to-day operational execution) + Req 06 (insights → recommendations). The proof of operational craft — bias toward action, getting into the weeds, shipping.</div>
+    <div class="star-row"><div class="star-label">Situation</div><div class="star-text">Post-Completion Certificate process averaging 20-day turnaround. Creating revenue leakage, customer complaints, and handover delays — a critical operational bottleneck in the order-to-cash pipeline.</div></div>
+    <div class="star-row"><div class="star-label">Task</div><div class="star-text">Compress cycle time dramatically while maintaining quality and audit integrity. No additional headcount approved.</div></div>
+    <div class="star-row"><div class="star-label">Action</div><div class="star-text">Process mapped end-to-end. Identified bottlenecks at verification and approval. Eliminated redundant steps. Introduced daily TAT dashboards. Rebuilt handover protocols between teams. Held the quality bar.</div></div>
+    <div class="star-row"><div class="star-label">Result</div><div class="star-text"><strong>20 days → 3 days (85% reduction).</strong> Monthly volume tripled (~90 → 281). Quality maintained. Client complaints eliminated for this workflow. <em>This is "bias toward action" in a measured outcome.</em></div></div>
+  </div>
+
+  <div class="star">
+    <div class="star-id">S13 · Supporting · "Tell me about cross-geography expansion"</div>
+    <h3 class="star-title">India hub stand-up — 42-person team in Hyderabad operating to Dubai parity</h3>
+    <div class="star-map"><strong>JD mapping:</strong> Snapshot of why you fit a <em>first India hire</em> brief. You have stood up a brand-new India ops team from scratch — the exact muscle Anthropic India will need.</div>
+    <div class="star-row"><div class="star-label">Situation</div><div class="star-text">Sobha collections growth required a second geography. India hub greenfield — no team, no playbook, no infrastructure on the ground.</div></div>
+    <div class="star-row"><div class="star-label">Task</div><div class="star-text">Stand up a 42-person India ops capability operating to the same SLA, governance, and data standards as the Dubai team. Within 12 months.</div></div>
+    <div class="star-row"><div class="star-label">Action</div><div class="star-text">Defined the role architecture, hiring slate, and ramp curve. Ported the Dubai operating model (T−25/T+30, quality scorecard, Salesforce platform) to India. Embedded Dubai-India daily sync cadence. Built training and capability ladders. Managed the cross-geography handoff protocols.</div></div>
+    <div class="star-row"><div class="star-label">Result</div><div class="star-text">India hub at <strong>parity within 9 months</strong>. 42 practitioners delivering to Dubai SLA standards. Now the dominant volume centre. <em>Direct analog: setting up Bengaluru-India S&O operating to APJ-HQ standards from a standing start is exactly what I did from Dubai.</em></div></div>
+  </div>
+
+  <div class="star">
+    <div class="star-id">S2 · Supporting · "Tell me about holding a standard under pressure"</div>
+    <h3 class="star-title">PR rejection at 49% — pipeline hygiene held against commercial pressure</h3>
+    <div class="star-map"><strong>JD mapping:</strong> Req 03 (forecast accuracy under scrutiny) + assertiveness signal for senior IC band. <strong>This is the proof point that you can hold a forecast or pipeline hygiene standard against sales pressure.</strong></div>
+    <div class="star-row"><div class="star-label">Situation</div><div class="star-text">December 2025 · Payment Request rejection rate at the quality gate hit <strong>49%</strong>. Commercial team pushed to relax the documentation standard — "the friction is killing velocity." Quarter-end pressure intense.</div></div>
+    <div class="star-row"><div class="star-label">Task</div><div class="star-text">Decide: loosen the gate and accept downstream revenue / audit risk, or hold the standard and defend the position with data.</div></div>
+    <div class="star-row"><div class="star-label">Action</div><div class="star-text">Held the threshold. Ran root-cause: 53% upstream document gaps, 47% manual errors. Built daily rejection KPI as permanent governance metric. Designed the Salesforce quality scorecard — continuous monitoring, pattern detection, automated escalation. Framed to leadership: <em>"The 49% rejection rate is the control working as designed. Relax it and you'll see the errors in the audit instead."</em></div></div>
+    <div class="star-row"><div class="star-label">Result</div><div class="star-text">Rate controlled within 30 days through structural fix, not standard relaxation. PR-to-SOA 0–2 day processing improved <strong>24.8% → 51.3%</strong>. Quality scorecard now monitors 8 metrics continuously. <em>The translatable claim: I will hold a forecast or pipeline hygiene standard against revenue pressure when the data supports the position.</em></div></div>
+  </div>
+</section>
+
+<!-- ============ 05 30-60-90 ============ -->
+<section class="panel" id="plan">
+  <div class="sec-num">05 / Day-1 to Day-90 plan</div>
+  <h1 class="sec-title">30 · 60 · 90 plan — first India S&O hire on a 4-month-old office</h1>
+  <p class="sec-sub">Tuned for a function with no incumbent, no inherited dashboards, no historical pipeline data, and a 5-month-old MD. Bring this to the final round as a written one-pager.</p>
+
+  <div class="tl-phase">
+    <div class="tl-phase-head"><span class="tl-phase-day">Week 0 — pre-start</span><span class="tl-phase-title">Land prepared, not zero-base</span></div>
+    <div class="tl-item"><strong>Read Anthropic's published research catalog</strong> — at minimum the recent posts on enterprise adoption, Bengaluru office launch, India partnerships (Swiggy, Air India, CRED, Razorpay).</div>
+    <div class="tl-item"><strong>Build the India enterprise AI competitive landscape one-pager</strong> — OpenAI India, Google Gemini, Microsoft Copilot, Perplexity. Vertical density per player.</div>
+    <div class="tl-item"><strong>Skill the SaaS metrics dialect</strong> — 12 terms cold (ARR, NRR, GRR, payback, magic number, Rule of 40, CAC, LTV, ACV, NDR, win rate, sales cycle).</div>
+  </div>
+
+  <div class="tl-phase">
+    <div class="tl-phase-head"><span class="tl-phase-day">Days 1–30 · Listen and inventory</span><span class="tl-phase-title">Map what exists before changing anything</span></div>
+    <div class="tl-item"><strong>Stakeholder 1:1s — 15 across 30 days.</strong> Irina Ghose (MD India), India sales hires (every AE individually), Tokyo S&O counterpart, global RevOps lead, Finance / target-setting partner, partner ecosystem lead, marketing lead.</div>
+    <div class="tl-item"><strong>Salesforce instance audit.</strong> Current setup, custom objects, report library, dashboard inventory, data quality baseline, integration topology. Surface the top 5 gaps.</div>
+    <div class="tl-item"><strong>Pipeline & forecast inventory.</strong> What pipeline exists, what stages, what forecast methodology, what's the variance baseline. If there's no forecast cadence yet, propose one.</div>
+    <div class="tl-item"><strong>Territory map (current state).</strong> Who covers what, by vertical / geography / segment. Identify overlap and gaps.</div>
+    <div class="tl-item"><strong>30-day readout to Irina + APJ S&O.</strong> One-pager: state of the function, top 5 gaps, proposed 60-day priorities, dependencies.</div>
+  </div>
+
+  <div class="tl-phase">
+    <div class="tl-phase-head"><span class="tl-phase-day">Days 31–60 · Build the operating cadence</span><span class="tl-phase-title">Ship the recurring rhythm + Q1 QBR pack</span></div>
+    <div class="tl-item"><strong>Forecast cadence shipped.</strong> Weekly forecast call (Mon AM India / Tokyo dial-in), monthly forecast accuracy review, quarterly recalibration. Templates, owners, decisions.</div>
+    <div class="tl-item"><strong>Pipeline health dashboard v1.</strong> Coverage ratio by quarter, stage conversion, deal velocity, AE-level forecast vs commit. Salesforce + Tableau / Looker overlay.</div>
+    <div class="tl-item"><strong>Territory v2 — proposed.</strong> If current is broken, draft the v2 cut with rationale. Decision pack for Irina.</div>
+    <div class="tl-item"><strong>Q1 QBR pack delivered.</strong> Joint with Irina — narrative arc, supporting data, asks. Walk through with Tokyo S&O for APJ-parity sense-check before HQ delivery.</div>
+    <div class="tl-item"><strong>Partner pipeline hygiene baseline.</strong> Co-sell tracking schema with hyperscalers, partner pipeline cleanup, joint planning logistics cadence.</div>
+    <div class="tl-item"><strong>60-day readout — what shipped + what's next.</strong></div>
+  </div>
+
+  <div class="tl-phase">
+    <div class="tl-phase-head"><span class="tl-phase-day">Days 61–90 · Compound + propose the AI-native layer</span><span class="tl-phase-title">Move from establishing to differentiating</span></div>
+    <div class="tl-item"><strong>AI-augmented pipeline signal layer — proposal.</strong> Use Claude internally on pipeline notes / call transcripts to surface stalled-deal patterns, win-loss themes, expansion triggers. Pilot with one AE for 30 days. <em>This is your unique angle.</em></div>
+    <div class="tl-item"><strong>Forecast accuracy first measurement.</strong> Variance vs commit for the first full quarter under the new cadence. Diagnose the gaps, recommend the fixes.</div>
+    <div class="tl-item"><strong>Sales tools adoption baseline + roadmap.</strong> Which tools are landing, which are not, what enablement is needed. Decision pack for global RevOps.</div>
+    <div class="tl-item"><strong>Annual planning input pack for FY27.</strong> Bottom-up build by territory + vertical + segment, scenarios, asks. Joint with Finance.</div>
+    <div class="tl-item"><strong>India-specific market intel quarterly brief.</strong> Standing deliverable for Irina + APJ HQ — competitive moves, regulatory shifts, enterprise budget signals, vertical-density updates.</div>
+    <div class="tl-item"><strong>90-day readout — what shipped, what's compounding, what I'm asking for.</strong></div>
+  </div>
+
+  <div class="card card-tint">
+    <h3 class="h4">The Day-90 declaration of identity</h3>
+    <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.65;">By Day 90, the function should be recognisable as a <strong>revenue ops function with an AI-native edge</strong> — not because it's been re-branded, but because the AI-augmented pipeline signal pilot is producing insights the team didn't have before. The asymmetric leverage of being an S&O hire at the AI company is that you can use Claude on every part of your own workflow openly. Make that visible.</p>
+  </div>
+</section>
+
+<!-- ============ 06 AI DIFFERENTIATOR ============ -->
+<section class="panel" id="ai">
+  <div class="sec-num">06 / The asymmetric edge</div>
+  <h1 class="sec-title">AI Differentiator — three portfolio projects, reframed for AI-native RevOps</h1>
+  <p class="sec-sub">Anthropic is the AI company. Every other candidate will pitch process and tooling. You pitch AI-native ops — built using their model — for a function that has no precedent yet at this company.</p>
+
+  <div class="ai-proj">
+    <div class="ai-proj-head"><span class="ai-proj-id">P6 · Revenue Health Intelligence Platform</span><span class="pill pill-blue">Built</span></div>
+    <div class="ai-proj-title">SMB Revenue Health Intelligence — pipeline pulse + at-risk-deal flagging via Claude</div>
+    <div class="ai-proj-stack">Python · Streamlit · Claude API · Pandas · Plotly</div>
+    <div class="ai-proj-body">
+      <p><strong>What it does:</strong> Simulates a 200-account B2B SaaS pipeline. Ingests stage history, activity logs, contact engagement data. AI layer flags at-risk deals 2 stages before slip (multi-signal: stalled engagement, single-threaded relationship, late-stage scope creep). Generates weekly pipeline health narrative for sales leadership in the style of a senior S&O analyst.</p>
+      <p style="margin-top: 8px;"><strong>Why it lands here:</strong> The JD asks for "trends, risks, opportunities translated into clear recommendations for sales leadership." This is <em>exactly</em> that — but with AI doing the pattern detection humans would miss across hundreds of accounts. <strong>The bottleneck on rev ops insight isn't access to data; it's bandwidth to read it. AI fixes the bandwidth.</strong></p>
+    </div>
+  </div>
+
+  <div class="ai-proj">
+    <div class="ai-proj-head"><span class="ai-proj-id">P12 · B2B Pipeline Signal Layer</span><span class="pill pill-blue">Built</span></div>
+    <div class="ai-proj-title">B2B Pipeline Signal Detection — anomaly flagging for SaaS deal-stage data</div>
+    <div class="ai-proj-stack">Python · Streamlit · Claude API · Pandas · Time-series anomaly detection</div>
+    <div class="ai-proj-body">
+      <p><strong>What it does:</strong> Synthesises 12 months of deal-stage transition data across simulated B2B pipeline. Detects velocity anomalies (deals stuck > 2σ above stage norm), stage-conversion drift (this month's win-rate vs trailing 6mo), AE-level pattern shifts (sudden over-reliance on inbound, narrowing book concentration). Surfaces 3 top anomalies weekly with hypothesis + recommended intervention.</p>
+      <p style="margin-top: 8px;"><strong>Why it lands here:</strong> Anthropic's India business doubled in 6 months. Anomalies in fast-growing pipeline are signal-rich and hard to spot manually. <strong>This is the muscle that makes a 1-person S&O function operate like a 4-person function — by making pattern detection a Claude call, not a human cycle.</strong></p>
+    </div>
+  </div>
+
+  <div class="ai-proj">
+    <div class="ai-proj-head"><span class="ai-proj-id">P13 · QBR Pack Auto-Generation</span><span class="pill pill-blue">Built</span></div>
+    <div class="ai-proj-title">QBR Pack Generator — Salesforce data + qualitative inputs → leadership-ready narrative</div>
+    <div class="ai-proj-stack">Python · Claude API · Pandas · python-pptx</div>
+    <div class="ai-proj-body">
+      <p><strong>What it does:</strong> Pulls Salesforce data + win/loss notes + AE 1:1 inputs. AI layer drafts the QBR narrative — quarter highlights, lowlights, forward look, asks — in the voice and structure leadership expects. Output is an editable .pptx, not a final deliverable. Human-in-the-loop for the judgment calls; AI for the synthesis + drafting load.</p>
+      <p style="margin-top: 8px;"><strong>Why it lands here:</strong> The JD lists "prepare materials for business reviews, QBRs, and leadership updates" as a core responsibility. QBR cycles eat S&O bandwidth — 2–3 weeks per quarter of pack-building. <strong>Cutting that to days, with AI handling the data-to-narrative compression, frees the function to do the actual diagnosis the JD also asks for.</strong></p>
+    </div>
+  </div>
+
+  <div class="ai-pitch">
+    "The JD describes a revenue ops function that has to plan, analyse, report, and operate — for India, alone, while coordinating with APJ. I've already built the AI-augmented versions of three of those four loops. Not as concept; as working code, using Claude. I'd come in on Day 1 with a pipeline signal layer, a QBR auto-draft tool, and a revenue health dashboard prototype — and treat Anthropic's S&O function as the place to mature them into production with the team. <strong>This isn't a candidate using AI to interview. This is a candidate showing what an AI-native S&O function actually looks like.</strong>"
+  </div>
+</section>
+
+<!-- ============ 07 INTERVIEW KIT ============ -->
+<section class="panel" id="iv">
+  <div class="sec-num">07 / The interview, mapped</div>
+  <h1 class="sec-title">Interview Kit — 24 questions across recruiter, hiring manager, panel, exec</h1>
+  <p class="sec-sub">Likely loop based on Anthropic's published hiring approach + standard senior-IC RevOps interview patterns. Scripted openers for the highest-leverage questions.</p>
+
+  <div class="iv-round">
+    <div class="iv-round-head">Round 1 · Recruiter screen (30 min)</div>
+    <div class="iv-q">Walk me through your background and what's drawing you to Anthropic. <span class="iv-q-tag">Behavioral · opener</span></div>
+    <div class="iv-q">Tell me about your current scope — team size, budget, what you own end-to-end. <span class="iv-q-tag">Behavioral · scope</span></div>
+    <div class="iv-q">What's your experience with B2B SaaS specifically? <span class="iv-q-tag">Domain · gap probe</span></div>
+    <div class="iv-q">Why are you looking to move? Why now? <span class="iv-q-tag">Motivation</span></div>
+    <div class="iv-q">What's your comp expectation? <span class="iv-q-tag">Logistics</span></div>
+  </div>
+
+  <div class="iv-anchor"><strong>Scripted opener for "why Anthropic"</strong>
+  "I've used Claude as a core tool in my own work for the last year — including in the operating system I've built for my career transition. That's given me a concrete sense of what AI-augmented operations actually looks like when applied seriously. Anthropic India is at the inflection where the operational infrastructure decisions made in the next 12 months will compound for years — and I want to be the person doing that work, partly because I've already built three working prototypes of what AI-native revenue ops could be."</div>
+
+  <div class="iv-round">
+    <div class="iv-round-head">Round 2 · Hiring manager (Irina Ghose or APJ S&O lead, 60 min)</div>
+    <div class="iv-q">Walk me through how you'd approach the first 30 days as the first India S&O hire on a 4-month-old office. <span class="iv-q-tag">Structured thinking · planning</span></div>
+    <div class="iv-q">Describe a time you built a reporting infrastructure from scratch — what was the hardest part? <span class="iv-q-tag">STAR · S5</span></div>
+    <div class="iv-q">Tell me about a time you held a forecast or pipeline standard against commercial pressure. <span class="iv-q-tag">STAR · S2 · assertiveness</span></div>
+    <div class="iv-q">How do you decide what to report on, when there's too much data to surface? <span class="iv-q-tag">Judgement · signal vs noise</span></div>
+    <div class="iv-q">What's your read on the Indian B2B AI market right now? Where would you place enterprise GTM bets? <span class="iv-q-tag">Domain · market POV</span></div>
+    <div class="iv-q">Tell me about a stakeholder you couldn't win over — what happened? <span class="iv-q-tag">Failure · stakeholder</span></div>
+  </div>
+
+  <div class="iv-anchor"><strong>Scripted opener for "first 30 days"</strong>
+  "I'd treat the first 30 days as inventory, not change. The role is the first India S&O hire on a function with no incumbent, so the temptation to start shipping is high — and wrong. My week-1-to-30 priority is 15 stakeholder 1:1s — Irina, every India AE individually, the Tokyo S&O peer, the global RevOps lead, the Finance target-setting partner, and the partner ecosystem lead — plus a full Salesforce instance audit and a pipeline / forecast inventory. The output is a 30-day readout that names the top 5 gaps and a proposed 60-day priority stack. The shipping starts on Day 31, not Day 1."</div>
+
+  <div class="iv-round">
+    <div class="iv-round-head">Round 3 · Technical / analytical (45 min · case)</div>
+    <div class="iv-q">You're three weeks into the role. The India sales lead asks for a "pipeline health" dashboard for Monday's leadership review. Walk me through what you build and why. <span class="iv-q-tag">Case · dashboard design</span></div>
+    <div class="iv-q">Forecast variance for Q is -22%. Walk me through how you'd diagnose. <span class="iv-q-tag">Case · root cause</span></div>
+    <div class="iv-q">India has 12 AEs covering enterprise + mid-market + digital natives. How would you propose segmenting territory? <span class="iv-q-tag">Case · territory</span></div>
+    <div class="iv-q">Show me a dashboard or report you've built — walk me through the decisions. <span class="iv-q-tag">Portfolio · S5 + AI projects</span></div>
+    <div class="iv-q">How would you set up Salesforce opportunity stages for a sales motion that doesn't have a settled playbook yet? <span class="iv-q-tag">Salesforce · stage design</span></div>
+    <div class="iv-q">What's your approach to forecast accuracy measurement when there's < 2 quarters of historical data? <span class="iv-q-tag">Analytical · cold start</span></div>
+  </div>
+
+  <div class="iv-anchor"><strong>Scripted opener for the dashboard case</strong>
+  "Two questions first: who's the consumer — Irina, or the AE bench? And what's the decision the dashboard supports? If it's leadership review, I'd build coverage ratio by quarter, stage-velocity deltas, and AE-level commit vs forecast — three views, one screen. If it's AE-facing, the view is different: deal-level health flags, next-best-action surface, time-since-last-touch. The discipline I've shipped is: every dashboard answers one decision. If it answers three, it's a strategy doc, not a dashboard."</div>
+
+  <div class="iv-round">
+    <div class="iv-round-head">Round 4 · Cross-functional panel (60 min · Tokyo S&O, global RevOps, Finance partner)</div>
+    <div class="iv-q">How would you partner with global RevOps when their priorities don't match India's? <span class="iv-q-tag">Cross-functional · matrix</span></div>
+    <div class="iv-q">Tell me about a time you had to translate between Finance and Sales. <span class="iv-q-tag">STAR · S4</span></div>
+    <div class="iv-q">What's your experience working across timezones? <span class="iv-q-tag">Logistics · APJ</span></div>
+    <div class="iv-q">Walk me through a QBR pack you've built. What made it work? <span class="iv-q-tag">STAR · S4</span></div>
+    <div class="iv-q">If you found you disagreed with Tokyo S&O's approach to forecast methodology, what would you do? <span class="iv-q-tag">Influence · upward</span></div>
+  </div>
+
+  <div class="iv-round">
+    <div class="iv-round-head">Round 5 · Executive / culture (30 min · MD India or APJ leader)</div>
+    <div class="iv-q">What's your view on responsible AI in enterprise GTM? <span class="iv-q-tag">Anthropic-specific · mission</span></div>
+    <div class="iv-q">How do you think about the trade-off between speed of execution and rigor of analysis? <span class="iv-q-tag">Philosophy</span></div>
+    <div class="iv-q">What would success look like for you in this role at the 12-month mark? <span class="iv-q-tag">Vision</span></div>
+    <div class="iv-q">What's a question you have for me about Anthropic's India strategy that you couldn't find the answer to publicly? <span class="iv-q-tag">Reverse · seriousness signal</span></div>
+  </div>
+
+  <div class="iv-anchor"><strong>Scripted opener for "responsible AI in enterprise GTM"</strong>
+  "The version of responsible AI I think about most isn't the policy frame — it's the operational frame. Sales orgs adopt AI tools fastest and least carefully of any function — Gong, Outreach, every pipeline scorer, every account researcher. If Anthropic is the model people deploy <em>safely</em> in those workflows, then S&O's job partly becomes the evidence layer for that — what AI did, what it recommended, how the rep acted, what the outcome was. That's not just a sales argument; it's a responsibility argument. I think that's a function I'd be unusually energised to build."</div>
+</section>
+
+<!-- ============ 08 COMP INTEL ============ -->
+<section class="panel" id="comp">
+  <div class="sec-num">08 / The money</div>
+  <h1 class="sec-title">Comp Intel — Anthropic India Senior IC RevOps band</h1>
+  <p class="sec-sub">Triangulated across 5 sources. Anthropic India is &lt; 4 months old so direct salary data is thin; the bands below are constructed via US-anchor + India-localisation + comparable-GCC peer cohort.</p>
+
+  <div class="comp-conf">Confidence: <strong>Medium</strong> · 5 sources · US data strong, India direct data thin (new GCC)</div>
+
+  <div class="comp-band">
+    <div class="comp-band-head"><span class="comp-band-name">Anthropic India · Senior IC RevOps / S&O</span><span class="comp-band-range">₹60–110L total</span></div>
+    <div class="comp-rows">
+      <div><div class="comp-row-label">Base (P50)</div><div class="comp-row-val">₹45–65L</div></div>
+      <div><div class="comp-row-label">Variable / bonus (15–25%)</div><div class="comp-row-val">₹8–15L</div></div>
+      <div><div class="comp-row-label">RSU (annualised, illiquid)</div><div class="comp-row-val">₹20–40L</div></div>
+    </div>
+    <p style="font-size: 12px; color: var(--text-mid); margin-top: 12px; line-height: 1.6;"><strong>P75–P90 stretch:</strong> ₹120–160L. <strong>Equity treatment:</strong> RSUs on a 4-year vest (25% Y1, then monthly), 1-year cliff implied. Anthropic valuation $61.5B private — equity is illiquid until IPO / tender. <strong>Localisation factor:</strong> ~30–40% of US equivalent (US Biz Ops $517–737K → India localised ₹150–220L worst-case, ₹60–110L typical for IC band given private-co equity discount).</p>
+  </div>
+
+  <h2 class="h3">Source triangulation</h2>
+  <ul class="source-list">
+    <li><strong>Levels.fyi · Anthropic Business Operations (US):</strong> $517K–$737K total comp, median $592–693K. Vesting: 25% Y1, then monthly Y2–Y4 (1-year cliff implied). Last updated Mar 2026.</li>
+    <li><strong>6figr · Anthropic India:</strong> Average ₹80L across all reported roles (small sample, post-Feb-2026 launch, mostly technical roles).</li>
+    <li><strong>Cirra · 2025 RevOps Director benchmarks (US):</strong> Base $180–220K, total ~$220–260K with stock for Director band. Anchor for the seniority slope.</li>
+    <li><strong>Payscale · Operations Director India (general):</strong> Base ₹20–70L (P10–P90), total up to ₹160L+. Wide range; B2B SaaS GCC slot sits at the upper-middle.</li>
+    <li><strong>Comparable Indian B2B SaaS GCCs:</strong> Airwallex (Bengaluru) Director Commercial Growth & RevOps actively hiring at 6–10 YOE; New Relic (Bengaluru) RevOps Manager ANZ posted; MongoDB / Snowflake / Databricks India IC RevOps at ₹50–90L total. Used as peer-cohort anchor.</li>
+  </ul>
+
+  <h2 class="h3">Negotiation levers — role-specific</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3 class="h4">Lever 01 · First-India-hire premium</h3>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;">You'll be among the first 10 hires on the function. <strong>Ask for a signing bonus</strong> (₹8–15L) reflecting the foundational nature of the work — not standard RSU refresh territory. Defensible.</p>
+    </div>
+    <div class="card">
+      <h3 class="h4">Lever 02 · Accelerated equity refresh</h3>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;">RSU illiquidity at a $61.5B private valuation is the real comp risk. <strong>Negotiate an accelerated refresh review at Month 12</strong>, not the standard Month 18–24 cycle — given the foundational-hire angle. Lower risk for them, real upside for you.</p>
+    </div>
+    <div class="card">
+      <h3 class="h4">Lever 03 · Title elevation</h3>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;">If they offer Manager / Lead, push for Senior / Principal. Anthropic bands are flat-but-tall — title flexibility on an early hire is normal. Title at this stage compounds for your <em>next</em> role.</p>
+    </div>
+    <div class="card">
+      <h3 class="h4">Lever 04 · AI-native scope rider</h3>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;">Ask for the role description to formally include "lead AI-augmented operational tooling for the India function" as a named accountability. No comp impact, but it shapes the role you actually do — and the next role you exit into.</p>
+    </div>
+  </div>
+
+  <h2 class="h3">Walk-away anchor</h2>
+  <div class="card card-tint">
+    <p style="font-size: 14px; color: var(--text); line-height: 1.65;"><strong>Floor: ₹42L base + standard equity.</strong> Below this, the foundational-hire premium isn't being paid. <strong>Realistic target: ₹55–65L base + ₹8–13L variable + ₹25–35L RSU = ₹88–113L total.</strong> Above ₹115L would be a strong outcome given the fit-score asymmetry. <strong>Above ₹130L would be a signal that they're hiring you for a specific edge, not a standard band fill — engage hard if you see that.</strong></p>
+  </div>
+
+  <div class="card card-tint" style="margin-top: 16px;">
+    <h3 class="h4" style="margin-top: 0;">Comparable cohort reality check</h3>
+    <p style="font-size: 13px; color: var(--text-mid); line-height: 1.65;">Note: this band sits above your current pipeline's Oaktree VP P50 (₹55–65L) on total comp, but with RSU illiquidity baked in. <strong>If both Anthropic and Oaktree converted</strong> (unlikely; different fit categories), the AmEx GMNS Director (₹70–90L total cash + LTI) would still be the highest-confidence outcome. Don't let Anthropic's headline number — which is real — distort your sequencing on the higher-probability tracks.</p>
+  </div>
+</section>
+
+<!-- ============ 09 CERT ROADMAP ============ -->
+<section class="panel" id="cert">
+  <div class="sec-num">09 / Skill credential plan</div>
+  <h1 class="sec-title">Certification Roadmap — JD silent · triaged via adjacent JDs</h1>
+  <p class="sec-sub">This specific JD does not list certifications. The cert plan below is triaged from Anthropic's own adjacent revenue / sales ops job postings — the most authoritative possible signal short of an internal team scan.</p>
+
+  <div class="comp-conf">Triage confidence: <strong>Medium</strong> · 6 Anthropic JDs scanned, single channel (company JDs only)</div>
+
+  <h2 class="h3">Research footprint declaration</h2>
+  <div class="card card-tint">
+    <p style="font-size: 13.5px; color: var(--text); line-height: 1.7;"><strong>Sources scanned (May 2026):</strong> (1) Anthropic Senior Revenue Operations Analyst US, (2) Anthropic Sales Operations Manager US, (3) Anthropic Sales Strategy & Ops EMEA, (4) Anthropic Sales Strategy & Ops DACH, (5) Anthropic Revenue Strategy & Operations Lead Japan, (6) Anthropic Salesforce Administrator US. <strong>Findings:</strong> 1 of 6 listed Salesforce certs as <em>required</em> (the SF Admin role: "Basic and Advanced Certifications — Advanced Administrator, Advanced Developer, or Platform II"). 6 of 6 listed Salesforce as a required tool. 6 of 6 listed Tableau / Looker / BI as required tools <em>without</em> certification gates. 6 of 6 emphasized "AI fluency" / "passionate about integrating AI" as a cultural requirement. 0 listed PMP, PMI-ACP, CRISC, or any PM cert. 0 listed cloud certs (AZ-900 / AI-900). <strong>Confidence: Medium</strong> — single channel (company JDs only), small sample (n=6), recent (&lt; 2 months).</p>
+  </div>
+
+  <h2 class="h3">Existing cert stack — leverage map</h2>
+  <table class="vocab">
+    <thead><tr><th>Existing cert / track</th><th>Relevance to this role</th></tr></thead>
+    <tbody>
+      <tr><td>AI-900 (Microsoft AI Fundamentals) — in progress</td><td><strong>MEDIUM-HIGH.</strong> Anthropic JDs uniformly emphasize AI fluency. Cert plus your AI portfolio (P6/P12/P13) signals you live the requirement, not just tick it.</td></tr>
+      <tr><td>GA4 + Looker Studio (Skillshop) — held</td><td><strong>MEDIUM.</strong> Looker family adjacency. Direct anchor for the "BI tools" requirement.</td></tr>
+      <tr><td>AZ-900 (Azure Fundamentals) — held</td><td><strong>LOW-MEDIUM.</strong> Cloud foundational literacy. Tangential to S&O, but signals tech context. Anthropic is GCP-heavy (Google investment) so don't lead with this.</td></tr>
+      <tr><td>PMI-ACP — in progress</td><td><strong>LOW.</strong> Not mentioned in any RevOps JD. Don't surface unprompted. If asked about delivery discipline, frame as "I run my analytical work in agile sprints" without citing the cert.</td></tr>
+      <tr><td>CRISC — track</td><td><strong>LOW.</strong> Risk governance cert. Off-thesis for this role. Park.</td></tr>
+      <tr><td>PL-900 (Power Platform) — held</td><td><strong>LOW.</strong> Microsoft stack signal; Anthropic stack-neutral. Don't lead.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="h3">New attainment plan — weighted</h2>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-clay">HIGH</span><span class="gap-title">Salesforce Administrator (ADM-201)</span><span class="pill pill-outline">3 weeks · $200 · Conversion lift ~25%</span></div>
+    <p class="gap-body"><strong>Why high:</strong> 6 of 6 Anthropic RevOps JDs list Salesforce as required; the Salesforce Admin role explicitly requires Advanced Admin. The Senior RevOps Analyst role's tools list reads like an Admin job spec without the cert ask. <strong>The single highest-leverage credential you can add for this entire role family.</strong> <strong>Placement:</strong> Resume header line + LinkedIn "Licenses & Certifications" + interview talking point ("I formalised my Salesforce architecture work with the ADM-201 to make it portable beyond Sobha's instance"). <strong>Path:</strong> Trailhead modules (free) + 3-week study sprint + voucher exam. Defensible 4-week timeline.</p>
+  </div>
+
+  <div class="card card-blue">
+    <div class="gap-head"><span class="pill pill-blue">MEDIUM</span><span class="gap-title">Tableau Desktop Specialist</span><span class="pill pill-outline">2 weeks · $100 · Conversion lift ~10–15%</span></div>
+    <p class="gap-body"><strong>Why medium:</strong> Tableau listed in Anthropic JDs as a tool, not a credential gate. You already have Looker Studio. Specialist (not Certified Associate) is enough — proves you can use the tool, doesn't claim mastery you don't have. <strong>Placement:</strong> LinkedIn cert badge; not headline. <strong>Path:</strong> Tableau free trial + eLearning + rebuild one Sobha dashboard in Tableau (this becomes a portfolio artifact for interview — see Gap 05 in Section 03).</p>
+  </div>
+
+  <div class="card card-blue">
+    <div class="gap-head"><span class="pill pill-blue">MEDIUM</span><span class="gap-title">Salesforce Advanced Administrator (CRT-211)</span><span class="pill pill-outline">6 weeks · $200 · Stretch cert</span></div>
+    <p class="gap-body"><strong>Why medium (not high):</strong> Required for the SF Admin role specifically, listed but not required for RevOps. Pursue only <em>after</em> ADM-201 if you want to signal serious Salesforce depth. <strong>Placement:</strong> Differentiator if you're chasing the next tier of Anthropic RevOps roles (Sr Analyst → Mgr → Lead) over 12–18 months. <strong>Path:</strong> Builds on ADM-201, adds change management + automation + complex security.</p>
+  </div>
+
+  <div class="card card-green">
+    <div class="gap-head"><span class="pill pill-green">MEDIUM-LOW</span><span class="gap-title">SaaS metrics literacy (study sprint, not a cert)</span><span class="pill pill-outline">4 weeks self-study · free · No badge</span></div>
+    <p class="gap-body"><strong>Why include:</strong> No cert exists that proves SaaS metrics fluency credibly. But the vocabulary gap (Gap 06) is real and an interview will surface it within 10 minutes. <strong>Path:</strong> Christoph Janz "Five Ways to Build a $100M Business," David Skok's "For Entrepreneurs" SaaS canon, Lenny's Newsletter SaaS metrics deep-dives, RevOps Co-op archives. <strong>Output:</strong> a one-pager "How I'd measure Anthropic India revenue health" as your leave-behind interview artifact. <strong>This converts a missing credential into a demonstration of operating-mode.</strong></p>
+  </div>
+
+  <div class="card card-green">
+    <div class="gap-head"><span class="pill pill-green">LOW (but free)</span><span class="gap-title">Anthropic "Build with Claude" / Claude API basics</span><span class="pill pill-outline">2–3 hrs · free · Cultural signal</span></div>
+    <p class="gap-body"><strong>Why include:</strong> No formal cert exists yet, but Anthropic's developer docs cover prompt engineering, tool use, and API basics. Working through these — and being able to discuss them in interview — signals you'd be a Claude power-user on Day 1, not learning the product from the inside. <strong>Path:</strong> docs.claude.com prompt engineering guide + tool use tutorials. <strong>Pair with:</strong> walking through P12 or P13 in interview as "here's what I built using these primitives."</p>
+  </div>
+
+  <h2 class="h3">Sequencing</h2>
+  <div class="card card-tint">
+    <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.7;"><strong>If you apply within 30 days</strong> (recommended low-effort path): skip cert acquisition; lead with existing AI-900 + Looker Studio + the AI portfolio. Mention ADM-201 as <em>"in progress, targeting completion within 60 days"</em> — credible commitment without false claim. <strong>If you decide to invest 2–3 months before applying</strong> (only justifiable if Anthropic posts a sub-Director role you fit better): ADM-201 first → SaaS metrics sprint in parallel → Tableau Specialist in week 5 → submit application. Total ~₹25K + 60–80 hours.</p>
+  </div>
+</section>
+
+<!-- ============ 10 CLOSE & OUTREACH ============ -->
+<section class="panel" id="close">
+  <div class="sec-num">10 / Apply, follow, convert</div>
+  <h1 class="sec-title">Close & Outreach — 30-minute application + 12-month follow strategy</h1>
+  <p class="sec-sub">Two parallel tracks: a low-cost shot at this specific Director req, and a deliberate watch on the sub-Director Anthropic India S&O roles that fit your YOE far better.</p>
+
+  <h2 class="h3">Track A · This specific req — low-effort application</h2>
+
+  <div class="card">
+    <h3 class="h4" style="margin-top: 0;">Bullet swap on resume v4 (the AmEx Director resume)</h3>
+    <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.6; margin-bottom: 12px;">No new resume needed. Take resume v4 and swap <em>one</em> bullet from the "Salesforce Architecture" section to lead with AI-augmented framing — Anthropic-specific positioning without the cost of a custom resume build.</p>
+    <p style="font-size: 12px; color: var(--text-mute); font-family: var(--sans); margin-bottom: 6px; letter-spacing: 0.5px;">CURRENT BULLET (representative):</p>
+    <p style="font-size: 13.5px; color: var(--text-mid); font-style: italic; padding-left: 14px; border-left: 2px solid var(--surface-2); margin-bottom: 12px;">"Co-architected Salesforce CRM platform from zero — 6-stakeholder discovery, 70+ live reports, 30,044 active records, supporting 14.9x revenue scale across two geographies."</p>
+    <p style="font-size: 12px; color: var(--text-mute); font-family: var(--sans); margin-bottom: 6px; letter-spacing: 0.5px;">PROPOSED SWAP:</p>
+    <p style="font-size: 13.5px; color: var(--text); font-style: italic; padding-left: 14px; border-left: 2px solid var(--clay); background: var(--bg-tint); padding: 12px 14px; border-radius: 6px;">"Co-architected the revenue ops platform (Salesforce + 70+ live dashboards) supporting AED 12.97B pipeline at 14.9x scale; layered AI-augmented signal detection prototypes (built on Claude API) for at-risk-deal flagging, pipeline anomaly surfacing, and QBR auto-drafting — redirecting 30% of analyst hours from administrative reporting to judgement work."</p>
+  </div>
+
+  <div class="card">
+    <h3 class="h4" style="margin-top: 0;">Application logistics</h3>
+    <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.65;"><strong>Apply via:</strong> anthropic.com/careers (Greenhouse-hosted) — never click third-party links per Anthropic's safety note in the JD. <strong>Cover note:</strong> optional but recommended — 4-sentence max. Format below. <strong>Total time investment:</strong> 30 minutes. <strong>Expected outcome:</strong> 8–12% callback rate given YOE gap. Don't expect a response.</p>
+  </div>
+
+  <div class="iv-anchor"><strong>Optional cover note (4 sentences max)</strong>
+  "I lead a 77-person revenue operations function at Sobha Realty in Dubai — AED 12.97B pipeline, 30,044 active records, 70+ live Salesforce dashboards I co-architected from zero. I'm aware my background sits outside the B2B SaaS lane the JD describes; I'm applying because the operational primitives transfer 1:1 and I've spent the last year building AI-native ops tooling on top of the Claude API (three working prototypes — happy to share). I'm based in Dubai with India relocation already in motion for early 2026. If the YOE gap is disqualifying for this specific role, I'd appreciate being kept in mind for sub-Director India S&O hires as the team builds out."</div>
+
+  <h2 class="h3">Track B · Sub-Director watch — 12-month strategy</h2>
+
+  <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.65; margin-bottom: 16px;"><strong>The real Anthropic India play is the role one band below this one.</strong> Anthropic's pattern (visible from US/EMEA/Tokyo postings) is to hire Senior Revenue Operations Analyst → Sales Operations Manager → Sales Strategy & Ops Lead. The Analyst / Manager tiers carry 6–8 YOE asks and your fit jumps from 40 to 65–70. Build awareness, position now, capture when posted.</p>
+
+  <div class="grid-2">
+    <div class="card card-blue">
+      <h3 class="h4">Action 01 · Job alerts</h3>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;">Set Google Alert: <code style="font-family: var(--sans); font-size: 11px; background: var(--surface-2); padding: 2px 6px; border-radius: 3px;">"Anthropic" + "India" + ("Revenue Operations" OR "Sales Operations" OR "Strategy")</code>. Weekly digest. LinkedIn job alert for same terms with Bengaluru location filter.</p>
+    </div>
+    <div class="card card-blue">
+      <h3 class="h4">Action 02 · LinkedIn engagement protocol</h3>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;">Follow Irina Ghose. Follow the first 10 Anthropic India hires as they appear. <strong>Engage thoughtfully on 1–2 posts per month</strong> — substantive comments on enterprise AI, India market dynamics, or operational scaling. <strong>No spam-style "great post!"</strong> Goal: name recognition by the time a sub-Director role posts.</p>
+    </div>
+    <div class="card card-blue">
+      <h3 class="h4">Action 03 · Network triangulation</h3>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;">Irina Ghose's 24-year Microsoft India network overlaps with people in your reach. <strong>2nd-degree connection mapping</strong> — identify 3–5 ex-Microsoft India operators in your LinkedIn graph who could provide warm referral when the right role opens. Don't ask now; build the relationship over months.</p>
+    </div>
+    <div class="card card-blue">
+      <h3 class="h4">Action 04 · Founder-level interest signal</h3>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;">When you ship a new AI portfolio project (P14 or beyond), <strong>post it on LinkedIn with a tag relevant to Anthropic's enterprise India motion</strong> (e.g., partnership ops with Razorpay/CRED, BFSI use cases). Don't tag Anthropic. Let discoverability work.</p>
+    </div>
+  </div>
+
+  <h2 class="h3">Recruiter outreach script — if you decide to escalate</h2>
+
+  <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6; margin-bottom: 12px;">Not recommended as first move on this specific Director role (the YOE gap will be obvious to a recruiter; cold outreach amplifies the gap signal). Use only if you've identified the specific recruiter via Anthropic's careers page or 1st/2nd-degree LinkedIn connection.</p>
+
+  <div class="iv-anchor"><strong>LinkedIn DM (180 words, copy-paste-tunable)</strong>
+  "Hi [name] — I noticed Anthropic is hiring for the Bengaluru Revenue S&O role. I'm AGM Dues Collections at Sobha Realty in Dubai — running revenue ops at AED 12.97B scale with a Salesforce platform I co-architected, supporting 14.9x growth.<br><br>
+  I'm aware my background sits adjacent to B2B SaaS rather than inside it — I'm reaching out because I've spent the last 12 months building AI-native ops tooling on the Claude API (three working prototypes), and the chance to do that work at Anthropic specifically is the reason I'm interested.<br><br>
+  If the Director req's YOE bar is the blocker, I'd appreciate being kept in mind for Sr Analyst / Manager India S&O roles as the team builds out. Happy to share my AI portfolio, my Sobha case studies, or talk through how I'd approach the first 90 days. Either way — thanks for reading.<br><br>
+  Best, Priyanuj"</div>
+
+  <h2 class="h3">Follow-up cadence</h2>
+  <div class="card card-tint">
+    <p style="font-size: 13.5px; color: var(--text); line-height: 1.7;"><strong>T+0:</strong> apply via careers portal. <strong>T+7:</strong> if no recruiter response, send the LinkedIn DM (only if you've identified the right person). <strong>T+21:</strong> if no engagement, drop active pursuit. <strong>T+30 onwards:</strong> shift to Track B passive engagement (job alerts + LinkedIn engagement). <strong>Do not send unsolicited follow-ups beyond T+21</strong> — Anthropic's recruiting volume is high and additional touches read as desperate, not committed.</p>
+  </div>
+
+  <div class="card card-tint" style="margin-top: 16px;">
+    <h3 class="h4" style="margin-top: 0;">Anti-rumination protocol</h3>
+    <p style="font-size: 13px; color: var(--text-mid); line-height: 1.65;">This is a 8–12% conversion role at 40% fit. <strong>Most outcomes here are silence.</strong> Anthropic recruiting closes loops slowly or not at all. <strong>Do not let the silence destabilise the AmEx / Oaktree sprint.</strong> Cap your active emotional engagement with this application at T+21 days; after that, the watch is purely passive. The Anthropic dream is a 12–18 month build via the sub-Director path, not a Q2 2026 outcome.</p>
+  </div>
+</section>
+
+<!-- ============ 11 RISK & RED FLAGS ============ -->
+<section class="panel" id="risk">
+  <div class="sec-num">11 / What could go wrong</div>
+  <h1 class="sec-title">Risk & Red Flags — the things to know before signing</h1>
+  <p class="sec-sub">Even at 8–12% conversion this matters: if it converts, you should know what you're walking into. Conditional section triggered by &lt; 12-month-old GCC and first-hire-on-function status.</p>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-red">Risk 01</span><span class="gap-title">Office age — Bengaluru is 4 months old</span></div>
+    <p class="gap-body"><strong>What it means:</strong> Embassy Golf Links Tech Park launched Feb 2026. By Day 1 of a Q3 2026 start, the office is &lt; 12 months old. <strong>Failure modes:</strong> physical infra still being sorted; team norms not yet established; "how we work here" being written week-by-week; admin overhead higher than mature offices. <strong>Mitigation:</strong> embrace the chaos as a feature, not a bug — first-hires get to write the playbook. <strong>Red flag at offer stage:</strong> if you ask "who else is on the S&O team here" and the answer is "no one yet," validate that there's a clear remote partner (Tokyo S&O Lead, global RevOps US) you actually have working access to. Solo-first-hire-no-remote-anchor is the version of this risk that derails.</p>
+  </div>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-red">Risk 02</span><span class="gap-title">First-on-function — undefined scope boundary</span></div>
+    <p class="gap-body"><strong>What it means:</strong> When there's no incumbent S&O hire, the function eats adjacent work that has no other owner — marketing ops, partner ops, customer success ops, deal desk, even billing reconciliation. <strong>Failure mode:</strong> 60% of your time on the work the JD describes, 40% on uninvited scope. <strong>Mitigation:</strong> in week-2 of the role, propose a written scope-and-boundary doc to Irina. <em>"Here's what S&O owns, here's what S&O partners on, here's what S&O explicitly doesn't pick up — for the first 6 months."</em> Land this early; it's exponentially harder later. <strong>Red flag at offer stage:</strong> if leadership won't commit to a scope doc in writing, the role will balloon.</p>
+  </div>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-red">Risk 03</span><span class="gap-title">Reporting-line ambiguity — Irina vs APJ S&O vs global RevOps</span></div>
+    <p class="gap-body"><strong>What it means:</strong> The JD says "you'll work closely with S&O counterparts across Japan, South Korea, Singapore, Australia, and the wider APJ region" — but doesn't say <em>who you report to</em>. Anthropic posted a separate <strong>Revenue Strategy & Operations Lead, Japan</strong> — Tokyo is clearly a peer office, but is APJ run from Tokyo, from US HQ, or is India semi-autonomous under Irina? Unclear. <strong>Failure mode:</strong> three masters with conflicting priorities — Irina wants India local outcomes; Tokyo wants APJ consistency; global RevOps wants HQ-standard process. <strong>Mitigation:</strong> clarify dotted-line vs solid-line reporting <em>at offer stage, in writing</em>. <strong>Red flag at offer:</strong> "we'll figure it out as we go" is the failure mode answer.</p>
+  </div>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-red">Risk 04</span><span class="gap-title">RSU illiquidity at $61.5B private valuation</span></div>
+    <p class="gap-body"><strong>What it means:</strong> Anthropic's equity is RSUs on a 4-year vest (25% Y1, monthly Y2–Y4). At a $61.5B private valuation with no tender event or IPO commitment, the equity is <strong>paper, not cash</strong>. Valuations can compress (see OpenAI's wobble narrative in 2024–25; see private AI markdowns generally). <strong>Failure mode:</strong> you take a real cash haircut from Sobha (current AED-denominated stable cash) for paper that may or may not liquidate at value. <strong>Mitigation:</strong> negotiate the cash side hard (base + signing); treat equity as upside, not core. Validate at offer: <em>"Is there a tender programme schedule? What's the 409A history?"</em> <strong>If they push you to take below-market cash for equity comfort, decline.</strong></p>
+  </div>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-amber">Risk 05</span><span class="gap-title">India regulatory exposure — DPDP Act + emerging AI law</span></div>
+    <p class="gap-body"><strong>What it means:</strong> India's Digital Personal Data Protection Act (DPDP) compliance overhead is real and operating-cost-relevant for an enterprise AI vendor handling Indian customer data. Emerging AI-specific legislation (advisory frameworks, sectoral guidelines from MeitY, RBI for BFSI use cases) creates compliance ambiguity that S&O may have to absorb on partner contracts, deal terms, data residency. <strong>Failure mode:</strong> revenue ops becomes 30% compliance ops by default. <strong>Mitigation:</strong> validate that Anthropic has a Legal / Compliance partner in India (likely yes, given the enterprise focus) and that S&O isn't expected to own it. <strong>Mostly informational — not a blocking risk, but worth knowing.</strong></p>
+  </div>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-amber">Risk 06</span><span class="gap-title">APJ matrix overload — 5+ stakeholders, async timezones</span></div>
+    <p class="gap-body"><strong>What it means:</strong> Coordinating with Tokyo (3.5 hrs ahead), Sydney (4.5 hrs ahead), Seoul (3.5 hrs ahead), Singapore (2.5 hrs ahead), and SF HQ (12.5 hrs behind) means a typical async-heavy week with limited overlap windows. <strong>Failure mode:</strong> meeting bloat across timezones, decisions stall, you become the synchronisation overhead the JD didn't tell you about. <strong>Mitigation:</strong> establish written-first communication norms in week 1 — Loom updates, async docs, clear escalation criteria. <strong>Use Claude internally to draft, summarise, and synthesise across the timezone gaps</strong> — this is the AI-native ops claim made operational.</p>
+  </div>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-amber">Risk 07</span><span class="gap-title">"Claude eats this job" — the AI-co-specific risk</span></div>
+    <p class="gap-body"><strong>What it means:</strong> The single biggest existential question for any operational role at an AI lab: does the model eventually do this work? S&O is in the "moderately automatable" category — reporting, pipeline analytics, deal-risk flagging are increasingly model-doable. <strong>Failure mode:</strong> 18 months in, your function shrinks rather than expands as Claude absorbs the analytical load. <strong>Mitigation — position as Claude operator, not Claude substitute:</strong> the durable S&O value at an AI company is judgement (which deals to escalate), context (which territory to redraw), and political navigation (how to frame the QBR ask) — none of which the model does. <strong>Build the role around those things from Day 1.</strong> The candidate who pitches "I'll automate my own job" is the candidate the AI company will actually hire — because they're aligning with the trajectory, not fighting it.</p>
+  </div>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-amber">Risk 08</span><span class="gap-title">Cultural transplant — SF Anthropic ↔ India GCC</span></div>
+    <p class="gap-body"><strong>What it means:</strong> Anthropic's HQ culture is famously high-context, slow-decision, research-influenced. India GCCs of US tech companies often struggle with "we don't escalate enough" / "we wait for HQ permission" patterns. Irina Ghose's Microsoft India tenure suggests she's seen this movie before — but it's still real. <strong>Failure mode:</strong> India team operates more cautiously than Anthropic HQ expects, slows the velocity. <strong>Mitigation:</strong> calibrate quickly — what's the decision-speed expectation, who can you spend without asking, when is async-decline acceptable. Ask Irina directly in the first 1:1.</p>
+  </div>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-amber">Risk 09</span><span class="gap-title">Title compression — "Senior IC" not "Director"</span></div>
+    <p class="gap-body"><strong>What it means:</strong> The JD title implies Director-level seniority; the JD content reads as a senior IC role with substantial individual contribution and limited people-leadership. Anthropic bands are flat. <strong>Failure mode:</strong> you sign expecting people management and team-building, get hands-keyboard work for 18 months, exit with a title that's hard to translate to the next role. <strong>Mitigation:</strong> validate at offer — <em>"When does this role get direct reports? What's the headcount plan for FY27?"</em> If the answer is "TBD," budget for IC scope for at least 12 months.</p>
+  </div>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-green">Risk 10</span><span class="gap-title">Hyper-growth pace — burnout risk</span></div>
+    <p class="gap-body"><strong>What it means:</strong> India revenue doubled in 6 months. The growth rate the team is sustaining is unsustainable in normal terms — by definition, the operational layer is under-resourced relative to the deal volume. <strong>Failure mode:</strong> 70-hour weeks become normal, never resolves, attrition follows. <strong>Mitigation:</strong> assess pace honestly in the interview process — ask the hiring manager about typical week, weekend work expectations, vacation norms. <strong>Anthropic's published "How We're Different" emphasises sustainability, but lived practice varies by team.</strong> Pattern-match on what current employees post about their hours.</p>
+  </div>
+
+  <div class="card card-tint">
+    <h3 class="h4" style="margin-top: 0;">The composite read</h3>
+    <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.7;"><strong>Risks 1–4 are the deal-makers / deal-breakers.</strong> If you can get clarity on office maturity, scope boundary, reporting line, and equity treatment <em>in writing before signing</em>, the risk profile is manageable. <strong>Risks 5–10 are operational hazards</strong> — real, but the kind of thing experienced operators navigate. None on its own is fatal. <strong>The single biggest pre-acceptance test:</strong> ask Irina in the final round <em>"What does success look like at the 12-month mark for this role, specifically?"</em> If she can answer that crisply, the role is defined enough to take. If the answer is vague, the role is still being written — and you're the writer, which is either an opportunity or a trap depending on your appetite.</p>
+  </div>
+</section>
+
+<!-- ============ 12 STAKEHOLDER DECODE ============ -->
+<section class="panel" id="stake">
+  <div class="sec-num">12 / Who decides what</div>
+  <h1 class="sec-title">Stakeholder Decode — the APJ S&O lattice</h1>
+  <p class="sec-sub">Six stakeholder surfaces, mapped. The hiring manager identity isn't published, but the reporting lattice is reconstructible from Anthropic's adjacent JDs and public team structure.</p>
+
+  <div class="card card-clay">
+    <div class="gap-head"><span class="pill pill-clay">Stakeholder 01 · MD India</span><span class="gap-title">Irina Ghose</span></div>
+    <p class="gap-body">
+      <strong>Background:</strong> 24-year Microsoft veteran. Most recently Managing Director, Microsoft India (held the role 2 years until Dec 2025). Led enterprise AI adoption across BFSI, healthcare, manufacturing, and government for Microsoft India. Joined Anthropic as MD India in January 2026; led the Bengaluru office launch in February 2026.<br><br>
+      <strong>What she cares about (inferred):</strong> Enterprise AI deployment with real revenue, not pilots. Vertical-led growth (BFSI / healthcare / mfg / govt — her Microsoft pattern). Building a credible India operation that competes with OpenAI / Google in this market. Track record of high-impact teams + ecosystem partnerships.<br><br>
+      <strong>How to speak to her:</strong> She speaks enterprise B2B fluently. Don't translate "dues collections" — translate to "AED 12.97B revenue ops at enterprise scale." She values execution. <strong>Lead with what shipped, what scaled, what the system can do at the 14.9x mark. She has zero patience for fluff.</strong><br><br>
+      <strong>Your "in":</strong> The AI-native operations angle is exactly what she spent her last decade selling at Microsoft. Frame your portfolio as "this is the kind of AI-augmented ops you used to deploy to your customers — I've built it for my own function." She'll get it instantly.
+    </p>
+  </div>
+
+  <div class="card card-blue">
+    <div class="gap-head"><span class="pill pill-blue">Stakeholder 02 · Tokyo S&O Lead</span><span class="gap-title">Revenue Strategy & Operations Lead, Japan (identity TBD)</span></div>
+    <p class="gap-body">
+      <strong>Background:</strong> Tokyo office is Anthropic's other APAC base. The Japan S&O Lead role is actively posted — incumbent identity hasn't surfaced publicly yet (search LinkedIn for "Anthropic Japan Revenue Operations" 30 days before interview). Likely a senior B2B SaaS APJ veteran from a comparable shop (Salesforce / Microsoft / Snowflake Tokyo).<br><br>
+      <strong>What they care about:</strong> APJ-wide consistency in how revenue is measured, reported, and forecasted. Anti-duplication of work across India + Japan. Joint forecasting credibility upward to global HQ.<br><br>
+      <strong>How to speak to them:</strong> Express clear interest in <em>learning</em> the APJ rev ops pattern from them. <em>"I'd be coming in with India context and zero APJ context — I'd want to spend the first month understanding the Japan operating rhythm and importing what makes sense to India."</em> This is a status-conscious peer relationship; deference + competence is the formula.<br><br>
+      <strong>Your "in":</strong> The Salesforce 0→1 story translates across geographies. Tokyo S&O probably inherited a platform, didn't build one. You did. Lead with the architectural decisions, not just the operational outcomes.
+    </p>
+  </div>
+
+  <div class="card card-blue">
+    <div class="gap-head"><span class="pill pill-blue">Stakeholder 03 · Global RevOps (US-based)</span><span class="gap-title">Global Revenue Operations Lead (identity TBD)</span></div>
+    <p class="gap-body">
+      <strong>Background:</strong> Anthropic has multiple US Revenue Operations roles posted (Sr RevOps Analyst, Sales Ops Manager, Salesforce Admin). The Global RevOps function is the source-of-truth for sales process, comp design, RevTech stack decisions. SF / NYC / Seattle-based.<br><br>
+      <strong>What they care about:</strong> One global way of operating wherever possible — same Salesforce setup, same opportunity stages, same forecast methodology, same tooling. Their failure mode is region-specific snowflakes that don't roll up cleanly.<br><br>
+      <strong>How to speak to them:</strong> Default to compliance, not innovation. <em>"I'd start by adopting the global RevOps standard, propose India-specific modifications only where the local market makes it genuinely necessary, with rationale."</em> This is the opposite of the pitch you'd make to Irina — global RevOps wants someone who consolidates the chaos, not someone who creates new patterns.<br><br>
+      <strong>Your "in":</strong> Process governance instinct. The T−25/T+30 framework, the 6-MD-approved process docs, the audit-ready quality scorecard — these signal that you'll <em>follow</em> rigour, not just create it.
+    </p>
+  </div>
+
+  <div class="card card-green">
+    <div class="gap-head"><span class="pill pill-green">Stakeholder 04 · India Sales Leadership</span><span class="gap-title">Sales hires being made in parallel</span></div>
+    <p class="gap-body">
+      <strong>Background:</strong> India enterprise AE hires are being made in parallel to this S&O role. Anthropic's enterprise India motion will likely cover Strategic Accounts (BFSI, conglomerates, GCCs), Digital Natives (Swiggy / CRED / Razorpay / Air India types — already partners), and Industries (manufacturing, retail, public sector). Watch the careers page for AE postings to map the team.<br><br>
+      <strong>What they care about:</strong> Pipeline visibility, forecast credibility upward, fast Salesforce support when something breaks, sales tooling that works, defensible territory boundaries, comp clarity. <strong>They want S&O to be invisible when working and instant when not.</strong><br><br>
+      <strong>How to speak to them:</strong> Service mindset, deeply. <em>"I'm here to make your job easier — what's slowing you down right now?"</em> The fastest way to lose AE trust is to position yourself as the data police; the fastest way to win is to ship them one obviously useful dashboard in week 2.<br><br>
+      <strong>Your "in":</strong> The S5 + S2 stories. You've supported 40+ RMs daily on a real revenue platform. You've held quality standards against commercial pressure and they ended up working <em>better</em> after, not slower. That's the AE-S&O partnership pattern they need.
+    </p>
+  </div>
+
+  <div class="card card-green">
+    <div class="gap-head"><span class="pill pill-green">Stakeholder 05 · Finance partner (target-setting)</span><span class="gap-title">FP&A / Finance counterpart (likely US-based for now)</span></div>
+    <p class="gap-body">
+      <strong>Background:</strong> Anthropic Finance / FP&A is concentrated at HQ (SF). India target-setting will run with US Finance until a local FP&A hire is made. JD references "help prepare inputs for target setting with Finance" — i.e., you are the India translation layer between the bottom-up sales build and the top-down finance commit.<br><br>
+      <strong>What they care about:</strong> Forecast credibility. Variance discipline. Bottom-up methodology that holds up to scrutiny. India numbers that won't surprise the board.<br><br>
+      <strong>How to speak to them:</strong> Pure data discipline. Show the model, show the assumptions, show the sensitivity. <em>"Here's the bottom-up build by segment × vertical, here's the top-down board number, here's the gap and three plausible reconciliations with their probability weights."</em> They care more about clean working than confident conclusions.<br><br>
+      <strong>Your "in">:</strong> The NPV AED 652M defense (S4). You've held a number through three rounds of MD/CEO scrutiny — that's the muscle. Lead with the financial-model defense, not the operational ones.
+    </p>
+  </div>
+
+  <div class="card card-green">
+    <div class="gap-head"><span class="pill pill-green">Stakeholder 06 · Partner & alliance ecosystem</span><span class="gap-title">Partnership leads (Swiggy, Air India, CRED, Razorpay, Karya, etc.)</span></div>
+    <p class="gap-body">
+      <strong>Background:</strong> Anthropic India's partnership stack is already substantial — Swiggy (MCP integration), Air India, CRED, Razorpay, Karya, Digital Green, Adalat AI, Ministry of Statistics. There's a partnerships lead at Anthropic India whose identity isn't yet public; this role partners closely on co-sell tracking, joint planning, partner pipeline hygiene per the JD (Req 05).<br><br>
+      <strong>What they care about:</strong> Clean co-sell attribution, joint pipeline visibility, partner enablement, easy-to-run joint QBRs. <strong>Their failure mode is partner work that doesn't show up in the revenue numbers — making the partner motion invisible to leadership.</strong><br><br>
+      <strong>How to speak to them:</strong> Build mode. <em>"Let's design the co-sell tracking schema together in week 3 — I'll bring a draft, you bring partner-side feedback."</em> Partner relationships are slow-trust; don't go solo on schema decisions that affect them.<br><br>
+      <strong>Your "in":</strong> The 10-bank partnership ecosystem at Sobha (AED 442M daily reconciled across counterparties) is the direct analog. You've run multi-party revenue ops; this is the same shape at SaaS scale.
+    </p>
+  </div>
+
+  <h2 class="h3">The interview-round-to-stakeholder map</h2>
+  <table class="vocab">
+    <thead><tr><th>Likely interview round</th><th>Who you're likely talking to</th></tr></thead>
+    <tbody>
+      <tr><td>Round 1 · Recruiter screen</td><td>India recruiter or APJ Talent partner. Goal: gate the YOE / domain fit.</td></tr>
+      <tr><td>Round 2 · Hiring manager</td><td>Irina Ghose (most likely) — or APJ S&O lead if reporting is APJ-side.</td></tr>
+      <tr><td>Round 3 · Technical / case</td><td>Tokyo S&O Lead and/or Global RevOps lead. Functional peer assessment.</td></tr>
+      <tr><td>Round 4 · Cross-functional panel</td><td>India sales leader (whoever's hired by then) + Finance partner + Partnerships lead.</td></tr>
+      <tr><td>Round 5 · Executive / culture</td><td>Irina again, or a US-based exec (VP RevOps / Sales). Mission + culture alignment.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="h3">The four questions to ask in the interview</h2>
+  <div class="card card-tint">
+    <p style="font-size: 13.5px; color: var(--text); line-height: 1.7;"><strong>One for each round, calibrated to the stakeholder you're talking to:</strong></p>
+    <ol style="margin-top: 10px; padding-left: 18px; font-size: 13.5px; color: var(--text-mid); line-height: 1.7;">
+      <li style="margin-bottom: 8px;"><strong>To Irina:</strong> "What does success look like for this role at the 12-month mark, specifically?" — surfaces scope clarity and Risk 02 / 09 in one question.</li>
+      <li style="margin-bottom: 8px;"><strong>To Tokyo S&O Lead:</strong> "What's working in your APJ operating rhythm that you'd want to see preserved in India, and what would you redesign if you could?" — invites peer-status framing.</li>
+      <li style="margin-bottom: 8px;"><strong>To Global RevOps:</strong> "How does APJ flexibility map against global RevOps consistency in your model — where's the line?" — surfaces Risk 03 (reporting ambiguity).</li>
+      <li><strong>To Finance partner:</strong> "What's the methodology for the FY27 India bottom-up target build, and what's my role in it specifically?" — establishes you as a planning partner, not a reporting analyst.</li>
+    </ol>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById(el.dataset.tab).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>

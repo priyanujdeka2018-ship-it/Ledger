@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scale AI OPM Regional Lead — Career Playbook v2 | Priyanuj Deka</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAF5;
+  --paper: #FFFFFF;
+  --paper-2: #F5F2EC;
+  --paper-3: #EFEAE0;
+  --border: #E5E1D8;
+  --border-strong: #C9C2B0;
+  --primary: #006CAD;
+  --primary-dark: #004A78;
+  --primary-light: #E5F0F8;
+  --accent: #C2410C;
+  --accent-light: #FBE9DD;
+  --gold: #B8860B;
+  --gold-light: #F7EFD3;
+  --danger: #BE1E2D;
+  --danger-light: #FAE1E3;
+  --success: #1E7A4F;
+  --success-light: #DEF1E6;
+  --text: #1A1A2E;
+  --text-soft: #2D2D44;
+  --muted: #5C5C70;
+  --dim: #A8A89C;
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'Inter', -apple-system, sans-serif;
+  --mono: 'IBM Plex Mono', 'Courier New', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.65;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* LAYOUT — left-rail nav per canon §5 */
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+/* LEFT NAV */
+.sidebar {
+  background: var(--paper);
+  border-right: 1px solid var(--border);
+  padding: 28px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.brand {
+  padding: 0 24px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+}
+
+.brand-mark {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.brand-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.15;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.brand-title em {
+  font-style: italic;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.brand-sub {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--muted);
+  margin-top: 8px;
+  letter-spacing: 0.1em;
+}
+
+.nav-section {
+  padding: 0 12px;
+}
+
+.nav-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--dim);
+  text-transform: uppercase;
+  padding: 14px 12px 6px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-soft);
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+
+.nav-btn:hover {
+  background: var(--paper-2);
+  color: var(--text);
+}
+
+.nav-btn.active {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+.nav-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  min-width: 16px;
+}
+
+.nav-btn.active .nav-num {
+  color: var(--primary);
+}
+
+/* MAIN */
+.main {
+  padding: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.section {
+  display: none;
+  padding: 40px 56px 80px;
+  max-width: 1100px;
+}
+
+.section.active { display: block; }
+
+/* SECTION HEAD */
+.section-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-title em {
+  font-style: italic;
+  color: var(--primary);
+}
+
+.section-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--muted);
+  font-weight: 400;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  max-width: 720px;
+}
+
+/* HEADLINE STATS (Snapshot) */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.hero-stat {
+  padding: 20px 22px;
+  border-right: 1px solid var(--border);
+}
+
+.hero-stat:last-child { border-right: none; }
+
+.hero-stat-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.hero-stat-val {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+}
+
+.hero-stat-val.text {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.hero-stat-sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* CARDS */
+.card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin-bottom: 16px;
+}
+
+.card.tinted {
+  background: var(--paper-2);
+}
+
+.card.accent-rail {
+  border-left: 3px solid var(--primary);
+}
+
+.card.gold-rail {
+  border-left: 3px solid var(--gold);
+}
+
+.card.accent-orange-rail {
+  border-left: 3px solid var(--accent);
+}
+
+.card.danger-rail {
+  border-left: 3px solid var(--danger);
+}
+
+.card.success-rail {
+  border-left: 3px solid var(--success);
+}
+
+.card-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.card.gold-rail .card-eyebrow { color: var(--gold); }
+.card.danger-rail .card-eyebrow { color: var(--danger); }
+.card.success-rail .card-eyebrow { color: var(--success); }
+.card.accent-orange-rail .card-eyebrow { color: var(--accent); }
+
+.card-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.card-title em {
+  font-style: italic;
+  color: var(--primary);
+}
+
+.card p {
+  color: var(--text-soft);
+  margin-bottom: 10px;
+}
+
+.card p:last-child { margin-bottom: 0; }
+
+.card strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.card strong.hl {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.card strong.warn {
+  color: var(--accent);
+}
+
+.card strong.alert {
+  color: var(--danger);
+}
+
+/* SUBSECTION DIVIDER */
+.h3 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 32px 0 14px;
+}
+
+.h3-eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.h4 {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  margin: 16px 0 8px;
+}
+
+/* TABLE */
+.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 8px 0 16px;
+  font-size: 13px;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.tbl th {
+  background: var(--paper-2);
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+.tbl td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  color: var(--text-soft);
+}
+
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: var(--paper-2); }
+
+.tbl .hl { color: var(--primary); font-weight: 600; }
+.tbl .warn { color: var(--accent); font-weight: 600; }
+.tbl .alert { color: var(--danger); font-weight: 600; }
+.tbl .ok { color: var(--success); font-weight: 600; }
+.tbl .mono { font-family: var(--mono); font-size: 12px; }
+
+/* PILL / TAG */
+.pill {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 99px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 1px 2px;
+}
+
+.pill-primary { background: var(--primary-light); color: var(--primary-dark); }
+.pill-gold { background: var(--gold-light); color: var(--gold); }
+.pill-danger { background: var(--danger-light); color: var(--danger); }
+.pill-success { background: var(--success-light); color: var(--success); }
+.pill-accent { background: var(--accent-light); color: var(--accent); }
+.pill-mute { background: var(--paper-3); color: var(--muted); }
+
+/* REQ-CARD */
+.req-card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+
+.req-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.req-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+  min-width: 20px;
+}
+
+.req-title {
+  flex: 1;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+.req-jd {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--muted);
+  padding: 4px 0 4px 12px;
+  border-left: 2px solid var(--border-strong);
+  margin: 6px 0 8px;
+}
+
+.req-proof {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.req-proof strong { color: var(--primary); }
+
+/* STAR */
+.star {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 18px 20px;
+  margin: 10px 0 18px;
+}
+
+.star-row {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 14px;
+  margin: 8px 0;
+  align-items: start;
+}
+
+.star-key {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  padding-top: 3px;
+}
+
+.star-key.result { color: var(--success); }
+
+.star-text {
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.65;
+}
+
+.star-text strong { color: var(--text); }
+.star-text strong.hl { color: var(--primary); }
+
+/* VOCAB */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.vocab-row {
+  display: grid;
+  grid-template-columns: 1fr 24px 1fr;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  font-size: 12.5px;
+}
+
+.vocab-row:nth-last-child(-n+2) { border-bottom: none; }
+
+.vocab-from {
+  color: var(--muted);
+  font-family: var(--sans);
+}
+
+.vocab-arrow {
+  font-family: var(--mono);
+  color: var(--primary);
+  text-align: center;
+  font-size: 12px;
+}
+
+.vocab-to {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* GAP CARD */
+.gap-card {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+}
+
+.gap-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 12px;
+}
+
+.gap-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.gap-body {
+  font-size: 13px;
+  color: var(--text-soft);
+  margin: 8px 0;
+}
+
+.gap-plan {
+  background: var(--paper-2);
+  border-left: 2px solid var(--primary);
+  padding: 10px 14px;
+  border-radius: 0 4px 4px 0;
+  font-size: 12.5px;
+  color: var(--text-soft);
+  margin-top: 10px;
+}
+
+.gap-plan strong { color: var(--primary); display: block; margin-bottom: 6px; font-size: 11px; font-family: var(--mono); letter-spacing: 0.05em; }
+
+/* TIMELINE */
+.timeline {
+  padding-left: 22px;
+  position: relative;
+  margin: 16px 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--border-strong);
+}
+
+.tl-item {
+  position: relative;
+  padding-bottom: 18px;
+}
+
+.tl-item:last-child { padding-bottom: 0; }
+
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -21px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--primary);
+}
+
+.tl-item.accent::before { border-color: var(--accent); }
+.tl-item.success::before { background: var(--success); border-color: var(--success); }
+
+.tl-time {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  font-weight: 500;
+}
+
+.tl-item.accent .tl-time { color: var(--accent); }
+.tl-item.success .tl-time { color: var(--success); }
+
+.tl-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 4px;
+  letter-spacing: -0.005em;
+}
+
+.tl-body {
+  font-size: 12.5px;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+/* AI PROJECT */
+.ai-box {
+  background: linear-gradient(135deg, #FFFFFF 0%, #F8F4EC 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 22px 24px;
+  margin: 14px 0;
+  position: relative;
+}
+
+.ai-box::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  border-radius: 8px 0 0 8px;
+}
+
+.ai-eyebrow {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.ai-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: 19px;
+  color: var(--text);
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.ai-body p {
+  margin-bottom: 10px;
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+.ai-body strong { color: var(--primary); font-weight: 600; }
+
+.ai-stack {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* QUOTE */
+.quote {
+  background: var(--gold-light);
+  border: 1px solid #E8D690;
+  border-radius: 8px;
+  padding: 22px 28px;
+  margin: 16px 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text);
+  position: relative;
+}
+
+.quote::before {
+  content: '"';
+  position: absolute;
+  font-family: var(--serif);
+  font-size: 72px;
+  color: var(--gold);
+  opacity: 0.35;
+  top: -8px;
+  left: 12px;
+  line-height: 1;
+}
+
+.quote-text {
+  position: relative;
+  z-index: 1;
+}
+
+.quote-attr {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* COVERAGE MATRIX */
+.cov-tbl td.cov {
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.cov-3 { color: var(--success); }
+.cov-2 { color: var(--accent); }
+.cov-1 { color: var(--muted); }
+.cov-0 { color: var(--dim); }
+
+/* COMP TABLE */
+.comp-band {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.comp-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 100px;
+  gap: 14px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  align-items: center;
+}
+
+.comp-row:last-child { border-bottom: none; }
+
+.comp-label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.comp-val { color: var(--text-soft); }
+
+.comp-band-amt {
+  font-family: var(--mono);
+  font-weight: 600;
+  color: var(--primary);
+  text-align: right;
+  font-size: 13px;
+}
+
+/* CONFIDENCE BADGE */
+.conf-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--paper-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.conf-badge.high { color: var(--success); background: var(--success-light); border-color: var(--success-light); }
+.conf-badge.med { color: var(--accent); background: var(--accent-light); border-color: var(--accent-light); }
+.conf-badge.low { color: var(--danger); background: var(--danger-light); border-color: var(--danger-light); }
+
+/* SOURCE LIST */
+.source-list {
+  font-size: 12px;
+  color: var(--muted);
+  padding: 0 0 0 16px;
+  margin: 6px 0;
+}
+
+.source-list li {
+  margin-bottom: 4px;
+}
+
+/* RISK FLAG */
+.flag {
+  display: flex;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  align-items: flex-start;
+}
+
+.flag.high {
+  background: var(--danger-light);
+  border-left: 3px solid var(--danger);
+}
+
+.flag.med {
+  background: var(--accent-light);
+  border-left: 3px solid var(--accent);
+}
+
+.flag.watch {
+  background: var(--gold-light);
+  border-left: 3px solid var(--gold);
+}
+
+.flag-icon {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.flag.high .flag-icon { color: var(--danger); }
+.flag.med .flag-icon { color: var(--accent); }
+.flag.watch .flag-icon { color: var(--gold); }
+
+.flag-body { flex: 1; }
+
+.flag-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+
+.flag-text {
+  font-size: 12.5px;
+  color: var(--text-soft);
+}
+
+/* MISC */
+ul, ol { padding-left: 20px; }
+li { margin-bottom: 5px; font-size: 13px; color: var(--text-soft); }
+li strong { color: var(--text); }
+li strong.hl { color: var(--primary); }
+.muted-text { color: var(--muted); font-size: 12px; }
+.mono { font-family: var(--mono); font-size: 12px; }
+.divider { height: 1px; background: var(--border); margin: 24px 0; }
+
+/* QUESTION LIST */
+.q-list { counter-reset: q; padding: 0; list-style: none; }
+.q-list li {
+  counter-increment: q;
+  position: relative;
+  padding: 10px 0 10px 36px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  list-style: none;
+}
+.q-list li::before {
+  content: counter(q, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--primary);
+  font-weight: 500;
+}
+.q-list li:last-child { border-bottom: none; }
+.q-list li strong { color: var(--text); }
+.q-list li em { color: var(--primary); font-style: normal; font-weight: 600; }
+.q-list .q-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-left: 6px;
+  background: var(--paper-2);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+/* MESSAGE TEMPLATE */
+.msg {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 16px 18px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-soft);
+  white-space: pre-line;
+  margin: 10px 0;
+}
+
+.msg-head {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* MOBILE — canon §5 requirement */
+@media (max-width: 768px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar {
+    position: relative;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 16px;
+  }
+  .nav-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    overflow-x: auto;
+  }
+  .nav-label { display: none; }
+  .nav-btn {
+    font-size: 11px;
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+  .section { padding: 24px 18px 48px; }
+  .section-title { font-size: 28px; }
+  .hero-stats { grid-template-columns: 1fr 1fr; }
+  .hero-stat:nth-child(2) { border-right: none; }
+  .hero-stat:nth-child(1), .hero-stat:nth-child(2) { border-bottom: 1px solid var(--border); }
+  .vocab-grid { grid-template-columns: 1fr; }
+  .comp-row { grid-template-columns: 1fr; gap: 4px; }
+  .star-row { grid-template-columns: 1fr; gap: 4px; }
+  .star-key { padding-top: 0; }
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--paper-2); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- ============ SIDEBAR ============ -->
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-mark">Playbook · v2 · Canon 2.0</div>
+    <div class="brand-title">Scale AI <em>OPM</em><br>Regional Lead</div>
+    <div class="brand-sub">PRIYANUJ DEKA · MAY 2026</div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-label">Core</div>
+    <button class="nav-btn active" onclick="showTab('snapshot', this)"><span class="nav-num">01</span> Snapshot</button>
+    <button class="nav-btn" onclick="showTab('decode', this)"><span class="nav-num">02</span> Role Decode</button>
+    <button class="nav-btn" onclick="showTab('fitgap', this)"><span class="nav-num">03</span> Fit &amp; Gap</button>
+    <button class="nav-btn" onclick="showTab('stars', this)"><span class="nav-num">04</span> Story Mapping</button>
+    <button class="nav-btn" onclick="showTab('plan', this)"><span class="nav-num">05</span> 30-60-90</button>
+    <button class="nav-btn" onclick="showTab('ai', this)"><span class="nav-num">06</span> AI Differentiator</button>
+    <button class="nav-btn" onclick="showTab('interview', this)"><span class="nav-num">07</span> Interview Kit</button>
+    <button class="nav-btn" onclick="showTab('comp', this)"><span class="nav-num">08</span> Comp Intel</button>
+    <button class="nav-btn" onclick="showTab('certs', this)"><span class="nav-num">09</span> Cert Roadmap</button>
+    <button class="nav-btn" onclick="showTab('outreach', this)"><span class="nav-num">10</span> Close &amp; Outreach</button>
+    <div class="nav-label">Conditional</div>
+    <button class="nav-btn" onclick="showTab('risk', this)"><span class="nav-num">11</span> Risk &amp; Red Flags</button>
+    <button class="nav-btn" onclick="showTab('stake', this)"><span class="nav-num">12</span> Manager Decode</button>
+  </nav>
+</aside>
+
+<!-- ============ MAIN ============ -->
+<main class="main">
+
+<!-- ====== 01 SNAPSHOT ====== -->
+<section class="section active" id="snapshot">
+  <div class="section-eyebrow">Section 01 · Snapshot</div>
+  <h1 class="section-title">A turnaround ops role <em>in disguise</em></h1>
+  <p class="section-sub">Scale AI's CEO publicly diagnosed "too many layers, excessive bureaucracy, ramped up too quickly, confusion about mission." That diagnosis is structurally a Restorative + Analytical + Arranger prescription. This playbook is built on that thesis.</p>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-label">Net Fit</div>
+      <div class="hero-stat-val">72</div>
+      <div class="hero-stat-sub">/100 · 82 capability − 10 stability</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Status</div>
+      <div class="hero-stat-val text">TACTICAL</div>
+      <div class="hero-stat-sub">Sequence behind AmEx + Oaktree</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">Target CTC</div>
+      <div class="hero-stat-val text">₹45–65L</div>
+      <div class="hero-stat-sub">Cash + uncertain equity</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-label">90-Day Cooldown</div>
+      <div class="hero-stat-val text">REAL COST</div>
+      <div class="hero-stat-sub">Don't apply until tailored</div>
+    </div>
+  </div>
+
+  <div class="card accent-rail">
+    <div class="card-eyebrow">Headline Thesis</div>
+    <h2 class="card-title">Why this role, why this candidate, why right now</h2>
+    <p>In June 2025, Meta took a 49% stake in Scale for $14.3B; Alexandr Wang left for Meta; <strong class="hl">OpenAI, Google ($200M+), and xAI all wound down their work with Scale within weeks</strong>. In July 2025, interim CEO Jason Droege laid off 200 FTEs (14% of headcount) and 500 contractors, and publicly admitted the company had "ramped up generative AI capacity too quickly… too many layers, excessive bureaucracy, confusion about the team's mission." Scale reorganized GenAI from 16 pods to 5 and pivoted hard toward enterprise and US government work (the Thunderforge DoD contract). By November 2025, Scale announced it was hiring 200 new people across the business.</p>
+    <p>"Regional Lead — India" exists inside this rebuild arc. Scale doesn't need a generic OPM; they need someone who can <strong class="hl">stabilize a regional execution layer that scaled too fast, install structural reliability, and partner the enterprise/gov pivot from the operations side</strong>. Your CliftonStrengths profile — Restorative + Analytical + Arranger — reads almost as the diagnosis itself.</p>
+  </div>
+
+  <div class="card tinted">
+    <div class="card-eyebrow">The Unique Unlock</div>
+    <h2 class="card-title">Three things make this role asymmetric for you</h2>
+    <ol style="padding-left:18px; margin-top:6px">
+      <li><strong>Strengths-prescription fit.</strong> Restorative is literally the strength that energizes around broken systems. The CEO has publicly admitted the system is broken. Most candidates will pitch generic ops experience. You pitch a strengths-prescription match.</li>
+      <li><strong>Regional ops scale-up precedent.</strong> You've done the exact title once already — stood up Sobha's 42-person India ops hub from zero. The geography was India for Sobha; the role architecture is what Scale needs.</li>
+      <li><strong>AI-augmented operating discipline.</strong> Three AI portfolio projects (Regional Ops Health Dashboard, Escalation Pattern Recurrence Detector, Distributed Workforce Quality Scorer) compress time-to-structural-fix by 5–10× and are uniquely on-message at an AI company rebuilding around quality and reliability.</li>
+    </ol>
+  </div>
+
+  <div class="card gold-rail">
+    <div class="card-eyebrow">Open Decisions (not addressed in this playbook)</div>
+    <h2 class="card-title">Park these — they sit at the pipeline layer</h2>
+    <ul>
+      <li><strong>CCC registration</strong> — proposed ID <span class="mono">Scale-OPM-RegLead</span>, status TACTICAL</li>
+      <li><strong>Application timing</strong> — apply only after AmEx and Oaktree first-round outcomes are in; 90-day cooldown makes a weak first attempt expensive</li>
+      <li><strong>Resume v1</strong> — sequence behind Uber resume v1 per existing pipeline priority</li>
+      <li><strong>AI portfolio prototype</strong> — Project 1 (Regional Ops Health Dashboard) is the screen-share artifact for the interview; build only if Scale moves to ACTIVE_NOW</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ====== 02 ROLE DECODE ====== -->
+<section class="section" id="decode">
+  <div class="section-eyebrow">Section 02 · Role Decode</div>
+  <h1 class="section-title">The 12 JD bullets, <em>decomposed</em></h1>
+  <p class="section-sub">Each JD line, what it actually means in operating practice, and what proof point you bring to it.</p>
+
+  <div class="card">
+    <div class="card-eyebrow">Four Thematic Clusters</div>
+    <h2 class="card-title">The 12 bullets fold into four operating clusters</h2>
+    <table class="tbl">
+      <tr><th style="width:22%">Cluster</th><th style="width:32%">JD bullets folded here</th><th>Plain English</th></tr>
+      <tr><td class="hl">Diagnose &amp; Fix Patterns</td><td>1 · 2 · 11</td><td>Run weekly pattern reviews on what's breaking in India ops. Don't patch — design fixes that prevent recurrence. The Restorative + Analytical strength expressed at company scale.</td></tr>
+      <tr><td class="hl">Own Escalations &amp; KPIs</td><td>3 · 4 · 5</td><td>You are the buck-stops-here person for the India region. KPI taxonomy is the source of truth. No structural change is real until the metric moves and stays moved.</td></tr>
+      <tr><td class="hl">System, SOP &amp; Training</td><td>6 · 7 · 8 · 12</td><td>Build the institutional memory and the rulebook. Write the operating model down so the system survives turnover and the next restructure.</td></tr>
+      <tr><td class="hl">Cross-Functional Tooling</td><td>9 · 10</td><td>Translate between frontline labelers and the people building Scale's internal tools. PM-adjacent skill — Salesforce 0→1 is the proof point.</td></tr>
+    </table>
+  </div>
+
+  <div class="h3-eyebrow">Requirement-by-Requirement</div>
+  <h2 class="h3">All 12 JD bullets, mapped to your proof</h2>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">01</span>
+      <div class="req-title">Identify recurring issue patterns and structural inefficiencies across the region</div>
+      <span class="pill pill-success">Direct match</span>
+    </div>
+    <div class="req-jd">"…recurring issue patterns and structural inefficiencies across the region"</div>
+    <div class="req-proof"><strong>Proof:</strong> Audit register (S1) — 14 control findings grouped into 6 root-cause clusters, each addressed structurally not transactionally. PR rejection containment (S2) — 49% rejection rate traced to four systemic causes, each closed with an upstream control, not a downstream patch. <strong>Strengths backbone: Restorative + Analytical.</strong></div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">02</span>
+      <div class="req-title">Lead retrospectives on operational breakdowns and implement durable, system-level fixes</div>
+      <span class="pill pill-success">Direct match</span>
+    </div>
+    <div class="req-jd">"…retrospectives… durable, system-level fixes"</div>
+    <div class="req-proof"><strong>Proof:</strong> Annual audit cycle error rate 41% → 1% (sustained, S28). PR TAT 20 → 3 days (sustained, S18). DLD termination process 90% improvement (S31). Every fix outlived its trigger event.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">03</span>
+      <div class="req-title">Act as the escalation partner for complex and high-risk regional cases</div>
+      <span class="pill pill-success">Direct match</span>
+    </div>
+    <div class="req-jd">"…escalation partner for complex and high-risk regional cases"</div>
+    <div class="req-proof"><strong>Proof:</strong> Three proactive CCO escalations on risk-register items before due dates (S25). AED 1.94B overdue portfolio (5,431 units) operated as senior escalation owner (S34). NPV AED 652M defended through multiple MD/CEO scrutiny rounds (S5).</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">04</span>
+      <div class="req-title">Define and drive regional KPI improvements across SLA, CSAT, backlog health, and escalation rates</div>
+      <span class="pill pill-success">Direct match (vocab shift)</span>
+    </div>
+    <div class="req-jd">"…SLA, CSAT, backlog health, escalation rates"</div>
+    <div class="req-proof"><strong>Proof:</strong> Portfolio delinquency 16.7% → 4.4% over 4 years (S16). PR TAT 20 → 3 days (S18). CSAT framework built from zero (S30). KPI categories are isomorphic — collection rate is an SLA, aging band is backlog age, escalation cadence is escalation rate. The names change; the discipline doesn't.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">05</span>
+      <div class="req-title">Track and measure the impact of operational changes and interventions</div>
+      <span class="pill pill-success">Direct match</span>
+    </div>
+    <div class="req-jd">"…track and measure the impact…"</div>
+    <div class="req-proof"><strong>Proof:</strong> 70+ report intelligence ecosystem (S6) — standing measurement infrastructure, not ad-hoc. Four-layer reconciliation framework (S33). Power BI PoC → production rollout (S27). Every change ships with baseline + measurable delta.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">06</span>
+      <div class="req-title">Influence SOPs, macros, and documentation to improve clarity and reduce ambiguity</div>
+      <span class="pill pill-success">Direct match</span>
+    </div>
+    <div class="req-jd">"…improve clarity and reduce ambiguity"</div>
+    <div class="req-proof"><strong>Proof:</strong> Collections process library — six MD-approved documents authored from scratch (S21). T−25 / T+30 critical collection window framework embedded into team SOPs (S3). Documentation quality scorecards with pre-submission checklists (S2).</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">07</span>
+      <div class="req-title">Partner with Enablement to build scalable regional training programs</div>
+      <span class="pill pill-accent">Strong match (vocab shift)</span>
+    </div>
+    <div class="req-jd">"…scalable regional training programs"</div>
+    <div class="req-proof"><strong>Proof:</strong> Built team capability to operate independently (S12). Trained all 77 staff on the T−25/T+30 framework (S3). India ops hub 42-person deployment included training architecture from scratch (S7). Vocabulary gap: "Enablement" as a named partner function is new; the work is identical.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">08</span>
+      <div class="req-title">Act as a regional training lead to reinforce workflows, policies, and quality standards</div>
+      <span class="pill pill-success">Direct match</span>
+    </div>
+    <div class="req-jd">"…regional training lead… workflows, policies, quality standards"</div>
+    <div class="req-proof"><strong>Proof:</strong> Three-team collections operating model with role-specific training architecture (S13). Documentation evidence and closure standards trained across the team during PR rejection containment (S2). Individualization CliftonStrength — you tune training to contributor profile, not generic content.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">09</span>
+      <div class="req-title">Collaborate with Product, Engineering, and Operations to drive tooling and workflow improvements</div>
+      <span class="pill pill-success">Direct match (highest-leverage bullet)</span>
+    </div>
+    <div class="req-jd">"…Product, Engineering, and Operations… tooling and workflow improvements"</div>
+    <div class="req-proof"><strong>Proof:</strong> Salesforce 0→1 co-architecture with Engineering, six-stakeholder discovery, 70+ reporting requirements (S4). NICE Dialler + IVR implementation partnering tech (S20). SQL database migration program (S26). This is the bullet that justifies the senior hire — and where you have the deepest receipts.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">10</span>
+      <div class="req-title">Translate frontline insights into clear, actionable requirements for system enhancements</div>
+      <span class="pill pill-success">Direct match</span>
+    </div>
+    <div class="req-jd">"…translate frontline insights into… requirements"</div>
+    <div class="req-proof"><strong>Proof:</strong> Salesforce 0→1 (S4) is exactly this skill — six-stakeholder discovery, 70+ written requirements, each validated against operational workflow. One Sobha App 0 → 36% adoption (S17) required translating customer-facing frontline observations into product requirements.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">11</span>
+      <div class="req-title">Identify risks within workflows and implement safeguards to improve consistency and reliability</div>
+      <span class="pill pill-success">Direct match</span>
+    </div>
+    <div class="req-jd">"…identify risks… implement safeguards"</div>
+    <div class="req-proof"><strong>Proof:</strong> 14-finding audit register, each finding with structural safeguard (S1). AED 475M unallocated-receipts containment (S22). Four-layer reconciliation framework (S33) — literal multi-layer safeguard architecture.</div>
+  </div>
+
+  <div class="req-card">
+    <div class="req-head">
+      <span class="req-num">12</span>
+      <div class="req-title">Strengthen auditability and operational defensibility across the region</div>
+      <span class="pill pill-success">Direct match</span>
+    </div>
+    <div class="req-jd">"…auditability and operational defensibility"</div>
+    <div class="req-proof"><strong>Proof:</strong> 14-finding audit closure with zero recurrence (S1). Annual audit cycle 41% → 1% error rate (S28). Risk register became standing governance tool — auditability is built into the operating model, not bolted on.</div>
+  </div>
+
+  <div class="card tinted accent-rail" style="margin-top:24px">
+    <div class="card-eyebrow">Reframe Mantra</div>
+    <h2 class="card-title">When the domain gap surfaces, say this once and move on</h2>
+    <div class="quote">
+      <div class="quote-text">I've spent six years running a high-volume, multi-region operations function with a KPI taxonomy that maps almost one-to-one to yours — collection rate is an SLA, customer satisfaction is CSAT, aging bands are backlog health, escalation rate is escalation rate. I've reduced ambiguity through structural fixes, built regional infrastructure from zero, and partnered Engineering on a 0-to-1 platform. I've been operating a support-style function under a different name. The vocabulary will shift in a few weeks. The operating discipline transfers Monday.</div>
+      <span class="quote-attr">Domain-gap bridge · use once, never twice</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 03 FIT & GAP ====== -->
+<section class="section" id="fitgap">
+  <div class="section-eyebrow">Section 03 · Fit &amp; Gap</div>
+  <h1 class="section-title">Strengths matched, <em>gaps classified</em></h1>
+  <p class="section-sub">Capability fit is 82. Stability discount is −10. Net fit lands at 72. Below: where you fit, where you don't, and where the gap is vocabulary versus genuine experience.</p>
+
+  <div class="card success-rail">
+    <div class="card-eyebrow">Why Capability Fit Is High (82)</div>
+    <h2 class="card-title">The diagnosis matches the prescription</h2>
+    <p>The CEO's own public diagnosis of Scale — <em>"too many layers, excessive bureaucracy, ramped up too quickly, confusion about mission"</em> — is structurally what your top-three CliftonStrengths are designed to fix. Most candidates will apply with generic ops experience. You apply with <strong class="hl">a strengths profile that reads as the prescription for the problem the company has already admitted to</strong>. That's rare and asymmetric.</p>
+  </div>
+
+  <div class="card danger-rail">
+    <div class="card-eyebrow">Why Net Fit Drops 10 (Stability Discount)</div>
+    <h2 class="card-title">Honest discount factors</h2>
+    <ul>
+      <li>Interim CEO still "interim" ~11 months in — your skip-level future is genuinely unclear</li>
+      <li>Customer-trust rebuild not complete; revenue-mix shift to enterprise/gov is in flight, not done</li>
+      <li>Role may be re-scoped or merged inside a future restructure within 12 months</li>
+      <li>Your walk-away floor is ₹42L for stability — Scale carries the highest org-stability risk in your active pipeline</li>
+    </ul>
+  </div>
+
+  <div class="h3-eyebrow">CliftonStrengths Alignment</div>
+  <h2 class="h3">Why this role suits your wiring specifically</h2>
+  <table class="tbl">
+    <tr><th style="width:18%">Strength</th><th style="width:52%">How it shows up in the JD</th><th>JD bullets it powers</th></tr>
+    <tr><td class="hl">Restorative</td><td>The "structural inefficiencies / system-level fixes / durable fixes / safeguards" thread runs through almost every bullet. Restorative is the strength that energizes around broken things and refuses to settle for patches.</td><td class="mono">1, 2, 11</td></tr>
+    <tr><td class="hl">Analytical</td><td>"Track and measure impact… KPIs… data-driven decisions" — Analytical is the metric-and-evidence reflex.</td><td class="mono">4, 5</td></tr>
+    <tr><td class="hl">Arranger</td><td>"Drive cross-functional initiatives… partner Product / Engineering / Operations" — Arranger orchestrates moving parts.</td><td class="mono">6, 7, 8, 9</td></tr>
+    <tr><td class="hl">Relator</td><td>Cross-functional influence depends on trust built one relationship at a time. Relator is the stakeholder bedrock.</td><td class="mono">3, 9, 10</td></tr>
+    <tr><td class="hl">Individualization</td><td>Training-lead bullets — tuning enablement to specific contributor profiles, not generic content.</td><td class="mono">7, 8</td></tr>
+  </table>
+
+  <div class="h3-eyebrow">Vocabulary Decoder</div>
+  <h2 class="h3">Sobha terminology → Scale support-ops terminology</h2>
+  <p style="font-size:13px; color:var(--text-soft); margin-bottom:14px">A hiring manager who hears "PR rejection rate" hears collections jargon and tunes out. The same person who hears "SLA breach rate" hears one of their own. The content of every STAR story is identical either way; framing determines whether you're heard as a peer or a stranger.</p>
+
+  <div class="vocab-grid">
+    <div class="vocab-row"><div class="vocab-from">Collection rate</div><div class="vocab-arrow">→</div><div class="vocab-to">SLA adherence rate</div></div>
+    <div class="vocab-row"><div class="vocab-from">DPD bucket · aging band</div><div class="vocab-arrow">→</div><div class="vocab-to">Backlog age · queue age</div></div>
+    <div class="vocab-row"><div class="vocab-from">Escalation to CCO</div><div class="vocab-arrow">→</div><div class="vocab-to">Tier-2 / Tier-3 escalation</div></div>
+    <div class="vocab-row"><div class="vocab-from">Payment Request (PR)</div><div class="vocab-arrow">→</div><div class="vocab-to">Ticket · case</div></div>
+    <div class="vocab-row"><div class="vocab-from">PR rejection rate</div><div class="vocab-arrow">→</div><div class="vocab-to">Ticket rework rate · SLA breach rate</div></div>
+    <div class="vocab-row"><div class="vocab-from">TAT (turnaround time)</div><div class="vocab-arrow">→</div><div class="vocab-to">FRT (first response time) · resolution time</div></div>
+    <div class="vocab-row"><div class="vocab-from">Customer satisfaction</div><div class="vocab-arrow">→</div><div class="vocab-to">CSAT</div></div>
+    <div class="vocab-row"><div class="vocab-from">Calling cadence · touchpoint</div><div class="vocab-arrow">→</div><div class="vocab-to">Agent productivity · ticket touch count</div></div>
+    <div class="vocab-row"><div class="vocab-from">NICE Dialler · IVR</div><div class="vocab-arrow">→</div><div class="vocab-to">WFM tool · telephony stack</div></div>
+    <div class="vocab-row"><div class="vocab-from">Salesforce CRM</div><div class="vocab-arrow">→</div><div class="vocab-to">Zendesk · case management platform</div></div>
+    <div class="vocab-row"><div class="vocab-from">Audit register · risk register</div><div class="vocab-arrow">→</div><div class="vocab-to">Risk inventory · control catalog</div></div>
+    <div class="vocab-row"><div class="vocab-from">Audit findings</div><div class="vocab-arrow">→</div><div class="vocab-to">Control failures · open issues</div></div>
+    <div class="vocab-row"><div class="vocab-from">Sustainable closure</div><div class="vocab-arrow">→</div><div class="vocab-to">Durable fix · root-cause closure</div></div>
+    <div class="vocab-row"><div class="vocab-from">Critical Collection Window</div><div class="vocab-arrow">→</div><div class="vocab-to">Operational readiness model</div></div>
+    <div class="vocab-row"><div class="vocab-from">Relationship Manager (RM)</div><div class="vocab-arrow">→</div><div class="vocab-to">Agent · specialist · contributor</div></div>
+    <div class="vocab-row"><div class="vocab-from">1LOD / 2LOD / 3LOD</div><div class="vocab-arrow">→</div><div class="vocab-to">Three lines of defense (universal — use as bridge)</div></div>
+    <div class="vocab-row"><div class="vocab-from">Asst. Manager · Sr. Manager</div><div class="vocab-arrow">→</div><div class="vocab-to">Tier-1 · Tier-2 lead</div></div>
+    <div class="vocab-row"><div class="vocab-from">Operations team</div><div class="vocab-arrow">→</div><div class="vocab-to">Frontline · labeler pool</div></div>
+    <div class="vocab-row"><div class="vocab-from">QCG (Quality Control Group)</div><div class="vocab-arrow">→</div><div class="vocab-to">QA team · quality assurance function</div></div>
+    <div class="vocab-row"><div class="vocab-from">MIS (Mgmt Info Systems)</div><div class="vocab-arrow">→</div><div class="vocab-to">Analytics · BI · data engineering</div></div>
+    <div class="vocab-row"><div class="vocab-from">Dues collection</div><div class="vocab-arrow">→</div><div class="vocab-to">Case resolution · account servicing</div></div>
+    <div class="vocab-row"><div class="vocab-from">Property handover</div><div class="vocab-arrow">→</div><div class="vocab-to">Customer milestone · closure event</div></div>
+    <div class="vocab-row"><div class="vocab-from">Collections process library</div><div class="vocab-arrow">→</div><div class="vocab-to">SOP repository · knowledge base · macro library</div></div>
+    <div class="vocab-row"><div class="vocab-from">Reconciliation framework</div><div class="vocab-arrow">→</div><div class="vocab-to">Reconciliation workflow · QC workflow</div></div>
+    <div class="vocab-row"><div class="vocab-from">Documentation quality scorecard</div><div class="vocab-arrow">→</div><div class="vocab-to">SOP adherence scorecard · quality framework</div></div>
+  </div>
+
+  <div class="h3-eyebrow">Gap Inventory</div>
+  <h2 class="h3">Five gaps — classified honestly</h2>
+  <p style="font-size:13px; color:var(--text-soft); margin-bottom:14px">Most gaps in your pipeline are vocabulary gaps — same operating discipline, different industry words. Two of the five below are genuine experience gaps that need real study. Three are vocabulary gaps closable inside two weeks. Don't conflate them when speaking to interviewers — it sounds less credible, not more.</p>
+
+  <div class="gap-card">
+    <div class="gap-head">
+      <div class="gap-title">Gap 1 — Support Operations Vocabulary (Zendesk world)</div>
+      <span class="pill pill-mute">Vocab · P2</span>
+    </div>
+    <div class="gap-body">You speak collections vocabulary fluently. You do not natively speak SLA-tiered ticket queues, macro authoring, agent productivity metrics, deflection rate, FRT, or WFM terminology. Operating discipline is identical; labels are not.</div>
+    <div class="gap-plan"><strong>Closure plan — 2 weeks · ~4 hrs/week</strong>
+    Read Zendesk's "Anatomy of a Support Operation" and macro best-practices guides. Study 3 case studies on contact-centre ops. Memorize: macro, trigger, view, queue, SLA tier, FCR, AHT, FRT, deflection, escalation rate, agent occupancy, ticket touch count. Rewrite STAR stories S2, S3, S18 using support-ops vocabulary.</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-head">
+      <div class="gap-title">Gap 2 — Distributed Contractor Workforce Operations</div>
+      <span class="pill pill-danger">Genuine · P0</span>
+    </div>
+    <div class="gap-body">Scale's operating substrate is a global contractor network — thousands of labelers working asynchronously across geographies. You've managed direct employees in a clear hierarchy. The quality-control, calibration, and contractor-management disciplines are real and different.</div>
+    <div class="gap-plan"><strong>Closure plan — 1 week · ~6 hrs</strong>
+    Read Scale's public content on labeler operations, quality, and "expert" workflows. Study Mechanical Turk operating mechanics, Mercor competitive intel. Understand: gold standards, golden sets, inter-annotator agreement (IAA), calibration tasks, qualification gating, shadow review. Prepare two-minute answer to: "How would you approach QA across a contractor pool you've never directly managed?"</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-head">
+      <div class="gap-title">Gap 3 — AI / LLM Training Data Domain</div>
+      <span class="pill pill-accent">Genuine · P1</span>
+    </div>
+    <div class="gap-body">You're an AI user, not a producer of training data. You don't need to be an ML engineer for this role, but you do need to speak the basic taxonomy fluently enough that Product and Engineering partners take you seriously.</div>
+    <div class="gap-plan"><strong>Closure plan — 2 weeks · ~3 hrs/week</strong>
+    Anthropic's "Building with Claude" + "Building Effective Agents". Scale's public RLHF, evals, red-teaming materials. Glossary fluency: RLHF, SFT, DPO, eval set, gold labels, model card, IAA, calibration, hallucination rate, jailbreak, red-team. One concrete project: hand-label 100 examples on a small open dataset, write up the quality issues you encounter.</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-head">
+      <div class="gap-title">Gap 4 — Async Remote-First Execution</div>
+      <span class="pill pill-accent">Partial · P1</span>
+    </div>
+    <div class="gap-body">Sobha is co-located. You've not run a senior IC role across multiple timezones, async-first. The role is India-remote, reporting likely into a US or APAC manager.</div>
+    <div class="gap-plan"><strong>Closure plan — 1 week</strong>
+    GitLab Handbook on async work principles. Study Doist, Buffer, Automattic operating models. Prepare your async hygiene story: written SOPs, structured weekly updates, single-thread decision logs, default-public communication, time-zone respect, output-not-presence orientation. Have an answer for: "What's your operating cadence when your manager is 12 hours ahead?"</div>
+  </div>
+
+  <div class="gap-card">
+    <div class="gap-head">
+      <div class="gap-title">Gap 5 — Scale AI Company-State Awareness</div>
+      <span class="pill pill-mute">Vocab · P2</span>
+    </div>
+    <div class="gap-body">Walking into an interview without knowing the Meta deal, the customer exodus, Droege's memo, or the Thunderforge contract is disqualifying. Knowing them by heart is differentiating.</div>
+    <div class="gap-plan"><strong>Closure plan — 3 days · ~2 hrs/day</strong>
+    Read full Meta–Scale deal coverage (TechCrunch, Bloomberg, CNBC, Jun 12–19 2025). Find Droege's internal restructure memo if publicly excerpted (CNBC, Business Insider). Listen to any Wang exit interviews + Droege podcast appearances since June 2025. Track Scale news weekly until interview. Read Scale's last 5 official blog posts for current external positioning.</div>
+  </div>
+</section>
+
+<!-- ====== 04 STORY MAPPING ====== -->
+<section class="section" id="stars">
+  <div class="section-eyebrow">Section 04 · Story Mapping</div>
+  <h1 class="section-title">Five STAR stories, <em>twelve bullets covered</em></h1>
+  <p class="section-sub">Drawn from the V3 Story Bank (S1–S36). Each runs under three minutes when rehearsed in support-ops vocabulary.</p>
+
+  <h2 class="h3"><span class="pill pill-primary">S1</span> · Structural Pattern Recognition &amp; Durable Fix</h2>
+  <p class="muted-text"><strong>Maps to:</strong> JD bullets 1, 2, 11, 12</p>
+  <div class="star">
+    <div class="star-row"><div class="star-key">SITUATION</div><div class="star-text">In 2023, an internal audit of Sobha's collections operations identified 14 control findings across documentation, approval protocols, and data governance. The findings carried real risk of recurrence — most ops teams would close them for the audit cycle and find the same issues re-opening next year.</div></div>
+    <div class="star-row"><div class="star-key">TASK</div><div class="star-text">As audit single point of contact, I owned the remediation programme. The bar I set was <strong>structural closure, not paper closure</strong> — every finding needed a control that made recurrence impossible.</div></div>
+    <div class="star-row"><div class="star-key">ACTION</div><div class="star-text">Built a structured risk register: owner, root-cause analysis, remediation action, target closure date, evidence criterion. Clustered 14 surface findings into 6 root-cause patterns. Designed structural controls for each <em>pattern</em>, not each finding. Ran weekly governance cadence with team leads. Proactively escalated three blockers to CCO before they hit overdue dates. The risk register became a standing tool, not an audit artifact.</div></div>
+    <div class="star-row"><div class="star-key result">RESULT</div><div class="star-text"><strong>97.5% reduction in error rate.</strong> All 14 findings closed within window. Zero recurrence in subsequent cycles. The risk register is now the team's continuous controls monitoring framework. <strong class="hl">Auditability built into the operating model, not bolted on at audit time.</strong></div></div>
+  </div>
+
+  <h2 class="h3"><span class="pill pill-primary">S2</span> · KPI Improvement Under Pressure</h2>
+  <p class="muted-text"><strong>Maps to:</strong> JD bullets 1, 2, 4, 6</p>
+  <div class="star">
+    <div class="star-row"><div class="star-key">SITUATION</div><div class="star-text">By December 2025, PR rejection rate at Sobha had reached 49% — nearly half of all collections-related financial requests sent back due to documentation failures. Volume had tripled (~90 → 281/month) while quality collapsed. In support-ops terms: SLA breach on half of all tickets, rework eating capacity.</div></div>
+    <div class="star-row"><div class="star-key">TASK</div><div class="star-text">Diagnose root causes, design a sustainable documentation quality architecture, and reduce rejection rate <em>without</em> slowing collections velocity. The AED 8.2B annual target depended on payment processing speed.</div></div>
+    <div class="star-row"><div class="star-key">ACTION</div><div class="star-text">Root cause analysis across all rejection categories. Built a quality scorecard with mandatory pre-submission checklist fields. Implemented daily KPI monitoring with team-level visibility. Introduced a peer review step. Trained the team on closure evidence standards. Built a tracker that <em>flagged any request exceeding the documentation threshold before submission</em> — the safeguard upstream of the rejection, not downstream.</div></div>
+    <div class="star-row"><div class="star-key result">RESULT</div><div class="star-text"><strong>PR TAT 20 → 3 days (85% improvement).</strong> Rejection rate declined sharply. The documentation quality architecture is now a permanent operating layer.</div></div>
+  </div>
+
+  <h2 class="h3"><span class="pill pill-primary">S3</span> · Operational Readiness Framework Design</h2>
+  <p class="muted-text"><strong>Maps to:</strong> JD bullets 4, 6, 7, 8</p>
+  <div class="star">
+    <div class="star-row"><div class="star-key">SITUATION</div><div class="star-text">Collections performance was volatile — teams intensified activity randomly, causing customer friction at non-critical payment windows and underperforming at the highest-risk moments. No structured operating model for the 55-day window around each payment due date.</div></div>
+    <div class="star-row"><div class="star-key">TASK</div><div class="star-text">Design a proprietary operating framework defining what "operational readiness" meant at each stage of the collections cycle — so every RM, ops associate, and team lead knew exactly which actions to take, when, relative to the payment date.</div></div>
+    <div class="star-row"><div class="star-key">ACTION</div><div class="star-text">Built the <strong>T−25 to T+30 Critical Collection Window Framework</strong> — a 55-day operational readiness model with defined activities, escalation triggers, customer touchpoint sequences, and documentation requirements at each stage. Embedded it into team SOPs. Trained all 77 staff. Built monitoring into the MI reporting ecosystem so adherence was visible in real time. <em>The framework is the SOP, the training program, and the measurement infrastructure in one.</em></div></div>
+    <div class="star-row"><div class="star-key result">RESULT</div><div class="star-text">Operating backbone for <strong>AED 12.97B in collections across 36,000+ units</strong>. <strong>Portfolio delinquency declined 74% (16.7% → 4.4%)</strong> over 4 years. Framework is now the standard model across the function.</div></div>
+  </div>
+
+  <h2 class="h3"><span class="pill pill-primary">S4</span> · Cross-Functional Tooling Build</h2>
+  <p class="muted-text"><strong>Maps to:</strong> JD bullets 9, 10 (highest-leverage bullets)</p>
+  <div class="star">
+    <div class="star-row"><div class="star-key">SITUATION</div><div class="star-text">In 2021, Sobha Collections had no systematic CRM infrastructure. Data lived in disparate Excel files, reporting was manual and error-prone, no real-time visibility into portfolio health. The business was scaling — without the operational infrastructure to support it.</div></div>
+    <div class="star-row"><div class="star-key">TASK</div><div class="star-text">Lead design and implementation of Salesforce CRM as <em>business-side owner</em> — not just user, but the stakeholder defining what the platform needed to do. First-line product owner, partnering Engineering.</div></div>
+    <div class="star-row"><div class="star-key">ACTION</div><div class="star-text">Six-stakeholder discovery process across Collections, Operations, MIS, Finance, Legal, and leadership. Defined <strong>70+ reporting requirements</strong>. Validated data architecture against collections workflows. Partnered with technology team on handoff criteria. Owned readiness review before each deployment milestone — documentation, user training, and data validation complete before go-live. Translated dozens of frontline pain points into clear product requirements.</div></div>
+    <div class="star-row"><div class="star-key result">RESULT</div><div class="star-text">Salesforce became the team's operating system. Reporting cycles compressed from days to minutes. Adoption sustained at high levels across 77 staff. <strong class="hl">This is "translate frontline insights into actionable requirements" and "Product / Engineering partnership" lived end-to-end. The vocabulary is real estate; the work is platform product ownership.</strong></div></div>
+  </div>
+
+  <h2 class="h3"><span class="pill pill-primary">S7</span> · Regional Operations Scale-Up (the title precedent)</h2>
+  <p class="muted-text"><strong>Maps to:</strong> JD bullets 7, 8, 12 — direct hit on "Regional Lead India" title</p>
+  <div class="star">
+    <div class="star-row"><div class="star-key">SITUATION</div><div class="star-text">Sobha needed an India operations hub to support its growing portfolio. There was no existing India ops infrastructure — no team, no SOPs, no reporting, no escalation paths, no quality framework.</div></div>
+    <div class="star-row"><div class="star-key">TASK</div><div class="star-text">Stand up the India operations hub — recruit, design the operating model, embed SOPs, build training infrastructure, define escalation paths, integrate with Dubai HQ. End state: 42-person India team functioning as co-equal operating layer with Dubai.</div></div>
+    <div class="star-row"><div class="star-key">ACTION</div><div class="star-text">Designed team structure (segments + roles + escalation matrix). Recruited the team. Built training curricula from scratch. Authored SOPs covering every recurring scenario. Established weekly governance with Dubai HQ. Defined cross-region KPI scorecards so performance was comparable across geographies. Served as regional training lead during ramp-up — every new hire onboarded through the curriculum I designed.</div></div>
+    <div class="star-row"><div class="star-key result">RESULT</div><div class="star-text"><strong>42-person India ops hub fully operational.</strong> Cross-region operating model embedded. India team became the operational backbone of multi-entity expansion (1 → 4 entities). <strong class="hl">This is the literal "Regional Lead" role title, executed once already. The geography was India for Sobha; the role architecture is what Scale needs.</strong></div></div>
+  </div>
+
+  <div class="h3-eyebrow">Coverage Matrix</div>
+  <h2 class="h3">Five stories versus twelve JD bullets</h2>
+  <table class="tbl cov-tbl">
+    <tr>
+      <th>JD bullet</th>
+      <th>S1 · Audit Register</th>
+      <th>S2 · PR Rejection</th>
+      <th>S3 · 55-Day Framework</th>
+      <th>S4 · Salesforce 0→1</th>
+      <th>S7 · India Hub</th>
+    </tr>
+    <tr><td>1. Recurring patterns</td><td class="cov cov-3">●●●</td><td class="cov cov-2">●●</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td></tr>
+    <tr><td>2. System-level fixes</td><td class="cov cov-3">●●●</td><td class="cov cov-3">●●●</td><td class="cov cov-2">●●</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td></tr>
+    <tr><td>3. Escalation partner</td><td class="cov cov-2">●●</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td><td class="cov cov-2">●●</td></tr>
+    <tr><td>4. KPI improvement</td><td class="cov cov-0">—</td><td class="cov cov-3">●●●</td><td class="cov cov-3">●●●</td><td class="cov cov-0">—</td><td class="cov cov-2">●●</td></tr>
+    <tr><td>5. Track + measure impact</td><td class="cov cov-2">●●</td><td class="cov cov-3">●●●</td><td class="cov cov-3">●●●</td><td class="cov cov-3">●●●</td><td class="cov cov-2">●●</td></tr>
+    <tr><td>6. SOPs + documentation</td><td class="cov cov-0">—</td><td class="cov cov-2">●●</td><td class="cov cov-3">●●●</td><td class="cov cov-0">—</td><td class="cov cov-3">●●●</td></tr>
+    <tr><td>7. Training programs</td><td class="cov cov-0">—</td><td class="cov cov-2">●●</td><td class="cov cov-3">●●●</td><td class="cov cov-0">—</td><td class="cov cov-3">●●●</td></tr>
+    <tr><td>8. Regional training lead</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td><td class="cov cov-2">●●</td><td class="cov cov-0">—</td><td class="cov cov-3">●●●</td></tr>
+    <tr><td>9. Product / Eng partnership</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td><td class="cov cov-3">●●●</td><td class="cov cov-0">—</td></tr>
+    <tr><td>10. Frontline → requirements</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td><td class="cov cov-3">●●●</td><td class="cov cov-0">—</td></tr>
+    <tr><td>11. Workflow safeguards</td><td class="cov cov-3">●●●</td><td class="cov cov-3">●●●</td><td class="cov cov-2">●●</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td></tr>
+    <tr><td>12. Auditability + defensibility</td><td class="cov cov-3">●●●</td><td class="cov cov-2">●●</td><td class="cov cov-0">—</td><td class="cov cov-0">—</td><td class="cov cov-2">●●</td></tr>
+  </table>
+  <p class="muted-text" style="margin-top:8px"><strong>Reading:</strong> ●●● primary story · ●● supporting · ● mentionable. All 12 bullets covered with at least one strong story. Drill these five until each runs under three minutes in support-ops vocabulary.</p>
+</section>
+
+<!-- ====== 05 30-60-90 ====== -->
+<section class="section" id="plan">
+  <div class="section-eyebrow">Section 05 · 30-60-90</div>
+  <h1 class="section-title">Pre-application, then <em>diagnose → fix → institutionalize</em></h1>
+  <p class="section-sub">Eighteen timeline items — four weeks of pre-application prep, plus six per phase grounded in Scale's actual current state rather than generic onboarding.</p>
+
+  <h2 class="h3">Pre-application — 4 weeks before submit</h2>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">Week 1 · Vocabulary immersion</div>
+      <div class="tl-title">Support ops + distributed workforce vocabulary</div>
+      <div class="tl-body">Close Gaps 1 and 2. Read Zendesk + Mechanical Turk + Mercor materials. Build a personal glossary file. Rewrite three STAR stories in support-ops language.</div>
+    </div>
+    <div class="tl-item accent">
+      <div class="tl-time">Week 2 · Company deep dive + AI taxonomy</div>
+      <div class="tl-title">Scale state + LLM training data vocabulary</div>
+      <div class="tl-body">Close Gaps 3 and 5. Read all post-June-2025 Scale coverage. Build a one-page Scale state-of-play cheat sheet. Hand-label 100 examples to feel the actual work.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Week 3 · AI portfolio sketch</div>
+      <div class="tl-title">Regional Operations Health Dashboard prototype</div>
+      <div class="tl-body">Build a working v0 of the dashboard described in Section 06. Even a static React mockup with hard-coded data is enough — the goal is something you can screen-share in an interview.</div>
+    </div>
+    <div class="tl-item success">
+      <div class="tl-time">Week 4 · Rehearsal + apply</div>
+      <div class="tl-title">STAR rehearsal in Scale vocabulary + submission</div>
+      <div class="tl-body">Record all five STAR stories in support-ops vocabulary. Under three minutes each. Final resume tailoring. Apply. Reach out to any Scale India employee on LinkedIn for a 15-minute informational chat.</div>
+    </div>
+  </div>
+
+  <h2 class="h3">Days 1–30 · Diagnostic Phase</h2>
+  <p style="font-size:13px; color:var(--text-soft); margin-bottom:14px">Goal: build an evidence-based picture of what's working, what's breaking, and where structural leverage exists. No major changes yet.</p>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">Day 1–7</div>
+      <div class="tl-title">Frontline immersion — shadow 3 to 5 labelers across work types</div>
+      <div class="tl-body">Image annotation, RLHF eval, code review, audio, expert tasks. Sit through their actual workday. Watch friction points. Take notes you can attribute to specific work types.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Day 8–14</div>
+      <div class="tl-title">Inventory regional KPI definitions, dashboards, and reporting rhythms</div>
+      <div class="tl-body">What SLAs exist? What's measured weekly versus daily? Who owns each metric? Where do reports go? Are definitions consistent across work types? Document the inconsistencies.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Day 8–21</div>
+      <div class="tl-title">Build escalation pattern inventory</div>
+      <div class="tl-body">Pull last 90 days of escalations across India region. Cluster by category. Identify top 10 recurring escalation types. This is the basis for Days 31–60 quick wins.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Day 14–25</div>
+      <div class="tl-title">Map cross-functional partners</div>
+      <div class="tl-body">Meet every Product PM, Engineering lead, Trust &amp; Safety counterpart, and Enablement partner who touches India ops. Understand their priorities and their friction with current regional execution.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Day 20–30</div>
+      <div class="tl-title">SOP and training audit</div>
+      <div class="tl-body">Find the five most-cited SOPs in the region. Read them. Find the five most ambiguous (hedge words, missing decision rules). Prioritize for Days 31–60 rewrites.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Day 25–30</div>
+      <div class="tl-title">Read every regional postmortem from the last 90 days</div>
+      <div class="tl-body">Patterns hide in postmortems. Fastest path to seeing what nobody has yet noticed is recurring.</div>
+    </div>
+  </div>
+
+  <h2 class="h3">Days 31–60 · Quick-Win Phase</h2>
+  <p style="font-size:13px; color:var(--text-soft); margin-bottom:14px">Goal: ship three visible improvements, prove the operating pattern by example, earn political capital for the bigger Days 61–90 work.</p>
+  <div class="timeline">
+    <div class="tl-item accent">
+      <div class="tl-time">Day 31–40</div>
+      <div class="tl-title">Ship Regional Ops Health Dashboard v1</div>
+      <div class="tl-body">The headline AI-portfolio project — single regional view with anomaly detection. Even v1 with three KPI tiles and a Claude-generated weekly briefing beats what likely exists today. Visible, talked-about, hard to argue with.</div>
+    </div>
+    <div class="tl-item accent">
+      <div class="tl-time">Day 35</div>
+      <div class="tl-title">Run first regional pattern review session</div>
+      <div class="tl-body">Weekly 30-minute meeting. Top 3 recurring escalation themes from the pattern inventory. Assign a structural-fix owner for each. Establish cadence as standing operating rhythm.</div>
+    </div>
+    <div class="tl-item accent">
+      <div class="tl-time">Day 36–50</div>
+      <div class="tl-title">Pilot one SOP rewrite</div>
+      <div class="tl-body">Take the worst-scoring SOP from Days 1–30 audit. Rewrite for clarity. A/B test against a single team for two weeks. If the metric moves, scale it.</div>
+    </div>
+    <div class="tl-item accent">
+      <div class="tl-time">Day 40</div>
+      <div class="tl-title">Establish weekly regional ops review with cross-functional partners</div>
+      <div class="tl-body">30 minutes, fixed agenda: KPI snapshot, top 3 patterns, top 3 risks, one decision. Async update doc circulated 24 hours prior. This becomes the standing forum where regional ops becomes legible to the global org.</div>
+    </div>
+    <div class="tl-item accent">
+      <div class="tl-time">Day 40–60</div>
+      <div class="tl-title">Design durable fixes for top 3 recurring root causes</div>
+      <div class="tl-body">From the escalation pattern inventory. Each fix: owner, root cause, intervention design, target metric, decision date. Three structural fixes by Day 60 is a strong opening volume.</div>
+    </div>
+    <div class="tl-item accent">
+      <div class="tl-time">Day 55–60</div>
+      <div class="tl-title">First skip-level reads of the operating model</div>
+      <div class="tl-body">Present a 5-page Regional Ops Brief to VP Ops / interim CEO. Patterns found, fixes underway, KPI baselines, recommended next quarter agenda.</div>
+    </div>
+  </div>
+
+  <h2 class="h3">Days 61–90 · Scale &amp; Institutionalize Phase</h2>
+  <p style="font-size:13px; color:var(--text-soft); margin-bottom:14px">Goal: convert what worked into operating infrastructure; propose the next quarter's structural agenda.</p>
+  <div class="timeline">
+    <div class="tl-item success">
+      <div class="tl-time">Day 61–75</div>
+      <div class="tl-title">Publish Regional Ops Playbook v1</div>
+      <div class="tl-body">Consolidate SOPs, KPI definitions, escalation matrix, cadence, cross-functional rituals. Single source of truth for India region. Future regional leads inherit a playbook, not folklore.</div>
+    </div>
+    <div class="tl-item success">
+      <div class="tl-time">Day 65–80</div>
+      <div class="tl-title">Stand up Enablement partnership</div>
+      <div class="tl-body">Design a regional training program for next quarter based on gaps surfaced in Days 1–30. Co-built with Enablement, owned by you operationally, signed off by them.</div>
+    </div>
+    <div class="tl-item success">
+      <div class="tl-time">Day 70–85</div>
+      <div class="tl-title">Define India regional KPI scorecard with explicit targets and thresholds</div>
+      <div class="tl-body">Not metrics — <em>targets</em>. SLA at X%, CSAT at Y, backlog age &lt; Z days, escalation rate &lt; A%. Plus recovery threshold per metric. This is where regional ops becomes defensible to leadership.</div>
+    </div>
+    <div class="tl-item success">
+      <div class="tl-time">Day 75–88</div>
+      <div class="tl-title">Build out Escalation Pattern Analyzer as roadmap item</div>
+      <div class="tl-body">AI portfolio Project 2 (Section 06). Pitch the design, get sign-off, scope the build for Q+1.</div>
+    </div>
+    <div class="tl-item success">
+      <div class="tl-time">Day 85–90</div>
+      <div class="tl-title">Present 90-day retrospective to leadership</div>
+      <div class="tl-body">What was found, what was fixed, what was measured, what's recommended next. Includes a structural agenda for the next two quarters with named risks and named owners.</div>
+    </div>
+    <div class="tl-item success">
+      <div class="tl-time">Day 90</div>
+      <div class="tl-title">Self-review against pre-set 90-day commitments</div>
+      <div class="tl-body">Audit yourself before anyone else does. Where did you hit, where did you miss, what would you do differently. This is the Restorative move that builds long-term credibility.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 06 AI DIFFERENTIATOR ====== -->
+<section class="section" id="ai">
+  <div class="section-eyebrow">Section 06 · AI Differentiator</div>
+  <h1 class="section-title">Three portfolio projects, <em>tailored to Scale's actual pain</em></h1>
+  <p class="section-sub">Reframed from your existing portfolio (P6, P11, P12). Build at least Project 1 as a working prototype before the interview — screen-sharing a real dashboard for 90 seconds beats thirty minutes of describing what you'd build.</p>
+
+  <div class="card accent-orange-rail">
+    <div class="card-eyebrow">Why this is your unfair advantage at Scale specifically</div>
+    <h2 class="card-title">Operating discipline + AI-augmented tooling at an AI company in turnaround</h2>
+    <p>Every OPM candidate will claim KPI fluency and root-cause discipline. Most will describe their work in spreadsheets and meetings. You're applying with the AI-augmented version of those same disciplines — tools that compress the time between problem and structural fix by an order of magnitude. <strong class="hl">That's already strong at AmEx and Oaktree. At an AI company that just admitted it ramped capacity too quickly and is rebuilding around quality and reliability, it's uniquely on-message.</strong></p>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-eyebrow">Project 01 · Headline build · P11 reframed</div>
+    <h3 class="ai-title">Regional Operations Health Dashboard</h3>
+    <div class="ai-body">
+      <p><strong>The problem.</strong> Distributed labeler workforce across India region. Multiple work types (image annotation, RLHF eval, code review, audio, expert). Many KPIs (SLA, CSAT, backlog age, escalation rate per work type). Today this is likely tracked across Zendesk reports, spreadsheets, and Looker dashboards without a single regional view. By the time a degraded work type surfaces, customer impact has landed.</p>
+      <p><strong>The solution.</strong> A single-page dashboard pulling from Zendesk-style ticketing data, internal Scale APIs, and a Postgres warehouse. Real-time KPI tiles for SLA adherence, CSAT trailing 7-day, backlog by age band, escalation rate, FCR. Three personas: Regional Lead view, frontline manager view, individual contributor view. Built with drill-down from region → work type → team → contributor.</p>
+      <p><strong>The AI layer.</strong> Claude API integration auto-generates a weekly regional ops briefing (TL;DR + top 3 anomalies + recommended actions). Embedding-based clustering on escalation case descriptions surfaces recurring patterns the human eye misses. A "why did this metric move?" explainer takes 30 days of data and returns a plain-English causal hypothesis.</p>
+      <p><strong>The pitch.</strong> <em>"In my first 60 days at Scale, here's what I'd build. I've done this once already — designed and shipped a 70+ report intelligence ecosystem at Sobha that became the operating backbone of the function. The vocabulary is different but the architecture transfers."</em></p>
+      <p><strong>Maps to JD bullets:</strong> 4, 5, 11, 12</p>
+      <div class="ai-stack">
+        <span class="pill pill-primary">React</span>
+        <span class="pill pill-primary">Tailwind</span>
+        <span class="pill pill-primary">Recharts</span>
+        <span class="pill pill-primary">Postgres</span>
+        <span class="pill pill-primary">Claude API</span>
+        <span class="pill pill-primary">Python</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-eyebrow">Project 02 · Supporting build · P12 reframed</div>
+    <h3 class="ai-title">Escalation Pattern Recurrence Detector</h3>
+    <div class="ai-body">
+      <p><strong>The problem.</strong> "Lead retrospectives on operational breakdowns and implement durable, system-level fixes" hides a hard practical question — how do you know what's actually recurring? Most ops teams patch the immediate symptom and forget. Six weeks later the same fire restarts under a different surface description. Pattern detection by spreadsheet is slow and biased toward the loudest cases, not the most frequent ones.</p>
+      <p><strong>The solution.</strong> Tool ingests all closed escalations (Zendesk export). Vector-embeds each escalation summary. Clusters by semantic similarity, not keyword. Flags any cluster with three or more similar incidents in a rolling 60-day window. Auto-tags each cluster with root cause hypothesis, blast radius, recurrence likelihood, suggested durable-fix archetype (process control / SOP rewrite / tooling change / training gap).</p>
+      <p><strong>The pitch.</strong> <em>"This is the structural reliability bullet of the JD turned into a tool. The Restorative strength expressed as software. It compresses what used to take a quarter of retrospectives into a weekly 30-minute review."</em></p>
+      <p><strong>Maps to JD bullets:</strong> 1, 2, 11</p>
+      <div class="ai-stack">
+        <span class="pill pill-primary">Python</span>
+        <span class="pill pill-primary">OpenAI embeddings</span>
+        <span class="pill pill-primary">scikit-learn</span>
+        <span class="pill pill-primary">Streamlit</span>
+        <span class="pill pill-primary">Claude API</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-box">
+    <div class="ai-eyebrow">Project 03 · Closes the labeler-workforce gap · P6 reframed</div>
+    <h3 class="ai-title">Distributed Workforce Quality Scorer</h3>
+    <div class="ai-body">
+      <p><strong>The problem.</strong> Scale's substrate is contractor labelers — thousands of them, working asynchronously. Quality control at this scale runs on gold-standard tasks, inter-annotator agreement, and calibration. Most ops teams discover degradation reactively when customer escalations land. By then the cost has been paid.</p>
+      <p><strong>The solution.</strong> A scorer that ingests labeler activity, gold-standard performance, peer-agreement metrics, and SLA adherence. Produces a rolling quality score per labeler with leading indicators (consistency drift, time-per-task drift, IAA drop). Auto-flags labelers whose score is moving in the wrong direction <em>before</em> downstream quality breaks. Includes a SOP-ambiguity dimension: when many labelers diverge on the same task, the SOP is the failure, not the labelers.</p>
+      <p><strong>The pitch.</strong> <em>"This closes the genuine gap on distributed contractor workforce operations and demonstrates I've thought about Scale's actual operating substrate, not just the JD."</em></p>
+      <p><strong>Maps to JD bullets:</strong> 6, 11, 12</p>
+      <div class="ai-stack">
+        <span class="pill pill-primary">Python</span>
+        <span class="pill pill-primary">Pandas</span>
+        <span class="pill pill-primary">Streamlit</span>
+        <span class="pill pill-primary">Claude API</span>
+        <span class="pill pill-primary">Postgres</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card gold-rail">
+    <div class="card-eyebrow">The Differentiator Close</div>
+    <h2 class="card-title">When asked "why Scale?"</h2>
+    <div class="quote">
+      <div class="quote-text">Two reasons. One — your CEO publicly diagnosed too many layers and excessive bureaucracy from rapid scaling. My top strengths (Restorative, Analytical, Arranger) are essentially that diagnosis turned into a prescription. Two — I'm bringing AI-augmented operating tools, not just ops experience. Regional health dashboards, escalation pattern analyzers, distributed workforce quality scorers. Same operating discipline most senior OPMs have, with time-to-fix compressed by an order of magnitude. That mix matters most at an AI company that is itself rebuilding around quality and reliability.</div>
+      <span class="quote-attr">90-second close · rehearse the structure, not the script</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 07 INTERVIEW KIT ====== -->
+<section class="section" id="interview">
+  <div class="section-eyebrow">Section 07 · Interview Kit</div>
+  <h1 class="section-title">Likely rounds, <em>twenty-eight questions</em>, and the opener</h1>
+  <p class="section-sub">Process expectation, question bank across categories, what you should ask back, and the memorized 90-second opener.</p>
+
+  <h2 class="h3">Likely interview process · 4 to 5 stages</h2>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">Stage 1 · 30 min</div>
+      <div class="tl-title">Recruiter screen</div>
+      <div class="tl-body">Basic fit, comp expectations, motivation, why-Scale. Keep it crisp. Set anchor at the higher end of band without naming a number first if possible.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">Stage 2 · 45 to 60 min</div>
+      <div class="tl-title">Hiring manager — behavioral + scenario</div>
+      <div class="tl-body">Deep on past experience. Two to three STAR stories likely. One or two operational scenarios. Bring the dashboard prototype.</div>
+    </div>
+    <div class="tl-item accent">
+      <div class="tl-time">Stage 3 · 3 to 4 × 45 min</div>
+      <div class="tl-title">Cross-functional panel</div>
+      <div class="tl-body">Product PM, Engineering, Trust &amp; Safety, Enablement. Each probes a different dimension of the JD. Tailor the STAR mix per panelist.</div>
+    </div>
+    <div class="tl-item accent">
+      <div class="tl-time">Stage 4 · 45 min</div>
+      <div class="tl-title">Executive — VP Operations or Droege</div>
+      <div class="tl-body">Strategic-level discussion. What you'd do in 30-60-90. How you think about regional autonomy. Customer-trust rebuild from an ops perspective.</div>
+    </div>
+    <div class="tl-item success">
+      <div class="tl-time">Stage 5 · offline</div>
+      <div class="tl-title">Reference checks</div>
+      <div class="tl-body">Prep three references in advance. Brief them on the role and the angle you're presenting.</div>
+    </div>
+  </div>
+
+  <h2 class="h3">Twenty-eight probable questions</h2>
+
+  <h3 class="h4">Behavioral · pull from STAR Bank</h3>
+  <ol class="q-list">
+    <li><strong>Tell me about a time you identified a recurring pattern in operations and implemented a durable fix.</strong> <em>→ S1</em><span class="q-tag">Pattern</span></li>
+    <li><strong>Describe a high-stakes escalation you owned end-to-end.</strong> <em>→ S25 or S31</em><span class="q-tag">Escalation</span></li>
+    <li><strong>How have you driven measurable KPI improvement at scale?</strong> <em>→ S2 + S16</em><span class="q-tag">KPI</span></li>
+    <li><strong>Walk me through an SOP or training program you designed from scratch.</strong> <em>→ S3 or S7</em><span class="q-tag">SOP</span></li>
+    <li><strong>Tell me about a cross-functional partnership that wasn't working — how did you fix it?</strong> <em>→ S4</em><span class="q-tag">Cross-fx</span></li>
+    <li><strong>Describe a time you had to push back on a popular decision because it was wrong.</strong> <em>→ S2 (PR quality standard) or S5 (NPV defense)</em><span class="q-tag">Pushback</span></li>
+    <li><strong>Tell me about a project that failed or fell short.</strong> <em>→ S24 (One Sobha App miss, honest self-reporting)</em><span class="q-tag">Failure</span></li>
+    <li><strong>How do you build trust with a team you've just inherited?</strong> <em>→ S12</em><span class="q-tag">Team</span></li>
+    <li><strong>Walk me through a regional ops scale-up you led.</strong> <em>→ S7</em><span class="q-tag">Regional</span></li>
+  </ol>
+
+  <h3 class="h4">Scenario · show how you think</h3>
+  <ol class="q-list" style="counter-reset: q 9">
+    <li><strong>Your code-review labeler vertical shows 23% backlog growth and CSAT dropping 8 points week-over-week. What do you do in the first 24 hours?</strong> Frame: triage (volume spike, quality issue, tooling break, contractor-availability issue?) → diagnose → contain → durable fix. Don't propose a fix before the diagnostic.<span class="q-tag">Triage</span></li>
+    <li><strong>Three SOPs contradict each other. Frontline is ad-libbing decisions. How do you fix it?</strong> Frame: stop the bleeding (interim guidance), audit all three for original intent, identify single source of authority, rewrite as one, retire the others, train, monitor for adherence.<span class="q-tag">SOP conflict</span></li>
+    <li><strong>An enterprise customer escalates a quality issue. Engineering points to ops; ops points to training. Run me through the next 72 hours.</strong> Frame: take ownership of customer-facing response immediately, parallel investigation across all three angles, no public finger-pointing internally, structural review after the customer is calm.<span class="q-tag">Customer crisis</span></li>
+    <li><strong>Your team thinks your KPI scorecard is unfair. What do you do?</strong> Frame: Relator question masquerading as metric question. Listen first. Understand whether issue is metric, target, or unequal exposure. Adjust where criticism is fair. Hold where it isn't.<span class="q-tag">Stakeholder</span></li>
+    <li><strong>You've inherited a team through three managers in a year. How do you stabilize?</strong> Frame: predictability over change. Stable cadence, stable communication, no big moves first 30 days, demonstrate competence on small things first.<span class="q-tag">Stabilization</span></li>
+    <li><strong>Two work types are competing for the same scarce contractor pool. Who wins?</strong> Frame: not a popularity contest — return on contractor hour, customer commitments, blast radius of failure. Decide by data, communicate by relationship.<span class="q-tag">Allocation</span></li>
+  </ol>
+
+  <h3 class="h4">Systems thinking</h3>
+  <ol class="q-list" style="counter-reset: q 15">
+    <li><strong>How do you define "structural reliability" for a region?</strong> KPIs stable across week-over-week variance, SOPs robust to staff turnover, escalation paths that work in the manager's absence, audit trails clean enough to defend without preparation.<span class="q-tag">Reliability</span></li>
+    <li><strong>What's the difference between a fix and a durable fix?</strong> A fix removes the symptom; a durable fix removes the cause and installs a control that prevents recurrence. S1 is the proof.<span class="q-tag">Durable</span></li>
+    <li><strong>When is a process problem actually a tooling problem?</strong> When the manual workaround consumes more capacity than the rework it prevents, or when frontline error rate correlates with process complexity rather than skill. S4 is the proof.<span class="q-tag">Tooling</span></li>
+    <li><strong>How do you measure the impact of operational changes?</strong> Baseline → intervention → 4-to-8-week observation window → comparison against control if possible → confirm change is durable, not seasonal. S2 is the proof.<span class="q-tag">Measurement</span></li>
+    <li><strong>How would you approach quality assurance across a contractor pool you've never directly managed?</strong> Gold standards, calibration tasks, inter-annotator agreement, peer-review sampling, SOP clarity scoring, leading-indicator scoring on drift. Closes Gap 2.<span class="q-tag">Distributed QA</span></li>
+  </ol>
+
+  <h3 class="h4">Company-state probes · signal you've done homework</h3>
+  <ol class="q-list" style="counter-reset: q 20">
+    <li><strong>What do you know about Scale right now?</strong> Don't recite. Frame: I know Meta took 49% in June 2025, customer mix shifted, CEO publicly diagnosed over-scaling on GenAI, team reorganized from 16 pods to 5, pivot is toward enterprise and government. Applying because the structural-rebuild moment is where my strengths are unusually well-fit.<span class="q-tag">State</span></li>
+    <li><strong>Why does this role exist?</strong> Direct: it exists to install regional operating discipline the rapid-scaling phase didn't have time to build. Rebuild role, not steady-state.<span class="q-tag">Role-why</span></li>
+    <li><strong>How do you think about working under an interim CEO?</strong> Pragmatic: report into whoever owns the regional outcome, focus on operating proof, don't get drawn into leadership politics, manage uncertainty by sticking to the metrics.<span class="q-tag">Interim</span></li>
+    <li><strong>How would you approach customer-trust rebuild from the operations side?</strong> Consistency, defensibility, evidence. Operating reliability is the longest-acting brand statement an ops org makes. Show, don't pitch.<span class="q-tag">Trust</span></li>
+  </ol>
+
+  <h3 class="h4">Questions YOU should ask them</h3>
+  <ol class="q-list" style="counter-reset: q 24">
+    <li><strong>What's the current India headcount and projected year-end shape — growing, holding, or consolidating?</strong><span class="q-tag">Sizing</span></li>
+    <li><strong>Who is the Regional Lead's primary stakeholder in the global org, and how often do you meet?</strong><span class="q-tag">Reporting</span></li>
+    <li><strong>What does success look like at 6 months versus 12 months for this role?</strong><span class="q-tag">Success</span></li>
+    <li><strong>What's the current state of the management team — is Jason confirmed as CEO long-term, or is a search active?</strong><span class="q-tag">Leadership</span></li>
+  </ol>
+
+  <div class="card gold-rail" style="margin-top:24px">
+    <div class="card-eyebrow">The 90-Second Opening Pitch</div>
+    <h2 class="card-title">Memorize the structure, not the script</h2>
+    <div class="quote">
+      <div class="quote-text">I'm Priyanuj. For the last six years I've run a 77-person operations function across India and Dubai for Sobha Realty's collections business — AED 12.97 billion portfolio, 36,000 accounts. The work has been everything your JD describes, in a different industry: identifying recurring patterns, designing durable system-level fixes, owning regional KPIs across SLA-style and CSAT-style metrics, partnering Engineering on tooling builds, and building the auditability layer.<br><br>I'm applying to Scale because two things are true. One — your CEO's public diagnosis of over-scaling and excessive bureaucracy is structurally what my top strengths (Restorative, Analytical, Arranger) are wired to fix. Two — I'm bringing AI-augmented operating tooling, not just operating experience. Regional health dashboards, escalation pattern analyzers, SOP ambiguity scorers. Same operating discipline most senior OPMs have, with time-to-structural-fix compressed by an order of magnitude. Rare mix in operations leadership, especially valuable at an AI company itself rebuilding around quality and reliability.</div>
+      <span class="quote-attr">Opener · rehearse out loud, twice</span>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 08 COMP INTEL ====== -->
+<section class="section" id="comp">
+  <div class="section-eyebrow">Section 08 · Compensation Intelligence</div>
+  <h1 class="section-title">Bands triangulated, <em>confidence declared</em></h1>
+  <p class="section-sub">Three sources triangulated for Scale-comparable AI-co India OPM compensation. Post-Meta equity treatment unpacked. Walk-away anchor explicit. Negotiation levers tied to role-specific risk.</p>
+
+  <div class="card accent-rail">
+    <div class="card-eyebrow">Confidence declaration · canon §2A</div>
+    <h2 class="card-title">Overall confidence: <span class="conf-badge med">Medium</span></h2>
+    <p>Scale AI is private — direct India-specific OPM comp data is single-source (Scale's own JD posting plus a parallel Strategic Projects Lead India listing). Triangulated against three independent sources for the broader AI-co India PM market. Equity treatment carries an additional layer of uncertainty — see below.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-eyebrow">Sources triangulated</div>
+    <h2 class="card-title">What was actually pulled</h2>
+    <table class="tbl">
+      <tr><th style="width:30%">Source</th><th style="width:18%">Date</th><th>What it gives us</th></tr>
+      <tr><td class="hl">Levels.fyi · Scale AI</td><td class="mono">May 2026</td><td>US Scale median TC $223,850. SWE range $234K–$642K (L3–L6). Business Operations bottom $23,922. Useful for global comp logic; India needs discount of 60–75% historically.</td></tr>
+      <tr><td class="hl">Glassdoor · Scale (976 salaries)</td><td class="mono">2026</td><td>3.6 / 5 comp rating. Confirms Scale pays at market or slightly above for tech-co peers. India-specific entries thin but present.</td></tr>
+      <tr><td class="hl">CNBC · Scale post-Meta coverage</td><td class="mono">Nov 2025</td><td>Scale announced 200 new hires in Nov 2025 across business; expanding offices in NY, DC, St. Louis, London. India hiring confirmed for OPM/PM roles. Post-Meta deal structured as <em>synthetic secondary</em> — existing shareholders received cash dividend while retaining diluted equity.</td></tr>
+      <tr><td class="hl">India AI/SaaS market refs</td><td class="mono">2026</td><td>Senior Program Manager India median ₹30–50L base; AI-co premium 15–25% on top. SaaS India average ₹27L. Bengaluru premium 15–20% over rest. AmbitionBox, Glassdoor India, Naukri triangulated.</td></tr>
+      <tr><td class="hl">Comparable: Mercor</td><td class="mono">May 2026</td><td>Mercor (Scale's direct India-staffing-adjacent competitor) US median TC $135K, TPM low $38K. Materially below Scale.</td></tr>
+      <tr><td class="hl">Scale India JD listings</td><td class="mono">May 2026</td><td>Strategic Projects Lead India (Mumbai/Bangalore) and OPM Regional Lead (remote India) — both live. Same 90-day reapplication policy across both. Initial remote, hybrid likely later.</td></tr>
+    </table>
+  </div>
+
+  <div class="card success-rail">
+    <div class="card-eyebrow">Compensation Bands · India remote · OPM Regional Lead</div>
+    <h2 class="card-title">Triangulated bands</h2>
+    <div class="comp-band">
+      <div class="comp-row"><div class="comp-label">Base salary</div><div class="comp-val">P50 ₹38–48L · P75 ₹50–60L · P90 ₹62–75L</div><div class="comp-band-amt">₹38–75L</div></div>
+      <div class="comp-row"><div class="comp-label">Variable / bonus</div><div class="comp-val">15–25% of base · typical AI-co range</div><div class="comp-band-amt">₹6–18L</div></div>
+      <div class="comp-row"><div class="comp-label">Equity (new hire, post-Meta)</div><div class="comp-val">Private-co RSUs in murky exit path · modeled 4-year value</div><div class="comp-band-amt">₹5–30L</div></div>
+      <div class="comp-row"><div class="comp-label">Signing bonus (likely)</div><div class="comp-val">India AI-co norm 5–15% of base · turnaround-risk premium possible</div><div class="comp-band-amt">₹3–8L</div></div>
+      <div class="comp-row"><div class="comp-label"><strong>Total Year-1 cash</strong></div><div class="comp-val"><strong>Working range Priyanuj should anchor against</strong></div><div class="comp-band-amt"><strong>₹45–65L</strong></div></div>
+    </div>
+    <p class="muted-text" style="margin-top:8px"><strong>Confidence on individual line items:</strong> Base — <span class="conf-badge med">Medium</span>. Variable — <span class="conf-badge med">Medium</span>. Equity — <span class="conf-badge low">Low · single-source · directional only</span>. Signing — <span class="conf-badge low">Low</span>.</p>
+  </div>
+
+  <div class="card danger-rail">
+    <div class="card-eyebrow">Equity treatment · the critical caveat</div>
+    <h2 class="card-title">What the Meta deal did to Scale equity</h2>
+    <p>The June 2025 Meta deal was structured as a <strong>synthetic secondary</strong>, not a primary investment. Meta invested $14.3B; Scale then issued a special dividend to existing shareholders (employees, VCs). Existing employees got cash and kept their equity, but ownership was diluted by Meta's 49% stake. <strong class="warn">For new hires today:</strong></p>
+    <ul style="margin-top:8px">
+      <li><strong>You join a privately-held company at $29B valuation</strong> with 49% strategic owner who has explicitly avoided board control to dodge antitrust scrutiny</li>
+      <li><strong>Exit path is genuinely murky</strong> — investor commentary in Aug-Nov 2025 was: "doesn't feel like it can go public anymore"; "did it kind of already have its exit?"</li>
+      <li><strong>Refresh grants matter more than initial grant</strong> — at a private co with unclear liquidity, the equity offer is a 4-year option, not a 4-year payout</li>
+      <li><strong>Cash should be the primary anchor</strong> for any decision against your ₹42L walk-away floor</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-eyebrow">Walk-away anchor</div>
+    <h2 class="card-title">Against your ₹42L floor</h2>
+    <table class="tbl">
+      <tr><th>Component</th><th>Floor for Scale (cash only)</th><th>Reasoning</th></tr>
+      <tr><td><strong>Base only</strong></td><td class="ok mono">≥ ₹40L</td><td>Below this and even with bonus + equity you can't reliably clear the ₹42L floor</td></tr>
+      <tr><td><strong>Base + variable</strong></td><td class="ok mono">≥ ₹48L</td><td>Variable should be planned-on at 80–90% of target — Scale is in turnaround, missing variable is real risk</td></tr>
+      <tr><td><strong>Total cash year 1</strong></td><td class="ok mono">≥ ₹50L</td><td>Includes signing bonus if offered. Below this, the equity has to be exceptionally good to compensate</td></tr>
+      <tr><td><strong>Equity premium required</strong></td><td class="warn mono">If cash &lt; ₹48L</td><td>Then equity must include cliff acceleration, refresh commitment, or liquid secondary option</td></tr>
+      <tr><td><strong>Hard no</strong></td><td class="alert mono">Base &lt; ₹35L</td><td>Below this, the turnaround-risk + private-co-equity combination doesn't pencil out against AmEx/Oaktree alternatives</td></tr>
+    </table>
+  </div>
+
+  <div class="card gold-rail">
+    <div class="card-eyebrow">Negotiation levers · tied to role-specific risk</div>
+    <h2 class="card-title">Five things you can ask for, with the rationale that fits this role</h2>
+    <ul>
+      <li><strong>Signing bonus (turnaround premium).</strong> "I'm joining a company in active rebuild post-restructure under an interim CEO. A signing bonus de-risks my decision and is materially smaller than the cost to Scale of an extended search." Target: ₹6–10L.</li>
+      <li><strong>Accelerated first review.</strong> 6-month rather than 12-month review. "If I deliver against the 30-60-90 plan I've described, please commit to a comp review at month 6." Costs Scale nothing; signals confidence on both sides.</li>
+      <li><strong>Equity refresh commitment.</strong> Not just initial grant — written commitment to refresh at month 12 conditional on performance. Materially de-risks the private-co liquidity question.</li>
+      <li><strong>Title clarity.</strong> "Senior" prefix on OPM if available. Free for them, meaningful for your next move.</li>
+      <li><strong>Remote permanence clause.</strong> The Strategic Projects Lead India JD says "initially remote, may move to hybrid." Get language about remote permanence or relocation support into the offer letter so it isn't decided unilaterally later.</li>
+    </ul>
+  </div>
+
+  <div class="card tinted">
+    <div class="card-eyebrow">Comparison against active pipeline</div>
+    <h2 class="card-title">How Scale stacks against your other tracks</h2>
+    <table class="tbl">
+      <tr><th>Track</th><th>P50 total Y1</th><th>Stability</th><th>Equity</th><th>Net read</th></tr>
+      <tr><td><strong>Oaktree VP</strong></td><td class="ok mono">₹55–65L</td><td class="ok">High</td><td class="mono">Deferred cash LTIP</td><td>Highest stability, predictable equity-like vehicle</td></tr>
+      <tr><td><strong>AmEx GMNS Director</strong></td><td class="ok mono">₹65–80L est</td><td class="ok">High</td><td class="mono">RSU</td><td>Highest cash + most stable, brand strongest</td></tr>
+      <tr><td><strong>Uber Sr Risk Ops</strong></td><td class="ok mono">₹85–95L</td><td class="warn">Medium</td><td class="mono">RSU</td><td>Highest ceiling, but tech-co cycles are real</td></tr>
+      <tr><td class="hl"><strong>Scale OPM Regional Lead</strong></td><td class="warn mono">₹45–65L</td><td class="alert">Low–Med</td><td class="alert mono">Private RSU · murky liquidity</td><td>Middle cash, lowest stability, highest brand/AI-co optionality if it stabilizes</td></tr>
+      <tr><td><strong>MS Biz Mgr OPG Noida</strong></td><td class="ok mono">₹60–90L incl AI premium</td><td class="ok">High</td><td class="mono">RSU</td><td>Strong all-round, most predictable</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ====== 09 CERTIFICATION ROADMAP ====== -->
+<section class="section" id="certs">
+  <div class="section-eyebrow">Section 09 · Certification Roadmap</div>
+  <h1 class="section-title">Research-led triage, <em>not credential collection</em></h1>
+  <p class="section-sub">JD is silent on certifications. Weighting determined by triage research, not assumption. Existing cert stack mapped before any new recommendation.</p>
+
+  <div class="card accent-rail">
+    <div class="card-eyebrow">Research footprint · canon §2B</div>
+    <h2 class="card-title">What was actually scanned — declared, not asserted</h2>
+    <ul>
+      <li><strong>Scale AI JD scan:</strong> Three Scale India JDs reviewed (OPM Regional Lead India, Strategic Projects Lead International, Operations Program Manager Code Quality). <strong class="hl">None list certifications as required or preferred.</strong></li>
+      <li><strong>Broader Scale JD scan:</strong> Five additional Scale OPM JDs (US-based, various functions) reviewed via Scale careers page and Greenhouse. None require certs. Some prefer "experience with SQL or another database language" — closer to a skill than a cert.</li>
+      <li><strong>LinkedIn proxy:</strong> Scale India ops profiles not directly accessible (login-walled). Inferred via Scale's hiring-bar public communication and broader AI-co India ops profile patterns: PMP common in senior PM cohorts, PMI-ACP rising, Zendesk/Salesforce certs occasional, no domain-specific AI cert as standard.</li>
+      <li><strong>Public statements:</strong> Droege's restructure memo, blog posts (Nov 2025 CFO Cinelli CNBC interview), Wang exit coverage — no cert-credential signaling anywhere.</li>
+    </ul>
+    <p style="margin-top:10px"><strong>Triage confidence: <span class="conf-badge med">Medium</span></strong>. 8 JDs scanned + public statement coverage + market norm inference. Sample size on India-specific Scale data is thin.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-eyebrow">Existing cert stack · map first, recommend second</div>
+    <h2 class="card-title">What you already have, applied to Scale</h2>
+    <table class="tbl">
+      <tr><th>Existing cert</th><th>Status</th><th>Relevance to Scale</th><th>How to deploy</th></tr>
+      <tr><td><strong>PMI-ACP</strong></td><td class="mono">In progress (Qualcomm track)</td><td class="hl">HIGH</td><td>Lead with this on resume. "Agile program management at AI-co scale" is the framing. Finishes the cert; finishes the framing.</td></tr>
+      <tr><td><strong>CRISC</strong></td><td class="mono">On AmEx track</td><td class="mono">LOW</td><td>Don't lead with it for Scale. Mention only if auditability/risk topic comes up in interview. Overweight signal for a non-financial-services AI-co.</td></tr>
+      <tr><td><strong>AZ-900 (Microsoft Azure Fundamentals)</strong></td><td class="mono">In progress</td><td class="mono">LOW–MED</td><td>Useful only if cloud-infra topic comes up. Inclusion in resume "Certifications" line is fine; not a focal point.</td></tr>
+      <tr><td><strong>AI-900 (Azure AI Fundamentals)</strong></td><td class="mono">Planned</td><td class="mono">MED</td><td>Demonstrates AI taxonomy fluency. Useful for the AI-co credibility signal. Worth completing if Scale becomes ACTIVE_NOW.</td></tr>
+      <tr><td><strong>GA4 / Skillshop / Looker Studio</strong></td><td class="mono">Free, completable</td><td class="mono">LOW</td><td>Skip for Scale. These are Google-track signals. Don't add noise.</td></tr>
+      <tr><td><strong>PL-900</strong></td><td class="mono">Planned</td><td class="mono">LOW</td><td>Microsoft Power Platform — irrelevant for Scale. Skip.</td></tr>
+    </table>
+  </div>
+
+  <div class="h3-eyebrow">Weighted New Recommendations</div>
+  <h2 class="h3">If Scale moves to ACTIVE_NOW — three options, weighted</h2>
+
+  <div class="card gold-rail">
+    <div class="card-eyebrow">Recommendation 1 · LOW weighting · 5–10% conversion lift</div>
+    <h2 class="card-title">Finish PMI-ACP before applying</h2>
+    <p><strong>Effort:</strong> 30–40 hours · <strong>Cost:</strong> ~$500 · <strong>Timeline:</strong> 4–6 weeks · <strong>Placement:</strong> Resume "Certifications" line + LinkedIn + opening pitch.</p>
+    <p><strong>Reasoning:</strong> JD is silent on certs, but PMI-ACP is the highest-signal cert for "program management at agile/AI-co scale." Already in progress on Qualcomm track — finishing it costs nothing additional in cognitive load. Lift estimate small but free.</p>
+    <p><strong>Confidence on the lift estimate:</strong> <span class="conf-badge med">Medium</span> — extrapolating from broader Sr PM market, no direct Scale data.</p>
+  </div>
+
+  <div class="card tinted">
+    <div class="card-eyebrow">Recommendation 2 · LOW weighting · 5% optical lift</div>
+    <h2 class="card-title">Zendesk Certified Support Admin (optional, cheap)</h2>
+    <p><strong>Effort:</strong> 10–15 hours · <strong>Cost:</strong> $400 · <strong>Timeline:</strong> 1–2 weeks · <strong>Placement:</strong> Resume + interview talking point on support-ops vocabulary closure.</p>
+    <p><strong>Reasoning:</strong> Closes Gap 1 (support-ops vocabulary) visibly. Hiring managers know certs don't equal experience — but the act of getting one specifically for this domain shift signals seriousness. Cheap signal, not a strong one.</p>
+    <p><strong>Recommendation:</strong> Skip unless Scale becomes ACTIVE_NOW <em>and</em> you have spare cycles in the pre-application 4-week window. Otherwise use the time on the AI portfolio prototype, which has 5× the marginal impact.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-eyebrow">Recommendation 3 · NOT RECOMMENDED · over-investment</div>
+    <h2 class="card-title">Skip: PMP, Six Sigma Black Belt, Lean certifications</h2>
+    <p><strong>Reasoning:</strong> None appear in scanned Scale JDs. Heavy time/cost investment (PMP: 60+ hours, $700; SSBB: 80+ hours, $1,500). Optical signal at a Silicon Valley AI co is lower than at traditional enterprises. The return-on-effort versus the AI portfolio prototype, vocabulary closure, and STAR rehearsal is meaningfully worse.</p>
+  </div>
+
+  <div class="card success-rail">
+    <div class="card-eyebrow">Net recommendation</div>
+    <h2 class="card-title">Spend the time on prototype + vocab, not new certs</h2>
+    <p>JD's silence on certifications combined with Scale's hiring signals (AI-co culture, operational depth over credentials, demonstrable problem-solving over paper qualifications) means certification weight on conversion is modest. <strong class="hl">Highest-marginal-impact investments for Scale specifically:</strong></p>
+    <ol>
+      <li>Build Regional Ops Health Dashboard prototype (Section 06, Project 1) — 20–30 hours, ~5× higher impact than any new cert</li>
+      <li>Close Gap 1 + Gap 2 vocabulary — 10 hours, demonstrably bigger interview impact than any optical signal</li>
+      <li>Finish PMI-ACP only if it's already going to be done for Qualcomm track</li>
+      <li>Skip everything else for this specific role</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ====== 10 CLOSE & OUTREACH ====== -->
+<section class="section" id="outreach">
+  <div class="section-eyebrow">Section 10 · Close &amp; Outreach</div>
+  <h1 class="section-title">Application sequencing, <em>messages, follow-up cadence</em></h1>
+  <p class="section-sub">When to apply, who to reach out to, what to say, and how to follow up — all tuned for Scale's 90-day reapplication policy.</p>
+
+  <div class="card danger-rail">
+    <div class="card-eyebrow">Critical gating · the 90-day rule</div>
+    <h2 class="card-title">Do not apply until artifacts are tailored</h2>
+    <p>Scale's stated policy: <strong class="alert">90-day waiting period before reconsidering candidates for the same role</strong>. A weak first attempt locks you out for a quarter. In a company actively restructuring, the role may be re-scoped or re-posted under a different name within that window — meaning a bad first read closes off the variant too.</p>
+    <p style="margin-top:8px"><strong>Gating sequence:</strong></p>
+    <ol style="margin-top:6px">
+      <li><strong>AmEx + Oaktree first-round outcomes</strong> must be in before Scale application</li>
+      <li><strong>4-week pre-application prep</strong> (Section 05) must be complete</li>
+      <li><strong>Resume v1 for Scale</strong> must be tailored (separate spec; not covered by this playbook per canon §10)</li>
+      <li><strong>AI Project 1 prototype</strong> at least at v0 (screen-shareable)</li>
+      <li><strong>STAR rehearsal in Scale vocabulary</strong> complete — 5 stories under 3 minutes each</li>
+    </ol>
+    <p style="margin-top:8px">Only after all five: apply.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-eyebrow">Outreach order</div>
+    <h2 class="card-title">Three contact tiers, in order</h2>
+    <table class="tbl">
+      <tr><th>Tier</th><th>Who</th><th>Why first / why later</th></tr>
+      <tr><td class="hl">Tier 1</td><td>Scale India ops practitioners (LinkedIn search: "Scale AI" + "India" + "operations" or "program manager")</td><td>Informational chat before applying. Goal: confirm hiring intent, understand current pain points, get vocabulary right. <em>Not</em> referral ask. Build relationship; reciprocate later.</td></tr>
+      <tr><td class="hl">Tier 2</td><td>Recruiter for the specific role (often listed on the JD or findable via LinkedIn role search)</td><td>Direct after application submitted. Short note: confirm receipt, anchor candidacy with a single sharp framing line.</td></tr>
+      <tr><td class="hl">Tier 3</td><td>Scale hiring manager (only if known) or a Scale alum in your second-degree network</td><td>Only after application + Tier 1/2. Risk of cold reach to hiring manager outweighs benefit unless there's a strong warm signal.</td></tr>
+    </table>
+  </div>
+
+  <h2 class="h3">Outreach scripts</h2>
+
+  <div class="msg">
+    <div class="msg-head">TIER 1 · LinkedIn DM to Scale India practitioner · pre-application</div>
+Hi [Name],
+
+Saw your work at Scale on the India ops side and wanted to reach out. I'm an operations leader (currently AGM Dues Collections at Sobha Realty in Dubai, 77-person multi-region function) exploring the Regional Lead OPM role at Scale and thinking carefully about the move.
+
+I'm not asking for a referral — genuinely just trying to understand the regional operating model and pain points before I put in an application I want to be substantive. Would you be open to a 15-minute conversation in the next two weeks? Happy to fit your timezone.
+
+Thanks for considering.
+Priyanuj
+  </div>
+
+  <div class="msg">
+    <div class="msg-head">TIER 2 · Recruiter follow-up · 48–72 hours after application</div>
+Hi [Recruiter Name],
+
+I submitted my application on [date] for the Operations Program Manager, Regional Lead (India) role.
+
+Brief framing for your consideration: I've spent six years running a 77-person multi-region operations function (AED 12.97B portfolio) with a KPI taxonomy that maps one-to-one onto Scale's — SLA, CSAT, backlog age, escalation rate. I've stood up a 42-person India operations hub from zero (direct precedent for the "Regional Lead India" role), built the Salesforce platform our function runs on partnering Engineering, and brought audit error rate from 41% to 1% sustained.
+
+Given Scale's recent communications around structural reliability and operational discipline post-restructure, I think there's a sharper fit here than the resume alone surfaces.
+
+Happy to chat at your convenience.
+Priyanuj Deka
+  </div>
+
+  <div class="msg">
+    <div class="msg-head">TIER 3 · LinkedIn note to Scale alum in 2nd-degree network</div>
+Hi [Name],
+
+I noticed you spent [duration] at Scale during [period]. I'm in conversations with Scale about the Regional Lead OPM role and would value 10 minutes of your perspective on the operating culture and what made the team work well (or not) during your time there. No referral ask — just trying to make an informed decision.
+
+Open to a quick call?
+
+Priyanuj
+  </div>
+
+  <h2 class="h3">Follow-up cadence</h2>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">T+0</div>
+      <div class="tl-title">Application submitted</div>
+      <div class="tl-body">Record date, role ID, JD snapshot, resume version, and any reference name in CCC.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">T+3 days</div>
+      <div class="tl-title">Tier 2 — recruiter outreach</div>
+      <div class="tl-body">Send the script above. Single message. Don't follow up if no response within 7 days unless something material changes.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">T+7 days</div>
+      <div class="tl-title">Tier 3 — alum / second-degree reach if available</div>
+      <div class="tl-body">Only if Tier 2 is silent AND you have a clean second-degree warm intro available.</div>
+    </div>
+    <div class="tl-item accent">
+      <div class="tl-time">T+14 days · NO RESPONSE</div>
+      <div class="tl-title">Single short follow-up to recruiter</div>
+      <div class="tl-body">"Following up on my application from [date]. Happy to discuss when timing works." That's it. Don't escalate further.</div>
+    </div>
+    <div class="tl-item success">
+      <div class="tl-time">Post-interview</div>
+      <div class="tl-title">Thank-you within 24 hours</div>
+      <div class="tl-body">Reference one specific topic from the conversation. Not generic. Sent per panelist if individual emails are visible; otherwise via recruiter.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">T+30 days post-final · no decision</div>
+      <div class="tl-title">Single recruiter ping</div>
+      <div class="tl-body">"Checking in on status. Still very interested." Stop after this — if no response, the answer is no.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== 11 RISK & RED FLAGS (CONDITIONAL) ====== -->
+<section class="section" id="risk">
+  <div class="section-eyebrow">Section 11 · Risk &amp; Red Flags · Conditional</div>
+  <h1 class="section-title">What you're <em>actually buying</em></h1>
+  <p class="section-sub">Triggered per canon §2 by interim leadership, recent layoffs, regulatory overhang, and active litigation. None are dealbreakers in isolation. Together they require eyes-open commitment.</p>
+
+  <div class="flag high">
+    <div class="flag-icon">!</div>
+    <div class="flag-body">
+      <div class="flag-title">Interim CEO 11+ months in — and counting</div>
+      <div class="flag-text">Jason Droege has been "interim" since June 2025. CFO Cinelli's Nov 2025 CNBC interview positions him as the operating CEO, but no formal confirmation has been announced. Two possibilities: (a) board is waiting for Scale's strategic pivot to land before formalizing — common, low-risk, (b) board is in active search — high-risk for new hires whose skip-level identity is undefined. <strong class="alert">Probe explicitly in final-round interview.</strong></div>
+    </div>
+  </div>
+
+  <div class="flag high">
+    <div class="flag-icon">!</div>
+    <div class="flag-body">
+      <div class="flag-title">Recent layoffs — July 2025</div>
+      <div class="flag-text">200 FTEs (14% of workforce) plus 500 contractors terminated. Droege's public memo cited "too many layers, excessive bureaucracy" — culture of structural pruning may continue in 2026. By Nov 2025, Scale announced 200 new roles, suggesting net re-hiring not net contraction — but composition is different (enterprise/gov focus, not GenAI labeling). <strong class="warn">Ask explicitly: what's the projected India team size 12 months from now?</strong></div>
+    </div>
+  </div>
+
+  <div class="flag med">
+    <div class="flag-icon">!</div>
+    <div class="flag-body">
+      <div class="flag-title">Active Mercor litigation — IP / trade secret claim</div>
+      <div class="flag-text">Scale sued Mercor in 2025 alleging IP theft / trade secret misappropriation. Defensive litigation against a fast-growing competitor in the same labeler-workforce space. Doesn't directly affect the Regional Lead role, but signals (a) management bandwidth is consumed by IP defense in addition to restructure, (b) the underlying labeler-operations IP is now legally contested. Watch for resolution news.</div>
+    </div>
+  </div>
+
+  <div class="flag med">
+    <div class="flag-icon">!</div>
+    <div class="flag-body">
+      <div class="flag-title">Customer-trust rebuild incomplete</div>
+      <div class="flag-text">OpenAI, Google, xAI all pulled or wound down work with Scale in summer 2025 after the Meta deal raised neutrality questions. Pivot to enterprise + US government/defense is in flight, not complete. <strong class="warn">Revenue mix during your first year will be visibly shifting. Operating priorities will follow customer concentration, not the org chart.</strong></div>
+    </div>
+  </div>
+
+  <div class="flag med">
+    <div class="flag-icon">!</div>
+    <div class="flag-body">
+      <div class="flag-title">DoD / Thunderforge regulatory exposure</div>
+      <div class="flag-text">Scale's pivot toward US government and defense work brings new regulatory surface — ITAR, FedRAMP, security clearance dependencies, geopolitical sensitivity. A India-based Regional Lead is unlikely to touch cleared work directly, but the company-wide operating model has new constraints. Worth understanding before committing.</div>
+    </div>
+  </div>
+
+  <div class="flag watch">
+    <div class="flag-icon">?</div>
+    <div class="flag-body">
+      <div class="flag-title">Private-co liquidity question post-Meta deal</div>
+      <div class="flag-text">Multiple Aug–Nov 2025 investor commentaries ("doesn't feel like it can go public anymore"; "did it kind of already have its exit?"). Doesn't mean Scale is failing — it means new-hire equity has uncertain liquidity. Comp Intel section reflects this; equity should not be primary anchor for offer evaluation.</div>
+    </div>
+  </div>
+
+  <div class="flag watch">
+    <div class="flag-icon">?</div>
+    <div class="flag-body">
+      <div class="flag-title">India GCC newness — operating model fluid</div>
+      <div class="flag-text">Scale's India presence is younger than the canon GCC-trigger threshold (12 months). The role is currently remote with possible hybrid transition. Operating model, reporting lines, and matrix structure may all evolve within your first 12 months. Build that expectation in.</div>
+    </div>
+  </div>
+
+  <div class="card success-rail">
+    <div class="card-eyebrow">Net read</div>
+    <h2 class="card-title">How to think about this risk surface holistically</h2>
+    <p><strong>None of these flags is disqualifying. Together they argue for:</strong></p>
+    <ul>
+      <li><strong>Cash-anchored offer evaluation</strong> — equity premium required if cash falls below ₹48L (see Comp Intel)</li>
+      <li><strong>Explicit probing in interviews</strong> — interim CEO timeline, headcount trajectory, customer concentration shift</li>
+      <li><strong>Tactical pipeline status</strong> — not primary track; sequence after AmEx and Oaktree</li>
+      <li><strong>Mitigated rather than ignored</strong> — risk-aware ≠ risk-averse. Restorative + Analytical strengths suit this risk surface well</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ====== 12 MANAGER / STAKEHOLDER DECODE (CONDITIONAL) ====== -->
+<section class="section" id="stake">
+  <div class="section-eyebrow">Section 12 · Manager / Stakeholder Decode · Conditional</div>
+  <h1 class="section-title">Who's in the room, <em>and what they care about</em></h1>
+  <p class="section-sub">Triggered per canon §2 by matrixed role with 4+ key stakeholders and identifiable interim CEO with substantial press footprint.</p>
+
+  <div class="card accent-rail">
+    <div class="card-eyebrow">Top of org · the interim CEO</div>
+    <h2 class="card-title">Jason Droege — what's public</h2>
+    <table class="tbl">
+      <tr><th style="width:25%">Dimension</th><th>Read</th></tr>
+      <tr><td><strong>Background</strong></td><td>Joined Scale as Chief Strategy Officer in Sept 2024. Previously: Uber Eats co-founder/EVP (built it from 0 to $4.8B revenue), Axon (operational scale), Mosaic, Booking.com. Clear operational scale-up pedigree, not a research-AI background.</td></tr>
+      <tr><td><strong>CEO since</strong></td><td>June 2025 (when Wang departed to Meta) — interim title still attached as of May 2026.</td></tr>
+      <tr><td><strong>Public diagnosis</strong></td><td>July 2025 memo (excerpted in CNBC, Business Insider): "ramped up… too quickly… too many layers, excessive bureaucracy, confusion about mission." Reorganized GenAI from 16 pods to 5. Cut 200 FTEs + 500 contractors.</td></tr>
+      <tr><td><strong>Strategic direction</strong></td><td>Pivot from GenAI lab labeling to enterprise + US government/defense. Thunderforge DoD contract is the lighthouse. Applications business is positioned as primary revenue driver going forward (per Nov 2025 CFO Cinelli interview).</td></tr>
+      <tr><td><strong>Operating style read</strong></td><td>Operational, not research. Comfortable with restructuring. Public communication is direct (the memo is unusually candid for a CEO of a heavily-funded private co). <strong class="hl">A Restorative-strength operator would speak this person's language naturally.</strong></td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-eyebrow">Hiring manager · likely identity</div>
+    <h2 class="card-title">Who you're probably reporting to</h2>
+    <p>The Regional Lead India OPM role is unlikely to report directly to Droege. Most probable manager identities, in order:</p>
+    <ol>
+      <li><strong>VP / Head of Global Operations</strong> (US-based) — most likely. Owns the regional operating model across all geos; would own a "Regional Lead India" role.</li>
+      <li><strong>VP / Head of Customer Operations / Trust &amp; Safety</strong> — possible if the role sits inside the support-ops org rather than the broader ops org.</li>
+      <li><strong>Director of International Operations / APAC Lead</strong> — possible if Scale has stood up a regional ops layer above India specifically.</li>
+    </ol>
+    <p style="margin-top:8px"><strong>Probing the right reporting question:</strong> Ask in the recruiter screen — "Who does this role report to, and what's their primary metric?" That single question tells you which of the three is true.</p>
+  </div>
+
+  <div class="card tinted">
+    <div class="card-eyebrow">Cross-functional stakeholder map</div>
+    <h2 class="card-title">Who else you'll matrix with daily</h2>
+    <table class="tbl">
+      <tr><th style="width:18%">Stakeholder</th><th style="width:32%">What they care about</th><th>How to land with them</th></tr>
+      <tr><td class="hl">Product PM</td><td>Tooling roadmap, frontline → requirements translation, time-to-ship on improvements</td><td>Bring evidence-backed feature requests, not opinions. S4 (Salesforce 0→1) is exactly the language they speak.</td></tr>
+      <tr><td class="hl">Engineering Manager / Lead</td><td>Technical feasibility, infra impact, predictable cadence, low-noise requirements</td><td>Show you understand what costs them time. Don't write requirements that hide complexity. The "I've worked alongside Engineering for years" framing helps.</td></tr>
+      <tr><td class="hl">Trust &amp; Safety</td><td>Risk surface, compliance, defensibility, audit posture</td><td>Speak their vocabulary natively — 3LOD, controls, evidence, audit trail. CRISC + audit register (S1) is your bridge.</td></tr>
+      <tr><td class="hl">Enablement</td><td>Training quality, time-to-proficiency, scalable content, retention</td><td>Frame yourself as co-owner of training, not customer. S3 (T-25/T+30 framework) and S7 (India hub training architecture) are direct.</td></tr>
+      <tr><td class="hl">Data / Analytics</td><td>Single source of truth, definition consistency, metric integrity</td><td>Be the operator who actually cares about how a metric is calculated, not just what the dashboard says. S6 (70+ report ecosystem) is the proof.</td></tr>
+      <tr><td class="hl">Finance / FP&amp;A</td><td>Operational economics — cost per ticket, contractor margin, regional unit economics</td><td>Read the regional P&amp;L logic before opining on it. Ask "how is this team measured?" before pitching changes.</td></tr>
+    </table>
+  </div>
+
+  <div class="card gold-rail">
+    <div class="card-eyebrow">Tactical interview preparation</div>
+    <h2 class="card-title">How to use this section actively</h2>
+    <ul>
+      <li><strong>Before recruiter screen:</strong> Re-read the Droege profile. Be prepared to reference his diagnosis specifically — "I read Droege's July memo on the restructure rationale. That diagnosis is structurally what my top strengths are designed to fix."</li>
+      <li><strong>Before hiring manager round:</strong> Probe reporting line identity. Tailor the bulk of your STAR mix to whichever flavor of "regional ops" sits above the role.</li>
+      <li><strong>Before cross-functional panel:</strong> Have one tailored story per stakeholder type (see table above). Don't repeat the same S1/S2 to every panelist — sequence S4 for Product/Eng, S7 for Enablement, S1 for T&amp;S, S3 for the operating-rhythm questions.</li>
+      <li><strong>Before final / executive round:</strong> Have specific operating-model questions ready that signal you've thought about regional governance under interim leadership — not abstract company-strategy questions.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
