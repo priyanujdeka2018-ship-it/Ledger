@@ -23,7 +23,7 @@ title: CCC Library
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
       margin: 40px auto;
-      max-width: 1000px;
+      max-width: 1100px;
       padding: 0 16px;
       line-height: 1.5;
       background: var(--bg);
@@ -39,6 +39,11 @@ title: CCC Library
       font-size: 21px;
     }
 
+    h3 {
+      margin: 22px 0 8px 0;
+      font-size: 18px;
+    }
+
     .muted {
       color: var(--muted);
       margin-top: 0;
@@ -50,6 +55,22 @@ title: CCC Library
       border-radius: 12px;
       padding: 14px 16px;
       margin: 14px 0;
+    }
+
+    .folder-block {
+      border-top: 1px solid var(--border);
+      margin-top: 18px;
+      padding-top: 10px;
+    }
+
+    .folder-path {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .folder-nav li {
+      margin: 4px 0;
     }
 
     a {
@@ -75,44 +96,113 @@ title: CCC Library
 
 <body>
   <h1>{{ page.title }}</h1>
+
   <p class="muted">
-    Auto-generated list of <code>.html</code> files inside <code>/CCC</code>.
+    Auto-generated folder-based list of <code>.html</code> files inside <code>/CCC</code>.
   </p>
 
   <div class="card">
-    <h2>Documents</h2>
+    <h2>Folders</h2>
 
     {% assign ccc_files = site.static_files
       | where_exp: "f", "f.path contains '/CCC/'"
       | where_exp: "f", "f.extname == '.html'"
       | where_exp: "f", "f.name != 'index.html'"
-      | sort: "name"
+      | sort: "path"
     %}
 
+    {% capture folder_list %}{% for f in ccc_files %}{% assign folder = f.path | split: f.name | first | remove_first: "/CCC/" %}{% if folder != "" %}{{ folder }}|{% endif %}{% endfor %}{% endcapture %}
+
+    {% assign folders = folder_list | split: "|" | uniq | sort %}
+
     {% if ccc_files.size > 0 %}
-      <ul>
-        {% for f in ccc_files %}
-          <li>
-            <a href="{{ f.path | relative_url }}">{{ f.name }}</a>
-          </li>
+
+      <ul class="folder-nav">
+        {% for folder in folders %}
+          {% if folder != "" %}
+            {% assign folder_clean = folder | append: "index" | split: "/index" | first %}
+            {% assign folder_parts = folder_clean | split: "/" %}
+            {% assign depth = folder_parts.size | minus: 1 %}
+            {% assign indent = depth | times: 20 %}
+
+            <li style="margin-left: {{ indent }}px;">
+              <a href="#{{ folder_clean | slugify }}">
+                {{ folder_parts | last }}
+              </a>
+              <span class="muted"> — {{ folder_clean }}</span>
+            </li>
+          {% endif %}
         {% endfor %}
+
+        <li>
+          <a href="#uncategorized">Uncategorized</a>
+          <span class="muted"> — files directly inside CCC</span>
+        </li>
       </ul>
+
     {% else %}
       <p class="muted">
         No static <code>.html</code> files were found inside <code>/CCC</code>.
       </p>
     {% endif %}
-
-    <p class="muted" style="margin-top:12px;">
-      Total files found: {{ ccc_files | size }}
-    </p>
   </div>
 
   <div class="card">
-    <h2>Notes</h2>
-    <p class="muted" style="margin:0;">
-      This page lists static HTML files using <code>site.static_files</code>.
-      Files with front matter are treated as Jekyll pages, not static files.
+    <h2>Documents</h2>
+
+    {% for folder in folders %}
+      {% if folder != "" %}
+        {% assign folder_clean = folder | append: "index" | split: "/index" | first %}
+
+        <div class="folder-block" id="{{ folder_clean | slugify }}">
+          <h3>{{ folder_clean | replace: "/", " / " }}</h3>
+          <div class="folder-path">
+            /CCC/{{ folder_clean }}/
+          </div>
+
+          <ul>
+            {% for f in ccc_files %}
+              {% assign this_folder = f.path | split: f.name | first | remove_first: "/CCC/" %}
+
+              {% if this_folder == folder %}
+                <li>
+                  <a href="{{ f.path | relative_url }}">{{ f.name }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    <div class="folder-block" id="uncategorized">
+      <h3>Uncategorized</h3>
+      <div class="folder-path">
+        /CCC/
+      </div>
+
+      <ul>
+        {% assign uncategorized_count = 0 %}
+
+        {% for f in ccc_files %}
+          {% assign this_folder = f.path | split: f.name | first | remove_first: "/CCC/" %}
+
+          {% if this_folder == "" %}
+            {% assign uncategorized_count = uncategorized_count | plus: 1 %}
+            <li>
+              <a href="{{ f.path | relative_url }}">{{ f.name }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+        {% if uncategorized_count == 0 %}
+          <li class="muted">No files directly inside /CCC.</li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <p class="muted" style="margin-top:18px;">
+      Total files found: {{ ccc_files | size }}
     </p>
   </div>
 
