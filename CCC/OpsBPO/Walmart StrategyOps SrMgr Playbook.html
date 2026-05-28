@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  ============================================================
+  PLAYBOOK_SKELETON_v1.html
+  ============================================================
+  Source: extracted from Anthropic_RevS_O_Playbook.html
+  Canon: aligned to PLAYBOOK_CANON v2.0
+  Status: structural framework — content stripped, variables parameterized
+
+  USAGE PER BUILD:
+  1. Clone this file as <Company>_<Role>_Playbook.html
+  2. Step 0 (canon §6): fill BRAND BLOCK below — primary/accent/bg/fonts/rationale
+  3. Optionally extend in BRAND EXTENSION CSS block (canon §5 anti-homogenization)
+  4. Update nav-brand block (title, sub, eyebrow) + nav-status
+  5. Fill 12 panels per schema comments (batched per canon §11 build mechanics)
+  6. Run Section 8 audit checklist inline BEFORE delivery
+  7. Update PLAYBOOK_CANON ledger with palette + typography summary
+  ============================================================
+-->
+<title>Walmart · Sr Manager Strategy Operations · Career Playbook</title>
+<style>
+  /* ============================================================
+     BRAND BLOCK — Walmart (canon §5)
+     ============================================================
+     Rationale: True Blue + Spark Yellow on near-white surface mirrors Walmart's
+                2025 brand refresh — "people-led, tech-powered omnichannel retailer."
+                Bentonville Blue for depth; near-white evokes walmart.com digital-first
+                clarity. Sans-only typography matches Walmart's Everyday Sans direction.
+     Source: corporate.walmart.com 2025 brand refresh announcement (Jan 13, 2025);
+             retaildive.com / dezeen.com brand identity breakdowns.
+     Distinctness vs last 3 builds: YES — duotone Walmart blue+yellow distinct from
+             gTech multi-color, Mastercard red/yellow/orange, D.E. Shaw financial-navy.
+             Spark-dot ornament (§ extension) is Walmart-specific identity signal.
+  */
+  :root {
+    /* Backgrounds */
+    --bg:        #FAFBFC;  /* near-white canvas, subtle cool tint */
+    --bg-tint:   #F0F4F9;  /* nav / hero gradient tint */
+    --surface:   #FFFFFF;  /* card surface */
+    --surface-2: #E8EFF7;  /* secondary surface / hover / hero gradient end */
+
+    /* Text */
+    --text:      #1A2B47;  /* dark navy-charcoal — Walmart-y, not pure black */
+    --text-mid:  #4A5A75;
+    --text-mute: #7A8AA0;
+    --border:    #DDE5EF;  /* hairline border, blue-tinted */
+
+    /* Brand colors */
+    --primary:      #0071CE;  /* Walmart True Blue */
+    --primary-dark: #001E60;  /* Bentonville Blue — strong emphasis */
+    --accent-2:     #FFC220;  /* Spark Yellow — AI/differentiator/ornament */
+    --accent-3:     #DC4C2D;  /* Terracotta — gap markers, sparing use */
+
+    /* Typography */
+    --serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, 'Helvetica Neue', Arial, sans-serif;  /* body — system sans (Walmart is sans-only) */
+    --sans:  'Helvetica Neue', Helvetica, Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;  /* display — clean retail sans */
+    --mono:  ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;  /* data / sources */
+  }
+
+  /* ============================================================
+     BRAND EXTENSION — Walmart-specific (canon §5 anti-homogenization)
+     ============================================================
+     Identity signals beyond variable swap:
+     1. Spark-dot ornament: yellow ◆ before .sec-num + .nav-brand-eyebrow + .req-jd
+        — evokes Walmart spark icon as scannable brand cue
+     2. Active nav item: yellow underline accent (overrides default blue border-left)
+        — Walmart-style "spark" attention marker
+     3. Hero gradient: blue→yellow diagonal sweep on .snap-hero
+        — True Blue → Spark Yellow brand pairing as visual anchor
+     4. Pill-spark: dedicated yellow-on-blue pill for AI/diff callouts
+  */
+
+  /* Spark-dot ornament before eyebrows */
+  .sec-num::before,
+  .nav-brand-eyebrow::before,
+  .req-jd::before,
+  .ai-proj-id::before,
+  .star-id::before,
+  .iv-round-head::before,
+  .tl-phase-day::before,
+  .snap-eyebrow::before {
+    content: '◆';
+    color: var(--accent-2);
+    margin-right: 7px;
+    font-size: 0.85em;
+    letter-spacing: 0;
+    display: inline-block;
+    transform: translateY(-1px);
+  }
+
+  /* Yellow spark underline on active nav (additive — keeps blue border-left) */
+  .nav-item.active {
+    box-shadow: inset 0 -2px 0 var(--accent-2);
+  }
+
+  /* Snapshot hero — True Blue to Spark Yellow brand sweep, subtle */
+  .snap-hero {
+    background:
+      linear-gradient(135deg, var(--bg-tint) 0%, var(--surface-2) 60%, rgba(255, 194, 32, 0.08) 100%) !important;
+    border-left: 4px solid var(--primary);
+    position: relative;
+    overflow: hidden;
+  }
+  .snap-hero::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(255, 194, 32, 0.18) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  /* Spark pill — Spark Yellow on Bentonville Blue, for AI/diff callouts */
+  .pill-spark {
+    background: var(--accent-2);
+    color: var(--primary-dark);
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+  }
+
+  /* True Blue accent on .stat values — strong brand presence */
+  .stat-value { color: var(--primary-dark); }
+
+  /* Italic editorial flourish for snap-thesis — Georgia for warmth on otherwise-sans deck */
+  .snap-thesis {
+    font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    font-style: italic;
+  }
+
+  /* Card variants Walmart-flavored */
+  .card-spark { border-left: 4px solid var(--accent-2); }
+
+  /* ============================================================
+     BASE
+     ============================================================ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--text); font-family: var(--serif); font-size: 15px; line-height: 1.6; }
+  ::selection { background: var(--primary); color: var(--bg); }
+
+  /* ============================================================
+     LAYOUT
+     ============================================================ */
+  .shell { display: flex; min-height: 100vh; max-width: 1440px; margin: 0 auto; }
+  .nav {
+    width: 260px; flex-shrink: 0; background: var(--bg-tint);
+    border-right: 1px solid var(--border); padding: 32px 0; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .nav-brand { padding: 0 28px 28px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+  .nav-brand-eyebrow { font-family: var(--sans); font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--primary); font-weight: 600; margin-bottom: 8px; }
+  .nav-brand-title { font-family: var(--sans); font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .nav-brand-sub { font-size: 12px; color: var(--text-mid); margin-top: 6px; font-style: italic; }
+  .nav-list { list-style: none; }
+  .nav-item {
+    padding: 11px 28px; font-family: var(--sans); font-size: 13px; font-weight: 500;
+    color: var(--text-mid); cursor: pointer; border-left: 3px solid transparent; transition: all .18s;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-item:hover { background: var(--surface-2); color: var(--text); }
+  .nav-item.active { background: var(--surface-2); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+  .nav-item-num { font-size: 10px; color: var(--text-mute); font-weight: 400; min-width: 18px; }
+  .nav-item.active .nav-item-num { color: var(--primary); }
+  .nav-status {
+    margin: 24px 28px 0; padding: 14px; background: var(--surface-2); border-radius: 6px;
+    font-family: var(--sans); font-size: 10px; color: var(--text-mid); line-height: 1.6;
+  }
+  .nav-status strong { color: var(--text); display: block; margin-bottom: 4px; font-size: 11px; }
+
+  .main { flex: 1; padding: 48px 64px 96px; max-width: 1100px; }
+  .panel { display: none; animation: fadeIn .25s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ============================================================
+     SECTION HEADS
+     ============================================================ */
+  .sec-num { font-family: var(--sans); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); font-weight: 600; margin-bottom: 12px; }
+  .sec-title { font-family: var(--sans); font-size: 36px; font-weight: 700; color: var(--text); line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .sec-sub { font-size: 16px; color: var(--text-mid); margin-bottom: 36px; max-width: 720px; line-height: 1.55; }
+  .h3 { font-family: var(--sans); font-size: 20px; font-weight: 600; color: var(--text); margin: 36px 0 16px; letter-spacing: -0.2px; }
+  .h4 { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); margin: 24px 0 10px; }
+
+  /* ============================================================
+     GENERIC CARDS + GRID
+     ============================================================ */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 16px; }
+  .card-primary { border-left: 4px solid var(--primary); }
+  .card-accent2 { border-left: 4px solid var(--accent-2); }
+  .card-accent3 { border-left: 4px solid var(--accent-3); }
+  .card-tint { background: var(--bg-tint); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+  /* ============================================================
+     PILLS / BADGES
+     ============================================================ */
+  .pill {
+    display: inline-block; font-family: var(--sans); font-size: 10px; font-weight: 600;
+    padding: 4px 10px; border-radius: 100px; letter-spacing: 0.6px; text-transform: uppercase;
+  }
+  .pill-primary { background: var(--primary); color: var(--bg); }
+  .pill-accent2 { background: var(--accent-2); color: var(--bg); }
+  .pill-accent3 { background: var(--accent-3); color: var(--bg); }
+  .pill-outline { border: 1px solid var(--border); color: var(--text-mid); background: var(--bg); }
+  .pill-amber { background: #c9943b; color: var(--bg); }
+  .pill-red { background: #b85f44; color: var(--bg); }
+
+  /* ============================================================
+     SNAPSHOT (panel 01) — see canon §2 row 1 + emergent pattern
+     stat-grid mandatory: Net Fit · Status · Conv Prob · Target CTC · (optional No-Go Gate)
+     ============================================================ */
+  .snap-hero {
+    background: linear-gradient(135deg, var(--bg-tint) 0%, var(--surface-2) 100%);
+    border-radius: 14px; padding: 40px 44px; margin-bottom: 32px; border: 1px solid var(--border);
+  }
+  .snap-eyebrow { font-family: var(--sans); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); margin-bottom: 14px; font-weight: 600; }
+  .snap-headline { font-family: var(--sans); font-size: 30px; font-weight: 700; line-height: 1.2; color: var(--text); margin-bottom: 12px; letter-spacing: -0.4px; }
+  .snap-thesis { font-size: 16px; color: var(--text-mid); font-style: italic; max-width: 760px; line-height: 1.6; }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .stat-label { font-family: var(--sans); font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-mute); margin-bottom: 6px; font-weight: 600; }
+  .stat-value { font-family: var(--sans); font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.1; }
+  .stat-sub { font-size: 11px; color: var(--text-mid); margin-top: 4px; }
+
+  /* ============================================================
+     REQ CARDS (panel 02) — Role Decode
+     Density min: 9 (canon §3)
+     ============================================================ */
+  .req {
+    background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--primary);
+    border-radius: 10px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .req-jd { font-family: var(--sans); font-size: 11px; color: var(--primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .req-quote { font-size: 14px; color: var(--text-mid); font-style: italic; margin-bottom: 12px; padding-left: 14px; border-left: 2px solid var(--surface-2); }
+  .req-mean { font-size: 14px; color: var(--text); }
+  .req-mean strong { color: var(--primary-dark); }
+
+  /* ============================================================
+     VOCAB TABLE (panel 03) — Fit & Gap
+     Density min: 15 — SOFT FLOOR (canon §3 P1.2)
+     If targeting < 15, declare justification in pre-build outline.
+     ============================================================ */
+  table.vocab { width: 100%; border-collapse: collapse; margin: 14px 0 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  table.vocab th, table.vocab td { padding: 13px 18px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+  table.vocab th { background: var(--surface-2); font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text); }
+  table.vocab tr:last-child td { border-bottom: none; }
+  table.vocab td:first-child { color: var(--primary-dark); font-weight: 500; width: 38%; }
+
+  /* ============================================================
+     GAP CARDS (panel 03) — Fit & Gap
+     Density min: 3–5 (canon §3)
+     ============================================================ */
+  .gap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 14px; }
+  .gap-genuine { border-left: 4px solid var(--primary); }
+  .gap-vocab { border-left: 4px solid var(--accent-3); }
+  .gap-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .gap-title { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); }
+  .gap-body { font-size: 13.5px; color: var(--text-mid); line-height: 1.65; }
+  .gap-body strong { color: var(--text); }
+
+  /* ============================================================
+     STAR (panel 04) — Story Mapping
+     Density req: 5 (canon §3)
+     ============================================================ */
+  .star {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 22px 26px; margin-bottom: 16px;
+  }
+  .star-id { font-family: var(--sans); font-size: 11px; color: var(--primary); font-weight: 600; letter-spacing: 0.8px; margin-bottom: 6px; text-transform: uppercase; }
+  .star-title { font-family: var(--sans); font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .star-map { font-size: 12px; color: var(--text-mid); margin-bottom: 14px; padding: 8px 12px; background: var(--bg-tint); border-radius: 6px; border-left: 3px solid var(--accent-2); }
+  .star-row { display: grid; grid-template-columns: 90px 1fr; gap: 16px; margin-bottom: 8px; align-items: start; }
+  .star-label { font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 1.4px; color: var(--primary); padding-top: 2px; }
+  .star-text { font-size: 13.5px; color: var(--text); line-height: 1.6; }
+  .star-text strong { color: var(--primary-dark); }
+
+  /* ============================================================
+     TIMELINE (panel 05) — 30-60-90
+     Density min: 15 items, ≥3 per phase (canon §3)
+     ============================================================ */
+  .tl-phase { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 16px; border-left: 4px solid var(--primary); }
+  .tl-phase-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tl-phase-day { font-family: var(--sans); font-size: 13px; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; text-transform: uppercase; }
+  .tl-phase-title { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--text); }
+  .tl-item { padding: 10px 0 10px 22px; position: relative; border-top: 1px solid var(--border); font-size: 13.5px; color: var(--text-mid); }
+  .tl-item:first-of-type { border-top: none; padding-top: 4px; }
+  .tl-item::before { content: '▸'; position: absolute; left: 0; top: 11px; color: var(--primary); font-size: 12px; }
+  .tl-item strong { color: var(--text); font-family: var(--sans); font-size: 13px; }
+
+  /* ============================================================
+     AI PROJECTS (panel 06) — AI Differentiator
+     Density req: 3 (canon §3) drawn from P6–P14
+     ============================================================ */
+  .ai-proj { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 24px 28px; margin-bottom: 16px; border-left: 4px solid var(--accent-2); }
+  .ai-proj-head { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+  .ai-proj-id { font-family: var(--sans); font-size: 11px; color: var(--accent-2); font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; }
+  .ai-proj-title { font-family: var(--sans); font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .ai-proj-stack { font-family: var(--sans); font-size: 11px; color: var(--text-mute); margin-bottom: 12px; letter-spacing: 0.4px; }
+  .ai-proj-body { font-size: 13.5px; color: var(--text-mid); line-height: 1.65; }
+  .ai-proj-body strong { color: var(--text); }
+  .ai-pitch { background: linear-gradient(135deg, var(--bg-tint), var(--surface-2)); border-radius: 10px; padding: 22px 26px; margin-top: 14px; font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--text); line-height: 1.65; border-left: 4px solid var(--primary); }
+
+  /* ============================================================
+     INTERVIEW KIT (panel 07)
+     Density min: 20 questions across rounds (canon §3)
+     ============================================================ */
+  .iv-round { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 16px; }
+  .iv-round-head { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--primary); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .iv-q { padding: 11px 0 11px 22px; position: relative; font-size: 13.5px; color: var(--text); border-top: 1px solid var(--border); line-height: 1.55; }
+  .iv-q:first-of-type { border-top: none; }
+  .iv-q::before { content: 'Q'; position: absolute; left: 0; top: 11px; color: var(--primary); font-family: var(--sans); font-size: 11px; font-weight: 700; }
+  .iv-q-tag { font-family: var(--sans); font-size: 10px; color: var(--text-mute); margin-left: 8px; letter-spacing: 0.4px; }
+  .iv-anchor { background: var(--bg-tint); border-radius: 8px; padding: 16px 20px; margin: 12px 0; font-size: 13px; color: var(--text); border-left: 3px solid var(--accent-3); font-style: italic; line-height: 1.6; }
+  .iv-anchor strong { font-style: normal; font-family: var(--sans); color: var(--accent-3); display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; }
+
+  /* ============================================================
+     COMP INTEL (panel 08) — canon §2A
+     Mandatory: confidence factor, ≥3 sources or "single-source · directional" tag,
+     line-item confidence breakdown if overall ≤ Medium, cross-pipeline note if applicable
+     ============================================================ */
+  .comp-conf { display: inline-block; padding: 8px 16px; border-radius: 100px; font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; background: var(--bg-tint); border: 1px solid var(--border); color: var(--text); margin-bottom: 18px; }
+  .comp-conf strong { color: var(--primary); }
+  .comp-band { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 14px; }
+  .comp-band-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+  .comp-band-name { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); }
+  .comp-band-range { font-family: var(--sans); font-size: 18px; font-weight: 700; color: var(--primary); }
+  .comp-rows { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 8px; }
+  .comp-row-label { font-family: var(--sans); font-size: 10px; color: var(--text-mute); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .comp-row-val { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); }
+  .source-list { font-size: 12.5px; color: var(--text-mid); line-height: 1.7; padding-left: 18px; }
+  .source-list li { margin-bottom: 6px; }
+
+  /* ============================================================
+     PLACEHOLDER (use during build)
+     ============================================================ */
+  .todo { background: repeating-linear-gradient(45deg, var(--bg-tint), var(--bg-tint) 10px, var(--surface-2) 10px, var(--surface-2) 20px); border: 1px dashed var(--primary); border-radius: 10px; padding: 32px; text-align: center; }
+  .todo-eyebrow { font-family: var(--sans); font-size: 11px; font-weight: 700; color: var(--primary); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+  .todo-title { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .todo-body { font-size: 13px; color: var(--text-mid); }
+
+  /* ============================================================
+     MOBILE
+     ============================================================ */
+  @media (max-width: 900px) {
+    .shell { flex-direction: column; }
+    .nav { width: 100%; height: auto; position: relative; padding: 18px 0; }
+    .nav-list { display: flex; overflow-x: auto; padding: 0 12px; gap: 4px; }
+    .nav-item { white-space: nowrap; padding: 8px 14px; border-left: none; border-bottom: 3px solid transparent; }
+    .nav-item.active { border-left: none; border-bottom-color: var(--primary); }
+    .main { padding: 28px 20px 64px; }
+    .stat-grid, .grid-2, .grid-3, .comp-rows { grid-template-columns: 1fr; }
+    .sec-title { font-size: 26px; }
+    .nav-brand, .nav-status { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-brand-eyebrow">Career Playbook · v1.0</div>
+    <div class="nav-brand-title">Walmart · Sr Manager, Strategy Operations</div>
+    <div class="nav-brand-sub">Bengaluru · Sourcing Division (GM &amp; Fashion)</div>
+  </div>
+  <ul class="nav-list">
+    <li class="nav-item active" data-tab="snap"><span class="nav-item-num">01</span> Snapshot</li>
+    <li class="nav-item" data-tab="decode"><span class="nav-item-num">02</span> Role Decode</li>
+    <li class="nav-item" data-tab="fit"><span class="nav-item-num">03</span> Fit & Gap</li>
+    <li class="nav-item" data-tab="story"><span class="nav-item-num">04</span> STAR Mapping</li>
+    <li class="nav-item" data-tab="plan"><span class="nav-item-num">05</span> 30·60·90</li>
+    <li class="nav-item" data-tab="ai"><span class="nav-item-num">06</span> AI Differentiator</li>
+    <li class="nav-item" data-tab="iv"><span class="nav-item-num">07</span> Interview Kit</li>
+    <li class="nav-item" data-tab="comp"><span class="nav-item-num">08</span> Comp Intel</li>
+    <li class="nav-item" data-tab="cert"><span class="nav-item-num">09</span> Cert Roadmap</li>
+    <li class="nav-item" data-tab="close"><span class="nav-item-num">10</span> Close &amp; Outreach</li>
+    <!-- Conditional sections — include only if canon §2 trigger fires.
+         Risk &amp; Red Flags: OMITTED per Step 0 — no trigger fires (Walmart GCC est. 2011,
+         no MD turnover/ramp-down; geopolitical context is role's subject, not a risk).
+         Stakeholder Decode: INCLUDED — matrixed trigger fires (4+ stakeholder clusters
+         per JD: GM/Fashion SBU leaders × Sam's sourcing leaders × Tech teams × corporate
+         strategic workstreams). -->
+    <li class="nav-item" data-tab="stake"><span class="nav-item-num">11</span> Stakeholder Decode</li>
+  </ul>
+  <div class="nav-status">
+    <strong>Build status</strong>
+    Complete · 11 sections<br>
+    Fit: 58–62 · EXPLORATORY<br>
+    Conv prob: 15–20%
+  </div>
+</nav>
+
+<!-- ============ MAIN ============ -->
+<main class="main">
+
+<!-- ============================================================
+     PANEL 01 · SNAPSHOT
+     Canon §2 row 1 + emergent stat-grid expansion
+     SCHEMA:
+       - sec-num + sec-title + sec-sub (role positioning sentence)
+       - snap-hero: eyebrow ("Headline thesis") + snap-headline (quoted thesis) + snap-thesis (paragraph)
+       - stat-grid (4 stats minimum): Net Fit · Status · Conv Prob · Target CTC
+         (optional 5th): No-Go Gate / Real Cost stat — REQUIRED if fit < 60 OR conv prob < 20%
+       - h3 "Why this role exists" → card-tint with company/role context
+       - h3 "The three things that decide this" → grid-3 with card-primary / card-accent2 / card-accent3
+       - h3 "Honest framing" → card with sequencing guidance vs other pipeline roles
+     ============================================================ -->
+<section class="panel active" id="snap">
+  <div class="sec-num">Section 01</div>
+  <h1 class="sec-title">Snapshot</h1>
+  <p class="sec-sub">Walmart's Sourcing Strategy Ops role sits at the centre of a $10B India-sourcing growth bet — but it's gated by domain experience you don't have. This snapshot decides whether the operating-discipline bridge is wide enough to be worth the build.</p>
+
+  <div class="snap-hero">
+    <div class="snap-eyebrow">Headline thesis</div>
+    <div class="snap-headline">Right operating system, wrong industry. PMO + AI orientation is the only honest bridge — and the bridge is slim.</div>
+    <p class="snap-thesis">Walmart wants a Strategy Ops PMO leader who has lived inside strategic sourcing. You've built the operating system — governance discipline, cross-functional matrix, AI-augmented analytics PMO, exec narrative under MD/CEO pressure — but you've never sourced. The gap is capability, not vocabulary. Pursue only if AmEx and Oaktree first-round outcomes don't gate. Investment ceiling: 30–45 minutes of reframed application + recruiter ping. No networking spend until response.</p>
+  </div>
+
+  <div class="stat-grid" style="grid-template-columns: repeat(5, 1fr);">
+    <div class="stat">
+      <div class="stat-label">Net Fit</div>
+      <div class="stat-value">58–62</div>
+      <div class="stat-sub">Below active-pipeline floor</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Status</div>
+      <div class="stat-value">EXPLORATORY</div>
+      <div class="stat-sub">Park; do not displace</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Conv Prob</div>
+      <div class="stat-value">15–20%</div>
+      <div class="stat-sub">Domain-gated</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Target CTC</div>
+      <div class="stat-value">₹50–65L</div>
+      <div class="stat-sub">P50 ₹42–46L; aim P75</div>
+    </div>
+    <div class="stat" style="border-left: 4px solid var(--accent-3);">
+      <div class="stat-label">No-Go Gate</div>
+      <div class="stat-value" style="color: var(--accent-3);">Real Cost</div>
+      <div class="stat-sub">Triggered: fit&lt;60 + conv&lt;20%</div>
+    </div>
+  </div>
+
+  <h3 class="h3">Why this role exists</h3>
+  <div class="card card-tint">
+    <p>Walmart announced in 2023–24 a strategic push to triple India sourcing to <strong>$10B annually by 2027</strong>. Walmart Global Tech India (Bengaluru, est. 2011, 15,000+ engineers; Chennai second GCC opening; ~9.5L sqft North Bengaluru lease) is the operational backbone of that bet. The Strategy Operations role inside the Sourcing Division is the <strong>centralized PMO + analytics + AI-rollout function</strong> that lets SBU sourcing leaders (GM, Fashion, Sam's Club) execute fast while preserving standardization, governance, and geopolitical-risk mitigation across the supply chain. It's a strategically important role inside a growing function — not a back-office headcount filler. That's the upside. The downside is that "strategic sourcing" in the JD's "What You'll Bring" list is a domain hard-gate that operating-discipline alone may not clear.</p>
+  </div>
+
+  <h3 class="h3">The three things that decide this</h3>
+  <div class="grid-3">
+    <div class="card card-primary">
+      <div class="pill pill-primary" style="margin-bottom: 10px;">Decider 1</div>
+      <h4 class="h4">How they read "Strategy Operations"</h4>
+      <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.6;">If they read it as <strong>transferable PMO + governance + analytics discipline</strong>, you're competitive. If they read it as <strong>domain-specific sourcing strategy</strong>, you're not. Title is ambiguous; recruiter framing will tell. The first-round screen is where this resolves.</p>
+    </div>
+    <div class="card card-accent2">
+      <div class="pill pill-spark" style="margin-bottom: 10px;">Decider 2</div>
+      <h4 class="h4">Whether the AI-PMO pitch lands</h4>
+      <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.6;">Walmart Global Tech India won the <strong>Minsky Award 2024</strong> for Best AI Implementation in a GCC — AI in supply chain is real here, not aspirational. Your 12-project AI portfolio + automated PMO tooling is unusually well-aligned to this specific GCC. Strongest single differentiator.</p>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--accent-3);">
+      <div class="pill" style="background: var(--accent-3); color: var(--bg); margin-bottom: 10px;">Decider 3</div>
+      <h4 class="h4">How they treat 8 yrs vs 10+ stated</h4>
+      <p style="font-size: 13.5px; color: var(--text-mid); line-height: 1.6;">JD says "10+ years progressive cross-functional program execution." You're at ~8 yrs (Sobha 2020+ + BITS pre-MBA). If <strong>soft-gate</strong>, MT→AGM velocity + AED 12.97B P&amp;L authority compensates. If <strong>hard-gate</strong>, the screen filters you before fit is evaluated. Likely soft-gate at Sr Manager level in India GCCs.</p>
+    </div>
+  </div>
+
+  <h3 class="h3">Honest framing</h3>
+  <div class="card">
+    <p style="margin-bottom: 12px;"><strong>Sequencing:</strong> Below AmEx GMNS Dir (88), Oaktree VP (85), gTech SDM (82), GBO Tools (80), Uber Sr Risk (78). Do <strong>not</strong> displace these. Apply only after AmEx + Oaktree first-round outcomes are visible. If both miss, this enters parallel-track consideration alongside D.E. Shaw DESIS.</p>
+    <p style="margin-bottom: 12px;"><strong>Investment ceiling:</strong> 30–45 minutes total. Reframed application using existing Sobha resume content (no custom resume v1 build until first-round signal). Recruiter outreach + LinkedIn ping. No networking spend until response received.</p>
+    <p style="margin-bottom: 0;"><strong>Walk-away:</strong> ₹42L floor preserved. Target band ₹50–65L (subject to comp-intel triangulation in Section 08). At ₹42L this is the floor, not the target — the role doesn't justify a stretch below floor given fit distance.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANEL 02 · ROLE DECODE
+     Canon §2 row 2 + §3 density (req-cards min 9)
+     SCHEMA:
+       - sec-num + sec-title + sec-sub
+       - For each JD bullet: <div class="req">
+           <div class="req-jd">[req number / category tag]</div>
+           <div class="req-quote">[exact JD line in italics]</div>
+           <div class="req-mean">[what this actually means — with <strong>your proof point</strong>]</div>
+         </div>
+       - Minimum 9 req-cards. Cover all must-haves + top nice-to-haves.
+     ============================================================ -->
+<section class="panel" id="decode">
+  <div class="sec-num">Section 02</div>
+  <h1 class="sec-title">Role Decode</h1>
+  <p class="sec-sub">JD broken into 11 requirement cards. For each, the exact JD line and what it <em>actually</em> means in operating terms — with your specific proof point.</p>
+
+  <div class="req">
+    <div class="req-jd">R1 · Governance &amp; PMO</div>
+    <div class="req-quote">"Provide centralized support to SBUs on horizontal initiatives, enabling standardization while preserving speed, flexibility, and execution ownership at the SBU level."</div>
+    <div class="req-mean">They want a <strong>federated PMO model</strong>: central enables, SBUs own. The proof point is the <strong>14-finding audit register at Sobha</strong> — central governance cadence that drove all 14 findings to closure (97.5% error reduction) while individual team leads retained execution ownership. Same operating pattern, different domain.</div>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">R2 · Standardization</div>
+    <div class="req-quote">"Support the development &amp; standardization of the templates/ models."</div>
+    <div class="req-mean">They want someone who builds the <strong>reference library</strong> — process templates, financial models, reporting standards — that SBU teams reuse. Proof: <strong>6+ MD-approved process documents</strong> (PF01–PF06) at Sobha and the <strong>70+ report MI ecosystem</strong> with standardized templates tiered by audience (RM dailies → MD strategic monthlies).</div>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">R3 · Risk &amp; Mitigation</div>
+    <div class="req-quote">"Provide centralized analytical, governance, and mitigation support to GM/Fashion and Sam's sourcing leaders during periods of geopolitical risk and supply chain disruption."</div>
+    <div class="req-mean">This is a <strong>crisis-ops PMO</strong> ask — tariff shocks, supplier failures, port disruptions. You haven't done supply-chain crisis specifically, but your <strong>3 proactive CCO escalations on blocked risk items</strong> + multi-entity expansion (1→4 entities under regulatory shifts) is the closest operating analog. Frame: "Same operating discipline, supply-chain vocabulary closes in 30 days."</div>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">R4 · Cross-SBU Projects</div>
+    <div class="req-quote">"Lead and drive specific cross SBU and SBU initiatives with cross functional leaders."</div>
+    <div class="req-mean">They want a <strong>horizontal initiative owner</strong> with cross-leader influence. Proof: led <strong>cross-functional embedding of Collections into the upstream enterprise customer journey</strong> across Sales / Marketing / Project Mgmt / Finance / CS — produced 6 MD-approved upstream protocols.</div>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">R5 · Corporate Representation</div>
+    <div class="req-quote">"Act as a representative for GM and Fashion in broader corporate strategic workstreams/projects."</div>
+    <div class="req-mean">This is <strong>upward representation</strong> — the SBUs' voice into corporate strategy. Direct analog: representing Sobha Collections in <strong>NPV AED 652M strategic investment defence</strong> across MD/CEO/CRO/CFO multi-round reviews. You've done the upward-into-corporate-strategy walk, just with a different SBU label.</div>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">R6 · Executive Narratives</div>
+    <div class="req-quote">"Develop high-impact executive presentations, narratives, and decision materials that synthesize data, insights, and trade-offs to support senior leadership decision-making."</div>
+    <div class="req-mean">Walmart's senior leadership runs on <strong>decision-grade narrative</strong>, not raw analysis. Proof: <strong>NPV AED 652M defence through multiple MD/CEO scrutiny rounds with zero material concessions</strong>. The pattern — strategic logic first, numbers second, sensitivity pre-empted — is exactly what Walmart wants.</div>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">R7 · Supplier Scorecards &amp; T2T</div>
+    <div class="req-quote">"Delivery Quarterly/Bi-annual Supplier Scorecards and facilitate preparation for T2T meetings."</div>
+    <div class="req-mean">T2T = Top-to-Top supplier reviews; scorecards are the data backbone. You haven't built supplier scorecards specifically, but the <strong>70+ report MI ecosystem + 8-metric quality scorecard infrastructure</strong> is the architectural twin. Walmart needs the operating system, not the supplier-domain knowledge — that's bridgeable.</div>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">R8 · Tech &amp; AI PMO</div>
+    <div class="req-quote">"Act as PMO for the design, rollout, and adoption of Technology and AI initiatives across GM and Fashion SBUs, working closely with Tech teams to ensure business alignment and timely inputs."</div>
+    <div class="req-mean">This is your <strong>strongest single requirement match</strong>. Proof: <strong>Salesforce 0→1 co-architecture</strong> with 6-stakeholder discovery + Tech-team co-design + adoption through workflow-friction reduction (not management mandate). 70+ live reports running 6 years later. Walmart Global Tech India's Minsky AI award context makes this even more aligned.</div>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">R9 · Experience Depth</div>
+    <div class="req-quote">"10+ years of progressive experience in complex, cross-functional program execution… Demonstrated leadership managing complex projects in fast-paced, matrixed environments."</div>
+    <div class="req-mean"><strong>Soft gate, not bridge.</strong> You're at ~8 yrs (Sobha 2020+ + pre-MBA BITS). Compensation: <strong>MT→AGM velocity in 6 years + AED 12.97B P&amp;L authority over 77-person matrixed team across 2 geographies + 4 legal entities</strong>. Depth-of-breadth that 10 yrs of generalist program execution often doesn't equal — but you'll need to make this explicit in the application narrative.</div>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">R10 · Data &amp; Sourcing</div>
+    <div class="req-quote">"Deep expertise in building data models, big data and strategic sourcing."</div>
+    <div class="req-mean"><strong>Data models: yes</strong> (NPV/DCF/IRR + Salesforce schema for 70+ reports + 30,044 records + 442M daily transactions). <strong>Big data: marginal</strong> (volume yes; "big data" stack tools no). <strong>Strategic sourcing: genuine gap</strong> — this is the line item that prices your fit. See Section 03 gap card #1 for honest framing + closure plan.</div>
+  </div>
+
+  <div class="req">
+    <div class="req-jd">R11 · Certifications</div>
+    <div class="req-quote">"Certification: PMP, Prince2, Agile/Scrum, Six Sigma, or equivalent. Advanced proficiency in Microsoft Suite."</div>
+    <div class="req-mean">JD lists 4 cert options as interchangeable. <strong>PMI-ACP (already in track)</strong> covers Agile/Scrum directly. <strong>Six Sigma Green Belt</strong> ($30, 1 week) is the low-effort filler that signals Walmart-aligned Lean retail-ops discipline. MS Suite: NPV models + executive decks already proven. PMP itself is not required. Plan in Section 09.</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANEL 03 · FIT & GAP
+     Canon §2 row 3 + §3 density (vocab min 15 soft-floor; gap 3–5)
+     SCHEMA:
+       - sec-num + sec-title + sec-sub
+       - h3 "Vocabulary translation" → table.vocab
+           <th>What they call it</th> | <th>Your equivalent experience</th>
+         Density: min 15 rows. SOFT FLOOR — if targeting lower, justify in pre-build outline.
+       - h3 "Gaps — classified" → series of .gap cards
+           .gap-genuine for capability gaps requiring closure plan
+           .gap-vocab for framing/positioning gaps
+         Each gap: title + body (with strong on classification + closure plan)
+         Density: 3–5 gap cards
+       - h3 "Strengths matched" → may use .card grid mapping CliftonStrengths / DISC to JD reqs
+     ============================================================ -->
+<section class="panel" id="fit">
+  <div class="sec-num">Section 03</div>
+  <h1 class="sec-title">Fit &amp; Gap</h1>
+  <p class="sec-sub">Vocabulary translates more than capability does. Genuine gaps are flagged honestly with closure plans; vocabulary gaps are bridged.</p>
+
+  <h3 class="h3">Vocabulary translation — Walmart language → your equivalent</h3>
+  <table class="vocab">
+    <thead>
+      <tr>
+        <th>What Walmart calls it</th>
+        <th>Your equivalent experience</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>SBU (Strategic Business Unit) — GM / Fashion / Sam's</td>
+        <td>Sobha Collections function as P&amp;L unit across 4 legal entities (Dubai mainland, Siniya Island, etc.)</td>
+      </tr>
+      <tr>
+        <td>Horizontal initiative across SBUs</td>
+        <td>Cross-functional programme across Ops (38) / QCG (12) / MIS (15) / RMs (12) — same federated execution pattern</td>
+      </tr>
+      <tr>
+        <td>Sourcing leader / Category leader</td>
+        <td>CRO Mohammad Adnan Hamid; CCO Ashish Vishnu Rupani — function-head stakeholder altitude</td>
+      </tr>
+      <tr>
+        <td>T2T (Top-to-Top) supplier review</td>
+        <td>MD/CEO + CRO + business-head strategic review cadences (NPV defence forum)</td>
+      </tr>
+      <tr>
+        <td>Supplier scorecard (Quarterly / Bi-annual)</td>
+        <td>8-metric quality scorecard + 70+ report ecosystem with tiered audience templates</td>
+      </tr>
+      <tr>
+        <td>Template &amp; model standardization</td>
+        <td>6+ MD-approved process documents (PF01–PF06); proprietary 55-day T−25/T+30 operating-rhythm framework</td>
+      </tr>
+      <tr>
+        <td>Geopolitical risk mitigation (supply-chain)</td>
+        <td>Multi-entity regulatory navigation (1→4 entities); 14-finding audit register with proactive blocker escalation</td>
+      </tr>
+      <tr>
+        <td>Cross-SBU strategic initiative</td>
+        <td>Cross-functional embedding of Collections into upstream enterprise journey (Sales / Marketing / PM / Finance / CS)</td>
+      </tr>
+      <tr>
+        <td>Corporate strategic workstream</td>
+        <td>NPV AED 652M strategic investment defence — MD/CEO/CRO/CFO multi-round forum</td>
+      </tr>
+      <tr>
+        <td>Decision materials / executive narrative</td>
+        <td>NPV multi-round pitch deck; Risk Committee briefing packs; Audit Committee responses</td>
+      </tr>
+      <tr>
+        <td>Data model (financial / operational)</td>
+        <td>NPV / DCF / IRR financial models + Salesforce schema design for 70+ downstream reports</td>
+      </tr>
+      <tr>
+        <td>Big data / enterprise analytics</td>
+        <td>30,044+ active records, 442M+ AED daily transactions, 982-document audit population — operational scale, not Spark/Hadoop</td>
+      </tr>
+      <tr>
+        <td>Strategic sourcing</td>
+        <td><span style="color: var(--accent-3); font-weight: 600;">GENUINE GAP</span> — vendor management (10-bank settlement) is closest adjacent; see gap card #1</td>
+      </tr>
+      <tr>
+        <td>AI-driven model / enterprise AI</td>
+        <td>12-project AI portfolio (P6–P14); automated risk synthesis prototypes; AI-augmented PMO tooling</td>
+      </tr>
+      <tr>
+        <td>Enterprise systems</td>
+        <td>Salesforce 0→1 co-architecture + NICE Dialler + IVR + Tagit + ERP integration layer</td>
+      </tr>
+      <tr>
+        <td>Storytelling for business partners</td>
+        <td>NPV multi-round defence narrative; CSAT framework launch story (Promoter/Passive/Detractor); 6-process doc rollout</td>
+      </tr>
+      <tr>
+        <td>Matrixed environment</td>
+        <td>77-person team across 4 functions + 2 geographies (Dubai 35 + India hub 42) — direct match</td>
+      </tr>
+      <tr>
+        <td>PMO discipline</td>
+        <td>Audit SPOC 4 consecutive years across 3 legal entities; weekly governance cadence; 14-finding register closure</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="h3">Gaps — classified</h3>
+
+  <div class="gap gap-genuine">
+    <div class="gap-head">
+      <span class="pill" style="background: var(--accent-3); color: var(--bg);">Genuine · High Impact</span>
+      <span class="gap-title">1. Strategic sourcing as a domain</span>
+    </div>
+    <div class="gap-body">
+      <strong>Capability gap, not vocabulary.</strong> You've not negotiated supplier contracts, run RFPs/RFQs, designed category strategy, or managed supplier qualification programmes. Real-estate-dues vendor management (10-bank settlement infrastructure) is the closest adjacent, but it's adjacent, not equivalent.
+      <br><br>
+      <strong>Fit-point cost:</strong> 10–15 points. This is the line item that prices the role at 58–62 not 75+.
+      <br><br>
+      <strong>Closure plan:</strong> Cannot pre-close this before interview. Honest acknowledgment is the only credible move. Anchor phrase: <em>"I haven't sourced. What I bring is the operating system that makes sourcing programmes governable, measurable, and adoptable across SBUs — the PMO + analytics + AI layer. I'd close sourcing-specific vocabulary in 30 days post-onboarding via guided immersion with category leaders."</em>
+    </div>
+  </div>
+
+  <div class="gap gap-genuine">
+    <div class="gap-head">
+      <span class="pill" style="background: var(--accent-3); color: var(--bg);">Genuine · Medium Impact</span>
+      <span class="gap-title">2. Retail / supply chain operating context</span>
+    </div>
+    <div class="gap-body">
+      <strong>Real estate dues ≠ supply chain ≠ retail merchandising.</strong> GM/Fashion SBU support implies retail merchandising fluency — seasonality, SKU lifecycle, inventory turn, store ops impact. You don't have this.
+      <br><br>
+      <strong>Fit-point cost:</strong> 5–8 points.
+      <br><br>
+      <strong>Closure plan:</strong> Pre-interview shallow ramp — Walmart annual report (10-K) + 2–3 retail supply chain podcasts (e.g., Retail Daily, Supply Chain Dive) + Walmart investor day deck. ~6 hours total. Frame: <em>"Operating discipline transfers. Retail vocabulary is the bridgeable layer — and I've already started."</em>
+    </div>
+  </div>
+
+  <div class="gap gap-genuine">
+    <div class="gap-head">
+      <span class="pill" style="background: var(--accent-3); color: var(--bg);">Genuine · Soft Gate</span>
+      <span class="gap-title">3. 10+ years experience requirement</span>
+    </div>
+    <div class="gap-body">
+      <strong>You're at ~8 years.</strong> Sobha 2020-present (~6 yrs) + pre-MBA BITS Pilani (~2 yrs). JD says "10+ years progressive cross-functional program execution."
+      <br><br>
+      <strong>Cannot manufacture experience.</strong> Compensation framing: <em>"MT→AGM in 6 years with full-function P&amp;L authority over a 77-person matrixed team across 2 geographies and 4 legal entities at AED 12.97B scale. Depth-of-breadth that 10 yrs of generalist program execution often doesn't equal."</em> Make this explicit in the application cover narrative, not just the resume.
+      <br><br>
+      <strong>Risk:</strong> If the screen is automated on years-of-experience, this gates you before fit is evaluated. Likely soft-gate at Sr Manager level in India GCCs; verify on application.
+    </div>
+  </div>
+
+  <div class="gap gap-vocab">
+    <div class="gap-head">
+      <span class="pill pill-outline">Vocabulary · Bridgeable</span>
+      <span class="gap-title">4. Sourcing terminology (RFP, RFQ, category mgmt, supplier qualification)</span>
+    </div>
+    <div class="gap-body">
+      <strong>Not a capability gap — a label gap.</strong> Your 10-bank settlement infrastructure management <em>is</em> structured vendor management; you just haven't framed it that way. PR rejection 49% containment <em>is</em> supplier quality control; same pattern.
+      <br><br>
+      <strong>Closure plan:</strong> 4-hour vocab block — Coupa / SAP Ariba primers + supplier qualification framework reading (CIPS basics) + 1-hour Walmart-specific sourcing glossary build. Apply vocabulary in application narrative + interview anchors.
+    </div>
+  </div>
+
+  <div class="gap gap-vocab">
+    <div class="gap-head">
+      <span class="pill pill-outline">Vocabulary · Cert</span>
+      <span class="gap-title">5. PMP not held; Six Sigma not yet started</span>
+    </div>
+    <div class="gap-body">
+      <strong>JD treats certs as interchangeable</strong> — PMP / Prince2 / Agile-Scrum / Six Sigma. PMI-ACP (already in track) directly satisfies Agile/Scrum. Six Sigma Green Belt ($30, ~1 week effort) is the lowest-effort second cert and signals Walmart-aligned Lean retail-ops discipline.
+      <br><br>
+      <strong>Closure plan:</strong> Six Sigma Green Belt within 30 days as a low-cost signal. Full plan in Section 09. Do <strong>not</strong> attempt PMP for this role — PMI-ACP + Six Sigma covers the JD ask without the 12-week PMP overhead.
+    </div>
+  </div>
+
+  <h3 class="h3">Strengths matched</h3>
+  <div class="grid-2">
+    <div class="card card-primary">
+      <h4 class="h4">CliftonStrengths → JD</h4>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.65;">
+        <strong>Restorative + Analytical:</strong> "Strong analytical and problem-solving skills, with proficiency in AI-driven models" — root-cause governance instinct (14-finding register; PR 49% containment).<br><br>
+        <strong>Arranger:</strong> "Project management and planning expertise" + "matrixed environments" — 77-person team across 4 functions × 2 geographies.<br><br>
+        <strong>Relator + Individualization:</strong> "Strong Stakeholder management" — 6-stakeholder Salesforce discovery; reading individual MD/CEO scrutiny angles in NPV defence.
+      </p>
+    </div>
+    <div class="card card-accent2">
+      <h4 class="h4">DISC profile → JD</h4>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.65;">
+        <strong>High-C:</strong> "Building data models, big data" — financial model rigour + governance discipline. Maps directly to template/model standardization mandate.<br><br>
+        <strong>High-S:</strong> "Fast-paced, matrixed environments" + "long-cycle program execution" — 6-yr MT→AGM consistency; cross-functional cadence ownership.<br><br>
+        <strong>Standing risk:</strong> Low-D/I means senior-forum assertiveness needs explicit proof. Three pre-loaded anchors (PR 49% standard, NPV defence, CCO escalations) cover this.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANEL 04 · STAR MAPPING
+     Canon §2 row 4 + §3 density (req 5 stories from S1–S36)
+     SCHEMA:
+       - sec-num + sec-title + sec-sub
+       - 5 STAR blocks:
+           <div class="star">
+             <div class="star-id">S## · [theme]</div>
+             <div class="star-title">[short title]</div>
+             <div class="star-map">Maps to: [JD req IDs from panel 02]</div>
+             <div class="star-row"><div class="star-label">Situation</div><div class="star-text">…</div></div>
+             <div class="star-row"><div class="star-label">Task</div><div class="star-text">…</div></div>
+             <div class="star-row"><div class="star-label">Action</div><div class="star-text">…</div></div>
+             <div class="star-row"><div class="star-label">Result</div><div class="star-text">…</div></div>
+           </div>
+       - Pull stories from STAR_STORY_BANK_V3.txt (S1–S36)
+       - star-map field MANDATORY — ties story to specific req in panel 02
+     ============================================================ -->
+<section class="panel" id="story">
+  <div class="sec-num">Section 04</div>
+  <h1 class="sec-title">STAR Mapping</h1>
+  <p class="sec-sub">Five stories pulled from STAR_STORY_BANK_V3 master index, mapped to specific Walmart JD requirements. Coverage: 4×★★★ + 1×★★. Stories carry the operating-discipline weight; the Sobha-to-Walmart vocabulary translation is the speaker's job in the room.</p>
+
+  <div class="star">
+    <div class="star-id">S1 · Risk Governance · ★★★</div>
+    <div class="star-title">14-Finding Audit Register → 97.5% Error Reduction</div>
+    <div class="star-map">Maps to: R1 (centralized PMO support), R2 (template standardization), R3 (governance &amp; mitigation), R9 (matrixed execution)</div>
+    <div class="star-row">
+      <div class="star-label">Situation</div>
+      <div class="star-text">In 2023, an internal audit of Sobha's Collections function identified <strong>14 control findings</strong> spanning documentation, approval protocols, and data governance — across a <strong>982-document audit population</strong> (the function's highest-ever volume). Findings carried structural recurrence risk across 4 legal entities and a 77-person matrixed team in 2 geographies.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Task</div>
+      <div class="star-text">As the named audit SPOC, own end-to-end remediation — drive each finding to verifiable, sustainable closure while live operations continued processing <strong>AED 40M+ daily</strong>. Zero processing delay tolerated.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Action</div>
+      <div class="star-text">Built structured risk register: per-finding owner, root cause, remediation action, target closure, evidence criterion. Implemented <strong>weekly governance cadence</strong> with team leads. Identified 3 blocked items (system-access dependencies) and <strong>escalated to CCO proactively before due dates</strong>. Designed process controls that made recurrence <strong>structurally impossible</strong>, not compliance-period-specific.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Result</div>
+      <div class="star-text"><strong>97.5% reduction in error rate</strong>. All 14 findings closed within the remediation window. <strong>Zero recurrence findings in subsequent audit cycles</strong>. Controls infrastructure (quality scorecard, LP Reversal reports, 4-layer reconciliation) became the reference for next audit's existing-mitigation evidence.</div>
+    </div>
+  </div>
+
+  <div class="star">
+    <div class="star-id">S4 · Product Delivery · ★★</div>
+    <div class="star-title">Salesforce 0→1 Co-Architecture with 6-Stakeholder Discovery</div>
+    <div class="star-map">Maps to: R8 (PMO for Tech/AI rollout &amp; adoption), R10 (data models + enterprise systems), R2 (standardization)</div>
+    <div class="star-row">
+      <div class="star-label">Situation</div>
+      <div class="star-text">Sobha's Collections function operated <strong>without a unified CRM</strong>. Relationship Managers managed AED 867M of accounts across Excel, paper records, and ad-hoc tracking. Dispute management and customer-experience continuity were structurally at risk. No platform infrastructure existed for the function's planned 14.9x scale-up.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Task</div>
+      <div class="star-text">Lead Salesforce platform design <strong>from zero</strong> — coordinating 6 stakeholder groups (RMs, Operations, QCG, MIS, Compliance, Finance) — to standardize customer engagement and create a defensible operational data layer that would also support 70+ downstream reports.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Action</div>
+      <div class="star-text">Multi-segment discovery: sat with RMs through daily workflows, mapped friction points, translated business signals into platform design requirements. Led <strong>solution design with Salesforce implementation partner</strong> and the in-house tech team. Defined data architecture for the 70+ downstream reports. Managed business↔tech handoffs. The platform was built around what RMs actually do — not what management thought they did.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Result</div>
+      <div class="star-text">Salesforce deployed; <strong>adoption succeeded because the platform reduced RM friction</strong>, not added to it. 70+ live data-connected reports operational. <strong>30,044+ active records</strong> managed. Platform scaled the function <strong>14.9x to AED 12.97B</strong> with zero proportional headcount addition for reporting. Still in production 6 years later.</div>
+    </div>
+  </div>
+
+  <div class="star">
+    <div class="star-id">S5 · Stakeholder · ★★★</div>
+    <div class="star-title">NPV AED 652M — Multi-Round MD/CEO Defence with Zero Concessions</div>
+    <div class="star-map">Maps to: R6 (executive presentations + narratives + decision materials), R5 (corporate strategic workstreams)</div>
+    <div class="star-row">
+      <div class="star-label">Situation</div>
+      <div class="star-text">A strategic investment proposal at Sobha required NPV defence to MD/CEO leadership — <strong>AED 652M decision with cross-functional implications</strong>. Multiple sequential scrutiny rounds across CRO, CFO, MD, and CEO — each surfacing different challenge angles.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Task</div>
+      <div class="star-text">Build the financial model, the narrative, and the decision materials. <strong>Defend the position through multiple review cycles without material concessions</strong> that would compromise the underlying strategic logic.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Action</div>
+      <div class="star-text">Built NPV / DCF / IRR model from raw inputs. Designed <strong>multi-layer scenario analysis</strong> (downside / base / upside) with sensitivity drivers exposed. Crafted exec narrative that led with strategic logic, anchored on numbers second. Pre-empted CFO challenges with line-item assumption defensibility. Pre-empted CEO challenges with strategic positioning rationale. Held position across MD/CEO/CRO/CFO scrutiny — adjusted modeling refinements where data improved, did not capitulate on underlying NPV.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Result</div>
+      <div class="star-text"><strong>AED 652M NPV defended through multiple review cycles. Zero material concessions on substantive economic logic.</strong> Decision approved on proposed terms. The model template became the reference for subsequent strategic investment reviews at the function.</div>
+    </div>
+  </div>
+
+  <div class="star">
+    <div class="star-id">S6 · Data Ops · ★★★</div>
+    <div class="star-title">70+ Report Intelligence Ecosystem — Centralized Analytical PMO</div>
+    <div class="star-map">Maps to: R2 (template/model standardization), R6 (decision materials), R7 (Supplier Scorecards + T2T prep)</div>
+    <div class="star-row">
+      <div class="star-label">Situation</div>
+      <div class="star-text">As Sobha Collections scaled 14.9x (AED 867M → 12.97B), reporting infrastructure was <strong>fragmented across Excel, manual rollups, and ad-hoc PowerPoint</strong>. Senior leadership lacked real-time visibility; teams spent disproportionate time on compilation versus analysis.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Task</div>
+      <div class="star-text">Design and operate a <strong>centralized analytical intelligence platform</strong> that served daily operations through MD-strategic decisions — without proportional headcount addition.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Action</div>
+      <div class="star-text">Architected <strong>70+ report MI ecosystem</strong> on Salesforce data layer. Reports tiered by audience: operational dailies (RMs), management weeklies (function heads), strategic monthlies (CRO / MD / CEO). Built <strong>standardized templates</strong> for recurring decision materials. Integrated quality scorecard (8 continuous metrics). Designed automation for stakeholder-specific rollups. Maintained the ecosystem as the function evolved.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Result</div>
+      <div class="star-text"><strong>30,044+ active records served. 442M+ AED daily transactions visible to leadership in near-real-time.</strong> Zero headcount added to the reporting function as scale grew 14.9x. The 70+ report layer is the <strong>direct architectural analog for centralized PMO analytics + supplier scorecard production</strong> at Walmart scale.</div>
+    </div>
+  </div>
+
+  <div class="star">
+    <div class="star-id">S8 · Stakeholder (Cross-Workstream) · ★★★</div>
+    <div class="star-title">Embedding Collections into the Enterprise Customer Journey</div>
+    <div class="star-map">Maps to: R4 (lead cross-SBU initiatives), R5 (represent SBU in broader corporate workstreams), R9 (matrixed)</div>
+    <div class="star-row">
+      <div class="star-label">Situation</div>
+      <div class="star-text">Collections at Sobha had historically been an <strong>isolated downstream function</strong> — operating after sales handover with limited upstream visibility. Customer experience issues, payment friction, and contract-stage decisions that affected collections downstream were made <strong>without collections input</strong>. Strategic cost concentrated at the back end: rework, escalations, customer dissatisfaction.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Task</div>
+      <div class="star-text">Embed Collections perspective into the upstream enterprise customer journey — Sales handover protocols, contract terms, project milestone communications, finance integration — making Collections a <strong>strategic partner upstream</strong>, not a downstream operator.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Action</div>
+      <div class="star-text">Identified <strong>6 upstream touchpoints</strong> where collections perspective would prevent downstream friction. Built cross-functional working group with Sales, Marketing, Project Management, Finance, Customer Service. Authored <strong>6+ MD-approved process documents (PF01–PF06)</strong> formalizing Collections as upstream input. Designed handover protocols that captured collections-relevant data at sales stage.</div>
+    </div>
+    <div class="star-row">
+      <div class="star-label">Result</div>
+      <div class="star-text"><strong>6 MD-approved process documents enacted.</strong> Collections became formal input to upstream customer-journey decisions. PCC TAT 20→3 days (85% reduction) at 3x volume was enabled by these upstream data-quality improvements. <strong>The cross-functional integration model is the direct analog for representing GM/Fashion in Walmart's broader corporate strategic workstreams.</strong></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANEL 05 · 30-60-90
+     Canon §2 row 5 + §3 density (≥15 items, ≥3 per phase, ≥3 day-1)
+     SCHEMA:
+       - sec-num + sec-title + sec-sub
+       - 4 .tl-phase blocks (day-1, day-30, day-60, day-90)
+       - Each phase:
+           <div class="tl-phase">
+             <div class="tl-phase-head">
+               <div class="tl-phase-day">Day 1 / Week 1 / Day 30 etc.</div>
+               <div class="tl-phase-title">[phase theme]</div>
+             </div>
+             <div class="tl-item"><strong>[milestone]</strong> — [explanation]</div>
+             <!-- repeat 3+ per phase -->
+           </div>
+       - Total ≥ 15 items across all phases
+     ============================================================ -->
+<section class="panel" id="plan">
+  <div class="sec-num">Section 05</div>
+  <h1 class="sec-title">30-60-90</h1>
+  <p class="sec-sub">A plan built around the honest truth: you arrive without sourcing domain knowledge, so the first 30 days buy credibility through listening + one AI-augmented quick win, not through bold restructuring. Standardize only what SBUs will actually adopt.</p>
+
+  <div class="tl-phase">
+    <div class="tl-phase-head">
+      <div class="tl-phase-day">Day 1 / Week 1</div>
+      <div class="tl-phase-title">Listen &amp; Map — buy credibility before changing anything</div>
+    </div>
+    <div class="tl-item"><strong>Map the SBU landscape</strong> — GM, Fashion, Sam's sourcing leaders: who owns what, decision rights, where the current PMO gaps actually hurt. Don't assume; ask each leader where central support helps vs slows them.</div>
+    <div class="tl-item"><strong>Inventory existing templates/models</strong> — baseline the reference library. What standardization exists, what's ad-hoc PowerPoint. You can't standardize what you haven't mapped (lesson from the 70+ report ecosystem build).</div>
+    <div class="tl-item"><strong>Shadow a T2T prep cycle + read last 2 quarters of supplier scorecards</strong> — understand the existing rhythm and supplier-data vocabulary before proposing changes. This is also your fastest sourcing-domain immersion.</div>
+    <div class="tl-item"><strong>Meet the Tech teams</strong> — understand the AI initiative pipeline, current rollout/adoption status across SBUs, and where business alignment is breaking down. This is your strongest-fit territory; establish the relationship early.</div>
+    <div class="tl-item"><strong>Build a stakeholder map</strong> — decision rights × influence × current pain across the matrixed environment. Same discipline as the 6-stakeholder Salesforce discovery.</div>
+  </div>
+
+  <div class="tl-phase">
+    <div class="tl-phase-head">
+      <div class="tl-phase-day">Day 30</div>
+      <div class="tl-phase-title">Diagnose &amp; Quick Win — show, don't tell</div>
+    </div>
+    <div class="tl-item"><strong>Deliver a current-state PMO governance assessment</strong> — where standardization helps vs where it slows SBUs, framed as explicit trade-offs. This is your NPV-defence muscle (S5) applied to operating-model design.</div>
+    <div class="tl-item"><strong>Identify 2–3 quick-win standardization templates</strong> SBU teams will actually adopt — friction-reduction first, mandate never (the Salesforce adoption lesson, S4). Adoption is earned, not ordered.</div>
+    <div class="tl-item"><strong>Ship one AI-augmented analytics prototype</strong> — an automated supplier-scorecard draft-generator (P6 reframe). A working artifact in week 4 does more for credibility than any deck. Walmart Global Tech India already values this (Minsky Award context).</div>
+    <div class="tl-item"><strong>Establish a weekly governance cadence</strong> for one horizontal initiative — the 14-finding register pattern (S1) applied to a live sourcing workstream.</div>
+  </div>
+
+  <div class="tl-phase">
+    <div class="tl-phase-head">
+      <div class="tl-phase-day">Day 60</div>
+      <div class="tl-phase-title">Build &amp; Standardize — the reference layer</div>
+    </div>
+    <div class="tl-item"><strong>Roll out the standardized decision-materials template</strong> across GM + Fashion — the 70+ report ecosystem pattern (S6), tiered by audience: SBU operational, function-head management, sourcing-leadership strategic.</div>
+    <div class="tl-item"><strong>Lead one cross-SBU initiative end-to-end</strong> with cross-functional leaders — proof of R4. Pick a horizontal where central PMO clearly adds value without stepping on SBU execution ownership.</div>
+    <div class="tl-item"><strong>Co-design the AI rollout adoption plan with Tech teams</strong> for one initiative — business alignment + timely-input framework. The adoption tracker (P13 reframe) makes "design, rollout, adoption" measurable.</div>
+    <div class="tl-item"><strong>Deliver the first PMO-owned Quarterly Supplier Scorecard</strong> with a measurable quality/turnaround improvement over baseline.</div>
+  </div>
+
+  <div class="tl-phase">
+    <div class="tl-phase-head">
+      <div class="tl-phase-day">Day 90</div>
+      <div class="tl-phase-title">Scale &amp; Institutionalize — earn the seat</div>
+    </div>
+    <div class="tl-item"><strong>Present a quantified PMO impact review</strong> to sourcing leadership — cycle-time, standardization adoption rate, analytical turnaround. Numbers, not narrative.</div>
+    <div class="tl-item"><strong>Establish the geopolitical-risk mitigation playbook</strong> — centralized analytical + governance support framework for supply-chain disruption (R3). Your multi-entity navigation + proactive-escalation instinct, formalized for sourcing.</div>
+    <div class="tl-item"><strong>Institutionalize the AI-augmented PMO tooling</strong> — at least 2 automated analytics workflows live and adopted, redirecting team time from compilation to judgment.</div>
+    <div class="tl-item"><strong>Earn a representation seat</strong> in one broader corporate strategic workstream as GM/Fashion's voice (R5) — the embedding-into-enterprise-journey move (S8) repeated at Walmart scale.</div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANEL 06 · AI DIFFERENTIATOR
+     Canon §2 row 6 + §3 density (3 projects from P6–P14)
+     SCHEMA:
+       - sec-num + sec-title + sec-sub
+       - 3 .ai-proj blocks:
+           <div class="ai-proj">
+             <div class="ai-proj-head">
+               <div>
+                 <div class="ai-proj-id">P## · [name]</div>
+                 <div class="ai-proj-title">[short framing for this role]</div>
+                 <div class="ai-proj-stack">[stack: Python / Claude API / Streamlit / etc.]</div>
+               </div>
+               <span class="pill pill-primary">[role-relevant pain point]</span>
+             </div>
+             <div class="ai-proj-body">
+               [what it does, how it maps to this role's actual problems,
+                what proof artifact you'd show]
+             </div>
+           </div>
+       - Optional: .ai-pitch closing block — single-paragraph "the differentiator pitch"
+     ============================================================ -->
+<section class="panel" id="ai">
+  <div class="sec-num">Section 06</div>
+  <h1 class="sec-title">AI Differentiator</h1>
+  <p class="sec-sub">Three projects from your 12-project portfolio (P6–P14), reframed for this role's actual pain points. The differentiator isn't using AI tools — it's building the operational AI layer that eliminates PMO administrative burden. Walmart Global Tech India already proved it values this (Minsky Award 2024, Best AI in GCC).</p>
+
+  <div class="ai-proj">
+    <div class="ai-proj-head">
+      <div>
+        <div class="ai-proj-id">P6 · SMB Revenue Health Intelligence Platform</div>
+        <div class="ai-proj-title">Reframe → Supplier Scorecard Auto-Generation + T2T Pack Builder</div>
+        <div class="ai-proj-stack">Python · Claude API · pandas · Streamlit</div>
+      </div>
+      <span class="pill pill-spark">Pain: manual scorecard + T2T prep burden</span>
+    </div>
+    <div class="ai-proj-body">
+      The original platform ingests revenue + operational signals and generates health summaries with threshold-based flagging. <strong>Reframed for Walmart:</strong> ingest supplier performance data (delivery reliability, quality defect rate, cost variance, compliance status) and auto-generate Quarterly/Bi-annual Supplier Scorecards plus T2T-ready briefing packs. Threshold → flag → narrative draft, the same pattern as the PR-rejection quality scorecard (S2). <strong>Proof artifact:</strong> a working prototype that takes a supplier-data CSV and outputs a formatted scorecard + exec summary in under 60 seconds. <strong>Maps to R7</strong> (Supplier Scorecards + T2T prep) — directly eliminates the most repetitive part of the JD.
+    </div>
+  </div>
+
+  <div class="ai-proj">
+    <div class="ai-proj-head">
+      <div>
+        <div class="ai-proj-id">P11 · Information Solutions Health Dashboard</div>
+        <div class="ai-proj-title">Reframe → Centralized Sourcing Analytics PMO Hub</div>
+        <div class="ai-proj-stack">Python · Claude API · Plotly · SQL (in progress)</div>
+      </div>
+      <span class="pill pill-primary">Pain: fragmented SBU analytical support</span>
+    </div>
+    <div class="ai-proj-body">
+      Originally a health-monitor for an information-solutions function. <strong>Reframed:</strong> a centralized PMO analytics hub that surfaces SBU-initiative health in one view — governance status, standardization-adoption rate, risk-register state — and answers ad-hoc data questions via natural-language query over the sourcing data layer. This is the 70+ report ecosystem (S6) made conversational: instead of building a new report for every ad-hoc ask, the SBU leader asks in plain language. <strong>Proof artifact:</strong> dashboard mockup + NL-query demo over sample sourcing data. <strong>Maps to R1</strong> (centralized analytical support) <strong>+ R6</strong> (decision materials) — and turns "deliver ad hoc data needs" from a time-sink into a self-serve layer.
+    </div>
+  </div>
+
+  <div class="ai-proj">
+    <div class="ai-proj-head">
+      <div>
+        <div class="ai-proj-id">P13 · Mastercard MEI Product Ops Intelligence</div>
+        <div class="ai-proj-title">Reframe → AI Rollout PMO — SBU Adoption Tracker</div>
+        <div class="ai-proj-stack">Python · Claude API · adoption-state logic</div>
+      </div>
+      <span class="pill pill-primary">Pain: AI initiatives stall at adoption, not build</span>
+    </div>
+    <div class="ai-proj-body">
+      The recurring failure of tech/AI initiatives isn't the build — it's SBU adoption. <strong>Reframed:</strong> an AI-initiative adoption tracker that monitors rollout health across GM/Fashion SBUs — adoption rate by SBU, blocker identification, business-alignment gaps, timely-input tracking against Tech-team dependencies. The JD's "design, rollout, and adoption" loop (R8) made measurable and governable — the same instinct as the Salesforce adoption-through-friction-reduction win (S4). <strong>Proof artifact:</strong> adoption-tracking framework + automated blocker-flagging logic. <strong>Maps to R8</strong> — your single strongest requirement match, made tangible.
+    </div>
+  </div>
+
+  <div class="ai-pitch">
+    <strong>The differentiator pitch (interview-ready):</strong> "Walmart Global Tech India already won a Minsky Award for AI in the GCC — so you don't need convincing that AI belongs in sourcing. What I bring is specific: I've personally built 12 AI-augmented operations tools tied to a live AED 12.97B function. Three of them retune directly to this role — supplier scorecard auto-generation, a conversational analytics hub, and an AI-rollout adoption tracker. My value isn't that I can use AI; it's that I build the operational AI layer that takes the administrative burden off a PMO team and redirects their time to judgment and influence work. I'd show you a working prototype in week 4, not month 4."
+  </div>
+</section>
+
+<!-- ============================================================
+     PANEL 07 · INTERVIEW KIT
+     Canon §2 row 7 + §3 density (≥20 questions across rounds)
+     SCHEMA:
+       - sec-num + sec-title + sec-sub
+       - For each interview round (typically 3–5 rounds):
+           <div class="iv-round">
+             <div class="iv-round-head">Round X · [stakeholder]</div>
+             <div class="iv-q">[question] <span class="iv-q-tag">[behavioral / technical / situational]</span></div>
+             <!-- repeat -->
+             <div class="iv-anchor">
+               <strong>Opening anchor</strong>
+               [scripted opening — your reframe for this round]
+             </div>
+           </div>
+       - Total ≥ 20 questions across all rounds
+       - Each round MUST have at least one .iv-anchor with scripted opening
+     ============================================================ -->
+<section class="panel" id="iv">
+  <div class="sec-num">Section 07</div>
+  <h1 class="sec-title">Interview Kit</h1>
+  <p class="sec-sub">21 likely questions across 4 rounds, with scripted opening anchors. The recurring test across every round: can operating discipline substitute for sourcing domain experience? Answer it with confidence, never apology.</p>
+
+  <div class="iv-round">
+    <div class="iv-round-head">Round 1 · Recruiter / TA Screen</div>
+    <div class="iv-q">Walk me through your background and why Walmart Sourcing Strategy Ops. <span class="iv-q-tag">behavioral</span></div>
+    <div class="iv-q">You're at ~8 years — the role says 10+. How do you see your experience matching? <span class="iv-q-tag">situational</span></div>
+    <div class="iv-q">You're in real-estate dues collections — this is retail sourcing. Why the switch, and why now? <span class="iv-q-tag">behavioral</span></div>
+    <div class="iv-q">What's your current compensation, and what's your expectation? <span class="iv-q-tag">screening</span></div>
+    <div class="iv-q">Are you open to Bengaluru, on-site? <span class="iv-q-tag">logistics</span></div>
+    <div class="iv-anchor">
+      <strong>Opening anchor</strong>
+      "I've built and run a centralized PMO + analytics + AI function for a AED 12.97B P&amp;L from zero — governance, template standardization, executive decision materials, and technology rollout. I just called it 'collections operations.' On the years question: I went MT→AGM in six years with full-function P&amp;L authority over a 77-person matrixed team across two geographies. That's a depth of breadth most ten-year generalist program tracks don't reach. I'm honest that I haven't done strategic sourcing — what transfers is the operating system that makes sourcing programmes governable and adoptable."
+    </div>
+  </div>
+
+  <div class="iv-round">
+    <div class="iv-round-head">Round 2 · Hiring Manager (Sourcing Strategy Lead)</div>
+    <div class="iv-q">Tell me about a time you established PMO governance for a complex cross-functional initiative. <span class="iv-q-tag">behavioral → S1</span></div>
+    <div class="iv-q">How would you standardize templates across SBUs that each have their own way of working — without killing their speed? <span class="iv-q-tag">situational</span></div>
+    <div class="iv-q">Describe building executive decision materials that drove a senior-leadership decision. <span class="iv-q-tag">behavioral → S5</span></div>
+    <div class="iv-q">You haven't done strategic sourcing. What would your first 90 days look like to close that gap? <span class="iv-q-tag">situational</span></div>
+    <div class="iv-q">How do you handle an SBU leader who resists a central standardization push? <span class="iv-q-tag">situational → assertiveness</span></div>
+    <div class="iv-anchor">
+      <strong>Opening anchor</strong>
+      "The 14-finding audit register is my clearest governance story — central cadence drove all 14 to closure with a 97.5% error reduction and zero recurrence, while each team lead kept execution ownership. That's exactly the federated PMO model this role describes: central enables, SBUs own. On sourcing specifically — I'd spend the first 30 days shadowing T2T cycles and supplier-data flows with category leaders, then close the vocabulary in guided immersion. The governance and analytics layer I bring on day one."
+    </div>
+  </div>
+
+  <div class="iv-round">
+    <div class="iv-round-head">Round 3 · Cross-Functional Panel (SBU Leaders + Tech)</div>
+    <div class="iv-q">How do you align Tech teams and business when their priorities differ on an AI initiative? <span class="iv-q-tag">situational → S4</span></div>
+    <div class="iv-q">Tell me about a technology/system rollout you led and how you drove adoption. <span class="iv-q-tag">behavioral → S4</span></div>
+    <div class="iv-q">A supplier scorecard shows a key supplier declining — walk me through your analytical and governance response. <span class="iv-q-tag">situational → S6/S1</span></div>
+    <div class="iv-q">How do you represent one function's interests in a broader corporate-strategy room? <span class="iv-q-tag">behavioral → S8/S5</span></div>
+    <div class="iv-q">What AI or automation would you bring to this PMO function specifically? <span class="iv-q-tag">technical → portfolio</span></div>
+    <div class="iv-q">How do you prioritize a dozen concurrent workstreams across SBUs? <span class="iv-q-tag">situational → Arranger</span></div>
+    <div class="iv-anchor">
+      <strong>Opening anchor</strong>
+      "Can I show you something? I built a supplier-scorecard auto-generator — give it a supplier-data file and it returns a formatted scorecard and exec summary in under a minute. I built it in two days. I have two more tuned to this role: a conversational analytics hub and an AI-rollout adoption tracker. My differentiator isn't that I use AI — it's that I build the operational AI layer that takes administrative burden off the PMO team. The Salesforce rollout taught me adoption is earned through friction-reduction, never mandate — that's the lens I bring to Tech-business alignment."
+    </div>
+  </div>
+
+  <div class="iv-round">
+    <div class="iv-round-head">Round 4 · Senior Leadership (Sourcing Director)</div>
+    <div class="iv-q">Where do you see Walmart's India sourcing strategy heading, and how does this role enable the $10B target? <span class="iv-q-tag">strategic</span></div>
+    <div class="iv-q">Tell me about a time you held a position under senior-leadership pressure and were later vindicated. <span class="iv-q-tag">behavioral → S2/S5</span></div>
+    <div class="iv-q">What's the biggest structural risk to a federated PMO model, and how would you mitigate it? <span class="iv-q-tag">situational</span></div>
+    <div class="iv-q">How would you approach geopolitical / supply-chain disruption support for sourcing leaders? <span class="iv-q-tag">situational → R3</span></div>
+    <div class="iv-q">Why should we bet on someone without sourcing domain experience? <span class="iv-q-tag">behavioral → close honestly</span></div>
+    <div class="iv-anchor">
+      <strong>Opening anchor</strong>
+      "This role exists because tripling India sourcing to $10B by 2027 needs a central operating layer that lets SBU leaders move fast without losing standardization or governance. That's a scaling-the-operating-system problem — and that's precisely what I did taking a function from AED 867M to 12.97B without the governance breaking. On the domain bet: I held a payment-rejection quality standard at 49% under leadership pressure to relax it, and the next quarter's data vindicated me. I defended a AED 652M NPV across MD/CEO scrutiny with zero material concessions. I don't fold under pressure, and I don't bluff on what I don't know. Sourcing domain I'll close in months; the judgment and the operating discipline took years."
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANEL 08 · COMP INTEL — canon §2A MANDATORY
+     SCHEMA:
+       - sec-num + sec-title + sec-sub (1-line headline confidence statement)
+       - <div class="comp-conf">Confidence: <strong>[High/Medium/Low]</strong> · [n] sources · [1-line context]</div>
+         IF < 3 sources: <div class="comp-conf">Confidence: <strong>Low</strong> · single-source · treat as directional only</div>
+       - h3 "Triangulation sources" → .source-list with explicit source citations (Levels.fyi / Glassdoor / AmbitionBox / recruiter intel / JD posting / etc.)
+       - h3 "Bands" → series of .comp-band per role-level (e.g., AVP / VP / Director)
+           Each band: comp-band-head (name + range) + comp-rows (Base / Variable / Equity)
+       - h3 "Line-item confidence" — MANDATORY if overall ≤ Medium OR if components have differing source quality
+           Break down: Base · Variable · Equity · Signing — each with own confidence rating
+       - h3 "Cross-pipeline note" — MANDATORY if comp band overlaps materially with another active pipeline role
+           Compare bands · conv-prob-adjusted ranking · explicit warning if headline number could distort sequencing
+       - h3 "Walk-away anchor" — vs ₹42L floor; reasoning for any delta
+       - h3 "Negotiation levers" — signing bonus, equity refresh, accelerated review, title bump,
+         interim-leadership premium, GCC-new-ops premium (as applicable)
+     ============================================================ -->
+<section class="panel" id="comp">
+  <div class="sec-num">Section 08</div>
+  <h1 class="sec-title">Comp Intel</h1>
+  <p class="sec-sub">Walmart India Sr Manager (non-tech Strategy Ops / PMO band). The realistic P50 sits right at your walk-away floor — and one headline source is a misleading outlier you must not let distort sequencing.</p>
+
+  <div class="comp-conf">Confidence: <strong>Medium–High</strong> · 4 sources + 2 anecdotes triangulated · consistent ₹42–46L median cluster across Glassdoor + Levels.fyi; one outlier (6figr) flagged</div>
+
+  <h3 class="h3">Triangulation sources</h3>
+  <ul class="source-list">
+    <li><strong>Glassdoor (India, total-pay model):</strong> Sr Manager median total ₹41.5L (base ₹36.5L + additional ₹5.0L). 52 salary submissions.</li>
+    <li><strong>Glassdoor (Bangalore):</strong> job average ₹48L; trajectory tops out ~₹50.5L at highest seniority.</li>
+    <li><strong>Levels.fyi (Sr Program Manager, Bengaluru — closest non-tech title analog):</strong> median ₹45.1L; P25 ₹33L; P75 ₹55.9L; P90 ₹70.2L. <em>Best proxy for this role's band.</em></li>
+    <li><strong>6figr (Walmart Sr Manager Bengaluru):</strong> ₹91L avg — <span style="color: var(--accent-3); font-weight: 600;">OUTLIER</span>. Almost certainly bundles higher seniority tiers (Sr Director / GM) under one label. Do not anchor on this.</li>
+    <li><strong>Anecdote (Glassdoor bowl):</strong> 9.5-yr candidate, Walmart offer ₹38L with 20% variable.</li>
+    <li><strong>Anecdote (Teamblind):</strong> Sr Engineering Manager 2 TC ₹70L (60–90 base + 30% bonus + 55% RSU) — engineering band, structurally above this non-tech role; useful only for structure, not level.</li>
+  </ul>
+
+  <h3 class="h3">Bands — Walmart India Sr Manager, Strategy Ops (non-tech)</h3>
+  <div class="comp-band">
+    <div class="comp-band-head"><span>Total Compensation (synthesized)</span><span class="comp-band-range">P50 ₹42–46L · P75 ₹52–58L · P90 ₹68–72L</span></div>
+    <div class="comp-row"><span class="comp-row-label">Base</span><span class="comp-row-val">₹32–40L (≈72–78% of TC)</span></div>
+    <div class="comp-row"><span class="comp-row-label">Variable (annual MIP/bonus)</span><span class="comp-row-val">15–20% of base</span></div>
+    <div class="comp-row"><span class="comp-row-label">Equity (WMT RSU)</span><span class="comp-row-val">≈10–18% of TC · real liquid NYSE stock, ~3-yr graded vest</span></div>
+    <div class="comp-row"><span class="comp-row-label">Signing</span><span class="comp-row-val">Situational — negotiable for Dubai→India relocation / notice buyout</span></div>
+  </div>
+
+  <h3 class="h3">Line-item confidence</h3>
+  <div class="card card-tint">
+    <p style="margin: 0;"><strong>Base — High:</strong> consistent across Glassdoor (₹36.5L) + Levels.fyi proxy. <br>
+    <strong>Variable — Medium:</strong> 15–20% range; offer anecdote confirms 20%. <br>
+    <strong>Equity — Medium-Low:</strong> non-tech RSU % varies widely; the 55%-RSU eng anecdote is <em>not</em> representative of a PMO role. Treat the 10–18% as directional. <br>
+    <strong>Signing — Low:</strong> no India-specific PMO data; include as a negotiation ask, not an expectation.</p>
+  </div>
+
+  <h3 class="h3">Cross-pipeline note — sequencing warning</h3>
+  <div class="card" style="border-left: 4px solid var(--accent-3);">
+    <p style="margin-bottom: 10px;"><strong>The 6figr ₹91L figure is a sequencing trap.</strong> If it anchors your perception, Walmart looks like a top-tier comp play. It isn't. The realistic P50 (₹42–46L) sits <strong>at or just above your ₹42L walk-away floor</strong>.</p>
+    <p style="margin-bottom: 10px;"><strong>Conversion-probability-adjusted ranking</strong> places this firmly below the active pipeline:</p>
+    <p style="margin-bottom: 10px; font-size: 13px; color: var(--text-mid);">Uber L5A P50 ₹85–95L (conv ~higher) ≫ Oaktree VP P50 ₹55–65L (conv 20–25%) &gt; AmEx GMNS Dir (conv highest) &gt; <strong>Walmart Sr Mgr P50 ₹42–46L (conv 15–20%)</strong> ≈ Oaktree AVP P50 ₹38–48L.</p>
+    <p style="margin: 0;"><strong>Verdict:</strong> Walmart offers around-floor comp for a below-floor fit. The expected value (comp × conversion) is low. This confirms EXPLORATORY — do not let the ₹91L headline pull it up the stack ahead of AmEx / Oaktree / Uber.</p>
+  </div>
+
+  <h3 class="h3">Walk-away anchor</h3>
+  <div class="card">
+    <p style="margin: 0;">Floor: <strong>₹42L</strong>. Walmart P50 (₹42–46L) lands right at it — so at the median this is the floor, not a stretch. <strong>Only worth pursuing if the offer clears ₹50L+ (P75 territory)</strong>, which would require a strong interview showing + AI-differentiator premium. Below ₹50L, the opportunity cost versus continuing AmEx/Oaktree/Uber pursuit is negative given the fit distance. A WMT RSU component (real liquid equity, unlike Oaktree's deferred cash LTIP) is a genuine structural plus if comp is otherwise borderline.</p>
+  </div>
+
+  <h3 class="h3">Negotiation levers</h3>
+  <div class="grid-2">
+    <div class="card card-primary">
+      <h4 class="h4">Strongest levers</h4>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;"><strong>GCC-growth premium:</strong> India sourcing $10B-by-2027 expansion = budget headroom; lever for base. <br><br><strong>AI-differentiator premium:</strong> a 12-project portfolio is rare for a PMO hire — lever for title (Sr Manager not Manager) and/or signing. <br><br><strong>RSU refresh:</strong> WMT is publicly traded; equity refresh is a real, liquid lever.</p>
+    </div>
+    <div class="card">
+      <h4 class="h4">Weak / N/A levers</h4>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;"><strong>Interim-leadership premium:</strong> N/A — established function. <br><br><strong>GCC-new-ops premium:</strong> N/A — Bengaluru GCC est. 2011. <br><br><strong>Signing for relocation:</strong> reasonable ask (Dubai→India move + notice-period buyout), but treat as upside, not a baseline expectation.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANEL 09 · CERT ROADMAP — canon §2B MANDATORY
+     SCHEMA:
+       - sec-num + sec-title + sec-sub
+       - h3 "JD signal scan" — quote the JD lines (if any) that name certs
+       - h3 "Research footprint" — MANDATORY when JD silent
+           Example format: "Scanned N LinkedIn profiles of [Team] members at [Company India GCC]
+           between [date range]; X mentioned [cert]. Reviewed Y prior JDs from 2024–25; Z listed
+           [cert] as preferred. Confidence: [High/Medium/Low]."
+       - <div class="comp-conf">Triage confidence: <strong>[High/Medium/Low]</strong> · [sample summary]</div>
+       - h3 "Weightage table" — per cert:
+           Name | Weightage (HIGH/MEDIUM/MEDIUM-LOW/LOW) | Reasoning | Confidence (where applicable) |
+           Effort/cost | Timeline | Placement (LinkedIn/resume/interview)
+       - h3 "Existing cert leverage" — explicit map of current stack (PMI-ACP, AZ-900, AI-900, PL-900,
+         CRISC, GA4/Skillshop, Looker Studio, etc.) to this role's requirements BEFORE recommending new certs
+     ============================================================ -->
+<section class="panel" id="cert">
+  <div class="sec-num">Section 09</div>
+  <h1 class="sec-title">Certification Roadmap</h1>
+  <p class="sec-sub">The JD names four certs as interchangeable. PMI-ACP (already in track) satisfies one option; Six Sigma Green Belt is the low-effort Walmart-cultural win. PMP is redundant for this role — defer it.</p>
+
+  <h3 class="h3">JD signal scan</h3>
+  <div class="card card-tint">
+    <p style="margin: 0;">JD line: <em>"Certification: PMP, Prince2, Agile/Scrum, Six Sigma, or equivalent. Advanced proficiency in Microsoft Suite."</em> <br><br>Four certs listed as <strong>interchangeable</strong> ("or equivalent") — this is a MEDIUM signal (preferred, not required; any one satisfies). MS Suite is a capability requirement, not a cert.</p>
+  </div>
+
+  <h3 class="h3">Research footprint</h3>
+  <div class="card">
+    <p style="margin: 0;">Reviewed the target JD plus <strong>2 adjacent current Walmart JDs (2025–26)</strong>: (1) "Senior Manager, Supply Chain Management — Supplier Quality Insights" lists preferred quals <strong>PMP + Six Sigma</strong>; (2) a Walmart cross-functional program role lists <strong>PMP/Agile + Prosci/ACMP change-management</strong> familiarity. Walmart is also publicly named as a trusted Lean Six Sigma adopter — Six Sigma carries cultural weight in Walmart ops roles specifically. Did not scan individual LinkedIn profiles, so footprint is JD-based, not profile-based.</p>
+  </div>
+
+  <div class="comp-conf">Triage confidence: <strong>Medium</strong> · 3 JDs (target + 2 adjacent 2025–26); JD-based not profile-based</div>
+
+  <h3 class="h3">Weightage table</h3>
+  <table class="vocab">
+    <thead>
+      <tr><th>Cert</th><th>Weight</th><th>Reasoning · Effort · Timeline · Placement</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Six Sigma Green Belt</strong></td>
+        <td><span class="pill pill-spark">MEDIUM</span></td>
+        <td>Named in target JD + adjacent Walmart JD; Walmart-cultural Lean signal. <strong>Effort: low</strong> ($30–200, ~1–2 wks). Timeline: pre-application if possible, else in-flight. Placement: resume + LinkedIn. <strong>Top recommend</strong> — best effort-to-signal ratio for this role.</td>
+      </tr>
+      <tr>
+        <td><strong>PMI-ACP</strong> <span style="color: var(--primary); font-size: 11px;">(in track)</span></td>
+        <td><span class="pill pill-primary">MEDIUM</span></td>
+        <td>Directly satisfies the "Agile/Scrum" JD option. Effort: already planned. Timeline: ~90 days. Placement: resume + LinkedIn + interview talking point. Continue as planned — it does double duty across pipeline (Qualcomm + Walmart).</td>
+      </tr>
+      <tr>
+        <td><strong>AI-900</strong> <span style="color: var(--primary); font-size: 11px;">(planned)</span></td>
+        <td><span class="pill pill-outline">MED-LOW</span></td>
+        <td>Not a JD cert, but signals the AI orientation the JD heavily emphasizes ("AI-driven models," "AI initiatives PMO"). Effort: low ($99, ~2 wks). Timeline: 60 days. Placement: LinkedIn + interview. Reinforces the differentiator.</td>
+      </tr>
+      <tr>
+        <td><strong>PMP</strong></td>
+        <td><span class="pill" style="background: var(--accent-3); color: var(--bg);">DEFER</span></td>
+        <td>Named, but interchangeable with the others — and PMI-ACP + Six Sigma already cover the JD ask. <strong>High effort</strong> (35 PDU + experience gate + ~12-wk prep + exam) for zero marginal signal on this role. Keep on the Qualcomm track only; do <strong>not</strong> pursue for Walmart.</td>
+      </tr>
+      <tr>
+        <td>Prosci / ACMP change mgmt</td>
+        <td><span class="pill pill-outline">LOW</span></td>
+        <td>Single adjacent-JD mention. Your Salesforce-adoption experience already evidences change management. Effort: medium. Recommendation: <strong>interview talking point, not a cert pursuit</strong> — cite the adoption-through-friction-reduction story (S4).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="h3">Existing cert leverage — map before adding</h3>
+  <div class="card card-primary">
+    <p style="margin: 0; font-size: 13.5px; line-height: 1.7;">
+      <strong>PMI-ACP (in track)</strong> → satisfies "Agile/Scrum" JD option · <span style="color: var(--primary);">DIRECT</span><br>
+      <strong>AI-900 (planned)</strong> → signals AI orientation JD emphasizes · <span style="color: var(--primary);">RELEVANT</span><br>
+      <strong>AZ-900 (in progress)</strong> → enterprise-systems / cloud literacy · MINOR<br>
+      <strong>CRISC</strong> → risk governance, maps to geopolitical-risk-mitigation bullet (R3) · MINOR-RELEVANT<br>
+      <strong>Salesforce 0→1 co-architecture (experience, not cert)</strong> → "enterprise systems" + change-management proof · <span style="color: var(--primary);">STRONG — no cert needed</span><br>
+      <strong>MS Suite advanced (JD-required capability)</strong> → NPV/DCF models + executive decks already prove it · <span style="color: var(--primary);">NO CERT NEEDED</span>
+    </p>
+  </div>
+
+  <div class="card card-accent2" style="margin-top: 14px;">
+    <p style="margin: 0;"><strong>Net cert action for this role:</strong> Six Sigma Green Belt (new, ~1–2 wks, low cost) + continue PMI-ACP &amp; AI-900 (already in track). That's it. The JD's cert ask is satisfied without the PMP overhead. Total net-new effort: ~1–2 weeks — appropriate for an EXPLORATORY role where investment ceiling matters.</p>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANEL 10 · CLOSE & OUTREACH
+     Canon §2 row 10
+     SCHEMA:
+       - sec-num + sec-title + sec-sub
+       - h3 "Application sequencing" — when to apply, in what order vs pipeline
+       - h3 "Recruiter outreach" — scripted message templates (referencing Master Databank V6)
+       - h3 "Hiring manager outreach" (if HM known) — scripted LinkedIn / email
+       - h3 "Follow-up cadence" — Day 0 / Day 3 / Day 7 / Day 14 sequence
+       - h3 "Interview-stage outreach" — between rounds; post-decline; offer-stage
+     ============================================================ -->
+<section class="panel" id="close">
+  <div class="sec-num">Section 10</div>
+  <h1 class="sec-title">Close &amp; Outreach</h1>
+  <p class="sec-sub">An EXPLORATORY role gets EXPLORATORY-grade outreach: efficient, time-boxed, no networking spend until a response lands. Base message structures live in Master Databank V6 — only the Walmart-specific customizations are below.</p>
+
+  <h3 class="h3">Application sequencing</h3>
+  <div class="card" style="border-left: 4px solid var(--accent-3);">
+    <p style="margin-bottom: 10px;"><strong>Do not apply yet.</strong> Gate this on AmEx GMNS + Oaktree first-round outcomes. Rationale: applying now spends attention you owe to higher-probability roles, and a Walmart rejection on a weak (un-customized) application burns the candidacy for a stronger future re-approach.</p>
+    <p style="margin-bottom: 10px;"><strong>Trigger to activate:</strong> if AmEx <em>and</em> Oaktree both miss at first round → Walmart enters parallel-track consideration alongside D.E. Shaw DESIS PM Director.</p>
+    <p style="margin: 0;"><strong>Investment ceiling on activation:</strong> 30–45 minutes. Reframe the existing Sobha resume using Section 03 vocab translations (no custom resume v1 build until a first-round signal justifies it). Recruiter ping + LinkedIn connect. No networking, no informational interviews until a human responds.</p>
+  </div>
+
+  <h3 class="h3">Recruiter outreach (Walmart Global Tech India · Sourcing TA)</h3>
+  <div class="card card-tint">
+    <p style="font-size: 12px; color: var(--text-mute); margin-bottom: 10px;">Pull the base cold-outreach structure from Master Databank V6 (search: "recruiter cold outreach template"). Walmart-specific customization:</p>
+    <p style="margin: 0; font-style: italic; font-family: var(--mono); font-size: 12.5px; line-height: 1.7; background: var(--surface); padding: 14px; border-radius: 6px;">
+      "Hi [name] — I'm exploring the Sr Manager, Strategy Operations role in the Sourcing Division. I've built and run a centralized PMO + analytics + AI function for a AED 12.97B P&amp;L from zero — governance cadence, template standardization, executive decision materials, and tech rollout/adoption. The part I'm genuinely energized by here is the 'PMO for AI initiatives across SBUs' mandate: I've personally built 12 AI-augmented ops tools, three of which retune directly to supplier scorecards and rollout-adoption tracking. I'm transparent that I haven't done strategic sourcing — I'd close that vocabulary fast, and the operating system transfers on day one. Worth a short conversation?"
+    </p>
+  </div>
+
+  <h3 class="h3">Hiring-manager outreach</h3>
+  <div class="card">
+    <p style="margin: 0;">HM not named in the JD. <strong>Defer</strong> until identified post-application (via recruiter or LinkedIn org mapping of Walmart Global Tech India Sourcing leadership). When identified, lead with the AI-PMO differentiator + one specific portfolio artifact — not a generic intro. Keep the Stakeholder Decode (Section 11) open when this activates.</p>
+  </div>
+
+  <h3 class="h3">Follow-up cadence</h3>
+  <div class="card card-primary">
+    <p style="margin: 0; font-size: 13.5px; line-height: 1.8;">
+      <strong>Day 0:</strong> Submit application + recruiter ping (above). <br>
+      <strong>Day 3:</strong> LinkedIn connect with Sourcing TA / recruiter — no message beyond the connect note. <br>
+      <strong>Day 7:</strong> One brief follow-up if no response — reference a specific role element (the AI-initiatives PMO mandate), not "just checking in." <br>
+      <strong>Day 14:</strong> Final follow-up. If still silent → deprioritize and return full attention to active pipeline. Do not chase past Day 14 for an EXPLORATORY role.
+    </p>
+  </div>
+
+  <h3 class="h3">Interview-stage outreach</h3>
+  <div class="grid-2">
+    <div class="card">
+      <h4 class="h4">Between rounds</h4>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;">Same-day thank-you referencing <strong>one specific artifact</strong> — offer to share the supplier-scorecard auto-generator prototype. Converts the AI claim into a tangible follow-up and keeps you memorable between rounds.</p>
+    </div>
+    <div class="card">
+      <h4 class="h4">Post-decline / offer-stage</h4>
+      <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;"><strong>Decline:</strong> graceful keep-warm — the GCC is expanding ($10B sourcing bet), so a future-fit re-approach is plausible. <strong>Offer:</strong> negotiate per Section 08 levers — anchor on ₹50L+ (P75), use GCC-growth + AI-differentiator + RSU-refresh; hold the ₹42L floor.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     PANEL 11 · RISK & RED FLAGS — OMITTED
+     ============================================================
+     Omit reason (canon §6 step 3): No trigger fires.
+       - GCC est. 2011 (established, not <12 mo)
+       - No MD turnover signal in last 6 mo
+       - No ramp-down — role is part of $10B India sourcing growth bet by 2027
+       - No recent layoff signal in Walmart Global Tech India
+       - Geopolitical risk is the ROLE'S SUBJECT (per JD), not a risk TO the role
+     If trigger fires later (post first-round intel), reintroduce per skeleton schema.
+     ============================================================ -->
+
+<!-- ============================================================
+     PANEL 11 (renumbered from 12 — Risk omitted) · STAKEHOLDER DECODE
+     CONDITIONAL — TRIGGER FIRED (canon §2)
+     Trigger: matrixed role with 4+ stakeholder clusters per JD —
+              GM/Fashion SBU leaders × Sam's sourcing leaders × Tech teams ×
+              corporate strategic workstreams.
+     SCHEMA:
+       - sec-num + sec-title + sec-sub
+       - h3 "Why this section is here" — one-line trigger justification (canon §P3.1)
+       - For each key stakeholder: card with name + role + tenure + public footprint summary + decode
+       - h3 "Interview-round routing" — table mapping stakeholder to which round they likely appear in
+     ============================================================ -->
+<section class="panel" id="stake">
+  <div class="sec-num">Section 11</div>
+  <h1 class="sec-title">Stakeholder Decode</h1>
+  <p class="sec-sub">A federated PMO role serves many masters. Since no individual is named in the JD, this decodes the stakeholder <em>clusters</em> by archetype — named-individual mapping activates post-application via LinkedIn org-mapping.</p>
+
+  <h3 class="h3">Why this section is here</h3>
+  <div class="card card-tint">
+    <p style="margin: 0;"><strong>Trigger (canon §2):</strong> matrixed role with 4+ stakeholder clusters — GM SBU sourcing leaders × Fashion SBU sourcing leaders × Sam's Club sourcing leaders × Tech/AI teams × broader corporate strategic-workstream owners. The role's success depends on serving central-vs-SBU tension well; knowing what each cluster wants and fears is the difference between "helpful PMO" and "central overhead they route around."</p>
+  </div>
+
+  <div class="card" style="border-left: 4px solid var(--accent-3);">
+    <h4 class="h4" style="color: var(--accent-3);">⚑ Live context — use this in the room</h4>
+    <p style="margin: 0; font-size: 13.5px; line-height: 1.65;">As of early 2026, <strong>US tariffs have pushed Walmart to ask Indian apparel/textile exporters to pause shipments</strong> — the US is ~28% of India's $36.6B textile/apparel exports. This is exactly the "geopolitical risk and supply chain disruption" the JD's R3 bullet names, happening <em>right now</em> in GM/Fashion sourcing. <strong>Talking point:</strong> "Your R3 mandate isn't hypothetical — the tariff disruption is live. My instinct in disruption is to build the centralized analytical + governance view fast so SBU leaders decide on data, not panic. That's the 3-CCO-escalation reflex applied to supply-chain shocks." Shows you've read the present, not just the JD.</p>
+  </div>
+
+  <h3 class="h3">Stakeholder clusters</h3>
+
+  <div class="card card-primary">
+    <h4 class="h4">1. Hiring Manager — Sourcing Strategy Lead (your direct manager)</h4>
+    <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;"><strong>Wants:</strong> a PMO leader who reduces their span-of-control load — someone who can own horizontal initiatives end-to-end without constant supervision. <strong>Fears:</strong> a hire who needs sourcing hand-holding for 6 months. <strong>Win them:</strong> the operating-system-transfers thesis + the 30-day immersion plan (you're explicit that you'll close the domain gap on your own time, not theirs). Footprint: not named in JD — identify post-application.</p>
+  </div>
+
+  <div class="card card-spark">
+    <h4 class="h4">2. GM (General Merchandise) SBU sourcing leader</h4>
+    <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;"><strong>Wants:</strong> standardization that doesn't slow their category execution. <strong>Fears:</strong> central PMO imposing templates that don't fit GM's reality. <strong>Win them:</strong> the Salesforce-adoption lesson (S4) — you standardize by reducing friction, never by mandate. Lead the relationship with "show me your workflow first."</p>
+  </div>
+
+  <div class="card card-spark">
+    <h4 class="h4">3. Fashion SBU sourcing leader</h4>
+    <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;"><strong>Wants:</strong> agility for fashion's short cycles + seasonality; analytical support during the current tariff disruption (most exposed category). <strong>Fears:</strong> rigid governance that can't flex to fashion's pace. <strong>Win them:</strong> the live-tariff talking point above — Fashion is feeling the disruption hardest; be the one who brings calm data. Footprint context: Walmart's Bengaluru sourcing hub (est. 2002) has deep apparel roots.</p>
+  </div>
+
+  <div class="card card-spark">
+    <h4 class="h4">4. Sam's Club sourcing leader</h4>
+    <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;"><strong>Wants:</strong> the same centralized support GM/Fashion get, adapted to Sam's membership-warehouse model. <strong>Fears:</strong> being the afterthought SBU in a GM/Fashion-centric PMO. <strong>Win them:</strong> demonstrate you treat all three SBUs as first-class — the Individualization strength (reading each SBU's distinct needs) is the differentiator here.</p>
+  </div>
+
+  <div class="card card-primary">
+    <h4 class="h4">5. Tech / AI teams (your strongest-fit relationship)</h4>
+    <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;"><strong>Wants:</strong> a business partner who gives clear, timely inputs and doesn't treat them as an order-taking function. <strong>Fears:</strong> a PMO that throws vague requirements over the wall. <strong>Win them:</strong> you've <em>been</em> the business-tech bridge (Salesforce 0→1 co-design, S4) — speak their language, bring your AI portfolio as proof you understand the build side, not just the ask side. This is where your edge is widest.</p>
+  </div>
+
+  <div class="card">
+    <h4 class="h4">6. Corporate strategic-workstream owners (upward stakeholders)</h4>
+    <p style="font-size: 13px; color: var(--text-mid); line-height: 1.6;"><strong>Wants:</strong> GM/Fashion's sourcing reality represented credibly in corporate strategy rooms. <strong>Fears:</strong> a representative who can't synthesize SBU detail into board-grade narrative. <strong>Win them:</strong> the NPV-defence muscle (S5) — you've defended a position to MD/CEO with zero concessions. Strategic context: the $10B-by-2027 India sourcing goal (publicly anchored by Sourcing EVP Andrea Albright; Vriddhi supplier-development programme, 50,000 trained) is the workstream you'd be representing into.</p>
+  </div>
+
+  <h3 class="h3">Interview-round routing</h3>
+  <table class="vocab">
+    <thead>
+      <tr><th>Stakeholder cluster</th><th>Likely round · what they probe</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Recruiter / Sourcing TA</td><td>Round 1 — experience-fit, comp, location, the 8-vs-10-yr question</td></tr>
+      <tr><td>Hiring Manager (Strategy Lead)</td><td>Round 2 — PMO governance depth, sourcing-gap closure plan, standardization philosophy</td></tr>
+      <tr><td>GM / Fashion / Sam's SBU leaders + Tech</td><td>Round 3 (panel) — cross-functional influence, adoption, AI portfolio demo, multi-SBU prioritization</td></tr>
+      <tr><td>Sourcing Director / senior leadership</td><td>Round 4 — strategic framing of the $10B bet, assertiveness under pressure, the domain-bet question, tariff-disruption response</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</main>
+</div>
+
+<script>
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById(el.dataset.tab).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
