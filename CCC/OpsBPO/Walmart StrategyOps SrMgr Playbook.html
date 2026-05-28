@@ -140,11 +140,22 @@
   /* Card variants Walmart-flavored */
   .card-spark { border-left: 4px solid var(--accent-2); }
 
+  /* comp-row — flex row for comp band line items (skeleton defines label/val children only) */
+  .comp-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .comp-row:last-child { border-bottom: none; }
+
   /* ============================================================
      BASE
      ============================================================ */
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { background: var(--bg); color: var(--text); font-family: var(--serif); font-size: 15px; line-height: 1.6; }
+  html, body { background: var(--bg); color: var(--text); font-family: var(--serif); font-size: 15px; line-height: 1.6; overflow-x: hidden; max-width: 100%; }
   ::selection { background: var(--primary); color: var(--bg); }
 
   /* ============================================================
@@ -352,8 +363,9 @@
      ============================================================ */
   @media (max-width: 900px) {
     .shell { flex-direction: column; }
-    .nav { width: 100%; height: auto; position: relative; padding: 18px 0; }
-    .nav-list { display: flex; overflow-x: auto; padding: 0 12px; gap: 4px; }
+    .shell { flex-direction: column; max-width: 100%; overflow-x: hidden; }
+    .nav { width: 100%; max-width: 100%; height: auto; position: relative; padding: 18px 0; overflow: hidden; }
+    .nav-list { display: flex; overflow-x: auto; padding: 0 12px; gap: 4px; max-width: 100%; min-width: 0; -webkit-overflow-scrolling: touch; }
     .nav-item { white-space: nowrap; padding: 8px 14px; border-left: none; border-bottom: 3px solid transparent; }
     .nav-item.active { border-left: none; border-bottom-color: var(--primary); }
     .main { padding: 28px 20px 64px; }
@@ -366,7 +378,6 @@
 <body>
 <div class="shell">
 
-<!-- ============ NAV ============ -->
 <nav class="nav">
   <div class="nav-brand">
     <div class="nav-brand-eyebrow">Career Playbook · v1.0</div>
@@ -384,12 +395,7 @@
     <li class="nav-item" data-tab="comp"><span class="nav-item-num">08</span> Comp Intel</li>
     <li class="nav-item" data-tab="cert"><span class="nav-item-num">09</span> Cert Roadmap</li>
     <li class="nav-item" data-tab="close"><span class="nav-item-num">10</span> Close &amp; Outreach</li>
-    <!-- Conditional sections — include only if canon §2 trigger fires.
-         Risk &amp; Red Flags: OMITTED per Step 0 — no trigger fires (Walmart GCC est. 2011,
-         no MD turnover/ramp-down; geopolitical context is role's subject, not a risk).
-         Stakeholder Decode: INCLUDED — matrixed trigger fires (4+ stakeholder clusters
-         per JD: GM/Fashion SBU leaders × Sam's sourcing leaders × Tech teams × corporate
-         strategic workstreams). -->
+    
     <li class="nav-item" data-tab="stake"><span class="nav-item-num">11</span> Stakeholder Decode</li>
   </ul>
   <div class="nav-status">
@@ -400,21 +406,8 @@
   </div>
 </nav>
 
-<!-- ============ MAIN ============ -->
 <main class="main">
 
-<!-- ============================================================
-     PANEL 01 · SNAPSHOT
-     Canon §2 row 1 + emergent stat-grid expansion
-     SCHEMA:
-       - sec-num + sec-title + sec-sub (role positioning sentence)
-       - snap-hero: eyebrow ("Headline thesis") + snap-headline (quoted thesis) + snap-thesis (paragraph)
-       - stat-grid (4 stats minimum): Net Fit · Status · Conv Prob · Target CTC
-         (optional 5th): No-Go Gate / Real Cost stat — REQUIRED if fit < 60 OR conv prob < 20%
-       - h3 "Why this role exists" → card-tint with company/role context
-       - h3 "The three things that decide this" → grid-3 with card-primary / card-accent2 / card-accent3
-       - h3 "Honest framing" → card with sequencing guidance vs other pipeline roles
-     ============================================================ -->
 <section class="panel active" id="snap">
   <div class="sec-num">Section 01</div>
   <h1 class="sec-title">Snapshot</h1>
@@ -426,7 +419,7 @@
     <p class="snap-thesis">Walmart wants a Strategy Ops PMO leader who has lived inside strategic sourcing. You've built the operating system — governance discipline, cross-functional matrix, AI-augmented analytics PMO, exec narrative under MD/CEO pressure — but you've never sourced. The gap is capability, not vocabulary. Pursue only if AmEx and Oaktree first-round outcomes don't gate. Investment ceiling: 30–45 minutes of reframed application + recruiter ping. No networking spend until response.</p>
   </div>
 
-  <div class="stat-grid" style="grid-template-columns: repeat(5, 1fr);">
+  <div class="stat-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
     <div class="stat">
       <div class="stat-label">Net Fit</div>
       <div class="stat-value">58–62</div>
@@ -486,18 +479,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     PANEL 02 · ROLE DECODE
-     Canon §2 row 2 + §3 density (req-cards min 9)
-     SCHEMA:
-       - sec-num + sec-title + sec-sub
-       - For each JD bullet: <div class="req">
-           <div class="req-jd">[req number / category tag]</div>
-           <div class="req-quote">[exact JD line in italics]</div>
-           <div class="req-mean">[what this actually means — with <strong>your proof point</strong>]</div>
-         </div>
-       - Minimum 9 req-cards. Cover all must-haves + top nice-to-haves.
-     ============================================================ -->
 <section class="panel" id="decode">
   <div class="sec-num">Section 02</div>
   <h1 class="sec-title">Role Decode</h1>
@@ -570,21 +551,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     PANEL 03 · FIT & GAP
-     Canon §2 row 3 + §3 density (vocab min 15 soft-floor; gap 3–5)
-     SCHEMA:
-       - sec-num + sec-title + sec-sub
-       - h3 "Vocabulary translation" → table.vocab
-           <th>What they call it</th> | <th>Your equivalent experience</th>
-         Density: min 15 rows. SOFT FLOOR — if targeting lower, justify in pre-build outline.
-       - h3 "Gaps — classified" → series of .gap cards
-           .gap-genuine for capability gaps requiring closure plan
-           .gap-vocab for framing/positioning gaps
-         Each gap: title + body (with strong on classification + closure plan)
-         Density: 3–5 gap cards
-       - h3 "Strengths matched" → may use .card grid mapping CliftonStrengths / DISC to JD reqs
-     ============================================================ -->
 <section class="panel" id="fit">
   <div class="sec-num">Section 03</div>
   <h1 class="sec-title">Fit &amp; Gap</h1>
@@ -763,24 +729,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     PANEL 04 · STAR MAPPING
-     Canon §2 row 4 + §3 density (req 5 stories from S1–S36)
-     SCHEMA:
-       - sec-num + sec-title + sec-sub
-       - 5 STAR blocks:
-           <div class="star">
-             <div class="star-id">S## · [theme]</div>
-             <div class="star-title">[short title]</div>
-             <div class="star-map">Maps to: [JD req IDs from panel 02]</div>
-             <div class="star-row"><div class="star-label">Situation</div><div class="star-text">…</div></div>
-             <div class="star-row"><div class="star-label">Task</div><div class="star-text">…</div></div>
-             <div class="star-row"><div class="star-label">Action</div><div class="star-text">…</div></div>
-             <div class="star-row"><div class="star-label">Result</div><div class="star-text">…</div></div>
-           </div>
-       - Pull stories from STAR_STORY_BANK_V3.txt (S1–S36)
-       - star-map field MANDATORY — ties story to specific req in panel 02
-     ============================================================ -->
 <section class="panel" id="story">
   <div class="sec-num">Section 04</div>
   <h1 class="sec-title">STAR Mapping</h1>
@@ -897,23 +845,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     PANEL 05 · 30-60-90
-     Canon §2 row 5 + §3 density (≥15 items, ≥3 per phase, ≥3 day-1)
-     SCHEMA:
-       - sec-num + sec-title + sec-sub
-       - 4 .tl-phase blocks (day-1, day-30, day-60, day-90)
-       - Each phase:
-           <div class="tl-phase">
-             <div class="tl-phase-head">
-               <div class="tl-phase-day">Day 1 / Week 1 / Day 30 etc.</div>
-               <div class="tl-phase-title">[phase theme]</div>
-             </div>
-             <div class="tl-item"><strong>[milestone]</strong> — [explanation]</div>
-             <!-- repeat 3+ per phase -->
-           </div>
-       - Total ≥ 15 items across all phases
-     ============================================================ -->
 <section class="panel" id="plan">
   <div class="sec-num">Section 05</div>
   <h1 class="sec-title">30-60-90</h1>
@@ -965,28 +896,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     PANEL 06 · AI DIFFERENTIATOR
-     Canon §2 row 6 + §3 density (3 projects from P6–P14)
-     SCHEMA:
-       - sec-num + sec-title + sec-sub
-       - 3 .ai-proj blocks:
-           <div class="ai-proj">
-             <div class="ai-proj-head">
-               <div>
-                 <div class="ai-proj-id">P## · [name]</div>
-                 <div class="ai-proj-title">[short framing for this role]</div>
-                 <div class="ai-proj-stack">[stack: Python / Claude API / Streamlit / etc.]</div>
-               </div>
-               <span class="pill pill-primary">[role-relevant pain point]</span>
-             </div>
-             <div class="ai-proj-body">
-               [what it does, how it maps to this role's actual problems,
-                what proof artifact you'd show]
-             </div>
-           </div>
-       - Optional: .ai-pitch closing block — single-paragraph "the differentiator pitch"
-     ============================================================ -->
 <section class="panel" id="ai">
   <div class="sec-num">Section 06</div>
   <h1 class="sec-title">AI Differentiator</h1>
@@ -1039,24 +948,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     PANEL 07 · INTERVIEW KIT
-     Canon §2 row 7 + §3 density (≥20 questions across rounds)
-     SCHEMA:
-       - sec-num + sec-title + sec-sub
-       - For each interview round (typically 3–5 rounds):
-           <div class="iv-round">
-             <div class="iv-round-head">Round X · [stakeholder]</div>
-             <div class="iv-q">[question] <span class="iv-q-tag">[behavioral / technical / situational]</span></div>
-             <!-- repeat -->
-             <div class="iv-anchor">
-               <strong>Opening anchor</strong>
-               [scripted opening — your reframe for this round]
-             </div>
-           </div>
-       - Total ≥ 20 questions across all rounds
-       - Each round MUST have at least one .iv-anchor with scripted opening
-     ============================================================ -->
 <section class="panel" id="iv">
   <div class="sec-num">Section 07</div>
   <h1 class="sec-title">Interview Kit</h1>
@@ -1116,23 +1007,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     PANEL 08 · COMP INTEL — canon §2A MANDATORY
-     SCHEMA:
-       - sec-num + sec-title + sec-sub (1-line headline confidence statement)
-       - <div class="comp-conf">Confidence: <strong>[High/Medium/Low]</strong> · [n] sources · [1-line context]</div>
-         IF < 3 sources: <div class="comp-conf">Confidence: <strong>Low</strong> · single-source · treat as directional only</div>
-       - h3 "Triangulation sources" → .source-list with explicit source citations (Levels.fyi / Glassdoor / AmbitionBox / recruiter intel / JD posting / etc.)
-       - h3 "Bands" → series of .comp-band per role-level (e.g., AVP / VP / Director)
-           Each band: comp-band-head (name + range) + comp-rows (Base / Variable / Equity)
-       - h3 "Line-item confidence" — MANDATORY if overall ≤ Medium OR if components have differing source quality
-           Break down: Base · Variable · Equity · Signing — each with own confidence rating
-       - h3 "Cross-pipeline note" — MANDATORY if comp band overlaps materially with another active pipeline role
-           Compare bands · conv-prob-adjusted ranking · explicit warning if headline number could distort sequencing
-       - h3 "Walk-away anchor" — vs ₹42L floor; reasoning for any delta
-       - h3 "Negotiation levers" — signing bonus, equity refresh, accelerated review, title bump,
-         interim-leadership premium, GCC-new-ops premium (as applicable)
-     ============================================================ -->
 <section class="panel" id="comp">
   <div class="sec-num">Section 08</div>
   <h1 class="sec-title">Comp Intel</h1>
@@ -1193,22 +1067,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     PANEL 09 · CERT ROADMAP — canon §2B MANDATORY
-     SCHEMA:
-       - sec-num + sec-title + sec-sub
-       - h3 "JD signal scan" — quote the JD lines (if any) that name certs
-       - h3 "Research footprint" — MANDATORY when JD silent
-           Example format: "Scanned N LinkedIn profiles of [Team] members at [Company India GCC]
-           between [date range]; X mentioned [cert]. Reviewed Y prior JDs from 2024–25; Z listed
-           [cert] as preferred. Confidence: [High/Medium/Low]."
-       - <div class="comp-conf">Triage confidence: <strong>[High/Medium/Low]</strong> · [sample summary]</div>
-       - h3 "Weightage table" — per cert:
-           Name | Weightage (HIGH/MEDIUM/MEDIUM-LOW/LOW) | Reasoning | Confidence (where applicable) |
-           Effort/cost | Timeline | Placement (LinkedIn/resume/interview)
-       - h3 "Existing cert leverage" — explicit map of current stack (PMI-ACP, AZ-900, AI-900, PL-900,
-         CRISC, GA4/Skillshop, Looker Studio, etc.) to this role's requirements BEFORE recommending new certs
-     ============================================================ -->
 <section class="panel" id="cert">
   <div class="sec-num">Section 09</div>
   <h1 class="sec-title">Certification Roadmap</h1>
@@ -1277,17 +1135,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     PANEL 10 · CLOSE & OUTREACH
-     Canon §2 row 10
-     SCHEMA:
-       - sec-num + sec-title + sec-sub
-       - h3 "Application sequencing" — when to apply, in what order vs pipeline
-       - h3 "Recruiter outreach" — scripted message templates (referencing Master Databank V6)
-       - h3 "Hiring manager outreach" (if HM known) — scripted LinkedIn / email
-       - h3 "Follow-up cadence" — Day 0 / Day 3 / Day 7 / Day 14 sequence
-       - h3 "Interview-stage outreach" — between rounds; post-decline; offer-stage
-     ============================================================ -->
 <section class="panel" id="close">
   <div class="sec-num">Section 10</div>
   <h1 class="sec-title">Close &amp; Outreach</h1>
@@ -1336,30 +1183,6 @@
   </div>
 </section>
 
-<!-- ============================================================
-     PANEL 11 · RISK & RED FLAGS — OMITTED
-     ============================================================
-     Omit reason (canon §6 step 3): No trigger fires.
-       - GCC est. 2011 (established, not <12 mo)
-       - No MD turnover signal in last 6 mo
-       - No ramp-down — role is part of $10B India sourcing growth bet by 2027
-       - No recent layoff signal in Walmart Global Tech India
-       - Geopolitical risk is the ROLE'S SUBJECT (per JD), not a risk TO the role
-     If trigger fires later (post first-round intel), reintroduce per skeleton schema.
-     ============================================================ -->
-
-<!-- ============================================================
-     PANEL 11 (renumbered from 12 — Risk omitted) · STAKEHOLDER DECODE
-     CONDITIONAL — TRIGGER FIRED (canon §2)
-     Trigger: matrixed role with 4+ stakeholder clusters per JD —
-              GM/Fashion SBU leaders × Sam's sourcing leaders × Tech teams ×
-              corporate strategic workstreams.
-     SCHEMA:
-       - sec-num + sec-title + sec-sub
-       - h3 "Why this section is here" — one-line trigger justification (canon §P3.1)
-       - For each key stakeholder: card with name + role + tenure + public footprint summary + decode
-       - h3 "Interview-round routing" — table mapping stakeholder to which round they likely appear in
-     ============================================================ -->
 <section class="panel" id="stake">
   <div class="sec-num">Section 11</div>
   <h1 class="sec-title">Stakeholder Decode</h1>
