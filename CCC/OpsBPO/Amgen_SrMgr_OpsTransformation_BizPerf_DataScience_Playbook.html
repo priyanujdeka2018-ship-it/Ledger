@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amgen · Sr Manager, Operations Transformation — Career Playbook</title>
+<style>
+  :root{
+    --blue:#0063C3;        /* Amgen Blue (PMS 2133 C) */
+    --blue-deep:#0A3D7A;   /* deep lapis */
+    --cyan:#00A3E0;        /* bright accent */
+    --ink:#0C1B2E;         /* deep navy text */
+    --ink-2:#3A4B61;       /* secondary text */
+    --muted:#6B7C93;       /* muted */
+    --line:#D7E2F0;        /* hairline */
+    --bg:#F5F8FC;          /* cool clinical white (NOT cream) */
+    --panel:#FFFFFF;
+    --panel-2:#EAF1FA;     /* cool blue panel */
+    --green:#1E9E6A;
+    --amber:#C7872B;
+    --red:#C0392B;
+    --mono:'SF Mono',ui-monospace,'Cascadia Mono',Menlo,Consolas,monospace;
+    --sans:'Helvetica Neue',Helvetica,Arial,system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{display:flex;min-height:100vh;max-width:1500px;margin:0 auto}
+
+  /* ---------- LEFT RAIL ---------- */
+  .rail{width:262px;flex-shrink:0;background:var(--ink);color:#fff;position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 0}
+  .brand{padding:0 24px 20px;border-bottom:1px solid rgba(255,255,255,.12);margin-bottom:14px}
+  .brand .mk{font-size:26px;font-weight:800;letter-spacing:.06em;color:#fff}
+  .brand .mk b{color:var(--cyan)}
+  .brand .sub{font-size:11px;color:#9DB4D0;margin-top:6px;letter-spacing:.04em;text-transform:uppercase}
+  .navitem{display:flex;gap:12px;align-items:flex-start;padding:11px 24px;cursor:pointer;color:#B9C9DD;font-size:13.5px;border-left:3px solid transparent;transition:.15s}
+  .navitem .n{font-family:var(--mono);font-size:11px;color:#6E86A4;min-width:20px}
+  .navitem:hover{background:rgba(255,255,255,.05);color:#fff}
+  .navitem.active{background:linear-gradient(90deg,rgba(0,99,195,.30),transparent);color:#fff;border-left-color:var(--cyan)}
+  .railfoot{padding:18px 24px 0;font-size:10.5px;color:#6E86A4;line-height:1.6;border-top:1px solid rgba(255,255,255,.12);margin-top:14px}
+
+  /* ---------- MOBILE NAV ---------- */
+  .mobnav{display:none;position:sticky;top:0;z-index:30;background:var(--ink);padding:14px 16px;gap:10px;align-items:center}
+  .mobnav .mk{font-size:18px;font-weight:800;color:#fff;letter-spacing:.05em}
+  .mobnav .mk b{color:var(--cyan)}
+  .mobnav select{margin-left:auto;background:#13263e;color:#fff;border:1px solid #2a4660;border-radius:8px;padding:9px 10px;font-size:13px;font-family:var(--sans);max-width:58%}
+
+  /* ---------- CONTENT ---------- */
+  .main{flex:1;min-width:0;padding:0}
+  .panel{display:none;padding:40px 48px 80px;animation:fade .25s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);font-weight:600}
+  h1{font-size:30px;font-weight:800;letter-spacing:-.01em;margin:8px 0 6px;line-height:1.12}
+  h2{font-size:22px;font-weight:800;letter-spacing:-.01em;margin:6px 0 4px}
+  .lead{font-size:15px;color:var(--ink-2);max-width:62ch;margin-bottom:8px}
+  h3{font-size:16px;font-weight:700;margin:26px 0 12px;color:var(--ink);display:flex;align-items:center;gap:9px}
+  h3::before{content:"";width:7px;height:7px;background:var(--cyan);border-radius:2px;display:inline-block}
+  p{margin-bottom:10px;color:var(--ink-2);font-size:14px}
+  strong{color:var(--ink)}
+  .hr{height:1px;background:var(--line);margin:26px 0}
+
+  /* cards */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 18px;margin-bottom:14px}
+  .card h4{font-size:14.5px;font-weight:700;margin-bottom:6px;color:var(--ink)}
+  .card p{font-size:13.5px;margin-bottom:6px}
+  .card p:last-child{margin-bottom:0}
+
+  /* snapshot stat grid */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0 8px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;position:relative;overflow:hidden}
+  .stat::after{content:"";position:absolute;top:0;left:0;width:100%;height:4px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+  .stat .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .stat .v{font-size:26px;font-weight:800;color:var(--ink);margin-top:8px;line-height:1}
+  .stat .v small{font-size:14px;color:var(--blue);font-weight:700}
+  .stat .d{font-size:11.5px;color:var(--muted);margin-top:6px}
+
+  /* score bar */
+  .scorebar{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:6px 0 18px}
+  .track{height:12px;background:#dbe6f4;border-radius:8px;position:relative;margin:14px 0 8px}
+  .fill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+  .mark{position:absolute;top:-5px;width:2px;height:22px;background:var(--ink)}
+  .mark span{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:10px;color:var(--ink);white-space:nowrap}
+
+  /* badges */
+  .badge{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:6px;vertical-align:middle}
+  .b-strong{background:#e2f4ec;color:var(--green)}
+  .b-mod{background:#fbf0db;color:var(--amber)}
+  .b-gap{background:#fbe5e2;color:var(--red)}
+  .b-pass{background:#e2ecfb;color:var(--blue)}
+  .b-info{background:var(--panel-2);color:var(--blue-deep)}
+
+  .req-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:8px}
+  .req-jd{font-size:12.5px;color:var(--muted);font-style:italic;border-left:2px solid var(--line);padding-left:10px;margin:8px 0}
+
+  /* STAR */
+  .star-tag{font-family:var(--mono);font-size:11px;color:#fff;background:var(--blue);padding:3px 8px;border-radius:5px;margin-right:8px}
+  .star-grid{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin-top:10px}
+  .star-grid .lab{font-family:var(--mono);font-size:10.5px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em;padding-top:2px}
+  .star-grid .txt{font-size:13px;color:var(--ink-2)}
+  .quote{background:var(--panel-2);border-left:3px solid var(--cyan);padding:10px 14px;border-radius:0 8px 8px 0;font-size:13px;color:var(--ink);margin-top:10px;font-style:italic}
+
+  /* timeline */
+  .phase{font-family:var(--mono);font-size:12px;font-weight:700;color:#fff;background:var(--blue-deep);display:inline-block;padding:5px 12px;border-radius:7px;margin:18px 0 12px}
+  .tl{border-left:2px solid var(--line);padding-left:18px;position:relative}
+  .tl::before{content:"";position:absolute;left:-6px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--cyan);border:2px solid #fff}
+
+  /* vocab chips */
+  .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+  .chip{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+  .chip .t{font-weight:700;font-size:13px;color:var(--blue-deep)}
+  .chip .t .badge{float:right}
+  .chip .m{font-size:12px;color:var(--ink-2);margin-top:4px}
+
+  /* tables → responsive */
+  .rtable{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0}
+  .rtable th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:9px 12px;border-bottom:2px solid var(--line)}
+  .rtable td{padding:10px 12px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top}
+  .rtable td strong{color:var(--ink)}
+
+  .q-num{font-family:var(--mono);color:var(--blue);font-weight:700;font-size:12px}
+  ul.tick{list-style:none;margin:6px 0}
+  ul.tick li{position:relative;padding-left:20px;font-size:13.5px;color:var(--ink-2);margin-bottom:7px}
+  ul.tick li::before{content:"▸";position:absolute;left:0;color:var(--cyan);font-weight:700}
+  .callout{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .callout .lab{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:6px;font-weight:600}
+
+  @media(max-width:768px){
+    .rail{display:none}
+    .mobnav{display:flex}
+    .wrap{display:block}
+    .panel{padding:24px 16px 64px}
+    h1{font-size:24px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .star-grid{grid-template-columns:1fr;gap:2px 0}
+    .star-grid .lab{padding-top:8px}
+    /* stack tables */
+    .rtable,.rtable tbody,.rtable tr,.rtable td{display:block;width:100%}
+    .rtable thead{display:none}
+    .rtable tr{border:1px solid var(--line);border-radius:10px;margin-bottom:12px;padding:6px 4px;background:var(--panel)}
+    .rtable td{border:none;padding:6px 12px}
+    .rtable td::before{content:attr(data-l);display:block;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  }
+</style>
+</head>
+<body>
+
+<!-- MOBILE NAV -->
+<div class="mobnav">
+  <span class="mk">amgen<b>·</b></span>
+  <select id="mobsel" onchange="show(this.value)">
+    <option value="s0">01 · Snapshot</option>
+    <option value="s1">02 · Role Decode</option>
+    <option value="s2">03 · Stakeholder Decode</option>
+    <option value="s3">04 · Fit &amp; Gap</option>
+    <option value="s4">05 · Risk &amp; Red Flags</option>
+    <option value="s5">06 · STAR Mapping</option>
+    <option value="s6">07 · 30·60·90</option>
+    <option value="s7">08 · AI Differentiator</option>
+    <option value="s8">09 · Interview Kit</option>
+    <option value="s9">10 · Comp Intel</option>
+    <option value="s10">11 · Cert Roadmap</option>
+    <option value="s11">12 · Close &amp; Outreach</option>
+  </select>
+</div>
+
+<div class="wrap">
+  <!-- LEFT RAIL -->
+  <nav class="rail">
+    <div class="brand">
+      <div class="mk">amgen<b>·</b></div>
+      <div class="sub">Sr Manager · Ops Transformation<br>Business Performance &amp; Data Science</div>
+    </div>
+    <div class="navitem active" data-t="s0" onclick="show('s0')"><span class="n">01</span><span>Snapshot</span></div>
+    <div class="navitem" data-t="s1" onclick="show('s1')"><span class="n">02</span><span>Role Decode</span></div>
+    <div class="navitem" data-t="s2" onclick="show('s2')"><span class="n">03</span><span>Stakeholder Decode</span></div>
+    <div class="navitem" data-t="s3" onclick="show('s3')"><span class="n">04</span><span>Fit &amp; Gap</span></div>
+    <div class="navitem" data-t="s4" onclick="show('s4')"><span class="n">05</span><span>Risk &amp; Red Flags</span></div>
+    <div class="navitem" data-t="s5" onclick="show('s5')"><span class="n">06</span><span>STAR Mapping</span></div>
+    <div class="navitem" data-t="s6" onclick="show('s6')"><span class="n">07</span><span>30·60·90 Plan</span></div>
+    <div class="navitem" data-t="s7" onclick="show('s7')"><span class="n">08</span><span>AI Differentiator</span></div>
+    <div class="navitem" data-t="s8" onclick="show('s8')"><span class="n">09</span><span>Interview Kit</span></div>
+    <div class="navitem" data-t="s9" onclick="show('s9')"><span class="n">10</span><span>Comp Intel</span></div>
+    <div class="navitem" data-t="s10" onclick="show('s10')"><span class="n">11</span><span>Cert Roadmap</span></div>
+    <div class="navitem" data-t="s11" onclick="show('s11')"><span class="n">12</span><span>Close &amp; Outreach</span></div>
+    <div class="railfoot">Hyderabad · On-site · &lt;20% travel<br>Net Fit 79 → 87 · Status: Pursue<br>Built against Scorecard method · STAR V3</div>
+  </nav>
+
+  <main class="main">
+
+  <!-- ============ 01 SNAPSHOT ============ -->
+  <section class="panel active" id="s0">
+    <div class="eyebrow">01 / Snapshot</div>
+    <h1>Senior Manager, Operations Transformation<br>— Business Performance &amp; Data Science</h1>
+    <p class="lead">A Hyderabad-based <strong>CI 2.0 (CI + AI)</strong> leadership mandate that reads like your job in pharma's vocabulary. Ops transformation, program/portfolio leadership, and AI-augmented operations are a near-literal match. Pharma domain is the only <em>real</em> drag — and it sits in Preferred, not Basic, Qualifications.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="k">Net Fit</div><div class="v">79 <small>→ 87</small></div><div class="d">Scorecard method · 10-dim</div></div>
+      <div class="stat"><div class="k">Status</div><div class="v">Pursue</div><div class="d">Basic quals: clean pass</div></div>
+      <div class="stat"><div class="k">Conv. Probability</div><div class="v">~25%</div><div class="d">→ ~35% w/ referral</div></div>
+      <div class="stat"><div class="k">Target CTC (P50)</div><div class="v">₹52L</div><div class="d">band ₹52–58L · Med conf</div></div>
+    </div>
+
+    <div class="scorebar">
+      <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--muted)"><span>FIT BRIDGE</span><span>+8 addressable</span></div>
+      <div class="track"><div class="fill" style="width:79%"></div><div class="mark" style="left:87%"><span>target 87</span></div></div>
+      <p style="font-size:12.5px;margin:0">+8 via: Lean Six Sigma Green Belt (cert, +2) · FAIR-data / enterprise-data-ecosystem vocabulary (+2) · GxP / regulated-context framing (+2) · one pharma-contextualised AI portfolio piece (+2). <strong>Zero hard gates block this role.</strong></p>
+    </div>
+
+    <h3>One-line thesis</h3>
+    <p>You built the business-performance and data layer for an AED 12.97B portfolio from zero, ran continuous improvement that cut cycle time 85% at triple the volume, and stood up the operating model a 77-person cross-geography team runs on. Amgen calls that "Operations Transformation + Business Performance + AI enablement." You call it collections operations. <strong>The reframe is vocabulary; the capability is identical.</strong></p>
+
+    <h3>What fires in this playbook</h3>
+    <p><span class="badge b-info">10 core</span> Snapshot · Role Decode · Fit &amp; Gap · STAR · 30·60·90 · AI Differentiator · Interview Kit · Comp Intel · Cert Roadmap · Close &amp; Outreach.</p>
+    <p><span class="badge b-mod">+2 conditional</span> <strong>Stakeholder Decode</strong> fires (4+ matrixed stakeholder groups). <strong>Risk &amp; Red Flags</strong> fires ("Build &amp; Lead the AIN Capability" = new/scaling capability + pharma regulatory operating context — both flagged <em>verify</em>, not confirmed distress).</p>
+
+    <div class="callout">
+      <div class="lab">Working assumptions (resolve on recruiter call — non-blocking)</div>
+      <ul class="tick">
+        <li><strong>Level:</strong> assumed SM = M-band people-leader (not Sr SM / Associate Director). One band shifts P50 by ₹15–20L.</li>
+        <li><strong>"Data Science":</strong> assumed AI/GenAI <em>enablement-orchestration leadership</em>, not hands-on ML-lifecycle ownership. Protects the honest enablement framing.</li>
+        <li><strong>AIN capability:</strong> assumed greenfield-leaning build (you establish ways of working), which shapes the 30·60·90 and Risk view.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 02 ROLE DECODE ============ -->
+  <section class="panel" id="s1">
+    <div class="eyebrow">02 / Role Decode</div>
+    <h1>What this role actually is</h1>
+    <p class="lead">Strip the pharma vocabulary and this is a transformation-program leadership seat inside Amgen's India capability centre, sitting between a global strategy org (OTDS) and the operations/technology teams that execute.</p>
+
+    <h3>The mandate, in plain terms</h3>
+    <div class="card"><h4>1 · Build &amp; lead the AIN capability</h4><p>Stand up and grow the India-based Operations Transformation + Business Performance team. Establish priorities, execution discipline, and scalable ways of working. <strong>This is the "stand up a function and the operating model it runs on" job</strong> — your single most-repeated pattern.</p></div>
+    <div class="card"><h4>2 · Lead transformation &amp; business performance</h4><p>Translate enterprise priorities into programs that improve efficiency, agility, performance visibility, and <em>value realization</em>. Output = measurable operational impact, not slideware.</p></div>
+    <div class="card"><h4>3 · AI, data &amp; digital enablement</h4><p>Advance AI / analytics / automation and data-centric capability. Support delivery of <strong>Generative-AI use cases</strong> on enterprise data platforms using modern information-architecture and <strong>FAIR data</strong> principles. Note the framing: <em>enable and orchestrate</em>, not hand-code models.</p></div>
+    <div class="card"><h4>4 · Program &amp; portfolio leadership</h4><p>Keep initiatives aligned, sequenced, governed, executed — with adoption outcomes tracked. This is RAID + governance cadence + value tracking at portfolio level.</p></div>
+    <div class="card"><h4>5 · Cross-functional collaboration</h4><p>Partner across OTDS (global), Operations leaders, DTI (Digital Technology &amp; Innovation), and enterprise stakeholders. Integrated solutions across people · process · data · technology.</p></div>
+    <div class="card"><h4>6 · Performance &amp; change leadership</h4><p>Build metrics, dashboards, governance mechanisms, value-tracking — while driving change management, capability building, and CI 2.0 adoption.</p></div>
+
+    <h3>Vocabulary bank — speak the language (20 terms)</h3>
+    <p style="font-size:12.5px;color:var(--muted)"><span class="badge b-strong">have</span> already in your toolkit · <span class="badge b-mod">learn</span> short study · <span class="badge b-gap">probe</span> ask on the call</p>
+    <div class="vgrid">
+      <div class="chip"><div class="t">OTDS <span class="badge b-mod">learn</span></div><div class="m">Operations Transformation &amp; Digital Strategy — the global org you partner with.</div></div>
+      <div class="chip"><div class="t">AIN <span class="badge b-mod">learn</span></div><div class="m">Amgen India — the capability you'd build &amp; lead.</div></div>
+      <div class="chip"><div class="t">DTI <span class="badge b-mod">learn</span></div><div class="m">Digital Technology &amp; Innovation — your tech delivery partner.</div></div>
+      <div class="chip"><div class="t">CI 2.0 (CI + AI) <span class="badge b-strong">have</span></div><div class="m">Continuous improvement augmented with AI — literally your thesis.</div></div>
+      <div class="chip"><div class="t">FAIR data <span class="badge b-mod">learn</span></div><div class="m">Findable · Accessible · Interoperable · Reusable — life-sciences data standard.</div></div>
+      <div class="chip"><div class="t">Value realization <span class="badge b-strong">have</span></div><div class="m">Tracking/capturing business value — your NPV + delinquency work.</div></div>
+      <div class="chip"><div class="t">Information architecture <span class="badge b-mod">learn</span></div><div class="m">Structure &amp; governance of enterprise data.</div></div>
+      <div class="chip"><div class="t">Enterprise data platform <span class="badge b-mod">learn</span></div><div class="m">Central data ecosystem (lakehouse / Databricks-class).</div></div>
+      <div class="chip"><div class="t">Generative-AI use case <span class="badge b-strong">have</span></div><div class="m">Applied GenAI to ops — your Claude-API portfolio.</div></div>
+      <div class="chip"><div class="t">Adoption outcomes <span class="badge b-strong">have</span></div><div class="m">Uptake of a deployed solution — App 0→36%, Salesforce rollout.</div></div>
+      <div class="chip"><div class="t">Matrixed organisation <span class="badge b-strong">have</span></div><div class="m">Cross-reporting structure — your CRO/CCO/MD interface.</div></div>
+      <div class="chip"><div class="t">Operating model / ways of working <span class="badge b-strong">have</span></div><div class="m">How teams deliver — your 55-day T−25/T+30 framework.</div></div>
+      <div class="chip"><div class="t">GxP <span class="badge b-gap">probe</span></div><div class="m">"Good Practice" regulatory quality guidelines (pharma).</div></div>
+      <div class="chip"><div class="t">CSV (validation) <span class="badge b-gap">probe</span></div><div class="m">Computer System Validation — regulated-system assurance.</div></div>
+      <div class="chip"><div class="t">DMAIC / Lean / Six Sigma <span class="badge b-mod">learn</span></div><div class="m">CI methodology spine — Green Belt closes this.</div></div>
+      <div class="chip"><div class="t">Capability building <span class="badge b-strong">have</span></div><div class="m">Developing team to operate independently — S12.</div></div>
+      <div class="chip"><div class="t">Governance cadence <span class="badge b-strong">have</span></div><div class="m">Recurring review rhythm — your weekly register cadence.</div></div>
+      <div class="chip"><div class="t">Portfolio sequencing <span class="badge b-strong">have</span></div><div class="m">Ordering initiatives by value/dependency.</div></div>
+      <div class="chip"><div class="t">Change mgmt (ADKAR/Prosci) <span class="badge b-mod">learn</span></div><div class="m">Structured org-change framework — name-drop, you do it already.</div></div>
+      <div class="chip"><div class="t">Business performance mgmt <span class="badge b-strong">have</span></div><div class="m">Metrics + dashboards + value tracking — your 70+ report ecosystem.</div></div>
+    </div>
+  </section>
+
+  <!-- ============ 03 STAKEHOLDER DECODE ============ -->
+  <section class="panel" id="s2">
+    <div class="eyebrow">03 / Stakeholder Decode <span class="badge b-mod" style="margin-left:8px">conditional · fired</span></div>
+    <h1>The matrix you'd operate inside</h1>
+    <p class="lead">This role has no single boss-shaped mandate — it lives across 4+ stakeholder groups. The JD names no hiring manager, so the first move is a LinkedIn scan for the <strong>OTDS / AIN transformation lead in Hyderabad</strong>. Decode each group's priority before the screen.</p>
+
+    <div class="card"><div class="req-head"><h4>OTDS — Operations Transformation &amp; Digital Strategy (global)</h4><span class="badge b-info">likely report line</span></div><p><strong>Cares about:</strong> enterprise priorities landing as executed programs; consistent ways of working between global and India. <strong>Your move:</strong> position yourself as the India execution arm that makes their strategy real — "I translate strategy into operating models," backed by S16 + S5.</p></div>
+    <div class="card"><div class="req-head"><h4>Operations leaders (the business)</h4><span class="badge b-info">internal customer</span></div><p><strong>Cares about:</strong> measurable efficiency / performance gains without disruption. <strong>Your move:</strong> lead with PCC TAT (S18) and 14.9x scale (S16) — proof you improve performance at volume without breaking the line.</p></div>
+    <div class="card"><div class="req-head"><h4>DTI — Digital Technology &amp; Innovation</h4><span class="badge b-info">delivery partner</span></div><p><strong>Cares about:</strong> business requirements that are clean, data architecture that's sound, adoption that sticks. <strong>Your move:</strong> the Salesforce 0→1 story (S6) — you led solution design, ran a 6-stakeholder discovery, shipped 70+ reports. You speak business-to-tech fluently.</p></div>
+    <div class="card"><div class="req-head"><h4>Enterprise stakeholders / data &amp; AI governance</h4><span class="badge b-info">cross-cutting</span></div><p><strong>Cares about:</strong> FAIR-compliant, governed, scalable solutions — not shadow tools. <strong>Your move:</strong> show governance instinct (14-finding register, PR-rejection discipline) and acknowledge the FAIR / enterprise-platform vocabulary as your active learning edge.</p></div>
+
+    <div class="callout">
+      <div class="lab">Pre-call homework</div>
+      <ul class="tick">
+        <li>Find the hiring leader on LinkedIn → read their last 6–12 months of posts for OTDS / AIN / CI 2.0 language; mirror their exact terms.</li>
+        <li>Identify whether AIN-Hyderabad reports into a global OTDS VP or an India site leader — changes who you're really selling to.</li>
+        <li>Check for an IIM Udaipur / BITS Pilani alum already inside Amgen Hyderabad for a warm intro (see Close &amp; Outreach).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 04 FIT & GAP ============ -->
+  <section class="panel" id="s3">
+    <div class="eyebrow">04 / Fit &amp; Gap</div>
+    <h1>Your evidence against every requirement</h1>
+    <p class="lead">Requirement-by-requirement. Sobha vocabulary translated into Amgen's transformation language. Eleven requirement matches, then the four real gaps and how each closes.</p>
+
+    <h3>Requirement matches</h3>
+    <div class="card req"><div class="req-head"><h4>Master's + 6+ yrs relevant experience</h4><span class="badge b-pass">basic qual · pass</span></div><div class="req-jd">"Master's degree and 6+ years of relevant business, operations, digital, or transformation experience"</div><p>IIM Udaipur PGDM + 6 years of operations/transformation leadership. Clears the hard gate cleanly. BITS Pilani dual degree is a premium credential signal on top.</p></div>
+
+    <div class="card req"><div class="req-head"><h4>Build &amp; lead India-based cross-functional team</h4><span class="badge b-strong">strong</span></div><div class="req-jd">"Lead and develop the India-based Operations Transformation and Business Performance team… scalable ways of working"</div><p>You lead 77 across two geographies (35 Dubai + 42 India) spanning Ops (38), Quality (12), MIS (15) + 12 RMs. You stood up the 42-person India hub in 12 months. <strong>This is the JD's first responsibility, verbatim.</strong> (S7, S12)</p></div>
+
+    <div class="card req"><div class="req-head"><h4>Lead transformation &amp; business-value realization</h4><span class="badge b-strong">strong</span></div><div class="req-jd">"…actionable programs that improve operational efficiency, agility, performance visibility, and business value realization"</div><p>14.9x programme scale (AED 867M → 12.97B) with delinquency down 74% (16.7%→4.4%) simultaneously. NPV AED 652M defended at MD/CEO. You realize value <em>and</em> prove it. (S16, S5)</p></div>
+
+    <div class="card req"><div class="req-head"><h4>AI, data &amp; digital enablement</h4><span class="badge b-strong">strong</span></div><div class="req-jd">"Advance AI, analytics, automation, and data-centric capabilities… support delivery of AI-enabled use cases leveraging Generative AI"</div><p>You led solution design on a Salesforce platform from zero and built a 70+ report intelligence ecosystem on a shared live-data layer — plus a Claude-API GenAI portfolio (see AI Differentiator). The enablement-leadership framing maps directly to "support delivery of AI-enabled use cases." (S6)</p></div>
+
+    <div class="card req"><div class="req-head"><h4>Program &amp; portfolio leadership</h4><span class="badge b-strong">strong</span></div><div class="req-jd">"…initiatives are aligned, sequenced, governed, and executed with measurable business impact and adoption outcomes"</div><p>Twelve concurrent workstreams under a 55-day T−25/T+30 operating rhythm you designed; a 14-finding governance register with weekly cadence and 100% in-window closure. Portfolio governance is a documented pattern. (S3, S1)</p></div>
+
+    <div class="card req"><div class="req-head"><h4>Cross-functional collaboration</h4><span class="badge b-strong">strong</span></div><div class="req-jd">"Partner with OTDS, Operations, DTI, and enterprise stakeholders…"</div><p>2026 goal framework built on 9 cross-functional inputs across 6+ departments and 4 entity GMs, MD-approved. You coordinate across people, process, data, and technology by default. (S11, S8)</p></div>
+
+    <div class="card req"><div class="req-head"><h4>Performance &amp; change leadership</h4><span class="badge b-strong">strong</span></div><div class="req-jd">"Establish metrics, dashboards, governance mechanisms, and value tracking… driving organizational change management"</div><p>The 70+ report ecosystem <em>is</em> a performance-management system; the capability-build (S12) is change management — you moved the org from leader-dependent to self-running without quality loss. (S6, S12)</p></div>
+
+    <div class="card req"><div class="req-head"><h4>Complex matrixed-org transformation (preferred)</h4><span class="badge b-strong">strong</span></div><div class="req-jd">"…in complex matrixed organizations"</div><p>Cross-geography team, CRO/CCO/MD/CEO direct interface, multi-entity (1→4) expansion. You already operate in a matrix above your title band.</p></div>
+
+    <div class="card req"><div class="req-head"><h4>Apply AI / analytics / data science to business problems (preferred)</h4><span class="badge b-mod">moderate</span></div><div class="req-jd">"Experience applying AI, analytics, automation, or data science capabilities…"</div><p>Strong on applied AI + analytics (portfolio + Salesforce intelligence). The word "data science" can read as ML-modeling depth — frame as <strong>enablement orchestration</strong>, not hands-on modeling, and let the portfolio carry the proof.</p></div>
+
+    <div class="card req"><div class="req-head"><h4>Lean / Six Sigma / Agile / CI methodologies (preferred)</h4><span class="badge b-mod">moderate</span></div><div class="req-jd">"Familiarity with Lean, Six Sigma, Agile, or continuous improvement methodologies"</div><p>You <em>do</em> CI daily (PCC TAT 85% / DMAIC in all but name) and PMI-ACP is in progress for Agile. The gap is the <strong>credential</strong>, not the practice — Green Belt closes it (Cert Roadmap).</p></div>
+
+    <div class="card req"><div class="req-head"><h4>Enterprise data ecosystems / FAIR principles / scalable platforms (preferred)</h4><span class="badge b-mod">moderate</span></div><div class="req-jd">"Familiarity with enterprise data ecosystems, FAIR data principles, and scalable digital platforms"</div><p>Platform-build instinct is proven (Salesforce 0→1). The specific FAIR / lakehouse vocabulary is a reading gap, not a capability gap — a weekend of study closes the language.</p></div>
+
+    <h3>The four real gaps</h3>
+    <div class="card gap"><div class="req-head"><h4>1 · Pharma / biotech regulated-industry domain</h4><span class="badge b-gap">real · preferred only</span></div><p>You can't manufacture pharma tenure. But it sits in <em>Preferred</em>, not Basic, Quals — not a gate. <strong>Mitigate:</strong> frame financial-services regulated-control transfer (CRO/CCO governance, audit register, validated reporting) and learn the GxP / CSV vocabulary enough to engage credibly. This is the dimension that caps fit at ~5–6/10.</p></div>
+    <div class="card gap"><div class="req-head"><h4>2 · FAIR data / enterprise-platform vocabulary</h4><span class="badge b-mod">closeable · vocab</span></div><p>Read GO-FAIR + one pharma data-strategy primer. Be able to say what FAIR means and why it matters for AI-readiness. ~1 weekend.</p></div>
+    <div class="card gap"><div class="req-head"><h4>3 · Lean Six Sigma certification</h4><span class="badge b-mod">closeable · cert</span></div><p>Green Belt converts your real CI work into a recognised credential. Dual-purpose with the Google track — already cert priority 1.</p></div>
+    <div class="card gap"><div class="req-head"><h4>4 · "Data science" depth perception</h4><span class="badge b-mod">closeable · framing</span></div><p>Pre-empt the probe: "I lead and orchestrate AI/data capability — I scope use cases, define the data requirements, and partner with technical teams on delivery. I'm not the model-builder; I'm the one who makes the use case land and stick." The JD's own wording ("support delivery of AI-enabled use cases") backs this exactly.</p></div>
+  </section>
+
+  <!-- ============ 05 RISK & RED FLAGS ============ -->
+  <section class="panel" id="s4">
+    <div class="eyebrow">05 / Risk &amp; Red Flags <span class="badge b-mod" style="margin-left:8px">conditional · fired</span></div>
+    <h1>What to verify before you commit</h1>
+    <p class="lead">No confirmed distress signals — but two triggers fired and warrant questions on the recruiter call. Treat these as diligence, not deterrents.</p>
+
+    <div class="card"><div class="req-head"><h4>"Build &amp; Lead the AIN Capability" — new/scaling team risk</h4><span class="badge b-mod">verify</span></div><p>A "build the capability" mandate is both your strength (greenfield = your pattern) and a risk (under-defined scope, thin headcount, unclear charter, reorg exposure). <strong>Ask:</strong> Is this team net-new or scaling an existing one? What's the current headcount &amp; planned ramp? Who held this before me, and why is it open? Is the charter board-backed with multi-year funding?</p></div>
+
+    <div class="card"><div class="req-head"><h4>Pharma regulatory operating context</h4><span class="badge b-info">context, not distress</span></div><p>Biotech is heavily regulated (GxP, validated systems, data integrity). This isn't a red flag — it's the operating reality. <strong>Ask:</strong> How regulated is this specific scope (GxP-adjacent vs commercial ops)? What's the validation overhead on AI/data deployments? It signals you understand the environment.</p></div>
+
+    <div class="card"><div class="req-head"><h4>GCC maturity &amp; cost-action exposure</h4><span class="badge b-mod">verify</span></div><p>Global biotechs periodically run cost/restructuring actions that can touch capability centres. <strong>Ask:</strong> How long has AIN-Hyderabad operated? Is it in a growth or consolidation phase? Where does this function sit in the org's stated priorities? (A scan of recent Amgen India hiring volume is a quick sanity check.)</p></div>
+
+    <div class="card"><div class="req-head"><h4>Level &amp; comp ambiguity</h4><span class="badge b-mod">verify</span></div><p>"Senior Manager" at Amgen India could be an M-band people-leader or shade toward Sr SM / Associate Director — a ₹15–20L swing. <strong>Ask early:</strong> internal level mapping, band, and whether the team-lead scope is confirmed or "to be built."</p></div>
+
+    <div class="callout"><div class="lab">Net read</div><p style="margin:0">All four are <strong>verify-on-call</strong> items, none are walk-away signals. A greenfield transformation seat in your target city, at a marquee biotech, with your exact skill spine — the upside materially outweighs the diligence load.</p></div>
+  </section>
+
+  <!-- ============ 06 STAR ============ -->
+  <section class="panel" id="s5">
+    <div class="eyebrow">06 / STAR Mapping</div>
+    <h1>Your five stories for this role</h1>
+    <p class="lead">Selected from STAR Bank V3 to cover the JD's six responsibility blocks. Assertiveness anchors (S2, S5, S25) live in the Interview Kit. Lead order below.</p>
+
+    <div class="card star"><h4><span class="star-tag">S16</span>14.9x Scale Transformation <span class="badge b-strong">transformation · value</span></h4>
+      <div class="star-grid">
+        <div class="lab">Situation</div><div class="txt">A collections programme at AED 867M with fragmented operations and high delinquency.</div>
+        <div class="lab">Task</div><div class="txt">Scale the programme without letting quality or risk degrade.</div>
+        <div class="lab">Action</div><div class="txt">Rebuilt the operating model, the data layer, and the governance cadence; sequenced initiatives; held quality standards under growth pressure.</div>
+        <div class="lab">Result</div><div class="txt">14.9x scale to AED 12.97B with delinquency cut 74% (16.7%→4.4%) <em>simultaneously</em>.</div>
+      </div>
+      <div class="quote">"14.9x growth with a 74% delinquency reduction at the same time — that's transformation that realized value, not just volume."</div>
+    </div>
+
+    <div class="card star"><h4><span class="star-tag">S6</span>Data &amp; Intelligence Platform 0→1 <span class="badge b-strong">AI / data enablement</span></h4>
+      <div class="star-grid">
+        <div class="lab">Situation</div><div class="txt">A 35+ team running on fragmented spreadsheets — no shared data layer, no real-time visibility.</div>
+        <div class="lab">Task</div><div class="txt">Design and deploy a collections-intelligence platform from scratch, with no vendor PM.</div>
+        <div class="lab">Action</div><div class="txt">Ran a 6-stakeholder requirements discovery, led the solution design with the Salesforce implementation team, built a 70+ report MI ecosystem, rolled it out across two geographies.</div>
+        <div class="lab">Result</div><div class="txt">Supported 14.9x growth on a shared live-data layer for 77 practitioners — zero added reporting headcount; data-driven culture across the division.</div>
+      </div>
+      <div class="quote">"I built the intelligence platform the whole function runs on — 6-stakeholder discovery, owned the architecture decisions, shipped 70+ live reports. That's the business-to-tech translation this role needs."</div>
+    </div>
+
+    <div class="card star"><h4><span class="star-tag">S18</span>PCC TAT 20→3 Days at 3× Volume <span class="badge b-strong">continuous improvement · CI 2.0</span></h4>
+      <div class="star-grid">
+        <div class="lab">Situation</div><div class="txt">A Property Completion Certificate process averaging 20-day TAT, causing revenue leakage.</div>
+        <div class="lab">Task</div><div class="txt">Redesign the end-to-end workflow without adding headcount.</div>
+        <div class="lab">Action</div><div class="txt">Mapped the full flow, isolated bottlenecks at verification + approval, eliminated redundant steps, built daily TAT + volume dashboards for live performance tracking.</div>
+        <div class="lab">Result</div><div class="txt">TAT 20→3 days (85% reduction) while monthly volume tripled (~90→281). Same team, redesigned workflow.</div>
+      </div>
+      <div class="quote">"20 days to 3, while volume tripled, same team. That's DMAIC in practice — exactly what CI 2.0 industrialises with AI."</div>
+    </div>
+
+    <div class="card star"><h4><span class="star-tag">S7</span>India Hub Stand-Up — 42 People in 12 Months <span class="badge b-strong">build &amp; lead India team</span></h4>
+      <div class="star-grid">
+        <div class="lab">Situation</div><div class="txt">A growing AED 86.8B portfolio needed offshore operating capacity — a capability that didn't exist.</div>
+        <div class="lab">Task</div><div class="txt">Stand up an India operations hub: define the model, recruit, train, and govern to standard.</div>
+        <div class="lab">Action</div><div class="txt">Defined the hub-vs-outsource model, set SLAs, built the training and documentation, established performance governance, ran the cost-centre-to-value-centre transition (GCC stand-up lens, S10).</div>
+        <div class="lab">Result</div><div class="txt">42-person hub in 12 months; 39 reports in production; zero quality gap versus onshore.</div>
+      </div>
+      <div class="quote">"Standing up a 42-person India capability from zero — model, SLAs, training, governance — is exactly the 'build &amp; lead the AIN team' mandate."</div>
+    </div>
+
+    <div class="card star"><h4><span class="star-tag">S3</span>55-Day T−25/T+30 Operating Rhythm <span class="badge b-strong">program governance · ways of working</span></h4>
+      <div class="star-grid">
+        <div class="lab">Situation</div><div class="txt">Twelve concurrent workstreams and a scaling portfolio with no unifying operating cadence.</div>
+        <div class="lab">Task</div><div class="txt">Convert ambiguity into a repeatable, governed rhythm the whole team could run on.</div>
+        <div class="lab">Action</div><div class="txt">Designed a proprietary 55-day T−25/T+30 framework from first principles — defined the milestones, the review points, the escalation paths, and the metrics at each gate.</div>
+        <div class="lab">Result</div><div class="txt">A scalable operating model a 77-person team runs on today; predictable governance across 12 workstreams.</div>
+      </div>
+      <div class="quote">"I build frameworks that convert ambiguity into structured, governed decisions. The 55-day window is the operating model the team runs on — that's 'scalable ways of working.'"</div>
+    </div>
+  </section>
+
+  <!-- ============ 07 30-60-90 ============ -->
+  <section class="panel" id="s6">
+    <div class="eyebrow">07 / 30·60·90 Plan</div>
+    <h1>First 90 days as the AIN transformation lead</h1>
+    <p class="lead">A listen-frame-deliver arc tuned to a build/scale mandate. Seventeen concrete moves. Bring a one-page version to the final round — it signals you've already started.</p>
+
+    <div class="phase">DAYS 0–30 · LISTEN &amp; MAP</div>
+    <div class="tl">
+      <div class="card tl"><h4>Meet OTDS + the matrix</h4><p>1:1s with the OTDS sponsor, Operations leaders, and DTI counterparts. Capture each one's top-3 priorities in their own words.</p></div>
+      <div class="card tl"><h4>Map the AIN team's current state</h4><p>Headcount, skills, charter, in-flight work, gaps. Confirm whether you're building net-new or scaling.</p></div>
+      <div class="card tl"><h4>Audit the transformation portfolio</h4><p>Inventory every live initiative — status, value-at-stake, dependencies, governance health. Find the orphans.</p></div>
+      <div class="card tl"><h4>Map the data &amp; AI landscape</h4><p>Enterprise platforms, FAIR-data maturity, existing GenAI use cases, who owns what. Identify the AI-readiness gaps.</p></div>
+      <div class="card tl"><h4>Baseline business-performance metrics</h4><p>What's measured today, what isn't, where value tracking is thin. This becomes your dashboard backlog.</p></div>
+      <div class="card tl"><h4>Build the stakeholder map</h4><p>Influence vs interest grid across OTDS / Ops / DTI / enterprise. Identify your first allies and your skeptics.</p></div>
+    </div>
+
+    <div class="phase">DAYS 31–60 · FRAME &amp; PILOT</div>
+    <div class="tl">
+      <div class="card tl"><h4>Define the team operating model</h4><p>Roles, rituals, ways of working, intake process. Your 55-day-rhythm instinct, adapted to Amgen's cadence.</p></div>
+      <div class="card tl"><h4>Re-sequence the portfolio</h4><p>Prioritise by value × feasibility × strategic fit; kill or park the low-value tail; publish the sequencing logic.</p></div>
+      <div class="card tl"><h4>Launch one CI 2.0 quick-win pilot</h4><p>Pick a high-visibility, low-risk process; apply CI + an AI assist; target a measurable cycle-time or quality gain in 30 days.</p></div>
+      <div class="card tl"><h4>Stand up the governance cadence</h4><p>Weekly delivery review + monthly value-review with OTDS. Lightweight RAID, clear escalation.</p></div>
+      <div class="card tl"><h4>Draft the value-realization framework</h4><p>Define how each initiative's business value is forecast, tracked, and confirmed — so impact isn't anecdotal.</p></div>
+      <div class="card tl"><h4>Open the capability-building plan</h4><p>Skill-gap map for the team; identify the 2–3 capabilities (AI fluency, FAIR-data, CI tooling) to grow first.</p></div>
+    </div>
+
+    <div class="phase">DAYS 61–90 · DELIVER &amp; SCALE</div>
+    <div class="tl">
+      <div class="card tl"><h4>Ship the first AI-enabled use case</h4><p>Move the pilot to a governed, adopted solution with a tracked metric — proof the model works.</p></div>
+      <div class="card tl"><h4>Publish the performance dashboard suite</h4><p>Live business-performance + portfolio-health dashboards for OTDS and Ops leaders. Visibility = trust.</p></div>
+      <div class="card tl"><h4>Secure portfolio sign-off</h4><p>Get the re-sequenced portfolio + value framework formally endorsed by the OTDS sponsor.</p></div>
+      <div class="card tl"><h4>Deliver the 90-day value readout</h4><p>One-page impact narrative: what shipped, what it's worth, what's next. Quantified, in their language.</p></div>
+      <div class="card tl"><h4>Scale ways of working across the team</h4><p>Roll the operating model out fully; move from leader-dependent to self-running (your S12 pattern).</p></div>
+    </div>
+  </section>
+
+  <!-- ============ 08 AI DIFFERENTIATOR ============ -->
+  <section class="panel" id="s7">
+    <div class="eyebrow">08 / AI Differentiator</div>
+    <h1>Your unfair advantage, built</h1>
+    <p class="lead">This role <em>is</em> the AI-augmented-operations pitch. "CI 2.0 (CI + AI)" is Amgen's name for what you've been building. Three portfolio pieces, reframed for transformation + business performance. Stack: Python · Streamlit · Claude API — your established toolkit.</p>
+
+    <div class="card"><h4>P1-derived · Transformation Value-Realization Tracker</h4><p style="font-family:var(--mono);font-size:11px;color:var(--muted)">Python · Streamlit · Claude API</p><p><strong>What it does:</strong> tracks a portfolio of transformation initiatives, AI-flags at-risk or under-realizing workstreams, and auto-generates value-tracking dashboards + a weekly governance summary.</p><p><strong>Maps to JD:</strong> "establish metrics, dashboards, governance mechanisms, and value-tracking approaches" + "aligned, sequenced, governed."</p><p><strong>Pitch:</strong> "I built the tool that turns a transformation portfolio into a live value scoreboard — and writes the governance update itself. It's CI 2.0 in one screen."</p></div>
+
+    <div class="card"><h4>P11-derived · Business-Performance Intelligence Dashboard</h4><p style="font-family:var(--mono);font-size:11px;color:var(--muted)">Python · Streamlit · Claude API</p><p><strong>What it does:</strong> ingests operational performance data, surfaces anomalies and adoption gaps, and generates AI hypotheses for under-performance with suggested interventions.</p><p><strong>Maps to JD:</strong> "improve performance visibility" + "adoption outcomes" + "decision-making, reduce manual work."</p><p><strong>Pitch:</strong> "I built what an enterprise performance-management layer does — anomaly detection, adoption tracking, and an AI that proposes the intervention, not just the chart."</p></div>
+
+    <div class="card"><h4>P16-derived · GenAI Operations-Brief Synthesizer</h4><p style="font-family:var(--mono);font-size:11px;color:var(--muted)">Python · Claude API (GenAI use case)</p><p><strong>What it does:</strong> takes raw program/ops data and meeting notes and generates executive briefs, governance packs, and value-realization narratives — the manual-reporting burden, eliminated.</p><p><strong>Maps to JD:</strong> "support delivery of AI-enabled use cases leveraging Generative AI" + "reduce manual work" — the single most literal AI line in the posting.</p><p><strong>Pitch:</strong> "This is a deployable GenAI use case: it kills the weekly reporting drag and redirects the team's hours from assembling slides to making judgment calls."</p></div>
+
+    <div class="callout"><div class="lab">The positioning, in one line</div><p style="margin:0">"I built what an AI-enabled transformation function does — in a different domain. The use cases transfer; only the data changes."</p></div>
+  </section>
+
+  <!-- ============ 09 INTERVIEW KIT ============ -->
+  <section class="panel" id="s8">
+    <div class="eyebrow">09 / Interview Kit</div>
+    <h1>22 questions you'll face — and the angle</h1>
+    <p class="lead">Behavioural (STAR-mapped), transformation/CI, AI/data, matrix/stakeholder, the pharma-domain probe, and the assertiveness handling your profile needs. Then the questions <em>you</em> ask.</p>
+
+    <h3>Behavioural — lead with these stories</h3>
+    <div class="card"><p><span class="q-num">Q1.</span> "Walk me through a transformation you led end-to-end." → <strong>S16</strong> (14.9x + delinquency −74%).</p></div>
+    <div class="card"><p><span class="q-num">Q2.</span> "Tell me about building a team or capability from scratch." → <strong>S7</strong> (42-person hub in 12 months) + <strong>S12</strong> (self-running org).</p></div>
+    <div class="card"><p><span class="q-num">Q3.</span> "Describe a process you improved with measurable impact." → <strong>S18</strong> (TAT 20→3 at 3× volume) — "DMAIC in practice."</p></div>
+    <div class="card"><p><span class="q-num">Q4.</span> "How do you handle ambiguity / no playbook?" → <strong>S3</strong> (55-day framework from first principles).</p></div>
+    <div class="card"><p><span class="q-num">Q5.</span> "Tell me about a data/digital capability you delivered." → <strong>S6</strong> (Salesforce 0→1, 70+ reports, led solution design).</p></div>
+    <div class="card"><p><span class="q-num">Q6.</span> "A time you drove change people resisted." → capability-build (S12): moving the org off leader-dependency without quality loss.</p></div>
+    <div class="card"><p><span class="q-num">Q7.</span> "Your biggest professional achievement?" → <strong>S16</strong> headline, backed by S5 (NPV defence).</p></div>
+    <div class="card"><p><span class="q-num">Q8.</span> "A time you failed." → App adoption 17% vs 80% (S24): "I reported it exactly as it was. Credibility depends on honest reporting."</p></div>
+
+    <h3>Transformation, CI &amp; portfolio</h3>
+    <div class="card"><p><span class="q-num">Q9.</span> "How do you prioritise a transformation portfolio?" → value × feasibility × strategic fit; kill the low-value tail; publish the logic.</p></div>
+    <div class="card"><p><span class="q-num">Q10.</span> "Walk me through your CI methodology." → DMAIC framing of the PCC redesign; measure-first, bottleneck isolation, dashboard-tracked sustainment.</p></div>
+    <div class="card"><p><span class="q-num">Q11.</span> "How do you track value realization?" → forecast → track → confirm; NPV discipline (S5) as the proof you don't let value claims drift.</p></div>
+    <div class="card"><p><span class="q-num">Q12.</span> "How do you sustain an improvement so it doesn't regress?" → embed metrics + governance cadence + ownership; the register pattern (S1).</p></div>
+
+    <h3>AI &amp; data — the "data science" probe</h3>
+    <div class="card"><p><span class="q-num">Q13.</span> "How technical are you on data science / ML?" → <strong>The enablement frame:</strong> "I scope use cases, define data requirements, and partner with technical teams on delivery. I make the use case land and stick — I'm not the model-builder." Back with the portfolio.</p></div>
+    <div class="card"><p><span class="q-num">Q14.</span> "Give an example of AI applied to a business problem." → the GenAI brief-synthesizer / value tracker; emphasise reducing manual work → time redirected to judgment.</p></div>
+    <div class="card"><p><span class="q-num">Q15.</span> "What do FAIR data principles mean for AI enablement?" → Findable/Accessible/Interoperable/Reusable = the foundation that makes data AI-ready; name it, then say it's your active learning edge.</p></div>
+    <div class="card"><p><span class="q-num">Q16.</span> "How would you drive AI adoption across operations?" → start with one high-visibility quick win, prove value, build a pattern library, scale via capability-building — not big-bang rollout.</p></div>
+
+    <h3>Matrix, stakeholders &amp; the domain question</h3>
+    <div class="card"><p><span class="q-num">Q17.</span> "How do you influence without authority across a matrix?" → S11 (9 cross-functional inputs, MD-approved) + S5 (defended NPV at MD/CEO, zero concessions).</p></div>
+    <div class="card"><p><span class="q-num">Q18.</span> "How would you partner with global OTDS from India?" → position as the execution arm that turns strategy into operating models; over-communicate; shared dashboards as the trust layer.</p></div>
+    <div class="card"><p><span class="q-num">Q19.</span> "You're from real estate, not pharma — why you?" → <strong>The pivot:</strong> "Transformation, business performance, and AI enablement are domain-portable. I've run them in a heavily governed environment under CRO/CCO oversight. The regulated discipline transfers; the molecule vocabulary I'll learn fast." Don't apologise — reframe.</p></div>
+    <div class="card"><p><span class="q-num">Q20.</span> "What do you know about Amgen / why us?" → biotech scale + a stated AI/transformation agenda (OTDS, CI 2.0) you want to help build in Hyderabad; tie to your AI-augmented-ops thesis.</p></div>
+
+    <h3>Assertiveness — pre-load these (your High-C/High-S edge)</h3>
+    <div class="card"><p><span class="q-num">Q21.</span> "A time you held a standard under pressure." → <strong>S2:</strong> held PR rejection at 49% despite pressure to relax; "the rejection rate was the control working as designed," vindicated by data.</p></div>
+    <div class="card"><p><span class="q-num">Q22.</span> "A time you pushed back on leadership / escalated a risk." → <strong>S5</strong> (NPV defended through 3 scrutiny rounds, zero material concessions) + <strong>S25</strong> (3 proactive CCO escalations before due dates).</p></div>
+
+    <div class="callout"><div class="lab">Questions YOU ask (signal seniority)</div>
+      <ul class="tick">
+        <li>"Is the AIN team net-new or scaling — and what does success look like at 6 and 12 months?"</li>
+        <li>"How mature is the enterprise data platform, and where's the biggest AI-readiness gap today?"</li>
+        <li>"Where does OTDS feel transformation is moving too slowly — and why?"</li>
+        <li>"How is this role's value measured in year one — adoption, cycle-time, cost, or business outcome?"</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 10 COMP INTEL ============ -->
+  <section class="panel" id="s9">
+    <div class="eyebrow">10 / Comp Intel <span class="badge b-info" style="margin-left:8px">3+ sources · confidence: Med</span></div>
+    <h1>What this should pay</h1>
+    <p class="lead">No clean published band exists for this exact function, so this is triangulated from three sources — a planning anchor, not a quoted fact. Level mapping is the single biggest swing variable.</p>
+
+    <h3>Estimated total CTC (P50): ₹48–58L all-in</h3>
+    <table class="rtable">
+      <thead><tr><th>Component</th><th>Range (est.)</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td data-l="Component"><strong>Fixed base</strong></td><td data-l="Range">₹32–44L</td><td data-l="Note">~70–75% of CTC; pharma GCC weights base heavily</td></tr>
+        <tr><td data-l="Component"><strong>Target bonus</strong></td><td data-l="Range">15–22%</td><td data-l="Note">Annual performance; pharma-GCC norm</td></tr>
+        <tr><td data-l="Component"><strong>LTI (RSU)</strong></td><td data-l="Range">₹5–12L/yr vested</td><td data-l="Note">US-listed RSUs even at India SM band; modest at this level</td></tr>
+        <tr><td data-l="Component"><strong>P25 / P50 / P75</strong></td><td data-l="Range">₹40L / ₹52L / ₹68L</td><td data-l="Note">Spread reflects SM vs Sr-SM level ambiguity</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Triangulation (≥3 sources)</h3>
+    <div class="card"><p><strong>Glassdoor</strong> — Amgen India "Senior Manager" averages ≈ ₹46.5L (wide typical range). Usable midpoint floor.</p></div>
+    <div class="card"><p><strong>Levels.fyi</strong> — Senior PM, Hyderabad (closest adjacent band, all-companies): median ≈ ₹57L, P25 ≈ ₹40.5L, P75 ≈ ₹86L. Program/transformation leadership tracks this band.</p></div>
+    <div class="card"><p><strong>6figr</strong> — Amgen-India all-roles average (~₹23L) is depressed by junior/associate volume → <strong>excluded</strong> as a level-mismatched aggregate.</p></div>
+    <div class="card"><div class="req-head"><h4>Outlier flag — sequencing trap</h4><span class="badge b-gap">do not anchor</span></div><p>A Fishbowl post reports a ₹1.1 cr Amgen-India Hyderabad offer (level unstated — almost certainly Director / hot-tech / over-leveled). Same trap as the Walmart ₹91L figure. Ignore for anchoring.</p></div>
+
+    <h3>Negotiation frame</h3>
+    <table class="rtable">
+      <thead><tr><th>Lever</th><th>Number</th><th>Justification</th></tr></thead>
+      <tbody>
+        <tr><td data-l="Lever"><strong>Anchor</strong></td><td data-l="Number">₹65L total</td><td data-l="Justification">77-person scope + AED 12.97B + AI-transformation differentiator = above-band</td></tr>
+        <tr><td data-l="Lever"><strong>Target</strong></td><td data-l="Number">₹52–58L</td><td data-l="Justification">P50–P60 of band</td></tr>
+        <tr><td data-l="Lever"><strong>Walk</strong></td><td data-l="Number">₹42L all-in</td><td data-l="Justification">VP-track floor; P25 sits at this line</td></tr>
+        <tr><td data-l="Lever"><strong>Joining / sign-on</strong></td><td data-l="Number">₹4–8L</td><td data-l="Justification">Covers Dubai→India RSU/bonus forfeiture; standard GCC lever</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><div class="lab">Leverage move</div><p style="margin:0">Time this against a live AmEx / Oaktree offer. Competing pharma-vs-BFSI offers is your strongest push-one-band-up play. <strong>Verify the internal level mapping on the recruiter call</strong> — a one-band shift moves P50 by ₹15–20L.</p></div>
+  </section>
+
+  <!-- ============ 11 CERT ROADMAP ============ -->
+  <section class="panel" id="s10">
+    <div class="eyebrow">11 / Cert Roadmap</div>
+    <h1>Credentials that move the needle</h1>
+    <p class="lead">Map your existing stack first, then add only what lifts <em>this</em> role. Weighting: explicit-req = HIGH · preferred = MEDIUM · JD-silent-but-needed = MED-LOW.</p>
+
+    <div class="callout"><div class="lab">Cert footprint — declared</div><p style="margin:0">Based on <strong>JD-stated preferences</strong> (high confidence on what's preferred) + <strong>pharma-GCC transformation-role norms</strong> (medium confidence). The JD names no required cert. A LinkedIn scan of the actual OTDS / AIN team's credentials would sharpen the silent-cert triage — sample not yet pulled. Treat below as directional.</p></div>
+
+    <h3>Add for this role</h3>
+    <div class="card"><div class="req-head"><h4>Lean Six Sigma Green Belt</h4><span class="badge b-mod">MEDIUM · preferred</span></div><p>Converts your real CI work (PCC TAT 85%) into a recognised credential the JD explicitly prefers. <strong>Dual-purpose</strong> — already your cert priority 1 for the Google track. Highest-leverage single add here.</p></div>
+    <div class="card"><div class="req-head"><h4>PMI-ACP</h4><span class="badge b-strong">in progress · MEDIUM</span></div><p>Covers the "Agile" preferred-qual and your cross-pipeline PM credibility. Already underway — no new cost, just finish.</p></div>
+    <div class="card"><div class="req-head"><h4>FAIR data / enterprise-data literacy</h4><span class="badge b-info">MED-LOW · self-study</span></div><p>Not a cert — GO-FAIR primer + one pharma data-strategy read. Goal: speak FAIR + lakehouse credibly in the screen. ~1 weekend.</p></div>
+    <div class="card"><div class="req-head"><h4>AI-900 (Azure AI Fundamentals) — optional</h4><span class="badge b-info">MED-LOW</span></div><p>Light AI-literacy signal (planned on your Microsoft track). Useful only if Amgen's stack skews Azure — verify before spending the ~$165; your Claude-API portfolio already proves applied AI.</p></div>
+
+    <h3>Already in your stack — map, don't re-buy</h3>
+    <table class="rtable">
+      <thead><tr><th>Credential</th><th>Status</th><th>Relevance here</th></tr></thead>
+      <tbody>
+        <tr><td data-l="Credential">PMI-ACP</td><td data-l="Status">In progress</td><td data-l="Relevance">Agile preferred-qual — direct</td></tr>
+        <tr><td data-l="Credential">AZ-900</td><td data-l="Status">In progress</td><td data-l="Relevance">Cloud literacy — indirect</td></tr>
+        <tr><td data-l="Credential">AI portfolio (P1/P11/P16)</td><td data-l="Status">Build/specced</td><td data-l="Relevance">Applied-AI proof — outweighs most certs for this role</td></tr>
+        <tr><td data-l="Credential">BITS + IIM</td><td data-l="Status">Held</td><td data-l="Relevance">Credential-bar premium signal</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============ 12 CLOSE & OUTREACH ============ -->
+  <section class="panel" id="s11">
+    <div class="eyebrow">12 / Close &amp; Outreach</div>
+    <h1>How to land it</h1>
+    <p class="lead">Sequencing, referral path, and the resume-rules-compliant positioning line. This is ACTIVE_NOW caliber but sits behind AmEx + Oaktree and never touches the Uber SQL deadline.</p>
+
+    <h3>Sequencing</h3>
+    <ul class="tick">
+      <li><strong>Behind AmEx + Oaktree</strong> for build/apply effort — they remain the highest-probability conversion roles that generate offer leverage.</li>
+      <li><strong>Does not displace Uber SQL</strong> (June 30 hard gate stays the top time-bound priority).</li>
+      <li>This is a P1/P2 hand-back: the Factory doesn't sync to ECOSYSTEM_STATE — register it in P1/P2 by hand as ACTIVE_NOW, Hyderabad cluster.</li>
+    </ul>
+
+    <h3>Referral path (lifts conversion ~25% → ~35%)</h3>
+    <ul class="tick">
+      <li>Search IIM Udaipur + BITS Pilani alumni at <strong>Amgen Hyderabad</strong> — prioritise anyone in OTDS / AIN / digital / operations.</li>
+      <li>A warm intro to the hiring leader beats a cold portal application materially. One good referral &gt; ten applications.</li>
+      <li>If no alum: a precise LinkedIn note to the hiring leader (see below) on the back of the AI-augmented-ops angle.</li>
+    </ul>
+
+    <h3>Positioning line (resume-rules compliant)</h3>
+    <div class="callout"><div class="lab">Unlock phrase — open the screen with this</div><p style="margin:0">"I run operations transformation today — I just call it collections operations. I built the business-performance and data layer for an AED 12.97B portfolio from zero: a 70+ report intelligence ecosystem on a Salesforce platform I led the solution design for, a continuous-improvement engine that cut cycle time 85% at triple the volume, and an operating model a 70+ person cross-geography team runs on. The reframe from real estate to pharma is vocabulary; the transformation-plus-AI capability is the same."</p></div>
+    <p style="font-size:12px;color:var(--muted)">Compliant with standing resume rules: no fabricated title, "70+" (not "85"), "led solution design" (not "co-architect"), achievement/scope/impact framing — no salary claim.</p>
+
+    <h3>Cold LinkedIn note (if no referral)</h3>
+    <div class="card"><p style="font-style:italic">"Hi [name] — I lead operations transformation for a 70+ person cross-geography team and have been building AI-augmented ops tooling (value-realization trackers, GenAI reporting). Your Sr Manager Ops Transformation role in Hyderabad maps almost exactly to what I do — I'd value 15 minutes to understand where you most need this capability to move. Either way, I admire what AIN is building."</p></div>
+
+    <div class="callout"><div class="lab">Next actions</div>
+      <ul class="tick">
+        <li>Resume v1 for this role — single-page, transformation + AI-enablement headline; reuse the AmEx/Oaktree achievement spine.</li>
+        <li>Pull the OTDS/AIN team LinkedIn footprint → sharpen the cert triage + find the referral.</li>
+        <li>Build (or reframe) the GenAI Ops-Brief Synthesizer (P16) — the most literal match to the JD's GenAI line — as the interview artifact.</li>
+        <li>Confirm level mapping on the recruiter call before any comp conversation.</li>
+      </ul>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<script>
+  function show(id){
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.navitem').forEach(n=>n.classList.remove('active'));
+    var el=document.getElementById(id);
+    if(el)el.classList.add('active');
+    var nav=document.querySelector('.navitem[data-t="'+id+'"]');
+    if(nav)nav.classList.add('active');
+    var sel=document.getElementById('mobsel');
+    if(sel)sel.value=id;
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
