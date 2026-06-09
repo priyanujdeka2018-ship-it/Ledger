@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playbook · AmEx Director — ORM Issues &amp; Events: Executive Insights &amp; Quality Management</title>
+<style>
+  :root{
+    --navy:#002663; --blue:#016FD0; --blue-mid:#2E77BB;
+    --ink:#14213D; --dim:#4D4F53; --mut:#6B7280;
+    --bg:#F4F6F9; --card:#FFFFFF; --line:#E2E8F0; --line2:#D5DEE8;
+    --green:#15803D; --green-bg:#E7F4EC;
+    --amber:#B45309; --amber-bg:#FBF0E2;
+    --blue-bg:#E8F1FB; --rail-text:#BFD2EA;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --sans:"Helvetica Neue",Helvetica,Arial,"Segoe UI",sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .shell{display:flex;min-height:100vh}
+
+  /* ---------- LEFT RAIL ---------- */
+  .rail{width:266px;background:var(--navy);color:#fff;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 18px}
+  .brand{border:2px solid var(--blue);border-radius:4px;padding:12px 14px;margin-bottom:22px}
+  .brand .amex{font-family:var(--sans);font-weight:800;letter-spacing:.12em;font-size:12px;color:#fff;line-height:1.25;text-transform:uppercase}
+  .brand .amex span{display:block;color:var(--blue)}
+  .brand .role{margin-top:9px;font-family:var(--serif);font-size:14.5px;color:var(--rail-text);line-height:1.3}
+  .rail-meta{font-family:var(--mono);font-size:10px;color:#7FA8D6;letter-spacing:.05em;margin-bottom:20px;line-height:1.7}
+  .tab{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:none;color:var(--rail-text);font-family:var(--sans);font-size:13.5px;padding:9px 11px;border-radius:6px;cursor:pointer;margin-bottom:2px;transition:all .15s}
+  .tab .tnum{font-family:var(--mono);font-size:10px;color:#5E86B8;min-width:20px}
+  .tab:hover{background:rgba(255,255,255,.07);color:#fff}
+  .tab.active{background:var(--blue);color:#fff}
+  .tab.active .tnum{color:#cfe4fb}
+  .tab.cond{border-left:2px solid var(--blue-mid)}
+
+  /* ---------- MAIN ---------- */
+  .main{flex:1;padding:42px 52px;max-width:1080px}
+  .mobnav{display:none}
+  .panel{display:none;animation:fade .35s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  .secnum{font-family:var(--mono);font-size:11px;color:var(--blue);letter-spacing:.18em;margin-bottom:6px}
+  .sectitle{font-family:var(--serif);font-size:30px;color:var(--navy);line-height:1.15;margin-bottom:6px;font-weight:700}
+  .secsub{color:var(--mut);font-size:14px;margin-bottom:26px;max-width:680px}
+  h3.block{font-family:var(--serif);font-size:19px;color:var(--navy);margin:30px 0 12px}
+  p.body{font-size:14.5px;color:var(--dim);margin-bottom:13px}
+  .lead{font-size:15.5px;color:var(--ink);margin-bottom:16px}
+  strong{color:var(--ink);font-weight:700}
+
+  /* ---------- STAT GRID ---------- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+  .stat{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--blue);border-radius:8px;padding:16px 16px 15px}
+  .stat .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.13em;color:var(--mut);text-transform:uppercase;margin-bottom:7px}
+  .stat .v{font-family:var(--serif);font-size:26px;color:var(--navy);font-weight:700;line-height:1}
+  .stat .s{font-size:11.5px;color:var(--dim);margin-top:5px}
+  .stat.pursue{border-top-color:var(--green)} .stat.pursue .v{color:var(--green);font-size:21px}
+
+  /* ---------- CARDS ---------- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin-bottom:14px}
+  .card.tint{background:var(--blue-bg);border-color:#C5DCF4}
+  .card.warn{background:var(--amber-bg);border-color:#F0DEC0}
+  .card .ctitle{font-family:var(--serif);font-size:16px;color:var(--navy);font-weight:700;margin-bottom:8px}
+  .callout{border-left:4px solid var(--blue);background:var(--blue-bg);border-radius:0 8px 8px 0;padding:15px 18px;margin:8px 0 20px}
+  .callout .ctitle{margin-bottom:6px}
+
+  .pill{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;padding:3px 8px;border-radius:4px;text-transform:uppercase;font-weight:600}
+  .pill.blue{background:var(--blue-bg);color:var(--blue)}
+  .pill.green{background:var(--green-bg);color:var(--green)}
+  .pill.amber{background:var(--amber-bg);color:var(--amber)}
+  .pill.navy{background:#E4EAF2;color:var(--navy)}
+
+  /* ---------- PILLARS ---------- */
+  .pillar{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:18px 20px;margin-bottom:13px;border-left:4px solid var(--navy)}
+  .pillar .ph{font-family:var(--serif);font-size:16px;color:var(--navy);font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+  .pillar .pn{font-family:var(--mono);font-size:11px;color:#fff;background:var(--navy);border-radius:4px;padding:2px 8px}
+
+  /* ---------- VOCAB MAP ---------- */
+  .vmap{border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-top:6px}
+  .vrow.vocab-row{display:grid;grid-template-columns:1fr 14px 1fr;gap:10px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line);font-size:13.5px;background:var(--card)}
+  .vrow.vocab-row:last-child{border-bottom:none}
+  .vrow .from{color:var(--dim)} .vrow .arr{color:var(--blue);font-weight:700;text-align:center}
+  .vrow .to{color:var(--navy);font-weight:600}
+  .vrow.head{background:#EEF3F8;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+  .vrow.head .from,.vrow.head .to{color:var(--mut);font-weight:600}
+
+  /* ---------- REQ / GAP ---------- */
+  .req-card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:11px}
+  .req-card .rh{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:8px}
+  .req-card .rt{font-family:var(--serif);font-size:15px;color:var(--navy);font-weight:700;flex:1}
+  .req-card .jd{font-size:12.5px;color:var(--mut);font-style:italic;border-left:3px solid var(--line2);padding-left:11px;margin-bottom:9px}
+  .req-card .pf{font-size:13.5px;color:var(--dim)}
+  .badge{font-family:var(--mono);font-size:9px;letter-spacing:.05em;padding:4px 9px;border-radius:5px;text-transform:uppercase;font-weight:700;white-space:nowrap}
+  .badge.h{background:var(--green-bg);color:var(--green)} .badge.m{background:var(--blue-bg);color:var(--blue)} .badge.p{background:var(--amber-bg);color:var(--amber)}
+
+  .gap-card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:12px;border-left:4px solid var(--amber)}
+  .gap-card.low{border-left-color:var(--blue-mid)}
+  .gap-card .gh{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:7px}
+  .gap-card .gt{font-family:var(--serif);font-size:15px;color:var(--navy);font-weight:700}
+  .gap-card .gb{font-size:13.5px;color:var(--dim);margin-bottom:9px}
+  .gap-card .fix{font-size:13px;color:var(--ink);background:var(--bg);border-radius:7px;padding:11px 13px}
+  .sev{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:4px;font-weight:700;letter-spacing:.05em}
+  .sev.hi{background:#FBE3E3;color:#B42318} .sev.md{background:var(--amber-bg);color:var(--amber)} .sev.lo{background:var(--blue-bg);color:var(--blue)}
+
+  /* ---------- FIT METER ---------- */
+  .meter{background:var(--navy);border-radius:11px;padding:24px 26px;color:#fff;margin-bottom:24px;display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+  .meter .big{font-family:var(--serif);font-size:48px;font-weight:700;line-height:1}
+  .meter .big em{font-style:normal;color:var(--blue);font-size:30px}
+  .meter .ml{flex:1;min-width:240px}
+  .meter .ml .t{font-family:var(--mono);font-size:10px;letter-spacing:.13em;color:#9FC0E6;text-transform:uppercase;margin-bottom:8px}
+  .bar{height:9px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden;margin:9px 0}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--blue-mid),var(--blue));border-radius:5px}
+  .meter .note{font-size:12.5px;color:#C7D6EA}
+
+  /* ---------- STAR ---------- */
+  .star-card{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:13px;overflow:hidden}
+  .star-head{padding:15px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:14px;background:var(--card);transition:background .15s}
+  .star-head:hover{background:#FAFCFE}
+  .star-head .sc{font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:.06em;margin-bottom:4px}
+  .star-head .stt{font-family:var(--serif);font-size:16px;color:var(--navy);font-weight:700}
+  .star-head .sl{font-size:12.5px;color:var(--mut);margin-top:4px;max-width:620px}
+  .chev{color:var(--blue);font-size:13px;margin-top:3px;transition:transform .2s}
+  .star-card.open .chev{transform:rotate(90deg)}
+  .star-body{display:none;padding:0 18px 18px;border-top:1px solid var(--line)}
+  .star-card.open .star-body{display:block}
+  .srow{display:grid;grid-template-columns:78px 1fr;gap:13px;padding:11px 0;border-bottom:1px solid var(--line)}
+  .srow:last-child{border-bottom:none}
+  .srow .sk{font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;color:var(--mut);padding-top:2px}
+  .srow .sk.r{color:var(--green)}
+  .srow .sv{font-size:13.5px;color:var(--dim)}
+  .reframe{background:var(--blue-bg);border-radius:7px;padding:11px 13px;margin:14px 0 4px;font-size:13px;color:var(--navy)}
+  .reframe b{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--blue);display:block;margin-bottom:4px;text-transform:uppercase}
+
+  /* ---------- TIMELINE ---------- */
+  .phase{font-family:var(--serif);font-size:18px;color:var(--navy);font-weight:700;margin:24px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--blue)}
+  .tl-item{display:grid;grid-template-columns:26px 1fr;gap:14px;margin-bottom:11px;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:13px 15px}
+  .tl-item .dot{width:18px;height:18px;border-radius:50%;background:var(--blue-bg);border:2px solid var(--blue);margin-top:2px}
+  .tl-item .tlt{font-size:14px;color:var(--navy);font-weight:700;margin-bottom:3px}
+  .tl-item .tlb{font-size:13px;color:var(--dim)}
+
+  /* ---------- AI ---------- */
+  .ai-card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin-bottom:14px;border-top:3px solid var(--blue)}
+  .ai-card .atag{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--blue);text-transform:uppercase;margin-bottom:7px}
+  .ai-card .att{font-family:var(--serif);font-size:17px;color:var(--navy);font-weight:700;margin-bottom:8px}
+  .ai-card .ab{font-size:13.5px;color:var(--dim);margin-bottom:12px}
+  .stack{display:flex;flex-wrap:wrap;gap:6px}
+  .tag{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;background:var(--blue-bg);color:var(--blue)}
+  .tag.gold{background:#F4ECD8;color:#92702A} .tag.new{background:var(--green-bg);color:var(--green)}
+
+  /* ---------- INTERVIEW ---------- */
+  .qgroup{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--blue);text-transform:uppercase;margin:24px 0 11px;padding-left:2px}
+  .q-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:9px}
+  .q-card .qq{font-size:14px;color:var(--navy);font-weight:700;margin-bottom:6px}
+  .q-card .qa{font-size:13px;color:var(--dim)}
+  .q-card .qa b{color:var(--blue);font-family:var(--mono);font-size:11px}
+
+  /* ---------- STAKEHOLDER ---------- */
+  .sh-card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:11px}
+  .sh-card .sht{font-family:var(--serif);font-size:15.5px;color:var(--navy);font-weight:700;margin-bottom:3px;display:flex;align-items:center;gap:9px}
+  .sh-card .shr{font-size:13.5px;color:var(--dim);margin-top:7px}
+  .sh-card .shr b.lbl{font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:.05em}
+
+  /* ---------- COMP ---------- */
+  .comp-card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:12px}
+  .comp-card .cct{font-family:var(--serif);font-size:15px;color:var(--navy);font-weight:700;margin-bottom:8px}
+  .comp-card .ccb{font-size:13.5px;color:var(--dim)}
+  .crange{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:6px 0 4px}
+  .crange .cb{background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:11px 8px;text-align:center}
+  .crange .cb .cp{font-family:var(--mono);font-size:9px;color:var(--mut);letter-spacing:.06em}
+  .crange .cb .cv{font-family:var(--serif);font-size:17px;color:var(--navy);font-weight:700;margin-top:3px}
+  .crange .cb.hl{border-color:var(--blue);background:var(--blue-bg)} .crange .cb.hl .cv{color:var(--blue)}
+
+  /* ---------- CERT ---------- */
+  .cert-card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:15px 18px;margin-bottom:11px}
+  .cert-card .ch{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
+  .cert-card .cn{font-family:var(--serif);font-size:15px;color:var(--navy);font-weight:700}
+  .cert-card .cb2{font-size:13px;color:var(--dim)}
+  .wt{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:4px;font-weight:700;letter-spacing:.05em}
+  .wt.med{background:var(--amber-bg);color:var(--amber)} .wt.medlo{background:var(--blue-bg);color:var(--blue)} .wt.lo{background:#EDEFF2;color:var(--mut)} .wt.have{background:var(--green-bg);color:var(--green)}
+
+  /* ---------- CLOSE ---------- */
+  .close-card{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:16px 18px;margin-bottom:12px}
+  .close-card.script{background:var(--navy);color:#fff;border:none}
+  .close-card .clt{font-family:var(--serif);font-size:15.5px;color:var(--navy);font-weight:700;margin-bottom:8px}
+  .close-card.script .clt{color:#fff}
+  .close-card .clb{font-size:13.5px;color:var(--dim)}
+  .close-card.script .clb{color:#D7E3F2}
+  .script-text{font-family:var(--serif);font-size:14.5px;line-height:1.7;color:#EAF1FA;font-style:italic}
+
+  .foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-family:var(--mono);font-size:10.5px;color:var(--mut);line-height:1.8}
+
+  /* ---------- MOBILE ---------- */
+  @media(max-width:768px){
+    .rail{display:none}
+    .main{padding:22px 18px;max-width:100%}
+    .mobnav{display:block;margin-bottom:22px}
+    .mobnav select{width:100%;padding:13px 14px;font-family:var(--sans);font-size:15px;border:2px solid var(--navy);border-radius:8px;background:var(--navy);color:#fff;font-weight:600}
+    .mobtitle{font-family:var(--sans);font-weight:800;letter-spacing:.1em;font-size:13px;color:var(--navy);text-transform:uppercase;margin-bottom:4px}
+    .mobtitle span{color:var(--blue)}
+    .mobrole{font-family:var(--serif);font-size:13px;color:var(--mut);margin-bottom:14px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .sectitle{font-size:24px}
+    .crange{grid-template-columns:repeat(2,1fr)}
+    .vrow.vocab-row{grid-template-columns:1fr;gap:3px}
+    .vrow .arr{display:none}
+    .vrow .to{padding-left:11px;border-left:2px solid var(--blue)}
+    .vrow.head{display:none}
+    .req-card .rh{flex-direction:column;gap:7px}
+    .meter{gap:16px} .meter .big{font-size:38px}
+    .srow{grid-template-columns:1fr;gap:3px}
+    .tl-item{grid-template-columns:1fr} .tl-item .dot{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ================= RAIL ================= -->
+  <nav class="rail">
+    <div class="brand">
+      <div class="amex">American<span>Express</span></div>
+      <div class="role">Director — ORM Issues &amp; Events · Executive Insights &amp; Quality Management</div>
+    </div>
+    <div class="rail-meta">PLAYBOOK · v1<br>2nd Line of Defense<br>Reports to VP, I&amp;E Program</div>
+    <button class="tab active" data-p="snapshot"><span class="tnum">01</span> Snapshot</button>
+    <button class="tab" data-p="decode"><span class="tnum">02</span> Role Decode</button>
+    <button class="tab cond" data-p="stakeholders"><span class="tnum">03</span> Stakeholder Decode</button>
+    <button class="tab" data-p="fit"><span class="tnum">04</span> Fit &amp; Gap</button>
+    <button class="tab" data-p="star"><span class="tnum">05</span> STAR Mapping</button>
+    <button class="tab" data-p="plan"><span class="tnum">06</span> 30·60·90</button>
+    <button class="tab" data-p="ai"><span class="tnum">07</span> AI Differentiator</button>
+    <button class="tab" data-p="interview"><span class="tnum">08</span> Interview Kit</button>
+    <button class="tab" data-p="comp"><span class="tnum">09</span> Comp Intel</button>
+    <button class="tab" data-p="cert"><span class="tnum">10</span> Cert Roadmap</button>
+    <button class="tab" data-p="close"><span class="tnum">11</span> Close &amp; Outreach</button>
+  </nav>
+
+  <!-- ================= MAIN ================= -->
+  <main class="main">
+
+    <div class="mobnav">
+      <div class="mobtitle">American<span>Express</span></div>
+      <div class="mobrole">Director — ORM Issues &amp; Events</div>
+      <select id="mobsel">
+        <option value="snapshot">01 · Snapshot</option>
+        <option value="decode">02 · Role Decode</option>
+        <option value="stakeholders">03 · Stakeholder Decode</option>
+        <option value="fit">04 · Fit &amp; Gap</option>
+        <option value="star">05 · STAR Mapping</option>
+        <option value="plan">06 · 30·60·90</option>
+        <option value="ai">07 · AI Differentiator</option>
+        <option value="interview">08 · Interview Kit</option>
+        <option value="comp">09 · Comp Intel</option>
+        <option value="cert">10 · Cert Roadmap</option>
+        <option value="close">11 · Close &amp; Outreach</option>
+      </select>
+    </div>
+
+    <!-- ===== 01 SNAPSHOT ===== -->
+    <section class="panel active" id="snapshot">
+      <div class="secnum">01 / SNAPSHOT</div>
+      <h1 class="sectitle">The fastest-mapping AmEx role in your pipeline</h1>
+      <p class="secsub">This is not GMNS (product-delivery risk) or GCG (merchant-client risk). It is a Risk-division, 2nd-Line oversight Director — and it mirrors your actual Sobha org almost department-for-department.</p>
+
+      <div class="stats">
+        <div class="stat"><div class="k">Net Fit</div><div class="v">74→87</div><div class="s">current → addressable</div></div>
+        <div class="stat pursue"><div class="k">Status</div><div class="v">PURSUE</div><div class="s">parallel AmEx bet</div></div>
+        <div class="stat"><div class="k">Conv Probability</div><div class="v">~30%</div><div class="s">external Director hire</div></div>
+        <div class="stat"><div class="k">Target CTC</div><div class="v">~₹82L</div><div class="s">Band 40 · P75</div></div>
+      </div>
+
+      <p class="lead">Your three Sobha sub-functions — <strong>QCG</strong> (12-person quality gate), <strong>MIS</strong> (15-person, 70+ live-data reports), and your <strong>14-finding risk register</strong> feeding the CRO monthly — line up one-to-one with this role's three pillars: <strong>Quality Management · Executive Insights &amp; Reporting Governance · Operational Risk Governance</strong>. The functional alignment is arguably tighter here than GMNS.</p>
+
+      <div class="callout">
+        <div class="ctitle">The one real lift — altitude, not vocabulary</div>
+        <p class="body" style="margin-bottom:0">This is a <strong>2nd Line of Defense (2LoD)</strong> role: it <em>governs and challenges</em> the issue-management program rather than owning execution (that's 1LoD). You've operated across all three lines — 1LoD execution, an independent 2LoD-style quality gate (QCG gated every Payment Request before it became a collections event), and 3LoD interface (audit SPOC). The reframe is positioning your QCG independence + audit governance as second-line oversight, and learning AmEx's framework labels (RCSA, Risk Appetite/KRI, Three Lines of Defence, issue-lifecycle governance). The substance is already in your hands.</p>
+      </div>
+
+      <h3 class="block">Why pursue — and why now</h3>
+      <div class="card">
+        <p class="body"><strong>1 · Cleanest structural mirror.</strong> Three named JD pillars; three Sobha sub-functions that already do them. Minimal capability gap — the work is recognition, not acquisition.</p>
+        <p class="body"><strong>2 · Your single strongest AI angle.</strong> The JD explicitly names reporting automation + executive insights. Your built prototypes (P9 Risk Committee Pack Generator, P7 ORE/Issues Tracker) are literally that — no other role in your pipeline matches the AI mandate this precisely.</p>
+        <p class="body" style="margin-bottom:0"><strong>3 · Adds a Risk-division track.</strong> Stacking this onto GMNS/GCG demonstrates range across AmEx divisions — per your own scorecard logic, that reads as breadth, not over-applying. Near-zero prep to apply (no hard cert gate; advanced degree / risk cert only "preferred," both of which you can satisfy).</p>
+      </div>
+
+      <div class="card warn">
+        <div class="ctitle">Sequencing discipline</div>
+        <p class="body" style="margin-bottom:0">This sits as a <strong>parallel AmEx application behind GMNS + Oaktree</strong>, your two primary conversion bets — not ahead of them. File it in the same cycle to build competing-offer leverage; do not let it pull prep capacity from the two roles closest to offer.</p>
+      </div>
+    </section>
+
+    <!-- ===== 02 ROLE DECODE ===== -->
+    <section class="panel" id="decode">
+      <div class="secnum">02 / ROLE DECODE</div>
+      <h1 class="sectitle">What this role actually is</h1>
+      <p class="secsub">Behind the title: a second-line governance Director who owns the truth of how Issues &amp; Events are measured, reported, and quality-assured across a regulated enterprise.</p>
+
+      <p class="lead">The Operational Risk Management (ORM) function is AmEx's <strong>2nd Line of Defense</strong> — it does not run the business; it oversees how the business owns its risk. Within ORM, the Issues &amp; Events team defines and governs how operational issues and loss/near-miss events are managed enterprise-wide. You would lead its <strong>Executive Insights &amp; Quality Management</strong> arm, reporting to the VP, Issues &amp; Events Program.</p>
+      <p class="body">In plain terms: you own (a) the executive and governance reporting layer that leadership and regulators see, (b) the integrity of the metrics and methodologies behind that reporting, and (c) the quality-management program that ensures the issue/event process itself meets policy and standard. You are the person who guarantees that when leadership reads a number, the number is true — and that the process producing it would survive an audit.</p>
+
+      <h3 class="block">The three pillars</h3>
+      <div class="pillar">
+        <div class="ph"><span class="pn">P1</span> Executive Insights &amp; Reporting Governance</div>
+        <p class="body" style="margin-bottom:0">Timely, accurate executive + governance reporting; trend analysis; reporting transparency for strategic decisions; reporting data management and governance routines. <em>Your map:</em> MIS function (70+ live-data reports, built 0→1) + monthly risk readouts to CRO + MD/CEO NPV defense as executive-altitude communication.</p>
+      </div>
+      <div class="pillar">
+        <div class="ph"><span class="pn">P2</span> Quality Management Program</div>
+        <p class="body" style="margin-bottom:0">Lead the QM program across Issues &amp; Events; ensure adherence to enterprise policy, governance standards, and quality expectations; quality reviews. <em>Your map:</em> QCG — your literal 12-person Quality Control &amp; Governance gate — plus holding the PR documentation standard at 49% rejection under commercial pressure.</p>
+      </div>
+      <div class="pillar">
+        <div class="ph"><span class="pn">P3</span> Operational Risk Governance &amp; Controls</div>
+        <p class="body" style="margin-bottom:0">Risk Appetite monitoring, RCSA alignment, issue-management governance, metric-methodology governance, business process controls, audit-ready artifacts, and partnering on Regulatory Exams + IAG audits. <em>Your map:</em> 14-finding audit register (RCSA-equivalent checks, monthly CRO / quarterly MD-CEO cadence) + audit SPOC role + 3 proactive CCO escalations.</p>
+      </div>
+
+      <h3 class="block">What AmEx is really buying — phrase decode</h3>
+      <div class="card">
+        <p class="body"><strong>"Govern metric methodologies &amp; reporting integrity"</strong> → You own the <em>definition of truth</em>. When two teams report a metric differently, your methodology is the arbiter. This is a single-point-of-accountability mandate, not a reporting-clerk role.</p>
+        <p class="body"><strong>"2nd Line team … works closely with 1st and 3rd line"</strong> → You <em>challenge and assure</em>, you don't execute. Independence is the job. Frame your QCG as exactly this: a function that sat apart from the operators and gated their work.</p>
+        <p class="body"><strong>"Audit-ready governance artifacts"</strong> → Zero-defect documentation discipline. In a regulated environment, an incomplete paper trail is a finding. Your audit-SPOC record (every finding owner / RCA / closure criterion / evidence) is the proof.</p>
+        <p class="body" style="margin-bottom:0"><strong>"Fast-paced, highly matrixed environment"</strong> → You will have accountability without direct authority over many partners. Your 77-person cross-geography, multi-stakeholder operating model is the rehearsal.</p>
+      </div>
+
+      <h3 class="block">Vocabulary translation — your language → AmEx ORM language</h3>
+      <p class="body">Learn these cold. Most of your "gaps" disappear the moment you speak in the second column. The unlock sentence: <em>"I've been doing this for six years — I just haven't been calling it RCSA / KRI / 2LoD."</em></p>
+      <div class="vmap">
+        <div class="vrow vocab-row head"><div class="from">Your Sobha reality</div><div class="arr"></div><div class="to">AmEx ORM / Issues &amp; Events term</div></div>
+        <div class="vrow vocab-row"><div class="from">14-finding audit register</div><div class="arr">→</div><div class="to">Issues &amp; Events inventory · Operational Risk Event (ORE) register</div></div>
+        <div class="vrow vocab-row"><div class="from">QCG — 12-person quality gate</div><div class="arr">→</div><div class="to">Quality Management (QM) program · control quality assurance</div></div>
+        <div class="vrow vocab-row"><div class="from">MIS — 70+ live-data reports</div><div class="arr">→</div><div class="to">Executive Insights &amp; Reporting layer · BI / analytics solutions</div></div>
+        <div class="vrow vocab-row"><div class="from">Monthly risk readout to CRO</div><div class="arr">→</div><div class="to">Governance reporting cadence · Risk Committee reporting</div></div>
+        <div class="vrow vocab-row"><div class="from">Operational quality checks embedded in rhythm</div><div class="arr">→</div><div class="to">Risk &amp; Control Self-Assessment (RCSA)</div></div>
+        <div class="vrow vocab-row"><div class="from">PR rejection threshold monitoring (49%)</div><div class="arr">→</div><div class="to">KRI / KCI threshold-breach monitoring · Risk Appetite monitoring</div></div>
+        <div class="vrow vocab-row"><div class="from">Audit SPOC</div><div class="arr">→</div><div class="to">IAG / Regulatory Exam liaison · 1LoD↔3LoD coordination</div></div>
+        <div class="vrow vocab-row"><div class="from">Process control documentation</div><div class="arr">→</div><div class="to">Business process controls · audit-ready governance artifacts · procedures</div></div>
+        <div class="vrow vocab-row"><div class="from">Root-cause analysis on rejections</div><div class="arr">→</div><div class="to">RCA via 5-Why / Fishbone (Ishikawa)</div></div>
+        <div class="vrow vocab-row"><div class="from">Quality gate before PR submission</div><div class="arr">→</div><div class="to">1LOD closure readiness · control execution</div></div>
+        <div class="vrow vocab-row"><div class="from">Collections governance framework</div><div class="arr">→</div><div class="to">Operational Risk Management (ORM) program governance</div></div>
+        <div class="vrow vocab-row"><div class="from">70+ report metric definitions</div><div class="arr">→</div><div class="to">Metric methodologies · calculation standards · reporting integrity</div></div>
+        <div class="vrow vocab-row"><div class="from">Risk register escalation to CCO</div><div class="arr">→</div><div class="to">Issue-lifecycle governance · escalation routines</div></div>
+        <div class="vrow vocab-row"><div class="from">AI dashboard / report automation</div><div class="arr">→</div><div class="to">Reporting automation · operational efficiency initiatives</div></div>
+        <div class="vrow vocab-row"><div class="from">77-person Dubai + India operation</div><div class="arr">→</div><div class="to">Matrixed, multi-geography operating model</div></div>
+        <div class="vrow vocab-row"><div class="from">Error-rate / delinquency trend tracking</div><div class="arr">→</div><div class="to">Risk Appetite / KRI trend analysis</div></div>
+        <div class="vrow vocab-row"><div class="from">Three-team model (Dues / QCG / MIS)</div><div class="arr">→</div><div class="to">Three Lines of Defence operating awareness</div></div>
+        <div class="vrow vocab-row"><div class="from">MD/CEO NPV defense</div><div class="arr">→</div><div class="to">Executive / senior-leadership stakeholder engagement</div></div>
+      </div>
+    </section>
+
+    <!-- ===== 03 STAKEHOLDER DECODE ===== -->
+    <section class="panel" id="stakeholders">
+      <div class="secnum">03 / STAKEHOLDER DECODE <span class="pill blue" style="margin-left:8px">conditional · matrixed 3+</span></div>
+      <h1 class="sectitle">The matrix you'll govern through</h1>
+      <p class="secsub">The JD names extensive collaboration across Risk, Compliance, Technology, Operations, plus Regulatory and IAG audit interfaces. You'll hold accountability without direct authority over most of them — map them before round one.</p>
+
+      <div class="sh-card">
+        <div class="sht"><span class="pill navy">HM</span> VP, Issues &amp; Events Program</div>
+        <p class="body" style="margin-bottom:0;font-size:13.5px">Your hiring manager and direct line. Not named in the JD — treat as the archetype: a 2LoD program owner who needs a Director who can take reporting + QM + governance off their plate and present it upward credibly.</p>
+        <div class="shr"><b class="lbl">THEY NEED</b> A self-sufficient deputy who produces audit-ready insight and challenges the 1st line without creating friction. <b class="lbl" style="margin-left:6px">YOUR PROOF</b> You ran a CRO-facing governance register and a QM gate as a single point of accountability — exactly the load they want to delegate.</p>
+      </div>
+
+      <div class="sh-card">
+        <div class="sht"><span class="pill blue">1LoD</span> Business-Unit Risk &amp; Process Owners</div>
+        <p class="body" style="margin-bottom:0;font-size:13.5px">The first line that owns and executes controls; the source of the issues/events you govern. You assure and challenge their data, you don't run their operations.</p>
+        <div class="shr"><b class="lbl">THEY NEED</b> Reporting that helps rather than polices; clear closure criteria. <b class="lbl" style="margin-left:6px">YOUR PROOF</b> Your QCG sat over operators and held standards while keeping the relationship productive — High-S / Relator strength in action.</p>
+      </div>
+
+      <div class="sh-card">
+        <div class="sht"><span class="pill amber">3LoD</span> Internal Audit Group (IAG) &amp; Regulatory Exam teams</div>
+        <p class="body" style="margin-bottom:0;font-size:13.5px">The third line and regulators who test the program. Your artifacts and methodologies are what they examine. This is the highest-stakes audience.</p>
+        <div class="shr"><b class="lbl">THEY NEED</b> Defensible methodology, complete evidence, no surprises. <b class="lbl" style="margin-left:6px">YOUR PROOF</b> Audit SPOC for 14 findings closed to MD-approved standards with zero recurrence — you've been on the receiving end of audit and passed.</p>
+      </div>
+
+      <div class="sh-card">
+        <div class="sht"><span class="pill navy">Partner</span> Compliance</div>
+        <p class="body" style="margin-bottom:0;font-size:13.5px">Co-owns policy adherence and regulatory alignment. You align issue-management governance to enterprise policy with them.</p>
+        <div class="shr"><b class="lbl">THEY NEED</b> Consistency between what policy requires and what reporting shows. <b class="lbl" style="margin-left:6px">YOUR PROOF</b> 6+ MD-approved process-library documents — you've codified policy into operating standards before.</p>
+      </div>
+
+      <div class="sh-card">
+        <div class="sht"><span class="pill blue">Partner</span> Technology</div>
+        <p class="body" style="margin-bottom:0;font-size:13.5px">Owns the platforms behind reporting and automation. Your automation/efficiency mandate runs through them.</p>
+        <div class="shr"><b class="lbl">THEY NEED</b> A business partner who specs requirements precisely and doesn't thrash. <b class="lbl" style="margin-left:6px">YOUR PROOF</b> Co-architected Salesforce 0→1 via 6-stakeholder discovery into a 70+ report ecosystem — you speak both reporting and build.</p>
+      </div>
+
+      <div class="sh-card">
+        <div class="sht"><span class="pill navy">Audience</span> Senior Leadership / Risk Committee</div>
+        <p class="body" style="margin-bottom:0;font-size:13.5px">The executive consumers of your insights. The role's value is judged by whether leadership trusts your reporting enough to decide on it.</p>
+        <div class="shr"><b class="lbl">THEY NEED</b> Signal over noise; trend narrative; confidence under scrutiny. <b class="lbl" style="margin-left:6px">YOUR PROOF</b> Defended an AED 652M NPV model at MD/CEO across three scrutiny rounds with zero material concessions.</p>
+      </div>
+    </section>
+
+    <!-- ===== 04 FIT & GAP ===== -->
+    <section class="panel" id="fit">
+      <div class="secnum">04 / FIT &amp; GAP</div>
+      <h1 class="sectitle">Requirement-by-requirement</h1>
+      <p class="secsub">How your Sobha record maps to each JD line — and the four gaps to close before round one.</p>
+
+      <div class="meter">
+        <div class="big">74<em>→87</em></div>
+        <div class="ml">
+          <div class="t">Net Fit — current → addressable</div>
+          <div class="bar"><i style="width:74%"></i></div>
+          <div class="note">Addressable to 87 with: 2LoD vocabulary reframe · CRISC enrolled · one ORM-specific AI prototype shipped · senior-forum assertiveness rehearsed.</div>
+        </div>
+      </div>
+
+      <div class="req-card"><div class="rh"><div class="rt">Lead timely, accurate, insightful executive &amp; governance reporting</div><span class="badge h">Strong</span></div><div class="jd">"Lead the delivery of timely, accurate, and insightful executive reporting … across the Issues &amp; Events organization."</div><div class="pf">Your MIS function delivers a <strong>70+ report live-data ecosystem</strong> built 0→1, feeding a monthly risk readout to the CRO and quarterly readouts to MD/CEO. Identical discipline — different domain vocabulary.</div></div>
+
+      <div class="req-card"><div class="rh"><div class="rt">Lead the Quality Management program; ensure policy/standard adherence</div><span class="badge h">Strong</span></div><div class="jd">"Lead the Quality Management program across Issues and Events, ensuring adherence to enterprise policies, governance standards, and quality expectations."</div><div class="pf">Your <strong>QCG — a 12-person centralised Quality Control &amp; Governance gate</strong> — assured every Payment Request against standard before it became a collections event. This is a QM program you designed and ran, not participated in.</div></div>
+
+      <div class="req-card"><div class="rh"><div class="rt">Govern reporting data management, quality reviews, data integrity</div><span class="badge h">Strong</span></div><div class="jd">"Lead reporting data management, quality reviews, and governance routines to ensure data accuracy, consistency, and integrity."</div><div class="pf">You drove an audit error-rate reduction (one stream from 41%→1%) and a <strong>97.5% error-rate reduction</strong> across collections through governance routines and embedded RCSA-equivalent checks.</div></div>
+
+      <div class="req-card"><div class="rh"><div class="rt">Govern metric methodologies, calculations &amp; reporting standards</div><span class="badge m">Reframe</span></div><div class="jd">"Govern reporting methodologies, metric calculations, and reporting standards related to operational and risk metrics."</div><div class="pf">You own the metric definitions behind 70+ reports and held the line on a contested quality threshold using the underlying data. You've governed methodology — you've called it "report logic," not "metric methodology governance."</div></div>
+
+      <div class="req-card"><div class="rh"><div class="rt">Govern operational-risk programs — Risk Appetite, RCSA, issue mgmt</div><span class="badge m">Reframe</span></div><div class="jd">"Drive governance and oversight activities … including Risk Appetite monitoring, RCSA alignment, issue management governance, and operational risk reporting."</div><div class="pf">Your 14-finding register <strong>is</strong> issue-management governance; your threshold monitoring is Risk Appetite/KRI monitoring; your embedded operational checks are RCSA. The capability is present; the labels are the lift (see gap 1).</div></div>
+
+      <div class="req-card"><div class="rh"><div class="rt">Own business process controls, documentation &amp; audit-ready artifacts</div><span class="badge h">Strong</span></div><div class="jd">"Own and strengthen business process controls, documentation, procedures, and audit-ready governance artifacts."</div><div class="pf">Audit SPOC across 14 findings — each with owner, RCA, remediation, target date, evidence criterion — plus <strong>6+ MD-approved process-library documents</strong>. This is the literal artifact set the role maintains.</div></div>
+
+      <div class="req-card"><div class="rh"><div class="rt">Drive automation &amp; process improvement for reporting efficiency</div><span class="badge h">Strong</span></div><div class="jd">"Drive/support automation and process improvement initiatives to enhance reporting efficiency, scalability, and operational effectiveness."</div><div class="pf">PCC TAT compressed <strong>20 → 3 days (85%) while handling 3× volume</strong>, plus a built AI reporting-pack prototype (P9). Process improvement and reporting automation, demonstrated and shippable.</div></div>
+
+      <div class="req-card"><div class="rh"><div class="rt">Partner across Risk, Compliance, Technology, Operations on audits/exams</div><span class="badge h">Strong</span></div><div class="jd">"Partner with Risk, Compliance, Technology, and Operational teams to support … Regulatory Exams, IAG audits, business monitoring, and testing engagements."</div><div class="pf">You run a 77-person, two-geography, multi-stakeholder operation and interfaced a three-entity audit. Matrixed partnering at this altitude is your operating norm (see gap 2 for the FS-exam nuance).</div></div>
+
+      <div class="req-card"><div class="rh"><div class="rt">Present to senior leadership; executive communication</div><span class="badge h">Strong</span></div><div class="jd">"Excellent verbal and written communication skills with the ability to present to senior leadership."</div><div class="pf">Defended an <strong>AED 652M NPV model at MD/CEO, CFO, and CRO across three scrutiny rounds with zero material concessions</strong>. Executive-forum communication under challenge, evidenced.</div></div>
+
+      <div class="req-card"><div class="rh"><div class="rt">Lead, coach &amp; develop multi-level teams of Managers and Analysts</div><span class="badge h">Strong</span></div><div class="jd">"Lead, coach, and develop a high-performing team of Managers and Analysts … managing multiple levels of teams."</div><div class="pf">12 direct reports plus indirect leadership of Ops (38), QCG (12), and MIS (15) — multi-level leadership across a <strong>77-person organization</strong> with zero quality degradation during 14.9× scale-up.</div></div>
+
+      <h3 class="block">Psychometric fit — read it honestly</h3>
+      <div class="card tint">
+        <p class="body"><strong>Exact-match traits.</strong> High-C + High-S, with Restorative + Analytical + Arranger in your top five, is the precise profile a governance/QM/reporting-integrity Director runs on: systematic, precise, procedure-following, obsessive about accuracy. Under pressure your steadiness <em>increases</em> and you become more thorough — exactly the temperament you want walking into a regulatory exam.</p>
+        <p class="body" style="margin-bottom:0"><strong>The watch-item.</strong> Low-D / Low-I means your default is to seek confirmation before acting and to under-project in senior forums. At Director-to-VP altitude this can read as hesitancy. It is a behavioural-activation gap, not an absence — and you have three pre-built proof points (gap 3) that demonstrate decisiveness under pressure.</p>
+      </div>
+
+      <h3 class="block">The four gaps</h3>
+      <div class="gap-card"><div class="gh"><div class="gt">Gap 1 · 2LoD ORM vocabulary &amp; altitude</div><span class="sev hi">HIGH · bridgeable</span></div><div class="gb">You've done RCSA, KRI monitoring, and issue governance — but in 1LoD language inside a non-regulated business. The role expects fluent second-line framing: Three Lines of Defence, RCSA, Risk Appetite Statement, KRI/KCI breach, issue-lifecycle governance.</div><div class="fix"><strong>Close it:</strong> Two-week vocabulary build (databank §18 AmEx/GMNS bank + Basel ORM principles). Re-articulate your QCG as an <em>independent second-line gate</em> and your register as <em>RCSA-aligned issue governance</em>. Rehearse the unlock line: "I ran a function that sat apart from operators and challenged their controls — that's 2LoD by design."</div></div>
+
+      <div class="gap-card"><div class="gh"><div class="gt">Gap 2 · FS regulatory-exam / IAG interface experience</div><span class="sev md">MEDIUM</span></div><div class="gb">Real estate ≠ a regulated bank under Regulatory Exams and IAG cycles. You've been audit SPOC (1LoD↔3LoD), but not inside a financial-services exam cadence.</div><div class="fix"><strong>Close it:</strong> Frame the audit-SPOC experience as the transferable core ("the audience changes from IAG to a regulator; the discipline — defensible methodology, complete evidence, owned closure — is identical"). Read AmEx's risk-mindset and control narrative; speak to "no-surprises" exam posture. Don't over-claim FS regulatory experience you don't have.</div></div>
+
+      <div class="gap-card"><div class="gh"><div class="gt">Gap 3 · Senior-forum assertiveness (Low-D/I)</div><span class="sev md">MEDIUM</span></div><div class="gb">The role presents to senior leadership and challenges the first line. Your natural mode under-projects authority.</div><div class="fix"><strong>Close it:</strong> Lead with your three assertiveness anchors — <strong>S2</strong> (held PR standard at 49% under pressure, vindicated by data), <strong>S5</strong> (NPV defended at MD/CEO, zero concessions), <strong>S25</strong> (3 proactive CCO escalations before due dates). Run two senior-forum mock rounds. Open answers with the decision, not the deliberation.</div></div>
+
+      <div class="gap-card low"><div class="gh"><div class="gt">Gap 4 · Formal QM-program &amp; metric-governance labels</div><span class="sev lo">LOW-MED</span></div><div class="gb">Your QCG is a QM program in substance; the role may expect named QM methods (sampling plans, defect taxonomies, QA frameworks) and explicit "metric-methodology governance."</div><div class="fix"><strong>Close it:</strong> Map QCG to a named QM frame (sampling, defect categorisation, first-pass-yield) — your 49% RCA already clustered failures into categories. A Six Sigma Green Belt (already on your cert track) supplies the vocabulary cheaply. Re-state report logic as "metric methodology + calculation standards."</div></div>
+    </section>
+
+    <!-- ===== 05 STAR MAPPING ===== -->
+    <section class="panel" id="star">
+      <div class="secnum">05 / STAR MAPPING</div>
+      <h1 class="sectitle">Five stories, reframed for ORM</h1>
+      <p class="secsub">Each pre-mapped to a JD pillar and re-voiced in second-line language. Tap to expand. Source: STAR Story Bank V3.</p>
+
+      <div class="star-card">
+        <div class="star-head"><div><div class="sc">S1 · RISK_GOVERNANCE · ★★★ · HEADLINE</div><div class="stt">14-finding audit register → 97.5% error reduction</div><div class="sl">Maps to P3: issue-management governance, RCSA alignment, audit-ready artifacts, governance reporting cadence.</div></div><span class="chev">▶</span></div>
+        <div class="star-body">
+          <div class="reframe"><b>ORM reframe</b>This is your spine story for the role. It is issue-lifecycle governance, RCSA-aligned control assessment, and CRO/MD reporting cadence — all in one. Lead with it for "tell me about an issue/audit program you owned."</div>
+          <div class="srow"><div class="sk">SITUATION</div><div class="sv">Sobha Internal Audit logged 14 open findings against Dues Collections — recurring data-quality failures, missing approvals, and control gaps spanning four years.</div></div>
+          <div class="srow"><div class="sk">TASK</div><div class="sv">As audit SPOC, own remediation: close all 14 to MD-approved closure standards and build a sustaining governance mechanism so findings would not recur.</div></div>
+          <div class="srow"><div class="sk">ACTION</div><div class="sv">Built a 14-finding governance register with monthly tracking to the CRO and quarterly readouts to MD/CEO; produced control documentation per finding; ran 6 process redesigns (each with MD-approved process docs); embedded RCSA-equivalent checks into the operating rhythm; co-architected Salesforce 0→1 via 6-stakeholder discovery to instrument the controls digitally.</div></div>
+          <div class="srow"><div class="sk r">RESULT</div><div class="sv">All 14 findings closed within 18 months; recurring error rate down 97.5%; closure standard adopted as the model for adjacent business-unit audit responses.</div></div>
+        </div>
+      </div>
+
+      <div class="star-card">
+        <div class="star-head"><div><div class="sc">S2 · RISK_GOVERNANCE · ★★★ · ASSERTIVENESS ANCHOR</div><div class="stt">PR rejection 49% — quality gate held under pressure</div><div class="sl">Maps to P2 (Quality Management) + the assertiveness gap.</div></div><span class="chev">▶</span></div>
+        <div class="star-body">
+          <div class="reframe"><b>ORM reframe</b>The control gate working as designed, defended against commercial pressure to relax it. This is your "held an unpopular position" and "Quality Management under pressure" story. The rejection rate is a KRI breach you investigated and stood behind.</div>
+          <div class="srow"><div class="sk">SITUATION</div><div class="sv">December 2025: the Payment Request rejection rate at the QCG quality gate hit 49%. The commercial team pushed hard to loosen the documentation standard — "the friction is killing velocity."</div></div>
+          <div class="srow"><div class="sk">TASK</div><div class="sv">Decide: relax the gate and accept downstream revenue/control risk, or hold the standard and absorb the commercial friction — then defend the call with evidence.</div></div>
+          <div class="srow"><div class="sk">ACTION</div><div class="sv">Ran root-cause analysis on the rejections; found ~73% were substantive control gaps, not gate over-firing; presented the data showing the gate was catching real leakage; held the standard and routed remediation to the upstream documentation failures.</div></div>
+          <div class="srow"><div class="sk r">RESULT</div><div class="sv">Position vindicated by downstream data; the gate was confirmed as catching genuine exceptions rather than noise; standard retained.</div></div>
+        </div>
+      </div>
+
+      <div class="star-card">
+        <div class="star-head"><div><div class="sc">S5 · STAKEHOLDER · ★★★ · ASSERTIVENESS ANCHOR</div><div class="stt">AED 652M NPV defended at MD/CEO — zero concessions</div><div class="sl">Maps to P1 executive communication + senior-forum assertiveness.</div></div><span class="chev">▶</span></div>
+        <div class="star-body">
+          <div class="reframe"><b>ORM reframe</b>Your proof of executive-altitude communication under scrutiny — the exact muscle this role needs for Risk Committee and exam settings. Deploy for "present to senior leadership" and "a time you pushed back."</div>
+          <div class="srow"><div class="sk">SITUATION</div><div class="sv">Proposed a mortgage-based revenue-acceleration model — NPV AED 652M against AED 21.2M cost, 32% cheaper than bank financing — needing MD/CEO approval in a risk-averse org with no precedent for the structure.</div></div>
+          <div class="srow"><div class="sk">TASK</div><div class="sv">Secure executive approval through multiple scrutiny rounds against finance and legal objections, without conceding core model parameters.</div></div>
+          <div class="srow"><div class="sk">ACTION</div><div class="sv">Built the DCF from first principles; prepared sensitivity analysis across 5 scenarios; presented to MD/CEO, CFO, and CRO in three review rounds; fielded objections on assumptions, risk exposure, and feasibility; held position on core parameters.</div></div>
+          <div class="srow"><div class="sk r">RESULT</div><div class="sv">Approved with zero material concessions; 248-day prepay advantage; 32% cheaper than bank financing.</div></div>
+        </div>
+      </div>
+
+      <div class="star-card">
+        <div class="star-head"><div><div class="sc">S6 · DATA_OPS · ★★★</div><div class="stt">70+ report intelligence ecosystem (0→1)</div><div class="sl">Maps to P1: reporting governance, data management, metric integrity.</div></div><span class="chev">▶</span></div>
+        <div class="star-body">
+          <div class="reframe"><b>ORM reframe</b>The executive-insights and reporting-integrity layer, built from scratch. This is your "data-driven decisions" and "built something from scratch" story, and it grounds your metric-methodology-governance claim.</div>
+          <div class="srow"><div class="sk">SITUATION</div><div class="sv">The collections function operated without a unified intelligence layer — fragmented data, no proactive cost or risk signaling across the portfolio.</div></div>
+          <div class="srow"><div class="sk">TASK</div><div class="sv">Build the reporting and analytics infrastructure the entire function could operate on, with defensible, consistent metric definitions.</div></div>
+          <div class="srow"><div class="sk">ACTION</div><div class="sv">Ran a 6-stakeholder discovery (Sales, Operations, Finance, MIS, IT, Compliance); co-architected Salesforce 0→1; built a live-data-connected ecosystem of 70+ reports with standardised metric logic enabling proactive cost and risk signaling.</div></div>
+          <div class="srow"><div class="sk r">RESULT</div><div class="sv">70+ reports in production as the single intelligence system the 77-person function runs on; proactive cost/risk signaling enabled across the portfolio.</div></div>
+        </div>
+      </div>
+
+      <div class="star-card">
+        <div class="star-head"><div><div class="sc">S18 · TRANSFORMATION · ★★★</div><div class="stt">PCC TAT 20 → 3 days (85% reduction) at 3× volume</div><div class="sl">Maps to P3: automation, process improvement, scalability, operational efficiency.</div></div><span class="chev">▶</span></div>
+        <div class="star-body">
+          <div class="reframe"><b>ORM reframe</b>Your process-improvement / efficiency proof — directly answers the JD's "automation and process improvement to enhance reporting efficiency and scalability." Use for "tell me about a process you re-engineered."</div>
+          <div class="srow"><div class="sk">SITUATION</div><div class="sv">The PCC process ran a 20-day turnaround across Accounts, Legal, DLD, and Technology — a bottleneck that worsened as volume grew.</div></div>
+          <div class="srow"><div class="sk">TASK</div><div class="sv">Compress turnaround without disrupting live operations, while absorbing a 3× increase in volume.</div></div>
+          <div class="srow"><div class="sk">ACTION</div><div class="sv">Diagnosed the cross-functional bottleneck end-to-end; redesigned the workflow and handoffs; sequenced the rollout to avoid disruption; instrumented it for monitoring.</div></div>
+          <div class="srow"><div class="sk r">RESULT</div><div class="sv">Turnaround cut from 20 to 3 days (85% reduction) while handling 3× the volume — efficiency improvement at category scale.</div></div>
+        </div>
+      </div>
+
+      <div class="card warn" style="margin-top:6px"><div class="ctitle">Backup bench (have them loaded, don't lead with them)</div><p class="body" style="margin-bottom:0">S28 (audit 41%→1% — data integrity) · S22 (AED 475M unallocated-receipts containment — exception management) · S33 (4-layer reconciliation — control architecture) · S12 (team independence) · S24 (honest self-reporting of an app-adoption miss — your failure/self-awareness story).</p></div>
+    </section>
+
+    <!-- ===== 06 30/60/90 ===== -->
+    <section class="panel" id="plan">
+      <div class="secnum">06 / 30·60·90</div>
+      <h1 class="sectitle">First-90 operating plan</h1>
+      <p class="secsub">What you'd say in the interview when asked "how would you approach your first 90 days" — a 2LoD governance ramp, not a takeover.</p>
+
+      <div class="phase">Days 0–30 · Listen, map, and earn the data's trust</div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Map the Issues &amp; Events reporting estate</div><div class="tlb">Inventory every executive and governance report, its owner, its metric definitions, and its cadence. Build a single source-of-truth map before changing anything.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Meet the matrix</div><div class="tlb">1:1s with the VP, 1LoD process owners, Compliance, Technology, and the IAG/exam liaison. Understand each partner's pain with current reporting and QM.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Audit the metric methodologies</div><div class="tlb">Pressure-test how the top operational/risk metrics are calculated. Flag any definitional inconsistencies — the fastest credibility win for a reporting-integrity owner.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Baseline the QM program</div><div class="tlb">Understand current sampling, defect taxonomy, and quality-review routines across Issues &amp; Events; identify where standards are ambiguous or unenforced.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Learn the regulatory rhythm</div><div class="tlb">Map the live Regulatory Exam / IAG calendar and any open findings the team owns. Know the no-surprises posture before the first review.</div></div></div>
+
+      <div class="phase">Days 31–60 · Stabilise integrity and standardise quality</div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Publish a metric-methodology standard</div><div class="tlb">Codify calculation definitions for the core metrics so two teams can no longer report the same number differently. This is the role's central mandate, made tangible.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Tighten governance-reporting routines</div><div class="tlb">Introduce a data-quality review gate before executive reports publish; define accuracy/consistency checks. Mirror your CRO-readout discipline.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Formalise the QM quality-review cadence</div><div class="tlb">Stand up a documented sampling + defect-trend review for Issues &amp; Events with clear thresholds and escalation paths.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Strengthen audit-ready artifacts</div><div class="tlb">Ensure every governance artifact (procedures, evidence, closure criteria) is exam-ready. Close documentation gaps surfaced in the first 30 days.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Coach the team on second-line posture</div><div class="tlb">Set the standard for challenging the first line constructively; develop Managers and Analysts on methodology rigor and executive-grade communication.</div></div></div>
+
+      <div class="phase">Days 61–90 · Automate, sharpen insight, and prove value</div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Ship the first reporting-automation win</div><div class="tlb">Deploy an automated executive/governance reporting pack (your P9 pattern) to compress assembly time and free the team for analysis over compilation.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Add trend-and-insight layer to executive reporting</div><div class="tlb">Move reporting from "what happened" to "what's emerging" — trend analysis and forward signals leadership can decide on.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Align Risk Appetite / KRI monitoring</div><div class="tlb">Confirm thresholds, breach-escalation routines, and RCSA alignment for Issues &amp; Events; surface any appetite breaches with recommended action.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Deliver a clean governance review or exam interaction</div><div class="tlb">Demonstrate the no-surprises posture in a live IAG/exam or Risk Committee touchpoint — defensible methodology, complete evidence.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Present a 90-day value readout to the VP</div><div class="tlb">Quantify integrity fixes, QM standardisation, automation time saved, and the forward roadmap. Close the loop with the executive audience.</div></div></div>
+      <div class="tl-item"><div class="dot"></div><div><div class="tlt">Set the 6-month roadmap</div><div class="tlb">Sequence deeper automation, expanded RCSA coverage, and a maturing defect-trend program — positioning the function as proactive, not reactive.</div></div></div>
+    </section>
+
+    <!-- ===== 07 AI DIFFERENTIATOR ===== -->
+    <section class="panel" id="ai">
+      <div class="secnum">07 / AI DIFFERENTIATOR</div>
+      <h1 class="sectitle">Your sharpest edge — and it's already half-built</h1>
+      <p class="secsub">No other role in your pipeline matches the AI mandate this precisely. The JD names reporting automation + executive insights; you've prototyped exactly that.</p>
+
+      <div class="card tint">
+        <div class="ctitle">The pitch (memorise the posture, not the script)</div>
+        <p class="body" style="margin-bottom:0">"One structural inefficiency in large risk-reporting teams is that people spend 60–70% of their time <em>assembling</em> reports rather than acting on the risk underneath them. I've built the precedent — a 70+ report live intelligence layer at Sobha, AI-augmented. For this role I'd ship a working reporting-automation prototype before week one, so the team's time moves from compilation to judgment. That's the difference between a candidate with an operations background and one who reduces the team's tooling debt on arrival."</p>
+      </div>
+
+      <div class="ai-card">
+        <div class="atag">AI PROJECT 1 · BUILT (P9) · DIRECTOR-CRITICAL</div>
+        <div class="att">Executive Insights / Risk Committee Pack Generator</div>
+        <div class="ab">Input: raw KRI/KCI metrics + open issue/event list + last meeting actions. Claude API drafts the governance pack — executive summary, metric commentary, aged-item escalations, recommended actions. This is the role's recurring deliverable, automated. Carry a 60-second screen-share into a final round: "I've already automated one of this team's hardest weekly burdens."</div>
+        <div class="stack"><span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">Document Generation</span><span class="tag gold">Map: P1 Reporting</span></div>
+      </div>
+
+      <div class="ai-card">
+        <div class="atag">AI PROJECT 2 · BUILT (P7) · ISSUE GOVERNANCE</div>
+        <div class="att">Issues &amp; Events Tracker with AI Risk Flagging</div>
+        <div class="ab">Input: a portfolio of open issues/events with owner, age, last update, blocker. Claude API classifies each by severity (P0–P3), generates a "blocker hypothesis" for aged items, and drafts a weekly status briefing. It is the exact intelligence layer this Director governs — re-voiced from "ORE Tracker" to "Issues &amp; Events Tracker."</div>
+        <div class="stack"><span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">Streamlit</span><span class="tag gold">Map: P3 Issue Mgmt</span></div>
+      </div>
+
+      <div class="ai-card">
+        <div class="atag">AI PROJECT 3 · NET-NEW BUILD · 2–3 DAYS · QM + INTEGRITY</div>
+        <div class="att">Metric-Integrity &amp; QM Defect-Trend Engine</div>
+        <div class="ab">Build this specifically for this role — it hits the two pillars P9/P7 don't. (a) <em>Integrity check:</em> validate reported metric values against their defined calculation methodology and flag deviations (the "two teams, two numbers" problem). (b) <em>QM trend:</em> cluster issue/event records by failure mode, surface the top 3 emerging defect themes, and draft an "emerging-risk / control-revisit" memo for governance review. Output: a Streamlit demo + one-page sample memo. It is the literal job — reporting integrity + Quality Management — shown in prototype before the interview.</div>
+        <div class="stack"><span class="tag">Python</span><span class="tag">Claude API</span><span class="tag">NLP Clustering</span><span class="tag new">NEW · ship pre-interview</span></div>
+      </div>
+
+      <div class="card"><div class="ctitle">Why this lands at AmEx specifically</div><p class="body" style="margin-bottom:0">AmEx runs ORM on data — registers, finding logs, RCA outputs, governance-pack content. The 49% PR scorecard you built is already an anomaly-detection pattern (threshold → flag → escalate → remediate); AI just makes it real-time. Frame your AI work as <em>"I built what an applied-AI risk team does, in a different domain"</em> — not "I read about ChatGPT." The posture shift is the differentiator.</p></div>
+    </section>
+
+    <!-- ===== 08 INTERVIEW KIT ===== -->
+    <section class="panel" id="interview">
+      <div class="secnum">08 / INTERVIEW KIT</div>
+      <h1 class="sectitle">Likely questions &amp; how to answer</h1>
+      <p class="secsub">Grouped by round type. Each carries the STAR to deploy or the posture to take. Lead with the decision; follow with the evidence.</p>
+
+      <div class="qgroup">— Behavioral / leadership</div>
+      <div class="q-card"><div class="qq">Tell me about an issue or audit program you owned end-to-end.</div><div class="qa"><b>S1.</b> 14 findings → 97.5% error reduction, RCSA-equivalent checks, CRO/MD cadence. Your spine story.</div></div>
+      <div class="q-card"><div class="qq">Describe a time you held an unpopular position under pressure.</div><div class="qa"><b>S2.</b> 49% PR gate held; "the rejection rate was the control working as designed." Open with the decision.</div></div>
+      <div class="q-card"><div class="qq">Walk me through presenting to your most senior stakeholder forum.</div><div class="qa"><b>S5.</b> NPV at MD/CEO/CFO/CRO, three rounds, zero concessions. Your executive-communication anchor.</div></div>
+      <div class="q-card"><div class="qq">Tell me about leading a large, multi-level team.</div><div class="qa"><b>S12 / context.</b> 77 people, two geographies, 12 direct + indirect Ops/QCG/MIS leadership, zero quality degradation at 14.9× scale.</div></div>
+      <div class="q-card"><div class="qq">Describe an escalation you initiated to senior leadership.</div><div class="qa"><b>S25.</b> 3 blocked register items escalated to CCO before due dates — proactivity, not reaction.</div></div>
+      <div class="q-card"><div class="qq">Tell me about a time you failed.</div><div class="qa"><b>S24.</b> "Target 80%, hit 17%. I reported it exactly as it was, because credibility depends on honest reporting." Owns it; shows integrity.</div></div>
+      <div class="q-card"><div class="qq">What's your biggest weakness?</div><div class="qa"><b>S15 framing.</b> "My instinct is to want all the data; I've trained myself to act on 70% and escalate fast." Names the Low-D honestly, shows the correction.</div></div>
+
+      <div class="qgroup">— Technical / ORM &amp; governance</div>
+      <div class="q-card"><div class="qq">How would you govern metric methodology so two teams can't report the same metric differently?</div><div class="qa">Single methodology standard + a definition catalogue + a data-quality review gate before publish. Reference your 70+ report standardised logic (S6).</div></div>
+      <div class="q-card"><div class="qq">Walk me through your understanding of the Three Lines of Defence.</div><div class="qa">1LoD owns/executes controls; 2LoD (this role) sets standards, oversees, and challenges; 3LoD audits independently. Position QCG as a 2LoD-style gate; audit-SPOC as 1LoD↔3LoD interface.</div></div>
+      <div class="q-card"><div class="qq">How do you approach RCSA in practice?</div><div class="qa">Identify risks per process, assess control design + operating effectiveness, rate residual risk, drive remediation. Your embedded operational checks in the 14-finding program were RCSA in substance.</div></div>
+      <div class="q-card"><div class="qq">A KRI breaches appetite. What do you do?</div><div class="qa">Confirm data integrity first; RCA the breach (5-Why / Fishbone); assess whether it's signal or noise (mirror the 49% RCA: ~73% substantive); escalate with recommended action, not just the number.</div></div>
+      <div class="q-card"><div class="qq">How do you run a Quality Management program for an issue/event process?</div><div class="qa">Define quality standards + sampling plan + defect taxonomy; review cadence with thresholds; trend analysis; closed-loop remediation. Map QCG's gate-and-review model.</div></div>
+      <div class="q-card"><div class="qq">What makes a governance artifact audit-ready?</div><div class="qa">Owner, documented procedure, evidence trail, closure criteria, version control — complete enough that a reviewer needs no verbal explanation. Reference 14-finding artifact set + 6 MD-approved process docs.</div></div>
+      <div class="q-card"><div class="qq">How do you ensure reporting data accuracy and integrity?</div><div class="qa">Source controls, reconciliation, a pre-publish quality gate, and methodology consistency. Cite the 41%→1% error reduction and reconciliation discipline.</div></div>
+      <div class="q-card"><div class="qq">Which reporting/visualization and automation tools have you used?</div><div class="qa">Live-data BI ecosystem (70+ reports), Looker Studio, Power BI, plus Python/Claude-API reporting automation. Name the AI prototypes (P9/P7).</div></div>
+
+      <div class="qgroup">— Executive / scenario &amp; case</div>
+      <div class="q-card"><div class="qq">How would you spend your first 90 days?</div><div class="qa">Run the 30·60·90 (tab 06): listen + map + audit methodologies → standardise integrity + QM → automate + sharpen insight. Emphasise "earn the data's trust before changing it."</div></div>
+      <div class="q-card"><div class="qq">Leadership wants the issue-resolution number to look better than it is. How do you handle it?</div><div class="qa">Hold integrity; present the true number with context and a credible improvement trajectory. Anchor to S24 (honest reporting) + S2 (held the standard).</div></div>
+      <div class="q-card"><div class="qq">A regulator/IAG flags a gap in your reporting. What's your response?</div><div class="qa">No-surprises posture: acknowledge, RCA, own closure with evidence and timeline. Frame audit-SPOC experience as directly transferable (gap 2).</div></div>
+      <div class="q-card"><div class="qq">The first line pushes back on a control you're enforcing. How do you respond?</div><div class="qa">Lead with data (49% RCA model), separate signal from friction, hold the standard while routing remediation upstream. Constructive challenge, not adversarial.</div></div>
+      <div class="q-card"><div class="qq">Where would you use AI/automation in this function first?</div><div class="qa">Automate governance-pack assembly (P9) to shift time from compilation to analysis; then metric-integrity validation (P3 build). Show the prototype.</div></div>
+      <div class="q-card"><div class="qq">Why American Express, and why this role?</div><div class="qa">175-year risk-mindset culture + a role that is the literal mirror of your QCG/MIS/risk-register org. "I want to do at AmEx scale what I built from scratch at Sobha." Tie to the brand's trust/security promise.</div></div>
+      <div class="q-card"><div class="qq">You're from real estate, not financial services — why should we believe you'll transfer?</div><div class="qa">"The asset class differs; the operational-risk profile is identical — AED 12.97B portfolio, three-entity audit, financial-services-grade governance built without institutional infrastructure." Confidence, not apology.</div></div>
+
+      <div class="card warn" style="margin-top:8px"><div class="ctitle">Two delivery rules for your DISC profile</div><p class="body" style="margin-bottom:0"><strong>1.</strong> Start every behavioral answer with the outcome/decision, then the method — your instinct is to build up to it. <strong>2.</strong> In senior-forum simulation, state recommendations as recommendations ("I'd hold the standard"), not as questions seeking validation.</p></div>
+    </section>
+
+    <!-- ===== 09 COMP INTEL ===== -->
+    <section class="panel" id="comp">
+      <div class="secnum">09 / COMP INTEL</div>
+      <h1 class="sectitle">Compensation &amp; negotiation</h1>
+      <p class="secsub">Director = AmEx Band 40. Figures triangulated across your internal scorecard + two Glassdoor geographies + 6figr band data. <span class="pill amber">Confidence: Medium</span></p>
+
+      <div class="comp-card">
+        <div class="cct">Total-comp picture — Director (Band 40), India</div>
+        <div class="crange">
+          <div class="cb"><div class="cp">P25</div><div class="cv">~₹48L</div></div>
+          <div class="cb"><div class="cp">P50</div><div class="cv">~₹64L</div></div>
+          <div class="cb hl"><div class="cp">P75 · YOUR ANCHOR</div><div class="cv">~₹82L</div></div>
+          <div class="cb"><div class="cp">P90 / stretch</div><div class="cv">~₹1Cr</div></div>
+        </div>
+        <div class="ccb">Glassdoor Gurgaon shows a Director total range ≈ ₹55–85L (base avg ~₹60L + variable ~₹15L; 90th pct ~₹1Cr); New Delhi ≈ ₹53–84L. Your internal scorecard pegs Band 40 at ~₹82L — consistent with a strong external Director hire landing around P75.</div>
+      </div>
+
+      <div class="comp-card">
+        <div class="cct">Pay structure</div>
+        <div class="ccb">Base + annual cash bonus + RSU grant (AmEx grants equity at Director band). Glassdoor "additional pay" of ~₹15–18L signals meaningful variable + stock. Clarify the base/bonus/RSU split early — at Band 40 the equity component is where stretch upside sits.</div>
+      </div>
+
+      <div class="comp-card">
+        <div class="cct">Your anchor &amp; floor</div>
+        <div class="ccb"><strong>Anchor ~₹82L all-in (P75)</strong>, justified by 14.9× programme scale, 77-person multi-geography leadership, and the AI-reporting differentiation few external candidates carry. Your walk-away floor (₹42L VP-track / ₹38L AVP-track) is far below this band — a Director offer clears it comfortably, so negotiate from strength, not relief.</div>
+      </div>
+
+      <div class="comp-card">
+        <div class="cct">Negotiation levers</div>
+        <div class="ccb">(1) Competing AmEx applications (GMNS/GCG) + an Oaktree process create cross-offer leverage — sequence them in the same cycle. (2) The shipped AI prototypes justify a premium over a paper-credentials candidate. (3) Multi-level leadership at 77-person scale supports the top of band. Lead negotiation with scope and demonstrated value, not tenure.</div>
+      </div>
+
+      <div class="card warn"><div class="ctitle">6figr sequencing-trap caution</div><p class="body" style="margin-bottom:0">6figr publishes an AmEx "Director Band 40" page but its headline numbers tend to skew high (self-reported, top-of-market). Use it as an <em>upper-bound directional signal only</em> — do not anchor your ask to a 6figr outlier, or you risk pricing yourself out of an otherwise-strong process. Glassdoor + your internal band are the credible anchors.</p></div>
+    </section>
+
+    <!-- ===== 10 CERT ROADMAP ===== -->
+    <section class="panel" id="cert">
+      <div class="secnum">10 / CERT ROADMAP</div>
+      <h1 class="sectitle">Certifications — map existing first</h1>
+      <p class="secsub">JD: "advanced degree or risk certification preferred." Both are reachable. Most of what helps is already on your AmEx/Google cert tracks — net-new spend is minimal.</p>
+
+      <div class="cert-card"><div class="ch"><div class="cn">CRISC (ISACA)</div><span class="wt med">MEDIUM · highest AmEx signal</span></div><div class="cb2">Directly satisfies the "risk certification preferred" line and is even more on-point here than for GMNS — risk + IT-controls governance is the role's core. Already <strong>PLANNED</strong> on your AmEx track (~$760). Enrol now; it signals serious intent for a 2LoD role and supplies the framework vocabulary in gap 1.</div></div>
+
+      <div class="cert-card"><div class="ch"><div class="cn">Six Sigma Green Belt</div><span class="wt med">MEDIUM · Quality Management pillar</span></div><div class="cb2">Genuinely relevant to the QM pillar (sampling, defect taxonomy, process quality) and closes gap 4 cheaply. Already <strong>priority on your Google/gTech track</strong> — this role gives it a second justification. Pulls double duty across pipelines.</div></div>
+
+      <div class="cert-card"><div class="ch"><div class="cn">Looker Studio (+ Power BI familiarity)</div><span class="wt medlo">LOW-MED · reporting tools named</span></div><div class="cb2">The JD names "reporting and visualization tools." Looker Studio is free and already <strong>PLANNED</strong>; pair with your existing Power BI exposure. Build one ORM-flavoured dashboard as a portfolio artifact alongside the AI prototypes.</div></div>
+
+      <div class="cert-card"><div class="ch"><div class="cn">Advanced degree — already satisfied</div><span class="wt have">HAVE</span></div><div class="cb2">"Advanced degree … preferred" is met by your IIM Udaipur PGDM (plus BITS Pilani dual degree). No new academic spend needed — the preferred-qualification box is already ticked. Present it as a strength; nothing to bridge.</div></div>
+
+      <div class="card tint"><div class="ctitle">Footprint read</div><p class="body" style="margin-bottom:0">Net-new requirement for this role is effectively just <strong>CRISC enrolment</strong> (already planned) — everything else is reused from existing tracks. No hard cert gate blocks the application; certs here are signal-amplifiers, not entry tickets. Apply before any cert completes.</p></div>
+    </section>
+
+    <!-- ===== 11 CLOSE & OUTREACH ===== -->
+    <section class="panel" id="close">
+      <div class="secnum">11 / CLOSE &amp; OUTREACH</div>
+      <h1 class="sectitle">Application strategy &amp; outreach</h1>
+      <p class="secsub">How to file this without diluting your primary bets — and how to open warm doors.</p>
+
+      <div class="close-card"><div class="clt">Application sequencing</div><div class="clb">File in the <strong>same cycle as GMNS + Oaktree</strong>, not after — competing processes are your negotiation leverage. Four AmEx applications across divisions (GMNS Dir, GCG Dir, GCG SM, ORM I&amp;E Dir) reads as range, not over-applying. Resume base: your AmEx Director v4, re-led to push <strong>QCG (Quality Management) and MIS (reporting governance) to the front</strong> and foreground the 14-finding register as issue-management governance. Confirm location (Gurgaon assumed) before finalising the cover note.</div></div>
+
+      <div class="close-card"><div class="clt">Positioning one-liner</div><div class="clb">"I built and ran the exact trifecta this role governs — a 12-person quality-management gate, a 70+ report executive-insights layer, and a CRO-facing operational-risk register — across an AED 12.97B, 77-person, two-geography operation. I'm looking to do at AmEx scale what I built from scratch at Sobha, with AI-augmented reporting from day one."</div></div>
+
+      <div class="close-card"><div class="clt">Referral targets (warm-path first)</div><div class="clb">Prioritise IIM Udaipur and BITS Pilani alumni in AmEx India risk/ORM functions (Gurgaon). A warm referral materially lifts an external, cross-industry Director candidacy. Populate from your CCC referral log; aim for one intro before the application is screened.</div></div>
+
+      <div class="close-card script">
+        <div class="clt">Cold-outreach draft — to an AmEx ORM contact (LinkedIn/email)</div>
+        <p class="script-text">"Hi [Name] — I lead operational risk, quality, and reporting governance for a AED 12.97B, 77-person collections programme across Dubai and India (QCG quality gate, 70+ report MI layer, a CRO-facing 14-finding risk register). I noticed AmEx's Director role in ORM Issues &amp; Events — Executive Insights &amp; Quality Management, and it maps almost exactly to what I run today, including AI-augmented reporting I've already prototyped. Would you have 15 minutes to share how the I&amp;E team thinks about its second-line reporting and QM remit? Grateful for any pointer."</p>
+      </div>
+
+      <div class="close-card"><div class="clt">Cultural hook to weave in</div><div class="clb">The JD leans on AmEx's <strong>175-year history and "strong risk mindset"</strong> — its brand promise of trust, security, and service. Mirror it: a reporting-integrity + QM Director <em>is</em> the operational guardian of that trust promise. It's a clean, authentic alignment between the role's purpose and your record of holding standards under pressure.</div></div>
+
+      <div class="foot">
+        PLAYBOOK FACTORY v1 · single-shot build · AmEx Director — ORM Issues &amp; Events: Executive Insights &amp; Quality Management<br>
+        Data referenced (not restated): STAR Story Bank V3 (S1, S2, S5, S6, S18 lead; S12/S24/S25/S28/S22/S33 bench) · Databank V6 §18 vocab · AI portfolio P7/P9 + net-new build · Cert tracker · DISC/PPA/Clifton.<br>
+        This project self-scores and builds; it does not sync to ECOSYSTEM_STATE — hand the active role back to P1/P2 by hand.
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  var tabs = document.querySelectorAll('.tab');
+  var panels = document.querySelectorAll('.panel');
+  var sel = document.getElementById('mobsel');
+  function show(id){
+    panels.forEach(function(p){ p.classList.toggle('active', p.id===id); });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.dataset.p===id); });
+    if(sel) sel.value = id;
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  tabs.forEach(function(t){ t.addEventListener('click', function(){ show(t.dataset.p); }); });
+  if(sel) sel.addEventListener('change', function(){ show(sel.value); });
+
+  document.querySelectorAll('.star-head').forEach(function(h){
+    h.addEventListener('click', function(){ h.parentElement.classList.toggle('open'); });
+  });
+</script>
+</body>
+</html>

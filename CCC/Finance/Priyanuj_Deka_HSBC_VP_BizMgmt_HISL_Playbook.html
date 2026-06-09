@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSBC VP Business Management — HISL · Playbook</title>
+<style>
+  :root{
+    --red:#DB0011; --red-dk:#A8000D; --ink:#141414; --char:#1d1d1d;
+    --rail:#171717; --rail-2:#222; --line:#e4e4e4; --mut:#6b6b6b;
+    --bg:#ffffff; --panel:#f6f6f6; --chip:#f0f0f0; --ok:#1a7f37; --warn:#b54708;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,"Helvetica Neue",Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{display:flex;min-height:100vh}
+  /* RAIL */
+  .rail{width:248px;background:var(--rail);color:#cfcfcf;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;border-right:3px solid var(--red)}
+  .brand{padding:22px 20px 16px;border-bottom:1px solid var(--rail-2)}
+  .hex{display:inline-block;width:14px;height:14px;background:var(--red);transform:rotate(45deg);margin-right:9px;vertical-align:middle}
+  .brand b{color:#fff;font-size:15px;letter-spacing:.5px;vertical-align:middle}
+  .brand .sub{display:block;color:var(--mut);font-size:11px;margin-top:7px;letter-spacing:.3px;line-height:1.4}
+  nav{padding:10px 0 30px}
+  nav a{display:flex;align-items:center;gap:10px;padding:10px 20px;color:#bdbdbd;text-decoration:none;font-size:13.5px;border-left:3px solid transparent;transition:.15s}
+  nav a .n{color:var(--red);font-weight:700;font-size:11px;width:18px}
+  nav a:hover{background:var(--rail-2);color:#fff}
+  nav a.active{background:#000;color:#fff;border-left-color:var(--red)}
+  /* MAIN */
+  main{flex:1;max-width:980px;padding:0 0 80px}
+  .topbar{display:none}
+  .panel{display:none;padding:40px 48px}
+  .panel.show{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .eyebrow{color:var(--red);font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+  h1{font-size:27px;letter-spacing:-.3px;margin:7px 0 4px}
+  h2{font-size:20px;margin:30px 0 12px;letter-spacing:-.2px;padding-top:14px;border-top:1px solid var(--line)}
+  h2:first-of-type{border-top:none;padding-top:0}
+  h3{font-size:15px;margin:0 0 5px}
+  p.lead{color:#333;font-size:15.5px;margin:10px 0 4px}
+  .mut{color:var(--mut)}
+  .sm{font-size:13px}
+  /* CARDS */
+  .grid{display:grid;gap:13px;margin:14px 0}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:15px 16px}
+  .card.edge{border-left:3px solid var(--red)}
+  .card h3{font-size:14.5px}
+  .card p{font-size:13.5px;color:#3a3a3a;margin-top:5px}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--chip);color:#444;margin:0 5px 5px 0}
+  .tag.red{background:#fde7e9;color:var(--red-dk)}
+  .tag.ok{background:#e6f4ea;color:var(--ok)}
+  .tag.warn{background:#fdf0e3;color:var(--warn)}
+  .tag.ink{background:#1d1d1d;color:#fff}
+  /* STAT */
+  .stat{background:#0e0e0e;color:#fff;border-radius:8px;padding:16px 16px 14px;border-left:3px solid var(--red)}
+  .stat .k{font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:#9a9a9a}
+  .stat .v{font-size:25px;font-weight:700;margin-top:6px;line-height:1}
+  .stat .v small{font-size:13px;color:#cfcfcf;font-weight:400}
+  /* lists */
+  ul.clean{list-style:none;margin:8px 0}
+  ul.clean li{padding:7px 0 7px 20px;position:relative;font-size:13.5px;border-bottom:1px solid #ededed}
+  ul.clean li:before{content:"";position:absolute;left:0;top:13px;width:7px;height:7px;background:var(--red);transform:rotate(45deg)}
+  ul.clean li:last-child{border-bottom:none}
+  .vocab-term{display:inline-block;background:#fff;border:1px solid var(--line);border-left:2px solid var(--red);padding:5px 9px;border-radius:5px;font-size:12.5px;margin:0 6px 7px 0}
+  .vocab-term b{color:var(--ink)}
+  .lab{font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.6px}
+  .star-meta{font-size:11.5px;color:var(--mut);margin-bottom:9px}
+  .star-row{margin-top:8px}
+  .star-row .lab{display:inline-block;width:62px}
+  .iq{padding:13px 15px}
+  .iq .q{font-weight:600;font-size:14px}
+  .iq .a{font-size:13px;color:#444;margin-top:5px}
+  .iq .a b{color:var(--red-dk)}
+  .phase-h{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#fff;background:var(--red);display:inline-block;padding:5px 12px;border-radius:5px;margin:18px 0 4px}
+  .timeline-item{padding:12px 15px}
+  .timeline-item .when{font-size:10.5px;font-weight:700;letter-spacing:.5px;color:var(--red-dk);text-transform:uppercase}
+  .note{background:#f4f4f5;border:1px solid #e2e2e4;border-left:3px solid var(--red);border-radius:8px;padding:13px 15px;font-size:13.5px;margin:14px 0}
+  .note.red{background:#fdeced;border-color:#f3b6bc}
+  .src{font-size:12px;color:var(--mut);border-left:2px solid var(--line);padding-left:10px;margin:4px 0}
+  .barwrap{background:#e9e9e9;border-radius:20px;height:9px;overflow:hidden;margin:7px 0}
+  .bar{height:100%;background:var(--red);border-radius:20px}
+  a.link{color:var(--red-dk)}
+  /* mobile dropdown */
+  .msel{display:none}
+  @media(max-width:768px){
+    .wrap{flex-direction:column}
+    .rail{display:none}
+    .topbar{display:block;position:sticky;top:0;z-index:20;background:var(--rail);border-bottom:3px solid var(--red);padding:13px 16px}
+    .topbar .t{color:#fff;font-size:13px;letter-spacing:.4px}
+    .topbar .hex{width:12px;height:12px}
+    .msel{display:block;width:100%;margin-top:10px;padding:11px;font-size:14px;border-radius:7px;border:1px solid #444;background:#000;color:#fff}
+    main{max-width:100%}
+    .panel{padding:24px 18px}
+    .g2,.g3,.g4{grid-template-columns:1fr}
+    h1{font-size:23px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <aside class="rail">
+    <div class="brand">
+      <span class="hex"></span><b>HSBC · VP BUSINESS MGMT</b>
+      <span class="sub">HSBC Invest Direct Securities (India) — HISL · Mumbai · On-site<br>Candidate playbook · Priyanuj Deka</span>
+    </div>
+    <nav id="nav">
+      <a class="active" data-t="snap"><span class="n">01</span>Snapshot</a>
+      <a data-t="decode"><span class="n">02</span>Role Decode</a>
+      <a data-t="risk"><span class="n">!!</span>Risk &amp; Red Flags</a>
+      <a data-t="fit"><span class="n">03</span>Fit &amp; Gap</a>
+      <a data-t="star"><span class="n">04</span>STAR Mapping</a>
+      <a data-t="plan"><span class="n">05</span>30·60·90</a>
+      <a data-t="ai"><span class="n">06</span>AI Differentiator</a>
+      <a data-t="stake"><span class="n">++</span>Stakeholder Decode</a>
+      <a data-t="kit"><span class="n">07</span>Interview Kit</a>
+      <a data-t="comp"><span class="n">08</span>Comp Intel</a>
+      <a data-t="cert"><span class="n">09</span>Cert Roadmap</a>
+      <a data-t="close"><span class="n">10</span>Close &amp; Outreach</a>
+    </nav>
+  </aside>
+
+  <div class="topbar">
+    <span class="hex"></span><span class="t">HSBC VP Business Management — HISL</span>
+    <select class="msel" id="msel">
+      <option value="snap">01 · Snapshot</option>
+      <option value="decode">02 · Role Decode</option>
+      <option value="risk">!! · Risk &amp; Red Flags</option>
+      <option value="fit">03 · Fit &amp; Gap</option>
+      <option value="star">04 · STAR Mapping</option>
+      <option value="plan">05 · 30·60·90</option>
+      <option value="ai">06 · AI Differentiator</option>
+      <option value="stake">++ · Stakeholder Decode</option>
+      <option value="kit">07 · Interview Kit</option>
+      <option value="comp">08 · Comp Intel</option>
+      <option value="cert">09 · Cert Roadmap</option>
+      <option value="close">10 · Close &amp; Outreach</option>
+    </select>
+  </div>
+
+  <main>
+  <!-- ============ SNAPSHOT ============ -->
+  <section class="panel show" id="snap">
+    <div class="eyebrow">Section 01 — Snapshot</div>
+    <h1>VP, Business Management — HISL</h1>
+    <p class="lead">A COO/PMO/governance seat that is a <b>bullseye on function</b> and a <b>hazard on context</b>. Built as a <b>ready-to-fire reserve asset</b>, not a priority application — see Risk &amp; Red Flags before committing.</p>
+
+    <div class="grid g4">
+      <div class="stat"><div class="k">Net Fit</div><div class="v">70<small>/100</small></div></div>
+      <div class="stat"><div class="k">Status</div><div class="v" style="font-size:20px;color:#ffd36b">Conditional</div></div>
+      <div class="stat"><div class="k">Conv. Probability</div><div class="v">~30<small>%</small></div></div>
+      <div class="stat"><div class="k">Target CTC</div><div class="v" style="font-size:20px">₹40–48L<small> all-in</small></div></div>
+    </div>
+
+    <h2>One-line thesis</h2>
+    <div class="card edge"><p style="font-size:14.5px">Your day job <i>is</i> this job minus the asset class — governance forums, KPI/KRI dashboards, exec MI, operating rhythm, action closure, transformation. The risk is not capability; it's that the hiring entity is a near-dormant broking shell, comp straddles your ₹42L floor, and the seat is in Mumbai, not Hyderabad.</p></div>
+
+    <h2>What fires in this build</h2>
+    <div class="grid g2">
+      <div class="card"><h3>10 core sections</h3><p>Snapshot · Role Decode · Fit &amp; Gap · STAR (×5) · 30·60·90 · AI Differentiator (×3) · Interview Kit · Comp Intel · Cert Roadmap · Close.</p></div>
+      <div class="card edge"><h3>Both conditionals triggered</h3><p><b>Risk &amp; Red Flags</b> — ramp-down / regulatory overhang (dormant SEBI-regulated entity mid-restructure). <b>Stakeholder Decode</b> — matrixed: JD names six functions (Ops, Tech, Risk, Compliance, Finance, HR).</p></div>
+    </div>
+
+    <div class="note red"><b>Read this first.</b> Three turns of diligence flagged HISL as “opportunistic at most.” This playbook exists so that <i>if</i> you choose to apply, there is zero rebuild cost — and so the same financial-ops-governance framing carries straight over to the core-entity Hyderabad seat you're actually hunting.</div>
+  </section>
+
+  <!-- ============ ROLE DECODE ============ -->
+  <section class="panel" id="decode">
+    <div class="eyebrow">Section 02 — Role Decode</div>
+    <h1>What the JD is really asking for</h1>
+    <p class="lead">Ten requirements decoded from JD language into the evidence and behaviour an interviewer is testing.</p>
+
+    <div class="grid g2">
+      <div class="card req-card edge"><span class="tag red">Governance</span><h3>“Drive governance forums &amp; operating rhythm”</h3><p>They want someone who <i>owns the cadence</i> — sets the forum calendar, drives leadership reviews, holds the rhythm. Your 55-day T−25/T+30 operating window (S3) is exactly this muscle.</p></div>
+      <div class="card req-card edge"><span class="tag red">MI</span><h3>“Dashboards, KPIs, KRIs, executive MI packs”</h3><p>Reporting <i>ownership</i>, not reporting support. Your 70+ report intelligence ecosystem (S6) is the strongest single proof in the bank for this.</p></div>
+      <div class="card req-card"><span class="tag">Performance</span><h3>“Track performance vs business plans &amp; strategic objectives”</h3><p>Connect target-setting to outcomes. Pair S19 (AED 10B target framework) with S16 (14.9x delivered against plan).</p></div>
+      <div class="card req-card"><span class="tag">Execution</span><h3>“Monitor delivery &amp; ensure closure of actions/decisions”</h3><p>Action-tracking discipline. S1 (14-finding audit → closure → 97.5% error reduction) is your closure-governance story.</p></div>
+      <div class="card req-card"><span class="tag">Planning</span><h3>“Support annual planning &amp; prioritisation”</h3><p>You've run the planning cycle that sets RM-level targets across a AED 12.97B book. Frame as “operating-plan build + cascade.”</p></div>
+      <div class="card req-card edge"><span class="tag red">Transformation</span><h3>“Coordinate transformation programmes &amp; milestones”</h3><p>Programme governance with dependencies and outcomes. S18 (PCC TAT 20→3 days) + S17 (App 0→36%) evidence this end-to-end.</p></div>
+      <div class="card req-card"><span class="tag">Finance</span><h3>“Budgeting, forecasting, business-case prep, investment tracking”</h3><p>S5 (NPV AED 652M business case, defended at MD/CEO/CFO/CRO) is your financial-governance flagship — speaks directly to “business case preparation.”</p></div>
+      <div class="card req-card"><span class="tag">Process</span><h3>“Process simplification &amp; operational efficiency”</h3><p>S18 + S28 (audit error 41%→1%) + S31 (DLD termination 90% better). Lead with benefits realised, not activity.</p></div>
+      <div class="card req-card edge"><span class="tag red">Stakeholder</span><h3>“Partner senior stakeholders; decision papers &amp; exec comms”</h3><p>You operate at MD/CEO/CRO/CCO altitude daily. S5 + S8 (embedding collections into the enterprise journey) carry this.</p></div>
+      <div class="card req-card"><span class="tag">Change</span><h3>“UAT, change governance, adoption, benefits realisation”</h3><p>S20 (NICE dialler + IVR), S17 (app adoption with honest miss-reporting, S24) and S26 (SQL migration) show the full change lifecycle.</p></div>
+    </div>
+
+    <h2>Vocabulary you must speak fluently (≥15)</h2>
+    <p class="sm mut">Reframe real-estate-collections experience into banking-business-management language. These are the terms a GCB4 panel expects unprompted.</p>
+    <div class="card">
+      <span class="vocab-term"><b>Operating rhythm</b> / BMR (business management routine)</span>
+      <span class="vocab-term"><b>KRI</b> vs KPI (key risk vs performance indicator)</span>
+      <span class="vocab-term"><b>RCSA</b> (risk &amp; control self-assessment)</span>
+      <span class="vocab-term"><b>Three Lines of Defence</b></span>
+      <span class="vocab-term"><b>MI pack</b> / exec dashboard</span>
+      <span class="vocab-term"><b>Operating model</b> &amp; target operating model (TOM)</span>
+      <span class="vocab-term"><b>Benefits realisation</b></span>
+      <span class="vocab-term"><b>Book of work</b> / portfolio governance</span>
+      <span class="vocab-term"><b>RAID</b> (risks, assumptions, issues, dependencies)</span>
+      <span class="vocab-term"><b>Cost-income ratio</b> / productivity</span>
+      <span class="vocab-term"><b>Governance forum</b> / steering committee (SteerCo)</span>
+      <span class="vocab-term"><b>Conduct &amp; controls</b> environment</span>
+      <span class="vocab-term"><b>Annual operating plan</b> (AOP)</span>
+      <span class="vocab-term"><b>Regulatory reporting</b> (SEBI for a broker)</span>
+      <span class="vocab-term"><b>Reg overhang</b> / remediation</span>
+      <span class="vocab-term"><b>Stakeholder map</b> / RACI</span>
+      <span class="vocab-term"><b>Decision paper</b> / submission</span>
+      <span class="vocab-term"><b>BAU transition</b> (project → run)</span>
+    </div>
+  </section>
+
+  <!-- ============ RISK & RED FLAGS ============ -->
+  <section class="panel" id="risk">
+    <div class="eyebrow">Conditional — Risk &amp; Red Flags <span class="tag red" style="margin-left:8px">Triggered</span></div>
+    <h1>The context hazards</h1>
+    <p class="lead">This section fired on ramp-down + regulatory overhang. Walk in with eyes open — and use these as <i>your</i> diligence questions, not just risks.</p>
+
+    <div class="grid g2">
+      <div class="card edge"><span class="tag red">Entity</span><h3>Near-dormant broking shell</h3><p>HISL reported revenue of roughly ₹19.2 lakh for FY-ending Mar 2024 — negligible for a securities firm with ~₹174cr paid-up capital. This is not a growing business.</p></div>
+      <div class="card edge"><span class="tag red">Strategy</span><h3>Group has exited retail broking</h3><p>The InvestDirect group now runs <b>lending</b> via its NBFC (HIFSL); live HSBC broking sits under a different entity (HSBC Securities &amp; Capital Markets). The “business growth” JD framing sits oddly against this.</p></div>
+      <div class="card"><span class="tag warn">Mandate risk</span><h3>Likely a turnaround / wind-down seat</h3><p>You don't fund a VP Business Management to babysit a dormant book. Probable real mandate: restructuring, entity consolidation, or regulated wind-down — high-load and deadline-driven, not a coast.</p></div>
+      <div class="card"><span class="tag warn">Comp</span><h3>Straddles your ₹42L floor</h3><p>GCB4 band lands ₹35–50L; mid-band sits at the floor. Clearing it needs an upper-band outcome against a small entity with limited budget flex. See Comp Intel.</p></div>
+      <div class="card"><span class="tag warn">Location</span><h3>Mumbai, on-site</h3><p>Conflicts with your Hyderabad primary target. A pursuit decision, not a fit issue — but it gates everything.</p></div>
+      <div class="card"><span class="tag warn">Screen</span><h3>“Within Banking / FS” filter</h3><p>Real-estate-collections may be filtered before your functional fit is seen. Mitigation: lead every artifact with <b>“financial-operations governance,”</b> never “real estate.”</p></div>
+    </div>
+
+    <div class="note red"><b>Turn risk into leverage.</b> In interview, ask directly: <i>“Is this seat scoped to steady-state governance, or to a transformation/consolidation mandate over the next 12–18 months?”</i> The answer tells you the workload, the comp justification, and whether the title is real — and signals you've done the homework most candidates won't.</div>
+  </section>
+
+  <!-- ============ FIT & GAP ============ -->
+  <section class="panel" id="fit">
+    <div class="eyebrow">Section 03 — Fit &amp; Gap</div>
+    <h1>Where you win, where you're exposed</h1>
+
+    <h2>Dimension read (Net Fit 70)</h2>
+    <div class="grid g2">
+      <div class="card"><h3>Functional match <span class="tag ok">8</span></h3><div class="barwrap"><div class="bar" style="width:80%"></div></div><p>Governance, MI, operating rhythm, action closure = daily work.</p></div>
+      <div class="card"><h3>Stakeholder altitude <span class="tag ok">8</span></h3><div class="barwrap"><div class="bar" style="width:80%"></div></div><p>MD/CEO/CRO decision-paper rhythm already in hand.</p></div>
+      <div class="card"><h3>Process &amp; systems <span class="tag ok">8</span></h3><div class="barwrap"><div class="bar" style="width:80%"></div></div><p>Simplification, automation, benefits realisation — core.</p></div>
+      <div class="card"><h3>Scale / tooling / analytics / people / AI <span class="tag">7</span></h3><div class="barwrap"><div class="bar" style="width:70%"></div></div><p>All over-cover the role; AI is an explicit JD “advantage.”</p></div>
+      <div class="card edge"><h3>Domain knowledge <span class="tag red">4</span></h3><div class="barwrap"><div class="bar" style="width:40%"></div></div><p>Zero broking/securities; “within Banking/FS” gate unmet from real estate. This is the swing.</p></div>
+      <div class="card"><h3>Psychometric fit <span class="tag">7</span></h3><div class="barwrap"><div class="bar" style="width:70%"></div></div><p>High-C/High-S suits governance discipline; activates the forum-assertiveness dev area.</p></div>
+    </div>
+
+    <h2>Gaps (closeable vs structural)</h2>
+    <div class="grid g2">
+      <div class="card gap-card edge"><span class="tag warn">Vocabulary — closeable</span><h3>Banking-governance language</h3><p>You do RCSA, KRIs, operating rhythm under different names. Closeable in the application window by relabelling (see Role Decode vocab). <b>Effort: low.</b></p></div>
+      <div class="card gap-card edge"><span class="tag warn">Context — closeable</span><h3>Securities/broking business model</h3><p>~1 week: how a broker-dealer earns (brokerage, margin financing, custody), and SEBI broker obligations. Enough to be conversant, not expert. <b>Effort: low–med.</b></p></div>
+      <div class="card gap-card"><span class="tag red">Structural — manage, don't close</span><h3>No FS/banking pedigree</h3><p>Cannot be closed pre-application. Manage via framing + a referral if possible. This is what the screen tests. <b>Effort: framing only.</b></p></div>
+      <div class="card gap-card"><span class="tag red">Behavioural — develop</span><h3>Senior-forum assertiveness</h3><p>HSBC's forum culture exercises your one development area. Pre-load the three proof points (S2, S5, S25) so challenge becomes evidence, not hesitation.</p></div>
+    </div>
+
+    <div class="note"><b>Net:</b> the gaps are <i>vocabulary and pedigree</i>, not capability. Capability ceiling with prep ≈ 82. The realistic blocker is the resume-screen, not the interview.</div>
+  </section>
+
+  <!-- ============ STAR MAPPING ============ -->
+  <section class="panel" id="star">
+    <div class="eyebrow">Section 04 — STAR Mapping</div>
+    <h1>Five stories, mapped to the seat</h1>
+    <p class="lead">Drawn from STAR Story Bank V3. Each tagged to the JD pillar it serves. Full S/T/A/R held in the bank — these are the deployment cuts.</p>
+
+    <div class="card star-card edge">
+      <div class="star-meta">S16 · 14.9x Scale Transformation · ★★★ · <b>Pillar: Performance vs plan / business growth</b></div>
+      <h3>“14.9x with delinquency down 74% — simultaneously”</h3>
+      <div class="star-row"><span class="lab">S/T</span><span class="sm">Owned the operating engine as the collections book scaled from AED 867M to AED 12.97B across a growing project portfolio.</span></div>
+      <div class="star-row"><span class="lab">A</span><span class="sm">Built the data infrastructure, target-setting framework and governance rhythm the function still runs on; cascaded plan to RM-level targets.</span></div>
+      <div class="star-row"><span class="lab">R</span><span class="sm">14.9x scale <i>with</i> a 74% delinquency reduction — growth and control improving together. <span class="tag">Use as opener</span></span></div>
+    </div>
+
+    <div class="card star-card edge">
+      <div class="star-meta">S6 · 70+ Report Intelligence Ecosystem · ★★★ · <b>Pillar: MI &amp; reporting / dashboards</b></div>
+      <h3>“I built the intelligence system the whole function operates on”</h3>
+      <div class="star-row"><span class="lab">S/T</span><span class="sm">The function lacked a single source of performance truth across a multi-entity, multi-geography book.</span></div>
+      <div class="star-row"><span class="lab">A</span><span class="sm">Designed 70+ live data-connected reports — performance, risk and exception views feeding leadership cadence (not ad-hoc pulls).</span></div>
+      <div class="star-row"><span class="lab">R</span><span class="sm">Became the operating MI layer for a 77-person, two-geography team. <span class="tag">Direct hit on “executive MI packs”</span></span></div>
+    </div>
+
+    <div class="card star-card edge">
+      <div class="star-meta">S1 · 14-Finding Audit Response · ★★★ · <b>Pillar: Risk &amp; control / action closure</b></div>
+      <h3>“The control environment, evidenced under audit”</h3>
+      <div class="star-row"><span class="lab">S/T</span><span class="sm">Internal Audit reviewed a AED 1.94B overdue portfolio (5,431 units, 36 projects, 982 documents) → 14 findings, 4 High Risk.</span></div>
+      <div class="star-row"><span class="lab">A</span><span class="sm">Owned the remediation book of work — root-caused each finding, drove action closure with tracked owners and dates.</span></div>
+      <div class="star-row"><span class="lab">R</span><span class="sm">97.5% error reduction post-remediation. <span class="tag">Maps to “ensure closure of actions/decisions” + risk-control domain</span></span></div>
+    </div>
+
+    <div class="card star-card edge">
+      <div class="star-meta">S5 · NPV AED 652M MD/CEO Defence · ★★★ · <b>Pillar: Stakeholder / business case / assertiveness</b></div>
+      <h3>“Approved by MD, CFO and CRO with zero material concessions”</h3>
+      <div class="star-row"><span class="lab">S/T</span><span class="sm">A AED 652M NPV business case faced multiple rounds of senior scrutiny.</span></div>
+      <div class="star-row"><span class="lab">A</span><span class="sm">Built and defended the model across forums; held assumptions under challenge where the data supported the position.</span></div>
+      <div class="star-row"><span class="lab">R</span><span class="sm">Cleared MD/CEO/CFO/CRO with no material concessions. <span class="tag">Doubles as assertiveness proof point</span></span></div>
+    </div>
+
+    <div class="card star-card edge">
+      <div class="star-meta">S18 · PCC TAT 20→3 Days · ★★★ · <b>Pillar: Transformation / process / benefits realisation</b></div>
+      <h3>“20 days to 3 — while tripling volume”</h3>
+      <div class="star-row"><span class="lab">S/T</span><span class="sm">A core process ran at 20-day turnaround and couldn't absorb rising volume.</span></div>
+      <div class="star-row"><span class="lab">A</span><span class="sm">Re-engineered the workflow end-to-end with change governance and adoption tracking.</span></div>
+      <div class="star-row"><span class="lab">R</span><span class="sm">85% TAT reduction with 3x throughput — benefits realised, not just designed. <span class="tag">“Process simplification &amp; efficiency”</span></span></div>
+    </div>
+
+    <div class="note"><b>Bench (reference, deploy if probed):</b> S3 (operating rhythm), S19 (target framework), S28 (audit 41%→1%), S2 (PR rejection 49% — assertiveness), S26/S27 (SQL + Power BI), S32 (10-bank infra), S9 (1→4 entities).</div>
+  </section>
+
+  <!-- ============ 30 60 90 ============ -->
+  <section class="panel" id="plan">
+    <div class="eyebrow">Section 05 — 30·60·90</div>
+    <h1>First 90 days, framed for governance</h1>
+    <p class="lead">18 actions calibrated to a Business Management seat in a possibly-restructuring entity — listen, instrument, then drive.</p>
+
+    <div class="phase-h">First 30 — Listen &amp; map</div>
+    <div class="grid g2">
+      <div class="card timeline-item"><span class="when">Days 1–10</span><p>Map the real mandate — steady-state vs transformation/wind-down. Confirm with HM and CRO sponsor.</p></div>
+      <div class="card timeline-item"><span class="when">Days 1–10</span><p>Build the stakeholder map / RACI across Ops, Tech, Risk, Compliance, Finance, HR.</p></div>
+      <div class="card timeline-item"><span class="when">Days 7–20</span><p>Inventory the existing MI — what packs exist, who consumes them, what's manual.</p></div>
+      <div class="card timeline-item"><span class="when">Days 10–25</span><p>Sit in every governance forum; document the current operating rhythm and gaps.</p></div>
+      <div class="card timeline-item"><span class="when">Days 15–30</span><p>Pull the open RAID / action log; identify stale, unowned items.</p></div>
+      <div class="card timeline-item"><span class="when">Day 30</span><p>Deliver a one-page “state of governance” read to the sponsor — observations, not yet recommendations.</p></div>
+    </div>
+
+    <div class="phase-h">31–60 — Instrument &amp; stabilise</div>
+    <div class="grid g2">
+      <div class="card timeline-item"><span class="when">Days 31–40</span><p>Rationalise the MI: one executive dashboard (KPI + KRI) as the single source of truth.</p></div>
+      <div class="card timeline-item"><span class="when">Days 35–45</span><p>Re-establish a crisp operating rhythm — forum calendar, pre-reads, decision-paper template.</p></div>
+      <div class="card timeline-item"><span class="when">Days 40–50</span><p>Stand up an action-closure tracker with owners + dates; clear the stale backlog.</p></div>
+      <div class="card timeline-item"><span class="when">Days 45–55</span><p>Map the book of work to dependencies; surface the top 3 delivery risks to SteerCo.</p></div>
+      <div class="card timeline-item"><span class="when">Days 50–60</span><p>Prototype one automation (see AI Differentiator) on the most manual MI pack.</p></div>
+      <div class="card timeline-item"><span class="when">Day 60</span><p>Present the stabilised governance operating model to leadership for sign-off.</p></div>
+    </div>
+
+    <div class="phase-h">61–90 — Drive &amp; prove</div>
+    <div class="grid g2">
+      <div class="card timeline-item"><span class="when">Days 61–70</span><p>Run the first full cycle on the new rhythm; measure forum efficiency and decision velocity.</p></div>
+      <div class="card timeline-item"><span class="when">Days 65–75</span><p>Move the automation prototype to production; quantify hours saved / error reduction.</p></div>
+      <div class="card timeline-item"><span class="when">Days 70–80</span><p>Build the benefits-realisation view for the active transformation book.</p></div>
+      <div class="card timeline-item"><span class="when">Days 75–85</span><p>Support the annual operating plan / forecasting cycle with the new MI as the spine.</p></div>
+      <div class="card timeline-item"><span class="when">Days 80–90</span><p>Deliver a quarter-on-quarter governance scorecard; name the next-quarter priorities.</p></div>
+      <div class="card timeline-item"><span class="when">Day 90</span><p>90-day review: what's stabilised, what's measurably better, what the 6-month book of work is.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ AI DIFFERENTIATOR ============ -->
+  <section class="panel" id="ai">
+    <div class="eyebrow">Section 06 — AI Differentiator</div>
+    <h1>Three AI-augmented plays for HISL</h1>
+    <p class="lead">The JD names AI-tool familiarity as an advantage. These are deployable in a bank's control reality (human-in-the-loop, auditable), each anchored to a real proof point.</p>
+
+    <div class="card ai-card edge">
+      <span class="tag ink">Play 1 · MI automation</span>
+      <h3>Auto-generated executive MI pack</h3>
+      <p><b>Problem it solves:</b> manual, slow, error-prone leadership packs. <b>Build:</b> a live data-connected layer that assembles the KPI/KRI dashboard and drafts the narrative commentary for review — not a black box, a first draft a human signs off.</p>
+      <p class="src">Anchored to: S6 (70+ report ecosystem) + S27 (Power BI PoC→production). Pitch line: “I've already built the reporting spine; AI just removes the manual assembly.”</p>
+    </div>
+
+    <div class="card ai-card edge">
+      <span class="tag ink">Play 2 · Risk flagging</span>
+      <h3>AI-assisted KRI / control-exception flagging</h3>
+      <p><b>Problem it solves:</b> control breaches surface late, in a regulated entity where that's costly. <b>Build:</b> pattern-detection over the control and action-log data that flags anomalies and ageing items to the right owner before they breach — supporting, not replacing, the Three-Lines model.</p>
+      <p class="src">Anchored to: S1 (audit remediation + closure) + S29 (automated policy→cash pipeline). Frames you as control-first, AI-second — exactly HSBC's risk culture.</p>
+    </div>
+
+    <div class="card ai-card edge">
+      <span class="tag ink">Play 3 · Transformation tracking</span>
+      <h3>AI-driven benefits-realisation &amp; book-of-work tracker</h3>
+      <p><b>Problem it solves:</b> programmes report activity, not realised benefit; dependencies hide. <b>Build:</b> a tracker that ingests programme updates, surfaces RAID/dependency risk, and keeps a live benefits-vs-plan view for SteerCo.</p>
+      <p class="src">Anchored to: S18 (re-engineering with benefits) + S26 (SQL migration programme). Especially valuable if the seat is a restructuring mandate.</p>
+    </div>
+
+    <div class="note"><b>Positioning guardrail:</b> in a bank, lead with <i>governance and auditability</i>, then AI. “Human-in-the-loop, fully traceable” is the phrase that lands with Risk and Compliance.</div>
+  </section>
+
+  <!-- ============ STAKEHOLDER DECODE ============ -->
+  <section class="panel" id="stake">
+    <div class="eyebrow">Conditional — Stakeholder Decode <span class="tag red" style="margin-left:8px">Triggered (6 functions)</span></div>
+    <h1>The matrix you'd coordinate</h1>
+    <p class="lead">The JD names six partner functions and no public HM. This is a coordination seat — your job is alignment across these, often without authority over them.</p>
+
+    <div class="grid g2">
+      <div class="card edge"><h3>Sponsor (likely CRO-adjacent)</h3><p>Given the InvestDirect entities are being run directly by senior risk leadership, expect a hands-on, scrutiny-heavy sponsor. Bring crisp decision papers, not open questions.</p></div>
+      <div class="card"><h3>Operations</h3><p>Your natural ally — speak their language (TAT, exceptions, throughput). S18/S29 build instant credibility.</p></div>
+      <div class="card"><h3>Technology</h3><p>Partner for MI automation and BAU transition. S26/S27 let you brief them as a peer, not a requester.</p></div>
+      <div class="card"><h3>Risk &amp; Compliance</h3><p>The culture's centre of gravity. Lead every AI/automation idea with controls and auditability (S1). Never frame as “move fast.”</p></div>
+      <div class="card"><h3>Finance</h3><p>Budgeting, forecasting, business cases. S5 (NPV defence) positions you as a finance-fluent operator.</p></div>
+      <div class="card"><h3>HR</h3><p>Headcount, productivity, and — if restructuring — transition management. Your 77-person, two-geography leadership is the proof.</p></div>
+    </div>
+    <div class="note"><b>Assertiveness watch:</b> matrixed influence without authority is precisely the senior-forum context that tests your dev area. Pre-decide your three non-negotiables before each forum so you hold them under pressure (the S2 pattern).</div>
+  </section>
+
+  <!-- ============ INTERVIEW KIT ============ -->
+  <section class="panel" id="kit">
+    <div class="eyebrow">Section 07 — Interview Kit</div>
+    <h1>Question bank (24) with approach</h1>
+    <p class="lead">Grouped by theme. Bold = the lever/story to reach for.</p>
+
+    <h2>Governance &amp; MI</h2>
+    <div class="grid g2">
+      <div class="card iq"><div class="q">How would you set up a governance operating rhythm from scratch?</div><div class="a">Forum calendar → pre-reads → decision papers → action closure. <b>Anchor S3 + S6.</b></div></div>
+      <div class="card iq"><div class="q">What makes an executive MI pack good vs noise?</div><div class="a">Decision-relevant, KPI+KRI, exception-led, single source of truth. <b>S6.</b></div></div>
+      <div class="card iq"><div class="q">How do you ensure decisions and actions actually close?</div><div class="a">Owners + dates + tracked log + forum accountability. <b>S1 closure story.</b></div></div>
+      <div class="card iq"><div class="q">Difference between a KPI and a KRI — give an example.</div><div class="a">Performance vs forward-looking risk; show you speak controls fluently.</div></div>
+      <div class="card iq"><div class="q">How do you track performance against the business plan?</div><div class="a">Plan → target cascade → variance → action. <b>S19 + S16.</b></div></div>
+    </div>
+
+    <h2>Transformation &amp; process</h2>
+    <div class="grid g2">
+      <div class="card iq"><div class="q">Tell me about a transformation you drove end-to-end.</div><div class="a"><b>S18 (20→3 days, 3x volume).</b> Lead with benefits realised.</div></div>
+      <div class="card iq"><div class="q">How do you run UAT and change adoption?</div><div class="a">S20 (NICE+IVR) / S17 (app adoption) + honest miss-handling (S24).</div></div>
+      <div class="card iq"><div class="q">How do you measure benefits realisation?</div><div class="a">Baseline → target → realised, tracked post-go-live, not at sign-off.</div></div>
+      <div class="card iq"><div class="q">A programme is slipping — what do you do?</div><div class="a">RAID surfacing, dependency re-sequencing, escalate with options. <b>S1 governance instinct.</b></div></div>
+      <div class="card iq"><div class="q">Where have you simplified a process for efficiency?</div><div class="a">S28 (41%→1% error), S31 (DLD 90% better).</div></div>
+    </div>
+
+    <h2>Stakeholder &amp; assertiveness</h2>
+    <div class="grid g2">
+      <div class="card iq"><div class="q">Tell me about influencing senior stakeholders without authority.</div><div class="a"><b>S5 (MD/CEO/CFO/CRO, zero concessions)</b> + S8.</div></div>
+      <div class="card iq"><div class="q">Describe a time you pushed back on leadership.</div><div class="a"><b>S2 (held PR rejection at 49%) — “the control working as designed.”</b></div></div>
+      <div class="card iq"><div class="q">How do you handle conflicting priorities across functions?</div><div class="a">S9 (4 entities, unified governance), pre-decided non-negotiables.</div></div>
+      <div class="card iq"><div class="q">A decision paper is challenged in committee — walk me through it.</div><div class="a">S5 pattern: defend on data, concede on noise, hold on substance.</div></div>
+      <div class="card iq"><div class="q">When did you escalate proactively?</div><div class="a">S25 — three risk items raised to CCO before due dates.</div></div>
+    </div>
+
+    <h2>Domain / banking (manage the gap)</h2>
+    <div class="grid g2">
+      <div class="card iq"><div class="q">You're from real estate — why banking business management?</div><div class="a"><b>Reframe: financial-operations governance.</b> A AED 12.97B receivables book is a financial operation under audit, controls and NPV discipline.</div></div>
+      <div class="card iq"><div class="q">What do you know about a broker-dealer's business model?</div><div class="a">Brokerage + margin financing + custody; show the 1-week prep, be conversant not expert.</div></div>
+      <div class="card iq"><div class="q">How does the risk &amp; control environment differ here?</div><div class="a">SEBI obligations, conduct, Three Lines — connect to your audit/RCSA-equivalent work (S1).</div></div>
+      <div class="card iq"><div class="q">How would you handle regulatory reporting deadlines?</div><div class="a">Reporting calendar, accuracy controls, no-surprise escalation — your operating-rhythm strength.</div></div>
+    </div>
+
+    <h2>Behavioural &amp; fit</h2>
+    <div class="grid g2">
+      <div class="card iq"><div class="q">Walk me through your career.</div><div class="a"><b>S14:</b> “MT to AGM in 6 years; I built the data infrastructure that didn't exist.”</div></div>
+      <div class="card iq"><div class="q">Biggest achievement?</div><div class="a"><b>S16:</b> 14.9x with 74% delinquency reduction simultaneously.</div></div>
+      <div class="card iq"><div class="q">Tell me about a failure.</div><div class="a"><b>S24:</b> app adoption 17% vs 80% target — “I reported it exactly as it was.”</div></div>
+      <div class="card iq"><div class="q">Your weakness?</div><div class="a"><b>S15:</b> “I want all the data; I've learned to act on 70%.”</div></div>
+      <div class="card iq"><div class="q">Why this role, given it's a small entity?</div><div class="a">Honest + strategic: governance challenge + interest in the restructuring mandate. <i>Don't oversell growth.</i></div></div>
+    </div>
+  </section>
+
+  <!-- ============ COMP INTEL ============ -->
+  <section class="panel" id="comp">
+    <div class="eyebrow">Section 08 — Comp Intel</div>
+    <h1>Compensation read</h1>
+    <p class="lead">HSBC India VP = GCB4. No HISL-specific data exists (entity too small to surface comp), so this triangulates the GCB4/VP band.</p>
+
+    <div class="grid g2">
+      <div class="card"><h3>Base</h3><p>₹30–40L typical at this grade in India.</p></div>
+      <div class="card"><h3>Bonus / equity</h3><p>10–20% cash bonus (₹3–6L); minimal-to-no equity at VP level in India.</p></div>
+      <div class="card edge"><h3>Total (typical)</h3><p>₹35–50L all-in · median ~₹40–45L · 25th→75th ≈ ₹33L→₹55–60L.</p></div>
+      <div class="card edge"><h3>HISL realistic</h3><p>₹35–48L — paid on the GCB4 band (banks pay by grade, not subsidiary P&amp;L), but limited above-band stretch.</p></div>
+    </div>
+
+    <h2>Sources triangulated (3+)</h2>
+    <div class="card">
+      <p class="src"><b>Glassdoor (Mumbai):</b> HSBC VP average ≈ ₹33.6L (370 salaries).</p>
+      <p class="src"><b>PayScale (VP Operations, India):</b> base ₹30–40L + ₹3–5.75L bonus.</p>
+      <p class="src"><b>Glassdoor / market (India ladder):</b> AVP ≈ ₹34L · SVP ≈ ₹70L — VP sits between.</p>
+    </div>
+
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card"><span class="tag warn">Confidence: Medium</span><h3>Why medium</h3><p>Strong GCB4-band data; zero HISL-specific data. Treat as directional, not a quote.</p></div>
+      <div class="card edge"><span class="tag red">Floor check — ₹42L</span><h3>Straddled, not cleared</h3><p>Mid-band lands <i>at</i> your floor. Clearing it needs an upper-band outcome (₹48–55L) — your IIM PGDM + 14.9x scale + multi-geo leadership justify the ask, but the entity's size limits flex.</p></div>
+    </div>
+    <div class="note"><b>Negotiation lever:</b> anchor on scope (77-person, two-geography, AED 12.97B) and the GCB4 band's upper quartile, not the entity. If they can't reach ₹48L+, this fails your own discipline — walk.</div>
+  </section>
+
+  <!-- ============ CERT ROADMAP ============ -->
+  <section class="panel" id="cert">
+    <div class="eyebrow">Section 09 — Cert Roadmap</div>
+    <h1>Certification footprint</h1>
+    <p class="lead">JD is cert-light: MBA preferred (you hold IIM Udaipur PGDM — covered) and AI-tools familiarity (advantage). Triaged footprint below — weightings reflect lift, not necessity.</p>
+
+    <div class="note"><b>Footprint declaration:</b> JD-silent on hard certs → triaged via comparable HSBC GCB4 Business-Management / COO postings and the FS-governance norm. Sample basis: small (this single JD + this conversation's HSBC role scan). <b>Confidence: Low–Medium.</b> Treat as directional, not asserted.</div>
+
+    <div class="grid g2">
+      <div class="card"><span class="tag ok">Already held — lead with these</span><h3>IIM Udaipur PGDM</h3><p>Satisfies “MBA preferred” outright. Never list as a gap.</p></div>
+      <div class="card edge"><span class="tag warn">MEDIUM (~15–25% lift)</span><h3>CRISC (already on your AmEx track)</h3><p>Risk &amp; control governance — directly relevant to a banking control environment. Reuse, don't add new.</p></div>
+      <div class="card"><span class="tag">MED-LOW</span><h3>PMP or PMI-ACP</h3><p>Speaks to “transformation programmes / change governance.” Already slated on your Qualcomm track — no net-new effort.</p></div>
+      <div class="card"><span class="tag">MED-LOW</span><h3>Lean Six Sigma (GB)</h3><p>Backs “process simplification &amp; efficiency.” Optional signal, not a gate.</p></div>
+      <div class="card"><span class="tag">LOW (advantage only)</span><h3>AI / analytics literacy</h3><p>Your existing Power BI + SQL + AI-ops portfolio already evidences the “AI-tools advantage.” No formal cert required.</p></div>
+      <div class="card"><span class="tag">Context, not cert</span><h3>SEBI broker basics (self-study)</h3><p>~1 week of reading > any certificate for this seat. Conversance closes the context gap.</p></div>
+    </div>
+    <div class="note"><b>Net:</b> zero new certifications needed to apply. Your existing stack (CRISC, PMI-ACP/PMP, analytics) already maps. Spend the time on <i>context</i> and <i>framing</i>, not new credentials.</div>
+  </section>
+
+  <!-- ============ CLOSE & OUTREACH ============ -->
+  <section class="panel" id="close">
+    <div class="eyebrow">Section 10 — Close &amp; Outreach</div>
+    <h1>How to play this</h1>
+
+    <div class="grid g2">
+      <div class="card edge"><h3>The decision</h3><p>Apply <i>only</i> if (a) Mumbai is acceptable, (b) you'll negotiate hard to ₹48L+, and (c) you're open to a turnaround mandate. Otherwise hold — the build is already done, zero rebuild cost.</p></div>
+      <div class="card edge"><h3>The better target</h3><p>This framing carries straight to a <b>core-entity Business Management/COO seat at HSBC GSS Hyderabad</b> — same evidence, fixes the entity/location/trajectory problems. That's the one to prioritise.</p></div>
+    </div>
+
+    <h2>Positioning lines (resume-rule compliant)</h2>
+    <ul class="clean">
+      <li><b>Summary anchor:</b> “Financial-operations governance leader — 14.9x programme scale, 77-person two-geography team, audit-grade control discipline.” <span class="mut sm">(financial-ops framing, not real estate)</span></li>
+      <li>“Built the 70+ report, live data-connected MI ecosystem the function operates on.” <span class="mut sm">(not “SQL-connected”)</span></li>
+      <li>“Led solution design for the Salesforce enhancement pipeline.” <span class="mut sm">(not “co-architect”)</span></li>
+      <li>“Accelerated compensation progression across six years (MT → AGM).” <span class="mut sm">(no salary figure)</span></li>
+      <li>Frame everything via scope / achievement / impact — aspiration stays in the summary only.</li>
+    </ul>
+
+    <h2>Outreach approach</h2>
+    <div class="grid g2">
+      <div class="card"><h3>Route</h3><p>Apply via the listing, then a short LinkedIn note to the HISL/InvestDirect TA or hiring lead. A warm referral into HSBC India beats a cold apply through the FS-pedigree screen.</p></div>
+      <div class="card"><h3>The hook (3 lines)</h3><p>(1) Financial-ops governance operator, 14.9x scale. (2) Exactly the COO/PMO/MI mandate this seat describes. (3) One sentence showing you understand it may be a transformation/consolidation context — most candidates won't.</p></div>
+    </div>
+    <div class="note"><b>Bottom line:</b> a genuine functional fit wrapped in a weak context. Keep this warm as a reserve; put your energy into the core-entity Hyderabad version.</div>
+  </section>
+
+  </main>
+</div>
+
+<script>
+  var links=document.querySelectorAll('#nav a');
+  var panels=document.querySelectorAll('.panel');
+  var msel=document.getElementById('msel');
+  function show(t){
+    panels.forEach(function(p){p.classList.toggle('show',p.id===t)});
+    links.forEach(function(a){a.classList.toggle('active',a.dataset.t===t)});
+    if(msel) msel.value=t;
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  links.forEach(function(a){a.addEventListener('click',function(){show(a.dataset.t)})});
+  if(msel) msel.addEventListener('change',function(){show(msel.value)});
+</script>
+</body>
+</html>

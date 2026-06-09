@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  ============================================================
+  PLAYBOOK_SKELETON_v1.html
+  ============================================================
+  Source: extracted from Anthropic_RevS_O_Playbook.html
+  Canon: aligned to PLAYBOOK_CANON v2.0
+  Status: structural framework — content stripped, variables parameterized
+
+  USAGE PER BUILD:
+  1. Clone this file as <Company>_<Role>_Playbook.html
+  2. Step 0 (canon §6): fill BRAND BLOCK below — primary/accent/bg/fonts/rationale
+  3. Optionally extend in BRAND EXTENSION CSS block (canon §5 anti-homogenization)
+  4. Update nav-brand block (title, sub, eyebrow) + nav-status
+  5. Fill 12 panels per schema comments (batched per canon §11 build mechanics)
+  6. Run Section 8 audit checklist inline BEFORE delivery
+  7. Update PLAYBOOK_CANON ledger with palette + typography summary
+  ============================================================
+-->
+<title>AmEx · Sr Manager SOBA GMNS · Career Playbook</title>
+<style>
+  /* ============================================================
+     BRAND BLOCK — fill per playbook (canon §5)
+     ============================================================
+     Rationale: SOBA = analyst/think-tank inside GMNS. Navy+copper on cream = institutional strategy room aesthetic, deliberately divergent from bright AmEx blue.
+     Source: americanexpress.com + Clemson career portal SOBA JD + AmEx 10-K
+     Distinctness check vs last 3 builds: Yes — cream+navy+copper+serif vs prior AmEx bright-blue+sans
+  */
+  :root {
+    /* Backgrounds */
+    --bg:        #F7F4ED;
+    --bg-tint:   #EEEAE0;
+    --surface:   #FFFFFF;
+    --surface-2: #E8E4DA;
+
+    /* Text */
+    --text:      #0A1F44;
+    --text-mid:  #4A5A75;
+    --text-mute: #8B8273;
+    --border:    #D8CFC0;
+
+    /* Brand colors */
+    --primary:      #00175A;
+    --primary-dark: #000C2E;
+    --accent-2:     #A66B2C;
+    --accent-3:     #3D6B6E;
+
+    /* Typography */
+    --serif: 'Georgia','Source Serif Pro','Garamond',serif;
+    --sans:  'Inter','Helvetica Neue',system-ui,sans-serif;
+    --mono:  /* TBD (optional) — for data / sources / code */;
+  }
+
+  /* ============================================================
+     BRAND EXTENSION (canon §5 anti-homogenization)
+     ============================================================
+     Per-playbook custom CSS for ornaments, role-specific layouts,
+     distinctness beyond variable values. Examples: custom heading
+     treatments, decorative backgrounds, role-specific iconography,
+     unique card patterns. Leave empty if variable swap alone yields
+     sufficient distinctness — but distinctness vs last 3 builds is
+     a HARD requirement (canon §5 binding rule).
+  */
+  /* (none for skeleton — populated per playbook) */
+
+  /* BRAND EXTENSION — SOBA analyst aesthetic */
+  html, body { background: var(--bg) repeating-linear-gradient(0deg, rgba(10,31,68,0.012) 0px, rgba(10,31,68,0.012) 1px, transparent 1px, transparent 3px); }
+  .sec-title { position: relative; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .sec-title::after { content: ''; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--primary); }
+  .sec-num::before { content: '§ '; color: var(--accent-2); font-family: var(--mono); }
+  .h4 { position: relative; padding-left: 14px; border-left: 2px solid var(--accent-2); }
+  .snap-hero { background: var(--surface); background-image: linear-gradient(135deg, var(--bg-tint) 0%, var(--surface) 60%); box-shadow: 0 1px 0 var(--border), 0 12px 32px -16px rgba(10,31,68,0.08); }
+  .snap-headline { font-family: var(--serif); font-weight: 700; letter-spacing: -0.3px; }
+  .stat-value { font-family: var(--mono); font-feature-settings: 'tnum' 1, 'lnum' 1; letter-spacing: -0.5px; }
+  table.vocab tr:nth-child(even) td { background: rgba(238,234,224,0.4); }
+  .req-jd::before { content: '§ '; color: var(--accent-2); font-family: var(--mono); font-weight: 700; }
+  .star-label { border-bottom: 1px solid var(--accent-2); padding-bottom: 2px; display: inline-block; }
+  .source-list, .comp-band-range, .comp-rows { font-family: var(--mono); font-feature-settings: 'tnum' 1; }
+  .comp-conf { background: var(--surface); border: 1px solid var(--accent-2); color: var(--accent-2); font-family: var(--mono); }
+  .comp-conf strong { color: var(--primary); font-family: var(--sans); }
+  .ai-proj { border-left: none; border-image: linear-gradient(180deg, var(--accent-2), var(--accent-3)) 1; border-left-width: 4px; border-left-style: solid; }
+  .ai-pitch { background: var(--bg-tint); border-left: none; border-top: 1px solid var(--accent-2); border-radius: 0; padding-top: 18px; font-family: var(--serif); }
+  .iv-anchor { border-left: 3px solid var(--accent-2); background: rgba(166,107,44,0.04); }
+  .iv-anchor strong { color: var(--accent-2); }
+  .nav-status { font-family: var(--mono); }
+  .nav-status strong { font-family: var(--sans); }
+
+  /* ============================================================
+     BASE
+     ============================================================ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--bg); color: var(--text); font-family: var(--serif); font-size: 15px; line-height: 1.6; }
+  ::selection { background: var(--primary); color: var(--bg); }
+
+  /* ============================================================
+     LAYOUT
+     ============================================================ */
+  .shell { display: flex; min-height: 100vh; max-width: 1440px; margin: 0 auto; }
+  .nav {
+    width: 260px; flex-shrink: 0; background: var(--bg-tint);
+    border-right: 1px solid var(--border); padding: 32px 0; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  }
+  .nav-brand { padding: 0 28px 28px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+  .nav-brand-eyebrow { font-family: var(--sans); font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--primary); font-weight: 600; margin-bottom: 8px; }
+  .nav-brand-title { font-family: var(--sans); font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.3; }
+  .nav-brand-sub { font-size: 12px; color: var(--text-mid); margin-top: 6px; font-style: italic; }
+  .nav-list { list-style: none; }
+  .nav-item {
+    padding: 11px 28px; font-family: var(--sans); font-size: 13px; font-weight: 500;
+    color: var(--text-mid); cursor: pointer; border-left: 3px solid transparent; transition: all .18s;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-item:hover { background: var(--surface-2); color: var(--text); }
+  .nav-item.active { background: var(--surface-2); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+  .nav-item-num { font-size: 10px; color: var(--text-mute); font-weight: 400; min-width: 18px; }
+  .nav-item.active .nav-item-num { color: var(--primary); }
+  .nav-status {
+    margin: 24px 28px 0; padding: 14px; background: var(--surface-2); border-radius: 6px;
+    font-family: var(--sans); font-size: 10px; color: var(--text-mid); line-height: 1.6;
+  }
+  .nav-status strong { color: var(--text); display: block; margin-bottom: 4px; font-size: 11px; }
+
+  .main { flex: 1; padding: 48px 64px 96px; max-width: 1100px; }
+  .panel { display: none; animation: fadeIn .25s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ============================================================
+     SECTION HEADS
+     ============================================================ */
+  .sec-num { font-family: var(--sans); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); font-weight: 600; margin-bottom: 12px; }
+  .sec-title { font-family: var(--sans); font-size: 36px; font-weight: 700; color: var(--text); line-height: 1.15; letter-spacing: -0.5px; margin-bottom: 12px; }
+  .sec-sub { font-size: 16px; color: var(--text-mid); margin-bottom: 36px; max-width: 720px; line-height: 1.55; }
+  .h3 { font-family: var(--sans); font-size: 20px; font-weight: 600; color: var(--text); margin: 36px 0 16px; letter-spacing: -0.2px; }
+  .h4 { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); margin: 24px 0 10px; }
+
+  /* ============================================================
+     GENERIC CARDS + GRID
+     ============================================================ */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 16px; }
+  .card-primary { border-left: 4px solid var(--primary); }
+  .card-accent2 { border-left: 4px solid var(--accent-2); }
+  .card-accent3 { border-left: 4px solid var(--accent-3); }
+  .card-tint { background: var(--bg-tint); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+
+  /* ============================================================
+     PILLS / BADGES
+     ============================================================ */
+  .pill {
+    display: inline-block; font-family: var(--sans); font-size: 10px; font-weight: 600;
+    padding: 4px 10px; border-radius: 100px; letter-spacing: 0.6px; text-transform: uppercase;
+  }
+  .pill-primary { background: var(--primary); color: var(--bg); }
+  .pill-accent2 { background: var(--accent-2); color: var(--bg); }
+  .pill-accent3 { background: var(--accent-3); color: var(--bg); }
+  .pill-outline { border: 1px solid var(--border); color: var(--text-mid); background: var(--bg); }
+  .pill-amber { background: #c9943b; color: var(--bg); }
+  .pill-red { background: #b85f44; color: var(--bg); }
+
+  /* ============================================================
+     SNAPSHOT (panel 01) — see canon §2 row 1 + emergent pattern
+     stat-grid mandatory: Net Fit · Status · Conv Prob · Target CTC · (optional No-Go Gate)
+     ============================================================ */
+  .snap-hero {
+    background: linear-gradient(135deg, var(--bg-tint) 0%, var(--surface-2) 100%);
+    border-radius: 14px; padding: 40px 44px; margin-bottom: 32px; border: 1px solid var(--border);
+  }
+  .snap-eyebrow { font-family: var(--sans); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); margin-bottom: 14px; font-weight: 600; }
+  .snap-headline { font-family: var(--sans); font-size: 30px; font-weight: 700; line-height: 1.2; color: var(--text); margin-bottom: 12px; letter-spacing: -0.4px; }
+  .snap-thesis { font-size: 16px; color: var(--text-mid); font-style: italic; max-width: 760px; line-height: 1.6; }
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
+  .stat-label { font-family: var(--sans); font-size: 10px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-mute); margin-bottom: 6px; font-weight: 600; }
+  .stat-value { font-family: var(--sans); font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.1; }
+  .stat-sub { font-size: 11px; color: var(--text-mid); margin-top: 4px; }
+
+  /* ============================================================
+     REQ CARDS (panel 02) — Role Decode
+     Density min: 9 (canon §3)
+     ============================================================ */
+  .req {
+    background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--primary);
+    border-radius: 10px; padding: 20px 24px; margin-bottom: 14px;
+  }
+  .req-jd { font-family: var(--sans); font-size: 11px; color: var(--primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .req-quote { font-size: 14px; color: var(--text-mid); font-style: italic; margin-bottom: 12px; padding-left: 14px; border-left: 2px solid var(--surface-2); }
+  .req-mean { font-size: 14px; color: var(--text); }
+  .req-mean strong { color: var(--primary-dark); }
+
+  /* ============================================================
+     VOCAB TABLE (panel 03) — Fit & Gap
+     Density min: 15 — SOFT FLOOR (canon §3 P1.2)
+     If targeting < 15, declare justification in pre-build outline.
+     ============================================================ */
+  table.vocab { width: 100%; border-collapse: collapse; margin: 14px 0 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  table.vocab th, table.vocab td { padding: 13px 18px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+  table.vocab th { background: var(--surface-2); font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text); }
+  table.vocab tr:last-child td { border-bottom: none; }
+  table.vocab td:first-child { color: var(--primary-dark); font-weight: 500; width: 38%; }
+
+  /* ============================================================
+     GAP CARDS (panel 03) — Fit & Gap
+     Density min: 3–5 (canon §3)
+     ============================================================ */
+  .gap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; margin-bottom: 14px; }
+  .gap-genuine { border-left: 4px solid var(--primary); }
+  .gap-vocab { border-left: 4px solid var(--accent-3); }
+  .gap-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .gap-title { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); }
+  .gap-body { font-size: 13.5px; color: var(--text-mid); line-height: 1.65; }
+  .gap-body strong { color: var(--text); }
+
+  /* ============================================================
+     STAR (panel 04) — Story Mapping
+     Density req: 5 (canon §3)
+     ============================================================ */
+  .star {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 22px 26px; margin-bottom: 16px;
+  }
+  .star-id { font-family: var(--sans); font-size: 11px; color: var(--primary); font-weight: 600; letter-spacing: 0.8px; margin-bottom: 6px; text-transform: uppercase; }
+  .star-title { font-family: var(--sans); font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .star-map { font-size: 12px; color: var(--text-mid); margin-bottom: 14px; padding: 8px 12px; background: var(--bg-tint); border-radius: 6px; border-left: 3px solid var(--accent-2); }
+  .star-row { display: grid; grid-template-columns: 90px 1fr; gap: 16px; margin-bottom: 8px; align-items: start; }
+  .star-label { font-family: var(--sans); font-size: 10px; font-weight: 700; letter-spacing: 1.4px; color: var(--primary); padding-top: 2px; }
+  .star-text { font-size: 13.5px; color: var(--text); line-height: 1.6; }
+  .star-text strong { color: var(--primary-dark); }
+
+  /* ============================================================
+     TIMELINE (panel 05) — 30-60-90
+     Density min: 15 items, ≥3 per phase (canon §3)
+     ============================================================ */
+  .tl-phase { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 16px; border-left: 4px solid var(--primary); }
+  .tl-phase-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tl-phase-day { font-family: var(--sans); font-size: 13px; font-weight: 700; color: var(--primary); letter-spacing: 0.8px; text-transform: uppercase; }
+  .tl-phase-title { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--text); }
+  .tl-item { padding: 10px 0 10px 22px; position: relative; border-top: 1px solid var(--border); font-size: 13.5px; color: var(--text-mid); }
+  .tl-item:first-of-type { border-top: none; padding-top: 4px; }
+  .tl-item::before { content: '▸'; position: absolute; left: 0; top: 11px; color: var(--primary); font-size: 12px; }
+  .tl-item strong { color: var(--text); font-family: var(--sans); font-size: 13px; }
+
+  /* ============================================================
+     AI PROJECTS (panel 06) — AI Differentiator
+     Density req: 3 (canon §3) drawn from P6–P14
+     ============================================================ */
+  .ai-proj { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 24px 28px; margin-bottom: 16px; border-left: 4px solid var(--accent-2); }
+  .ai-proj-head { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+  .ai-proj-id { font-family: var(--sans); font-size: 11px; color: var(--accent-2); font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; }
+  .ai-proj-title { font-family: var(--sans); font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .ai-proj-stack { font-family: var(--sans); font-size: 11px; color: var(--text-mute); margin-bottom: 12px; letter-spacing: 0.4px; }
+  .ai-proj-body { font-size: 13.5px; color: var(--text-mid); line-height: 1.65; }
+  .ai-proj-body strong { color: var(--text); }
+  .ai-pitch { background: linear-gradient(135deg, var(--bg-tint), var(--surface-2)); border-radius: 10px; padding: 22px 26px; margin-top: 14px; font-family: var(--serif); font-style: italic; font-size: 15px; color: var(--text); line-height: 1.65; border-left: 4px solid var(--primary); }
+
+  /* ============================================================
+     INTERVIEW KIT (panel 07)
+     Density min: 20 questions across rounds (canon §3)
+     ============================================================ */
+  .iv-round { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 16px; }
+  .iv-round-head { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--primary); letter-spacing: 0.6px; text-transform: uppercase; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .iv-q { padding: 11px 0 11px 22px; position: relative; font-size: 13.5px; color: var(--text); border-top: 1px solid var(--border); line-height: 1.55; }
+  .iv-q:first-of-type { border-top: none; }
+  .iv-q::before { content: 'Q'; position: absolute; left: 0; top: 11px; color: var(--primary); font-family: var(--sans); font-size: 11px; font-weight: 700; }
+  .iv-q-tag { font-family: var(--sans); font-size: 10px; color: var(--text-mute); margin-left: 8px; letter-spacing: 0.4px; }
+  .iv-anchor { background: var(--bg-tint); border-radius: 8px; padding: 16px 20px; margin: 12px 0; font-size: 13px; color: var(--text); border-left: 3px solid var(--accent-3); font-style: italic; line-height: 1.6; }
+  .iv-anchor strong { font-style: normal; font-family: var(--sans); color: var(--accent-3); display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase; }
+
+  /* ============================================================
+     COMP INTEL (panel 08) — canon §2A
+     Mandatory: confidence factor, ≥3 sources or "single-source · directional" tag,
+     line-item confidence breakdown if overall ≤ Medium, cross-pipeline note if applicable
+     ============================================================ */
+  .comp-conf { display: inline-block; padding: 8px 16px; border-radius: 100px; font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; background: var(--bg-tint); border: 1px solid var(--border); color: var(--text); margin-bottom: 18px; }
+  .comp-conf strong { color: var(--primary); }
+  .comp-band { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 22px 26px; margin-bottom: 14px; }
+  .comp-band-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+  .comp-band-name { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); }
+  .comp-band-range { font-family: var(--sans); font-size: 18px; font-weight: 700; color: var(--primary); }
+  .comp-rows { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 8px; }
+  .comp-row-label { font-family: var(--sans); font-size: 10px; color: var(--text-mute); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .comp-row-val { font-family: var(--sans); font-size: 15px; font-weight: 600; color: var(--text); }
+  .source-list { font-size: 12.5px; color: var(--text-mid); line-height: 1.7; padding-left: 18px; }
+  .source-list li { margin-bottom: 6px; }
+
+  /* ============================================================
+     PLACEHOLDER (use during build)
+     ============================================================ */
+  .todo { background: repeating-linear-gradient(45deg, var(--bg-tint), var(--bg-tint) 10px, var(--surface-2) 10px, var(--surface-2) 20px); border: 1px dashed var(--primary); border-radius: 10px; padding: 32px; text-align: center; }
+  .todo-eyebrow { font-family: var(--sans); font-size: 11px; font-weight: 700; color: var(--primary); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+  .todo-title { font-family: var(--sans); font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .todo-body { font-size: 13px; color: var(--text-mid); }
+
+  /* ============================================================
+     MOBILE
+     ============================================================ */
+  @media (max-width: 900px) {
+    .shell { flex-direction: column; }
+    .nav { width: 100%; height: auto; position: relative; padding: 18px 0; }
+    .nav-list { display: flex; overflow-x: auto; padding: 0 12px; gap: 4px; }
+    .nav-item { white-space: nowrap; padding: 8px 14px; border-left: none; border-bottom: 3px solid transparent; }
+    .nav-item.active { border-left: none; border-bottom-color: var(--primary); }
+    .main { padding: 28px 20px 64px; }
+    .stat-grid, .grid-2, .grid-3, .comp-rows { grid-template-columns: 1fr; }
+    .sec-title { font-size: 26px; }
+    .nav-brand, .nav-status { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ============ NAV ============ -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-brand-eyebrow">Career Playbook</div>
+    <div class="nav-brand-title">Sr Manager · SOBA, GMNS</div>
+    <div class="nav-brand-sub">American Express · Hyderabad · Band 35</div>
+  </div>
+  <ul class="nav-list">
+    <li class="nav-item active" data-tab="snap"><span class="nav-item-num">01</span> Snapshot</li>
+    <li class="nav-item" data-tab="decode"><span class="nav-item-num">02</span> Role Decode</li>
+    <li class="nav-item" data-tab="fit"><span class="nav-item-num">03</span> Fit & Gap</li>
+    <li class="nav-item" data-tab="story"><span class="nav-item-num">04</span> STAR Mapping</li>
+    <li class="nav-item" data-tab="plan"><span class="nav-item-num">05</span> 30·60·90</li>
+    <li class="nav-item" data-tab="ai"><span class="nav-item-num">06</span> AI Differentiator</li>
+    <li class="nav-item" data-tab="iv"><span class="nav-item-num">07</span> Interview Kit</li>
+    <li class="nav-item" data-tab="comp"><span class="nav-item-num">08</span> Comp Intel</li>
+    <li class="nav-item" data-tab="cert"><span class="nav-item-num">09</span> Cert Roadmap</li>
+    <li class="nav-item" data-tab="close"><span class="nav-item-num">10</span> Close & Outreach</li>
+    <!-- Conditional sections — include only if canon §2 trigger fires.
+         Each conditional panel MUST contain a one-line trigger justification (canon §P3.1). -->
+    <li class="nav-item" data-tab="stake"><span class="nav-item-num">12</span> Stakeholder Decode</li>
+  </ul>
+  <div class="nav-status">
+    <strong>Build status</strong>
+    11 / 11 sections complete<br>
+    Fit: 76 · BUILD<br>
+    Conv prob: 25–35%
+  </div>
+</nav>
+
+<!-- ============ MAIN ============ -->
+<main class="main">
+
+<section class="panel active" id="snap">
+<!-- PANEL 01 · SNAPSHOT — inner HTML only -->
+<div class="sec-num">01 · Snapshot</div>
+<div class="sec-title">AmEx Sr Manager — SOBA, GMNS Client Management</div>
+<div class="sec-sub">Strategic Operations &amp; Business Analytics · Hyderabad · Band 35 · Reports to Director SOBA · Shift: 4:30 PM – 1:30 AM IST</div>
+
+<div class="snap-hero">
+  <div class="snap-eyebrow">Headline Thesis</div>
+  <div class="snap-headline">You built what SOBA does — different domain, same operating model.</div>
+  <div class="snap-thesis">Scaled revenue operations 14.9× (AED 867M → 12.97B), reduced delinquency 74%, co-architected the Salesforce platform that mirrors MerchantForce, and deployed a 12-project AI portfolio that directly addresses the JD's explicit AI/automation mandate. The capability match is strong — the strategic question is whether Band 35 scope and night-shift economics justify the move versus your Director-track application in the same organisation.</div>
+</div>
+
+<div class="stat-grid">
+  <div class="stat">
+    <div class="stat-label">Net Fit</div>
+    <div class="stat-value">76</div>
+    <div class="stat-sub">Strong match; Band 35 scope caps ceiling</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Status</div>
+    <div class="stat-value">BUILD</div>
+    <div class="stat-sub">Override from MONITOR — backup to GMNS Director</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Conv. Probability</div>
+    <div class="stat-value">25–35%</div>
+    <div class="stat-sub">Night shift + real estate origin = conversion drag</div>
+  </div>
+  <div class="stat">
+    <div class="stat-label">Target CTC</div>
+    <div class="stat-value">₹50–52L</div>
+    <div class="stat-sub">P50 Band 35 ops · walk-away ₹48L</div>
+  </div>
+</div>
+
+<div class="h3">Why this role exists</div>
+<div class="card card-tint">
+  <strong>SOBA = the analytical backbone of GMNS Client Management.</strong> Global Merchant &amp; Network Services is AmEx's B2B / merchant-facing arm — the business that manages merchant relationships, acceptance rates, and commercial partnerships. Client Managers are the frontline. SOBA exists to make them effective: translating ambiguous business problems into structured solutions, running risk &amp; compliance activities, and building the processes/systems that let Client Managers focus on relationships instead of operational noise. This role leads a team that does for AmEx merchants what your MIS ecosystem does for Sobha's 36,000-unit portfolio — except the "portfolio" is merchant relationships, and the KPIs shift from delinquency to merchant capacity, lead conversion, and SLA compliance.
+</div>
+
+<div class="h3">The three things that decide this</div>
+<div class="grid-3">
+  <div class="card card-primary">
+    <div class="h4">Salesforce → MerchantForce</div>
+    You co-architected 40+ custom objects, 120+ automations, and a 70+ report MI ecosystem on Salesforce. MerchantForce is AmEx's merchant-specific Salesforce instance. The platform switch is vocabulary, not capability — proprietary objects and data model absorbed in Week 1–2 onboarding.
+  </div>
+  <div class="card card-accent2">
+    <div class="h4">Process reimagination proof</div>
+    Your 55-day T−25/T+30 framework IS the "reimagine lead verification / sales cycle / SLAs" ask. PCC TAT 20→3 days at 3× volume IS efficiency-driven capacity expansion. These aren't analogies — they're structural equivalents in a different domain.
+  </div>
+  <div class="card card-accent3">
+    <div class="h4">AI-augmented operations mandate</div>
+    The JD explicitly asks for AI/automation leverage. Your 12-project AI portfolio — including 3 AmEx-mapped projects (P7 ORE Tracker, P8 Ops Readiness Gate, P9 Risk Committee Pack) — is the single strongest differentiator versus internal AmEx candidates who have domain but not AI-build capability.
+  </div>
+</div>
+
+<div class="h3">Honest framing</div>
+<div class="card">
+  <strong>This role competes with your GMNS Director application</strong> — same organisation, same hiring ecosystem, likely recruiter overlap. The comp delta is ₹25–58L/year (Band 35 P50 ~₹50L vs Band 40 P50 ~₹75–90L). Night shift (4:30 PM–1:30 AM IST, US-hours coverage) is a genuine lifestyle cost with limited reversal once accepted. <strong>Strategic recommendation:</strong> treat as backup — apply only if GMNS Director rejects or goes silent past 4 weeks. If pursuing both, sequence the Director application first so this role functions as a fallback with demonstrated interest, not a signal of downward flexibility. The role itself is a strong capability match at Band 35 — just below your target altitude.
+</div>
+</section>
+
+<section class="panel" id="decode">
+<!-- PANEL 02 · ROLE DECODE — inner HTML only -->
+<div class="sec-num">02 · Role Decode</div>
+<div class="sec-title">What the JD actually asks for</div>
+<div class="sec-sub">11 requirement cards — each JD line decoded into what it means, what they'll screen for, and where your proof sits. Clustered by theme, not JD order.</div>
+
+<div class="req">
+  <div class="req-jd">REQ-01 · Team Leadership</div>
+  <div class="req-quote">"Lead and develop a high-performing team, fostering a culture of curiosity, continuous learning, and accountability for results" + "Previous people leadership a plus"</div>
+  <div class="req-mean">They want a <strong>builder-operator</strong>, not just a manager. "Curiosity" and "continuous learning" signal a team that's expected to evolve — not run static playbooks. Your proof: <strong>77-person cross-geography team (35 Dubai, 42 India)</strong> with three direct-report managers (AM Ops, Manager QCG, AM MIS) + 12 Dues RMs. You built this team structure from scratch during 14.9× scale-up — the "developing" part isn't theoretical.</div>
+</div>
+
+<div class="req">
+  <div class="req-jd">REQ-02 · Process Improvement → CM Capacity</div>
+  <div class="req-quote">"Proactively identify inefficiencies and challenge existing processes, driving improvements that increase Client Manager capacity and effectiveness"</div>
+  <div class="req-mean">This is the core SOBA mandate: <strong>free up Client Manager time</strong> by eliminating operational friction. "Proactively identify" = Restorative strength (spot what's broken before it breaks visibly). Your proof: <strong>PCC TAT 20→3 days at 3× volume</strong> — freed up downstream capacity without adding headcount. <strong>PR-to-SOA TAT 0–2 day rate 24.8%→51.3%</strong> — halved processing drag on the collections team, directly freeing operational bandwidth.</div>
+</div>
+
+<div class="req">
+  <div class="req-jd">REQ-03 · Ambiguity → Structure</div>
+  <div class="req-quote">"Translate ambiguous business problems into structured, data-driven solutions with measurable impact"</div>
+  <div class="req-mean">This is the single most diagnostic line in the JD. It separates executors (who need defined problems) from <strong>strategic operators</strong> (who define the problem first, then solve it). Your proof: the <strong>55-day T−25/T+30 framework</strong> — a proprietary collections methodology you designed from first principles. No one told you to build it; you observed the data, identified the critical window, and structured a system around it. The NPV rebate programme (AED 652M incremental inflow) is another example — ambiguous mandate ("increase advance collections") translated into a quantified model with MD-approved governance.</div>
+</div>
+
+<div class="req">
+  <div class="req-jd">REQ-04 · Outcome Ownership</div>
+  <div class="req-quote">"Own and drive outcomes across key priorities, ensuring clear accountability and follow-through on results" + "Decisive self-starter with a high degree of accountability"</div>
+  <div class="req-mean">They want someone who <strong>carries a number and owns it publicly</strong>. "Clear accountability" = named, measurable, reviewable. Your proof: <strong>personal FY 2026 dues target AED 8.2B</strong> — not a team target you share credit on, but a named personal target tracked in PeopleStrong HR. Q1 2026 actual: AED 2.62B (110% of pro-rata). You carry outcome ownership at a scale that exceeds what this Band 35 role will likely require.</div>
+</div>
+
+<div class="req">
+  <div class="req-jd">REQ-05 · Revenue Acceleration</div>
+  <div class="req-quote">"Strategize and lead initiatives that accelerate revenue growth by reimagining processes (e.g., lead verification, sales cycle, SLAs)"</div>
+  <div class="req-mean">Three specific process areas named: <strong>lead verification</strong> (merchant qualification/onboarding), <strong>sales cycle</strong> (time-to-close for merchant deals), and <strong>SLA management</strong> (response times, resolution benchmarks). "Reimagining" ≠ incremental — they want someone who questions whether the current process should exist at all. Your proof: T−25/T+30 = sales cycle reimagination. PCC TAT 85% reduction = SLA reimagination. NPV rebate (32% cheaper than bank financing) = revenue acceleration via incentive design. The domain is different (merchant vs. property), but the structural pattern — <strong>question the process, redesign it, measure the revenue impact</strong> — is identical.</div>
+</div>
+
+<div class="req">
+  <div class="req-jd">REQ-06 · Test-and-Learn</div>
+  <div class="req-quote">"Promote a test-and-learn mindset, piloting new approaches and scaling successful solutions"</div>
+  <div class="req-mean">This signals the team is expected to <strong>experiment, not just execute</strong>. "Piloting" = controlled scope. "Scaling" = proving ROI before broader rollout. Your proof: <strong>One Sobha App payments architecture</strong> — 0→278 transactions in Year 1, piloted with a controlled customer segment before entity-wide rollout. IVR + NICE Omnichannel = same pattern. 12-project AI portfolio = structured pilot methodology across multiple use cases.</div>
+</div>
+
+<div class="req">
+  <div class="req-jd">REQ-07 · AI &amp; Automation</div>
+  <div class="req-quote">"Identify and implement opportunities to leverage AI and automation to enhance productivity and decision-making"</div>
+  <div class="req-mean">This is <strong>explicitly in the JD</strong> — not inferred. Most Sr Manager candidates at AmEx India will have consumed AI (used Copilot, attended an AI workshop). Your differentiator: you <strong>build</strong> AI. 12-project portfolio (P7 ORE Tracker, P8 Ops Readiness Gate, P9 Risk Committee Pack, P12 Fraud Signal Dashboard). Python + Claude API + Streamlit + Pandas stack. This isn't "I'm interested in AI" — it's "I've built the intelligence layer, and I can build it again on your platform."</div>
+</div>
+
+<div class="req">
+  <div class="req-jd">REQ-08 · Senior Stakeholder Influence</div>
+  <div class="req-quote">"Act as a thought partner to senior stakeholders, influencing decisions through insightful analysis and strong business judgment" + "Outstanding project management and relationship management skills to collaborate closely with partners at various levels of seniority, including Sr. Leadership"</div>
+  <div class="req-mean">"Thought partner" is a specific term — it means <strong>you're in the room when decisions are made</strong>, not just when they're executed. "Influencing" = you don't have authority, so you lead with data and judgment. Your proof: <strong>NPV AED 652M defence before MD/CEO Francis Alfred</strong> — built the commercial case, defended it across multiple scrutiny rounds, zero material concessions. You also brief the CRO (Mohammad Adnan Hamid) and CCO (Ashish Vishnu Rupani) regularly. The stakeholder altitude here is lower than your current (Director SOBA vs. MD/CEO), which is actually a strength — you operate above the role's ceiling.</div>
+</div>
+
+<div class="req">
+  <div class="req-jd">REQ-09 · Resilience in White Space</div>
+  <div class="req-quote">"Drive a culture of resilience and adaptability, navigating white space and shifting priorities while maintaining execution excellence" + "Curious, resilient, adaptive learner with a sense of ownership"</div>
+  <div class="req-mean">"White space" = <strong>undefined territory with no playbook</strong>. "Shifting priorities" = SOBA frequently gets redirected as GMNS strategy evolves — the team that thrives here is comfortable with ambiguity and can maintain execution discipline while the target moves. Your proof: you built an entire function (Dues Collections as an institutional operation) from scratch during 14.9× scale-up. There was no playbook for scaling a real estate collections operation from AED 867M to AED 12.97B — you wrote it. That's the definition of white space navigation.</div>
+</div>
+
+<div class="req">
+  <div class="req-jd">REQ-10 · PMO + Cross-Functional</div>
+  <div class="req-quote">"Team player, prepared to take on PMO responsibilities for different work streams" + "Experience collaborating with Merchant-facing teams, Strategy &amp; Capabilities, GCO, Control Management"</div>
+  <div class="req-mean">This Sr Manager wears two hats: <strong>team leader + programme coordinator</strong> across SOBA's workstreams. The named collaborators (Merchant-facing, S&amp;C, GCO, Control Management) signal a <strong>highly matrixed</strong> role with 4+ stakeholder groups. Your proof: you coordinate across 3 direct-report managers, 4 legal entities, 2 geographies, and regular engagement with MD, CRO, CCO, and internal audit. PMO is not a stretch — it's your current operating model minus the formal PMO title.</div>
+</div>
+
+<div class="req">
+  <div class="req-jd">REQ-11 · Salesforce &amp; Tooling</div>
+  <div class="req-quote">"Proficient in Salesforce (MerchantForce), Excel, PowerPoint" + "Knowledge of client management organization"</div>
+  <div class="req-mean">MerchantForce is AmEx's merchant-specific Salesforce instance — the CRM backbone for GMNS Client Managers. "Proficient" at Sr Manager level means <strong>you understand the data model, can specify requirements, and can interrogate reports</strong> — not that you build flows daily. Your proof: <strong>led solution design for Salesforce CRM at Sobha</strong> — PR workflows, rebate automation, quality scorecard, CSAT triggers. 40+ custom objects, 120+ automations, 70+ report MI ecosystem. You over-qualify on this dimension. Excel and PowerPoint are table-stakes you clear easily (live data-connected reports, MD-facing monthly PPT).</div>
+</div>
+</section>
+
+<section class="panel" id="fit">
+<!-- PANEL 03 · FIT & GAP — inner HTML only -->
+<div class="sec-num">03 · Fit &amp; Gap</div>
+<div class="sec-title">Vocabulary translation &amp; gap classification</div>
+<div class="sec-sub">18 vocabulary mappings to bridge Sobha → AmEx SOBA terminology. 4 gaps classified as genuine (capability closure needed) or vocabulary (framing-only). Strengths locked to psychometric profile.</div>
+
+<div class="h3">Vocabulary translation</div>
+<table class="vocab">
+  <thead>
+    <tr><th>What they call it</th><th>Your equivalent experience</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Client Manager capacity &amp; effectiveness</td>
+      <td>Portfolio Manager productivity &amp; operational bandwidth — your PCC TAT reduction (20→3d) and PR-to-SOA acceleration (24.8%→51.3%) directly freed downstream capacity without adding headcount</td>
+    </tr>
+    <tr>
+      <td>MerchantForce (Salesforce)</td>
+      <td>Salesforce CRM — led solution design: 40+ custom objects, 120+ automations, 70+ report MI ecosystem, PR workflows, rebate automation, quality scorecard, CSAT triggers</td>
+    </tr>
+    <tr>
+      <td>Lead verification</td>
+      <td>Client onboarding validation / KYC-adjacent due diligence — your PR quality gate (49% rejection rate diagnosis + automated scorecard) is structurally equivalent to lead qualification triage</td>
+    </tr>
+    <tr>
+      <td>Sales cycle reimagination</td>
+      <td>55-day T−25/T+30 client lifecycle framework — proprietary methodology redesigning the critical collection window; equivalent to reimagining time-to-close for merchant deals</td>
+    </tr>
+    <tr>
+      <td>SLA management</td>
+      <td>Service delivery timelines &amp; turnaround benchmarks — PCC TAT 3-day SLA, PR-to-SOA 0–2 day target, daily run-rate tracking (~AED 43–47M/working day)</td>
+    </tr>
+    <tr>
+      <td>Strategic Operations &amp; Business Analytics (SOBA)</td>
+      <td>MIS ecosystem / Revenue Intelligence Platform — 70+ reports, 3 multi-dimensional analytical suites (Dues Receipt Summary, Advance Summary, Trend_M), cross-geography analytics team (42 India MIS staff)</td>
+    </tr>
+    <tr>
+      <td>Client Management organisation</td>
+      <td>Dues Collections / Revenue Operations function — manages 36,000+ customer relationships across AED 87B active portfolio, 4 legal entities, 100+ nationalities</td>
+    </tr>
+    <tr>
+      <td>Risk and compliance activities</td>
+      <td>Delinquency risk management + regulatory compliance — reduced portfolio delinquency 16.7%→4.4% (74% reduction); 4+ years as named audit SPOC; 14-finding audit → 97.5% error reduction</td>
+    </tr>
+    <tr>
+      <td>Data Security Initiatives</td>
+      <td>Client data governance + PII/NPI protection — Salesforce access controls, multi-entity data segregation, compliance with UAE Central Bank and DLD reporting requirements</td>
+    </tr>
+    <tr>
+      <td>Colleague engagement</td>
+      <td>Team culture &amp; employee experience — built cross-geography team culture across Dubai + India hub; structured mentorship for 3 direct-report managers; team-capability evidence: COL-PF14 NPV Rebate V2 proposed by direct report</td>
+    </tr>
+    <tr>
+      <td>Operational risk</td>
+      <td>Process control framework + exception management — risk register with weekly closure cadence; became permanent audit SPOC; 7 MD-approved process documents (COL-PF01 through COL-PF14)</td>
+    </tr>
+    <tr>
+      <td>GCO (Global Compliance Office)</td>
+      <td>Internal compliance &amp; audit functions — your 4-year audit SPOC tenure mirrors the GCO liaison role; escalation pathways differ but governance muscle is identical</td>
+    </tr>
+    <tr>
+      <td>Control Management</td>
+      <td>Risk register escalation + process control — 14-finding audit remediation without disrupting live operations; proactively escalated 3 blocked items to CCO before due dates</td>
+    </tr>
+    <tr>
+      <td>Merchant-facing teams</td>
+      <td>Client-facing relationship managers / Dues RMs — 12 Dues RMs directly handling customer relationships + payments; merchant-facing teams at AmEx are the structural equivalent</td>
+    </tr>
+    <tr>
+      <td>Revenue growth acceleration</td>
+      <td>Recovery rate optimisation + portfolio health improvement — reframe: your 14.9× scale is revenue growth, not just collections growth. NPV programme (AED 652M incremental, 32% cheaper than bank financing) is revenue-accelerating incentive design</td>
+    </tr>
+    <tr>
+      <td>Test-and-learn mindset</td>
+      <td>Pilot-and-scale methodology — One Sobha App (0→278 txns Year 1), IVR launch, NICE Omnichannel discovery, 12-project AI portfolio = structured experimentation across multiple use cases</td>
+    </tr>
+    <tr>
+      <td>White space navigation</td>
+      <td>Cross-functional ownership without formal authority — built entire Dues Collections function during 14.9× scale with no playbook, no predecessor framework, no dedicated PMO; defined the operating model yourself</td>
+    </tr>
+    <tr>
+      <td>PMO responsibilities</td>
+      <td>Programme governance + cross-stream coordination — coordinate across 3 managers, 4 entities, 2 geographies, MD/CRO/CCO reporting cadence; PMO is your current operating model minus the formal title</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="h3">Gaps — classified</div>
+
+<div class="gap gap-genuine">
+  <div class="gap-head">
+    <div class="gap-title">MerchantForce platform-specific data model</div>
+    <span class="pill pill-amber">Genuine — closure: Week 1–2 onboarding</span>
+  </div>
+  <div class="gap-body">
+    You know Salesforce deeply (co-architect level), but <strong>MerchantForce is AmEx's merchant-specific instance</strong> with proprietary objects (merchant records, discount rate tables, acceptance network data), custom flows, and a data model tuned to GMNS operations. You haven't seen this specific configuration. <strong>Closure plan:</strong> standard Week 1–2 onboarding provides MerchantForce orientation; your Salesforce architecture depth means you'll absorb the proprietary layer faster than a non-Salesforce hire. Ask for admin-level sandbox access in first week. Estimated ramp: 2–3 weeks to operational fluency, 6–8 weeks to architectural understanding.
+  </div>
+</div>
+
+<div class="gap gap-vocab">
+  <div class="gap-head">
+    <div class="gap-title">GMNS merchant-side domain vocabulary</div>
+    <span class="pill pill-outline">Vocabulary — framing only</span>
+  </div>
+  <div class="gap-body">
+    AmEx GMNS uses merchant-acquiring terminology: <strong>merchant agreements, discount rates, charge volume, acceptance rates, merchant tiering, OptBlue</strong>. Your current vocabulary is collections-based: delinquency rate, recovery tiers, milestone schedules. The underlying concepts (client segmentation, revenue-per-relationship, risk tiering, lifecycle management) are structurally identical — the words differ. <strong>Closure plan:</strong> pre-interview vocabulary scan (AmEx 10-K merchant services section + 2–3 GMNS LinkedIn posts). No capability gap — just a translation exercise.
+  </div>
+</div>
+
+<div class="gap gap-genuine">
+  <div class="gap-head">
+    <div class="gap-title">GCO &amp; Control Management collaboration patterns</div>
+    <span class="pill pill-amber">Genuine — closure: first 30 days</span>
+  </div>
+  <div class="gap-body">
+    You've worked with internal audit and compliance at Sobha (4-year audit SPOC), but <strong>AmEx's GCO (Global Compliance Office) and Control Management</strong> have specific escalation paths, reporting cadences, regulatory frameworks (OCC/CFPB for US operations, FCA for UK), and a formal 1LOD/2LOD/3LOD defence model. Your governance muscle is strong; the institutional choreography is new. <strong>Closure plan:</strong> first-30-day stakeholder mapping with GCO and Control Management leads; your risk register experience provides the structural analog. Ask Director SOBA for GCO org chart and recent audit findings in first week.
+  </div>
+</div>
+
+<div class="gap gap-vocab">
+  <div class="gap-head">
+    <div class="gap-title">"Revenue acceleration" framing</div>
+    <span class="pill pill-outline">Vocabulary — framing only</span>
+  </div>
+  <div class="gap-body">
+    Your impact is framed as <strong>"recovery rate optimisation" and "delinquency reduction"</strong> — both revenue-positive, but SOBA frames it as "revenue growth" not "revenue recovery." The NPV programme (AED 652M incremental) is pure revenue acceleration; the 14.9× scale is revenue growth. You just need to <strong>lead with growth language, not risk-mitigation language</strong>. <strong>Closure plan:</strong> rewrite all proof points in "accelerated" / "expanded" / "grew" framing before interview. Example: "Accelerated annual revenue capture from AED 867M to AED 12.97B" not "reduced delinquency from 16.7% to 4.4%."
+  </div>
+</div>
+
+<div class="h3">Strengths matched — psychometric lock-in</div>
+<div class="grid-2">
+  <div class="card card-primary">
+    <div class="h4">Restorative → "Proactively identify inefficiencies"</div>
+    <strong>CliftonStrengths #1.</strong> You instinctively spot what's broken and fix it — not because someone assigned you the problem, but because leaving it broken causes you discomfort. This is the single most diagnostic JD line for your profile. The SOBA mandate (free up Client Manager capacity) is a Restorative playground: find the friction, diagnose the root cause, design the fix, measure the improvement. Your PCC TAT reduction, PR rejection diagnosis, and 14-finding audit remediation are all Restorative-driven outcomes.
+  </div>
+  <div class="card card-accent2">
+    <div class="h4">Analytical → "Data-driven solutions with measurable impact"</div>
+    <strong>CliftonStrengths #2.</strong> You demand proof before action and quantify outcomes by reflex. The JD's emphasis on "measurable impact" and "insightful analysis" maps directly. Your 70+ report MI ecosystem, NPV cost-benefit model (AED 652M / AED 21.2M cost / 32% cheaper), and delinquency tracking (16.7%→4.4% with year-over-year granularity) demonstrate Analytical at enterprise scale.
+  </div>
+  <div class="card card-accent3">
+    <div class="h4">Arranger → "Navigate shifting priorities while maintaining execution"</div>
+    <strong>CliftonStrengths #3.</strong> You manage complexity by constantly reordering resources and priorities — 77 people across 2 geographies, 4 entities, 30+ projects. "Shifting priorities" and "white space" in the JD are Arranger territory. Your daily orchestration (AED 43–47M daily run rate, ~2,400 PR records/day) demonstrates execution maintenance under continuous reprioritisation.
+  </div>
+  <div class="card card-primary">
+    <div class="h4">High-C DISC → "Attention to detail and critical thinking"</div>
+    <strong>DISC dominant factor.</strong> High Compliance = precision-oriented, standards-driven, quality-focused. The JD's "keen attention to detail," "operational risk" focus, and "commitment to quality, oversight" are High-C requirements. Your 97.5% error reduction, 7 MD-approved process documents, and audit SPOC tenure demonstrate High-C in production environments. <strong>Watch point:</strong> Low-D may read as hesitant in the "decisive self-starter" screen — counter with NPV defence and PR rejection standard-hold anchor stories.
+  </div>
+</div>
+</section>
+
+<section class="panel" id="story">
+<!-- PANEL 04 · STAR MAPPING — inner HTML only -->
+<div class="sec-num">04 · Story Mapping</div>
+<div class="sec-title">Interview evidence — 5 STAR stories</div>
+<div class="sec-sub">Each story drawn from the 36-story evidence bank (S1–S36), re-framed for SOBA's specific pain points. Maps link to Panel 02 req-cards.</div>
+
+<div class="star">
+  <div class="star-id">S3 · 55-Day T−25/T+30 Framework</div>
+  <div class="star-title">Turning ambiguity into a proprietary operational methodology</div>
+  <div class="star-map">Maps to: REQ-03 (Ambiguity → Structure) · REQ-05 (Revenue Acceleration / Sales cycle reimagination)</div>
+  <div class="star-row"><div class="star-label">SITUATION</div><div class="star-text">Collections had no framework for identifying when a customer payment was at highest risk. Decisions about collection intensity were made on intuition, not data. RM scheduling, escalation triggers, and resource allocation were ad hoc — causing customer friction at non-critical windows and underperformance at the highest-leverage moments.</div></div>
+  <div class="star-row"><div class="star-label">TASK</div><div class="star-text">Define the problem from first principles, structure an analytical framework, and build a scalable solution — with <strong>no precedent, no academic model, and no external benchmark</strong>.</div></div>
+  <div class="star-row"><div class="star-label">ACTION</div><div class="star-text">Analysed 4 years of payment data to identify the critical collection window. Discovered that the <strong>55-day T−25/T+30 window</strong> around payment due dates captures the highest-leverage collection opportunity. Built the framework as the operational backbone — RM scheduling, escalation triggers, customer touchpoint sequences, and documentation requirements all anchored to this window. Embedded it into SOPs, trained all 77 staff, and built the monitoring layer into the MI ecosystem for real-time adherence visibility.</div></div>
+  <div class="star-row"><div class="star-label">RESULT</div><div class="star-text">Proprietary framework now governs all collection activity timing. Portfolio delinquency reduced <strong>74% (16.7% → 4.4%)</strong> over 4 years. The framework is original intellectual property — not adapted from any external model. <strong>SOBA reframe:</strong> "I built the sales-cycle methodology from scratch — the same 'reimagine the process' capability this JD asks for. Different domain, identical structural problem."</div></div>
+</div>
+
+<div class="star">
+  <div class="star-id">S5 · NPV AED 652M Multi-Round Defence</div>
+  <div class="star-title">Thought-partnering at MD/CEO level through insightful analysis</div>
+  <div class="star-map">Maps to: REQ-08 (Senior Stakeholder Influence) · REQ-04 (Outcome Ownership)</div>
+  <div class="star-row"><div class="star-label">SITUATION</div><div class="star-text">Early-payment incentive programme required MD/CEO sign-off. The commercial case was challenged on risk, cost, and ROI — senior leadership questioned whether incentivising early payment would erode margins without proportionate cash-flow benefit.</div></div>
+  <div class="star-row"><div class="star-label">TASK</div><div class="star-text">Build, defend, and secure approval for a complex financial model — <strong>independently, with no finance team support</strong>.</div></div>
+  <div class="star-row"><div class="star-label">ACTION</div><div class="star-text">Built NPV model from first principles: <strong>AED 652M incremental inflow, AED 21.2M total programme cost, 248-day average prepayment acceleration, 32% cheaper than bank financing benchmark</strong>. Anticipated leadership questions — brought sensitivity scenarios, break-even analysis, and risk-adjusted projections. Presented to MD/CEO Francis Alfred with a structured decision framework. Defended through multiple scrutiny rounds — <strong>zero material concessions</strong>. Built governance layer to track actual vs projected performance.</div></div>
+  <div class="star-row"><div class="star-label">RESULT</div><div class="star-text">Full MD approval. Programme delivered as modelled. AED 3.26B in advance collections generated in 2025; AED 2.15B advance pipeline outstanding. The model is now the permanent decision framework for all early-payment incentive decisions. <strong>SOBA reframe:</strong> "This is what 'thought partner to senior stakeholders' looks like in practice — I didn't just present data, I structured the decision and defended it."</div></div>
+</div>
+
+<div class="star">
+  <div class="star-id">S6 · 70+ Report Intelligence Ecosystem</div>
+  <div class="star-title">Building the data backbone that makes an operational team effective</div>
+  <div class="star-map">Maps to: REQ-07 (AI &amp; Automation) · REQ-02 (Process Improvement → CM Capacity)</div>
+  <div class="star-row"><div class="star-label">SITUATION</div><div class="star-text">A 35+ person team operating on fragmented spreadsheets — no CRM, no shared data layer, no real-time visibility into portfolio health, collection activity, or team performance. Decision-making was gut-driven, not data-driven.</div></div>
+  <div class="star-row"><div class="star-label">TASK</div><div class="star-text">Design and deploy a collections intelligence platform from scratch, with no vendor PM, no technical PM, and no dedicated BI function.</div></div>
+  <div class="star-row"><div class="star-label">ACTION</div><div class="star-text">Conducted <strong>6-stakeholder requirements discovery</strong>. Led solution design with Salesforce implementation team: 40+ custom objects, 120+ automations. Personally built 12 analytical reports (2021–2023) and 6 daily management reports. Architected 3 multi-dimensional analytical suites (Dues Receipt Summary: 7 sheets; Advance Summary: 24 sheets; Trend_M: 3 sheets). Deployed across Dubai and Hyderabad — trained 77 practitioners on shared real-time data layer.</div></div>
+  <div class="star-row"><div class="star-label">RESULT</div><div class="star-text"><strong>70+ reports in production</strong>, still live in 2026. Scaled to support 14.9× programme growth. Zero additional reporting headcount. Eliminated spreadsheet-based decision-making across the function. <strong>SOBA reframe:</strong> "I built what SOBA's analytics function does — the intelligence layer that makes client-facing teams effective. That's the AI/automation foundation this JD is asking for."</div></div>
+</div>
+
+<div class="star">
+  <div class="star-id">S12 · Building Team Capability to Operate Independently</div>
+  <div class="star-title">Scaling leadership — from leader-dependent to team-autonomous</div>
+  <div class="star-map">Maps to: REQ-01 (Team Leadership / curiosity &amp; continuous learning) · REQ-09 (Resilience in White Space)</div>
+  <div class="star-row"><div class="star-label">SITUATION</div><div class="star-text">Scaling from 8 to 77 people created a bottleneck risk: senior leader review was required on every critical output — process documents, audit responses, escalation memos, governance reports. The organisation couldn't scale if every decision routed through one person.</div></div>
+  <div class="star-row"><div class="star-label">TASK</div><div class="star-text">Build team capability so the function could scale without becoming leader-dependent — <strong>shift from "I do" to "they do, I govern."</strong></div></div>
+  <div class="star-row"><div class="star-label">ACTION</div><div class="star-text">Designed a capability framework with explicit skill ladders for each team tier. Built training materials and documentation standards. Created review cadences (weekly quality audits, monthly performance reviews). Empowered the senior layer (3 direct-report managers: AM Ops, Manager QCG, AM MIS) to author MD-approved process documents independently. Established a "learning loop" — post-incident reviews became capability-building sessions, not blame exercises.</div></div>
+  <div class="star-row"><div class="star-label">RESULT</div><div class="star-text">Senior team now produces governance documents that pass MD review <strong>without escalation</strong>. Evidence: COL-PF14 (NPV Rebate V2, Feb 2026) was proposed and drafted by a direct report, not by Priyanuj. Organisation scales without single-point-of-failure risk. <strong>SOBA reframe:</strong> "The JD says 'foster curiosity, continuous learning, and accountability.' I built the system that makes those words operational — not a culture poster, a capability framework."</div></div>
+</div>
+
+<div class="star">
+  <div class="star-id">S18 · PCC TAT 20→3 Days at 3× Volume</div>
+  <div class="star-title">Capacity expansion through process redesign — not headcount</div>
+  <div class="star-map">Maps to: REQ-02 (Process Improvement → CM Capacity) · REQ-06 (Test-and-Learn)</div>
+  <div class="star-row"><div class="star-label">SITUATION</div><div class="star-text">Property Completion Certificate processing averaged 20-day TAT, causing revenue leakage and customer escalations. Volume was ~90/month. The bottleneck sat at verification and approval stages — multiple handoffs, redundant checks, no real-time visibility.</div></div>
+  <div class="star-row"><div class="star-label">TASK</div><div class="star-text">Redesign the end-to-end workflow to reduce TAT dramatically — <strong>without increasing headcount</strong>.</div></div>
+  <div class="star-row"><div class="star-label">ACTION</div><div class="star-text">Mapped full process flow end-to-end. Identified bottlenecks at verification and approval stages. Eliminated redundant steps (3 parallel checks collapsed to 1 sequential gate). Built daily TAT and volume dashboards for real-time performance tracking. Piloted the redesigned workflow with a controlled subset before full rollout — classic test-and-learn: <strong>measure the pilot, validate the improvement, then scale</strong>.</div></div>
+  <div class="star-row"><div class="star-label">RESULT</div><div class="star-text">TAT <strong>20→3 days (85% reduction)</strong>. Monthly volume <strong>~90→281 (3× increase)</strong>. Same team, redesigned workflow. Dashboard now permanent governance tool. <strong>SOBA reframe:</strong> "This is exactly what 'increase Client Manager capacity and effectiveness' means — I freed up 17 days per case without adding a single person. Translate PCC→merchant onboarding, and the structural pattern is identical."</div></div>
+</div>
+</section>
+
+<section class="panel" id="plan">
+<!-- PANEL 05 · 30-60-90 — inner HTML only -->
+<div class="sec-num">05 · 30-60-90</div>
+<div class="sec-title">First 90 days in SOBA</div>
+<div class="sec-sub">16 milestones across 4 phases — calibrated for a Band 35 Sr Manager joining a matrixed ops-analytics function inside GMNS. Night-shift context (4:30 PM–1:30 AM IST) means US-hours stakeholder overlap is built into the rhythm.</div>
+
+<div class="tl-phase">
+  <div class="tl-phase-head">
+    <div class="tl-phase-day">Day 1 — Week 1</div>
+    <div class="tl-phase-title">Orient &amp; map the terrain</div>
+  </div>
+  <div class="tl-item"><strong>MerchantForce sandbox access</strong> — Request admin-level access on Day 1. Spend first 3 evenings navigating the merchant data model: merchant records, discount rate objects, acceptance network fields, CM activity logs. Your Salesforce architecture depth means you'll read the data model faster than any non-Salesforce hire; translate your 40+ custom object vocabulary to MerchantForce equivalents.</div>
+  <div class="tl-item"><strong>Director SOBA 1:1 — operating rhythm download</strong> — Map the cadence: what reports ship when, what meetings happen weekly/monthly, what the Director's top 3 priorities are this quarter. Ask explicitly: "What's the one thing you wish this team did better?" That answer defines your first quick win.</div>
+  <div class="tl-item"><strong>Team 1:1 sweep</strong> — Meet every direct report and every senior IC individually. Listen for: what's working, what's broken, what they wish leadership would fix. Document patterns — Restorative reflex: you're already diagnosing.</div>
+  <div class="tl-item"><strong>Stakeholder map draft</strong> — Identify the 4 key cross-org partners (Merchant-facing teams, Strategy &amp; Capabilities, GCO, Control Management) + their primary contacts. Begin scheduling introductory conversations for Week 2–3.</div>
+</div>
+
+<div class="tl-phase">
+  <div class="tl-phase-head">
+    <div class="tl-phase-day">Day 30</div>
+    <div class="tl-phase-title">Diagnose &amp; earn credibility</div>
+  </div>
+  <div class="tl-item"><strong>Process efficiency audit — first findings</strong> — Identify the top 3 operational friction points that reduce Client Manager capacity. Quantify the time cost (hours/week lost) using MerchantForce activity data. Present findings to Director SOBA as a structured problem statement — not a complaint list, a prioritised opportunity register with estimated capacity-recovery per fix.</div>
+  <div class="tl-item"><strong>GCO &amp; Control Management relationship anchored</strong> — Complete introductory meetings with GCO and Control Management leads. Map their escalation paths, reporting cadences, and regulatory framework. Document the 1LOD/2LOD/3LOD defence model as it applies to SOBA's risk activities. Your 4-year audit SPOC experience is the credibility bridge — lead with it.</div>
+  <div class="tl-item"><strong>First quick win delivered</strong> — Ship one visible improvement within 30 days. Target a low-hanging process fix (SLA tracking gap, manual report that should be automated, meeting that should be an email). Small scope, visible result. This earns permission for bigger moves.</div>
+  <div class="tl-item"><strong>Vocabulary translation complete</strong> — By Day 30, you should be fluent in GMNS merchant-side terminology. Merchant agreements, discount rates, charge volume, OptBlue, merchant tiering — no longer need mental translation. Test: can you explain a CM's typical week to a new hire? If yes, translation is done.</div>
+</div>
+
+<div class="tl-phase">
+  <div class="tl-phase-head">
+    <div class="tl-phase-day">Day 60</div>
+    <div class="tl-phase-title">Build &amp; pilot</div>
+  </div>
+  <div class="tl-item"><strong>Pilot first efficiency initiative</strong> — Launch a controlled pilot for the #1 friction point from your Day 30 audit. Define success metrics before launch (hours saved, error rate reduced, CM satisfaction delta). Test-and-learn: measure for 2 weeks, iterate, decide scale-or-kill by Day 75.</div>
+  <div class="tl-item"><strong>AI opportunity assessment</strong> — Audit the team's current tooling and manual workflows. Identify 2–3 processes where AI/automation could enhance productivity or decision-making. Present a lightweight feasibility brief to Director SOBA — not a full business case yet, just "here's what's possible, here's the effort, here's the expected lift."</div>
+  <div class="tl-item"><strong>Risk &amp; compliance cadence established</strong> — Own the SOBA risk-activity calendar: which compliance activities ship when, who reviews, where exceptions are tracked. Build or refine the risk register (your 14-finding audit experience is directly applicable). Establish yourself as the person GCO and Control Management call when they need something from SOBA.</div>
+  <div class="tl-item"><strong>Cross-functional relationship maturity</strong> — By Day 60, Strategy &amp; Capabilities and Merchant-facing team leads should know you by name and see you as the SOBA point of contact for their requests. Relationship test: do they come to you directly, or do they still go through Director SOBA? If direct, you've earned the seat.</div>
+</div>
+
+<div class="tl-phase">
+  <div class="tl-phase-head">
+    <div class="tl-phase-day">Day 90</div>
+    <div class="tl-phase-title">Deliver &amp; set trajectory</div>
+  </div>
+  <div class="tl-item"><strong>First measurable capacity improvement delivered</strong> — The Day 60 pilot should be scaled or replaced by a higher-impact initiative. Present quantified results to Director SOBA: "We freed X hours/week of CM capacity by redesigning [process]. Here's the before/after data." This is your first outcome-ownership proof point inside AmEx.</div>
+  <div class="tl-item"><strong>AI pilot launched</strong> — At least one AI/automation initiative should be in active pilot by Day 90 — even if it's a simple automation (e.g., automated weekly ops digest, SLA breach alert, lead-quality triage). Demonstrate builder capability, not just consumer-of-AI-tools.</div>
+  <div class="tl-item"><strong>Strategic recommendation to Director SOBA</strong> — Deliver a written brief: "Here's what I've learned in 90 days. Here are the 3 biggest opportunities for SOBA to increase CM effectiveness over the next 6 months. Here's my recommended priority order and rough effort/impact for each." This positions you as a thought partner, not just a team lead.</div>
+  <div class="tl-item"><strong>Team development plan</strong> — Formalise individual development plans for each direct report. Identify skill gaps, define learning goals, set 6-month milestones. Apply the capability-building framework you built at Sobha (S12) — shift from "I govern" to "they grow."</div>
+</div>
+</section>
+
+<section class="panel" id="ai">
+<!-- PANEL 06 · AI DIFFERENTIATOR — inner HTML only -->
+<div class="sec-num">06 · AI Differentiator</div>
+<div class="sec-title">Your AI portfolio — re-framed for SOBA</div>
+<div class="sec-sub">3 projects from the 12-project AI portfolio, each re-framed to address a specific SOBA pain point. These aren't hypotheticals — they're build-ready architectures with transferable proof artifacts.</div>
+
+<div class="ai-proj">
+  <div class="ai-proj-head">
+    <div>
+      <div class="ai-proj-id">P7 · ORE Tracker</div>
+      <div class="ai-proj-title">Client Manager Effectiveness &amp; Risk Tracker</div>
+      <div class="ai-proj-stack">Python · Claude API · Streamlit · Pandas · Salesforce data export</div>
+    </div>
+    <span class="pill pill-primary">CM Capacity &amp; Risk</span>
+  </div>
+  <div class="ai-proj-body">
+    <strong>Original design:</strong> Operational Risk &amp; Effectiveness tracker built on Sobha's collections data — monitors team performance metrics, flags risk concentrations, and generates weekly health summaries for leadership review.<br><br>
+    <strong>SOBA reframe:</strong> Replace collections KPIs with Client Manager activity metrics from MerchantForce — meetings held, follow-ups completed, pipeline movement, SLA adherence. The AI layer does three things: (1) <strong>flags underperforming CMs</strong> before they miss targets, enabling early intervention; (2) <strong>identifies capacity patterns</strong> — which operational tasks consume disproportionate CM time, creating the evidence base for process elimination; (3) <strong>generates weekly effectiveness digests</strong> that Director SOBA and GMNS leadership can act on without manual compilation. This directly addresses both the "expand CM capacity" and "risk and compliance" mandates in the JD.<br><br>
+    <strong>Interview artifact:</strong> Show the Streamlit dashboard with mock MerchantForce data. Walk through the AI-generated risk flag ("CM X has 15 overdue follow-ups, 3 SLA breaches pending, and declining meeting cadence — intervention recommended") to demonstrate how the tool converts data into action.
+  </div>
+</div>
+
+<div class="ai-proj">
+  <div class="ai-proj-head">
+    <div>
+      <div class="ai-proj-id">P8 · Ops Readiness Gate Checker</div>
+      <div class="ai-proj-title">Lead Verification &amp; Pipeline Quality Gate</div>
+      <div class="ai-proj-stack">Python · Claude API · Streamlit · Rule engine · Salesforce validation hooks</div>
+    </div>
+    <span class="pill pill-accent2">Lead Verification</span>
+  </div>
+  <div class="ai-proj-body">
+    <strong>Original design:</strong> Operations Readiness Gate Checker built for Sobha's onboarding workflows — validates that all pre-conditions are met before a case progresses to the next stage, reducing rework and rejection rates.<br><br>
+    <strong>SOBA reframe:</strong> Map the gate-checking logic to GMNS <strong>lead verification</strong> — the JD explicitly names this as a process to reimagine. Before a merchant lead advances from qualification to active pipeline, the tool validates: documentation completeness, compliance flags, credit-risk indicators, and merchant-tier eligibility. The AI layer adds a <strong>quality-confidence score</strong> — "this lead has 92% documentation completeness and no compliance flags; recommend advance" vs "this lead is missing 3 required fields and has an unresolved GCO flag; hold." This replaces manual verification with automated triage, directly expanding CM capacity by eliminating low-value verification work.<br><br>
+    <strong>Proof of concept in practice:</strong> Your PR rejection rate work (49% rejection → automated scorecard with Salesforce escalation triggers) IS this project's Sobha-domain equivalent. You didn't just flag bad PRs — you built the system that prevents them. Same architecture, applied to merchant lead verification.
+  </div>
+</div>
+
+<div class="ai-proj">
+  <div class="ai-proj-head">
+    <div>
+      <div class="ai-proj-id">P12 · B2B Fraud Signal Dashboard</div>
+      <div class="ai-proj-title">Revenue Risk Signal Dashboard</div>
+      <div class="ai-proj-stack">Python · Streamlit · Claude API · Pandas · IEEE-CIS dataset</div>
+    </div>
+    <span class="pill pill-accent3">Data-Driven Solutions</span>
+  </div>
+  <div class="ai-proj-body">
+    <strong>Original design:</strong> B2B Fraud Signal Intelligence Dashboard — anomaly detection on transaction data, automated risk flagging, pattern recognition across large datasets. Built on the IEEE-CIS fraud detection dataset.<br><br>
+    <strong>SOBA reframe:</strong> Reposition as a <strong>revenue risk signal dashboard</strong> for GMNS Client Management. Instead of fraud detection, the same anomaly-detection architecture monitors merchant revenue patterns: sudden volume drops, unusual transaction patterns, SLA breach clustering, seasonal anomalies vs expected behaviour. The AI layer generates <strong>root cause hypotheses</strong> — "Merchant X shows 23% volume decline vs trailing 6-month average; most likely drivers: seasonal adjustment (40% probability), competitive displacement (35%), operational issue (25%)" — enabling CMs to prioritise investigation rather than discover problems reactively.<br><br>
+    <strong>Interview pitch:</strong> "The JD says 'translate ambiguous business problems into data-driven solutions with measurable impact.' This dashboard demonstrates exactly that — I take unstructured transaction data, apply AI-driven anomaly detection, and generate actionable hypotheses for the client-facing team. The architecture is domain-agnostic; I built it on fraud data, but the same pattern applies to merchant health monitoring."
+  </div>
+</div>
+
+<div class="ai-pitch">
+  <strong>The differentiator pitch:</strong> "Most candidates at this level have consumed AI — used Copilot, attended a workshop, built a prompt. I build AI. My 12-project portfolio includes 3 projects specifically designed for AmEx-equivalent operations: risk tracking, quality gating, and signal detection. The gap between 'I'm interested in AI' and 'I've built the intelligence layer' is the gap between this role's ambition and its execution capability. I close that gap on Day 1."
+</div>
+</section>
+
+<section class="panel" id="iv">
+<!-- PANEL 07 · INTERVIEW KIT — inner HTML only -->
+<div class="sec-num">07 · Interview Kit</div>
+<div class="sec-title">Likely interview questions &amp; scripted anchors</div>
+<div class="sec-sub">22 questions across 4 rounds, calibrated for a Band 35 Sr Manager hire into SOBA GMNS. Each round has a scripted opening anchor — your first 60 seconds set the frame.</div>
+
+<div class="iv-round">
+  <div class="iv-round-head">Round 1 · HR / Recruiter Screen (30 min)</div>
+  <div class="iv-q">Walk me through your career and why you're interested in this role at AmEx. <span class="iv-q-tag">behavioral</span></div>
+  <div class="iv-q">What do you know about GMNS and the Client Management organisation? <span class="iv-q-tag">situational</span></div>
+  <div class="iv-q">This role requires a 4:30 PM–1:30 AM shift. How do you feel about that? <span class="iv-q-tag">situational</span></div>
+  <div class="iv-q">What are your compensation expectations? <span class="iv-q-tag">situational</span></div>
+  <div class="iv-q">Tell me about a time you led a team through a major change. <span class="iv-q-tag">behavioral</span></div>
+  <div class="iv-anchor">
+    <strong>Opening anchor — R1</strong>
+    "I run a 77-person revenue operations function across Dubai and Hyderabad, accountable for AED 8.2 billion in annual collections. I built the Salesforce platform, the intelligence ecosystem, and the AI portfolio that powers it. I'm looking at AmEx because SOBA does for merchant Client Managers what my team does for our collections function — builds the operational backbone that makes the frontline effective. The domain changes; the operating model doesn't."
+  </div>
+</div>
+
+<div class="iv-round">
+  <div class="iv-round-head">Round 2 · Director SOBA — Hiring Manager (60 min)</div>
+  <div class="iv-q">How would you approach identifying inefficiencies in a process you've never seen before? <span class="iv-q-tag">situational</span></div>
+  <div class="iv-q">Tell me about a time you translated an ambiguous business problem into a structured solution. <span class="iv-q-tag">behavioral → S3</span></div>
+  <div class="iv-q">How have you used data to influence a senior stakeholder's decision? <span class="iv-q-tag">behavioral → S5</span></div>
+  <div class="iv-q">Describe a process you reimagined that had measurable revenue impact. <span class="iv-q-tag">behavioral → S3, S18</span></div>
+  <div class="iv-q">How do you balance team development with delivery pressure? <span class="iv-q-tag">behavioral → S12</span></div>
+  <div class="iv-q">What experience do you have with AI or automation in an operational context? <span class="iv-q-tag">technical → P7, P8, P12</span></div>
+  <div class="iv-q">How would you design a test-and-learn programme for improving lead verification? <span class="iv-q-tag">situational</span></div>
+  <div class="iv-anchor">
+    <strong>Opening anchor — R2</strong>
+    "I'd like to spend our time on three things: first, how I've built structured solutions from ambiguous problems — my 55-day T−25/T+30 framework was designed from first principles with no external model. Second, how I've reimagined processes to free up operational capacity — PCC turnaround from 20 to 3 days at three times the volume, same team. Third, the AI portfolio I've built — not consumed, built — that directly addresses the automation mandate in this role."
+  </div>
+</div>
+
+<div class="iv-round">
+  <div class="iv-round-head">Round 3 · Cross-Functional Peers — GMNS Stakeholders (60 min)</div>
+  <div class="iv-q">How do you build relationships with teams you don't manage? <span class="iv-q-tag">behavioral</span></div>
+  <div class="iv-q">Describe a time you had to influence a decision without formal authority. <span class="iv-q-tag">behavioral → S5, S8</span></div>
+  <div class="iv-q">Tell me about a risk or compliance issue you managed alongside operations. <span class="iv-q-tag">behavioral → S1, S2</span></div>
+  <div class="iv-q">How do you handle competing priorities from multiple stakeholder groups? <span class="iv-q-tag">situational</span></div>
+  <div class="iv-q">Describe a situation where you had to push back on a stakeholder. <span class="iv-q-tag">behavioral → S2 (PR 49%)</span></div>
+  <div class="iv-anchor">
+    <strong>Opening anchor — R3</strong>
+    "My current role is inherently matrixed — I coordinate across an MD/CEO, a CRO, a CCO, and internal audit, with no single reporting line to any of them except the CCO. I'm accustomed to building influence through data quality and consistent delivery, not positional authority. The GCO and Control Management partnership you'd expect in this role maps directly to the governance relationships I've maintained for four-plus years."
+  </div>
+</div>
+
+<div class="iv-round">
+  <div class="iv-round-head">Round 4 · VP / Senior Director — GMNS Leadership (45 min)</div>
+  <div class="iv-q">Why AmEx, and why now? <span class="iv-q-tag">situational</span></div>
+  <div class="iv-q">Where do you see AI transforming operations in financial services over the next 3 years? <span class="iv-q-tag">technical</span></div>
+  <div class="iv-q">Tell me about your biggest professional failure and what you learned. <span class="iv-q-tag">behavioral → S24</span></div>
+  <div class="iv-q">How do you drive accountability in a team that navigates ambiguity daily? <span class="iv-q-tag">behavioral → S12</span></div>
+  <div class="iv-q">What would you do in your first 90 days? <span class="iv-q-tag">situational → Panel 05</span></div>
+  <div class="iv-anchor">
+    <strong>Opening anchor — R4</strong>
+    "AmEx's recent Hyper acquisition signals that agentic AI isn't a future bet — it's a current strategic priority. I've been building that capability independently: a 12-project AI portfolio that automates risk flagging, operational readiness checks, and leadership reporting. I'm looking to bring that builder mindset into a team that's explicitly mandated to leverage AI for productivity. SOBA's mission — make Client Managers more effective — is the mission I've been executing for six years in a different domain."
+  </div>
+</div>
+</section>
+
+<section class="panel" id="comp">
+<!-- PANEL 08 · COMP INTEL — inner HTML only -->
+<div class="sec-num">08 · Comp Intel</div>
+<div class="sec-title">Compensation intelligence — Band 35 Sr Manager</div>
+<div class="sec-sub">Triangulated from 3 independent sources with explicit confidence ratings. Night-shift premium estimated separately. Ops-tier adjustment applied to correct tech-heavy data skew.</div>
+
+<div class="comp-conf">Confidence: <strong>Medium</strong> · 3 sources · tech-skew adjusted · some data 2022-dated</div>
+
+<div class="h3">Triangulation sources</div>
+<div class="card card-tint">
+  <div class="h4">Source 1 — Levels.fyi Band 35 India (PM + DS Mgr)</div>
+  PM median ₹43.0L total (range ₹31.2–53.3L) · DS Mgr median ₹43.85L total (range ₹30.5–55.8L). Based on verified self-reported compensation. <strong>Caveat:</strong> data skews toward tech/PM roles; ops/business Band 35 typically 10–15% below tech Band 35 due to lower equity component and different variable target.
+</div>
+<div class="card card-tint">
+  <div class="h4">Source 2 — Glassdoor Sr Manager AmEx India (29K+ salaries)</div>
+  Average base ₹33L · Total pay range ₹28–45L (P25–P75) · P90 ₹59L. Largest sample set. <strong>Caveat:</strong> "Senior Manager" title spans Band 30 (Manager-1) through Band 35 (Sr Mgr); the ₹28L P25 floor likely includes Band 30 entries. Band 35-specific filtering unavailable.
+</div>
+<div class="card card-tint">
+  <div class="h4">Source 3 — Teamblind Band 35 promotion data (community-reported)</div>
+  Promotion-to-Band-35 data point: base jumped ₹20L→₹32L fixed (2022). Max promotion hike reported: 30%. <strong>Caveat:</strong> single data point, 2022-dated, promotion comp ≠ lateral-hire comp (lateral typically higher).
+</div>
+
+<div class="h3">Bands</div>
+<div class="comp-band">
+  <div class="comp-band-head">
+    <div class="comp-band-name">Band 35 · Sr Manager · Ops/Business Analytics (adjusted)</div>
+    <div class="comp-band-range">₹42–62L total CTC</div>
+  </div>
+  <table class="vocab">
+    <thead><tr><th>Component</th><th>Range</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Fixed base</td><td>₹30–40L</td><td>Ops-adjusted from tech median (₹38–48L × 0.85)</td></tr>
+      <tr><td>Variable (VPP, 20–25% target)</td><td>₹6–10L</td><td>Paid annually; target 20% for Band 35, 25% for high performers</td></tr>
+      <tr><td>LTI / Restricted Stock</td><td>₹3–7L</td><td>Band 35 threshold; not guaranteed every year; refresh based on performance</td></tr>
+      <tr><td>Night shift premium</td><td>₹2–4L</td><td>Transport + meal + shift differential for 4:30 PM–1:30 AM; band-agnostic</td></tr>
+      <tr><td><strong>Total CTC</strong></td><td><strong>₹42–62L</strong></td><td>P50 estimate: ₹50–52L</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="h3">Line-item confidence</div>
+<div class="card">
+  <table class="vocab">
+    <thead><tr><th>Component</th><th>Confidence</th><th>Reasoning</th></tr></thead>
+    <tbody>
+      <tr><td>Fixed base</td><td><strong>Medium</strong></td><td>3 sources converge on ₹30–40L for Band 35 ops; tech-skew adjustment is estimated, not empirical</td></tr>
+      <tr><td>Variable</td><td><strong>Medium-High</strong></td><td>AmEx VPP structure well-documented; 20–25% target consistent across sources</td></tr>
+      <tr><td>LTI / RSU</td><td><strong>Low</strong></td><td>Band 35 equity allocation varies significantly; no ops-specific data; tech Band 35 equity is higher</td></tr>
+      <tr><td>Night shift premium</td><td><strong>Low</strong></td><td>Single-source (industry benchmark); AmEx-specific night-shift data unavailable</td></tr>
+      <tr><td>Signing bonus</td><td><strong>Low</strong></td><td>AmEx India signing bonuses reported inconsistently; ₹2–5L range anecdotal</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="h3">Cross-pipeline note</div>
+<div class="card card-primary">
+  <strong>Material overlap with 3 pipeline roles:</strong><br><br>
+  <table class="vocab">
+    <thead><tr><th>Role</th><th>P50 CTC</th><th>Delta vs SOBA</th><th>Conv. Prob.</th></tr></thead>
+    <tbody>
+      <tr><td>Qualcomm Sr PM</td><td>₹46–68L</td><td>Comparable to +₹16L</td><td>30–40%</td></tr>
+      <tr><td>Oaktree VP Info Solutions</td><td>₹55–65L</td><td>+₹5–13L</td><td>35–45%</td></tr>
+      <tr><td><strong>AmEx GMNS Director (Band 40)</strong></td><td><strong>₹75–110L</strong></td><td><strong>+₹25–58L</strong></td><td>20–30%</td></tr>
+    </tbody>
+  </table>
+  <br>
+  <strong>Warning:</strong> If the GMNS Director converts, the comp delta alone is ₹25–58L/year — equivalent to 5–10 years of Band 35 salary progression. Accepting the SOBA Sr Manager role before the Director outcome is known could forfeit ₹250–580L in cumulative compensation over 10 years. This is the single most important sequencing decision in the pipeline.
+</div>
+
+<div class="h3">Walk-away anchor</div>
+<div class="card">
+  <strong>Walk-away: ₹48L total CTC.</strong> Reasoning: ₹42L is the pipeline floor, but SOBA's night-shift lifestyle cost (4:30 PM–1:30 AM IST, 5 days/week) requires a premium above floor. ₹48L = floor + ₹6L night-shift premium. Below ₹48L, the lifestyle cost exceeds the career-transition value. Any offer below ₹48L should be countered, not rejected — use the night-shift premium as the explicit lever.
+</div>
+
+<div class="h3">Negotiation levers</div>
+<div class="card card-accent2">
+  <div class="h4">Lever 1: Night-shift premium</div>
+  "This role requires a permanent shift pattern that eliminates evening social, family, and health-management time. I'd expect the compensation to reflect that commitment — a ₹3–4L shift premium above base."
+  <div class="h4">Lever 2: Salesforce architecture depth</div>
+  "You're hiring for MerchantForce proficiency. I didn't just use Salesforce — I co-architected the platform with 40+ custom objects and 120+ automations. That reduces your onboarding risk and time-to-productivity."
+  <div class="h4">Lever 3: Signing bonus (one-time)</div>
+  "If base flexibility is limited by band constraints, a ₹3–5L signing bonus bridges the gap without creating a comp-band precedent. AmEx India has precedent for this at Band 35 lateral hires."
+  <div class="h4">Lever 4: Accelerated review</div>
+  "A 6-month accelerated performance review with explicit promotion-to-Band-40 criteria. This signals commitment to my growth trajectory while keeping Day 1 comp within band."
+</div>
+</section>
+
+<section class="panel" id="cert">
+<!-- PANEL 09 · CERT ROADMAP — inner HTML only -->
+<div class="sec-num">09 · Cert Roadmap</div>
+<div class="sec-title">Certification strategy — JD-silent triage</div>
+<div class="sec-sub">The JD names zero certifications — not as required, not as preferred. Triage via research determines which certs add conversion lift versus ICP polish.</div>
+
+<div class="h3">JD signal scan</div>
+<div class="card card-tint">
+  <strong>Result: JD is completely silent on certifications.</strong> No cert is named as required, preferred, or even implied. The JD emphasises capability descriptors ("proficient in Salesforce," "experience with AI/automation," "project management skills") without linking them to formal credentials. This shifts the entire cert analysis to research-based triage.
+</div>
+
+<div class="h3">Research footprint</div>
+<div class="card">
+  <strong>LinkedIn scan (May 2026):</strong> Searched for "Strategic Operations Business Analytics GMNS American Express" on LinkedIn. Located 2 SOBA-adjacent profiles (Sr Manager Global Planning &amp; Reporting GMNS; Strategic Planning analyst at AmEx). Neither profile displayed certifications prominently. Sample insufficient for cert-pattern inference.<br><br>
+  <strong>Prior JD scan:</strong> Located 1 related JD — "Director, Strategic Operations &amp; Business Analytics (SOBA)" posted via Clemson career portal. Director-level JD listed same capability descriptors as Sr Manager JD; no certifications named. Qualifications section identical in structure: Salesforce, Excel, PowerPoint, change management, project management — all capability-based, not cert-based.<br><br>
+  <strong>Company signal:</strong> AmEx recently acquired Hyper (agentic expense management AI company, May 2026), signalling accelerated AI investment across commercial services. No cert requirements associated with this strategic direction — capability and build experience valued over credentials.<br><br>
+  <strong>Conclusion:</strong> AmEx SOBA hiring appears capability-gated, not cert-gated. Certifications are ICP polish, not conversion levers.
+</div>
+<div class="comp-conf">Triage confidence: <strong>Low-Medium</strong> · 2 LinkedIn profiles · 1 prior JD · no team-level cert patterns visible</div>
+
+<div class="h3">Weightage table</div>
+<div class="card">
+  <table class="vocab">
+    <thead><tr><th>Certification</th><th>Weightage</th><th>Reasoning</th><th>Effort / Cost</th><th>Timeline</th><th>Placement</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Salesforce Administrator</td>
+        <td><strong>MEDIUM</strong></td>
+        <td>JD says "proficient in Salesforce (MerchantForce)." Cert validates platform depth beyond user-level. Differentiates from candidates who "use" Salesforce vs "architect" it. Conversion lift ~15–20%.</td>
+        <td>$200 exam · 40–60 hrs study (accelerated given existing Salesforce architecture experience)</td>
+        <td>3–4 weeks</td>
+        <td>Resume + LinkedIn + interview ("I'm not just proficient — I'm certified and I've built from scratch")</td>
+      </tr>
+      <tr>
+        <td>Six Sigma Green Belt</td>
+        <td><strong>MEDIUM</strong></td>
+        <td>JD emphasises process improvement, efficiency, and reimagining processes. SSGB provides structured methodology vocabulary (DMAIC, control charts, process capability) that frames your PCC/TAT/PR work in universally recognised terms. Conversion lift ~10–15%.</td>
+        <td>₹15–25K (ASQ or IASSC) · 60–80 hrs study</td>
+        <td>4–6 weeks</td>
+        <td>Resume + interview framework language</td>
+      </tr>
+      <tr>
+        <td>PMP</td>
+        <td><strong>LOW</strong></td>
+        <td>JD mentions PMO responsibilities but doesn't require PMP. Your project/programme management is demonstrated through proof points (12 concurrent workstreams, 7 MD-approved process docs), not credentials. Conversion lift ~5%.</td>
+        <td>$555 exam · 35 hrs education + 100 hrs study</td>
+        <td>8–12 weeks</td>
+        <td>LinkedIn badge only — don't lead with it</td>
+      </tr>
+      <tr>
+        <td>CRISC</td>
+        <td><strong>LOW</strong></td>
+        <td>Risk &amp; compliance activities are part of the JD, but CRISC is enterprise-IT-risk focused, not ops-risk focused. Already in existing stack (AmEx-mapped). Mention if asked; don't push.</td>
+        <td>Already attained / in progress</td>
+        <td>N/A</td>
+        <td>Resume — already listed</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="h3">Existing cert leverage</div>
+<div class="card card-accent3">
+  <div class="h4">Already mapped to this role</div>
+  <table class="vocab">
+    <thead><tr><th>Your cert</th><th>SOBA relevance</th><th>Interview deployment</th></tr></thead>
+    <tbody>
+      <tr><td>CRISC (in progress)</td><td>Risk &amp; compliance activities mandate — signals risk-governance fluency</td><td>Mention when discussing GCO/Control Management collaboration</td></tr>
+      <tr><td>PMI-ACP (in progress)</td><td>Agile methodology — supports test-and-learn mandate</td><td>Reference when discussing pilot-and-scale approach</td></tr>
+      <tr><td>AZ-900 (in progress)</td><td>Low direct relevance — AmEx is not Azure-primary for SOBA ops</td><td>Don't proactively mention unless cloud architecture comes up</td></tr>
+      <tr><td>GA4 / Skillshop / Looker Studio</td><td>No direct relevance — GMNS analytics uses internal tools, not Google stack</td><td>Don't mention</td></tr>
+    </tbody>
+  </table>
+  <br>
+  <div class="h4">Recommended priority (if pursuing this role)</div>
+  <strong>Priority 1: Salesforce Administrator cert</strong> — highest conversion lift for lowest effort given existing platform depth. 3–4 weeks, $200. Start immediately if SOBA becomes active.<br>
+  <strong>Priority 2: Six Sigma Green Belt</strong> — already elevated to priority one across Google SDM/Scaled Delivery tracks (per pipeline cert stack). Dual-purpose: SOBA process improvement + Google ops methodology. 4–6 weeks.<br>
+  <strong>Do not start:</strong> PMP for this role alone — effort/lift ratio unfavorable. Only pursue PMP if 3+ pipeline roles would benefit simultaneously.
+</div>
+</section>
+
+<section class="panel" id="close">
+<!-- PANEL 10 · CLOSE & OUTREACH — inner HTML only -->
+<div class="sec-num">10 · Close &amp; Outreach</div>
+<div class="sec-title">Application sequencing &amp; outreach</div>
+<div class="sec-sub">This role requires careful sequencing against your GMNS Director application. Applying to both simultaneously in the same org carries signal risk. Outreach scripts calibrated accordingly.</div>
+
+<div class="h3">Application sequencing</div>
+<div class="card card-primary">
+  <div class="h4">Decision rule: GMNS Director outcome governs SOBA timing</div>
+  <table class="vocab">
+    <thead><tr><th>Scenario</th><th>SOBA action</th><th>Reasoning</th></tr></thead>
+    <tbody>
+      <tr><td>GMNS Director — interview scheduled</td><td><strong>HOLD</strong> SOBA application</td><td>Applying to a lower-band role in the same org while interviewing for Director signals downward flexibility</td></tr>
+      <tr><td>GMNS Director — rejected / silent 4+ weeks</td><td><strong>APPLY</strong> to SOBA immediately</td><td>SOBA becomes the primary AmEx track; Director rejection removes signal risk</td></tr>
+      <tr><td>GMNS Director — offer received</td><td><strong>DROP</strong> SOBA permanently</td><td>Comp delta ₹25–58L/year; no strategic reason to pursue Band 35</td></tr>
+      <tr><td>GMNS Director — not yet applied</td><td><strong>APPLY Director first</strong>, SOBA 2 weeks later if no response</td><td>Establishes Director as primary intent; SOBA reads as breadth-of-interest, not desperation</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="h3">Recruiter outreach</div>
+<div class="card">
+  <div class="h4">LinkedIn message — AmEx India recruiter</div>
+  <em>Hi [Recruiter Name],</em><br><br>
+  <em>I noticed the Sr Manager, SOBA opening in GMNS Client Management — the mandate to expand Client Manager capacity through process reimagination and AI/automation is closely aligned with what I've built over the past six years.</em><br><br>
+  <em>Quick context: I lead a 77-person revenue operations function across Dubai and Hyderabad, accountable for AED 8.2B in annual collections. I co-architected our Salesforce platform (40+ custom objects, 120+ automations, 70+ report MI ecosystem) and have a 12-project AI portfolio that directly addresses the automation mandate in the JD.</em><br><br>
+  <em>I'd welcome a conversation about how my operational scale and AI-build capability could accelerate SOBA's objectives. Happy to share my CV or discuss further.</em><br><br>
+  <em>Best regards,<br>Priyanuj Deka</em>
+</div>
+
+<div class="card">
+  <div class="h4">LinkedIn message — if GMNS Director was previously applied</div>
+  <em>Hi [Recruiter Name],</em><br><br>
+  <em>I recently applied for the Director, SOBA role in GMNS — I'm also genuinely interested in the Sr Manager position within the same team. My background in revenue operations at enterprise scale (14.9× growth, 77-person team, Salesforce platform architecture) maps well to both levels. I'd appreciate guidance on how AmEx handles interest across related openings in the same function.</em><br><br>
+  <em>Best regards,<br>Priyanuj Deka</em>
+</div>
+
+<div class="h3">Follow-up cadence</div>
+<div class="card card-tint">
+  <table class="vocab">
+    <thead><tr><th>Day</th><th>Action</th><th>Channel</th></tr></thead>
+    <tbody>
+      <tr><td>Day 0</td><td>Submit application via AmEx Careers + LinkedIn recruiter outreach</td><td>Career portal + LinkedIn</td></tr>
+      <tr><td>Day 3</td><td>If no recruiter response: connect with 1–2 AmEx India GMNS team members; comment on their posts to build visibility</td><td>LinkedIn engagement</td></tr>
+      <tr><td>Day 7</td><td>If no response: polite follow-up to recruiter — reference the specific role and add one new proof point not in original message</td><td>LinkedIn message</td></tr>
+      <tr><td>Day 14</td><td>If still no response: pivot to referral strategy — search IIM Udaipur / BITS Pilani alumni at AmEx India; request warm introduction to GMNS hiring team</td><td>Alumni network + LinkedIn</td></tr>
+      <tr><td>Day 21+</td><td>If no traction: classify as DORMANT in CCC; re-activate only if new signal emerges (re-posting, recruiter activity, referral response)</td><td>CCC update</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="h3">Interview-stage outreach</div>
+<div class="card">
+  <div class="h4">Between rounds</div>
+  <em>"Thank you for the conversation today. I'm particularly energised by [specific topic discussed] — it reinforced my conviction that my experience building [relevant proof point] directly addresses SOBA's mandate. Looking forward to the next step."</em>
+  <div class="h4">Post-rejection</div>
+  <em>"I appreciate the transparency. I remain deeply interested in AmEx's GMNS organisation and would welcome being considered for future openings where my operational scale and AI-build background could contribute. I'll stay connected."</em>
+  <div class="h4">Offer stage — counter script</div>
+  <em>"I'm excited about this opportunity. The total CTC of [X] is below what I'd expected given the permanent night-shift commitment and the Salesforce architecture depth I bring — which reduces your onboarding risk significantly. I'd like to discuss a [night-shift premium / signing bonus / accelerated review] to bridge the gap."</em>
+</div>
+</section>
+
+<section class="panel" id="stake">
+<!-- PANEL 12 · STAKEHOLDER DECODE — CONDITIONAL — inner HTML only -->
+<div class="sec-num">12 · Stakeholder Decode</div>
+<div class="sec-title">Key stakeholders &amp; influence map</div>
+<div class="sec-sub">Conditional section — triggered by matrixed role with 4+ named cross-org stakeholder groups in JD. Maps the influence landscape you'll navigate from Day 1.</div>
+
+<div class="card card-tint" style="margin-bottom:24px">
+  <strong>Why this section is here:</strong> The JD explicitly names 4 cross-org collaboration partners (Merchant-facing teams, Strategy &amp; Capabilities, GCO, Control Management) plus the Director SOBA as hiring manager. This is a highly matrixed role where influence ≠ authority.
+</div>
+
+<div class="h3">Primary stakeholders</div>
+
+<div class="card card-primary">
+  <div class="h4">Director, SOBA — Hiring Manager</div>
+  <strong>Role:</strong> Your direct report-to. Owns the SOBA team mandate, sets quarterly priorities, represents SOBA to GMNS VP/SVP leadership. The Director JD (found via Clemson career portal) mirrors the Sr Manager JD at a higher altitude — strategic planning, revenue acceleration, risk oversight.<br>
+  <strong>What they need from you:</strong> Execution reliability. They set the direction; you make it happen. "I can trust this person to own outcomes without me checking" is the hiring signal. Your proof: you operate at this level already (CCO sets direction, you execute AED 8.2B target independently).<br>
+  <strong>Interview decode:</strong> Director SOBA is likely Round 2. They'll probe for independent decision-making and strategic thinking — not just "can you do the work" but "can you think at my level so I can delegate upward?"
+</div>
+
+<div class="card card-accent2">
+  <div class="h4">Merchant-Facing Teams (Client Managers)</div>
+  <strong>Role:</strong> SOBA's primary internal customer. Client Managers are the frontline relationship owners for AmEx's merchant partners. Every SOBA initiative exists to make CMs more effective — reduce their operational burden, improve their tools, accelerate their processes.<br>
+  <strong>What they need from you:</strong> Friction removal. CMs don't want strategy decks — they want fewer clicks, faster approvals, and better data. Your PCC TAT reduction (20→3 days) and PR-to-SOA acceleration (24.8%→51.3%) are the exact type of improvements CMs value.<br>
+  <strong>Relationship risk:</strong> CMs may view SOBA as "corporate overhead." Earn credibility by delivering a visible quick win in first 30 days that CMs can feel, not just measure.
+</div>
+
+<div class="card card-accent3">
+  <div class="h4">Strategy &amp; Capabilities</div>
+  <strong>Role:</strong> GMNS's strategic planning function. Sets multi-year merchant strategy, defines product roadmaps, identifies market opportunities. SOBA partners with S&amp;C on translating strategic priorities into operational execution.<br>
+  <strong>What they need from you:</strong> Operational feasibility assessment. S&amp;C designs the "what"; SOBA assesses the "how" and "at what cost." Your NPV modelling capability (AED 652M) and process-impact quantification demonstrate this skill.<br>
+  <strong>Collaboration pattern:</strong> Likely quarterly strategy-to-execution handoffs with ad hoc requests during initiative launches. Build a standing check-in rhythm (monthly 30-min sync) to avoid reactive firefighting.
+</div>
+
+<div class="card card-primary">
+  <div class="h4">GCO (Global Compliance Office)</div>
+  <strong>Role:</strong> AmEx's 2LOD compliance function. Owns regulatory interpretation, compliance testing, and policy enforcement. SOBA executes risk &amp; compliance activities as 1LOD — GCO provides the framework and oversight.<br>
+  <strong>What they need from you:</strong> Clean execution of compliance activities, timely escalation of exceptions, and evidence that controls are embedded in operations (not just documented). Your 4-year audit SPOC tenure and 14-finding remediation demonstrate exactly this capability.<br>
+  <strong>Relationship risk:</strong> GCO can be a blocker if they don't trust your controls. Proactive engagement (sharing your risk register, inviting them to review your processes) builds trust faster than waiting for audit findings.
+</div>
+
+<div class="card card-accent2">
+  <div class="h4">Control Management</div>
+  <strong>Role:</strong> The operational risk function within GMNS. Tests controls, identifies process failures, escalates risk events. Works alongside GCO but focused on operational execution risk rather than regulatory compliance.<br>
+  <strong>What they need from you:</strong> Proactive risk identification, not reactive responses. Your 3 proactive CCO escalations (pre-deadline) are the exact behaviour Control Management values. Frame your risk register experience as 1LOD self-assessment capability.<br>
+  <strong>Collaboration pattern:</strong> Regular touchpoints around RCSA (Risk and Control Self-Assessment) cycles. Expect quarterly assessments with ad hoc deep-dives on identified issues.
+</div>
+
+<div class="h3">Interview-round routing</div>
+<div class="card">
+  <table class="vocab">
+    <thead><tr><th>Stakeholder</th><th>Likely round</th><th>What they're screening for</th></tr></thead>
+    <tbody>
+      <tr><td>Director SOBA</td><td>R2 (60 min)</td><td>Strategic thinking, data-driven solutions, independent decision-making, team leadership</td></tr>
+      <tr><td>Merchant-facing / S&amp;C peers</td><td>R3 (60 min)</td><td>Collaboration style, influence without authority, process improvement orientation</td></tr>
+      <tr><td>GCO / Control Management</td><td>R3 or separate R3b</td><td>Risk awareness, compliance discipline, proactive escalation behaviour</td></tr>
+      <tr><td>VP / Sr Director GMNS</td><td>R4 (45 min)</td><td>Senior-forum presence, strategic judgment, cultural fit, "can I put this person in front of my stakeholders?"</td></tr>
+    </tbody>
+  </table>
+</div>
+</section>
+
+</main>
+</div>
+
+<script>
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById(el.dataset.tab).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>

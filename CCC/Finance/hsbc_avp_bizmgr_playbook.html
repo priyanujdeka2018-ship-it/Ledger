@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSBC AVP Business Manager — Career Playbook</title>
+<style>
+  :root{
+    --red:#DB0011;          /* HSBC Red — PMS 485 C */
+    --red-deep:#A8000D;     /* derived hover/accent */
+    --red-tint:#FBE9EA;     /* faint red wash */
+    --ink:#1A1A1A;          /* charcoal text */
+    --ink-soft:#3D3D3D;
+    --grey:#767676;         /* HSBC grey */
+    --line:#E2E2E2;
+    --line-soft:#EFEFEF;
+    --bg:#FFFFFF;
+    --panel:#FAFAFA;
+    --good:#1E7D4F;
+    --warn:#B26A00;
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --rail-w:248px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);color:var(--ink);background:var(--bg);
+    line-height:1.55;-webkit-font-smoothing:antialiased;font-size:15px;
+  }
+  .tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:relative;overflow:hidden;
+    background:var(--ink);color:#fff;
+    padding:38px 40px 34px;border-bottom:5px solid var(--red);
+  }
+  header .hexwatermark{
+    position:absolute;right:-60px;top:-50px;width:340px;height:380px;opacity:.07;pointer-events:none;
+  }
+  .hexmark{
+    width:38px;height:42px;display:inline-block;vertical-align:middle;
+    background:var(--red);
+    clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+    position:relative;
+  }
+  .hexmark::after{
+    content:"";position:absolute;inset:7px;background:var(--ink);
+    clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  }
+  .kicker{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#bdbdbd;font-weight:700;margin-bottom:14px}
+  header h1{font-size:32px;font-weight:800;letter-spacing:-.5px;line-height:1.1}
+  header h1 .sub{display:block;font-size:17px;font-weight:400;color:#cfcfcf;letter-spacing:0;margin-top:8px}
+  .header-meta{margin-top:18px;display:flex;flex-wrap:wrap;gap:9px}
+  .chip{font-size:11.5px;letter-spacing:.04em;padding:5px 11px;border:1px solid #4a4a4a;border-radius:2px;color:#e6e6e6}
+  .chip.red{background:var(--red);border-color:var(--red);color:#fff;font-weight:700}
+
+  /* ---------- LAYOUT ---------- */
+  .wrap{display:flex;min-height:100vh}
+  nav.rail{
+    width:var(--rail-w);flex:0 0 var(--rail-w);background:var(--panel);
+    border-right:1px solid var(--line);padding:22px 0;position:sticky;top:0;height:100vh;overflow-y:auto;
+  }
+  nav.rail .rail-label{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--grey);padding:0 22px 12px;font-weight:700}
+  .tab{
+    display:flex;align-items:center;gap:11px;width:100%;text-align:left;border:0;background:none;cursor:pointer;
+    font-family:var(--sans);font-size:13.5px;color:var(--ink-soft);padding:11px 22px;border-left:3px solid transparent;transition:.15s;
+  }
+  .tab .tnum{color:var(--grey);font-size:11.5px;font-weight:700;min-width:20px}
+  .tab:hover{background:#fff;color:var(--ink)}
+  .tab.active{background:#fff;color:var(--red);border-left-color:var(--red);font-weight:700}
+  .tab.active .tnum{color:var(--red)}
+
+  .mobtabs{display:none}
+
+  main{flex:1;min-width:0;padding:40px 48px 90px;max-width:1000px}
+  .panel{display:none;animation:fade .4s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .stagger>*{opacity:0;animation:rise .5s ease forwards}
+  .stagger>*:nth-child(1){animation-delay:.02s}
+  .stagger>*:nth-child(2){animation-delay:.07s}
+  .stagger>*:nth-child(3){animation-delay:.12s}
+  .stagger>*:nth-child(4){animation-delay:.17s}
+  .stagger>*:nth-child(5){animation-delay:.22s}
+  .stagger>*:nth-child(6){animation-delay:.27s}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  /* ---------- TYPE / SECTIONS ---------- */
+  .sec-num{font-size:12px;letter-spacing:.28em;color:var(--red);font-weight:700;text-transform:uppercase}
+  h2.sec{font-size:26px;font-weight:800;letter-spacing:-.4px;margin:6px 0 4px;display:flex;align-items:center;gap:12px}
+  h2.sec::before{content:"";width:16px;height:18px;background:var(--red);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);flex:0 0 auto}
+  .sec-sub{color:var(--grey);font-size:14.5px;margin-bottom:26px;max-width:62ch}
+  h3.blk{font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;margin:30px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--ink)}
+  p.body{margin-bottom:13px;color:var(--ink-soft)}
+  strong{color:var(--ink)}
+
+  /* ---------- SNAPSHOT GRID ---------- */
+  .statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+  .stat{border:1px solid var(--line);border-top:3px solid var(--red);padding:16px 16px 14px;background:#fff}
+  .stat .lab{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--grey);font-weight:700;margin-bottom:7px}
+  .stat .val{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1}
+  .stat .val small{font-size:13px;font-weight:600;color:var(--grey)}
+  .stat .note{font-size:11.5px;color:var(--grey);margin-top:6px;line-height:1.4}
+  .stat.flag{border-top-color:var(--warn)}
+  .stat.flag .val{color:var(--warn);font-size:15px;line-height:1.25;padding-top:3px}
+
+  .thesis{background:var(--ink);color:#fff;padding:22px 24px;border-left:5px solid var(--red);margin-bottom:26px}
+  .thesis .t-lab{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#bdbdbd;font-weight:700;margin-bottom:8px}
+  .thesis p{font-size:16px;line-height:1.5}
+  .thesis em{color:#fff;font-style:normal;border-bottom:2px solid var(--red);padding-bottom:1px}
+
+  /* fit meter */
+  .fitmeter{display:flex;align-items:center;gap:24px;border:1px solid var(--line);padding:22px 26px;margin-bottom:24px;background:#fff}
+  .fitbadge{
+    flex:0 0 auto;width:104px;height:116px;background:var(--red);color:#fff;
+    clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .fitbadge .n{font-size:38px;font-weight:800;line-height:1}
+  .fitbadge .arrow{font-size:11px;color:#ffd0d3;margin:2px 0}
+  .fitbadge .t{font-size:20px;font-weight:700;opacity:.95}
+  .fitmeter .fm-body{flex:1}
+  .fitmeter .fm-body .lab{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--grey);font-weight:700;margin-bottom:6px}
+  .bar{height:9px;background:var(--line-soft);border-radius:2px;overflow:hidden;margin:9px 0 4px}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--red-deep))}
+
+  /* ---------- CARDS ---------- */
+  .card{border:1px solid var(--line);background:#fff;padding:17px 19px;margin-bottom:13px;border-left:3px solid var(--line)}
+  .card.strong{border-left-color:var(--good)}
+  .card.mod{border-left-color:var(--warn)}
+  .card.red{border-left-color:var(--red)}
+  .card .ch{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:9px}
+  .card .ct{font-size:14.5px;font-weight:700;line-height:1.35}
+  .badge{font-size:9.5px;letter-spacing:.08em;font-weight:800;text-transform:uppercase;padding:4px 9px;border-radius:2px;white-space:nowrap;flex:0 0 auto}
+  .b-strong{background:#E5F3EC;color:var(--good)}
+  .b-mod{background:#FBF0DF;color:var(--warn)}
+  .b-red{background:var(--red-tint);color:var(--red)}
+  .b-crit{background:var(--red);color:#fff}
+  .jd{font-size:12.5px;color:var(--grey);font-style:italic;margin-bottom:9px;padding-left:11px;border-left:2px solid var(--line)}
+  .card .pf{font-size:13.5px;color:var(--ink-soft)}
+  .wt{font-size:10px;letter-spacing:.1em;font-weight:800;text-transform:uppercase;color:var(--red)}
+
+  /* lexicon */
+  .lex{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+  .term{font-size:12px;border:1px solid var(--line);padding:5px 10px;background:#fff;border-radius:2px}
+  .term b{color:var(--red)}
+
+  /* STAR */
+  .star .sc{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.06em;background:var(--ink);color:#fff;padding:3px 8px;border-radius:2px;margin-right:8px}
+
+  /* timeline */
+  .tl{position:relative;margin-left:8px;padding-left:26px;border-left:2px solid var(--line)}
+  .tl .ph{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:800;color:var(--red);margin:22px 0 10px;position:relative}
+  .tl .ph::before{content:"";position:absolute;left:-33px;top:2px;width:13px;height:14px;background:var(--red);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+  .tl .item{margin-bottom:11px;position:relative}
+  .tl .item::before{content:"";position:absolute;left:-31px;top:7px;width:7px;height:7px;border-radius:50%;background:#fff;border:2px solid var(--grey)}
+  .tl .item h4{font-size:13.5px;font-weight:700}
+  .tl .item p{font-size:12.5px;color:var(--grey)}
+
+  /* AI cards */
+  .ai{border:1px solid var(--line);border-top:3px solid var(--red);padding:18px 20px;margin-bottom:14px;background:#fff}
+  .ai .pid{font-size:10.5px;font-weight:800;letter-spacing:.1em;color:var(--red)}
+  .ai h4{font-size:15.5px;font-weight:800;margin:3px 0 4px}
+  .ai .stack{font-size:11.5px;color:var(--grey);letter-spacing:.03em;margin-bottom:9px;font-weight:600}
+  .ai p{font-size:13px;color:var(--ink-soft)}
+  .ai .maps{font-size:12px;margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);color:var(--ink-soft)}
+  .ai .maps b{color:var(--red)}
+
+  /* interview */
+  .qcat{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:var(--red);margin:20px 0 9px}
+  ol.q{list-style:none;counter-reset:q}
+  ol.q li{counter-increment:q;position:relative;padding:9px 0 9px 34px;border-bottom:1px solid var(--line-soft);font-size:13.5px;color:var(--ink-soft)}
+  ol.q li::before{content:counter(q);position:absolute;left:0;top:9px;font-size:11px;font-weight:800;color:#fff;background:var(--red);width:22px;height:22px;border-radius:2px;display:flex;align-items:center;justify-content:center}
+  .anchor{background:var(--red-tint);border-left:3px solid var(--red);padding:14px 16px;margin:8px 0 4px;font-size:13px}
+  .anchor b{color:var(--red)}
+
+  /* tables */
+  table{width:100%;border-collapse:collapse;margin:6px 0 14px;font-size:13px}
+  thead th{background:var(--ink);color:#fff;text-align:left;padding:10px 12px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+  tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:var(--panel)}
+  .hl{background:var(--red-tint)!important;font-weight:700}
+  td .pri{font-size:9.5px;font-weight:800;letter-spacing:.06em;padding:2px 7px;border-radius:2px}
+  .p-high{background:var(--red-tint);color:var(--red)}
+  .p-med{background:#FBF0DF;color:var(--warn)}
+  .p-low{background:var(--line-soft);color:var(--grey)}
+  .p-prog{background:#E5F3EC;color:var(--good)}
+
+  .callout{border:1px solid var(--line);border-left:4px solid var(--ink);background:var(--panel);padding:16px 18px;margin:14px 0;font-size:13.5px}
+  .callout.warn{border-left-color:var(--warn)}
+  .callout b{color:var(--ink)}
+  .footnote{font-size:11.5px;color:var(--grey);margin-top:8px;line-height:1.5}
+
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+
+  footer{border-top:1px solid var(--line);padding:20px 48px;color:var(--grey);font-size:11.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  /* ---------- MOBILE ---------- */
+  @media(max-width:768px){
+    header{padding:26px 20px 24px}
+    header h1{font-size:24px}
+    header h1 .sub{font-size:14px}
+    .wrap{flex-direction:column}
+    nav.rail{display:none}
+    .mobtabs{display:block;position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);padding:12px 16px}
+    .mobtabs select{width:100%;font-family:var(--sans);font-size:14px;padding:11px 12px;border:1px solid var(--line);border-radius:2px;background:#fff;color:var(--ink);font-weight:600}
+    main{padding:24px 16px 70px}
+    .statgrid{grid-template-columns:1fr 1fr;gap:10px}
+    .twocol{grid-template-columns:1fr}
+    .fitmeter{flex-direction:column;align-items:flex-start;gap:16px}
+    h2.sec{font-size:21px}
+    footer{padding:18px 16px}
+    /* responsive tables -> stacked cards, no horizontal scroll */
+    table,thead,tbody,th,td,tr{display:block}
+    thead{position:absolute;left:-9999px}
+    tbody tr{border:1px solid var(--line);border-left:3px solid var(--red);margin-bottom:12px;padding:4px 0;background:#fff!important}
+    tbody td{border:0;border-bottom:1px solid var(--line-soft);padding:9px 14px;position:relative}
+    tbody td:last-child{border-bottom:0}
+    tbody td::before{content:attr(data-label);display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);font-weight:700;margin-bottom:3px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hexwatermark"><div style="width:340px;height:380px;background:#fff;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)"></div></div>
+  <div class="kicker"><span class="hexmark"></span>&nbsp;&nbsp;Career Playbook · Conditional Track</div>
+  <h1>AVP — Business Manager
+    <span class="sub">HSBC · Risk &amp; Compliance (R&amp;C) · Hyderabad GCC (Hybrid)</span>
+  </h1>
+  <div class="header-meta">
+    <span class="chip red">Net Fit 77 → 84</span>
+    <span class="chip">Status: Conditional</span>
+    <span class="chip">Band: AVP / GCB5</span>
+    <span class="chip">Conv. prob ~35–40%</span>
+    <span class="chip">Also open: Bengaluru · Gurugram</span>
+  </div>
+</header>
+
+<div class="mobtabs">
+  <select id="mobsel" onchange="go(this.value)">
+    <option value="p0">01 · Snapshot</option>
+    <option value="p1">02 · Role Decode</option>
+    <option value="p2">03 · Fit &amp; Gap (+ Honest Read)</option>
+    <option value="p3">04 · Stakeholder Decode</option>
+    <option value="p4">05 · STAR Mapping</option>
+    <option value="p5">06 · 30·60·90</option>
+    <option value="p6">07 · AI Differentiator</option>
+    <option value="p7">08 · Interview Kit</option>
+    <option value="p8">09 · Comp Intel</option>
+    <option value="p9">10 · Cert Roadmap</option>
+    <option value="p10">11 · Close &amp; Outreach</option>
+  </select>
+</div>
+
+<div class="wrap">
+  <nav class="rail">
+    <div class="rail-label">Playbook</div>
+    <button class="tab active" onclick="go('p0')"><span class="tnum">01</span> Snapshot</button>
+    <button class="tab" onclick="go('p1')"><span class="tnum">02</span> Role Decode</button>
+    <button class="tab" onclick="go('p2')"><span class="tnum">03</span> Fit &amp; Gap</button>
+    <button class="tab" onclick="go('p3')"><span class="tnum">04</span> Stakeholder Decode</button>
+    <button class="tab" onclick="go('p4')"><span class="tnum">05</span> STAR Mapping</button>
+    <button class="tab" onclick="go('p5')"><span class="tnum">06</span> 30·60·90</button>
+    <button class="tab" onclick="go('p6')"><span class="tnum">07</span> AI Differentiator</button>
+    <button class="tab" onclick="go('p7')"><span class="tnum">08</span> Interview Kit</button>
+    <button class="tab" onclick="go('p8')"><span class="tnum">09</span> Comp Intel</button>
+    <button class="tab" onclick="go('p9')"><span class="tnum">10</span> Cert Roadmap</button>
+    <button class="tab" onclick="go('p10')"><span class="tnum">11</span> Close &amp; Outreach</button>
+  </nav>
+
+  <main>
+
+  <!-- ============ 01 SNAPSHOT ============ -->
+  <section class="panel active" id="p0">
+    <div class="stagger">
+      <div class="sec-num">01 — Snapshot</div>
+      <h2 class="sec">The one-screen read</h2>
+      <p class="sec-sub">A wheelhouse BizOps role — MI, cost, headcount, governance, scenario modelling — sized <em>above</em> a templated AVP band-seat. Strong on capability; capped on band, comp and scope. Build it clear-eyed.</p>
+
+      <div class="statgrid">
+        <div class="stat"><div class="lab">Net Fit</div><div class="val tnum">77<small> → 84</small></div><div class="note">Scorecard method, 10-dim. Capability is high; adjustments pull for band-down.</div></div>
+        <div class="stat"><div class="lab">Status</div><div class="val" style="font-size:19px">Conditional</div><div class="note">Pursue only as a fast Hyderabad-local fallback, not a marquee track.</div></div>
+        <div class="stat"><div class="lab">Conv. Probability</div><div class="val tnum">~38%</div><div class="note">Strong transferable fit, offset by over-banding friction.</div></div>
+        <div class="stat flag"><div class="lab">Target CTC</div><div class="val tnum">₹32–44L</div><div class="note">Median ~₹34–38L. Clears your ₹38L floor only top-quartile.</div></div>
+      </div>
+
+      <div class="thesis">
+        <div class="t-lab">Thesis</div>
+        <p>You are over-qualified for the work and under-banded by the title. The fit is real — this is the <em>Business Manager / CoS family</em> you already operate in. The catch is structural: AVP band, comp-at-floor, support-flavoured scope, and a culture that advances slowly. Win it on <em>credible over-delivery</em>, price it honestly, and hold it as insurance behind AmEx GMNS and Oaktree.</p>
+      </div>
+
+      <h3 class="blk">What's firing</h3>
+      <div class="twocol">
+        <div class="card red"><div class="ct">10 core sections</div><div class="pf">Snapshot · Role Decode · Fit &amp; Gap · STAR ×5 · 30·60·90 · AI ×3 · Interview Kit · Comp · Cert · Close.</div></div>
+        <div class="card mod"><div class="ct">Conditional: Stakeholder Decode <span class="badge b-mod">Triggered</span></div><div class="pf">Matrixed 3+ — R&amp;C leadership, Finance, HR. Decoded in tab 04.</div></div>
+      </div>
+      <div class="callout warn"><b>Risk &amp; Red Flags — formal triggers not met.</b> No interim leadership, ramp-down, regulatory overhang, layoffs, GCC &lt;12mo, or MD turnover &lt;6mo. The material risks here — band-down, comp-at-floor, scope-regression, culture-throttle — are therefore carried inside <b>Fit &amp; Gap (Honest Read)</b> and <b>Comp Intel</b>, not a standalone section.</div>
+
+      <h3 class="blk">Three things to internalise before you apply</h3>
+      <div class="card"><div class="ch"><div class="ct">1 · This is the Microsoft Biz Mgr / BlackRock CoS family</div></div><div class="pf">Not the HSBC VP Liquidity Ops role in your pipeline (that one is treasury-walled, fit 65). This is your operating wheelhouse — far cleaner fit, far lighter reframe.</div></div>
+      <div class="card"><div class="ch"><div class="ct">2 · The band is the ceiling, not a starting point</div></div><div class="pf">HSBC banding is rigid; over-qualification tends to cap you <em>at</em> AVP rather than stretch the offer. Your ceiling here is modest by design.</div></div>
+      <div class="card"><div class="ch"><div class="ct">3 · Location is flexible; your target isn't</div></div><div class="pf">Same role is open in Bengaluru and Gurugram. The band is essentially identical nationally — switching cities won't solve the floor. Default to <strong>Hyderabad</strong> (your target).</div></div>
+    </div>
+  </section>
+
+  <!-- ============ 02 ROLE DECODE ============ -->
+  <section class="panel" id="p1">
+    <div class="stagger">
+      <div class="sec-num">02 — Role Decode</div>
+      <h2 class="sec">What the JD actually asks for</h2>
+      <p class="sec-sub">Ten responsibilities, translated from HR language into the real job. Weighting reflects where the role lives day-to-day: planning cadence, cost discipline, and decision-grade MI.</p>
+
+      <div class="card red"><div class="ch"><div class="ct">Track &amp; analyse the Functional Resource Plan (FRP) and workforce plan</div><span class="badge b-crit">Critical</span></div><div class="jd">"Assist in tracking and analysing the FRP and workforce plan."</div><div class="pf">Own the function's headcount-and-resource picture: plan vs actual FTE, role pipeline, vacancy ageing, and the story behind every variance. <span class="wt">Weight: Critical</span></div></div>
+
+      <div class="card red"><div class="ch"><div class="ct">Monitor direct &amp; indirect cost performance; surface risks &amp; opportunities</div><span class="badge b-crit">Critical</span></div><div class="jd">"Support monitoring of direct and indirect cost performance, helping identify risks and opportunities."</div><div class="pf">Be the cost early-warning system. Track actuals vs forecast, flag accruals/overruns before they land, and quantify save opportunities. <span class="wt">Weight: Critical</span></div></div>
+
+      <div class="card"><div class="ch"><div class="ct">Prepare &amp; review financial plans, forecasts and headcount reports</div><span class="badge b-mod">High</span></div><div class="jd">"Contribute to preparation and review of financial plans, forecasts, and headcount reports."</div><div class="pf">Run the planning artefacts end-to-end — annual plan, quarterly reforecast, monthly headcount pack. Accuracy and on-time submission to Finance are the bar. <span class="wt">Weight: High</span></div></div>
+
+      <div class="card"><div class="ch"><div class="ct">Track consultancy &amp; third-party spend within guidelines</div><span class="badge b-mod">High</span></div><div class="jd">"Help track consultancy and third-party spend, ensuring compliance with guidelines."</div><div class="pf">Govern contingent/vendor spend against policy: PO discipline, rate compliance, and a clean audit trail. Catch leakage. <span class="wt">Weight: High</span></div></div>
+
+      <div class="card"><div class="ch"><div class="ct">Drive cost-saving initiatives &amp; monitor progress vs targets</div><span class="badge b-mod">High</span></div><div class="jd">"Support implementation of cost-saving initiatives and monitor progress against targets."</div><div class="pf">Turn save ideas into a tracked programme — baseline, target, owner, run-rate, realisation. Report the gap honestly. <span class="wt">Weight: High</span></div></div>
+
+      <div class="card"><div class="ch"><div class="ct">Govern resourcing process &amp; headcount approval</div><span class="badge b-mod">High</span></div><div class="jd">"Govern resourcing processes and headcount approval to support strategic hiring."</div><div class="pf">Be the control gate: every hire request follows the workflow, is funded, and is approved at the right level — done with HR, not around them. <span class="wt">Weight: High</span></div></div>
+
+      <div class="card"><div class="ch"><div class="ct">Scenario-model for the SF / LoB</div><span class="badge b-mod">Medium</span></div><div class="jd">"Support with scenario modelling for the corresponding SF or LoB."</div><div class="pf">Build the "what-if" — cost/headcount sensitivity under reorg, ramp, or budget-cut scenarios, framed for a decision. <span class="wt">Weight: Medium</span></div></div>
+
+      <div class="card red"><div class="ch"><div class="ct">Provide high-quality MI for LoB / sub-function decisions</div><span class="badge b-crit">Critical</span></div><div class="jd">"Provide high-quality Management Information (MI) to support decision-making at LoB/sub-function level."</div><div class="pf">The deliverable that defines you: clean, fast, decision-grade dashboards and packs. Not reporting — <em>intelligence</em> leadership acts on. <span class="wt">Weight: Critical</span></div></div>
+
+      <div class="card"><div class="ch"><div class="ct">Build relationships with R&amp;C leadership, Finance and HR</div><span class="badge b-mod">High</span></div><div class="jd">"Build and maintain effective working relationships with internal stakeholders, including R&amp;C leadership, Finance, and HR."</div><div class="pf">Three power centres, no single boss for the work. Reliability and zero-surprise reporting are the currency. <span class="wt">Weight: High</span></div></div>
+
+      <div class="card"><div class="ch"><div class="ct">Identify &amp; execute cost-reduction / operational improvement</div><span class="badge b-mod">Medium</span></div><div class="jd">"Support identification and execution of opportunities to drive cost reduction and operational improvements."</div><div class="pf">Bring an improvement instinct — find the inefficiency, propose the fix, prove the impact. Where your operator background shows. <span class="wt">Weight: Medium</span></div></div>
+
+      <h3 class="blk">Lexicon — speak the function's language</h3>
+      <p class="footnote" style="margin-bottom:6px">Internalise before any screen. ≥18 terms; "FRP", "GCB", "SF/LoB" and "RoB" are the tells that separate insiders from outsiders.</p>
+      <div class="lex">
+        <span class="term"><b>FRP</b> — Functional Resource Plan</span>
+        <span class="term"><b>Workforce plan</b> — FTE supply/demand</span>
+        <span class="term"><b>SF</b> — Sub-Function</span>
+        <span class="term"><b>LoB</b> — Line of Business</span>
+        <span class="term"><b>GCB5</b> — Global Career Band (AVP)</span>
+        <span class="term"><b>R&amp;C</b> — Risk &amp; Compliance function</span>
+        <span class="term"><b>RoB</b> — Rhythm of Business</span>
+        <span class="term"><b>MBR / QBR</b> — Monthly/Quarterly Business Review</span>
+        <span class="term"><b>MI</b> — Management Information</span>
+        <span class="term"><b>Direct vs indirect cost</b></span>
+        <span class="term"><b>Accruals</b> — recognised, unbilled cost</span>
+        <span class="term"><b>Actuals vs forecast</b> — variance</span>
+        <span class="term"><b>Run-rate</b> — annualised cost trend</span>
+        <span class="term"><b>Contingent / third-party spend</b></span>
+        <span class="term"><b>Headcount approval matrix</b></span>
+        <span class="term"><b>Cost-to-serve</b></span>
+        <span class="term"><b>Realisation</b> — banked vs planned save</span>
+        <span class="term"><b>Data governance / DQ</b> — quality controls</span>
+        <span class="term"><b>1LoD / 2LoD</b> — Lines of Defence</span>
+        <span class="term"><b>BAU</b> — Business as Usual</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 03 FIT & GAP ============ -->
+  <section class="panel" id="p2">
+    <div class="stagger">
+      <div class="sec-num">03 — Fit &amp; Gap</div>
+      <h2 class="sec">Where you map, where you stretch</h2>
+      <p class="sec-sub">Scored across the 10-dimension method (raw 81; net −4 for band-down + banking-convention reframe). The capability ceiling is high; the friction is positioning, not competence.</p>
+
+      <div class="fitmeter">
+        <div class="fitbadge"><div class="n tnum">77</div><div class="arrow">▼ addressable</div><div class="t tnum">84</div></div>
+        <div class="fm-body">
+          <div class="lab">Current → Addressable</div>
+          <div class="bar"><i style="width:77%"></i></div>
+          <p class="body" style="margin:0;font-size:13px">Closes to <strong>84</strong> with: banking cost-/FRP-vocabulary reframe + 2 working MI dashboards + a tight "why this band" narrative. No hard domain gate — unlike the liquidity role, nothing here is a wall.</p>
+        </div>
+      </div>
+
+      <h3 class="blk">Dimension scorecard</h3>
+      <table>
+        <thead><tr><th>Dimension</th><th>Score</th><th>Read</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Dimension">Functional match</td><td data-label="Score" class="tnum">7/10</td><td data-label="Read">BizOps mechanics transfer; cost-centre vs your revenue axis is the reframe.</td></tr>
+          <tr><td data-label="Dimension">Scale match</td><td data-label="Score" class="tnum">9/10</td><td data-label="Read">77-person / AED 12.97B over-sizes an AVP remit.</td></tr>
+          <tr><td data-label="Dimension">Domain knowledge</td><td data-label="Score" class="tnum">6/10</td><td data-label="Read">Banking soft-pref; role is domain-light — FRP/cost conventions are vocab, not a wall.</td></tr>
+          <tr><td data-label="Dimension">Technical tooling</td><td data-label="Score" class="tnum">8/10</td><td data-label="Read">Excel/PPT + 70+ report MI ecosystem; data-governance double-emphasis = your QCG strength. No SQL gate.</td></tr>
+          <tr><td data-label="Dimension">People management</td><td data-label="Score" class="tnum">9/10</td><td data-label="Read">35 Dubai + 42 Hyderabad, 4 sub-teams — above remit.</td></tr>
+          <tr><td data-label="Dimension">Stakeholder altitude</td><td data-label="Score" class="tnum">9/10</td><td data-label="Read">You operate at CRO/CCO/MD; role tops at R&amp;C-lead / Finance / HR.</td></tr>
+          <tr><td data-label="Dimension">Analytical depth</td><td data-label="Score" class="tnum">8/10</td><td data-label="Read">NPV/DCF + target-allocation; scenario modelling is a framing stretch only.</td></tr>
+          <tr><td data-label="Dimension">Process &amp; systems</td><td data-label="Score" class="tnum">9/10</td><td data-label="Read">T−25/T+30, finding registers, 6+ MD-approved governance docs.</td></tr>
+          <tr><td data-label="Dimension">Psychometric fit</td><td data-label="Score" class="tnum">8/10</td><td data-label="Read">High-C/High-S suits rigour + steady support; lower D/I demand than front-line.</td></tr>
+          <tr><td data-label="Dimension">AI differentiator</td><td data-label="Score" class="tnum">8/10</td><td data-label="Read">Automated FRP/headcount/cost trackers + anomaly flagging — most cite, you build.</td></tr>
+          <tr class="hl"><td data-label="Dimension">Raw → Net</td><td data-label="Score" class="tnum">81 → 77</td><td data-label="Read">+2 BITS+IIM · −4 band-down/regression · −2 banking-convention reframe.</td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="blk">Strongest matches</h3>
+      <div class="card strong"><div class="ch"><div class="ct">Workforce &amp; headcount planning at GCC scale</div><span class="badge b-strong">Strong</span></div><div class="pf">You stood up a <strong>42-person Hyderabad hub in under 12 months</strong> — hiring, capability, governance, attrition — and rebalance 77 people across geographies. That <em>is</em> FRP and resourcing governance, lived.</div></div>
+      <div class="card strong"><div class="ch"><div class="ct">Decision-grade MI</div><span class="badge b-strong">Strong</span></div><div class="pf">A <strong>70+ report MI ecosystem</strong> built for executive decisions. The JD's headline deliverable is your default operating mode.</div></div>
+      <div class="card strong"><div class="ch"><div class="ct">Financial rigour &amp; cost discipline</div><span class="badge b-strong">Strong</span></div><div class="pf">The <strong>NPV model (AED 652M inflow / AED 21.2M cost / 32% cheaper than bank financing)</strong>, defended at MD/CEO with zero concessions, is forecast-vs-actual governance at the highest altitude.</div></div>
+
+      <h3 class="blk">Gaps to close (vocabulary, not capability)</h3>
+      <div class="card mod"><div class="ch"><div class="ct">Banking cost-centre &amp; FRP conventions</div><span class="badge b-mod">Closeable</span></div><div class="pf">You manage <em>revenue</em>; this is <em>cost-base</em> stewardship. Learn the FRP cadence, GCB banding, and direct/indirect cost taxonomy. 2–3 weeks of reading.</div></div>
+      <div class="card mod"><div class="ch"><div class="ct">R&amp;C function &amp; Lines-of-Defence context</div><span class="badge b-mod">Closeable</span></div><div class="pf">Frame your 14-finding register and QCG layer in 1LoD/2LoD language. Adjacent, not new.</div></div>
+      <div class="card mod"><div class="ch"><div class="ct">HSBC planning tooling</div><span class="badge b-mod">Closeable</span></div><div class="pf">Internal FRP/MI systems differ from Salesforce. Position transferability of the <em>discipline</em>; tools are learnable on the job.</div></div>
+      <div class="card red"><div class="ch"><div class="ct">The "why this band" narrative</div><span class="badge b-red">Must-prep</span></div><div class="pf">The real gap isn't skill — it's explaining, credibly, why a 77-person leader wants an AVP support seat. Without a clean answer this reads as a flight risk. Scripted in the Interview Kit.</div></div>
+
+      <h3 class="blk">Honest read — the risks this role carries</h3>
+      <div class="callout warn"><b>Band-down + over-banding.</b> AVP/GCB5 is below your current operating altitude. HSBC tends to slot over-qualified hires <em>at</em> the band, not above it — limited ceiling, and "why are you applying down" friction in screening.</div>
+      <div class="callout warn"><b>Comp clears your floor only top-quartile.</b> Median ~₹34–38L sits at or below your ₹38L AVP walk-away; HSBC's rigid banding makes negotiating into the top of band a real, not safe, bet. (Detail in Comp Intel.)</div>
+      <div class="callout warn"><b>Scope regression.</b> The JD's "assist / support / contribute / help" verbs and the multi-hub clone signal a templated execution seat — not a unique leadership mandate. Against your 77-person remit, this is a structural step sideways/down.</div>
+      <div class="callout warn"><b>Culture-throttle.</b> HSBC's humane WLB cuts both ways: slow promotion, process-heavy, legacy-bound — limited room for your AI/transformation edge. Comfortable day-to-day, decelerative for your trajectory.</div>
+      <p class="footnote">Net: pursue as <strong>insurance / fast Hyderabad fallback</strong>, not as a track you optimise the whole pipeline around.</p>
+    </div>
+  </section>
+
+  <!-- ============ 04 STAKEHOLDER DECODE ============ -->
+  <section class="panel" id="p3">
+    <div class="stagger">
+      <div class="sec-num">04 — Stakeholder Decode <span style="color:var(--warn)">· Conditional (Triggered: matrixed 3+)</span></div>
+      <h2 class="sec">Three power centres, no single boss</h2>
+      <p class="sec-sub">The work succeeds on consensus and reliability, not authority. Map each stakeholder's real want, the friction, and your lever. Your High-S/Relator suits this; your Low-D is the thing to manage.</p>
+
+      <div class="card red"><div class="ch"><div class="ct">R&amp;C Leadership — your principal</div><span class="badge b-red">Primary</span></div>
+        <div class="pf"><strong>Wants:</strong> reliable MI, no surprises, clean cost/headcount governance, and to look good upward. <strong>Friction:</strong> low tolerance for late or wrong numbers in front of their own leadership. <strong>Your lever:</strong> this is your CRO/CCO analog at Sobha — you already anticipate executive questions and pre-empt variances. Run them like you run Adnan and Ashish: weekly cadence, pre-reads, decisions tracked to closure.</div></div>
+
+      <div class="card"><div class="ch"><div class="ct">Finance — the numbers' integrity owner</div><span class="badge b-mod">Critical partner</span></div>
+        <div class="pf"><strong>Wants:</strong> accuracy, on-time submissions into their planning cycle, reconcilable data. <strong>Friction:</strong> you sit between the function's narrative and Finance's controls — they'll challenge optimistic save claims. <strong>Your lever:</strong> NPV-grade financial credibility + your 4-layer reconciliation discipline. Speak their language: realisation, run-rate, accruals.</div></div>
+
+      <div class="card"><div class="ch"><div class="ct">HR — the resourcing-process owner</div><span class="badge b-mod">Critical partner</span></div>
+        <div class="pf"><strong>Wants:</strong> headcount approvals to follow workflow; hiring governed, not bypassed. <strong>Friction:</strong> HR controls the very process you're trying to expedite — you govern <em>with</em> them. <strong>Your lever:</strong> you built a 42-person hub with HR on hiring, capability and attrition at scale — you've been their partner, not their bottleneck.</div></div>
+
+      <div class="callout warn"><b>The matrixed watch-out.</b> With no formal authority over Finance or HR, you'll need to hold standards — data quality, deadline discipline — by influence. This is exactly your Low-D development area. Lead with your three assertiveness anchors (Interview Kit) when challenged on whether you can drive without a hammer.</div>
+    </div>
+  </section>
+
+  <!-- ============ 05 STAR ============ -->
+  <section class="panel" id="p4">
+    <div class="stagger">
+      <div class="sec-num">05 — STAR Mapping</div>
+      <h2 class="sec">Five stories that carry the JD</h2>
+      <p class="sec-sub">One story per functional cluster, drawn from STAR Bank V3. Full text lives in STAR_STORY_BANK_V3 — rehearse from there; these are the mapping and the framing line.</p>
+
+      <div class="card red star"><div class="ch"><div class="ct"><span class="sc">S7</span>Standing up the 42-person Hyderabad hub</div><span class="badge b-red">FRP / Workforce</span></div>
+        <div class="jd">Maps to: track/analyse FRP &amp; workforce plan · govern resourcing &amp; headcount approval.</div>
+        <div class="pf">Built a 42-person India operations hub in under 12 months — headcount planning, capability build, governance, attrition control across two geographies. <strong>Frame:</strong> "I've run a GCC workforce plan from zero — exactly the resourcing engine this role governs, just from the build side."</div></div>
+
+      <div class="card star"><div class="ch"><div class="ct"><span class="sc">S19</span>Setting the AED 10B+ target framework</div><span class="badge b-mod">Financial Planning</span></div>
+        <div class="jd">Maps to: prepare/review financial plans &amp; forecasts · scenario modelling for SF/LoB.</div>
+        <div class="pf">Cascaded a multi-entity target into a closed-loop plan — projections → IOM targets → 70+ reports → individual OKRs in the HR system. <strong>Frame:</strong> "Planning to me is a closed loop with owners and variance tracking, not a spreadsheet."</div></div>
+
+      <div class="card star"><div class="ch"><div class="ct"><span class="sc">S18</span>PCC TAT: 20 → 3 days</div><span class="badge b-mod">Cost Save / Improvement</span></div>
+        <div class="jd">Maps to: cost-saving initiatives + monitor progress · operational improvement.</div>
+        <div class="pf">Re-engineered an end-to-end process for an 85% cycle-time cut while absorbing 3× volume — baseline, redesign, run-rate, sustained. <strong>Frame:</strong> "I find the inefficiency, prove the save, and bank it — then keep it banked."</div></div>
+
+      <div class="card star"><div class="ch"><div class="ct"><span class="sc">S21</span>6+ MD-approved governance documents</div><span class="badge b-mod">Process Governance</span></div>
+        <div class="jd">Maps to: govern resourcing process &amp; approval · high-quality MI / executive reporting.</div>
+        <div class="pf">Authored and defended 6+ process/policy documents through CCO/CFO/CRO/MD review — the governance backbone for a 4-entity operation. <strong>Frame:</strong> "I build the control gates leadership trusts, and I get them signed off at the top."</div></div>
+
+      <div class="card star"><div class="ch"><div class="ct"><span class="sc">S33</span>The 4-layer reconciliation control</div><span class="badge b-red">Data Governance / DQ</span></div>
+        <div class="jd">Maps to: data governance &amp; tools-based data-quality improvement (JD double-emphasis).</div>
+        <div class="pf">Designed a multi-layer reconciliation that keeps a large, multi-source portfolio's data clean and audit-ready. <strong>Frame:</strong> "MI is only as good as its data integrity — I build the quality controls underneath the dashboard."</div></div>
+
+      <div class="callout"><b>Coverage check.</b> FRP/workforce ✓ · financial planning ✓ · cost-save/improvement ✓ · process governance ✓ · data governance ✓. The MI requirement is doubly evidenced by S21 + the AI dashboards in tab 07.</div>
+    </div>
+  </section>
+
+  <!-- ============ 06 30/60/90 ============ -->
+  <section class="panel" id="p5">
+    <div class="stagger">
+      <div class="sec-num">06 — Application &amp; Prep Roadmap</div>
+      <h2 class="sec">30 · 60 · 90 days to ready</h2>
+      <p class="sec-sub">Lightweight by design — this is a fallback track, so most prep is shared with your AmEx / Accenture / BlackRock tracks. Don't over-invest ahead of those first-round outcomes.</p>
+
+      <div class="tl">
+        <div class="ph">First 30 — Decode &amp; Position</div>
+        <div class="item"><h4>Lock the banking cost-/FRP-vocabulary</h4><p>Direct vs indirect cost, FRP cadence, GCB banding, accruals/realisation. 3–4 hours of targeted reading.</p></div>
+        <div class="item"><h4>Reframe 3 Sobha proofs into cost-centre language</h4><p>42-person hub → workforce plan; NPV → forecast governance; reconciliation → data quality.</p></div>
+        <div class="item"><h4>Draft the "why this band" narrative</h4><p>The single most important prep item. Script + rehearse until it's effortless (see Interview Kit).</p></div>
+        <div class="item"><h4>Tailor resume to BizOps, not collections</h4><p>Use the MS Biz Mgr OPG v1 base — NOT the HSBC VP Liquidity resume. Lead with scope, MI, governance.</p></div>
+        <div class="item"><h4>Decide the location line</h4><p>Apply to the Hyderabad posting; note flexibility only if asked.</p></div>
+        <div class="item"><h4>Map your existing cert stack to the JD</h4><p>PMI-ACP (in progress) + Looker Studio planned already cover the "MI tools a plus" signal.</p></div>
+
+        <div class="ph">Next 30 (Day 31–60) — Build Proof</div>
+        <div class="item"><h4>Build MI Dashboard #1 — Function Health</h4><p>FRP vs actual headcount, vacancy ageing, cost variance (simulated data). Power BI or Looker.</p></div>
+        <div class="item"><h4>Build MI Dashboard #2 — Cost &amp; Spend</h4><p>Direct/indirect run-rate + third-party spend vs guideline, with save-realisation tracking.</p></div>
+        <div class="item"><h4>Adapt AI project P11 to this role</h4><p>Reframe the Info Solutions Health Dashboard as an R&amp;C operating-health view (tab 07).</p></div>
+        <div class="item"><h4>Rehearse the 5 STAR stories in cost/MI framing</h4><p>S7, S19, S18, S21, S33 — out loud, against the JD clusters.</p></div>
+        <div class="item"><h4>Lines-of-Defence reframe of your risk register</h4><p>Position the 14-finding register + QCG in 1LoD/2LoD language.</p></div>
+
+        <div class="ph">Day 61–90 — Demonstrate &amp; Convert</div>
+        <div class="item"><h4>Lead screens with a dashboard, not a CV walk</h4><p>"Here's the MI layer I'd build for the function" — show, don't tell.</p></div>
+        <div class="item"><h4>Run the assertiveness anchors on demand</h4><p>PR-49% · NPV defence · 3 CCO escalations — your Low-D rebuttal set.</p></div>
+        <div class="item"><h4>Hold comp discipline</h4><p>Anchor for top-of-band; ₹38L is the walk-away. Don't chase the seat below floor.</p></div>
+        <div class="item"><h4>Keep it sequenced behind AmEx + Oaktree</h4><p>File / push only after their first-round outcomes are known — leverage, not haste.</p></div>
+        <div class="item"><h4>Hand the role back to P1/P2 if it goes live</h4><p>This project doesn't sync to the ecosystem — register manually if it advances.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 07 AI DIFFERENTIATOR ============ -->
+  <section class="panel" id="p6">
+    <div class="stagger">
+      <div class="sec-num">07 — AI Differentiator</div>
+      <h2 class="sec">Three builds that out-position every other AVP candidate</h2>
+      <p class="sec-sub">The universal edge: AI-augmented operations. Every applicant will <em>cite</em> automation; you arrive having <em>built</em> it. For a cost/headcount/MI role, these three map almost one-to-one onto the JD.</p>
+
+      <div class="ai"><div class="pid">P11 · adapted</div><h4>R&amp;C Function Operating-Health Dashboard</h4><div class="stack">Python · Streamlit · Claude API · Power BI/Looker</div><p>One live view consolidating FRP vs actual headcount, vacancy ageing, and direct/indirect cost variance — with AI-generated anomaly flags and plain-English variance commentary.</p><div class="maps"><b>Maps to:</b> high-quality MI · cost monitoring · FRP tracking. <b>Pitch:</b> "This is the MI layer I'd stand up in month one."</div></div>
+
+      <div class="ai"><div class="pid">P10 · direct fit</div><h4>Extended Workforce &amp; Third-Party Cost Intelligence</h4><div class="stack">Python · Claude API · Streamlit</div><p>Tracks contingent/consultancy spend against policy guidelines, flags overruns and rate breaches, and models cost-save scenarios under headcount/ramp changes.</p><div class="maps"><b>Maps to:</b> third-party spend governance · cost-saving initiatives · scenario modelling. <b>Pitch:</b> "Vendor leakage gets caught before month-end, not after."</div></div>
+
+      <div class="ai"><div class="pid">P9 · reframed</div><h4>Business Review Pack Generator</h4><div class="stack">Python · Claude API</div><p>Ingests the month's cost, headcount and FRP data and auto-drafts the MBR/QBR executive pack — narrative, variance call-outs, and decision asks — ready for the function head.</p><div class="maps"><b>Maps to:</b> executive MI · RoB cadence · decision support. <b>Pitch:</b> "I take the admin burden off the cadence and redirect the time to judgement."</div></div>
+
+      <div class="callout"><b>The frame to repeat:</b> "I automate the reporting plumbing so the function spends its time on decisions, not deck-building." It ties directly to your live-data MI ecosystem and your Analytical / Restorative strengths — and it's exactly the kind of edge a process-heavy bank under-uses, which is itself a talking point.</div>
+    </div>
+  </section>
+
+  <!-- ============ 08 INTERVIEW KIT ============ -->
+  <section class="panel" id="p7">
+    <div class="stagger">
+      <div class="sec-num">08 — Interview Kit</div>
+      <h2 class="sec">21 questions + your assertiveness anchors</h2>
+      <p class="sec-sub">Grouped by theme. The make-or-break category here isn't competence — it's motivation. Nail "why this band" and the rest follows.</p>
+
+      <div class="qcat">Business management &amp; planning</div>
+      <ol class="q">
+        <li>Walk me through how you'd run an annual planning cycle for a function from a standing start.</li>
+        <li>How do you track a workforce plan — what does "good" FRP discipline look like to you?</li>
+        <li>Tell me about a time you turned a leader's vision into an executable, owned plan.</li>
+        <li>How do you keep a planning process honest when stakeholders push optimistic numbers?</li>
+        <li>Describe the operating cadence (RoB) you've designed and how you tracked actions to closure.</li>
+      </ol>
+
+      <div class="qcat">Cost &amp; financial</div>
+      <ol class="q">
+        <li>How do you monitor direct vs indirect cost performance and surface risks early?</li>
+        <li>Tell me about a cost-saving initiative you drove — baseline, target, realisation.</li>
+        <li>How would you govern consultancy / third-party spend against guidelines?</li>
+        <li>Walk me through a financial model you built and had to defend to senior leadership.</li>
+      </ol>
+
+      <div class="qcat">MI &amp; data governance</div>
+      <ol class="q">
+        <li>What separates reporting from decision-grade MI? Give an example you've built.</li>
+        <li>How do you ensure data quality underneath a dashboard leadership relies on?</li>
+        <li>Tell me about a tools-based data-quality improvement you implemented.</li>
+      </ol>
+
+      <div class="qcat">Stakeholder &amp; matrixed influence</div>
+      <ol class="q">
+        <li>How do you hold a standard (e.g., deadline or data quality) with stakeholders you don't manage?</li>
+        <li>Describe partnering with HR/Finance on a headcount or planning decision.</li>
+        <li>Tell me about a time you delivered bad news (a variance / a miss) to leadership.</li>
+      </ol>
+
+      <div class="qcat">Scenario &amp; problem-solving</div>
+      <ol class="q">
+        <li>Budget gets cut 10% mid-year — how do you model and present the options?</li>
+        <li>A function is over-hiring against plan — how do you diagnose and intervene?</li>
+        <li>Where would you look first for operational inefficiency in a cost base you just inherited?</li>
+      </ol>
+
+      <div class="qcat">Motivation — the decisive category</div>
+      <ol class="q">
+        <li>You lead 77 people today — why an AVP support role here? <em>(The make-or-break question.)</em></li>
+        <li>Where do you see yourself in 3 years, and how does this role serve that?</li>
+        <li>This role is also open in Bengaluru and Gurugram — why Hyderabad, and how committed are you?</li>
+      </ol>
+
+      <h3 class="blk">Assertiveness anchors (your Low-D rebuttal set)</h3>
+      <div class="anchor"><b>Anchor 1 — Held the line under pressure.</b> Kept the PR rejection documentation standard at 49% in Dec-25 despite pressure to relax it; position vindicated by the data.</div>
+      <div class="anchor"><b>Anchor 2 — Defended a model at the top, zero concessions.</b> Defended the NPV model (AED 652M inflow / AED 21.2M cost / 32% cheaper than bank financing) at MD/CEO across multiple scrutiny rounds.</div>
+      <div class="anchor"><b>Anchor 3 — Escalated proactively.</b> Took 3 blocked risk-register items to the CCO before their due dates rather than letting them slip.</div>
+
+      <h3 class="blk">Your scripted answer to "why this band"</h3>
+      <div class="callout"><b>The honest, credible line:</b> "I'm optimising for the right work and the right institution, not the title on day one. The work here — function-level planning, cost stewardship, decision-grade MI inside a global bank — is squarely what I do, and HSBC's scale and brand are where I want to build. I'd rather enter at the band that fits the role definition and earn the next one on delivery than over-title myself into a poor fit." Keep it forward-looking; never disparage your current role or sound like you're settling.</div>
+      <p class="footnote">Caveat to yourself: if the interviewer probes and you can't make this land sincerely, that's a signal the role may be the wrong move — not just a hard question.</p>
+    </div>
+  </section>
+
+  <!-- ============ 09 COMP INTEL ============ -->
+  <section class="panel" id="p8">
+    <div class="stagger">
+      <div class="sec-num">09 — Compensation Intelligence</div>
+      <h2 class="sec">The floor is the whole question</h2>
+      <p class="sec-sub">Triangulated across four sources for an experienced-hire AVP (GCB5) at HSBC's India service centre. The headline: your ₹38L walk-away sits at the <em>top</em> of the realistic band, not the middle.</p>
+
+      <table>
+        <thead><tr><th>Percentile</th><th>Total Comp (all-in)</th><th>Read</th></tr></thead>
+        <tbody>
+          <tr><td data-label="Percentile">P25</td><td data-label="Total Comp" class="tnum">~₹28L</td><td data-label="Read">Below floor — entry/standard band.</td></tr>
+          <tr><td data-label="Percentile">P50 (most likely)</td><td data-label="Total Comp" class="tnum">~₹34–38L</td><td data-label="Read">At or just under your ₹38L AVP walk-away.</td></tr>
+          <tr class="hl"><td data-label="Percentile">P75 (your target)</td><td data-label="Total Comp" class="tnum">~₹40–44L</td><td data-label="Read">Clears the floor — requires top-of-band negotiation.</td></tr>
+          <tr><td data-label="Percentile">P90 (stretch)</td><td data-label="Total Comp" class="tnum">~₹48–51L</td><td data-label="Read">"Lead AVP" territory; rare for a band-down hire.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout"><b>Confidence: Medium.</b> Four sources triangulated — Glassdoor (AVP avg ~₹29L base, up to ~₹51L P90), PayScale (~₹28–30L), Indeed (runs low), and a Fishbowl "Lead AVP" data-point of ₹37L fixed + ~20% bonus (≈₹44L). No internal band sheet, so treat the band as directional.</div>
+
+      <div class="callout warn"><b>HSBC-specific headwind.</b> GCB banding is rigid and comp reputation is "stable but stagnating." Negotiating well above midpoint is harder here than at a hungry new GCC — and over-qualification can cap you <em>at</em> the band rather than stretch it.</div>
+
+      <h3 class="blk">Walk-away &amp; negotiation</h3>
+      <div class="card red"><div class="ch"><div class="ct">Walk-away: ₹38L all-in (AVP-track floor)</div></div><div class="pf">Do not take this seat below ₹38L. Anchor on your scale (77 people, AED 12.97B) + BITS/IIM scarcity for the top of band; push the variable % and any joining bonus. If they cap at midpoint, the math says pass.</div></div>
+
+      <h3 class="blk">Against your Hyderabad stack</h3>
+      <table>
+        <thead><tr><th>Role</th><th>Total Comp</th><th>Band</th><th>vs HSBC AVP</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td data-label="Role">Oaktree VP Info Solutions</td><td data-label="Total Comp" class="tnum">₹55–65L</td><td data-label="Band">VP</td><td data-label="vs HSBC AVP">Dominates — comp + band + fastest TTO</td></tr>
+          <tr><td data-label="Role">HSBC AVP Business Manager</td><td data-label="Total Comp" class="tnum">₹32–44L</td><td data-label="Band">AVP</td><td data-label="vs HSBC AVP">Weakest of the four on comp</td></tr>
+          <tr><td data-label="Role">Amgen Sr Mgr (Hyderabad GCC)</td><td data-label="Total Comp" class="tnum">~₹35–55L</td><td data-label="Band">Sr Mgr</td><td data-label="vs HSBC AVP">Higher ceiling</td></tr>
+          <tr><td data-label="Role">Latinem AVP (internal)</td><td data-label="Total Comp" class="tnum">TBD</td><td data-label="Band">AVP</td><td data-label="vs HSBC AVP">Known-operator leverage</td></tr>
+        </tbody>
+      </table>
+      <p class="footnote">On comp alone, three of your four Hyderabad options beat this one. That's the core reason it sits as a fallback.</p>
+    </div>
+  </section>
+
+  <!-- ============ 10 CERT ROADMAP ============ -->
+  <section class="panel" id="p9">
+    <div class="stagger">
+      <div class="sec-num">10 — Certification Roadmap</div>
+      <h2 class="sec">Build dashboards, don't chase paper</h2>
+      <p class="sec-sub">The JD is cert-light: MS Office required, MI tools "a plus", data governance "an advantage". No credential gates this role — so the highest-leverage move is two working MI dashboards, not a certificate.</p>
+
+      <div class="callout"><b>Cert footprint — declared.</b> Triaged from the JD + role-family reasoning (<em>not</em> from a scraped LinkedIn sample of HSBC R&amp;C business managers). Confidence: <b>Low–Medium</b>. Conclusion: nothing is gating; weightings below reflect signal value, not requirement.</div>
+
+      <table>
+        <thead><tr><th>Credential / Proof</th><th>Weight</th><th>Status</th><th>Why / Note</th></tr></thead>
+        <tbody>
+          <tr class="hl"><td data-label="Credential">2× working MI dashboards (Power BI / Looker)</td><td data-label="Weight"><span class="pri p-high">High</span></td><td data-label="Status"><span class="pri p-prog">Build</span></td><td data-label="Note">Direct proof of "MI tools + data quality". Higher ROI than any paper. ~2 weeks given your Salesforce dashboard base.</td></tr>
+          <tr><td data-label="Credential">Power BI PL-300 (optional)</td><td data-label="Weight"><span class="pri p-med">Medium</span></td><td data-label="Status"><span class="pri p-low">Optional</span></td><td data-label="Note">Formalises the dashboards into a credential. Do only if time permits — the build matters more.</td></tr>
+          <tr><td data-label="Credential">FP&amp;A / financial-modelling micro-cert</td><td data-label="Weight"><span class="pri p-med">Med-Low</span></td><td data-label="Status"><span class="pri p-low">Directional</span></td><td data-label="Note">Shores up the cost-centre/FRP framing (e.g., CFI FMVA or a Coursera FP&amp;A). Optional, directional only.</td></tr>
+          <tr><td data-label="Credential">PMI-ACP</td><td data-label="Weight"><span class="pri p-low">Low (direct)</span></td><td data-label="Status"><span class="pri p-prog">In progress</span></td><td data-label="Note">Already underway. Transferable PM credibility across your whole pipeline — no extra spend for this role.</td></tr>
+          <tr><td data-label="Credential">Looker Studio (free)</td><td data-label="Weight"><span class="pri p-low">Low-Med</span></td><td data-label="Status"><span class="pri p-low">Planned</span></td><td data-label="Note">Already on your Google track. Doubles as the dashboard-build tool above.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout"><b>Existing stack first.</b> You already carry PMI-ACP (in progress), AZ-900 (in progress), and Looker Studio (planned). None need to be re-bought for HSBC. The only net-new effort worth making is the two dashboards — and they double as interview artefacts (tab 07).</div>
+    </div>
+  </section>
+
+  <!-- ============ 11 CLOSE ============ -->
+  <section class="panel" id="p10">
+    <div class="stagger">
+      <div class="sec-num">11 — Close &amp; Outreach</div>
+      <h2 class="sec">How to play it</h2>
+      <p class="sec-sub">A disciplined, low-cost approach: apply clean, lead with proof, hold the floor, and never let it pull focus from your anchor tracks.</p>
+
+      <h3 class="blk">The one-line positioning</h3>
+      <div class="thesis"><div class="t-lab">Your pitch</div><p>"A scaled operations leader who runs function-level planning, cost stewardship and decision-grade MI — and builds the AI layer that takes the admin burden off the cadence."</p></div>
+
+      <h3 class="blk">Outreach angle</h3>
+      <div class="card red"><div class="ch"><div class="ct">Lead with the MI build, not the title gap</div></div><div class="pf">If you reach a recruiter or the hiring manager directly, open with the dashboard: "I build the operating-health MI that R&amp;C business management runs on — happy to show a working example." It reframes you from "over-qualified collections leader" to "the MI/cost operator we want."</div></div>
+      <div class="card"><div class="ch"><div class="ct">Pre-empt the band question</div></div><div class="pf">Address it before they do, briefly and forward-looking (script in Interview Kit). Silence on it reads as flight risk.</div></div>
+
+      <h3 class="blk">Sequencing &amp; governance</h3>
+      <div class="card mod"><div class="ch"><div class="ct">Behind AmEx GMNS + Oaktree</div></div><div class="pf">File or push only after their first-round outcomes are known — competing interest is your only real comp leverage at a rigid-band employer.</div></div>
+      <div class="card"><div class="ch"><div class="ct">Hand-off, don't auto-sync</div></div><div class="pf">This project self-scores and builds only. If the role advances, register it manually into P1/P2 — it does not flow to ECOSYSTEM_STATE on its own.</div></div>
+
+      <div class="callout warn"><b>The decision frame, restated.</b> Pursue this as <b>insurance / a fast Hyderabad fallback</b>. If Oaktree VP or an AmEx round lands, this falls away — and that's the correct outcome, not a loss.</div>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<footer>
+  <span>HSBC AVP Business Manager · Career Playbook v1 · Conditional track · Built single-shot</span>
+  <span>Brand-derived palette · HSBC Red #DB0011 · Hyderabad-default</span>
+</footer>
+
+<script>
+  function go(id){
+    document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active')});
+    var el=document.getElementById(id);
+    if(el){el.classList.add('active')}
+    document.querySelectorAll('nav.rail .tab').forEach(function(t){t.classList.remove('active')});
+    var idx=['p0','p1','p2','p3','p4','p5','p6','p7','p8','p9','p10'].indexOf(id);
+    var tabs=document.querySelectorAll('nav.rail .tab');
+    if(idx>-1&&tabs[idx]){tabs[idx].classList.add('active')}
+    var sel=document.getElementById('mobsel'); if(sel){sel.value=id}
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+</script>
+</body>
+</html>
