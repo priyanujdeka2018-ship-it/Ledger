@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oaktree VP Strategy &amp; Ops — Career Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --oak-forest:#1B4332;--oak-sage:#2D6A4F;--oak-gold:#B08D57;
+  --oak-slate:#1E293B;--oak-cloud:#F8FAFC;--oak-ash:#64748B;
+  --oak-mist:#E2E8F0;--oak-light:#F1F5F9;--oak-gold-dim:#F5F0E6;
+  --oak-red:#B91C1C;--oak-amber:#D97706;--oak-green:#15803D;
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --rail-w:220px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--font-body);background:var(--oak-cloud);color:var(--oak-slate);font-size:14px;line-height:1.65;}
+/* ── LAYOUT ── */
+.shell{display:flex;min-height:100vh;}
+.rail{width:var(--rail-w);background:var(--oak-forest);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;display:flex;flex-direction:column;}
+.rail-logo{padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,.12);}
+.rail-logo h1{font-family:var(--font-display);font-size:15px;color:#fff;font-weight:600;line-height:1.3;}
+.rail-logo span{font-family:var(--font-mono);font-size:10px;color:var(--oak-gold);display:block;margin-top:6px;letter-spacing:.5px;}
+.rail-nav{flex:1;padding:12px 0;}
+.rail-btn{display:block;width:100%;text-align:left;padding:10px 20px;background:none;border:none;color:rgba(255,255,255,.65);font-family:var(--font-body);font-size:12.5px;font-weight:500;cursor:pointer;transition:.15s;border-left:3px solid transparent;}
+.rail-btn:hover{color:#fff;background:rgba(255,255,255,.06);}
+.rail-btn.active{color:#fff;background:rgba(255,255,255,.1);border-left-color:var(--oak-gold);}
+.rail-btn .num{font-family:var(--font-mono);font-size:10px;color:var(--oak-gold);margin-right:8px;}
+.main{margin-left:var(--rail-w);flex:1;min-width:0;}
+.section{display:none;padding:40px 48px 60px;max-width:960px;}
+.section.active{display:block;}
+/* ── MOBILE ── */
+.mob-dd{display:none;}
+@media(max-width:768px){
+  .rail{display:none;}
+  .main{margin-left:0;}
+  .mob-dd{display:block;position:sticky;top:0;z-index:100;background:var(--oak-forest);padding:12px 16px;}
+  .mob-dd select{width:100%;padding:10px 12px;font-family:var(--font-body);font-size:13px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;appearance:none;-webkit-appearance:none;}
+  .mob-dd select option{background:var(--oak-forest);color:#fff;}
+  .section{padding:24px 16px 40px;}
+}
+/* ── TYPOGRAPHY ── */
+.sec-eyebrow{font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--oak-ash);margin-bottom:12px;}
+.sec-title{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--oak-forest);margin-bottom:6px;line-height:1.25;}
+.sec-sub{font-size:14px;color:var(--oak-ash);margin-bottom:28px;line-height:1.6;}
+h3{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--oak-forest);margin:24px 0 10px;}
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid var(--oak-mist);border-radius:10px;padding:22px 26px;margin-bottom:14px;}
+.card-title{font-family:var(--font-body);font-size:14px;font-weight:700;color:var(--oak-forest);margin-bottom:8px;}
+.card-forest{border-left:4px solid var(--oak-forest);}
+.card-gold{border-left:4px solid var(--oak-gold);}
+.card-sage{border-left:4px solid var(--oak-sage);}
+.card-red{border-left:4px solid var(--oak-red);}
+.card-amber{border-left:4px solid var(--oak-amber);}
+.card-hero{background:linear-gradient(135deg,#e8f0e9 0%,var(--oak-cloud) 100%);border:1.5px solid #c5d9c8;}
+/* ── STAT GRID ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px;}
+.stat-box{background:#fff;border:1px solid var(--oak-mist);border-radius:8px;padding:16px 18px;text-align:center;}
+.stat-label{font-family:var(--font-mono);font-size:10px;color:var(--oak-ash);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.stat-val{font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--oak-forest);}
+.stat-val.gold{color:var(--oak-gold);}
+.stat-val.red{color:var(--oak-red);}
+.stat-val.green{color:var(--oak-green);}
+/* ── BADGES ── */
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:16px;margin:2px 4px 6px 0;}
+.badge-forest{background:#dcfce7;color:var(--oak-green);}
+.badge-gold{background:var(--oak-gold-dim);color:#92400E;}
+.badge-red{background:#fee2e2;color:var(--oak-red);}
+.badge-ash{background:var(--oak-light);color:var(--oak-ash);}
+.badge-sage{background:#d1fae5;color:var(--oak-sage);}
+/* ── FIT BARS ── */
+.fit-row{display:flex;align-items:center;gap:12px;margin-bottom:11px;}
+.fit-lbl{font-size:13px;font-weight:500;width:200px;flex-shrink:0;}
+.fit-bar-wrap{flex:1;height:7px;background:var(--oak-mist);border-radius:4px;overflow:hidden;}
+.fit-bar-fill{height:100%;border-radius:4px;transition:width .6s ease;}
+.fill-g{background:var(--oak-green);}
+.fill-a{background:var(--oak-amber);}
+.fill-r{background:var(--oak-red);}
+.fit-pct{font-family:var(--font-mono);font-size:12px;width:36px;text-align:right;font-weight:600;}
+/* ── TABLES ── */
+table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:13px;}
+th{background:var(--oak-forest);color:#fff;padding:9px 12px;text-align:left;font-weight:600;font-size:12px;}
+td{padding:9px 12px;border-bottom:1px solid var(--oak-mist);}
+tr:nth-child(even){background:var(--oak-light);}
+.tbl-sm td,.tbl-sm th{padding:7px 10px;font-size:12px;}
+/* ── SCORE BRIDGE ── */
+.score-bridge{display:flex;align-items:center;gap:20px;padding:20px 0;margin-bottom:20px;}
+.score-num{font-family:var(--font-display);font-size:42px;font-weight:700;}
+.score-arrow{font-size:28px;color:var(--oak-gold);}
+.score-track{flex:1;height:10px;background:var(--oak-mist);border-radius:6px;position:relative;}
+.score-fill{height:100%;background:linear-gradient(90deg,var(--oak-sage),var(--oak-gold));border-radius:6px;}
+.score-marker{position:absolute;top:-6px;width:3px;height:22px;background:var(--oak-forest);border-radius:2px;}
+/* ── VOCAB ── */
+.vocab-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;border-bottom:1px solid var(--oak-mist);padding:8px 0;}
+.vocab-row.head{font-weight:700;color:var(--oak-forest);border-bottom:2px solid var(--oak-forest);font-size:12px;}
+.vocab-row span{font-size:12.5px;padding:2px 4px;}
+@media(max-width:768px){.vocab-row{grid-template-columns:1fr;gap:2px;}.vocab-row span:first-child{font-weight:600;}}
+/* ── TIMELINE ── */
+.tl-item{display:flex;gap:16px;margin-bottom:14px;}
+.tl-marker{width:36px;height:36px;border-radius:50%;background:var(--oak-forest);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;font-weight:600;flex-shrink:0;}
+.tl-marker.gold{background:var(--oak-gold);}
+.tl-marker.sage{background:var(--oak-sage);}
+.tl-body{flex:1;font-size:13px;line-height:1.6;}
+.tl-body strong{color:var(--oak-forest);}
+/* ── Q&A ── */
+.qa-card{background:#fff;border:1px solid var(--oak-mist);border-radius:8px;padding:14px 18px;margin-bottom:10px;}
+.qa-q{font-weight:600;color:var(--oak-forest);font-size:13px;margin-bottom:6px;}
+.qa-a{font-size:12.5px;color:var(--oak-ash);line-height:1.55;}
+.qa-star{font-family:var(--font-mono);font-size:11px;color:var(--oak-gold);margin-top:4px;}
+</style>
+</head>
+<body>
+
+<!-- ═══ MOBILE DROPDOWN ═══ -->
+<div class="mob-dd">
+<select onchange="switchTab(this.value)">
+<option value="0">01 · Snapshot</option>
+<option value="1">02 · Role Decode</option>
+<option value="2">03 · Fit &amp; Gap</option>
+<option value="3">04 · STAR Mapping</option>
+<option value="4">05 · 30·60·90</option>
+<option value="5">06 · AI Differentiator</option>
+<option value="6">07 · Interview Kit</option>
+<option value="7">08 · Comp Intel</option>
+<option value="8">09 · Cert Roadmap</option>
+<option value="9">10 · Close &amp; Outreach</option>
+<option value="10">11 · Risk &amp; Red Flags</option>
+<option value="11">12 · Stakeholder Decode</option>
+</select>
+</div>
+
+<div class="shell">
+<!-- ═══ LEFT RAIL ═══ -->
+<nav class="rail">
+<div class="rail-logo">
+<h1>Oaktree VP — Strategy &amp; Ops<br>(Biz Transformation)</h1>
+<span>Playbook · Priyanuj Deka · June 2026</span>
+</div>
+<div class="rail-nav">
+<button class="rail-btn active" onclick="switchTab(0)"><span class="num">01</span>Snapshot</button>
+<button class="rail-btn" onclick="switchTab(1)"><span class="num">02</span>Role Decode</button>
+<button class="rail-btn" onclick="switchTab(2)"><span class="num">03</span>Fit &amp; Gap</button>
+<button class="rail-btn" onclick="switchTab(3)"><span class="num">04</span>STAR Mapping</button>
+<button class="rail-btn" onclick="switchTab(4)"><span class="num">05</span>30·60·90</button>
+<button class="rail-btn" onclick="switchTab(5)"><span class="num">06</span>AI Differentiator</button>
+<button class="rail-btn" onclick="switchTab(6)"><span class="num">07</span>Interview Kit</button>
+<button class="rail-btn" onclick="switchTab(7)"><span class="num">08</span>Comp Intel</button>
+<button class="rail-btn" onclick="switchTab(8)"><span class="num">09</span>Cert Roadmap</button>
+<button class="rail-btn" onclick="switchTab(9)"><span class="num">10</span>Close &amp; Outreach</button>
+<button class="rail-btn" onclick="switchTab(10)"><span class="num">11</span>Risk &amp; Red Flags</button>
+<button class="rail-btn" onclick="switchTab(11)"><span class="num">12</span>Stakeholder Decode</button>
+</div>
+</nav>
+
+<div class="main">
+
+<!-- ═══════════ TAB 01 — SNAPSHOT ═══════════ -->
+<div class="section active" id="t0">
+<div class="sec-eyebrow">01 / Snapshot</div>
+<div class="sec-title">Oaktree VP — Strategy &amp; Operations (Business Transformation)</div>
+<div class="sec-sub">Lead within the Strategy &amp; Ops team of Business Transformation, driving department priorities, aligning domains across the back office, and owning end-to-end delivery of key programmes. Hyderabad GCC · $223B AUM.</div>
+
+<div class="stat-grid">
+<div class="stat-box"><div class="stat-label">Net Fit</div><div class="stat-val">70→82</div></div>
+<div class="stat-box"><div class="stat-label">Status</div><div class="stat-val green">Pursue</div></div>
+<div class="stat-box"><div class="stat-label">Conv Prob</div><div class="stat-val gold">25–30%</div></div>
+<div class="stat-box"><div class="stat-label">Target CTC</div><div class="stat-val">₹65–68L</div></div>
+<div class="stat-box"><div class="stat-label">Prep Window</div><div class="stat-val">4–6 Wks</div></div>
+<div class="stat-box"><div class="stat-label">Reframe Effort</div><div class="stat-val gold">Moderate</div></div>
+</div>
+
+<div class="card card-hero">
+<div class="card-title">One-Line Thesis</div>
+<p>Your from-scratch governance architecture, consensus-building across ambiguous multi-stakeholder domains, and 14.9x programme delivery are structural matches for back-office business transformation — but the explicit 10-year financial services preference and Big 4 consulting signal are real friction that the <strong>"I built what consultants recommend, in an operating role"</strong> framing must overcome.</p>
+</div>
+
+<div class="card card-forest">
+<div class="card-title">Employer Context</div>
+<p><strong>Oaktree Capital Management</strong> — $223B AUM (Dec 2025), credit-focused alternative investment manager founded by Howard Marks. 100% owned by Brookfield Asset Management since Oct 2025. ~1,400 employees across 26 global offices. Four strategies: Credit, Private Equity, Real Assets, Listed Equities.</p>
+<p style="margin-top:8px"><strong>Hyderabad GCC</strong> — Opened early 2025 at RMZ Nexity, HITEC City. Still in active buildout. Led by <strong>Vijay Padmanabhan</strong> (MD), hired from Invesco GCC where he ran 28 functions. New GCC = high visibility, flat decision layers, early-mover advantage.</p>
+<p style="margin-top:8px"><strong>Business Transformation dept</strong> — This is NOT the Information Solutions team (your existing Oaktree pipeline role). Strategy &amp; Ops sits across the entire back office, driving strategic priorities, managing consensus, and owning end-to-end programme delivery. Broader scope, higher seniority bar.</p>
+</div>
+
+<div class="card card-gold">
+<div class="card-title">Why This Role Fits (Short Version)</div>
+<p>This JD describes someone who builds governance in ambiguity, drives consensus across conflicting stakeholders, delivers complex multi-workstream programmes, grows direct reports, and operates with minimal oversight. That is a description of your Sobha role — with investment-management vocabulary overlaid. Your 14.9x scale is programme leadership. Your NPV AED 652M defence is consensus building at the executive level. Your risk register is issue resolution. Your PCC TAT redesign is process transformation. Your Sobha One App honest miss is the intellectual curiosity and self-awareness they prize.</p>
+<p style="margin-top:8px;font-style:italic;color:var(--oak-sage);">"I've been doing business transformation for six years — I just haven't been calling it that."</p>
+</div>
+
+<div class="card">
+<div class="card-title">Position in Your Pipeline</div>
+<p>This is a <strong>second Oaktree track</strong>, distinct from VP Info Solutions (78→85). Lower base fit (70 vs 78) primarily because this role explicitly demands 10+ years of financial services industry experience and Big 4/consulting background — harder gates than Info Solutions' BA/PM scope. However, the addressable ceiling is comparable (82 vs 85), and the CTC band is ~₹5–8L higher at P50. Treat as a parallel application within the same employer — if both roles are live, apply to both to demonstrate range across departments.</p>
+</div>
+
+<div class="card">
+<div class="card-title">Sub-Scores (Diagnostic)</div>
+<table class="tbl-sm">
+<tr><th>Dimension</th><th>Score</th><th>Note</th></tr>
+<tr><td>Functional</td><td>7/10</td><td>PM + transformation strong; FinServ domain gap drags</td></tr>
+<tr><td>Technical / Cert</td><td>7/10</td><td>Excel/PPT trivial; Jira/Confluence/Monday.com addressable</td></tr>
+<tr><td>Leadership / Vocab</td><td>7/10</td><td>Team scale overqualified; back-office transformation vocab needs ramp</td></tr>
+</table>
+</div>
+</div>
+
+<!-- ═══════════ TAB 02 — ROLE DECODE ═══════════ -->
+<div class="section" id="t1">
+<div class="sec-eyebrow">02 / Role Decode</div>
+<div class="sec-title">JD Decomposed Into Five Pillars</div>
+<div class="sec-sub">Every JD responsibility maps to one of five pillars. Your job is to have 2–3 STAR stories per pillar and speak the vocabulary naturally.</div>
+
+<div class="card card-forest">
+<div class="card-title">Pillar 1 — Programme &amp; Project Leadership</div>
+<p><strong>JD Language:</strong> "Owning end-to-end delivery of key projects/programs," "manage multiple highly visible initiatives with minimal oversight," "create and own project plan, project charter and other artifacts," "setting key performance indicators."</p>
+<p style="margin-top:8px"><strong>Your Sobha Proof:</strong> 14.9x programme scale (AED 867M→12.97B). 12 concurrent workstreams, all on schedule. 1,016-unit mortgage programme as sole coordinator over 24 months. 6+ MD-approved process documents (project charters equivalent). NPV AED 652M independently built and defended.</p>
+<p style="margin-top:8px"><strong>Translation:</strong> "I run the equivalent of a multi-workstream transformation programme with executive accountability, KPI ownership, and zero predecessor infrastructure."</p>
+</div>
+
+<div class="card card-forest">
+<div class="card-title">Pillar 2 — Stakeholder Management &amp; Consensus Building</div>
+<p><strong>JD Language:</strong> "Build and manage trusting relationships with stakeholders across functions," "manage multiple viewpoints from business stakeholders across departments on ambiguous topics to build consensus," "adjusting communication styles and presentations to the audience."</p>
+<p style="margin-top:8px"><strong>Your Sobha Proof:</strong> NPV AED 652M multi-round MD/CEO defence (zero material concessions). 6-stakeholder Salesforce discovery with conflicting requirements. Collections embedded into enterprise customer journey (CRO + CCO + Sales). 2026 goal framework securing cross-functional buy-in.</p>
+<p style="margin-top:8px"><strong>Translation:</strong> "I manage up to MD/CEO, lateral to peers across Commercial, Legal, and Finance, and down to a 77-person team. The NPV defence is consensus building under scrutiny."</p>
+</div>
+
+<div class="card card-forest">
+<div class="card-title">Pillar 3 — Process Transformation &amp; Change Management</div>
+<p><strong>JD Language:</strong> "Transformation, process improvement, change management," "develop new processes in collaboration with business; document and deliver trainings for BAU team," "help transform ideas, progress through blockers."</p>
+<p style="margin-top:8px"><strong>Your Sobha Proof:</strong> PCC TAT 20→3 days (85% reduction at 3× volume). Sobha One App 0→36% adoption (honest 17% miss → corrective redesign). Risk register: 14 findings → 97.5% error reduction → permanent governance tool. 55-day T−25/T+30 collection window framework designed from scratch.</p>
+<p style="margin-top:8px"><strong>Translation:</strong> "I redesign processes and transition them to BAU. The risk register started as an audit remediation — I turned it into a permanent governance tool. That's transformation embedded."</p>
+</div>
+
+<div class="card card-forest">
+<div class="card-title">Pillar 4 — Data Analysis &amp; Decision Support</div>
+<p><strong>JD Language:</strong> "Gather, document, analyze and draw conclusions regarding complex data," "succinctly present findings to various audiences," "working with and reviewing large sets of data including data manipulation in logical data structures and reconciliations."</p>
+<p style="margin-top:8px"><strong>Your Sobha Proof:</strong> 70+ live report ecosystem (Salesforce + Power BI + Azure SQL). PR rejection 49% root cause analysis via multi-source data diagnosis. 4-layer receipt reconciliation across AED 442M daily volume. NPV financial model built independently.</p>
+<p style="margin-top:8px"><strong>Translation:</strong> "I built the data infrastructure the function operates on — from zero. 70+ reports, live-connected to Azure SQL, consumed by 77 practitioners across two geographies."</p>
+</div>
+
+<div class="card card-forest">
+<div class="card-title">Pillar 5 — Team Leadership &amp; People Development</div>
+<p><strong>JD Language:</strong> "Effectively grow and manage direct reports both in their professional growth and in the successful delivery of their initiatives," "communicate across different audiences and ability to manage up, lateral and down."</p>
+<p style="margin-top:8px"><strong>Your Sobha Proof:</strong> 77-person cross-geography team (35 Dubai + 42 India). 3 direct report managers (Mathews Babu, Garima Shah, Asjad Mohammed). Succession evidence: team members now authoring MD-approved process documents autonomously (COL-PF14 proposed by direct report). MT→AGM career velocity in 6 years.</p>
+<p style="margin-top:8px"><strong>Translation:</strong> "I've grown people from task executors to document authors with MD sign-off authority. That's the people development this JD describes."</p>
+</div>
+
+<h3>Qualifications Checklist</h3>
+<table>
+<tr><th>Requirement</th><th>Your Match</th><th>Status</th></tr>
+<tr><td>10+ yrs transformation / PM / process improvement in FinServ</td><td>6+ yrs revenue-ops transformation at scale; no FinServ pedigree</td><td><span class="badge badge-gold">Partial</span></td></tr>
+<tr><td>Big 4 or comparable consulting experience (preferred)</td><td>No consulting background; position as "built what consultants recommend"</td><td><span class="badge badge-red">Gap</span></td></tr>
+<tr><td>Track record in advisory/transformation/PM</td><td>14.9x scale, PCC TAT, risk register, NPV AED 652M</td><td><span class="badge badge-forest">Strong</span></td></tr>
+<tr><td>Managing and growing direct reports</td><td>77-person team, 3 managers, succession evidence</td><td><span class="badge badge-forest">Strong</span></td></tr>
+<tr><td>Solid analytical skills, resolve complex problems</td><td>PR 49% root cause, 4-layer reconciliation, NPV model</td><td><span class="badge badge-forest">Strong</span></td></tr>
+<tr><td>Synthesize challenges and tell a story through materials</td><td>MD/CEO presentations, risk committee packs</td><td><span class="badge badge-forest">Strong</span></td></tr>
+<tr><td>Operating in the grey, establish structure in fluid environments</td><td>Built governance from scratch, no predecessor, no playbook</td><td><span class="badge badge-forest">Strong</span></td></tr>
+<tr><td>Large data sets, data manipulation, reconciliations</td><td>70+ reports, Azure SQL, 4-layer reconciliation</td><td><span class="badge badge-forest">Strong</span></td></tr>
+<tr><td>Excel, Word, PowerPoint</td><td>Core toolkit — trivial match</td><td><span class="badge badge-forest">Strong</span></td></tr>
+<tr><td>Jira/Confluence, Monday.com, Visio</td><td>Limited direct use; process mapping equivalent; addressable 1–2 wks</td><td><span class="badge badge-gold">Addressable</span></td></tr>
+</table>
+
+<div class="card card-gold">
+<div class="card-title">Unlock Phrase — Use This In Every Screen Call</div>
+<p style="font-style:italic;">"I run business transformation today — I just call it dues collection operations. I built governance architecture from scratch across a ₹14,000 Cr portfolio with no predecessor, no playbook, and no consulting firm to lean on. I've managed 77 people across two geographies, defended financial models at the MD/CEO level, redesigned processes that cut cycle times by 85%, and built the data infrastructure a 77-person function operates on. The reframe from real estate operations to investment management back-office is vocabulary, not capability."</p>
+</div>
+</div>
+
+<!-- ═══════════ TAB 03 — FIT & GAP ═══════════ -->
+<div class="section" id="t2">
+<div class="sec-eyebrow">03 / Fit &amp; Gap</div>
+<div class="sec-title">Your Evidence Measured Against Every Dimension</div>
+<div class="sec-sub">10-dimension scoring with score bridge from 70 (base) to 82 (addressable).</div>
+
+<div class="score-bridge">
+<div class="score-num" style="color:var(--oak-amber);">70</div>
+<div class="score-arrow">→</div>
+<div class="score-num" style="color:var(--oak-green);">82</div>
+<div style="flex:1;">
+<div class="score-track">
+<div class="score-fill" style="width:70%;"></div>
+<div class="score-marker" style="left:82%;"></div>
+</div>
+<div style="font-size:12px;color:var(--oak-ash);margin-top:8px;">+12 points addressable via: FinServ vocabulary immersion (+3) · consulting-equivalent framing (+3) · Jira/Confluence ramp (+2) · back-office transformation vocab (+2) · assertiveness positioning (+2)</div>
+</div>
+</div>
+
+<div class="fit-row"><div class="fit-lbl">Programme/Project Leadership</div><div class="fit-bar-wrap"><div class="fit-bar-fill fill-g" style="width:90%"></div></div><div class="fit-pct">9/10</div></div>
+<div class="fit-row"><div class="fit-lbl">Stakeholder &amp; Consensus Building</div><div class="fit-bar-wrap"><div class="fit-bar-fill fill-g" style="width:90%"></div></div><div class="fit-pct">9/10</div></div>
+<div class="fit-row"><div class="fit-lbl">Process Transformation</div><div class="fit-bar-wrap"><div class="fit-bar-fill fill-g" style="width:80%"></div></div><div class="fit-pct">8/10</div></div>
+<div class="fit-row"><div class="fit-lbl">Change Management</div><div class="fit-bar-wrap"><div class="fit-bar-fill fill-g" style="width:80%"></div></div><div class="fit-pct">8/10</div></div>
+<div class="fit-row"><div class="fit-lbl">Financial Services Domain</div><div class="fit-bar-wrap"><div class="fit-bar-fill fill-r" style="width:40%"></div></div><div class="fit-pct" style="color:var(--oak-red)">4/10</div></div>
+<div class="fit-row"><div class="fit-lbl">Big 4 / Consulting Pedigree</div><div class="fit-bar-wrap"><div class="fit-bar-fill fill-r" style="width:30%"></div></div><div class="fit-pct" style="color:var(--oak-red)">3/10</div></div>
+<div class="fit-row"><div class="fit-lbl">Data &amp; Analytics</div><div class="fit-bar-wrap"><div class="fit-bar-fill fill-a" style="width:70%"></div></div><div class="fit-pct">7/10</div></div>
+<div class="fit-row"><div class="fit-lbl">Tools (Jira/Monday/Visio)</div><div class="fit-bar-wrap"><div class="fit-bar-fill fill-a" style="width:60%"></div></div><div class="fit-pct">6/10</div></div>
+<div class="fit-row"><div class="fit-lbl">Team Leadership &amp; People Dev</div><div class="fit-bar-wrap"><div class="fit-bar-fill fill-g" style="width:90%"></div></div><div class="fit-pct">9/10</div></div>
+<div class="fit-row"><div class="fit-lbl">Communication &amp; Influence</div><div class="fit-bar-wrap"><div class="fit-bar-fill fill-a" style="width:70%"></div></div><div class="fit-pct">7/10</div></div>
+
+<h3>Strengths — Lead With These</h3>
+<div class="card card-sage"><p><strong>1. Built governance from scratch in ambiguity</strong> — No predecessor, no playbook, no consulting firm. You designed the entire operational architecture: 55-day collection window, risk register, MI ecosystem, process document library. This IS "operating in the grey and establishing structure."</p></div>
+<div class="card card-sage"><p><strong>2. Consensus building at executive altitude</strong> — NPV AED 652M defended at MD/CEO level through multiple scrutiny rounds. 6-stakeholder Salesforce discovery with conflicting requirements resolved into a unified platform. 2026 goal framework securing cross-functional buy-in from CRO, CCO, and Sales.</p></div>
+<div class="card card-sage"><p><strong>3. Team leadership overqualified</strong> — 77-person team with 3 direct managers is larger than most VP-level transformation teams. Succession evidence (COL-PF14 authored by direct report) directly answers "grow direct reports in their professional growth."</p></div>
+<div class="card card-sage"><p><strong>4. Process transformation with quantified results</strong> — PCC TAT 20→3 days at 3× volume. PR rejection 49% → continuous monitoring. Risk register 14 findings → 97.5% error reduction. These are consulting-grade outcomes without a consulting methodology label.</p></div>
+<div class="card card-sage"><p><strong>5. Honest self-reporting differentiator</strong> — Sobha One App: 80% target, 17% actual, reported exactly as is. "I'd rather own a miss than hide one." This answers "Intellectual Curiosity" and "Judgment" from Personal Attributes.</p></div>
+
+<h3>Gaps — Address These</h3>
+<div class="card card-red"><p><strong>1. Financial services domain (hardest gap)</strong> — Zero institutional buy-side experience. 10+ years in FinServ is a steep bar. Mitigation: Howard Marks' 3 most recent memos + Oaktree annual letter + "I bring operating transformation discipline that doesn't require fund-specific credentials."</p></div>
+<div class="card card-red"><p><strong>2. Big 4 / consulting pedigree</strong> — No Deloitte, McKinsey, Accenture, or equivalent on resume. Mitigation: "I built what Big 4 practices recommend — from scratch, in an operating role, with P&amp;L accountability. Consultants write frameworks; I built and lived them."</p></div>
+<div class="card card-amber"><p><strong>3. Jira/Confluence/Monday.com</strong> — Limited direct tool experience. Mitigation: Free-tier self-study (1–2 weeks). Frame as "I've managed equivalent project governance in Salesforce + SharePoint; tooling is the easiest ramp."</p></div>
+<div class="card card-amber"><p><strong>4. Back-office transformation vocabulary</strong> — STP, exception management, operating model design, T+1/T+2 settlement — alt-investment-specific terms. Mitigation: Vocabulary bank (Tab 3 below) + Howard Marks immersion.</p></div>
+<div class="card card-amber"><p><strong>5. Senior-forum assertiveness</strong> — DISC Low-D profile creates perceived hesitancy in high-pressure forums. Mitigation: Three proof points (S2, S5, S25) pre-loaded for assertiveness challenges.</p></div>
+
+<h3>Domain Vocabulary — Translation Bridge</h3>
+<div class="vocab-row head"><span>Oaktree Term</span><span>Definition</span><span>Your Sobha Equivalent</span></div>
+<div class="vocab-row"><span>Business Transformation</span><span>Org-wide change programme across process, technology, and people</span><span>14.9x revenue ops transformation (2019–2025)</span></div>
+<div class="vocab-row"><span>Back Office</span><span>Post-trade operations: settlement, reconciliation, reporting, compliance</span><span>Collections operations (accounts, payments, documentation)</span></div>
+<div class="vocab-row"><span>Operating Model Design</span><span>Target-state org + process + technology blueprint</span><span>55-day collection window framework + 3-team model</span></div>
+<div class="vocab-row"><span>Project Charter</span><span>Formal document authorising a project and defining scope</span><span>MD-approved process documents (COL-PF01 through COL-PF14)</span></div>
+<div class="vocab-row"><span>RAID Log</span><span>Risks, Assumptions, Issues, Dependencies tracker</span><span>14-finding risk register with weekly closure cadence</span></div>
+<div class="vocab-row"><span>KPI / OKR</span><span>Performance metrics tied to strategic outcomes</span><span>Collections efficiency, PR rejection rate, PCC TAT, CSAT</span></div>
+<div class="vocab-row"><span>BAU Transition</span><span>Handing new process from project mode to steady-state operations</span><span>Risk register → permanent governance tool; quality scorecard BAU</span></div>
+<div class="vocab-row"><span>STP (Straight-Through Processing)</span><span>Fully automated end-to-end transaction flow with zero manual touch</span><span>Automated receipt-to-allocation pipeline</span></div>
+<div class="vocab-row"><span>Reconciliation</span><span>Matching records across systems to confirm accuracy</span><span>4-layer receipt reconciliation (AED 442M daily)</span></div>
+<div class="vocab-row"><span>Exception Management</span><span>Handling items that fail automated processing</span><span>PR rejection queue + unallocated receipts (AED 475M)</span></div>
+<div class="vocab-row"><span>Third-Party Vendor</span><span>External service providers integrated into operations</span><span>10-bank infrastructure, Salesforce implementation partner</span></div>
+<div class="vocab-row"><span>Consensus Building</span><span>Aligning diverse stakeholder views to unified decisions</span><span>NPV AED 652M multi-round approval across MD/CEO/CRO/CCO</span></div>
+<div class="vocab-row"><span>Operating in the Grey</span><span>Making progress without clear rules, precedent, or structure</span><span>Built governance from zero: no predecessor, no playbook, no consulting</span></div>
+<div class="vocab-row"><span>SME (Subject Matter Expert)</span><span>Recognised domain authority within initiative scope</span><span>AGM-level collections domain expertise across 4 entities</span></div>
+<div class="vocab-row"><span>Stakeholder Alignment Matrix</span><span>Map of stakeholder influence, interest, and engagement strategy</span><span>CRO/CCO/MD/Sales/Legal engagement map for NPV approval</span></div>
+<div class="vocab-row"><span>Product Management (in context)</span><span>Owning the roadmap of tools/platforms supporting operations</span><span>Salesforce enhancement pipeline + Power BI dashboard roadmap</span></div>
+<div class="vocab-row"><span>Prioritisation Framework</span><span>Decision model for sequencing competing demands</span><span>T−25/T+30 critical collection window (triage by urgency and value)</span></div>
+<div class="vocab-row"><span>Jira / Confluence</span><span>Atlassian project/knowledge management stack</span><span>Salesforce task management + SharePoint documentation</span></div>
+<div class="vocab-row"><span>Monday.com</span><span>Visual work management for cross-functional tracking</span><span>Cross-functional Salesforce dashboards + team action trackers</span></div>
+<div class="vocab-row"><span>Visio</span><span>Microsoft process mapping and diagramming tool</span><span>PCC workflow process maps, collections SOP flowcharts</span></div>
+</div>
+
+<!-- ═══════════ TAB 04 — STAR MAPPING ═══════════ -->
+<div class="section" id="t3">
+<div class="sec-eyebrow">04 / STAR Mapping</div>
+<div class="sec-title">Five Stories Matched to Five Pillars</div>
+<div class="sec-sub">Each story maps to the pillar it serves. All referenced from STAR_STORY_BANK_V3.</div>
+
+<div class="card card-forest">
+<div class="card-title">S16 → Pillar 1: Programme Leadership — 14.9× Scale Transformation</div>
+<p><strong>S:</strong> AED 867M baseline, no governance, no MI infrastructure (2021). Collections function operating on fragmented spreadsheets.</p>
+<p><strong>T:</strong> Scale delivery 14.9× while simultaneously building governance architecture and reducing delinquency.</p>
+<p><strong>A:</strong> Designed governance architecture from scratch. Built 70+ report Salesforce MI ecosystem. Led 77-person cross-geography team (Dubai + India). Established KPI frameworks, process documentation library, risk controls.</p>
+<p><strong>R:</strong> AED 12.97B by 2025 (14.9×). Delinquency 16.7%→4.4% (−74%). AED 652M NPV from incentive design.</p>
+<p style="margin-top:8px;"><strong>Oaktree framing:</strong> "This is end-to-end programme delivery at enterprise scale — I owned the charter, the KPIs, the stakeholders, and the outcomes. No project office. No consulting support. Just execution."</p>
+</div>
+
+<div class="card card-gold">
+<div class="card-title">S5 → Pillar 2: Stakeholder &amp; Consensus — NPV AED 652M Multi-Round Defence</div>
+<p><strong>S:</strong> Early-payment incentive programme required MD/CEO sign-off. Commercial case challenged on risk, cost, and ROI by multiple senior stakeholders.</p>
+<p><strong>T:</strong> Build, defend, and secure approval for a complex financial model — independently, with no financial analyst support.</p>
+<p><strong>A:</strong> Built NPV model from first principles. Prepared scenario analysis with sensitivity tables. Presented to MD, CFO, and CRO through three review rounds. Addressed every challenge with data. Zero material concessions.</p>
+<p><strong>R:</strong> AED 652M NPV approved. Programme generated measurable portfolio acceleration. Model became template for future incentive designs.</p>
+<p style="margin-top:8px;"><strong>Oaktree framing:</strong> "This is managing multiple viewpoints on an ambiguous topic to build consensus. Three rounds of executive scrutiny, zero concessions — because the data was airtight."</p>
+</div>
+
+<div class="card card-sage">
+<div class="card-title">S18 → Pillar 3: Process Transformation — PCC TAT 20d → 3d at 3× Volume</div>
+<p><strong>S:</strong> Post-Completion Certificate process averaging 20-day TAT, causing revenue leakage. No process map existed.</p>
+<p><strong>T:</strong> Redesign end-to-end workflow without increasing headcount.</p>
+<p><strong>A:</strong> Mapped full process flow for the first time. Identified bottlenecks at verification and approval stages. Eliminated redundant steps. Built daily TAT + volume dashboards for real-time monitoring.</p>
+<p><strong>R:</strong> TAT 20→3 days (85% reduction). Monthly volume ~90→281 (3×). Zero headcount increase.</p>
+<p style="margin-top:8px;"><strong>Oaktree framing:</strong> "Textbook process transformation — mapped, diagnosed, redesigned, and transitioned to BAU. The dashboards I built are still the governance tool today."</p>
+</div>
+
+<div class="card card-forest">
+<div class="card-title">S1 → Pillar 4: Data &amp; Issue Resolution — 14-Finding Audit → 97.5% Error Reduction</div>
+<p><strong>S:</strong> Internal audit identified 14 control failures in collections data-processing workflow. Live operations at risk.</p>
+<p><strong>T:</strong> Lead remediation without disrupting live operations while building a permanent control framework.</p>
+<p><strong>A:</strong> Multi-source root cause analysis across 14 findings. Built risk register with weekly closure cadence, owner per item, evidence criterion. Designed corrective-action programme. Became permanent audit SPOC.</p>
+<p><strong>R:</strong> 97.5% error reduction. Risk register now permanent governance tool. Zero recurrence.</p>
+<p style="margin-top:8px;"><strong>Oaktree framing:</strong> "This is the risk and issue resolution process the JD describes — I built it from an audit finding, not from a template. The register is alive and operating today."</p>
+</div>
+
+<div class="card card-gold">
+<div class="card-title">S24 → Personal Attributes: Intellectual Curiosity — Honest Adoption Miss</div>
+<p><strong>S:</strong> Sobha One App roll-out targeted 80% adoption for payment request submissions via mobile.</p>
+<p><strong>T:</strong> Drive adoption across the 77-person team and report progress to leadership.</p>
+<p><strong>A:</strong> Tracked adoption metrics honestly. At checkpoint, actual adoption was 17% — far below target. Reported the miss exactly as it was. Root-caused: skipped the "why" conversation with end users. For the next rollout (Salesforce quality scorecard), front-loaded behavioural change work.</p>
+<p><strong>R:</strong> 17% honest reporting. Corrective approach hit adoption curve on next rollout.</p>
+<p style="margin-top:8px;"><strong>Oaktree framing:</strong> "I'd rather own a miss than hide one. The key line: the target was 80%, we hit 17%, I reported it exactly as it was. Interviewers hear hundreds of scripted wins — they remember the one candidate who self-reports accurately."</p>
+</div>
+</div>
+
+<!-- ═══════════ TAB 05 — 30·60·90 ═══════════ -->
+<div class="section" id="t4">
+<div class="sec-eyebrow">05 / 30·60·90</div>
+<div class="sec-title">First 90 Days — Listen, Map, Deliver</div>
+<div class="sec-sub">Structured entry plan for a VP joining the Strategy &amp; Ops team within Business Transformation at a greenfield GCC.</div>
+
+<h3>Days 1–30 · Listen &amp; Absorb</h3>
+<div class="tl-item"><div class="tl-marker">01</div><div class="tl-body"><strong>Meet every stakeholder in the Business Transformation ecosystem</strong> — Strategy &amp; Ops peers, Product Management, Technology, Data, Operations, and third-party vendors. Understand reporting lines, decision rights, and informal influence maps.</div></div>
+<div class="tl-item"><div class="tl-marker">02</div><div class="tl-body"><strong>Shadow the 3 highest-visibility active initiatives</strong> — understand scope, blockers, governance cadence, and stakeholder dynamics. Don't change anything yet.</div></div>
+<div class="tl-item"><div class="tl-marker">03</div><div class="tl-body"><strong>Audit existing project governance artifacts</strong> — project charters, RAID logs, KPI dashboards, status reports. Identify format inconsistencies and reporting gaps.</div></div>
+<div class="tl-item"><div class="tl-marker">04</div><div class="tl-body"><strong>Build a domain immersion plan</strong> — read the last 3 Howard Marks memos, the Oaktree annual letter, and the Brookfield integration context. Understand how Credit, PE, Real Assets, and Listed Equities differ operationally.</div></div>
+<div class="tl-item"><div class="tl-marker">05</div><div class="tl-body"><strong>Identify the 3 highest-pain operational bottlenecks</strong> — what breaks most often, where do errors originate, which processes have the longest cycle times. Build a quantified impact assessment.</div></div>
+<div class="tl-item"><div class="tl-marker">06</div><div class="tl-body"><strong>Establish 1:1 rhythm with direct reports</strong> — understand their development goals, current workload, and blockers. Set expectations on communication cadence and decision escalation.</div></div>
+
+<h3>Days 31–60 · Map &amp; Diagnose</h3>
+<div class="tl-item"><div class="tl-marker gold">07</div><div class="tl-body"><strong>For each top-3 bottleneck, produce a current-state process map</strong> with quantified impact: break rate, TAT, rework hours, stakeholder handoff count.</div></div>
+<div class="tl-item"><div class="tl-marker gold">08</div><div class="tl-body"><strong>Identify 2 quick wins and 1 structural redesign</strong> — quick wins ship within 60 days; structural redesign gets a 6-month roadmap proposal.</div></div>
+<div class="tl-item"><div class="tl-marker gold">09</div><div class="tl-body"><strong>Standardise project governance templates</strong> — project charter, RAID log, status report, KPI dashboard. Ensure every active initiative uses a consistent format.</div></div>
+<div class="tl-item"><div class="tl-marker gold">10</div><div class="tl-body"><strong>Present initial findings to Vijay Padmanabhan and hiring manager</strong> — not a critique, but a "here's what I see, here's what I recommend, here's what I need" deck. Validate before committing.</div></div>
+<div class="tl-item"><div class="tl-marker gold">11</div><div class="tl-body"><strong>Propose a stakeholder alignment matrix</strong> — map every Business Transformation initiative to its sponsor, RACI, and decision escalation path.</div></div>
+
+<h3>Days 61–90 · Deliver &amp; Establish Rhythm</h3>
+<div class="tl-item"><div class="tl-marker sage">12</div><div class="tl-body"><strong>Ship first quick win</strong> — ideally a new SOP, a dashboard, or a process simplification that makes a visible pain point disappear. Demonstrate value before proposing structural change.</div></div>
+<div class="tl-item"><div class="tl-marker sage">13</div><div class="tl-body"><strong>Present the structural redesign proposal</strong> with a 6-month roadmap, resource requirements, KPIs, and phased delivery milestones.</div></div>
+<div class="tl-item"><div class="tl-marker sage">14</div><div class="tl-body"><strong>Establish a recurring governance cadence</strong> — weekly initiative status review, monthly exec summary, quarterly strategic alignment check. Own the rhythm, not just the reports.</div></div>
+<div class="tl-item"><div class="tl-marker sage">15</div><div class="tl-body"><strong>Conduct first direct report development review</strong> — tie individual growth plans to initiative delivery. Set 90-day OKRs for each direct report.</div></div>
+<div class="tl-item"><div class="tl-marker sage">16</div><div class="tl-body"><strong>Build credibility artifact</strong> — a single deliverable (process map, KPI dashboard, or governance framework) that becomes the team's reference point. Make it visible to US/HQ stakeholders.</div></div>
+</div>
+
+<!-- ═══════════ TAB 06 — AI DIFFERENTIATOR ═══════════ -->
+<div class="section" id="t5">
+<div class="sec-eyebrow">06 / AI Differentiator</div>
+<div class="sec-title">Three AI Projects Mapped to This Role</div>
+<div class="sec-sub">Your AI portfolio is the sharpest competitive edge. No other candidate at this level builds production AI tools.</div>
+
+<div class="card card-forest">
+<div class="card-title">P1 — Programme Health Tracker (Claude API + Streamlit)</div>
+<p><strong>What it does:</strong> Ingests project status data (milestones, risks, blockers, resource utilisation) and generates AI-powered health narratives with recommended interventions. Flags projects trending red before they miss deadlines.</p>
+<p><strong>JD mapping:</strong> "Setting key performance indicators to measure project performance and intended outcomes" + "manage risk and issue resolution process."</p>
+<p><strong>Interview line:</strong> "I built an AI tool that does what this role does — monitor programme health, flag risks, and generate executive narratives. I can show you the prototype."</p>
+<p><strong>Stack:</strong> Python + Streamlit + Claude API + mock project data</p>
+</div>
+
+<div class="card card-gold">
+<div class="card-title">P11 — Information Solutions Health Dashboard (Claude API + Streamlit)</div>
+<p><strong>What it does:</strong> Monitors data quality KPIs (reconciliation exception rates, NAV variance, trade break frequency), generates AI anomaly narratives, and recommends investigation steps. Fund-ops simulation using mock data.</p>
+<p><strong>JD mapping:</strong> "Gather, document, analyze and draw conclusions regarding complex data" + "working with and reviewing large sets of data."</p>
+<p><strong>Interview line:</strong> "I built this to prepare for Oaktree specifically — it simulates the kind of data-quality monitoring a Business Transformation team would want to implement."</p>
+<p><strong>Stack:</strong> Python + Streamlit + Claude API + mock fund-ops data</p>
+</div>
+
+<div class="card card-sage">
+<div class="card-title">P9 — Risk Committee Pack Generator (Claude API + Streamlit)</div>
+<p><strong>What it does:</strong> Takes raw risk register data (findings, owners, deadlines, status) and generates a formatted executive risk pack with AI-written commentary on trends, escalation recommendations, and closure forecasts.</p>
+<p><strong>JD mapping:</strong> "Succinctly present findings to various audiences in a consumable presentation" + "manage risk and issue resolution."</p>
+<p><strong>Interview line:</strong> "I automated the risk reporting I used to do manually for the CRO. It takes the RAID log and generates a board-ready pack."</p>
+<p><strong>Stack:</strong> Python + Streamlit + Claude API + risk register template</p>
+</div>
+
+<div class="card">
+<div class="card-title">The Pitch (Use This)</div>
+<p>"Most candidates at my level talk about AI. I build it. I've shipped 16+ tools using Claude API, Python, and Streamlit — including programme health trackers, risk committee pack generators, and data quality dashboards. These aren't prototypes — they're operational tools that solve the same problems this role manages. I built what GBAI does, different domain."</p>
+</div>
+</div>
+
+<!-- ═══════════ TAB 07 — INTERVIEW KIT ═══════════ -->
+<div class="section" id="t6">
+<div class="sec-eyebrow">07 / Interview Kit</div>
+<div class="sec-title">22 Questions with STAR Routing</div>
+<div class="sec-sub">Likely interview loop: HR screen → Hiring Manager (Strategy &amp; Ops lead) → Cross-functional peers → Vijay Padmanabhan (MD) → US/HQ virtual.</div>
+
+<div class="qa-card"><div class="qa-q">"Walk me through your career."</div><div class="qa-a">Lead with S14 (MT→AGM velocity), pivot to S16 (14.9× scale), close with why you're here.</div><div class="qa-star">Primary: S14 · Backup: S16</div></div>
+<div class="qa-card"><div class="qa-q">"Describe a complex process you redesigned."</div><div class="qa-a">S18 (PCC TAT 20→3d). Emphasise: mapped first, diagnosed bottlenecks, shipped daily dashboards for BAU monitoring.</div><div class="qa-star">Primary: S18 · Backup: S36</div></div>
+<div class="qa-card"><div class="qa-q">"Tell me about managing competing priorities."</div><div class="qa-a">S9 (4 entities, 7 IOMs, 70+ reports). Frame: unified governance, not siloed teams.</div><div class="qa-star">Primary: S9 · Backup: S16</div></div>
+<div class="qa-card"><div class="qa-q">"How do you build consensus among conflicting stakeholders?"</div><div class="qa-a">S5 (NPV defence). Key line: "Three rounds of executive scrutiny. Zero material concessions. Because the data was airtight."</div><div class="qa-star">Primary: S5 · Backup: S8</div></div>
+<div class="qa-card"><div class="qa-q">"Tell me about a change initiative that failed or underperformed."</div><div class="qa-a">S24 (Sobha One App honest story). Key line: "80% target, 17% actual. I reported it exactly as it was."</div><div class="qa-star">Primary: S24</div></div>
+<div class="qa-card"><div class="qa-q">"How do you handle stakeholder pushback?"</div><div class="qa-a">S2 (PR rejection 49%). Key line: "I held the standard because the data supported the position."</div><div class="qa-star">Primary: S2 · Backup: S5</div></div>
+<div class="qa-card"><div class="qa-q">"How do you operate in ambiguous environments?"</div><div class="qa-a">S3 (55-day collection window). Key: "I build frameworks that convert ambiguity into structured decisions."</div><div class="qa-star">Primary: S3 · Backup: S15</div></div>
+<div class="qa-card"><div class="qa-q">"Tell me about managing a risk or issue to resolution."</div><div class="qa-a">S1 (14-finding audit). Full RAID-equivalent story.</div><div class="qa-star">Primary: S1 · Backup: S22</div></div>
+<div class="qa-card"><div class="qa-q">"How do you set KPIs for a new initiative?"</div><div class="qa-a">S19 (AED 10B target framework). Frame: "I designed the KPI architecture that a 77-person team operates against."</div><div class="qa-star">Primary: S19 · Backup: S11</div></div>
+<div class="qa-card"><div class="qa-q">"Describe how you grow direct reports."</div><div class="qa-a">S12 (team capability). Key line: "Team members progressed from task executors to authoring MD-approved documents autonomously."</div><div class="qa-star">Primary: S12 · Backup: S13</div></div>
+<div class="qa-card"><div class="qa-q">"How would you approach your first 90 days?"</div><div class="qa-a">Use the 30·60·90 framework from Tab 5. Tailor to their specific context based on what you learn in the interview.</div><div class="qa-star">See Tab 5</div></div>
+<div class="qa-card"><div class="qa-q">"Tell me about using data to drive a decision."</div><div class="qa-a">S6 (70+ reports). Frame: "I built the data infrastructure the entire function operates on."</div><div class="qa-star">Primary: S6 · Backup: S34</div></div>
+<div class="qa-card"><div class="qa-q">"How do you manage up to senior leadership?"</div><div class="qa-a">S5 (NPV at MD/CEO level) + S21 (process library with MD sign-off). Frame: "I present to the same altitude this role requires."</div><div class="qa-star">Primary: S5 · Backup: S21</div></div>
+<div class="qa-card"><div class="qa-q">"Tell me about transitioning a project to BAU."</div><div class="qa-a">S1 (risk register → permanent governance). S18 (PCC dashboards now BAU monitoring tool).</div><div class="qa-star">Primary: S1 · Backup: S18</div></div>
+<div class="qa-card"><div class="qa-q">"How do you manage third-party vendors?"</div><div class="qa-a">S32 (10-bank infrastructure, AED 442M daily). S23 (Mortgage MOU coordination).</div><div class="qa-star">Primary: S32 · Backup: S23</div></div>
+<div class="qa-card"><div class="qa-q">"Tell me about a time you had to learn a new domain fast."</div><div class="qa-a">Real estate collections 2020 — zero industry knowledge, MT to AGM by 2022. Frame intellectual curiosity and speed of domain ramp.</div><div class="qa-star">Primary: S14</div></div>
+<div class="qa-card"><div class="qa-q">"Describe your approach to project documentation."</div><div class="qa-a">S21 (6+ MD-approved process documents). Frame: "I wrote the charter, the SOP, the training materials, and the governance cadence."</div><div class="qa-star">Primary: S21</div></div>
+<div class="qa-card"><div class="qa-q">"How do you handle multiple projects with minimal oversight?"</div><div class="qa-a">S16 (12 concurrent workstreams, all on schedule). S23 (1,016-unit mortgage as sole coordinator).</div><div class="qa-star">Primary: S16 · Backup: S23</div></div>
+<div class="qa-card"><div class="qa-q">"What's your biggest weakness?"</div><div class="qa-a">S15 (decision hesitation). Key: "My tendency is to want all the data. I've learned to act on 70% and course-correct."</div><div class="qa-star">Primary: S15</div></div>
+<div class="qa-card"><div class="qa-q">"Why are you leaving your current role?"</div><div class="qa-a">"I've scaled this function 14.9×, built the team's capability to operate independently, and I'm ready for the next transformation challenge. Oaktree's Hyderabad GCC — building a function from the ground up at a $223B AUM firm — is exactly that."</div><div class="qa-star">No STAR needed</div></div>
+<div class="qa-card"><div class="qa-q">"Why Oaktree specifically?"</div><div class="qa-a">"Three reasons: (1) I've read Howard Marks — the investment philosophy of risk control resonates with how I think about operations. (2) Your Hyderabad GCC is in buildout — I've built from scratch before and I'm energised by greenfield. (3) Business Transformation is what I do; the vocabulary changes, the discipline doesn't."</div><div class="qa-star">No STAR needed</div></div>
+<div class="qa-card"><div class="qa-q">"You don't have financial services experience. How do you bridge that?"</div><div class="qa-a">"Fair question. My argument: transformation discipline is transferable; domain vocabulary is learnable. I managed a ₹14,000 Cr portfolio with reconciliation, risk governance, KPI architecture, and executive reporting — the structure maps directly. What I don't have is fund-specific terminology, and I'm already immersing in that: Howard Marks' memos, IBOR/ABOR concepts, NAV processes. I closed my last domain gap (from zero to AGM in real estate) in under two years."</div><div class="qa-star">No STAR needed</div></div>
+
+<h3>5 Questions to Ask Them</h3>
+<div class="card"><p><strong>1.</strong> "What does the Business Transformation team own end-to-end today vs. what's still shared with LA/NY, and how do you see that split evolving as the GCC matures?"</p></div>
+<div class="card"><p><strong>2.</strong> "Which back-office domain is furthest along in transformation, and which is the next priority — and what does 'done' look like for each?"</p></div>
+<div class="card"><p><strong>3.</strong> "How does the Strategy &amp; Ops team interact with Product Management — is it a dotted line or a hard boundary?"</p></div>
+<div class="card"><p><strong>4.</strong> "What's the team composition today — how many direct reports would this VP manage, and what's their experience level?"</p></div>
+<div class="card"><p><strong>5.</strong> "How does Brookfield's ownership influence operating model decisions, tooling choices, or reporting lines?"</p></div>
+</div>
+
+<!-- ═══════════ TAB 08 — COMP INTEL ═══════════ -->
+<div class="section" id="t7">
+<div class="sec-eyebrow">08 / Comp Intel</div>
+<div class="sec-title">Compensation Intelligence — Triangulated</div>
+<div class="sec-sub">Confidence: 5/10 (Low-Moderate). "VP Strategy &amp; Ops, Business Transformation" at a boutique alt-investment GCC in Hyderabad is an extremely thin data category.</div>
+
+<table>
+<tr><th>Percentile</th><th>Fixed</th><th>Bonus %</th><th>Bonus ₹</th><th>LTI ₹</th><th>Total Target</th></tr>
+<tr><td>P25</td><td>₹38L</td><td>20%</td><td>₹7.6L</td><td>0</td><td>~₹46L</td></tr>
+<tr><td><strong>P50</strong></td><td><strong>₹48L</strong></td><td><strong>25%</strong></td><td><strong>₹12L</strong></td><td><strong>₹5–8L</strong></td><td><strong>₹65–68L</strong></td></tr>
+<tr><td>P75</td><td>₹58L</td><td>25–30%</td><td>₹15–17L</td><td>₹8–12L</td><td>~₹83L</td></tr>
+<tr><td>P90</td><td>₹70L</td><td>30%</td><td>₹21L</td><td>₹15–20L</td><td>~₹106L</td></tr>
+</table>
+
+<div class="card card-gold">
+<div class="card-title">Why This Sits Higher Than Info Solutions (₹55–65L P50)</div>
+<p>The JD demands 10+ years (vs 8+), explicitly asks for Big 4-calibre talent, and positions this person as a "leader within the group driving department priorities" — not a single-function BA/PM. The scope is back-office-wide transformation, not one information solutions vertical. That seniority and breadth commands a ₹5–8L premium even at the same employer and GCC.</p>
+</div>
+
+<div class="card">
+<div class="card-title">Comp Mechanics</div>
+<p><strong>LTI structure:</strong> Oaktree's LTI is typically deferred cash or co-investment, not equity/RSUs (private firm, Brookfield subsidiary). Vesting likely 3–4 years with clawback provisions. The Hyderabad GCC already has a Senior Manager role managing employee investment fund programs, LTI, and co-investment operations — confirming these structures are live for India hires.</p>
+<p style="margin-top:8px"><strong>GCC premium:</strong> Hyderabad GCC leadership roles command 25–30% higher median salaries than traditional IT services, with niche skills driving 20–40% premiums. Variable pay at GCC senior leadership has surged to ~16% of fixed salary.</p>
+</div>
+
+<div class="card card-forest">
+<div class="card-title">Against Your Floors</div>
+<p>Walk-away: <strong>₹42L all-in for VP-track</strong>. This role clears your floor even at P25 (₹46L). The P50 target of ₹65–68L is strong for Hyderabad and competitive against your existing pipeline roles.</p>
+<p style="margin-top:8px"><strong>Pipeline context:</strong> Uber L5B ₹110–120L (highest ceiling) → AmEx Director ~₹82L → <strong>This role ₹65–68L</strong> → Oaktree Info Solutions ₹55–65L → MS BizMgr OPG ₹55–70L.</p>
+</div>
+
+<div class="card">
+<div class="card-title">Sources</div>
+<p>Glassdoor Oaktree VP ($283K avg US, 52 salaries), PayScale VP Ops Hyderabad (₹32.5L median base), H1B data (VP Internal Audit $177K), GCC salary benchmarks (Zyoin, HRBX, Zinnov 2026 reports), Michael Page India, existing Info Solutions estimate (Playbook v1). No direct Oaktree India data exists — all triangulated.</p>
+</div>
+</div>
+
+<!-- ═══════════ TAB 09 — CERT ROADMAP ═══════════ -->
+<div class="section" id="t8">
+<div class="sec-eyebrow">09 / Cert Roadmap</div>
+<div class="sec-title">Certification Landscape</div>
+<div class="sec-sub">JD is silent on certifications. Cert footprint triaged via team LinkedIn and prior JDs.</div>
+
+<table>
+<tr><th>Cert</th><th>Relevance</th><th>Weight</th><th>Timeline</th><th>Status</th></tr>
+<tr><td>PMI-ACP (Agile Certified Practitioner)</td><td>Transformation + agile PM methodology — validates structured approach without Big 4 pedigree</td><td><span class="badge badge-gold">MEDIUM</span></td><td>6–8 weeks</td><td>Priority — in pipeline</td></tr>
+<tr><td>PMP (Project Management Professional)</td><td>Gold standard PM cert — compensates for no consulting background</td><td><span class="badge badge-gold">MEDIUM</span></td><td>8–12 weeks</td><td>Consider if PMI-ACP doesn't suffice</td></tr>
+<tr><td>Lean Six Sigma Green Belt</td><td>Process improvement methodology — directly answers "Big 4 type" preference</td><td><span class="badge badge-gold">MEDIUM</span></td><td>4–6 weeks</td><td>Strongest Big 4-equivalent signal</td></tr>
+<tr><td>AZ-900 (Azure Fundamentals)</td><td>Cloud/data literacy signal — relevant to tech stakeholder credibility</td><td><span class="badge badge-ash">MED-LOW</span></td><td>2–3 weeks</td><td>In progress</td></tr>
+<tr><td>Jira Fundamentals</td><td>Direct JD requirement (Jira/Confluence expertise)</td><td><span class="badge badge-gold">MEDIUM</span></td><td>1 week (free)</td><td>Self-study — Atlassian University</td></tr>
+<tr><td>Confluence Fundamentals</td><td>Direct JD requirement</td><td><span class="badge badge-gold">MEDIUM</span></td><td>1 week (free)</td><td>Self-study — Atlassian University</td></tr>
+<tr><td>Monday.com Certification</td><td>Direct JD requirement</td><td><span class="badge badge-ash">MED-LOW</span></td><td>3–5 days (free)</td><td>Monday.com Academy</td></tr>
+<tr><td>CRISC</td><td>Risk and controls — strengthens risk governance narrative</td><td><span class="badge badge-ash">LOW</span></td><td>3–4 months</td><td>AmEx track primarily</td></tr>
+</table>
+
+<div class="card card-gold">
+<div class="card-title">Recommended Sequencing</div>
+<p><strong>Week 1–2:</strong> Jira + Confluence fundamentals (free, Atlassian University) — directly addresses JD tool requirement. Monday.com certification (3–5 days, free).</p>
+<p><strong>Week 3–4:</strong> Continue AZ-900 (in progress). Begin Lean Six Sigma Green Belt self-study — this is the single strongest signal to compensate for the Big 4 gap.</p>
+<p><strong>Week 5–8:</strong> PMI-ACP prep (overlaps with existing pipeline priority). LSSGB completion.</p>
+</div>
+
+<div class="card">
+<div class="card-title">Cert Footprint — LinkedIn Triage</div>
+<p><strong>Sample:</strong> Oaktree Strategy &amp; Ops team members on LinkedIn show PMP, Lean Six Sigma, and Jira certifications as common. No mandatory certification gate visible in JD or prior postings. Confidence: Low (small sample, new GCC team). The JD's emphasis on "Big 4 type" experience suggests methodology fluency is valued more than specific cert badges — LSSGB or PMP would be the strongest proxy.</p>
+</div>
+</div>
+
+<!-- ═══════════ TAB 10 — CLOSE & OUTREACH ═══════════ -->
+<div class="section" id="t9">
+<div class="sec-eyebrow">10 / Close &amp; Outreach</div>
+<div class="sec-title">Application Strategy &amp; Outreach Plan</div>
+<div class="sec-sub">Dual-path: direct application + referral. Referral is decisive at Oaktree's scale (1,400 employees, tight-knit culture).</div>
+
+<div class="card card-forest">
+<div class="card-title">Application Path</div>
+<p><strong>Direct:</strong> Apply via LinkedIn or oaktreecapital.com/careers. Tailor resume headline to "Business Transformation &amp; Programme Leadership" — not "Collections" or "Dues."</p>
+<p><strong>Referral hunt:</strong> IIM Udaipur alumni at Oaktree / Brookfield / Invesco GCC (Vijay Padmanabhan's former employer). BITS Pilani network at Brookfield India. LinkedIn 2nd-degree connections at Oaktree Hyderabad.</p>
+<p><strong>Dual-track with Info Solutions:</strong> If both roles are live, apply to both. Frame as "I'm interested in Business Transformation broadly — my skill set spans both Strategy &amp; Ops and Information Solutions." This demonstrates range, not desperation.</p>
+</div>
+
+<div class="card card-gold">
+<div class="card-title">Cover Note Framework (300 words)</div>
+<p><strong>Para 1 (Hook):</strong> "I've spent six years building what your JD describes — governance architecture from scratch, consensus across conflicting stakeholders, and process transformation with quantified results — inside a ₹14,000 Cr operating environment with no consulting firm and no predecessor."</p>
+<p><strong>Para 2 (Three proof points):</strong> 14.9× programme scale + 74% delinquency reduction. PCC TAT 20→3d at 3× volume. NPV AED 652M defended at MD/CEO level through three review rounds.</p>
+<p><strong>Para 3 (Why Oaktree):</strong> Howard Marks' risk-control philosophy, Hyderabad GCC greenfield opportunity, Business Transformation as the natural next application of your operating discipline.</p>
+<p><strong>Para 4 (Close):</strong> "I've built what Big 4 practices recommend — from scratch, in an operating role. I'd welcome the chance to discuss how that translates to your back-office transformation priorities."</p>
+</div>
+
+<div class="card">
+<div class="card-title">Outreach Message Templates</div>
+<p><strong>To Vijay Padmanabhan (warm intro via Invesco network):</strong> "Hi Vijay — [referrer] mentioned you're building the Hyderabad GCC. I've spent 6 years building operations infrastructure from zero at Sobha Realty — governance, data platforms, team deployment — and I'm interested in the VP Strategy &amp; Ops role in Business Transformation. Would you be open to a brief conversation?"</p>
+<p style="margin-top:8px"><strong>To recruiter (LinkedIn InMail):</strong> "Hi [Name] — I'm interested in the VP Strategy &amp; Operations (Business Transformation) role at Oaktree Hyderabad. Quick summary: 6+ years leading business transformation programmes at scale (14.9× growth, 77-person team, $3.5B AUM portfolio). I've attached my resume — happy to discuss fit."</p>
+</div>
+
+<div class="card">
+<div class="card-title">Timeline Commitment</div>
+<p><strong>Week 1:</strong> Resume v1 build (adapt from existing Oaktree Info Solutions resume). Cover note draft. Jira/Confluence self-study begins.</p>
+<p><strong>Week 2:</strong> Application submitted (direct + referral dual-path). LinkedIn outreach to 3–5 Oaktree/Brookfield/Invesco connections.</p>
+<p><strong>Week 3–4:</strong> Domain immersion (Howard Marks memos, annual letter). Monday.com cert. LSSGB self-study begins.</p>
+<p><strong>Week 5–6:</strong> Interview prep: STAR rehearsal (5 primary stories), mock interview, 30·60·90 customisation.</p>
+</div>
+</div>
+
+<!-- ═══════════ TAB 11 — RISK & RED FLAGS ═══════════ -->
+<div class="section" id="t10">
+<div class="sec-eyebrow">11 / Risk &amp; Red Flags</div>
+<div class="sec-title">Conditional Risk Assessment</div>
+<div class="sec-sub">Triggered: GCC &lt;24 months old. Assessed below.</div>
+
+<div class="card card-amber">
+<div class="card-title">Risk 1 — GCC &lt;24 Months (Opened Early 2025)</div>
+<p><strong>Signal:</strong> Oaktree Hyderabad GCC is ~18 months old. New GCCs carry execution risk: reporting lines may shift, scope may shrink if US/HQ reduces commitment, team buildout could stall.</p>
+<p><strong>Mitigation:</strong> Oaktree's GCC is backed by Brookfield ($1T+ AUM parent). Vijay Padmanabhan was a strategic hire from Invesco GCC (28 functions). Recent job postings (Sr Manager Comp Ops, VP Strategy &amp; Ops, VP Info Solutions) signal active buildout, not contraction. The risk is low-to-moderate and declining as the GCC matures.</p>
+</div>
+
+<div class="card card-amber">
+<div class="card-title">Risk 2 — Role May Overlap with Info Solutions VP</div>
+<p><strong>Signal:</strong> Two VP-level openings at a 1,400-person firm's new GCC could indicate either healthy buildout or an unclear org design. If the roles overlap, you risk being positioned against yourself.</p>
+<p><strong>Mitigation:</strong> The JDs are clearly distinct — Info Solutions is a BA/PM function role; Strategy &amp; Ops is a cross-departmental transformation leadership role. Different reporting lines, different skill emphasis. Dual application is viable and demonstrates range.</p>
+</div>
+
+<div class="card card-amber">
+<div class="card-title">Risk 3 — Financial Services Experience Gate</div>
+<p><strong>Signal:</strong> "10+ years within the financial services industry, preferably in investment management" is the steepest experience gate in any role in your pipeline. This is not "preferred" — it's stated as part of the core 10+ years requirement.</p>
+<p><strong>Mitigation:</strong> The gate is experience-type, not certification-based — it can be negotiated if you demonstrate transferable transformation discipline. The conversion probability (25–30%) reflects this risk. If you clear the screen call, the gate becomes less relevant as interview performance takes over.</p>
+</div>
+
+<div class="card">
+<div class="card-title">Risk 4 — Plateau Role Assessment</div>
+<p><strong>Verdict: NOT a plateau role.</strong> Business Transformation VP at a $223B AUM firm is a growth position with direct strategic ownership, team leadership, and executive visibility. The greenfield GCC context guarantees scope expansion. The risk is conversion probability, not career trajectory.</p>
+</div>
+</div>
+
+<!-- ═══════════ TAB 12 — STAKEHOLDER DECODE ═══════════ -->
+<div class="section" id="t11">
+<div class="sec-eyebrow">12 / Stakeholder Decode</div>
+<div class="sec-title">Key Decision Makers</div>
+<div class="sec-sub">Triggered: Vijay Padmanabhan (MD Hyderabad) has public footprint.</div>
+
+<div class="card card-forest">
+<div class="card-title">Vijay Padmanabhan — MD, Head of Oaktree Hyderabad GCC</div>
+<p><strong>Background:</strong> Hired from Invesco GCC where he ran 28 functions. Likely the final-round interviewer and ultimate hiring authority for all senior Hyderabad roles.</p>
+<p><strong>What he cares about:</strong> GCC maturity — proving Hyderabad can handle strategic, not just transactional, work. Scalability — building teams that can operate independently as the GCC grows. Process rigour — establishing standards that match the LA/NY operating bar.</p>
+<p><strong>Your alignment:</strong> You've done exactly what he's trying to do — built a team from scratch, established governance, and proven it can operate at scale. The 42-person India hub story (S7/S10) is a direct analog.</p>
+<p><strong>Communication style:</strong> Likely a structured, data-driven leader (given Invesco GCC background). Lead with quantified outcomes, not narrative.</p>
+</div>
+
+<div class="card card-gold">
+<div class="card-title">Hiring Manager — Strategy &amp; Ops Lead (Business Transformation)</div>
+<p><strong>Background:</strong> Unknown — likely a Director or SVP within Business Transformation. May be based in LA or Hyderabad.</p>
+<p><strong>What they care about:</strong> Can this person run multiple programmes with minimal oversight? Can they manage stakeholders across functions without creating conflict? Can they grow direct reports?</p>
+<p><strong>Your alignment:</strong> S16 (12 concurrent workstreams), S5 (multi-stakeholder consensus), S12 (team capability building). Prepare for deep-dive STAR questioning on all three.</p>
+</div>
+
+<div class="card">
+<div class="card-title">US/HQ Stakeholder (Likely Virtual Round)</div>
+<p><strong>Background:</strong> A Director or SVP in the LA-based Business Transformation team.</p>
+<p><strong>What they care about:</strong> Cross-timezone communication, ability to synthesise and present upward, cultural fit with Oaktree's collaborative-but-rigorous style.</p>
+<p><strong>Your alignment:</strong> Your Dubai→India cross-geography management and your MD/CEO presentation experience directly address this. Frame: "I've managed teams and stakeholders across time zones for 4+ years."</p>
+</div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+function switchTab(i){
+  i=parseInt(i);
+  document.querySelectorAll('.section').forEach((s,idx)=>{s.classList.toggle('active',idx===i);});
+  document.querySelectorAll('.rail-btn').forEach((b,idx)=>{b.classList.toggle('active',idx===i);});
+  const dd=document.querySelector('.mob-dd select');
+  if(dd)dd.selectedIndex=i;
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
