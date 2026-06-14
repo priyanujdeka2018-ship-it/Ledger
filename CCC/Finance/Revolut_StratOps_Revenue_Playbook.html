@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revolut Strategy & Ops Manager (Revenue) — Career Playbook</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+  --bg-dark: #191C1F;
+  --bg-panel: #F5F6F8;
+  --bg-card: #FFFFFF;
+  --primary: #0075EB;
+  --primary-light: #E8F2FD;
+  --accent: #6B4CE6;
+  --accent-light: #EDE8FD;
+  --red: #E5484D;
+  --red-light: #FCEAEB;
+  --green: #30A46C;
+  --green-light: #E9F9EF;
+  --amber: #E5A300;
+  --amber-light: #FFF7E0;
+  --text: #1A1D21;
+  --text-muted: #6B7280;
+  --border: #E2E5E9;
+  --rail-w: 240px;
+  --header-h: 64px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--bg-panel);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* ── HEADER ── */
+.header {
+  position: fixed; top:0; left:0; right:0; height: var(--header-h);
+  background: var(--bg-dark);
+  display: flex; align-items: center; padding: 0 24px;
+  z-index: 100;
+  border-bottom: 2px solid var(--primary);
+}
+.header-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: 18px; color: #FFFFFF;
+  letter-spacing: -0.5px;
+}
+.header-brand span { color: var(--primary); }
+.header-meta {
+  margin-left: auto;
+  font-size: 12px; color: #9CA3AF;
+  text-align: right;
+}
+.header-meta strong { color: #F3F4F6; }
+
+/* ── MOBILE DROPDOWN ── */
+.mobile-nav { display: none; }
+
+/* ── LEFT RAIL ── */
+.rail {
+  position: fixed; top: var(--header-h); left: 0; bottom: 0;
+  width: var(--rail-w); background: var(--bg-dark);
+  overflow-y: auto; padding: 16px 0; z-index: 90;
+}
+.rail a {
+  display: block; padding: 10px 20px;
+  color: #9CA3AF; text-decoration: none;
+  font-size: 13px; font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+.rail a:hover { color: #E5E7EB; background: rgba(255,255,255,0.04); }
+.rail a.active {
+  color: #FFFFFF; background: rgba(0,117,235,0.12);
+  border-left-color: var(--primary);
+}
+.rail-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px; color: var(--primary);
+  margin-right: 8px; font-weight: 600;
+}
+
+/* ── MAIN ── */
+.main {
+  margin-left: var(--rail-w); margin-top: var(--header-h);
+  padding: 32px 40px 80px;
+  max-width: 900px;
+}
+
+/* ── SECTIONS ── */
+.section { display: none; }
+.section.active { display: block; }
+
+.section-num {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px; color: var(--primary);
+  font-weight: 600; letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px; font-weight: 700;
+  color: var(--text); margin-bottom: 6px;
+  letter-spacing: -0.5px;
+}
+.section-sub {
+  font-size: 14px; color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px; margin-bottom: 20px;
+}
+.card h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px; font-weight: 600;
+  margin-bottom: 12px;
+}
+.card h4 {
+  font-size: 14px; font-weight: 600;
+  margin-bottom: 8px; color: var(--text);
+}
+
+/* ── STAT GRID ── */
+.stat-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px; margin-bottom: 24px;
+}
+.stat-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 20px;
+  text-align: center;
+}
+.stat-box .val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px; font-weight: 700;
+  color: var(--primary);
+}
+.stat-box .lbl {
+  font-size: 12px; color: var(--text-muted);
+  margin-top: 4px; font-weight: 500;
+}
+.stat-box.warn .val { color: var(--red); }
+.stat-box.ok .val { color: var(--green); }
+.stat-box.caution .val { color: var(--amber); }
+
+/* ── PILLS ── */
+.pill {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  padding: 3px 10px; border-radius: 20px;
+}
+.pill-red { background: var(--red-light); color: var(--red); }
+.pill-green { background: var(--green-light); color: var(--green); }
+.pill-blue { background: var(--primary-light); color: var(--primary); }
+.pill-amber { background: var(--amber-light); color: var(--amber); }
+.pill-purple { background: var(--accent-light); color: var(--accent); }
+
+/* ── TABLES ── */
+table {
+  width: 100%; border-collapse: collapse;
+  font-size: 13px; margin: 16px 0;
+}
+th {
+  background: var(--bg-dark); color: #F3F4F6;
+  padding: 10px 14px; text-align: left;
+  font-weight: 600; font-size: 12px;
+}
+td {
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+
+/* ── STAR ── */
+.star-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px; padding: 24px;
+  margin-bottom: 20px;
+  border-left: 4px solid var(--primary);
+}
+.star-card h4 { margin-bottom: 6px; }
+.star-jd { font-size: 12px; color: var(--accent); margin-bottom: 14px; font-weight: 500; }
+.star-grid { display: grid; grid-template-columns: 80px 1fr; gap: 8px 16px; }
+.star-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px; font-weight: 700;
+  color: var(--primary); letter-spacing: 0.5px;
+  padding-top: 2px;
+}
+.star-text { font-size: 13px; line-height: 1.55; }
+
+/* ── TIMELINE ── */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before {
+  content: ''; position: absolute; left: 8px; top: 0; bottom: 0;
+  width: 2px; background: var(--border);
+}
+.tl-item { position: relative; margin-bottom: 20px; }
+.tl-item::before {
+  content: ''; position: absolute; left: -24px; top: 6px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--primary); border: 2px solid var(--bg-panel);
+}
+.tl-item.phase::before { background: var(--accent); width: 14px; height: 14px; left: -25px; }
+.tl-phase {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--accent); margin-bottom: 4px;
+}
+.tl-title { font-weight: 600; font-size: 13px; }
+.tl-desc { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* ── AI PROJECT ── */
+.ai-card {
+  background: linear-gradient(135deg, #191C1F 0%, #1E2530 100%);
+  border-radius: 10px; padding: 24px; color: #F3F4F6;
+  margin-bottom: 20px;
+}
+.ai-card h4 { color: #FFFFFF; margin-bottom: 4px; }
+.ai-card .stack {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px; color: var(--primary);
+  margin-bottom: 12px; font-weight: 600;
+}
+.ai-card p { font-size: 13px; line-height: 1.6; color: #D1D5DB; }
+.ai-card .pitch {
+  margin-top: 14px; padding: 14px;
+  background: rgba(0,117,235,0.1);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 8px 8px 0;
+  font-size: 13px; color: #E5E7EB;
+  font-style: italic;
+}
+
+/* ── INTERVIEW Q ── */
+.q-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 16px 20px;
+  margin-bottom: 12px;
+}
+.q-card .q {
+  font-weight: 600; font-size: 13px;
+  margin-bottom: 6px; color: var(--text);
+}
+.q-card .a { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+.q-card .story {
+  font-size: 11px; color: var(--accent);
+  margin-top: 6px; font-weight: 600;
+}
+
+/* ── RISK ── */
+.risk-card {
+  background: var(--bg-card);
+  border: 1px solid var(--red);
+  border-radius: 10px; padding: 20px;
+  margin-bottom: 16px;
+  border-left: 4px solid var(--red);
+}
+.risk-card h4 { color: var(--red); }
+
+/* ── VOCAB ── */
+.vocab-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.vocab-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 12px;
+}
+.vocab-item .term {
+  font-weight: 700; font-size: 13px;
+  color: var(--primary); margin-bottom: 4px;
+}
+.vocab-item .def { font-size: 12px; color: var(--text-muted); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .rail { display: none; }
+  .main { margin-left: 0; padding: 20px 16px 60px; }
+  .mobile-nav {
+    display: block; position: fixed;
+    top: var(--header-h); left: 0; right: 0;
+    background: var(--bg-dark); z-index: 90;
+    padding: 8px 16px;
+  }
+  .mobile-nav select {
+    width: 100%; padding: 10px 12px;
+    background: #2A2D31; color: #F3F4F6;
+    border: 1px solid #3F4246; border-radius: 8px;
+    font-size: 13px; font-family: 'Inter', sans-serif;
+  }
+  .main { margin-top: calc(var(--header-h) + 52px); }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .star-grid { grid-template-columns: 1fr; }
+  .star-label { margin-top: 8px; }
+  .section-title { font-size: 22px; }
+  .header-meta { display: none; }
+  .vocab-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-brand"><span>R</span>evolut · Strategy & Ops <span>(Revenue)</span></div>
+  <div class="header-meta">
+    <strong>Priyanuj Deka</strong> · Career Playbook<br>
+    Fit: 56→68 · Status: Pass (Override Build)
+  </div>
+</div>
+
+<!-- MOBILE DROPDOWN -->
+<div class="mobile-nav">
+  <select id="mobileSelect" onchange="switchTab(this.value)">
+    <option value="0">01 · Snapshot</option>
+    <option value="1">02 · Role Decode</option>
+    <option value="2">03 · Fit & Gap</option>
+    <option value="3">04 · STAR Mapping</option>
+    <option value="4">05 · 30·60·90 Plan</option>
+    <option value="5">06 · AI Differentiator</option>
+    <option value="6">07 · Interview Kit</option>
+    <option value="7">08 · Comp Intel</option>
+    <option value="8">09 · Cert Roadmap</option>
+    <option value="9">10 · Risk & Red Flags</option>
+    <option value="10">11 · Close & Outreach</option>
+  </select>
+</div>
+
+<!-- LEFT RAIL -->
+<nav class="rail" id="rail">
+  <a href="#" onclick="switchTab(0);return false" class="active"><span class="rail-num">01</span>Snapshot</a>
+  <a href="#" onclick="switchTab(1);return false"><span class="rail-num">02</span>Role Decode</a>
+  <a href="#" onclick="switchTab(2);return false"><span class="rail-num">03</span>Fit & Gap</a>
+  <a href="#" onclick="switchTab(3);return false"><span class="rail-num">04</span>STAR Mapping</a>
+  <a href="#" onclick="switchTab(4);return false"><span class="rail-num">05</span>30·60·90 Plan</a>
+  <a href="#" onclick="switchTab(5);return false"><span class="rail-num">06</span>AI Differentiator</a>
+  <a href="#" onclick="switchTab(6);return false"><span class="rail-num">07</span>Interview Kit</a>
+  <a href="#" onclick="switchTab(7);return false"><span class="rail-num">08</span>Comp Intel</a>
+  <a href="#" onclick="switchTab(8);return false"><span class="rail-num">09</span>Cert Roadmap</a>
+  <a href="#" onclick="switchTab(9);return false"><span class="rail-num">10</span>Risk & Red Flags</a>
+  <a href="#" onclick="switchTab(10);return false"><span class="rail-num">11</span>Close & Outreach</a>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- ═══ TAB 0: SNAPSHOT ═══ -->
+<div class="section active" id="tab-0">
+  <div class="section-num">01 / Overview</div>
+  <div class="section-title">Role Snapshot</div>
+  <div class="section-sub">Strategy & Operations Manager (Revenue) · Revolut · India (Remote)</div>
+
+  <div class="stat-grid">
+    <div class="stat-box caution"><div class="val">56→68</div><div class="lbl">Net Fit (Base→Addressable)</div></div>
+    <div class="stat-box warn"><div class="val">Pass</div><div class="lbl">Status (Override Build)</div></div>
+    <div class="stat-box caution"><div class="val">20–25%</div><div class="lbl">Conv Probability</div></div>
+    <div class="stat-box"><div class="val">₹30–47L</div><div class="lbl">India P50–P75 CTC</div></div>
+    <div class="stat-box warn"><div class="val">⚠ FIRED</div><div class="lbl">No-Go Gate (Base &lt;60)</div></div>
+    <div class="stat-box ok"><div class="val">✓ Remote</div><div class="lbl">India Remote Verified</div></div>
+  </div>
+
+  <div class="card">
+    <h3>One-Line Thesis</h3>
+    <p>Process-building and vendor-management fundamentals transfer cleanly to Revolut's revenue operations mandate, but the JD's 2+ year experience floor and absence of team management signal a mid-level IC position that risks seniority regression from your current VP-adjacent scope. Fintech-native domain vocabulary requires heavy reframe with no unique strategic payoff relative to existing pipeline roles.</p>
+  </div>
+
+  <div class="card">
+    <h3>Why This Playbook Exists Despite "Pass"</h3>
+    <p>You overrode the recommendation. This playbook is built to give you the best possible shot if you choose to apply — while flagging the structural risks honestly. Revolut's India expansion (40% of global workforce by end-2026, £500M committed) makes this a credible employer, and the brand carries weight in fintech circles. The playbook treats the role as a conditional opportunity: worth pursuing only if comp clears ₹38L+ and the internal leveling maps to a senior band.</p>
+  </div>
+
+  <div class="card">
+    <h3>Unlock Phrase</h3>
+    <p style="font-size:15px; font-weight:600; color:var(--primary); line-height:1.5;">"I've spent six years scaling revenue operations 14.9x across four legal entities and two geographies — building the process infrastructure, vendor governance, and data systems that let a $3.5B portfolio run at speed. I've been doing revenue operations at hyper-growth scale; I just haven't been calling it that."</p>
+  </div>
+</div>
+
+<!-- ═══ TAB 1: ROLE DECODE ═══ -->
+<div class="section" id="tab-1">
+  <div class="section-num">02 / What they actually mean</div>
+  <div class="section-title">Role Decode</div>
+  <div class="section-sub">Translating Revolut's JD language into your operational vocabulary.</div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>JD Phrase</th><th>Real Meaning</th><th>Your Translation</th></tr></thead>
+      <tbody>
+        <tr><td>"Building and optimising scalable processes"</td><td>Design ops workflows that don't break at 2x, 5x, 10x volume</td><td>PCC TAT 20→3 days at 3x volume; 14.9x portfolio scale with same-team ops</td></tr>
+        <tr><td>"Leading core infrastructure projects end to end"</td><td>Own a cross-functional build from scoping to delivery — likely internal tooling or process systems</td><td>Salesforce 0→1 (6 stakeholders, 70+ reports); SQL migration programme</td></tr>
+        <tr><td>"Exploring and defining which projects to prioritise"</td><td>Portfolio/backlog management — say no to low-impact work, sequence high-impact work</td><td>30-item Salesforce enhancement backlog with impact × effort scoring</td></tr>
+        <tr><td>"Searching for new features to provide seamless customer experience"</td><td>Product-ops: identify friction points in the customer journey and propose fixes</td><td>One Sobha App integration + customer communication automation</td></tr>
+        <tr><td>"Managing critical vendor relationships"</td><td>Own vendor SLAs, performance reviews, escalation paths — likely payment processors, KYC providers, support BPOs</td><td>NICE/cXserve vendor governance; 10-bank settlement infrastructure</td></tr>
+        <tr><td>"Developing strategic supply chain partnerships and negotiating commercial terms"</td><td>New vendor onboarding + contract negotiation — fintech supply chain = payment rails, data providers, compliance tools</td><td>NPV AED 652M model: negotiated 32% cheaper financing vs bank alternatives</td></tr>
+        <tr><td>"2:1 degree from a top university"</td><td>Strong academic signal — BITS + IIM exceeds this bar</td><td>BITS Pilani dual degree + PGDM IIM Udaipur</td></tr>
+        <tr><td>"Fast-paced environment"</td><td>Revolut ships weekly, deploys daily — startup cadence, not enterprise cycles</td><td>14.9x scale = continuous adaptation; T-25/T+30 framework = operational tempo discipline</td></tr>
+        <tr><td>"Enjoy working with data"</td><td>SQL/Python/R for ad-hoc analysis, not just consuming dashboards — this is the hidden technical screen</td><td>70+ live-data-connected reports; SQL migration programme lead; Python + Claude API projects</td></tr>
+        <tr><td>"Nice to have: SQL, Python, R"</td><td>Not optional for top-band offers — candidates who code get P75+ comp and faster progression</td><td>SQL: in-progress (Mode Analytics + DataCamp); Python: active (AI portfolio builds)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Vocabulary You Must Master (Week 1)</h3>
+    <div class="vocab-grid">
+      <div class="vocab-item"><div class="term">RevOps</div><div class="def">Revenue Operations — unified function spanning sales, marketing, and customer success ops</div></div>
+      <div class="vocab-item"><div class="term">GMV</div><div class="def">Gross Merchandise Value — total transaction volume processed through the platform</div></div>
+      <div class="vocab-item"><div class="term">ARPU</div><div class="def">Average Revenue Per User — key unit economics metric for subscription/freemium fintech</div></div>
+      <div class="vocab-item"><div class="term">CAC / LTV</div><div class="def">Customer Acquisition Cost / Lifetime Value — the ratio that determines growth sustainability</div></div>
+      <div class="vocab-item"><div class="term">MRR / ARR</div><div class="def">Monthly/Annual Recurring Revenue — subscription revenue tracking</div></div>
+      <div class="vocab-item"><div class="term">Cohort Analysis</div><div class="def">Tracking user groups by signup date to measure retention and revenue trends</div></div>
+      <div class="vocab-item"><div class="term">Unit Economics</div><div class="def">Revenue and cost per individual customer/transaction — the foundation of scalability decisions</div></div>
+      <div class="vocab-item"><div class="term">Funnel Conversion</div><div class="def">User journey metrics: signup → activation → first transaction → retained user</div></div>
+      <div class="vocab-item"><div class="term">OKR</div><div class="def">Objectives & Key Results — Revolut's goal-setting framework (inherited from tech culture)</div></div>
+      <div class="vocab-item"><div class="term">Sprint / Agile</div><div class="def">2-week delivery cycles with standups, retros, and backlog grooming</div></div>
+      <div class="vocab-item"><div class="term">NPS</div><div class="def">Net Promoter Score — customer satisfaction proxy used in Revolut's ops metrics</div></div>
+      <div class="vocab-item"><div class="term">FX Spread</div><div class="def">The margin on foreign exchange transactions — a core Revolut revenue line</div></div>
+      <div class="vocab-item"><div class="term">AML / KYC</div><div class="def">Anti-Money Laundering / Know Your Customer — regulatory compliance backbone</div></div>
+      <div class="vocab-item"><div class="term">PPI (India)</div><div class="def">Prepaid Payment Instruments — Revolut's RBI-licensed India product category</div></div>
+      <div class="vocab-item"><div class="term">Rate Card</div><div class="def">Vendor pricing schedule — critical for supply chain negotiation</div></div>
+      <div class="vocab-item"><div class="term">SLA Governance</div><div class="def">Structured vendor performance tracking against contractual service levels</div></div>
+      <div class="vocab-item"><div class="term">Hyper-growth</div><div class="def">Sustained 40%+ YoY growth — Revolut: $2.2B→$4B→$6B revenue in 3 years</div></div>
+      <div class="vocab-item"><div class="term">GCC</div><div class="def">Global Capability Centre — Revolut's India hub (5,500 people by end-2026)</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB 2: FIT & GAP ═══ -->
+<div class="section" id="tab-2">
+  <div class="section-num">03 / Where you stand</div>
+  <div class="section-title">Fit & Gap Analysis</div>
+  <div class="section-sub">10-dimension scoring with evidence mapping. Sub-scores: Functional 6/10 · Technical-Cert 8/10 · Leadership-Vocab 5/10.</div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>Dimension</th><th>Wt</th><th>Score</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td>Functional Alignment</td><td>20%</td><td>6/10</td><td>Process design, vendor mgmt, infrastructure projects — all map. But revenue ops in fintech is product-adjacent, not back-office collections.</td></tr>
+        <tr><td>Technical/Cert Prerequisites</td><td>10%</td><td>8/10</td><td>BITS + IIM exceeds "2:1 from top university." SQL/Python as nice-to-have only. Low barrier.</td></tr>
+        <tr><td>Leadership & Vocab</td><td>15%</td><td>5/10</td><td>"2+ years experience" codes mid-level. Startup fintech vocab (RevOps, GMV, cohort) is unfamiliar territory.</td></tr>
+        <tr><td>Programme Scale Match</td><td>10%</td><td>4/10</td><td>You're overqualified (AED 12.97B, 77 people). Risk: reviewer wonders why you're applying at this level.</td></tr>
+        <tr><td>Domain Relevance</td><td>10%</td><td>4/10</td><td>Fintech/neobank — no direct experience. Financial ops overlap via collections is thin.</td></tr>
+        <tr><td>AI Portfolio Relevance</td><td>5%</td><td>4/10</td><td>JD doesn't mention AI. Coding is "nice to have." Your AI portfolio is a differentiator but not a direct ask.</td></tr>
+        <tr><td>Stakeholder Altitude</td><td>10%</td><td>5/10</td><td>Mid-level role. Not explicitly C-suite facing — more cross-functional coordination.</td></tr>
+        <tr><td>Geographic/Mode Fit</td><td>5%</td><td>10/10</td><td>India remote — perfect for Hyderabad. Revolut hiring 1,600 India roles in 2026.</td></tr>
+        <tr><td>Compensation Alignment</td><td>10%</td><td>5/10</td><td>India P50 ₹30–42L. Barely meets AVP-track floor at P75 (₹43–47L). Equity illiquid until 2028+.</td></tr>
+        <tr><td>Career Trajectory Value</td><td>5%</td><td>5/10</td><td>Strong brand ($75B valuation, 75M+ customers). But potential seniority regression.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Critical Gaps (4)</h3>
+    <table>
+      <thead><tr><th>Gap</th><th>Severity</th><th>Closure Path</th><th>Timeline</th></tr></thead>
+      <tbody>
+        <tr><td>Fintech/neobank domain vocabulary</td><td><span class="pill pill-red">HIGH</span></td><td>Self-study: Revolut blog, Annual Report 2024, fintech newsletters (The Fintech Times, Sifted). Master 18 vocab items above.</td><td>1–2 weeks</td></tr>
+        <tr><td>Product-led growth culture fluency</td><td><span class="pill pill-amber">MEDIUM</span></td><td>Read "Inspired" (Cagan), follow Revolut product blog. Practice framing ops work as product impact.</td><td>2 weeks</td></tr>
+        <tr><td>SQL proficiency (nice-to-have → table-stakes for P75+)</td><td><span class="pill pill-amber">MEDIUM</span></td><td>Mode Analytics + DataCamp SQL track (already in P4 Skill Building plan). Kaggle dataset practice.</td><td>4–6 weeks</td></tr>
+        <tr><td>Seniority positioning</td><td><span class="pill pill-red">HIGH</span></td><td>Frame application as seeking IC-to-leader track at a high-growth company. Position 6 years as "I bring the pattern recognition of a scaled operator to a team that's building from scratch." Don't over-emphasise team size.</td><td>Cover letter + interview framing</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ TAB 3: STAR MAPPING ═══ -->
+<div class="section" id="tab-3">
+  <div class="section-num">04 / Your proof points</div>
+  <div class="section-title">STAR Story Mapping</div>
+  <div class="section-sub">5 stories mapped to Revolut's core asks. Source: STAR_STORY_BANK_V3.</div>
+
+  <div class="star-card">
+    <h4>S16 · Scaling Revenue Operations 14.9x Over Five Years</h4>
+    <div class="star-jd">JD: "Building and optimising scalable processes to continue Revolut's hyper-growth"</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div><div class="star-text">Sobha's collections function was managing AED 867M annually across a single entity with largely manual, spreadsheet-based operations. The UAE property market was entering a historic boom, and the function had to scale in proportion or the company risked severe cash flow deterioration.</div>
+      <div class="star-label">TASK</div><div class="star-text">Scale the revenue operations function to handle exponential growth without proportional headcount increases — build systems, not bodies.</div>
+      <div class="star-label">ACTION</div><div class="star-text">Built Salesforce CRM from 0→1 across 6 stakeholders; designed 70+ live-data-connected reports; established T-25/T+30 operational rhythm framework; created governance architecture across 4 legal entities; managed 77-person team across Dubai and India.</div>
+      <div class="star-label">RESULT</div><div class="star-text">AED 867M → AED 12.97B (14.9x growth). Delinquency reduced 74% (16.7%→4.4%). Same core team handled 14.9x scale through process and technology leverage.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>S18 · PCC TAT Transformation: 20 Days → 3 Days at 3x Volume</h4>
+    <div class="star-jd">JD: "Building and optimising scalable processes" + "Setting a timeline to reach goals quickly"</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div><div class="star-text">Post-Completion Certificate process averaging 20-day turnaround. Creating revenue leakage, customer complaints, and handover delays — a critical SLA failure in the order-to-cash pipeline.</div>
+      <div class="star-label">TASK</div><div class="star-text">Redesign the end-to-end workflow to dramatically reduce cycle time while maintaining quality. No additional headcount.</div>
+      <div class="star-label">ACTION</div><div class="star-text">Mapped full process flow. Identified bottlenecks at verification and approval stages. Eliminated redundant steps. Introduced daily TAT dashboards. Rebuilt handover protocols between teams.</div>
+      <div class="star-label">RESULT</div><div class="star-text">20 days → 3 days (85% reduction). Monthly volume tripled (~90 to 281). Quality maintained. Client complaints eliminated for this workflow.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>S17 · Salesforce 0→1: Building Core Infrastructure from Scratch</h4>
+    <div class="star-jd">JD: "Leading and executing core infrastructure projects end to end"</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div><div class="star-text">No centralised CRM or MI platform existed for the collections function. Portfolio data lived in fragmented Excel files. As the portfolio scaled past AED 5B, the manual approach became unsustainable.</div>
+      <div class="star-label">TASK</div><div class="star-text">Lead the full lifecycle of a CRM implementation — from discovery through deployment — as the business owner (not IT).</div>
+      <div class="star-label">ACTION</div><div class="star-text">Ran 6-stakeholder discovery process. Designed field architecture and workflow rules. Led UAT cycles. Built 70+ reports and dashboards as the MI backbone. Iterated based on user feedback across 4 entities.</div>
+      <div class="star-label">RESULT</div><div class="star-text">Platform still in production 6 years later. Powers daily operations, risk monitoring, and executive reporting. Became the foundation for all subsequent automation and AI projects.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>S23 · 10-Bank Settlement Infrastructure & Vendor Governance</h4>
+    <div class="star-jd">JD: "Managing critical vendor relationships and building performance tracking systems"</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div><div class="star-text">Collections operations required relationships with 10 banking partners for settlement, payment processing, and reconciliation — managing AED 442M in daily flows. Each bank had different protocols, SLAs, and escalation paths.</div>
+      <div class="star-label">TASK</div><div class="star-text">Build and maintain a systematic vendor governance framework across all banking partners — ensuring SLA compliance, reconciliation accuracy, and relationship health.</div>
+      <div class="star-label">ACTION</div><div class="star-text">Established structured reconciliation protocols per bank. Built performance tracking dashboards. Created escalation matrices. Negotiated terms on 12 mortgage MOU initiatives with bank partners.</div>
+      <div class="star-label">RESULT</div><div class="star-text">AED 442M daily settlement operating smoothly across 10 banks. Systematic reconciliation reduced exceptions. Mortgage MOU programme unlocked additional revenue channels through bank partnerships.</div>
+    </div>
+  </div>
+
+  <div class="star-card">
+    <h4>S26 · SQL Migration Programme: Infrastructure Modernisation Leadership</h4>
+    <div class="star-jd">JD: "Enjoy working with data" + "Nice to have: SQL, Python"</div>
+    <div class="star-grid">
+      <div class="star-label">SITUATION</div><div class="star-text">70+ report ecosystem built on Excel with live Salesforce connections was hitting scalability limits. Team had independently begun SQL migration — 18/50 reports complete — but three infrastructure blockers stalled progress.</div>
+      <div class="star-label">TASK</div><div class="star-text">Lead programme decision-making: evaluate the proposal, remove blockers, and set delivery timeline — demonstrating technical programme leadership without personal SQL expertise.</div>
+      <div class="star-label">ACTION</div><div class="star-text">Reviewed team's proposal (1,255 min/month savings projected). Identified 3 blockers and assigned ownership with resolution targets. Requested structured ROI justification. Proposed AI-assisted acceleration for remaining migrations. Added all blockers to formal RAID log.</div>
+      <div class="star-label">RESULT</div><div class="star-text">Programme structured with defined milestones. 21 hours/month productivity recovery projected. Clear decision framework and escalation path established. Demonstrates active infrastructure modernisation leadership.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB 4: 30·60·90 ═══ -->
+<div class="section" id="tab-4">
+  <div class="section-num">05 / Your first 90 days</div>
+  <div class="section-title">30·60·90 Day Plan</div>
+  <div class="section-sub">If you land the role — what the first quarter looks like.</div>
+
+  <div class="card">
+    <div class="timeline">
+      <div class="tl-item phase"><div class="tl-phase">Days 1–30: Absorb & Map</div></div>
+      <div class="tl-item"><div class="tl-title">Learn the revenue stack end-to-end</div><div class="tl-desc">Map every revenue line (subscriptions, FX, crypto, trading, interchange). Understand unit economics per segment.</div></div>
+      <div class="tl-item"><div class="tl-title">Shadow 3 cross-functional teams</div><div class="tl-desc">Payments, compliance, and product — understand handoff points and friction.</div></div>
+      <div class="tl-item"><div class="tl-title">Audit existing process documentation</div><div class="tl-desc">Identify what's documented, what's tribal knowledge, and where SOPs are missing.</div></div>
+      <div class="tl-item"><div class="tl-title">Map vendor ecosystem</div><div class="tl-desc">Catalogue all vendors (payment processors, KYC providers, BPOs). Note contract renewal dates, SLA terms, performance baselines.</div></div>
+      <div class="tl-item"><div class="tl-title">Build stakeholder map</div><div class="tl-desc">Identify decision-makers, influencers, and blockers across product, engineering, compliance, and finance.</div></div>
+      <div class="tl-item"><div class="tl-title">First 1:1 round with all key stakeholders</div><div class="tl-desc">Ask: "What's broken? What would you fix if you had one more person?" Compile pain-point inventory.</div></div>
+
+      <div class="tl-item phase"><div class="tl-phase">Days 31–60: Own & Optimise</div></div>
+      <div class="tl-item"><div class="tl-title">Deliver first process improvement</div><div class="tl-desc">Pick the highest-pain, lowest-complexity workflow from the pain-point inventory. Redesign and ship within 2 weeks. Target: measurable TAT or error-rate reduction.</div></div>
+      <div class="tl-item"><div class="tl-title">Build vendor performance scorecard</div><div class="tl-desc">Structured tracking: SLA compliance, response time, cost-per-unit, quality metrics. Weekly cadence.</div></div>
+      <div class="tl-item"><div class="tl-title">Launch project prioritisation framework</div><div class="tl-desc">Impact × effort matrix for the ops backlog. Get team buy-in. Kill 3 low-impact items publicly.</div></div>
+      <div class="tl-item"><div class="tl-title">Identify one automation opportunity</div><div class="tl-desc">Manual process that runs daily/weekly and can be scripted. Build PoC (Python or internal tooling).</div></div>
+      <div class="tl-item"><div class="tl-title">First ops review presentation to leadership</div><div class="tl-desc">Share findings, quick wins, and proposed Q2 roadmap. Demonstrate pattern recognition from fresh eyes.</div></div>
+
+      <div class="tl-item phase"><div class="tl-phase">Days 61–90: Scale & Propose</div></div>
+      <div class="tl-item"><div class="tl-title">Propose a scalability initiative</div><div class="tl-desc">One project that will 2x throughput of a key process without proportional headcount. Use the 14.9x pattern: technology + process redesign, not bodies.</div></div>
+      <div class="tl-item"><div class="tl-title">Negotiate one vendor contract improvement</div><div class="tl-desc">Use the performance scorecard data to renegotiate terms, reduce cost, or improve SLA on one critical vendor.</div></div>
+      <div class="tl-item"><div class="tl-title">Ship the automation PoC to production</div><div class="tl-desc">Move the Day 45 prototype into live use. Document the time savings. Use it as the template for future automation.</div></div>
+      <div class="tl-item"><div class="tl-title">Establish weekly ops rhythm</div><div class="tl-desc">Standing cadence: Monday metrics review, Wednesday vendor check-in, Friday stakeholder sync. Consistent operating tempo.</div></div>
+      <div class="tl-item"><div class="tl-title">Draft H2 roadmap with 3 high-impact projects</div><div class="tl-desc">Prioritised by revenue impact × feasibility. Present to leadership with resource requirements and timeline.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TAB 5: AI DIFFERENTIATOR ═══ -->
+<div class="section" id="tab-5">
+  <div class="section-num">06 / Your edge</div>
+  <div class="section-title">AI Differentiator</div>
+  <div class="section-sub">3 projects that demonstrate you build the future of operations, not just describe it.</div>
+
+  <div class="ai-card">
+    <h4>P15 · Revenue Operations Health Intelligence Dashboard</h4>
+    <div class="stack">Python · Streamlit · Claude API · Pandas · Plotly</div>
+    <p>Ingests mock revenue operations data across multiple product lines (subscriptions, FX, trading, interchange). AI layer flags: revenue leakage patterns, conversion funnel anomalies, cohort retention drops, and vendor SLA breaches. Auto-generates weekly executive digest: "Top 3 revenue risks this week" in plain English for leadership.</p>
+    <div class="pitch">"I built a revenue operations intelligence layer that does what most RevOps teams spend 10 hours a week doing manually — surfacing the signals that matter from the noise. The same architecture applies to any multi-product revenue stack."</div>
+  </div>
+
+  <div class="ai-card">
+    <h4>P7 · Operational Risk & Revenue Event Tracker (Reframed)</h4>
+    <div class="stack">Python · Claude API · Streamlit</div>
+    <p>Originally designed for financial risk monitoring, this tracker identifies operational events that impact revenue — process failures, SLA breaches, vendor quality drops, compliance gate failures. AI layer categorises events by severity, assigns ownership, and generates remediation timelines. Directly applicable to Revolut's multi-vendor, multi-product operational complexity.</p>
+    <div class="pitch">"When you're processing billions in transactions across dozens of vendors, the biggest revenue risk isn't fraud — it's operational failure. This tracker catches the upstream signals before they become downstream revenue events."</div>
+  </div>
+
+  <div class="ai-card">
+    <h4>P11 · Vendor Performance Intelligence Dashboard (Reframed)</h4>
+    <div class="stack">Python · Streamlit · Claude API · Pandas</div>
+    <p>Monitors vendor ecosystem health across SLA compliance, cost-per-unit trends, quality metrics, and contract utilisation. AI layer identifies vendors approaching contract renewal with declining performance — flagging renegotiation opportunities. Generates structured vendor review packs replacing 4 hours of manual prep per vendor per quarter.</p>
+    <div class="pitch">"The JD says 'managing critical vendor relationships and building performance tracking systems.' I've already built the tracking system. Want to see it?"</div>
+  </div>
+</div>
+
+<!-- ═══ TAB 6: INTERVIEW KIT ═══ -->
+<div class="section" id="tab-6">
+  <div class="section-num">07 / Prepare to win</div>
+  <div class="section-title">Interview Kit</div>
+  <div class="section-sub">22 questions mapped to Revolut's interview style. Revolut uses case studies + behavioural rounds.</div>
+
+  <div class="q-card"><div class="q">1. Tell me about a time you scaled a process to handle significantly more volume.</div><div class="a">Lead with S16 (14.9x scale). Emphasise: same team, technology leverage, not headcount. Revolut cares about doing more with less.</div><div class="story">→ S16 primary · S18 backup</div></div>
+  <div class="q-card"><div class="q">2. Walk me through a core infrastructure project you led end to end.</div><div class="a">S17 (Salesforce 0→1). Stress: business owner, not IT. Discovery → design → UAT → deployment → 6 years in production.</div><div class="story">→ S17 primary · S26 backup</div></div>
+  <div class="q-card"><div class="q">3. How do you prioritise when everything feels urgent?</div><div class="a">Framework: impact × effort matrix. Reference the 30-item Salesforce backlog. Show you kill low-impact work publicly.</div><div class="story">→ S17 (backlog mgmt) · S18 (TAT prioritisation)</div></div>
+  <div class="q-card"><div class="q">4. Describe a time you managed a critical vendor relationship.</div><div class="a">S23 (10-bank infrastructure). AED 442M daily flows. Structured governance, performance tracking, escalation matrices.</div><div class="story">→ S23 primary · S21 backup</div></div>
+  <div class="q-card"><div class="q">5. How do you use data to make decisions?</div><div class="a">70+ reports as the MI backbone. T-25/T+30 framework built from responsiveness data analysis. Every decision has a dashboard behind it.</div><div class="story">→ S29 (data ops) · S28 backup</div></div>
+  <div class="q-card"><div class="q">6. Tell me about a time you negotiated commercial terms with a partner.</div><div class="a">NPV AED 652M model — 32% cheaper than bank financing. Multiple MD/CEO scrutiny rounds, zero material concessions.</div><div class="story">→ S22 primary</div></div>
+  <div class="q-card"><div class="q">7. What would you do in your first 30 days here?</div><div class="a">Reference Tab 5 (30·60·90). Absorb & Map: learn revenue stack, shadow teams, audit processes, map vendors, build stakeholder relationships.</div><div class="story">→ 30·60·90 Plan</div></div>
+  <div class="q-card"><div class="q">8. How do you handle ambiguity?</div><div class="a">Collections function had no playbook when you joined. Built governance from first principles. Frame as: "I thrive in building order from chaos."</div><div class="story">→ S16 · S17</div></div>
+  <div class="q-card"><div class="q">9. Tell me about a time you failed.</div><div class="a">One Sobha App: 17% adoption vs 80% target. Own it completely. Lesson: user adoption requires change management, not just technology deployment.</div><div class="story">→ S24 (honest self-reporting)</div></div>
+  <div class="q-card"><div class="q">10. Why Revolut? Why now?</div><div class="a">"I've scaled revenue operations 14.9x in traditional real estate. I want to apply that pattern recognition to a company that's growing faster than anything in my industry — and doing it with technology, not headcount. Revolut is the scale challenge I'm looking for."</div><div class="story">→ Thesis framing</div></div>
+  <div class="q-card"><div class="q">11. How would you improve a process that's already working?</div><div class="a">PCC TAT was "working" at 20 days — but working isn't optimal. Show that you question accepted norms. First-principles analysis → 85% reduction.</div><div class="story">→ S18</div></div>
+  <div class="q-card"><div class="q">12. Describe your experience with SQL or Python.</div><div class="a">Honest: "I lead the SQL migration programme and use Python for AI-augmented operations projects. I'm not a software engineer — I'm an ops leader who codes enough to build prototypes and evaluate technical proposals."</div><div class="story">→ S26 · AI portfolio</div></div>
+  <div class="q-card"><div class="q">13. Case: A vendor's SLA compliance dropped from 98% to 85% over 3 months. What do you do?</div><div class="a">Framework: (1) Data — isolate which SLA metrics dropped, when, for which segments. (2) Root cause — is it capacity, quality, priority, or contract misalignment? (3) Remediation plan with timeline. (4) Escalation trigger if no improvement in 2 weeks. (5) Parallel evaluation of alternative vendors.</div><div class="story">→ Analytical framework</div></div>
+  <div class="q-card"><div class="q">14. Case: Revenue is growing 40% YoY but ops costs are growing 60%. How do you investigate?</div><div class="a">Unit economics lens: cost-per-transaction trending up means scaling problem. Decompose by (a) headcount growth vs volume growth, (b) vendor cost inflation, (c) process complexity creep, (d) quality/rework costs. Target: bend the cost curve below revenue curve.</div><div class="story">→ S16 (scaled without proportional cost)</div></div>
+  <div class="q-card"><div class="q">15. How do you manage stakeholders who disagree on priorities?</div><div class="a">Framework: shared data → shared understanding → facilitated decision. Reference 6-stakeholder Salesforce discovery — competing requirements resolved through structured scoring.</div><div class="story">→ S17 · S21</div></div>
+  <div class="q-card"><div class="q">16. Tell me about a time you pushed back on a senior leader.</div><div class="a">PR rejection standard held at 49% despite executive pressure. Position vindicated by next quarter's data. "I'd rather own a miss than hide one."</div><div class="story">→ S2 (PR 49%)</div></div>
+  <div class="q-card"><div class="q">17. How do you measure the success of an ops team?</div><div class="a">Four layers: (1) Throughput — volume processed per FTE. (2) Quality — error rate, rework %. (3) Speed — cycle time / TAT. (4) Cost — cost-per-unit trending down as volume scales up. Revenue ops adds: (5) Revenue impact — did the process change move a revenue metric?</div><div class="story">→ Framework response</div></div>
+  <div class="q-card"><div class="q">18. What's the biggest operational challenge in a hyper-growth company?</div><div class="a">"Processes that worked at 10x break at 50x. The biggest challenge is building systems that scale ahead of growth — not catching up after things break. That's why I built the T-25/T+30 framework: a proactive operating rhythm that prevented downstream failures."</div><div class="story">→ S16 · S3</div></div>
+  <div class="q-card"><div class="q">19. How would you evaluate whether to build vs buy a tool?</div><div class="a">Criteria: (1) Is it core to our competitive advantage? Build. (2) Is it commodity infrastructure? Buy. (3) Time-to-value vs total cost of ownership over 3 years. (4) Maintenance burden — who owns it after launch? Reference: chose Salesforce (buy) over custom CRM (build) because speed-to-value mattered more than customisation.</div><div class="story">→ S17</div></div>
+  <div class="q-card"><div class="q">20. Tell me about a time you automated something.</div><div class="a">AI-augmented operations portfolio — automated programme health tracking, risk flagging, and vendor performance monitoring. Python + Claude API + Streamlit. Replaced hours of manual report prep.</div><div class="story">→ AI portfolio (P7, P11, P15)</div></div>
+  <div class="q-card"><div class="q">21. Why are you leaving your current role?</div><div class="a">"I've taken the function from AED 867M to AED 12.97B. The growth curve is flattening, and I'm looking for a new scale challenge — ideally in a technology-first company where the ceiling is defined by the product, not the real estate cycle."</div><div class="story">→ Growth narrative</div></div>
+  <div class="q-card"><div class="q">22. Where do you see yourself in 3 years?</div><div class="a">"Leading a revenue operations function at scale — either as a senior IC who drives company-wide process infrastructure, or as a people leader building the ops team for the next growth phase. Revolut's trajectory means both paths exist."</div><div class="story">→ Career trajectory</div></div>
+</div>
+
+<!-- ═══ TAB 7: COMP INTEL ═══ -->
+<div class="section" id="tab-7">
+  <div class="section-num">08 / What they pay</div>
+  <div class="section-title">Compensation Intel</div>
+  <div class="section-sub">Confidence: MEDIUM (3 sources, 55+ datapoints). Triangulated India data.</div>
+
+  <div class="stat-grid">
+    <div class="stat-box"><div class="val">₹30L</div><div class="lbl">P50 Cash (Glassdoor)</div></div>
+    <div class="stat-box"><div class="val">₹43–47L</div><div class="lbl">P75 Cash Range</div></div>
+    <div class="stat-box"><div class="val">₹52L</div><div class="lbl">P90 (Stretch)</div></div>
+    <div class="stat-box caution"><div class="val">$75B→$100B+</div><div class="lbl">Valuation (Pre-IPO)</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Source Triangulation</h3>
+    <table>
+      <thead><tr><th>Source</th><th>Sample</th><th>P25</th><th>P50</th><th>P75</th><th>P90</th></tr></thead>
+      <tbody>
+        <tr><td>Glassdoor (India)</td><td>55 salaries</td><td>₹23.3L</td><td>₹30L</td><td>₹42.6L</td><td>₹52L</td></tr>
+        <tr><td>Levels.fyi (BizOps Mgr India)</td><td>Multiple</td><td>₹29.8L</td><td>₹41.6–45.6L</td><td>—</td><td>₹94.9L*</td></tr>
+        <tr><td>Indeed (Strategy Mgr India)</td><td>6 postings</td><td>—</td><td>₹22.8L</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:11px; color:var(--text-muted); margin-top:8px;">*₹95L outlier on Levels.fyi almost certainly includes significant equity or represents a senior/lead band.</p>
+  </div>
+
+  <div class="card">
+    <h3>Equity Component</h3>
+    <p>Revolut valued at $75B (Nov 2025 secondary at $1,381/share). Targeting $100B+ in H2 2026 share sale. IPO targeted for 2028 at $150B+ valuation. Employees can sell up to 20% of holdings in secondary sales. Revenue: $6B in 2025 (up from $4B in 2024). Net profit: $1.7B.</p>
+    <p style="margin-top:12px;"><strong>For you:</strong> Pre-IPO equity is real but illiquid until 2028+. Grant size for this level is unknown — likely modest for a mid-level S&O Manager. Don't count equity in your walk-away calculation.</p>
+  </div>
+
+  <div class="card">
+    <h3>Walk-Away Analysis</h3>
+    <table>
+      <thead><tr><th>Scenario</th><th>Total Cash</th><th>vs ₹38L AVP Floor</th><th>vs ₹42L VP Floor</th></tr></thead>
+      <tbody>
+        <tr><td>P25 hire</td><td>~₹23L</td><td><span class="pill pill-red">❌ -39%</span></td><td><span class="pill pill-red">❌ -45%</span></td></tr>
+        <tr><td>P50 hire</td><td>~₹30–42L</td><td><span class="pill pill-amber">⚠ borderline</span></td><td><span class="pill pill-red">❌ below</span></td></tr>
+        <tr><td>P75 hire</td><td>~₹43–47L</td><td><span class="pill pill-green">✓ clears</span></td><td><span class="pill pill-amber">⚠ barely</span></td></tr>
+        <tr><td>P90 (stretch)</td><td>~₹52L</td><td><span class="pill pill-green">✓ clears</span></td><td><span class="pill pill-green">✓ clears</span></td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px; font-weight:600;">Negotiation lever: Position your 6 years of scaled operations as justification for P75+ placement. If they offer below ₹38L, walk.</p>
+  </div>
+</div>
+
+<!-- ═══ TAB 8: CERT ROADMAP ═══ -->
+<div class="section" id="tab-8">
+  <div class="section-num">09 / Credential strategy</div>
+  <div class="section-title">Cert Roadmap</div>
+  <div class="section-sub">JD is cert-silent. Triage based on interview signal value and cross-role utility.</div>
+
+  <div class="card">
+    <h3>Cert Footprint Analysis</h3>
+    <p>The JD lists no certifications as requirements or nice-to-haves. Revolut's hiring philosophy emphasises demonstrated capability over credentials — consistent with startup culture. However, certain certifications carry interview signal value and cross-role utility in your pipeline.</p>
+  </div>
+
+  <div class="card">
+    <table>
+      <thead><tr><th>Certification</th><th>Relevance</th><th>Weight</th><th>Status</th><th>Cross-Role Value</th></tr></thead>
+      <tbody>
+        <tr><td>SQL Proficiency (Mode Analytics + DataCamp)</td><td>JD "nice to have" → table-stakes for P75+ offers</td><td><span class="pill pill-amber">MEDIUM</span></td><td>In Progress</td><td>Uber (HARD GATE), Google (3 roles), D.E. Shaw</td></tr>
+        <tr><td>PMI-ACP</td><td>Agile/sprint methodology — Revolut runs agile ops</td><td><span class="pill pill-amber">MED-LOW</span></td><td>In Progress</td><td>Universal across all pipeline roles</td></tr>
+        <tr><td>Google Analytics 4 (Skillshop)</td><td>Funnel/cohort analytics — fintech RevOps adjacent</td><td><span class="pill pill-blue">LOW</span></td><td>Planned</td><td>Google roles (3), Mastercard</td></tr>
+        <tr><td>Python (DataCamp / freeCodeCamp)</td><td>JD "nice to have" — builds on AI portfolio work</td><td><span class="pill pill-blue">LOW</span></td><td>Active (AI projects)</td><td>Uber, Google, AmEx</td></tr>
+        <tr><td>AZ-900 (Azure Fundamentals)</td><td>Low direct relevance — Revolut is AWS-heavy</td><td><span class="pill pill-blue">LOW</span></td><td>In Progress</td><td>Microsoft roles (2)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Recommendation</h3>
+    <p>Don't pursue any new certification specifically for this role. Your existing in-progress stack (SQL + PMI-ACP + AZ-900) covers the bases. The highest-value action for Revolut specifically is completing the SQL track (Mode Analytics) — it converts "nice to have" into "demonstrated" and unlocks P75+ comp negotiation positioning.</p>
+  </div>
+</div>
+
+<!-- ═══ TAB 9: RISK & RED FLAGS ═══ -->
+<div class="section" id="tab-9">
+  <div class="section-num">10 / Eyes open</div>
+  <div class="section-title">Risk & Red Flags</div>
+  <div class="section-sub">Conditional trigger: seniority step-down + comp risk + overqualification signal. All 3 fired.</div>
+
+  <div class="risk-card">
+    <h4>⚠ Risk 1: Seniority Regression</h4>
+    <p>The JD asks for "2+ years of work experience." You have 6+. This is a mid-level IC role — no team management mentioned, no people leadership required. Moving from AGM (VP-adjacent) with 77 reports to an IC S&O Manager is a visible step-down on paper. Future employers may question why you took a lower-scope role.</p>
+    <p style="margin-top:8px;"><strong>Mitigation:</strong> Frame as a deliberate domain pivot: "I chose scope of impact over title — Revolut's revenue operations at $6B scale was a higher-complexity challenge than managing a larger team in a slower-growth industry." Only works if you actually get meaningful project ownership.</p>
+  </div>
+
+  <div class="risk-card">
+    <h4>⚠ Risk 2: Compensation Below Walk-Away</h4>
+    <p>India P50 (₹30L) is 21% below your AVP-track floor (₹38L). Even P75 (₹43L) barely clears. Pre-IPO equity is illiquid until 2028. You'd be taking a material pay cut for speculative upside.</p>
+    <p style="margin-top:8px;"><strong>Mitigation:</strong> Negotiate hard for P75+ placement citing 6 years of scaled ops. Request equity grant details in writing before accepting. Walk if cash comp < ₹38L — no exceptions.</p>
+  </div>
+
+  <div class="risk-card">
+    <h4>⚠ Risk 3: Overqualification Signal</h4>
+    <p>A reviewer seeing "14.9x scale, 77-person team, AED 12.97B portfolio" applying for a "2+ years experience" role may assume you're desperate, not strategic. This can lead to lowball offers or outright rejection ("overqualified").</p>
+    <p style="margin-top:8px;"><strong>Mitigation:</strong> Downweight team size in the resume. Lead with process impact and technology leverage. Frame as: "I bring pattern recognition from scaled operations to a company that's building its ops infrastructure for the next phase."</p>
+  </div>
+
+  <div class="risk-card">
+    <h4>⚠ Risk 4: Revolut Culture Fit</h4>
+    <p>Glassdoor comp satisfaction for India S&O Managers: 3.4/5 (13% below global Revolut average). Revolut's culture is famously intense — long hours, high accountability, fast iteration. Your DISC profile (High-C, High-S) suggests you thrive in structured environments with clear parameters. Revolut's chaos-as-feature culture may create friction.</p>
+    <p style="margin-top:8px;"><strong>Mitigation:</strong> Ask about team cadence in interviews: sprint length, decision-making speed, escalation norms. If the answers suggest unpredictable chaos rather than structured intensity, this is a mismatch.</p>
+  </div>
+
+  <div class="card">
+    <h3>Net Risk Assessment</h3>
+    <p style="font-weight:600; color:var(--red);">Aggregate risk: HIGH. Three of four risks are structural (seniority, comp, culture fit) and cannot be fully mitigated. Pursue only if: (a) comp clears ₹38L+ in cash, (b) the role is internally leveled higher than the JD implies, and (c) you receive meaningful equity. If any of these conditions fail, redirect effort to higher-fit pipeline roles.</p>
+  </div>
+</div>
+
+<!-- ═══ TAB 10: CLOSE & OUTREACH ═══ -->
+<div class="section" id="tab-10">
+  <div class="section-num">11 / Make the move</div>
+  <div class="section-title">Close & Outreach</div>
+  <div class="section-sub">Application strategy, networking angles, and closing moves.</div>
+
+  <div class="card">
+    <h3>Application Channel</h3>
+    <p>Apply directly via <strong>revolut.com/en-IN/careers</strong>. Revolut explicitly warns against third-party application platforms. Do not use LinkedIn Easy Apply — go to the source.</p>
+  </div>
+
+  <div class="card">
+    <h3>LinkedIn Outreach Strategy</h3>
+    <p><strong>Target:</strong> Current Revolut S&O Managers in India (there are 5,500+ India employees). Search: "Strategy Operations Manager Revolut India" on LinkedIn.</p>
+    <p style="margin-top:12px;"><strong>Outreach script (keep under 300 characters):</strong></p>
+    <p style="background:var(--bg-panel); padding:14px; border-radius:8px; margin-top:8px; font-size:13px;">Hi [Name] — I'm exploring the S&O Manager (Revenue) role at Revolut India. I've spent 6 years scaling revenue operations 14.9x at a $3.5B real estate platform and I'm curious about how the India ops team is structured. Would you have 10 minutes for a quick chat?</p>
+  </div>
+
+  <div class="card">
+    <h3>IIM / BITS Alumni Network</h3>
+    <p>Search for IIM Udaipur and BITS Pilani alumni at Revolut on LinkedIn. Revolut's India GCC (Bangalore-heavy) may have alumni connections. A warm introduction converts at 3–5x the rate of a cold application.</p>
+  </div>
+
+  <div class="card">
+    <h3>Cover Note Positioning (if applicable)</h3>
+    <p>Lead with scale + systems, not title. Three bullets max:</p>
+    <p style="margin-top:8px;">1. "Scaled revenue operations 14.9x ($240M → $3.5B) across 4 entities, 2 geographies — through process architecture and technology leverage, not headcount."</p>
+    <p>2. "Led end-to-end infrastructure builds: CRM 0→1 (70+ live reports, 6 years in production), SQL migration programme, AI-augmented operations portfolio."</p>
+    <p>3. "Looking to apply pattern recognition from scaled operations to Revolut's next growth phase — where the challenge is building systems that don't break at 10x."</p>
+  </div>
+
+  <div class="card">
+    <h3>Pipeline Priority Reminder</h3>
+    <p>This role sits at <strong>56→68 fit</strong> against 10+ pipeline roles scoring 70+. Time invested here is time not spent on Uber resume v1 (highest CTC ceiling), Oaktree VP (fastest TTO), or AmEx GMNS Director (highest fit). Apply if the application takes less than 60 minutes total. Do not build a custom resume unless you pass the first screen.</p>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+function switchTab(idx) {
+  idx = parseInt(idx);
+  document.querySelectorAll('.section').forEach((s,i) => {
+    s.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.rail a').forEach((a,i) => {
+    a.classList.toggle('active', i === idx);
+  });
+  const sel = document.getElementById('mobileSelect');
+  if (sel) sel.value = idx;
+  window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>

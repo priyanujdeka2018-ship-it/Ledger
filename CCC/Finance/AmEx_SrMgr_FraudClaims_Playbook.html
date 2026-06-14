@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmEx Sr Manager — Fraud Risk (Claims) | Career Playbook | Priyanuj Deka</title>
+<style>
+:root {
+  --amex-blue: #006FCF;
+  --amex-dark: #002663;
+  --amex-accent: #1D8ECE;
+  --amex-light: #E8F2FC;
+  --amex-bg: #F0F6FC;
+  --text: #2C2F33;
+  --text-muted: #5A6068;
+  --white: #FFFFFF;
+  --gray-100: #F5F7FA;
+  --gray-200: #E4E8ED;
+  --gray-300: #CDD3DB;
+  --red: #C62828;
+  --red-bg: #FFEBEE;
+  --amber: #E65100;
+  --amber-bg: #FFF3E0;
+  --green: #2E7D32;
+  --green-bg: #E8F5E9;
+  --rail-w: 220px;
+  --font: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: "SF Mono", "Cascadia Code", "Consolas", monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; scroll-behavior: smooth; }
+body { font-family: var(--font); color: var(--text); background: var(--gray-100); line-height: 1.55; }
+
+/* LEFT RAIL */
+.rail {
+  position: fixed; top: 0; left: 0; width: var(--rail-w); height: 100vh;
+  background: var(--amex-dark); display: flex; flex-direction: column;
+  z-index: 100; overflow-y: auto;
+}
+.rail-logo {
+  padding: 20px 16px 12px; border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.rail-logo h2 { color: var(--white); font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.rail-logo p { color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 4px; }
+.rail-tabs { flex: 1; padding: 8px 0; }
+.rail-tab {
+  display: block; width: 100%; padding: 10px 16px; border: none; background: none;
+  color: rgba(255,255,255,0.6); font-size: 13px; text-align: left; cursor: pointer;
+  font-family: var(--font); transition: all 0.15s; border-left: 3px solid transparent;
+}
+.rail-tab:hover { color: var(--white); background: rgba(255,255,255,0.05); }
+.rail-tab.active {
+  color: var(--white); background: rgba(255,255,255,0.1);
+  border-left-color: var(--amex-blue); font-weight: 600;
+}
+.rail-tab .tab-num {
+  display: inline-block; width: 22px; font-family: var(--mono); font-size: 11px;
+  color: rgba(255,255,255,0.35); margin-right: 6px;
+}
+.rail-tab.active .tab-num { color: var(--amex-blue); }
+
+/* MOBILE DROPDOWN */
+.mobile-nav {
+  display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: var(--amex-dark); padding: 10px 16px;
+}
+.mobile-nav select {
+  width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1); color: var(--white); font-size: 14px;
+  font-family: var(--font);
+}
+
+/* MAIN CONTENT */
+.main { margin-left: var(--rail-w); min-height: 100vh; }
+.section { display: none; padding: 32px 40px 60px; max-width: 960px; }
+.section.active { display: block; }
+.section-title {
+  font-size: 22px; font-weight: 700; color: var(--amex-dark); margin-bottom: 6px;
+}
+.section-sub { color: var(--text-muted); font-size: 13px; margin-bottom: 28px; }
+
+/* CARDS */
+.card {
+  background: var(--white); border-radius: 8px; padding: 20px 24px;
+  margin-bottom: 16px; border: 1px solid var(--gray-200);
+}
+.card-title {
+  font-size: 15px; font-weight: 700; color: var(--amex-dark); margin-bottom: 10px;
+}
+.card p { font-size: 13.5px; color: var(--text); margin-bottom: 8px; }
+.card p:last-child { margin-bottom: 0; }
+
+/* STAT GRID */
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+.stat-card {
+  background: var(--white); border-radius: 8px; padding: 16px;
+  border: 1px solid var(--gray-200); text-align: center;
+}
+.stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.stat-value { font-size: 22px; font-weight: 800; color: var(--amex-dark); font-family: var(--mono); }
+.stat-value.blue { color: var(--amex-blue); }
+.stat-value.amber { color: var(--amber); }
+.stat-value.green { color: var(--green); }
+.stat-note { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+/* BADGES */
+.badge {
+  display: inline-block; padding: 3px 10px; border-radius: 4px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;
+}
+.badge-strong { background: var(--green-bg); color: var(--green); }
+.badge-mod { background: var(--amber-bg); color: var(--amber); }
+.badge-gap { background: var(--red-bg); color: var(--red); }
+.badge-blue { background: var(--amex-light); color: var(--amex-blue); }
+
+/* REQUIREMENT CARDS */
+.req-card {
+  background: var(--white); border-radius: 8px; padding: 18px 22px;
+  margin-bottom: 12px; border: 1px solid var(--gray-200);
+  border-left: 4px solid var(--gray-300);
+}
+.req-card.strong { border-left-color: var(--green); }
+.req-card.moderate { border-left-color: var(--amber); }
+.req-card.gap { border-left-color: var(--red); }
+.req-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+.req-title { font-size: 14px; font-weight: 700; color: var(--amex-dark); flex: 1; min-width: 200px; }
+.req-jd { font-size: 12px; color: var(--text-muted); font-style: italic; margin-bottom: 8px; padding: 6px 10px; background: var(--gray-100); border-radius: 4px; }
+.req-proof { font-size: 13px; color: var(--text); line-height: 1.5; }
+.req-proof strong { color: var(--amex-dark); }
+
+/* STAR CARDS */
+.star-card {
+  background: var(--white); border-radius: 8px; padding: 20px 24px;
+  margin-bottom: 16px; border: 1px solid var(--gray-200);
+}
+.star-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+.star-title { font-size: 15px; font-weight: 700; color: var(--amex-dark); }
+.star-row { display: flex; gap: 12px; margin-bottom: 10px; }
+.star-key {
+  flex-shrink: 0; width: 72px; padding: 4px 0; text-align: center;
+  font-size: 11px; font-weight: 700; border-radius: 4px; letter-spacing: 0.3px;
+}
+.star-key.sit { background: #E3F2FD; color: #1565C0; }
+.star-key.task { background: #F3E5F5; color: #7B1FA2; }
+.star-key.act { background: #FFF3E0; color: #E65100; }
+.star-key.res { background: #E8F5E9; color: #2E7D32; }
+.star-key.bridge { background: var(--amex-light); color: var(--amex-blue); }
+.star-content { font-size: 13px; color: var(--text); line-height: 1.5; flex: 1; }
+
+/* TIMELINE */
+.timeline { position: relative; padding-left: 28px; }
+.timeline::before {
+  content: ''; position: absolute; left: 8px; top: 4px; bottom: 4px;
+  width: 2px; background: var(--gray-300);
+}
+.tl-item { position: relative; margin-bottom: 16px; }
+.tl-item::before {
+  content: ''; position: absolute; left: -24px; top: 6px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--amex-blue); border: 2px solid var(--white);
+  box-shadow: 0 0 0 2px var(--amex-light);
+}
+.tl-item.phase::before { background: var(--amex-dark); width: 14px; height: 14px; left: -25px; top: 4px; }
+.tl-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px; }
+.tl-text { font-size: 13.5px; color: var(--text); margin-top: 2px; }
+.tl-text strong { color: var(--amex-dark); }
+
+/* AI CARDS */
+.ai-card {
+  background: var(--white); border-radius: 8px; padding: 20px 24px;
+  margin-bottom: 16px; border: 1px solid var(--gray-200);
+  border-left: 4px solid var(--amex-blue);
+}
+.ai-tag {
+  display: inline-block; padding: 2px 8px; border-radius: 3px;
+  font-size: 10px; font-weight: 600; background: var(--amex-light);
+  color: var(--amex-blue); margin-right: 4px; margin-bottom: 4px;
+}
+
+/* QUESTION TABLE */
+.q-table { width: 100%; border-collapse: collapse; }
+.q-table th {
+  text-align: left; padding: 10px 12px; background: var(--amex-dark);
+  color: var(--white); font-size: 12px; font-weight: 600;
+}
+.q-table td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid var(--gray-200); vertical-align: top; }
+.q-table tr:hover { background: var(--gray-100); }
+.q-num { font-family: var(--mono); color: var(--amex-blue); font-weight: 700; font-size: 12px; width: 30px; }
+
+/* COMP TABLE */
+.comp-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+.comp-table th {
+  text-align: left; padding: 10px 14px; background: var(--amex-light);
+  color: var(--amex-dark); font-size: 12px; font-weight: 700; border-bottom: 2px solid var(--amex-blue);
+}
+.comp-table td { padding: 10px 14px; font-size: 13px; border-bottom: 1px solid var(--gray-200); }
+
+/* VOCAB TABLE */
+.vocab-table { width: 100%; border-collapse: collapse; }
+.vocab-table th {
+  text-align: left; padding: 8px 12px; background: var(--amex-dark);
+  color: var(--white); font-size: 12px; font-weight: 600;
+}
+.vocab-table td { padding: 8px 12px; font-size: 12.5px; border-bottom: 1px solid var(--gray-200); vertical-align: top; }
+.vocab-table tr:nth-child(even) { background: var(--gray-100); }
+
+/* PROGRESS BAR */
+.progress-wrap { margin: 8px 0; }
+.progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+.progress-bar { height: 6px; background: var(--gray-200); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; transition: width 0.3s; }
+.fill-green { background: var(--green); }
+.fill-amber { background: var(--amber); }
+.fill-red { background: var(--red); }
+.fill-blue { background: var(--amex-blue); }
+
+/* CERT CARD */
+.cert-card {
+  background: var(--white); border-radius: 8px; padding: 18px 22px;
+  margin-bottom: 12px; border: 1px solid var(--gray-200);
+}
+.cert-weight { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+.cert-weight.high { color: var(--red); }
+.cert-weight.med { color: var(--amber); }
+.cert-weight.low { color: var(--green); }
+
+/* CALLOUT */
+.callout {
+  padding: 16px 20px; border-radius: 8px; margin-bottom: 16px; font-size: 13px;
+}
+.callout-blue { background: var(--amex-light); border-left: 4px solid var(--amex-blue); }
+.callout-amber { background: var(--amber-bg); border-left: 4px solid var(--amber); }
+.callout-red { background: var(--red-bg); border-left: 4px solid var(--red); }
+.callout-green { background: var(--green-bg); border-left: 4px solid var(--green); }
+.callout strong { color: var(--amex-dark); }
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* SCORE BAR */
+.score-bar-wrap { margin: 16px 0; }
+.score-bar { height: 10px; background: var(--gray-200); border-radius: 5px; position: relative; overflow: visible; }
+.score-marker {
+  position: absolute; top: -6px; width: 22px; height: 22px; border-radius: 50%;
+  background: var(--amex-blue); border: 3px solid var(--white);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.score-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 6px; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .rail { display: none; }
+  .mobile-nav { display: block; }
+  .main { margin-left: 0; padding-top: 52px; }
+  .section { padding: 20px 16px 40px; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .grid-2 { grid-template-columns: 1fr; }
+  .q-table th:nth-child(3), .q-table td:nth-child(3) { display: none; }
+  .star-row { flex-direction: column; gap: 4px; }
+  .star-key { width: auto; }
+}
+@media (max-width: 480px) {
+  .stat-grid { grid-template-columns: 1fr; }
+  .req-header { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- LEFT RAIL -->
+<nav class="rail">
+  <div class="rail-logo">
+    <h2>Fraud Claims</h2>
+    <p>AmEx Sr Manager · Playbook</p>
+  </div>
+  <div class="rail-tabs">
+    <button class="rail-tab active" onclick="showTab(0)"><span class="tab-num">01</span>Snapshot</button>
+    <button class="rail-tab" onclick="showTab(1)"><span class="tab-num">02</span>Role Decode</button>
+    <button class="rail-tab" onclick="showTab(2)"><span class="tab-num">03</span>Fit &amp; Gap</button>
+    <button class="rail-tab" onclick="showTab(3)"><span class="tab-num">04</span>STAR Mapping</button>
+    <button class="rail-tab" onclick="showTab(4)"><span class="tab-num">05</span>30 · 60 · 90</button>
+    <button class="rail-tab" onclick="showTab(5)"><span class="tab-num">06</span>AI Differentiator</button>
+    <button class="rail-tab" onclick="showTab(6)"><span class="tab-num">07</span>Interview Kit</button>
+    <button class="rail-tab" onclick="showTab(7)"><span class="tab-num">08</span>Comp Intel</button>
+    <button class="rail-tab" onclick="showTab(8)"><span class="tab-num">09</span>Cert Roadmap</button>
+    <button class="rail-tab" onclick="showTab(9)"><span class="tab-num">10</span>Close &amp; Outreach</button>
+  </div>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav">
+  <select onchange="showTab(this.value)">
+    <option value="0">01 — Snapshot</option>
+    <option value="1">02 — Role Decode</option>
+    <option value="2">03 — Fit & Gap</option>
+    <option value="3">04 — STAR Mapping</option>
+    <option value="4">05 — 30·60·90</option>
+    <option value="5">06 — AI Differentiator</option>
+    <option value="6">07 — Interview Kit</option>
+    <option value="7">08 — Comp Intel</option>
+    <option value="8">09 — Cert Roadmap</option>
+    <option value="9">10 — Close & Outreach</option>
+  </select>
+</div>
+
+<div class="main">
+
+<!-- ====== TAB 01: SNAPSHOT ====== -->
+<div class="section active" id="tab-0">
+  <h1 class="section-title">Snapshot</h1>
+  <p class="section-sub">AmEx Senior Manager — Risk Management (Fraud Claims) · Gurgaon · Hybrid</p>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Net Fit</div>
+      <div class="stat-value amber">58→70</div>
+      <div class="stat-note">Base → Addressable</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Status</div>
+      <div class="stat-value" style="font-size:16px; color:var(--amber)">CONDITIONAL</div>
+      <div class="stat-note">Below GCG Sr Mgr (72)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Conv Prob</div>
+      <div class="stat-value amber">25–30%</div>
+      <div class="stat-note">Domain gap is primary filter</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Target CTC</div>
+      <div class="stat-value blue">₹48–55L</div>
+      <div class="stat-note">P50–P75 total comp</div>
+    </div>
+  </div>
+
+  <div class="score-bar-wrap">
+    <div class="score-bar">
+      <div class="score-marker" style="left:55%" title="58 base"></div>
+      <div class="score-marker" style="left:68%; background:var(--green); opacity:0.6" title="70 addressable"></div>
+    </div>
+    <div class="score-label">
+      <span>0 — No Fit</span>
+      <span>50 — Competitive</span>
+      <span>70 — Strong</span>
+      <span>100</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">One-Line Thesis</div>
+    <p>Process-design and analytical muscles match structurally, but fraud claims is a genuine domain pivot — not a vocabulary reframe — placing this below all three existing AmEx tracks.</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Sub-Scores</div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Functional</span><span>6/10</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-amber" style="width:60%"></div></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Technical / Cert</span><span>5/10</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-red" style="width:50%"></div></div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Leadership / Vocab</span><span>7/10</span></div>
+        <div class="progress-bar"><div class="progress-fill fill-green" style="width:70%"></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Pipeline Context</div>
+      <p>This is your 4th AmEx role, in a <strong>different org</strong> (Global Fraud &amp; Banking Risk vs. GMNS/GCG). Fraud claims domain is a genuine capability gap, not a vocabulary gap. Pursue only if higher-fit AmEx tracks stall.</p>
+      <p style="margin-top:8px"><strong>Upside:</strong> JD names GMNS as enterprise partner. If your GMNS Director application is live, this creates "known entity" leverage inside AmEx.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-amber">
+    <strong>Conditional Gate:</strong> Build and submit only if (a) GMNS Director and GCG Sr Manager applications do not advance within 2 weeks, OR (b) you want AmEx hiring funnel familiarity — using this as a lower-risk practice run for the Director-level roles.
+  </div>
+</div>
+
+<!-- ====== TAB 02: ROLE DECODE ====== -->
+<div class="section" id="tab-1">
+  <h1 class="section-title">Role Decode</h1>
+  <p class="section-sub">What this role actually is — beyond the JD language</p>
+
+  <div class="card">
+    <div class="card-title">The Role in Plain English</div>
+    <p><strong>"Strategy analyst + process designer for fraud claims — the team that decides who really pays when fraud happens."</strong></p>
+    <p style="margin-top:10px">Within AmEx's Global Fraud &amp; Banking Risk org, the fraud claims team owns the question: "Was this transaction really fraud, or is someone gaming the system?" When a cardholder files a fraud claim, AmEx needs to determine if it's legitimate (real fraud) or suspect/bogus (the cardholder actually made the transaction). This role designs the strategies, data signals, and processes that make that determination at scale.</p>
+    <p style="margin-top:8px">You are <strong>not</strong> the person reviewing individual claims. You're the person building the machine — the rules, models, and review queues — that the operations team uses to adjudicate claims. You partner with data science (who build the ML models), technology (who build the tooling), and servicing ops (who execute the reviews).</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Org Context</div>
+    <p><strong>Global Fraud &amp; Banking Risk</strong> → Fraud Claims sub-team. Enterprise partners include: <strong>GMNS</strong> (your highest-fit AmEx target), Global Servicing, EDMX, Enterprise Digital, Technology, US Consumer &amp; Commercial.</p>
+    <p style="margin-top:8px">The team's north star: reduce fraud losses from bogus claims while maintaining the world-class customer experience AmEx is known for. Same fraud–CX tradeoff as the Uber role, different domain.</p>
+  </div>
+
+  <div class="callout callout-blue">
+    <strong>The core tension:</strong> Every bogus claim you catch saves AmEx money. Every legitimate claim you wrongly flag as bogus damages customer trust. You optimize this tradeoff with data, not intuition.
+  </div>
+
+  <div class="card">
+    <div class="card-title">Top 7 Requirements, Reverse-Engineered</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">1. Design strategies for suspect fraud claims identification</div>
+      <div class="badge badge-strong">CORE ASK</div>
+    </div>
+    <div class="req-jd">"Design strategies for Suspect(bogus) fraud claims identification, management, and review strategies, leveraging Amex's unique closed loop and big data capabilities"</div>
+    <div class="req-proof">This is the headline deliverable. You build the rules, thresholds, and review queues that flag potentially bogus claims before they're paid out. "Closed loop" is AmEx's competitive advantage — they own both the card-issuing and merchant-acquiring sides, giving them data other networks don't have. Your analog: designing the <strong>T−25/T+30 critical collection window</strong> — a strategy framework that separates high-risk from low-risk based on data signals.</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">2. Analyze fraud claims data for patterns and trends</div>
+      <div class="badge badge-strong">CORE ASK</div>
+    </div>
+    <div class="req-jd">"Analyze fraud claims data for patterns and trends, analyze processes to validate that chargeback opportunities are fully optimized"</div>
+    <div class="req-proof">Two things here: (a) pattern analysis on claims data to identify emerging fraud vectors or bogus-claim patterns, and (b) chargeback optimization — making sure AmEx recovers money from merchants when the liability sits with them. Your analog: <strong>PR rejection 49% RCA</strong> — multi-source data triangulation to find patterns in rejection categories, then building monitoring dashboards.</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">3. Oversee servicing and claims management capabilities</div>
+    </div>
+    <div class="req-jd">"Oversee the creation of servicing and claims management capabilities and processes. Partner with Ops teams to improve efficiency"</div>
+    <div class="req-proof">You design the operational playbook — how claims are triaged, reviewed, escalated, and resolved. Then partner with ops to make sure it actually works at volume. Your analog: <strong>Salesforce 0→1 build</strong> — creating the operational platform from scratch, then rolling it out across two geographies.</div>
+  </div>
+
+  <div class="req-card moderate">
+    <div class="req-header">
+      <div class="req-title">4. Collaborate with modeling team on fraud strategies</div>
+    </div>
+    <div class="req-jd">"Collaborate with the modeling team to build efficient strategies, reducing losses due to suspect fraud claims by identifying data signals"</div>
+    <div class="req-proof">You're the strategy voice; the modeling team builds the ML. Your job is to identify what data signals matter ("customers who file 3+ claims in 6 months on CNP transactions above $500") and the modelers turn those into predictive features. This requires speaking data-science vocabulary without being a data scientist. Your AI portfolio projects demonstrate this bridge.</div>
+  </div>
+
+  <div class="req-card moderate">
+    <div class="req-header">
+      <div class="req-title">5. Partner with internal FRM teams and technology</div>
+    </div>
+    <div class="req-jd">"Partner closely with internal FRM teams, technology to ideate, and create solutions, capabilities, and strategies"</div>
+    <div class="req-proof">Cross-functional partnership is the operating mode, not a side activity. FRM = Fraud Risk Management — the broader organization. Technology = the engineering teams that build claim processing systems. Your analog: <strong>6-stakeholder Salesforce discovery</strong> — running cross-functional requirements gathering and owning the solution design.</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">6. Assess process inherent risk and implement controls</div>
+    </div>
+    <div class="req-jd">"Assess process inherent risk and implement mitigating controls under the fraud RAU"</div>
+    <div class="req-proof">RAU = Risk Assessment Unit — AmEx's internal risk framework. You assess where the claims process itself has vulnerability (agent collusion, incomplete review, data gaps) and build controls. Your analog: <strong>14-finding audit risk register</strong> — identifying process-level risks and implementing corrective controls with weekly closure governance.</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">7. KPI reporting and monitoring</div>
+    </div>
+    <div class="req-jd">"Daily / Weekly / Monthly KPI reporting &amp; monitoring"</div>
+    <div class="req-proof">The reporting cadence is the operating rhythm. Daily = operational (queue depth, SLA). Weekly = tactical (trend shifts, rule performance). Monthly = strategic (loss rates, recovery rates, false-positive rates). Your analog: <strong>70+ report MI ecosystem</strong> serving daily, weekly, and monthly cadences across 77 practitioners and C-suite.</div>
+  </div>
+</div>
+
+<!-- ====== TAB 03: FIT & GAP ====== -->
+<div class="section" id="tab-2">
+  <h1 class="section-title">Fit &amp; Gap Analysis</h1>
+  <p class="section-sub">9 requirement matches + 4 gaps</p>
+
+  <div class="score-bar-wrap">
+    <div class="score-bar">
+      <div class="score-marker" style="left:55%"></div>
+      <div class="score-marker" style="left:68%; background:var(--green); opacity:0.6"></div>
+    </div>
+    <div class="score-label">
+      <span>0</span><span>58 base</span><span>70 addressable</span><span>100</span>
+    </div>
+  </div>
+
+  <h3 style="margin: 20px 0 12px; color: var(--green); font-size: 14px;">MATCHES</h3>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">Strategy design for fraud identification</div>
+      <div class="badge badge-strong">STRONG</div>
+    </div>
+    <div class="req-proof">Your <strong>55-day T−25/T+30 framework</strong> is a strategy design for risk identification — separating high-risk from low-risk accounts using temporal and behavioral signals. The methodology (data signals → threshold logic → triage queue → escalation) is structurally identical to suspect-claims identification. Domain differs; architecture matches.</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">Data analysis for patterns and trends</div>
+      <div class="badge badge-strong">STRONG</div>
+    </div>
+    <div class="req-proof">The <strong>PR rejection 49% root-cause analysis</strong> is exactly this: mining operational data for patterns (rejection by category, by RM, by geography), identifying trends (upstream data quality as root cause), and building continuous monitoring. Your <strong>70+ report MI ecosystem</strong> is the analytical infrastructure that makes pattern detection ongoing, not ad-hoc.</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">Process design and operational capability build</div>
+      <div class="badge badge-strong">STRONG</div>
+    </div>
+    <div class="req-proof">Three proof points: (1) <strong>Salesforce 0→1</strong> — built claims management infrastructure from scratch. (2) <strong>PCC TAT 20→3 days</strong> — redesigned processing workflow at 3× volume. (3) <strong>6 MD-approved process documents</strong> — SOPs that govern 77-person operations. Creating servicing capabilities is your core operating mode.</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">Process risk assessment and controls implementation</div>
+      <div class="badge badge-strong">STRONG</div>
+    </div>
+    <div class="req-proof"><strong>14-finding audit risk register</strong> — identified process vulnerabilities, built corrective-action programme, achieved 97.5% error reduction. <strong>4-year audit SPOC</strong> — owned the control environment. <strong>Quality scorecard</strong> with automated escalation triggers — embedded controls into daily workflow. The "fraud RAU" framing is new vocabulary; the work is muscle memory.</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">KPI reporting and monitoring architecture</div>
+      <div class="badge badge-strong">STRONG</div>
+    </div>
+    <div class="req-proof"><strong>70+ report ecosystem</strong> serving daily/weekly/monthly cadence. Designed for three audiences: operational (RMs, team leads), tactical (managers, QCG), and strategic (CCO, CRO, MD). Role-tailored views, real-time data, automated distribution. Direct match to the JD's reporting requirement.</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">Cross-functional partnership</div>
+      <div class="badge badge-strong">STRONG</div>
+    </div>
+    <div class="req-proof">You sit at the intersection of <strong>4 sub-functions</strong> (Ops 38, QCG 12, MIS 15, Dues 12 RMs) and interface with <strong>CCO, CRO, MD/CEO, Technology, Legal</strong>. The JD names GMNS, EDMX, Enterprise Digital, Technology, Servicing, Consumer, and Commercial as partners. Six-plus stakeholder matrix management is your operating reality.</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">Project management and communication</div>
+      <div class="badge badge-strong">STRONG</div>
+    </div>
+    <div class="req-proof"><strong>12 concurrent workstreams</strong> delivered on schedule in FY2025. <strong>NPV AED 652M defence</strong> at MD/CEO — multiple scrutiny rounds, zero concessions. Project management isn't a skill you demonstrate; it's the default operating mode for everything you do.</div>
+  </div>
+
+  <div class="req-card strong">
+    <div class="req-header">
+      <div class="req-title">Education qualification</div>
+      <div class="badge badge-strong">EXCEEDS</div>
+    </div>
+    <div class="req-proof"><strong>BITS Pilani</strong> (dual degree, Engineering) + <strong>IIM Udaipur PGDM</strong> (MBA equivalent). JD asks for "Bachelor's degree in business, Economics, Sciences, Mathematics, or Engineering — preferred." You exceed this with both engineering and management credentials from India's premier institutions.</div>
+  </div>
+
+  <div class="req-card moderate">
+    <div class="req-header">
+      <div class="req-title">3+ years product management / strategy experience</div>
+      <div class="badge badge-mod">MODERATE</div>
+    </div>
+    <div class="req-proof">6+ years in collections operations with strong strategy and process design components. Not titled "Product Manager," but the work maps: <strong>Salesforce platform ownership</strong> (product decisions), <strong>T−25/T+30 framework</strong> (strategy), <strong>SQL migration programme</strong> (technical product implementation). Reframe required; experience sufficient.</div>
+  </div>
+
+  <h3 style="margin: 24px 0 12px; color: var(--red); font-size: 14px;">GAPS</h3>
+
+  <div class="req-card gap">
+    <div class="req-header">
+      <div class="req-title">Gap 1 — Fraud Domain Expertise</div>
+      <div class="badge badge-gap">CRITICAL</div>
+    </div>
+    <div class="req-proof">Zero fraud-domain experience. This is not a vocabulary gap — it's a capability gap. Fraud claims requires understanding: chargeback dispute flows, Reg E/Reg Z regulatory frameworks, reason codes (4837, 4863, etc.), suspect-bogus classification logic, friendly fraud vs. third-party fraud, card-not-present vs. card-present fraud patterns, and AmEx's closed-loop data advantage over Visa/Mastercard networks.</div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Severity</span><span>CRITICAL</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-red" style="width:90%"></div></div>
+    </div>
+    <p style="font-size:12px; margin-top:8px"><strong>Close it (4–6 weeks):</strong> (1) Study CFPB Reg E and Reg Z dispute requirements. (2) Read AmEx merchant chargeback guide (public). (3) Study Visa/Mastercard chargeback reason code taxonomy. (4) Read Kount/Forter/Ethoca whitepapers on friendly fraud. (5) Understand AmEx closed-loop advantage (issuer + acquirer = both-side data). (6) Build a fraud-claims classifier using your AI portfolio methodology (see AI tab).</p>
+  </div>
+
+  <div class="req-card gap">
+    <div class="req-header">
+      <div class="req-title">Gap 2 — SQL Proficiency</div>
+      <div class="badge badge-gap">HIGH</div>
+    </div>
+    <div class="req-proof">JD explicitly names SQL alongside Python and Hive. Your SQL migration programme (18/50 reports migrated) demonstrates awareness and trajectory, but not production-grade fluency. The fraud claims role requires querying large claim datasets to identify patterns — GROUP BY, window functions, CTEs, and subqueries on claim-level data are table stakes.</div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Severity</span><span>HIGH</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-red" style="width:75%"></div></div>
+    </div>
+    <p style="font-size:12px; margin-top:8px"><strong>Close it:</strong> Same SQL acceleration track as Uber — Mode Analytics + DataCamp + Kaggle IEEE-CIS fraud dataset. 4–6 week rubric. Shared investment across both pipeline roles.</p>
+  </div>
+
+  <div class="req-card gap">
+    <div class="req-header">
+      <div class="req-title">Gap 3 — Hive / Big Data Tooling</div>
+      <div class="badge badge-gap">MODERATE</div>
+    </div>
+    <div class="req-proof">JD names Hive alongside SQL and Python. Hive is a SQL-like interface for querying big data in Hadoop. If you can write SQL, Hive is a 1–2 week syntax adaptation. But you haven't used it, and claiming familiarity would be dishonest.</div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Severity</span><span>MODERATE</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-amber" style="width:55%"></div></div>
+    </div>
+    <p style="font-size:12px; margin-top:8px"><strong>Close it:</strong> After SQL is solid, Hive is a weekend sprint. Cloudera or Hortonworks sandbox environment + HiveQL exercises. Frame in interview: "I'm SQL-proficient and actively extending to Hive — the query paradigm is the same, it's the data-scale architecture that's different."</p>
+  </div>
+
+  <div class="req-card gap">
+    <div class="req-header">
+      <div class="req-title">Gap 4 — Credit Risk Background</div>
+      <div class="badge badge-gap">LOW</div>
+    </div>
+    <div class="req-proof">JD says "Experience in credit &amp; fraud risk preferred" — note "preferred," not required. Your risk experience is operational risk (audit, governance, controls), not credit risk (underwriting, portfolio risk, loss reserves). At Senior Manager level in fraud claims, credit risk knowledge is nice-to-have, not gatekeeping.</div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Severity</span><span>LOW</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-green" style="width:30%"></div></div>
+    </div>
+    <p style="font-size:12px; margin-top:8px"><strong>Close it:</strong> Read the Moody's/S&amp;P AmEx credit card portfolio overview. Understand charge-off rates, delinquency buckets, and how fraud losses sit alongside credit losses in AmEx's P&amp;L. 2-hour orientation, not a course.</p>
+  </div>
+
+  <div class="callout callout-green">
+    <strong>Not a Gap — Real Estate vs. Financial Services:</strong> Your AED 12.97B portfolio, AED 652M NPV, AED 86.8B active portfolio, and 14.9× scale-up are financial-services-grade numbers. The asset class differs; the operational risk profile is identical. State this directly if asked.
+  </div>
+</div>
+
+<!-- ====== TAB 04: STAR MAPPING ====== -->
+<div class="section" id="tab-3">
+  <h1 class="section-title">STAR Mapping — Fraud Claims Framing</h1>
+  <p class="section-sub">5 stories reframed for the fraud claims context</p>
+
+  <!-- STAR 1 -->
+  <div class="star-card">
+    <div class="star-header">
+      <div class="star-title">S1 — Suspect Pattern Identification at Scale</div>
+      <div class="badge badge-blue">PR Rejection 49% → Fraud Claims Pattern Detection</div>
+    </div>
+    <div class="star-row"><div class="star-key sit">SITUATION</div><div class="star-content">Payment Request rejection rate hit 49% — nearly half of all incoming requests failing quality validation. No monitoring system existed; the problem was invisible until it became a crisis. The pressure was to relax standards to clear the backlog. Analogous to a fraud claims environment where suspect-bogus signals are firing but no structured review strategy exists.</div></div>
+    <div class="star-row"><div class="star-key task">TASK</div><div class="star-content">Find the root cause, build a detection system, and resolve the crisis without compromising the quality standard — demonstrating that the 49% rate was the control working as designed, not evidence of a broken process.</div></div>
+    <div class="star-row"><div class="star-key act">ACTION</div><div class="star-content">Ran multi-source data triangulation across three data sets (rejection dashboard, collection-wise summary, daily PR aging). Identified that upstream data quality was the root cause — not the control itself. Built a daily rejection KPI as a permanent governance metric. Designed a Salesforce quality scorecard with automated escalation triggers. Held the standard at 49% despite pressure, presenting the data case: "The rejection rate is the control working."</div></div>
+    <div class="star-row"><div class="star-key res">RESULT</div><div class="star-content">Rate controlled within 30 days through root-cause remediation. Quality scorecard now monitors 8 workflow metrics continuously. PR-to-SOA processing improved from 24.8% to 51.3%. Quality enforcement drove speed improvement — not the reverse.</div></div>
+    <div class="star-row"><div class="star-key bridge">FRAUD CLAIMS BRIDGE</div><div class="star-content">This is the suspect-claims identification muscle: mine data for patterns, separate signal from noise, build monitoring, hold the standard when pressure mounts. In fraud claims, the analog is: "Is this rejection rate evidence that we're catching bogus claims — or evidence that our rules are too aggressive?"</div></div>
+  </div>
+
+  <!-- STAR 2 -->
+  <div class="star-card">
+    <div class="star-header">
+      <div class="star-title">S2 — Risk Register as Claims Management Infrastructure</div>
+      <div class="badge badge-blue">14-Finding Audit → Process Risk Controls</div>
+    </div>
+    <div class="star-row"><div class="star-key sit">SITUATION</div><div class="star-content">Internal audit identified 14 control failures across the collections data-processing workflow. Error rates at 41% on Final Notices. Volume growing 4× simultaneously. No structured remediation programme existed.</div></div>
+    <div class="star-row"><div class="star-key task">TASK</div><div class="star-content">Lead remediation across all 14 findings without disrupting live operations, while volume quadrupled from ~183/month to ~982/month.</div></div>
+    <div class="star-row"><div class="star-key act">ACTION</div><div class="star-content">Built risk register with owner-and-due-date discipline. Established weekly closure governance cadence. Initiated 6 MD-approved process documents as structural responses. Introduced "Zero Error Forward" checkpoints. Became permanent audit SPOC for 4 consecutive years.</div></div>
+    <div class="star-row"><div class="star-key res">RESULT</div><div class="star-content">97.5% error reduction (41% → 1%). Risk register became permanent governance tool. Named respondent for 4 years without a critical unresolved finding.</div></div>
+    <div class="star-row"><div class="star-key bridge">FRAUD CLAIMS BRIDGE</div><div class="star-content">The JD says "Assess process inherent risk and implement mitigating controls under the fraud RAU." This IS that work — identifying process vulnerabilities, building controls, tracking remediation, and maintaining the control environment. The RAU framing is new; the discipline is identical.</div></div>
+  </div>
+
+  <!-- STAR 3 -->
+  <div class="star-card">
+    <div class="star-header">
+      <div class="star-title">S3 — Claims Platform Build From Zero</div>
+      <div class="badge badge-blue">Salesforce 0→1 → Servicing Capability Creation</div>
+    </div>
+    <div class="star-row"><div class="star-key sit">SITUATION</div><div class="star-content">35+ person team operating on fragmented spreadsheets — no CRM, no shared data layer, no real-time visibility. Scaling from AED 867M to what would become AED 12.97B was impossible on manual infrastructure.</div></div>
+    <div class="star-row"><div class="star-key task">TASK</div><div class="star-content">Design and deploy a collections intelligence platform from scratch, with no vendor PM or technical PM support.</div></div>
+    <div class="star-row"><div class="star-key act">ACTION</div><div class="star-content">Conducted 6-stakeholder requirements discovery. Led solution design with Salesforce implementation team. Built 70+ report MI ecosystem. Rolled out across two geographies (Dubai + India). Established adoption governance and training programme.</div></div>
+    <div class="star-row"><div class="star-key res">RESULT</div><div class="star-content">Scaled to support 14.9× programme growth. 77 practitioners on shared real-time data layer. Zero additional reporting headcount. Enabled data-driven culture across the division.</div></div>
+    <div class="star-row"><div class="star-key bridge">FRAUD CLAIMS BRIDGE</div><div class="star-content">"Oversee the creation of servicing and claims management capabilities and processes" — this is what 0→1 platform builds look like. I didn't inherit a system; I authored the architecture, managed the stakeholders, and delivered the operating capability.</div></div>
+  </div>
+
+  <!-- STAR 4 -->
+  <div class="star-card">
+    <div class="star-header">
+      <div class="star-title">S4 — Data-Driven Strategy Defence to Senior Leadership</div>
+      <div class="badge badge-blue">NPV AED 652M → Strategy Presentation & Defence</div>
+    </div>
+    <div class="star-row"><div class="star-key sit">SITUATION</div><div class="star-content">Early-payment incentive programme required MD/CEO sign-off. Commercial case challenged on risk, cost, ROI across multiple dimensions.</div></div>
+    <div class="star-row"><div class="star-key task">TASK</div><div class="star-content">Build, defend, and secure approval for a complex financial model — independently.</div></div>
+    <div class="star-row"><div class="star-key act">ACTION</div><div class="star-content">Built NPV from first principles (AED 652M inflow, AED 21.2M cost, 248-day average prepayment, 32% cheaper than bank financing). Anticipated leadership questions — brought sensitivity scenarios for every challenge category. Defended at MD/CEO through multiple scrutiny rounds. Held the analytical position; conceded minor framing, held core recommendation.</div></div>
+    <div class="star-row"><div class="star-key res">RESULT</div><div class="star-content">Full MD approval. Zero material concessions. Programme delivered as modelled.</div></div>
+    <div class="star-row"><div class="star-key bridge">FRAUD CLAIMS BRIDGE</div><div class="star-content">Fraud claims strategy proposals — new review thresholds, bogus-identification rules, chargeback recovery targets — require senior-leadership defence with data. This story proves the muscle: build the model, defend the recommendation, hold when challenged.</div></div>
+  </div>
+
+  <!-- STAR 5 -->
+  <div class="star-card">
+    <div class="star-header">
+      <div class="star-title">S5 — Process Optimisation Under Volume Pressure</div>
+      <div class="badge badge-blue">PCC TAT 20→3 Days → Claims Processing Efficiency</div>
+    </div>
+    <div class="star-row"><div class="star-key sit">SITUATION</div><div class="star-content">Post-Completion Certificate process averaging 20-day TAT, causing revenue leakage. Volume simultaneously tripling from ~90 to 281 per month.</div></div>
+    <div class="star-row"><div class="star-key task">TASK</div><div class="star-content">Redesign end-to-end workflow without increasing headcount.</div></div>
+    <div class="star-row"><div class="star-key act">ACTION</div><div class="star-content">Mapped full process flow. Identified bottlenecks at verification + approval stages. Eliminated redundant steps. Built daily TAT + volume dashboards for performance tracking. Same team, redesigned workflow.</div></div>
+    <div class="star-row"><div class="star-key res">RESULT</div><div class="star-content">TAT 20→3 days (85% reduction). Monthly volume ~90→281 (3×). Same team, no headcount increase.</div></div>
+    <div class="star-row"><div class="star-key bridge">FRAUD CLAIMS BRIDGE</div><div class="star-content">"Partner with Ops teams to improve efficiency" — this is what operational efficiency looks like. Claims processing speed matters: faster adjudication = better customer experience + faster loss recovery. The constraint is always the same: improve speed without sacrificing accuracy.</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Quick Router — Behavioral to STAR</div>
+    <table class="q-table">
+      <tr><th>If they ask...</th><th>Lead with</th></tr>
+      <tr><td>"Describe a pattern you identified in data"</td><td>S1 — PR rejection 49%</td></tr>
+      <tr><td>"Tell me about risk controls you've implemented"</td><td>S2 — 14-finding register</td></tr>
+      <tr><td>"Walk me through building something from scratch"</td><td>S3 — Salesforce 0→1</td></tr>
+      <tr><td>"How do you present to senior leadership?"</td><td>S4 — NPV defence</td></tr>
+      <tr><td>"Tell me about process improvement"</td><td>S5 — PCC TAT</td></tr>
+      <tr><td>"How do you handle ambiguity?"</td><td>S3 — no precedent, no playbook</td></tr>
+      <tr><td>"When did you push back?"</td><td>S1 — held the standard at 49%</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ====== TAB 05: 30·60·90 ====== -->
+<div class="section" id="tab-4">
+  <h1 class="section-title">30 · 60 · 90 Day Plan</h1>
+  <p class="section-sub">From fraud-claims outsider to strategy-contributing team member</p>
+
+  <div class="card">
+    <div class="card-title" style="color: var(--amex-blue)">Days 1–30 · ABSORB</div>
+    <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px">Goal: Understand the fraud claims ecosystem, data, tools, and team before proposing anything</p>
+    <div class="timeline">
+      <div class="tl-item phase"><div class="tl-label">Week 1</div><div class="tl-text"><strong>Claims process immersion</strong> — shadow the claims review team end-to-end. Understand how a fraud claim moves from customer filing → initial triage → investigation → adjudication → resolution.</div></div>
+      <div class="tl-item"><div class="tl-label">Week 1</div><div class="tl-text"><strong>Meet enterprise partners</strong> — introductions with GMNS, EDMX, Enterprise Digital, Technology, and Servicing contacts. Map the stakeholder matrix and identify decision-makers vs. influencers.</div></div>
+      <div class="tl-item"><div class="tl-label">Week 2</div><div class="tl-text"><strong>Data environment orientation</strong> — get access to claims data in SQL/Hive. Run exploratory queries on claim volumes, bogus-claim rates, reason code distribution, and seasonal patterns.</div></div>
+      <div class="tl-item"><div class="tl-label">Week 2</div><div class="tl-text"><strong>Study existing suspect-claims strategies</strong> — understand current rules, thresholds, and review queues. Document what's working and what the team considers pain points.</div></div>
+      <div class="tl-item"><div class="tl-label">Week 3–4</div><div class="tl-text"><strong>KPI baseline</strong> — pull 12-month historical KPIs: bogus-claim identification rate, chargeback recovery rate, false-positive rate, average adjudication TAT, loss-to-claims ratio.</div></div>
+      <div class="tl-item"><div class="tl-label">Week 4</div><div class="tl-text"><strong>RAU framework orientation</strong> — understand the fraud Risk Assessment Unit methodology. Map existing controls, identify documentation gaps. Bring operational risk register discipline from Sobha.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="color: var(--amber)">Days 31–60 · CONTRIBUTE</div>
+    <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px">Goal: Deliver first tangible improvements using process-design and analytical strengths</p>
+    <div class="timeline">
+      <div class="tl-item phase"><div class="tl-label">Week 5</div><div class="tl-text"><strong>Claims data pattern analysis</strong> — run the first structured pattern analysis on suspect-claim data. Identify top 5 bogus-claim vectors by volume, loss, and false-positive rate. Present findings to team lead.</div></div>
+      <div class="tl-item"><div class="tl-label">Week 6</div><div class="tl-text"><strong>Chargeback optimisation audit</strong> — validate that chargeback opportunities are fully optimised. Identify any representment gaps (cases where AmEx could recover from merchants but isn't).</div></div>
+      <div class="tl-item"><div class="tl-label">Week 6–7</div><div class="tl-text"><strong>KPI reporting enhancement</strong> — propose improvements to the daily/weekly/monthly reporting cadence based on your 70+ report MI ecosystem experience. Build one new dashboard or report.</div></div>
+      <div class="tl-item"><div class="tl-label">Week 7</div><div class="tl-text"><strong>Partner with modeling team</strong> — initiate collaboration on data signals for suspect-claim identification. Bring 3 hypothesis-driven feature ideas based on your pattern analysis.</div></div>
+      <div class="tl-item"><div class="tl-label">Week 8</div><div class="tl-text"><strong>Process documentation</strong> — draft or update SOPs for claims review workflows, incorporating controls identified in your RAU assessment. Use your MD-approved document methodology.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="color: var(--green)">Days 61–90 · OWN</div>
+    <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px">Goal: Own a strategy workstream and deliver measurable impact</p>
+    <div class="timeline">
+      <div class="tl-item phase"><div class="tl-label">Week 9</div><div class="tl-text"><strong>Propose first suspect-claims strategy</strong> — using closed-loop data and pattern analysis from weeks 5–8, propose a new identification strategy targeting a specific bogus-claim vector.</div></div>
+      <div class="tl-item"><div class="tl-label">Week 10</div><div class="tl-text"><strong>RAU control implementation</strong> — implement at least one new process control under the fraud RAU framework. Document inherent risk, control design, and monitoring plan.</div></div>
+      <div class="tl-item"><div class="tl-label">Week 11</div><div class="tl-text"><strong>Cross-functional strategy session</strong> — lead a working session with FRM + Technology on claims management capability enhancement. Use your 6-stakeholder discovery methodology.</div></div>
+      <div class="tl-item"><div class="tl-label">Week 12</div><div class="tl-text"><strong>90-day impact presentation</strong> — present first-quarter results: KPIs established, patterns identified, strategies proposed, controls implemented, partner relationships built.</div></div>
+    </div>
+  </div>
+
+  <div class="callout callout-blue">
+    <strong>The meta-narrative:</strong> "I'm not pretending I know fraud claims on day one. I'm applying the same process-design, data-analysis, and controls-governance methodology that scaled a $3.5B collections portfolio 14.9× — to a new domain. The methodology transfers; the domain vocabulary is what I'm learning."
+  </div>
+</div>
+
+<!-- ====== TAB 06: AI DIFFERENTIATOR ====== -->
+<div class="section" id="tab-5">
+  <h1 class="section-title">AI Differentiator</h1>
+  <p class="section-sub">3 AI-powered solutions mapped to fraud claims problems</p>
+
+  <div class="card">
+    <div class="card-title">The 30-Second AI Story</div>
+    <p>"At Sobha, I've been building AI tools that automate the lowest-judgment parts of operational risk work — the weekly deck assembly, the risk-register status pulls, the compliance monitoring. The time saved goes back into actual judgment work: which patterns to escalate, which controls need tightening, which strategies need revision. I'd bring that same philosophy to fraud claims — AI as a force multiplier on the analyst's judgment, not a replacement for it."</p>
+  </div>
+
+  <div class="ai-card">
+    <div class="card-title">P-FC1: Suspect Claims Pattern Detector</div>
+    <div style="margin-bottom:10px">
+      <span class="ai-tag">Claude API</span><span class="ai-tag">Python</span><span class="ai-tag">pandas</span><span class="ai-tag">Streamlit</span>
+    </div>
+    <p><strong>The Problem:</strong> Claims analysts review individual claims in isolation. Patterns across claims — repeat claimants, merchant clusters, timing patterns, amount thresholds — require structured analysis that's time-intensive to do manually.</p>
+    <p><strong>The Build:</strong> A Streamlit dashboard that ingests a mock claims dataset (synthetic data), uses Claude API to identify patterns across multiple dimensions (claimant behavior, merchant patterns, temporal signals), and outputs a structured risk-priority queue. Each flagged pattern includes: the signal detected, the confidence level, the suggested review action, and the estimated loss at risk.</p>
+    <p><strong>The Pitch:</strong> "Instead of reviewing 1,000 claims linearly, the tool surfaces the 50 that have the highest bogus-probability signal — and explains why. The analyst makes the judgment call; the AI does the pattern-matching at scale."</p>
+    <p style="font-size:12px; color:var(--text-muted); margin-top:8px"><strong>Build time:</strong> 1 weekend. <strong>Data:</strong> Synthetic claims dataset (generate from public fraud statistics).</p>
+  </div>
+
+  <div class="ai-card">
+    <div class="card-title">P-FC2: Chargeback Recovery Optimiser</div>
+    <div style="margin-bottom:10px">
+      <span class="ai-tag">Claude API</span><span class="ai-tag">Python</span><span class="ai-tag">JSON schema</span><span class="ai-tag">Streamlit</span>
+    </div>
+    <p><strong>The Problem:</strong> Chargeback representment (recovering money from merchants) requires analyzing dispute evidence against card-network rules. Missed representments = lost recovery. Over-represented cases = wasted ops time.</p>
+    <p><strong>The Build:</strong> A tool where you input a dispute case summary and it outputs: (a) the applicable reason codes, (b) the evidence required for successful representment, (c) a win-probability score based on case characteristics, and (d) a recommended action (represent, accept, or escalate). Trained on public chargeback reason-code documentation from Mastercard and Visa.</p>
+    <p><strong>The Pitch:</strong> "The JD says 'validate that chargeback opportunities are fully optimised.' This tool ensures no recoverable case falls through the cracks — and no unwinnable case wastes ops resources."</p>
+    <p style="font-size:12px; color:var(--text-muted); margin-top:8px"><strong>Build time:</strong> 1 weekend. <strong>Data:</strong> Public reason-code documentation + synthetic case data.</p>
+  </div>
+
+  <div class="ai-card">
+    <div class="card-title">P-FC3: Fraud Claims KPI Report Generator</div>
+    <div style="margin-bottom:10px">
+      <span class="ai-tag">Python</span><span class="ai-tag">pandas</span><span class="ai-tag">Claude API</span><span class="ai-tag">Markdown</span>
+    </div>
+    <p><strong>The Problem:</strong> Daily/weekly/monthly KPI reporting for fraud claims is repetitive assembly work — same structure, same metrics, different numbers. Analyst time spent on deck assembly is time not spent on pattern analysis.</p>
+    <p><strong>The Build:</strong> A Python script that takes weekly mock CSV exports (claim volumes, bogus rates, recovery rates, TAT metrics) and outputs a structured KPI report — trends, callouts, anomalies flagged, recommended actions. Claude API drafts the narrative; human reviews and approves.</p>
+    <p><strong>The Pitch:</strong> "Redirect analyst time from report assembly to actual fraud judgment. The JD requires daily/weekly/monthly reporting — this tool makes that cadence sustainable without burning analyst capacity on formatting."</p>
+    <p style="font-size:12px; color:var(--text-muted); margin-top:8px"><strong>Build time:</strong> 1 weekend. Reframe of existing P9 Risk Committee Pack Generator.</p>
+  </div>
+
+  <div class="callout callout-blue">
+    <strong>Portfolio positioning:</strong> All three projects use Claude API + Python + Streamlit — the same stack powering your existing 16-project AI portfolio. The builds are domain adaptations, not greenfield. This signals that AI integration is a repeatable methodology for you, not a one-off experiment.
+  </div>
+</div>
+
+<!-- ====== TAB 07: INTERVIEW KIT ====== -->
+<div class="section" id="tab-6">
+  <h1 class="section-title">Interview Kit</h1>
+  <p class="section-sub">22 likely questions with story routing and answer frameworks</p>
+
+  <div class="card">
+    <div class="card-title">Behavioral Questions</div>
+    <table class="q-table">
+      <tr><th style="width:30px">#</th><th>Question</th><th>Use Story / Framework</th></tr>
+      <tr><td class="q-num">1</td><td>Tell me about a time you identified a pattern in data that others missed.</td><td>S1 — PR rejection 49%. Key line: "The pattern was invisible because nobody was measuring it. I built the dashboard that made it visible."</td></tr>
+      <tr><td class="q-num">2</td><td>Describe a time you designed a process or strategy from scratch.</td><td>S3 — Salesforce 0→1 or T−25/T+30 framework. Frame: "No template existed. I authored the architecture from field discovery."</td></tr>
+      <tr><td class="q-num">3</td><td>Walk me through a risk assessment you conducted.</td><td>S2 — 14-finding register. Structure: identify → assess inherent risk → design control → implement → monitor → close.</td></tr>
+      <tr><td class="q-num">4</td><td>Tell me about a time you held a position under pressure.</td><td>S1 — held the 49% standard. Key line: "The rejection rate was the control working as designed. I held because the data supported the position."</td></tr>
+      <tr><td class="q-num">5</td><td>How have you collaborated with a modeling/data science team?</td><td>Frame your AI portfolio collaboration. "I defined the business problem and data signals; the model translates those into predictive features."</td></tr>
+      <tr><td class="q-num">6</td><td>Describe presenting a data-driven recommendation to senior leadership.</td><td>S4 — NPV AED 652M. Emphasise: holding through multiple scrutiny rounds, not just presenting once.</td></tr>
+      <tr><td class="q-num">7</td><td>Tell me about a time you improved process efficiency.</td><td>S5 — PCC TAT 20→3 days at 3× volume. Emphasise: same team, redesigned workflow — headcount wasn't the solution.</td></tr>
+      <tr><td class="q-num">8</td><td>How do you manage competing priorities?</td><td>12 concurrent workstreams. Lead with the system: "Risk-weighted, deadline-weighted, dependency-weighted prioritisation."</td></tr>
+      <tr><td class="q-num">9</td><td>Tell me about cross-functional partnership with stakeholders who don't report to you.</td><td>S3 — 6-stakeholder Salesforce discovery. Start with their workflow, not your agenda.</td></tr>
+      <tr><td class="q-num">10</td><td>Describe a time you implemented controls to mitigate risk.</td><td>S2 — 14-finding register + Zero Error Forward checkpoints. Structure matches RAU methodology.</td></tr>
+      <tr><td class="q-num">11</td><td>Tell me about a failure or a target you missed.</td><td>Sobha One App — 80% target, 17% actual. Key line: "I reported it exactly as it was. Tool adoption needs change management, not just technology."</td></tr>
+      <tr><td class="q-num">12</td><td>How do you build KPI monitoring frameworks?</td><td>70+ report MI ecosystem. Three-tier design: operational (daily), tactical (weekly), strategic (monthly). Role-tailored views.</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Fraud-Domain Questions</div>
+    <table class="q-table">
+      <tr><th style="width:30px">#</th><th>Question</th><th>How to Answer</th></tr>
+      <tr><td class="q-num">13</td><td>What's your understanding of suspect/bogus fraud claims?</td><td>Define: cardholder files fraud claim but actually authorised the transaction. Distinguish from friendly fraud, true third-party fraud, and synthetic fraud. Show you've studied the taxonomy.</td></tr>
+      <tr><td class="q-num">14</td><td>How would you leverage AmEx's closed-loop data?</td><td>"Closed loop means AmEx sees both sides — cardholder behavior AND merchant data. I'd use purchase velocity at specific merchants, cardholder claim history, and merchant dispute rates as triangulation signals."</td></tr>
+      <tr><td class="q-num">15</td><td>How would you balance fraud loss reduction with customer experience?</td><td>Frame as the core tradeoff. "Every false positive is a customer we've wrongly accused. I'd target precision over recall initially — catch confirmed bogus at high confidence before widening the net."</td></tr>
+      <tr><td class="q-num">16</td><td>What data signals would you use to identify bogus claims?</td><td>Repeat-claimant frequency, claim-amount distribution anomalies, claim-timing relative to purchase, merchant-category overlap, device/IP consistency, closed-loop transaction velocity.</td></tr>
+      <tr><td class="q-num">17</td><td>How would you optimise chargeback recovery?</td><td>"Map representment win rates by reason code. Identify systematic gaps. Automate evidence assembly for high-win-rate categories. Redirect ops time from unwinnable to winnable cases."</td></tr>
+      <tr><td class="q-num">18</td><td>What experience do you have with fraud risk specifically?</td><td>Be direct: "My domain is operational risk and collections — not fraud. But the methodology transfers: data-driven strategy design, pattern identification, process controls, and KPI monitoring. I've studied the fraud claims domain specifically for this role."</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Strategic / Role-Specific Questions</div>
+    <table class="q-table">
+      <tr><th style="width:30px">#</th><th>Question</th><th>Framework</th></tr>
+      <tr><td class="q-num">19</td><td>What would your first 30/60/90 days look like?</td><td>See Tab 05. Lead with "Absorb before proposing" — shows humility about domain gap.</td></tr>
+      <tr><td class="q-num">20</td><td>Why AmEx? Why fraud claims?</td><td>Three threads: (1) AmEx's closed-loop data advantage is uniquely exciting for strategy design. (2) Fraud claims is where analytics directly prevents financial loss — tangible P&amp;L impact. (3) My process-governance DNA fits a team focused on "doing it the right way."</td></tr>
+      <tr><td class="q-num">21</td><td>How would you assess whether a claims process has inherent risk?</td><td>Framework: map the process end-to-end → identify human-judgment steps → assess error probability at each step → evaluate downstream impact of errors → design controls at highest-risk points. Cite your 14-finding audit methodology.</td></tr>
+      <tr><td class="q-num">22</td><td>How do you work with technology teams to build capabilities?</td><td>S3 — Salesforce. "I start with requirements discovery, not solutioning. I document the business need, map it to system capabilities, and own the UAT. I'm not an engineer, but I'm the voice of the business need."</td></tr>
+    </table>
+  </div>
+
+  <div class="callout callout-amber">
+    <strong>The "domain gap" answer you must nail:</strong> When they probe your fraud experience, don't apologise. Lead with: "I bring the methodology — process design, data-driven strategy, risk controls, stakeholder management — that took a collections operation from AED 867M to AED 12.97B. The fraud claims domain is what I'm learning rapidly. The methodology is what's hard to teach; the domain is what's learnable."
+  </div>
+</div>
+
+<!-- ====== TAB 08: COMP INTEL ====== -->
+<div class="section" id="tab-7">
+  <h1 class="section-title">Comp Intel</h1>
+  <p class="section-sub">3 sources triangulated · Confidence: MEDIUM</p>
+
+  <div class="card">
+    <div class="card-title">Salary Triangulation</div>
+    <table class="comp-table">
+      <tr><th>Source</th><th>Data Point</th><th>Notes</th></tr>
+      <tr><td>Glassdoor</td><td>AmEx Sr Manager India: Avg ₹28.9L base, P75 ₹40.3L, P90 ₹59L. Total comp range ₹28–45L.</td><td>29,132 salaries. Most reliable sample size. Includes all functions.</td></tr>
+      <tr><td>PayScale</td><td>Sr Risk Manager India: Avg ₹21.9L base, late-career ₹26.1L. Total pay ₹10–50L.</td><td>General risk-manager data, not AmEx-specific. Floor reference only.</td></tr>
+      <tr><td>Weekday / Indeed</td><td>AmEx India 10yr exp: ~₹27.6L base avg. Sr Manager ₹15.9L (Indeed — likely skewed low).</td><td>Indeed figure appears to include non-metro and lower levels. Directional only.</td></tr>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Best Estimate — Fraud Risk Sr Manager, Gurgaon</div>
+      <table class="comp-table">
+        <tr><th>Component</th><th>Range</th></tr>
+        <tr><td>Base Salary</td><td>₹28–35L</td></tr>
+        <tr><td>Annual Bonus (15–20%)</td><td>₹4.2–7L</td></tr>
+        <tr><td>Benefits (medical, PF, etc.)</td><td>₹3–5L</td></tr>
+        <tr><td>RSUs (if eligible)</td><td>₹3–8L/yr (AmEx grants at SM level vary)</td></tr>
+        <tr><td><strong>Total Comp (P50)</strong></td><td><strong>₹42–48L</strong></td></tr>
+        <tr><td><strong>Total Comp (P75)</strong></td><td><strong>₹50–55L</strong></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Negotiation Anchors</div>
+      <p><strong>Anchor:</strong> ₹52L total comp (aligns with GCG Sr Manager anchor)</p>
+      <p><strong>Walk-away:</strong> ₹42L (VP-track floor applies despite SM title — AmEx SM can be VP-equivalent scope)</p>
+      <p><strong>Joining bonus ask:</strong> ₹3–5L (offsets Sobha deferred comp)</p>
+      <p style="margin-top:10px; font-size:12px; color:var(--text-muted)">AmEx India typically offers 15–20% annual bonus for Sr Managers. RSU grants at SM level are discretionary and may not be offered initially — negotiate for inclusion if base comes in below ₹32L.</p>
+    </div>
+  </div>
+
+  <div class="callout callout-amber">
+    <strong>Confidence: MEDIUM.</strong> 3 sources triangulated but with wide variance. AmEx India comp is structured (band-based), so negotiation flex is moderate. Focus on total comp, not base — the bonus + RSU + joining bonus package is where the value sits.
+  </div>
+
+  <div class="card">
+    <div class="card-title">Negotiation Tactics</div>
+    <p>Never name a number first. Always ask their range. Use "compensation" not "salary." Ask joining bonus separately — it's a separate budget pool. Never accept or decline on the call; always ask 24–48 hrs.</p>
+    <p style="margin-top:8px">If they push on current comp: "I'm making a transition from Dubai to India, so the comp structures aren't directly comparable. I'm focused on the total compensation range for this role at AmEx."</p>
+    <p style="margin-top:8px"><strong>If you have competing offers (GMNS Director, Oaktree VP):</strong> "I have active conversations at a Director level within AmEx and at VP level elsewhere. I'm evaluating based on role scope, growth trajectory, and total compensation."</p>
+  </div>
+</div>
+
+<!-- ====== TAB 09: CERT ROADMAP ====== -->
+<div class="section" id="tab-8">
+  <h1 class="section-title">Cert Roadmap</h1>
+  <p class="section-sub">Certification footprint assessment for fraud claims role</p>
+
+  <div class="callout callout-blue">
+    <strong>JD Cert Signals:</strong> The JD does not explicitly require any certification. "3+ years experience" and tool proficiency (SQL, Python, Hive) are the hard requirements. Certs are therefore triaged as JD-silent — weighted by LinkedIn scan of fraud risk teams at AmEx India.
+  </div>
+
+  <div class="cert-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+      <div class="card-title" style="margin:0">SQL Proficiency (Mode Analytics + DataCamp)</div>
+      <div class="cert-weight high">OVERRIDE PRIORITY</div>
+    </div>
+    <p>Not a certification, but the hardest gate. JD explicitly names SQL. Your current state: 18/50 reports migrated. This is the shared investment with Uber — the same SQL acceleration track serves both roles.</p>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Current Progress</span><span>36%</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-amber" style="width:36%"></div></div>
+    </div>
+    <p style="font-size:12px; color:var(--text-muted)">Timeline: 4–6 weeks. Rubric: Mode Analytics → DataCamp → Kaggle IEEE-CIS fraud dataset.</p>
+  </div>
+
+  <div class="cert-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+      <div class="card-title" style="margin:0">CRISC (Certified in Risk and Information Systems Control)</div>
+      <div class="cert-weight med">MEDIUM — CROSS-PIPELINE</div>
+    </div>
+    <p>CRISC is the gold-standard credential for operational/IT risk roles in financial services. Already prioritised for your GMNS Director and GCG tracks. Same investment serves this role. The signal value: "I take risk management seriously enough to pursue the professional credential."</p>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Current Progress</span><span>0%</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-red" style="width:0%"></div></div>
+    </div>
+    <p style="font-size:12px; color:var(--text-muted)">Timeline: 3–4 months study. Not required to apply — say "actively preparing" in interview.</p>
+  </div>
+
+  <div class="cert-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+      <div class="card-title" style="margin:0">CFE (Certified Fraud Examiner) — ACFE</div>
+      <div class="cert-weight med">MEDIUM-LOW — FRAUD-SPECIFIC</div>
+    </div>
+    <p>The CFE from ACFE is the primary professional credential in fraud examination. It covers fraud prevention, detection, investigation, and legal elements. Relevant to this role specifically, but not widely required at AmEx India Sr Manager level.</p>
+    <p style="font-size:12px; color:var(--text-muted)">Timeline: 3–6 months study. Consider only if this becomes your primary AmEx track. LinkedIn scan: low prevalence among AmEx India fraud claims team (most hold analytics or risk certifications, not CFE).</p>
+  </div>
+
+  <div class="cert-card">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+      <div class="card-title" style="margin:0">PMI-ACP (Agile Certified Practitioner)</div>
+      <div class="cert-weight low">LOW — UNIVERSAL</div>
+    </div>
+    <p>Already in your cert roadmap as a universal priority. Signals project management rigor. Low direct relevance to fraud claims, but contributes to the "operations leader" positioning across all pipeline roles.</p>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Current Progress</span><span>Planned</span></div>
+      <div class="progress-bar"><div class="progress-fill fill-blue" style="width:10%"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Existing Stack (Leverage These)</div>
+    <p><strong>BITS Pilani</strong> (Engineering) — exceeds education requirement</p>
+    <p><strong>IIM Udaipur PGDM</strong> — MBA equivalent, business/economics coverage</p>
+    <p><strong>Python via AI portfolio</strong> — 16+ projects demonstrating production use</p>
+    <p><strong>Salesforce platform expertise</strong> — 6-year practitioner, 0→1 architect</p>
+    <p><strong>Power BI / Excel</strong> — core analytical toolkit</p>
+    <p style="margin-top:8px; font-size:12px; color:var(--text-muted)">No new certifications are required to apply. SQL proficiency is the only gate that should be accelerated before interview.</p>
+  </div>
+</div>
+
+<!-- ====== TAB 10: CLOSE & OUTREACH ====== -->
+<div class="section" id="tab-9">
+  <h1 class="section-title">Close &amp; Outreach</h1>
+  <p class="section-sub">Application strategy and networking approach</p>
+
+  <div class="card">
+    <div class="card-title">Application Decision Matrix</div>
+    <table class="comp-table">
+      <tr><th>Factor</th><th>Assessment</th></tr>
+      <tr><td>Fit score</td><td>58→70 — below GCG Sr Mgr (72) and GMNS Director (75→88)</td></tr>
+      <tr><td>Domain gap severity</td><td>CRITICAL — fraud claims is a genuine pivot</td></tr>
+      <tr><td>Prep time required</td><td>4–6 weeks (SQL + fraud domain crash course)</td></tr>
+      <tr><td>Cannibalisation risk</td><td>LOW — different org (Fraud &amp; Banking Risk vs. GMNS/GCG)</td></tr>
+      <tr><td>Strategic value</td><td>MODERATE — enters AmEx hiring funnel, creates GMNS visibility</td></tr>
+      <tr><td>Comp attractiveness</td><td>MODERATE — ₹48–55L, similar to GCG Sr Mgr</td></tr>
+    </table>
+  </div>
+
+  <div class="callout callout-amber">
+    <strong>Recommendation: CONDITIONAL APPLY</strong> — File the application only if (a) GMNS Director and GCG Sr Manager applications are already submitted, AND (b) SQL acceleration is on track. This role serves as AmEx funnel insurance, not as a primary target.
+  </div>
+
+  <div class="card">
+    <div class="card-title">Application Sequencing</div>
+    <p><strong>Priority 1:</strong> AmEx GMNS Director (75→88) — highest fit, playbook + resume built</p>
+    <p><strong>Priority 2:</strong> AmEx GCG Sr Manager (72) — natural fit, resume built</p>
+    <p><strong>Priority 3:</strong> This role (58→70) — file after P1 and P2 are submitted</p>
+    <p style="margin-top:10px">Filing this role after the Director applications creates a natural cascade: if the Director-level roles don't convert, this provides a lower-risk entry point into AmEx. The risk of applying to multiple AmEx roles simultaneously: if the same recruiter handles all three, it may signal "casting wide" rather than "targeted interest." Mitigate by spacing applications 1–2 weeks apart.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Networking Approach</div>
+    <p><strong>Target 1:</strong> AmEx India fraud risk team members on LinkedIn. Search: "fraud claims" + "American Express" + "India." Goal: understand team culture, current priorities, and whether the hiring manager is known.</p>
+    <p><strong>Target 2:</strong> IIM alumni at AmEx India. Use the IIM Udaipur alumni network. AmEx Gurgaon has a meaningful IIM footprint — this is warm-outreach territory.</p>
+    <p><strong>Target 3:</strong> If your GMNS Director application is active, mention in cover letter: "I'm aware of and interested in multiple opportunities within AmEx, including the GMNS organisation." This signals breadth of interest without undercutting the specific application.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Cover Letter Key Lines</div>
+    <p><strong>Opening:</strong> "I bring the methodology that scaled a $3.5B collections portfolio 14.9× — process design, data-driven strategy, risk controls, and cross-functional partnership — to a domain where these capabilities directly prevent fraud losses."</p>
+    <p><strong>Domain bridge:</strong> "My collections operations work at Sobha Realty involved the same core challenge as fraud claims: separating legitimate from illegitimate, at scale, with data. The T−25/T+30 framework I authored for collections risk identification is structurally identical to suspect-claims identification logic."</p>
+    <p><strong>Close:</strong> "I'm drawn to the fraud claims team's mission of 'doing it the right way' — holding the right party accountable while maintaining the customer experience. My governance DNA, AI-augmented operations portfolio, and analytical rigour would serve that mission."</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Vocab Decoder — Fraud Claims Edition</div>
+    <table class="vocab-table">
+      <tr><th>Fraud Claims Term</th><th>What It Means</th><th>Your Sobha Analog</th></tr>
+      <tr><td>Suspect / Bogus claim</td><td>A fraud claim filed by the cardholder that's actually not fraud — they made the transaction</td><td>PR rejection — submission that doesn't meet quality standards</td></tr>
+      <tr><td>Chargeback</td><td>When a card issuer reverses a charge and debits the merchant for a disputed transaction</td><td>Late Payment Charge reversal — reversing a fee back to the customer</td></tr>
+      <tr><td>Representment</td><td>Merchant's response to a chargeback — presenting evidence the charge was valid</td><td>PR resubmission with corrected documentation</td></tr>
+      <tr><td>Closed loop</td><td>AmEx is both issuer AND acquirer — sees both sides of every transaction</td><td>Salesforce ecosystem — seeing both RM actions AND customer data</td></tr>
+      <tr><td>Reason code</td><td>Standardised code classifying why a dispute was filed (e.g., 4837 = no cardholder authorisation)</td><td>PR rejection category codes in your quality scorecard</td></tr>
+      <tr><td>Friendly fraud</td><td>Customer disputes a legitimate charge — knowingly or unknowingly</td><td>Customer claiming non-receipt of service despite documentation</td></tr>
+      <tr><td>CNP (Card Not Present)</td><td>Online/phone transactions where the physical card isn't used — higher fraud risk</td><td>Remote/digital payment channels vs. in-person</td></tr>
+      <tr><td>Fraud RAU</td><td>Risk Assessment Unit for fraud processes — AmEx's internal risk framework</td><td>Your audit SPOC / risk register methodology</td></tr>
+      <tr><td>FRM</td><td>Fraud Risk Management — the broader organisation this team sits within</td><td>Collections Risk &amp; Governance — your functional domain</td></tr>
+      <tr><td>EDMX</td><td>Enterprise Data Management &amp; Experimentation — AmEx's data science org</td><td>MIS team (Asjad, 15 people) — your data infrastructure partner</td></tr>
+      <tr><td>False positive</td><td>A legitimate claim wrongly flagged as bogus — damages customer trust</td><td>A valid PR wrongly rejected — creates customer friction</td></tr>
+      <tr><td>Reg E</td><td>Federal regulation governing electronic fund transfers — sets dispute timelines</td><td>No direct analog — learn the regulatory framework</td></tr>
+      <tr><td>Reg Z</td><td>Federal regulation governing credit card billing disputes — fair credit billing</td><td>No direct analog — learn alongside Reg E</td></tr>
+      <tr><td>Claims management strategy</td><td>The rules, thresholds, and review queues that determine how claims are adjudicated</td><td>T−25/T+30 critical collection window — your strategy framework</td></tr>
+      <tr><td>Big data capabilities</td><td>Hive, Hadoop, large-scale data processing for pattern detection across millions of claims</td><td>SQL migration programme — moving from Excel to database-scale analytics</td></tr>
+      <tr><td>GMNS</td><td>Global Merchant &amp; Network Solutions — enterprise partner named in this JD</td><td>Your highest-fit AmEx role — the team this role interfaces WITH</td></tr>
+      <tr><td>Loss reduction</td><td>Reducing financial losses from fraudulent claims — the team's north-star metric</td><td>Delinquency reduction: 16.7% → 4.4% (−74%)</td></tr>
+      <tr><td>Chargeback optimisation</td><td>Maximising recovery from merchants when the liability sits with them</td><td>Advance collections optimisation — maximising early-payment recovery</td></tr>
+    </table>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+function showTab(i) {
+  i = parseInt(i);
+  document.querySelectorAll('.section').forEach((s, idx) => {
+    s.classList.toggle('active', idx === i);
+  });
+  document.querySelectorAll('.rail-tab').forEach((t, idx) => {
+    t.classList.toggle('active', idx === i);
+  });
+  const sel = document.querySelector('.mobile-nav select');
+  if (sel) sel.value = i;
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
