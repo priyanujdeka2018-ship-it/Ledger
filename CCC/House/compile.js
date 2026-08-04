@@ -5,15 +5,18 @@
  * at build time. Output is ~70KB and loads instantly on mobile Safari.
  *
  * Usage:  npm install && node compile.js
- * Output: dist/house-ledger.html
+ * Output: house-ledger.html (alongside the source, which is what Pages serves)
  */
 
 const fs = require('fs');
 const path = require('path');
 const babel = require('@babel/core');
 
-const SRC = path.join(__dirname, 'src', 'house-ledger.jsx.html');
-const OUT = path.join(__dirname, 'dist', 'house-ledger.html');
+// Both files sit in CCC/House/. house-ledger.html is the file GitHub Pages
+// serves at /Ledger/CCC/House/house-ledger.html — compiling anywhere else
+// means a rebuild never reaches the live site.
+const SRC = path.join(__dirname, 'house-ledger.jsx.html');
+const OUT = path.join(__dirname, 'house-ledger.html');
 
 // Read source
 const html = fs.readFileSync(SRC, 'utf8');
