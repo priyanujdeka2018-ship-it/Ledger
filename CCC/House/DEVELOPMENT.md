@@ -111,6 +111,29 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 - **Abbreviate aggregates, not line items.** `fmtAmt()` for hero cards and
   totals, `fmtFull()` in the entry list, which is the reconciliation unit.
 
+## Data note — the account split
+
+Use these figures. They are what the per-row data actually sums to:
+
+| Account | Total | Entries |
+|---|---|---|
+| Self | ₹63,73,628 | 65 |
+| Reemon | ₹21,42,760 | 23 |
+| **Total** | **₹85,16,388** | **88** |
+
+`HOUSE_CONTEXT.md` states the split as Self ₹63,30,198 / Reemon ₹21,86,190 — a
+₹43,430 difference. That figure is not reproducible from the per-row data and
+is treated as an error in that summary. Entry counts and the grand total agree
+across sources. **Do not change any row's `account` field to make the summary
+match**, and do not reopen the reconciliation.
+
+Caveat worth keeping: no single row equals ₹43,430 and no single Self↔Reemon
+swap produces it; multi-row combinations were not exhaustively searched, so
+"summary-level arithmetic error" is inference rather than proof. Neither figure
+has been checked against the original bank statement. If the split ever needs
+to be authoritative — for tax, or for splitting costs between family members —
+verify against the statement, not against any of these documents.
+
 ## Testing
 
 There is no test suite. Changes are verified by loading the compiled file in

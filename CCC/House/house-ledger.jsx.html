@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<!-- No maximum-scale / user-scalable=no: blocking pinch zoom is an
+     accessibility failure, newer iOS Safari ignores it anyway, and the
+     layout is responsive enough not to need it. -->
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>House Ledger</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 
@@ -56,7 +59,7 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .hero-card{flex:0 0 calc(50% - 6px);scroll-snap-align:start;background:var(--card);border-radius:20px;border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all .3s ease;min-width:0}
 .hero-card.expanded{flex:0 0 100%;position:relative}
 .hero-front{padding:16px 14px}
-.hero-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);font-weight:700;margin-bottom:6px}
+.hero-label{font-size:.7rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);font-weight:700;margin-bottom:6px}
 .hero-big{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:800;line-height:1.15;color:var(--t1);word-break:break-word;overflow-wrap:anywhere}
 .hero-sub{font-size:.72rem;color:var(--t2);margin-top:4px;font-weight:600}
 .hero-expand{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;padding:0 14px}
@@ -68,7 +71,7 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .budget-bar-wrap{margin:8px 0}
 .budget-bar{height:8px;border-radius:4px;background:var(--border);overflow:hidden;position:relative}
 .budget-fill{height:100%;border-radius:4px;transition:width .5s}
-.budget-labels{display:flex;justify-content:space-between;font-size:.65rem;color:var(--t3);margin-top:3px;font-weight:600}
+.budget-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--t3);margin-top:3px;font-weight:600}
 .detail-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:.78rem}
 .detail-row .label{color:var(--t2)}
 .detail-row .value{font-weight:700;color:var(--t1)}
@@ -76,7 +79,7 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 
 /* ─── CSS-TAB-BAR ─── */
 .tab-bar{display:flex;background:var(--card);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:40;padding:4px 0 env(safe-area-inset-bottom,4px)}
-.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:.6rem;font-weight:700;color:var(--t3);cursor:pointer;border:none;background:none;transition:color .2s}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:.7rem;font-weight:700;color:var(--t3);cursor:pointer;border:none;background:none;transition:color .2s}
 .tab-item.active{color:var(--tabActive)}
 .tab-icon{font-size:1.15rem}
 
@@ -105,17 +108,21 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .entry-amt{font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;color:var(--t1);white-space:nowrap;flex-shrink:0}
 .entry-meta{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;align-items:center}
 .entry-date{font-size:.7rem;color:var(--t3)}
-.chip{display:inline-flex;padding:2px 8px;border-radius:10px;font-size:.62rem;font-weight:700;white-space:nowrap}
+.chip{display:inline-flex;padding:3px 8px;border-radius:10px;font-size:.7rem;font-weight:700;white-space:nowrap}
 .entry-detail{padding:0 14px;max-height:0;overflow:hidden;transition:max-height .3s}
 .entry-detail.open{max-height:400px;padding:8px 14px 14px}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .detail-cell{font-size:.72rem}
-.detail-cell .lbl{color:var(--t3);font-size:.6rem;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.detail-cell .lbl{color:var(--t3);font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
 .detail-cell .val{color:var(--t1);font-weight:600;margin-top:1px}
-.swipe-hint{text-align:center;font-size:.62rem;color:var(--t3);padding:4px 0 8px;font-style:italic}
-.swipe-underlay{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 20px;font-weight:700;font-size:.8rem;color:#fff;z-index:1}
+.swipe-hint{text-align:center;font-size:.7rem;color:var(--t3);padding:4px 0 8px;font-style:italic}
+/* Opacity tracks swipe distance and the label changes at the commit
+   threshold, so 60px is felt rather than guessed. */
+.swipe-underlay{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 18px;font-weight:700;font-size:.8rem;color:#fff;z-index:1;opacity:0}
 .swipe-underlay.left{right:0;background:#ef4444;border-radius:0 16px 16px 0}
 .swipe-underlay.right{left:0;background:#3b82f6;border-radius:16px 0 0 16px}
+.swipe-tip{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:7px 12px;margin-bottom:8px;font-size:.7rem;color:var(--t2);font-weight:600}
+.swipe-tip button{background:none;border:none;color:var(--t3);font-size:.85rem;font-weight:700;cursor:pointer;padding:0 2px;line-height:1}
 
 /* ─── CSS-OVERVIEW-CARDS ─── */
 .overview-card{background:var(--card);border-radius:18px;border:1px solid var(--border);padding:16px;margin-bottom:10px;cursor:pointer;transition:transform .15s}
@@ -135,16 +142,29 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .v-name{font-weight:700;font-size:.92rem;color:var(--t1);flex:1;min-width:0}
 .v-total{font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem;color:var(--t1);white-space:nowrap;flex-shrink:0}
 .v-meta{font-size:.7rem;color:var(--t3);margin-top:4px;font-weight:600}
-.v-intermediary{font-size:.65rem;color:var(--lav);margin-top:4px;font-weight:600}
+.v-intermediary{font-size:.7rem;color:var(--lav);margin-top:4px;font-weight:600}
 .v-modes{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
 
 /* ─── CSS-TIMELINE ─── */
-.tl-chart{padding:12px;background:var(--card);border-radius:18px;border:1px solid var(--border);margin-bottom:10px}
-.tl-bars{display:flex;align-items:flex-end;gap:4px;height:180px;padding:0 4px}
-.tl-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
-.tl-bar{width:100%;border-radius:4px 4px 0 0;cursor:pointer;transition:opacity .2s;min-height:2px}
-.tl-bar:hover{opacity:.8}
-.tl-month{font-size:.5rem;color:var(--t3);font-weight:700;transform:rotate(-45deg);white-space:nowrap;margin-top:4px}
+.tl-chart{padding:12px 6px;background:var(--card);border-radius:18px;border:1px solid var(--border);margin-bottom:10px}
+/* Horizontally scrollable with fixed-width bars and upright labels. At
+   flex:1 across ~20 months the bars were ~15px wide and the labels were 8px
+   of text rotated -45°, which is unreadable on a phone. */
+.tl-bars{display:flex;align-items:flex-end;gap:6px;padding:0 6px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.tl-bar-col{flex:0 0 38px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border-radius:6px;padding:2px 0;background:none;border:none;font-family:'Nunito',sans-serif}
+.tl-bar-col.sel{background:var(--accentLt)}
+.tl-stack{display:flex;flex-direction:column;width:100%;border-radius:4px 4px 0 0;overflow:hidden}
+.tl-bar{width:100%;transition:opacity .2s;min-height:2px}
+.tl-bar-col:active .tl-stack{opacity:.7}
+.tl-month{font-size:.7rem;color:var(--t3);font-weight:700;white-space:nowrap;margin-top:4px}
+.tl-bar-col.sel .tl-month{color:var(--accent)}
+.tl-axis{display:flex;justify-content:space-between;align-items:baseline;padding:0 8px 6px;font-size:.7rem;color:var(--t3);font-weight:700}
+.tl-readout{background:var(--accentLt);border-radius:14px;padding:10px 14px;margin-bottom:10px}
+.tl-readout .r-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.tl-readout .r-month{font-size:.8rem;font-weight:700;color:var(--accent)}
+.tl-readout .r-amt{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--accent)}
+.tl-readout .r-sub{font-size:.7rem;color:var(--t2);font-weight:600;margin-top:2px}
+.tl-readout button{width:100%;margin-top:8px;padding:8px;border-radius:12px;border:1px solid var(--accent);background:var(--card);color:var(--accent);font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer}
 .tl-toggle{display:flex;gap:6px;justify-content:center;margin-bottom:10px}
 .tl-toggle button{padding:6px 14px;border-radius:12px;border:1px solid var(--border);background:var(--card);font-size:.72rem;font-weight:700;color:var(--t2);cursor:pointer;font-family:'Nunito',sans-serif}
 .tl-toggle button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -312,13 +332,13 @@ function Header({syncStatus,themeId,onTheme,onRefresh,userName,onUserChange}){
   return(
     <div className="header">
       <div style={{display:'flex',alignItems:'center',gap:8}}>
-        <div className={`sync-dot ${syncStatus==='live'?'sync-live':syncStatus==='err'?'sync-err':'sync-loading'}`}/>
+        <div className={`sync-dot ${syncStatus==='live'?'sync-live':syncStatus==='err'?'sync-err':'sync-loading'}`} role="status" aria-label={syncStatus==='live'?'Synced':syncStatus==='err'?'Sync error':'Loading'}/>
         <h1>House Ledger</h1>
       </div>
       <div className="header-r" style={{position:'relative'}}>
-        <button className="header-btn" onClick={onRefresh}>↻</button>
-        <button className="header-btn" onClick={onTheme}>🎨</button>
-        <button className="header-btn" onClick={()=>setShowMenu(!showMenu)} style={{fontSize:'.75rem',fontWeight:700}}>{userName?.slice(0,1)||'?'}</button>
+        <button className="header-btn" onClick={onRefresh} aria-label="Refresh data">↻</button>
+        <button className="header-btn" onClick={onTheme} aria-label="Choose theme">🎨</button>
+        <button className="header-btn" onClick={()=>setShowMenu(!showMenu)} aria-label={`Logged in as ${userName||'nobody'} — switch user`} aria-expanded={showMenu} style={{fontSize:'.75rem',fontWeight:700}}>{userName?.slice(0,1)||'?'}</button>
         {showMenu&&<div className="user-menu">{FAMILY.map(f=><div key={f} className={`user-opt ${f===userName?'active':''}`} onClick={()=>{onUserChange(f);setShowMenu(false);}}>{f}</div>)}</div>}
       </div>
       {showMenu&&<div style={{position:'fixed',inset:0,zIndex:54}} onClick={()=>setShowMenu(false)}/>}
@@ -372,11 +392,11 @@ function HeroAccountCard({exps,onNavigate,expanded,onToggle}){
         <div className="hero-label">Accounts</div>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',gap:4}}>
           <div style={{flex:1,minWidth:0}}>
-            <div style={{fontSize:'.62rem',color:ACCT_CLR.Self.text,fontWeight:700}}>Self</div>
+            <div style={{fontSize:'.7rem',color:ACCT_CLR.Self.text,fontWeight:700}}>Self</div>
             <div style={{fontFamily:"'Playfair Display',serif",fontWeight:800,fontSize:'1.05rem',color:'var(--t1)'}}>{fmtAmt(selfTotal)}</div>
           </div>
           <div style={{flex:1,minWidth:0,textAlign:'right'}}>
-            <div style={{fontSize:'.62rem',color:ACCT_CLR.Reemon.text,fontWeight:700}}>Reemon</div>
+            <div style={{fontSize:'.7rem',color:ACCT_CLR.Reemon.text,fontWeight:700}}>Reemon</div>
             <div style={{fontFamily:"'Playfair Display',serif",fontWeight:800,fontSize:'1.05rem',color:'var(--t1)'}}>{fmtAmt(reemonTotal)}</div>
           </div>
         </div>
@@ -452,17 +472,27 @@ function SubtotalBar({label,entries}){
 // ─── JS-ENTRY-ROW ───
 function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
   const ref=useRef(null);const startX=useRef(0);const dx=useRef(0);const swiped=useRef(false);
+  const leftRef=useRef(null);const rightRef=useRef(null);
   const pc=PHASE_CLR[entry.phase]||{bg:'#f5f5f4',text:'#44403c'};
   const ac=ACCT_CLR[entry.account]||{bg:'#f5f5f4',text:'#44403c'};
+  const THRESH=60;
+  // Direct DOM writes rather than state: this runs on every touchmove.
+  const paint=d=>{
+    const armed=Math.abs(d)>=THRESH;
+    const show=Math.min(1,Math.abs(d)/THRESH);
+    const [active,idle]=d>0?[rightRef.current,leftRef.current]:[leftRef.current,rightRef.current];
+    if(idle)idle.style.opacity=0;
+    if(active){active.style.opacity=d===0?0:show;active.textContent=armed?(d>0?'✏️ Release to edit':'🗑 Release to delete'):(d>0?'✏️ Edit':'🗑 Delete');}
+  };
   const handleStart=e=>{startX.current=e.touches[0].clientX;dx.current=0;swiped.current=false;};
-  const handleMove=e=>{dx.current=e.touches[0].clientX-startX.current;if(Math.abs(dx.current)>8)swiped.current=true;const el=ref.current;if(el)el.style.transform=`translateX(${Math.max(-80,Math.min(80,dx.current))}px)`;};
-  const handleEnd=()=>{const el=ref.current;if(!el)return;if(dx.current<-60)onDelete(entry);else if(dx.current>60)onEdit(entry);el.style.transform='translateX(0)';};
+  const handleMove=e=>{dx.current=e.touches[0].clientX-startX.current;if(Math.abs(dx.current)>8)swiped.current=true;const el=ref.current;if(el)el.style.transform=`translateX(${Math.max(-80,Math.min(80,dx.current))}px)`;paint(dx.current);};
+  const handleEnd=()=>{const el=ref.current;if(!el)return;const d=dx.current;paint(0);el.style.transform='translateX(0)';if(d<-THRESH)onDelete(entry);else if(d>THRESH)onEdit(entry);};
   // A swipe also lands as a click; suppress the expand toggle past 8px of travel.
   const handleClick=()=>{if(swiped.current){swiped.current=false;return;}onToggle(entry.id);};
   return(
     <div className="entry-row">
-      <div className="swipe-underlay right">✏️ Edit</div>
-      <div className="swipe-underlay left">🗑 Delete</div>
+      <div ref={rightRef} className="swipe-underlay right">✏️ Edit</div>
+      <div ref={leftRef} className="swipe-underlay left">🗑 Delete</div>
       <div ref={ref} className="entry-content" onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd} onClick={handleClick}>
         <div className="entry-top">
           <span className="entry-vendor">{entry.vendor}</span>
@@ -495,15 +525,18 @@ function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
           {entry.invoiceRef&&<div className="detail-cell"><div className="lbl">Invoice</div><div className="val">{entry.invoiceRef}</div></div>}
           {entry.notes&&<div className="detail-cell" style={{gridColumn:'1/-1'}}><div className="lbl">Notes</div><div className="val">{entry.notes}</div></div>}
         </div>
-        <div className="swipe-hint">← swipe to edit or delete →</div>
       </div>
     </div>
   );
 }
 
 // ─── JS-ENTRIES-TAB ───
-function EntriesTab({exps,activeFilter,onClearFilter,onEdit,onDelete,expandId,onToggle}){
+function EntriesTab({exps,activeFilter,onClearFilter,onClearFilterKey,onEdit,onDelete,expandId,onToggle}){
   const [search,setSearch]=useState('');
+  // The old hint lived inside the expanded detail, so you had to already know
+  // to expand a row to discover you could swipe it.
+  const [showTip,setShowTip]=useState(()=>!localStorage.getItem('hl-swipe-tip'));
+  const dismissTip=()=>{localStorage.setItem('hl-swipe-tip','1');setShowTip(false);};
   const [sort,setSort]=useState({key:'date',dir:'desc'});
   const [statusSel,setStatusSel]=useState([]);
 
@@ -535,7 +568,11 @@ function EntriesTab({exps,activeFilter,onClearFilter,onEdit,onDelete,expandId,on
   const setSortKey=k=>setSort(p=>p.key===k?{key:k,dir:p.dir==='desc'?'asc':'desc'}:{key:k,dir:'desc'});
   const arrow=k=>sort.key!==k?'':sort.dir==='desc'?' ↓':' ↑';
 
-  const filterLabel=activeFilter?Object.entries(activeFilter).filter(([k,v])=>v).map(([k,v])=>typeof v==='object'?`${monthLabel(v.start.slice(0,7))}`:v).join(' · '):'';
+  // One chip per active filter, each individually dismissible — they used to
+  // collapse into a single joined label that could only be cleared wholesale.
+  const filterChips=activeFilter?Object.entries(activeFilter).filter(([k,v])=>v)
+    .map(([k,v])=>({key:k,text:typeof v==='object'?monthLabel(v.start.slice(0,7)):v})):[];
+  const filterLabel=filterChips.map(c=>c.text).join(' · ');
   const crumb=[filterLabel,statusSel.join('/'),search&&`"${search}"`].filter(Boolean).join(' · ');
   const exportName=()=>{
     const slug=(crumb||'all').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);
@@ -560,8 +597,14 @@ function EntriesTab({exps,activeFilter,onClearFilter,onEdit,onDelete,expandId,on
               {s} ({exps.filter(e=>e.status===s).length})
             </button>);})}
         </div>}
-      {filterLabel&&<div className="filter-badge" onClick={onClearFilter}>{filterLabel} ✕</div>}
+      {filterChips.length>0&&
+        <div className="status-filters">
+          {filterChips.map(c=><div key={c.key} className="filter-badge" onClick={()=>onClearFilterKey(c.key)}>{c.text} ✕</div>)}
+          {filterChips.length>1&&<div className="filter-badge" style={{background:'var(--border)',color:'var(--t2)'}} onClick={onClearFilter}>Clear all ✕</div>}
+        </div>}
       {crumb&&<SubtotalBar label={crumb} entries={filtered}/>}
+      {showTip&&filtered.length>0&&
+        <div className="swipe-tip"><span>Swipe a row → to edit, ← to delete</span><button aria-label="Dismiss tip" onClick={dismissTip}>✕</button></div>}
       {filtered.length===0&&<div className="empty-state"><div className="icon">📭</div><p>No entries found</p></div>}
       {filtered.map(e=><EntryRow key={e.id} entry={e} isExpanded={expandId===e.id} onToggle={onToggle} onEdit={onEdit} onDelete={onDelete}/>)}
     </div>
@@ -640,6 +683,7 @@ function VendorsTab({exps,onNavigate}){
   return(
     <div className="entry-list">
       <div className="search-bar"><input placeholder="Search vendors..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
+      {filtered.length>0&&<SubtotalBar label={`${filtered.length} ${filtered.length===1?'vendor':'vendors'}`} entries={filtered.flatMap(v=>v.entries)}/>}
       {filtered.map(v=>{
         // Copy before sorting — v.entries is memoized and sorting it in place
         // mutates state during render.
@@ -669,46 +713,59 @@ function VendorsTab({exps,onNavigate}){
 // ─── JS-TIMELINE-TAB ───
 function TimelineTab({exps,onNavigate}){
   const [mode,setMode]=useState('phase');
+  const [sel,setSel]=useState(null);
+  const barsRef=useRef(null);
   const months=useMemo(()=>{
     const m={};exps.forEach(e=>{const k=monthKey(e.date);if(!m[k])m[k]=[];m[k].push(e);});
     return Object.keys(m).sort().map(k=>({key:k,label:monthLabel(k),entries:m[k],total:m[k].reduce((s,e)=>s+e.amount,0)}));
   },[exps]);
   const maxTotal=Math.max(...months.map(m=>m.total),1);
+  const peak=months.find(m=>m.total===maxTotal);
+
+  // Open on the most recent month, which is the end of a scrolling chart.
+  useEffect(()=>{const el=barsRef.current;if(el)el.scrollLeft=el.scrollWidth;},[months.length,mode]);
+
+  const segsFor=m=>{
+    if(mode==='account'){
+      const s=m.entries.filter(e=>e.account==='Self').reduce((a,e)=>a+e.amount,0);
+      return [['Self',s,ACCT_CLR.Self.dot],['Reemon',m.total-s,ACCT_CLR.Reemon.dot]].filter(x=>x[1]>0);
+    }
+    const g={};m.entries.forEach(e=>{g[e.phase]=(g[e.phase]||0)+e.amount;});
+    return Object.entries(g).sort((a,b)=>b[1]-a[1]).map(([ph,amt])=>[ph,amt,(PHASE_CLR[ph]||{dot:'#888'}).dot]);
+  };
+  const selMonth=sel?months.find(m=>m.key===sel):null;
+
   return(
     <div className="entry-list">
       <div className="tl-toggle">
         <button className={mode==='phase'?'active':''} onClick={()=>setMode('phase')}>By Phase</button>
         <button className={mode==='account'?'active':''} onClick={()=>setMode('account')}>By Account</button>
       </div>
+      {/* Tapping a bar reveals its value here first; navigating to the
+          entries is a deliberate second tap rather than the only outcome. */}
+      {selMonth&&
+        <div className="tl-readout">
+          <div className="r-top">
+            <span className="r-month">{selMonth.label}</span>
+            <span className="r-amt">{fmtFull(selMonth.total)}</span>
+          </div>
+          <div className="r-sub">{selMonth.entries.length} {selMonth.entries.length===1?'entry':'entries'} · {segsFor(selMonth).slice(0,2).map(([n,a])=>`${n} ${fmtAmt(a)}`).join(' · ')}</div>
+          <button onClick={()=>onNavigate({dateRange:{start:selMonth.key+'-01',end:monthEnd(selMonth.key)}})}>
+            View {selMonth.label} entries →
+          </button>
+        </div>}
       <div className="tl-chart">
-        <div className="tl-bars">
-          {months.map(m=>{
-            const h=(m.total/maxTotal)*160;
-            if(mode==='phase'){
-              const groups={};m.entries.forEach(e=>{groups[e.phase]=(groups[e.phase]||0)+e.amount;});
-              const segs=Object.entries(groups).sort((a,b)=>b[1]-a[1]);
-              return(
-                <div key={m.key} className="tl-bar-col" onClick={()=>{const start=m.key+'-01';const end=m.key+'-31';onNavigate({dateRange:{start,end}});}}>
-                  <div style={{height:h,display:'flex',flexDirection:'column',width:'100%'}}>
-                    {segs.map(([ph,amt])=>{const pc=PHASE_CLR[ph]||{dot:'#888'};return <div key={ph} className="tl-bar" style={{flex:amt,background:pc.dot}}/>;})}
-                  </div>
-                  <div className="tl-month">{m.label}</div>
-                </div>
-              );
-            }else{
-              const selfAmt=m.entries.filter(e=>e.account==='Self').reduce((s,e)=>s+e.amount,0);
-              const reemonAmt=m.total-selfAmt;
-              return(
-                <div key={m.key} className="tl-bar-col" onClick={()=>{const start=m.key+'-01';const end=m.key+'-31';onNavigate({dateRange:{start,end}});}}>
-                  <div style={{height:h,display:'flex',flexDirection:'column',width:'100%'}}>
-                    {selfAmt>0&&<div className="tl-bar" style={{flex:selfAmt,background:ACCT_CLR.Self.dot}}/>}
-                    {reemonAmt>0&&<div className="tl-bar" style={{flex:reemonAmt,background:ACCT_CLR.Reemon.dot}}/>}
-                  </div>
-                  <div className="tl-month">{m.label}</div>
-                </div>
-              );
-            }
-          })}
+        <div className="tl-axis"><span>peak {fmtAmt(maxTotal)}{peak?` · ${peak.label}`:''}</span><span>tap a bar</span></div>
+        <div className="tl-bars" ref={barsRef}>
+          {months.map(m=>(
+            <button key={m.key} className={`tl-bar-col ${sel===m.key?'sel':''}`} aria-label={`${m.label}: ${fmtFull(m.total)}, ${m.entries.length} ${m.entries.length===1?'entry':'entries'}`}
+              onClick={()=>setSel(s=>s===m.key?null:m.key)}>
+              <div className="tl-stack" style={{height:(m.total/maxTotal)*160}}>
+                {segsFor(m).map(([name,amt,clr])=><div key={name} className="tl-bar" style={{flex:amt,background:clr}}/>)}
+              </div>
+              <div className="tl-month">{m.label}</div>
+            </button>
+          ))}
         </div>
       </div>
       <div style={{marginTop:8}}>
@@ -717,7 +774,7 @@ function TimelineTab({exps,onNavigate}){
           return Object.entries(quarters).map(([q,d])=>(
             <div key={q} className="detail-row" style={{padding:'6px 4px'}}>
               <span className="label" style={{fontSize:'.78rem'}}>{q}</span>
-              <span className="value" style={{fontSize:'.85rem'}}>{fmtAmt(d.total)} <span style={{fontSize:'.65rem',color:'var(--t3)',fontWeight:400}}>({d.count})</span></span>
+              <span className="value" style={{fontSize:'.85rem'}}>{fmtAmt(d.total)} <span style={{fontSize:'.7rem',color:'var(--t3)',fontWeight:400}}>({d.count})</span></span>
             </div>
           ));
         })()}
@@ -803,7 +860,7 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
             {err.amount&&<div className="field-err">{err.amount}</div>}</div>
           <div className="field"><label>Vendor</label><input list="vendors" value={f.vendor} onChange={e=>setVendor(e.target.value)} placeholder="Who was paid"/><datalist id="vendors">{vendors.map(v=><option key={v} value={v}/>)}</datalist>
             {err.vendor&&<div className="field-err">{err.vendor}</div>}
-            {autofill&&<div className="autofill-note"><span>Prefilled from {fmtDateShort(autofill.date)} payment</span><button type="button" onClick={()=>setAutofill(null)}>✕</button></div>}</div>
+            {autofill&&<div className="autofill-note"><span>Prefilled from {fmtDateShort(autofill.date)} payment</span><button type="button" aria-label="Dismiss autofill note" onClick={()=>setAutofill(null)}>✕</button></div>}</div>
           <div className="field"><label>Transfer To</label><input value={f.transferTo} onChange={e=>up('transferTo',e.target.value)} placeholder="Same as vendor unless intermediary"/></div>
           <div className="field"><label>Account</label><div className="toggle-group">{['Self','Reemon'].map(a=><button key={a} type="button" className={`toggle-btn ${f.account===a?'active':''}`} onClick={()=>up('account',a)}>{a}</button>)}</div></div>
         </>}
@@ -821,7 +878,7 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
           <div className="field"><label>Payment Mode</label><select value={f.paymentMode} onChange={e=>up('paymentMode',e.target.value)}>{PAYMENT_MODES.map(m=><option key={m} value={m}>{m}</option>)}</select></div>
           <div className="field"><label>Invoice Ref</label><input value={f.invoiceRef} onChange={e=>up('invoiceRef',e.target.value)} placeholder="Optional"/></div>
           <div className="field"><label>Notes</label><textarea value={f.notes} onChange={e=>up('notes',e.target.value)} placeholder="Optional"/></div>
-          <div className="field"><label>Status</label><div className="toggle-group">{STATUSES.map(s=><button key={s} type="button" className={`toggle-btn ${f.status===s?'active':''}`} style={{fontSize:'.7rem'}} onClick={()=>up('status',s)}>{s}</button>)}</div></div>
+          <div className="field"><label>Status</label><div className="toggle-group">{STATUSES.map(s=><button key={s} type="button" className={`toggle-btn ${f.status===s?'active':''}`} onClick={()=>up('status',s)}>{s}</button>)}</div></div>
         </>}
         {/* Say why Next is disabled rather than leaving a dead button. */}
         {step<3&&!canNext&&<div className="form-hint">Still needed: {missing.map(k=>k==='subcategory'?'subcategory':k).join(', ')}</div>}
@@ -928,6 +985,11 @@ function App(){
 
   const toggleHero=useCallback(id=>setHeroCard(h=>h===id?null:id),[]);
   const navigateToEntries=useCallback((filter)=>{setActiveFilter(filter);setTab('entries');setExpandId(null);setHeroCard(null);},[]);
+  const clearFilterKey=useCallback(k=>setActiveFilter(f=>{
+    if(!f)return f;
+    const n={...f};delete n[k];
+    return Object.keys(n).length?n:null;
+  }),[]);
 
   const handleSaveEntry=useCallback(async(entry)=>{
     try{
@@ -963,7 +1025,7 @@ function App(){
             </div>)}
           </div>}
         {!(syncStatus==='loading'&&exps.length===0)&&<>
-        {tab==='entries'&&<EntriesTab exps={exps} activeFilter={activeFilter} onClearFilter={()=>setActiveFilter(null)} onEdit={handleEdit} onDelete={handleDeleteConfirm} expandId={expandId} onToggle={id=>setExpandId(expandId===id?null:id)}/>}
+        {tab==='entries'&&<EntriesTab exps={exps} activeFilter={activeFilter} onClearFilter={()=>setActiveFilter(null)} onClearFilterKey={clearFilterKey} onEdit={handleEdit} onDelete={handleDeleteConfirm} expandId={expandId} onToggle={id=>setExpandId(expandId===id?null:id)}/>}
         {tab==='phases'&&<PhasesTab exps={exps} onNavigate={navigateToEntries}/>}
         {tab==='zones'&&<ZonesTab exps={exps} onNavigate={navigateToEntries}/>}
         {tab==='vendors'&&<VendorsTab exps={exps} onNavigate={navigateToEntries}/>}
@@ -971,7 +1033,7 @@ function App(){
         </>}
       </div>
       <TabBar tab={tab} onTab={setTab}/>
-      {tab==='entries'&&<button className="fab" onClick={()=>{setEditEntry(null);setShowForm(true);}}>+</button>}
+      {tab==='entries'&&<button className="fab" onClick={()=>{setEditEntry(null);setShowForm(true);}} aria-label="Add new entry">+</button>}
       {showForm&&<EntryForm entry={editEntry} onSave={handleSaveEntry} onCancel={()=>{setShowForm(false);setEditEntry(null);}} exps={exps} userName={userName}/>}
       {deleteTarget&&<ConfirmDialog title="Delete Entry?" message={`${deleteTarget.vendor} — ${fmtFull(deleteTarget.amount)} on ${fmtDate(deleteTarget.date)}`} onConfirm={handleDeleteEntry} onCancel={()=>setDeleteTarget(null)}/>}
       {showThemePicker&&<ThemePicker themeId={themeId} onPick={id=>{setThemeId(id);applyTheme(id);setShowThemePicker(false);}} onClose={()=>setShowThemePicker(false)}/>}
