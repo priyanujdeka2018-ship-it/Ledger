@@ -228,6 +228,13 @@ async function run() {
   await step('signed in again: form opened', () => page.locator('.modal h2').waitFor({ timeout: 3000 }));
   await step('close form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
   await step('manual refresh', () => page.locator('.header-btn[aria-label="Refresh data"]').click());
+  await step('pull to refresh', () => page.evaluate(() => {
+    const el = document.body;
+    const t = y => new Touch({ identifier: 1, target: el, clientX: 190, clientY: y });
+    el.dispatchEvent(new TouchEvent('touchstart', { touches: [t(100)], bubbles: true }));
+    el.dispatchEvent(new TouchEvent('touchmove', { touches: [t(300)], bubbles: true }));
+    el.dispatchEvent(new TouchEvent('touchend', { touches: [], bubbles: true }));
+  }));
 
   await browser.close();
 

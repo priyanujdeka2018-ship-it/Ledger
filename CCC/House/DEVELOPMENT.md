@@ -213,6 +213,17 @@ and they change perhaps monthly; polling them would add roughly 14,000
 reads/day per open tab for nothing. They load on mount, on manual refresh, and
 after an edit.
 
+## Pull-to-refresh
+
+`U21`. Engages only when the page is already scrolled to the top, no modal is
+open, and the drag is more vertical than horizontal — a horizontal row swipe
+wins outright. The indicator rides the finger (drag distance halved, capped at
+90px) and switches to "Release to refresh" past 64px, so the threshold is seen
+rather than guessed. Releasing short of it does nothing.
+
+Listeners are passive and attached to `document`; nothing calls
+`preventDefault`, so native overscroll is untouched.
+
 ## Vendor analytics
 
 The Vendors tab is two levels. The list carries a **cash vs banked** card for
