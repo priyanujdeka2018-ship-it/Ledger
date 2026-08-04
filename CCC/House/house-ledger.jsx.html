@@ -45,6 +45,7 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .sync-dot{width:8px;height:8px;border-radius:50%;margin-right:6px}
 .sync-live{background:#4ade80;animation:pulse 2s infinite}
 .sync-err{background:#ef4444}
+.sync-loading{background:#fbbf24;animation:pulse .9s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
 /* ─── CSS-HERO-CARDS ─── */
@@ -158,6 +159,11 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .btn-primary{background:var(--accent);color:#fff}
 .btn-secondary{background:var(--border);color:var(--t2)}
 .btn-danger{background:#ef4444;color:#fff}
+.amt-echo{font-family:'Playfair Display',serif;font-size:.85rem;font-weight:700;color:var(--accent);margin-top:5px}
+.autofill-note{display:flex;align-items:center;gap:6px;justify-content:space-between;background:var(--amberLt);color:var(--amber);border-radius:10px;padding:6px 10px;font-size:.7rem;font-weight:700;margin-top:6px}
+.autofill-note button{background:none;border:none;color:inherit;font-size:.8rem;font-weight:700;cursor:pointer;padding:0 2px;line-height:1}
+.field-err{font-size:.7rem;font-weight:700;color:var(--rose);margin-top:4px}
+.form-hint{font-size:.72rem;color:var(--t3);font-weight:600;margin-top:12px;text-align:center}
 
 /* ─── CSS-CONFIRM-THEME ─── */
 .confirm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:70;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -178,6 +184,10 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .empty-state{text-align:center;padding:40px 20px;color:var(--t3)}
 .empty-state .icon{font-size:2.5rem;margin-bottom:8px}
 .empty-state p{font-size:.85rem}
+.skel-row{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px;margin-bottom:8px}
+.skel-line{height:11px;border-radius:6px;background:var(--border);opacity:.6;animation:shimmer 1.2s ease-in-out infinite}
+.skel-line+.skel-line{margin-top:8px}
+@keyframes shimmer{0%,100%{opacity:.6}50%{opacity:.25}}
 </style>
 </head>
 <body>
@@ -266,7 +276,7 @@ function Header({syncStatus,themeId,onTheme,onRefresh,userName,onUserChange}){
   return(
     <div className="header">
       <div style={{display:'flex',alignItems:'center',gap:8}}>
-        <div className={`sync-dot ${syncStatus==='live'?'sync-live':'sync-err'}`}/>
+        <div className={`sync-dot ${syncStatus==='live'?'sync-live':syncStatus==='err'?'sync-err':'sync-loading'}`}/>
         <h1>House Ledger</h1>
       </div>
       <div className="header-r" style={{position:'relative'}}>
@@ -368,20 +378,24 @@ function SubtotalBar({label,entries}){
 
 // ─── JS-ENTRY-ROW ───
 function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
-  const ref=useRef(null);const startX=useRef(0);const dx=useRef(0);
+  const ref=useRef(null);const startX=useRef(0);const dx=useRef(0);const swiped=useRef(false);
   const pc=PHASE_CLR[entry.phase]||{bg:'#f5f5f4',text:'#44403c'};
   const ac=ACCT_CLR[entry.account]||{bg:'#f5f5f4',text:'#44403c'};
-  const handleStart=e=>{startX.current=e.touches[0].clientX;dx.current=0;};
-  const handleMove=e=>{dx.current=e.touches[0].clientX-startX.current;const el=ref.current;if(el)el.style.transform=`translateX(${Math.max(-80,Math.min(80,dx.current))}px)`;};
+  const handleStart=e=>{startX.current=e.touches[0].clientX;dx.current=0;swiped.current=false;};
+  const handleMove=e=>{dx.current=e.touches[0].clientX-startX.current;if(Math.abs(dx.current)>8)swiped.current=true;const el=ref.current;if(el)el.style.transform=`translateX(${Math.max(-80,Math.min(80,dx.current))}px)`;};
   const handleEnd=()=>{const el=ref.current;if(!el)return;if(dx.current<-60)onDelete(entry);else if(dx.current>60)onEdit(entry);el.style.transform='translateX(0)';};
+  // A swipe also lands as a click; suppress the expand toggle past 8px of travel.
+  const handleClick=()=>{if(swiped.current){swiped.current=false;return;}onToggle(entry.id);};
   return(
     <div className="entry-row">
       <div className="swipe-underlay right">✏️ Edit</div>
       <div className="swipe-underlay left">🗑 Delete</div>
-      <div ref={ref} className="entry-content" onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd} onClick={()=>onToggle(entry.id)}>
+      <div ref={ref} className="entry-content" onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd} onClick={handleClick}>
         <div className="entry-top">
           <span className="entry-vendor">{entry.vendor}</span>
-          <span className="entry-amt">{fmtAmt(entry.amount)}</span>
+          {/* Exact figures here: the entry list is the reconciliation unit,
+              and ₹1L vs ₹1.05L is hard to tell apart while scanning. */}
+          <span className="entry-amt">{fmtFull(entry.amount)}</span>
         </div>
         <div className="entry-meta">
           <span className="entry-date">{fmtDateShort(entry.date)}</span>
@@ -391,7 +405,8 @@ function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
       </div>
       <div className={`entry-detail ${isExpanded?'open':''}`}>
         <div className="detail-grid">
-          <div className="detail-cell"><div className="lbl">Amount</div><div className="val">{fmtFull(entry.amount)}</div></div>
+          {/* Amount is no longer repeated here — the collapsed row shows it in full. */}
+          <div className="detail-cell"><div className="lbl">Logged By</div><div className="val">{entry.loggedBy||'—'}</div></div>
           <div className="detail-cell"><div className="lbl">Category</div><div className="val">{entry.category}</div></div>
           <div className="detail-cell"><div className="lbl">Subcategory</div><div className="val">{entry.subcategory}</div></div>
           <div className="detail-cell"><div className="lbl">Phase</div><div className="val">{entry.phase}</div></div>
@@ -470,7 +485,7 @@ function OverviewCards({groups,onSelect,labelKey}){
 
 // ─── JS-PHASES-TAB ───
 function PhasesTab({exps,onNavigate}){
-  const [level,setLevel]=useState(0);const [selPhase,setSelPhase]=useState(null);const [selZone,setSelZone]=useState(null);
+  const [level,setLevel]=useState(0);const [selPhase,setSelPhase]=useState(null);
   const phases=useMemo(()=>{
     const m={};exps.forEach(e=>{if(!m[e.phase])m[e.phase]={name:e.phase,entries:[]};m[e.phase].entries.push(e);});
     return PHASES.filter(p=>m[p]).map(p=>m[p]);
@@ -479,7 +494,7 @@ function PhasesTab({exps,onNavigate}){
     if(!selPhase)return [];const pe=exps.filter(e=>e.phase===selPhase);const m={};pe.forEach(e=>{if(!m[e.zone])m[e.zone]={name:e.zone,entries:[]};m[e.zone].entries.push(e);});return Object.values(m).sort((a,b)=>b.entries.reduce((s,e)=>s+e.amount,0)-a.entries.reduce((s,e)=>s+e.amount,0));
   },[exps,selPhase]);
   if(level===0)return(<div className="entry-list"><OverviewCards groups={phases} labelKey="phase" onSelect={p=>{setSelPhase(p);setLevel(1);}}/></div>);
-  if(level===1)return(<div className="entry-list"><button className="back-btn" onClick={()=>setLevel(0)}>← All Phases</button><SubtotalBar label={selPhase} entries={exps.filter(e=>e.phase===selPhase)}/><OverviewCards groups={zones} labelKey="zone" onSelect={z=>{setSelZone(z);onNavigate({phase:selPhase,zone:z});}}/></div>);
+  if(level===1)return(<div className="entry-list"><button className="back-btn" onClick={()=>setLevel(0)}>← All Phases</button><SubtotalBar label={selPhase} entries={exps.filter(e=>e.phase===selPhase)}/><OverviewCards groups={zones} labelKey="zone" onSelect={z=>onNavigate({phase:selPhase,zone:z})}/></div>);
   return null;
 }
 
@@ -510,7 +525,9 @@ function VendorsTab({exps,onNavigate}){
     <div className="entry-list">
       <div className="search-bar"><input placeholder="Search vendors..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
       {filtered.map(v=>{
-        const lastDate=v.entries.sort((a,b)=>b.date.localeCompare(a.date))[0]?.date;
+        // Copy before sorting — v.entries is memoized and sorting it in place
+        // mutates state during render.
+        const lastDate=[...v.entries].sort((a,b)=>b.date.localeCompare(a.date))[0]?.date;
         const selfAmt=v.entries.filter(e=>e.account==='Self').reduce((s,e)=>s+e.amount,0);
         const selfPct=v.total>0?(selfAmt/v.total)*100:50;
         return(
@@ -598,14 +615,62 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
   const isEdit=!!entry?.id;
   const [step,setStep]=useState(1);
   const [f,setF]=useState(entry||{date:new Date().toISOString().slice(0,10),amount:'',vendor:'',transferTo:'',account:'Self',category:'',subcategory:'',phase:'',zone:'Whole House',expenseType:'Contract',paymentMode:'NEFT',invoiceRef:'',notes:'',status:'Paid'});
+  const [autofill,setAutofill]=useState(null);
+  const [dupWarn,setDupWarn]=useState(null);
   const up=(k,v)=>setF(p=>({...p,[k]:v,...(k==='vendor'&&!isEdit&&p.transferTo===p.vendor?{transferTo:v}:{}),
     ...(k==='category'?{subcategory:''}:{})}));
   const vendors=useMemo(()=>[...new Set(exps.map(e=>e.vendor))].sort(),[exps]);
+
+  // Most recent entry per vendor, for autofill.
+  const vendorLast=useMemo(()=>{
+    const m={};
+    exps.forEach(e=>{const k=(e.vendor||'').trim().toLowerCase();if(!k)return;if(!m[k]||e.date>m[k].date)m[k]=e;});
+    return m;
+  },[exps]);
+
+  // Picking a known vendor carries its classification forward from that
+  // vendor's last payment. Every field stays editable; the note says where
+  // the values came from.
+  const setVendor=v=>{
+    const src=vendorLast[v.trim().toLowerCase()];
+    setF(p=>{
+      const next={...p,vendor:v,...(!isEdit&&p.transferTo===p.vendor?{transferTo:v}:{})};
+      if(!isEdit&&src&&src.vendor!==p.vendor){
+        next.category=src.category;next.subcategory=src.subcategory;next.phase=src.phase;
+        next.zone=src.zone;next.expenseType=src.expenseType;next.paymentMode=src.paymentMode;
+      }
+      return next;
+    });
+    setAutofill(!isEdit&&src?{date:src.date}:null);
+  };
+
   const subs=CATEGORIES[f.category]||[];
-  const canNext=step===1?(f.date&&f.amount&&f.vendor):step===2?(f.category&&f.subcategory&&f.phase):true;
-  const handleSave=()=>{
-    const entry={...f,amount:parseFloat(f.amount)||0,transferTo:f.transferTo||f.vendor,loggedBy:userName||'Unknown'};
-    onSave(entry);
+  const today=new Date().toISOString().slice(0,10);
+  const amtNum=parseFloat(f.amount);
+  const err={
+    date:!f.date?'Date is required':f.date>today?'Date cannot be in the future':'',
+    amount:f.amount===''?'Amount is required':!(amtNum>0)?'Amount must be greater than zero':'',
+    vendor:!f.vendor.trim()?'Vendor is required':'',
+    category:!f.category?'Category is required':'',
+    subcategory:!f.subcategory?'Subcategory is required':'',
+    phase:!f.phase?'Phase is required':''
+  };
+  const stepFields={1:['date','amount','vendor'],2:['category','subcategory','phase'],3:[]};
+  const missing=stepFields[step].filter(k=>err[k]);
+  const canNext=missing.length===0;
+  const canSave=[...stepFields[1],...stepFields[2]].every(k=>!err[k]);
+
+  // Non-blocking duplicate check: same date + amount + vendor + category.
+  // Genuine same-day repeat payments to one vendor do occur, so this warns
+  // rather than refuses.
+  const findDup=e=>exps.find(x=>x.id!==entry?.id&&x.date===e.date&&Math.abs(x.amount-e.amount)<0.01
+    &&(x.vendor||'').trim().toLowerCase()===e.vendor.toLowerCase()&&x.category===e.category);
+
+  const handleSave=(force)=>{
+    if(!canSave)return;
+    const built={...f,amount:amtNum||0,vendor:f.vendor.trim(),transferTo:(f.transferTo||f.vendor).trim(),loggedBy:userName||'Unknown'};
+    if(!force){const d=findDup(built);if(d){setDupWarn({built,match:d});return;}}
+    onSave(built);
   };
   return(
     <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
@@ -613,16 +678,26 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
         <h2>{isEdit?'Edit Entry':'New Entry'}</h2>
         <div className="form-steps"><div className={`form-step ${step>=1?'active':''} ${step>1?'done':''}`}/><div className={`form-step ${step>=2?'active':''} ${step>2?'done':''}`}/><div className={`form-step ${step>=3?'active':''}`}/></div>
         {step===1&&<>
-          <div className="field"><label>Date</label><input type="date" value={f.date} onChange={e=>up('date',e.target.value)}/></div>
-          <div className="field"><label>Amount (₹)</label><input type="number" placeholder="0" value={f.amount} onChange={e=>up('amount',e.target.value)}/></div>
-          <div className="field"><label>Vendor</label><input list="vendors" value={f.vendor} onChange={e=>up('vendor',e.target.value)} placeholder="Who was paid"/><datalist id="vendors">{vendors.map(v=><option key={v} value={v}/>)}</datalist></div>
+          <div className="field"><label>Date</label><input type="date" max={today} value={f.date} onChange={e=>up('date',e.target.value)}/>
+            {err.date&&<div className="field-err">{err.date}</div>}</div>
+          <div className="field"><label>Amount (₹)</label><input type="number" inputMode="decimal" placeholder="0" value={f.amount} onChange={e=>up('amount',e.target.value)}/>
+            {/* Echo the parsed figure back — a dropped or extra zero is the
+                most expensive data-entry error in a ledger. */}
+            {amtNum>0&&<div className="amt-echo">{fmtFull(amtNum)} ({fmtAmt(amtNum).replace('₹','')})</div>}
+            {err.amount&&<div className="field-err">{err.amount}</div>}</div>
+          <div className="field"><label>Vendor</label><input list="vendors" value={f.vendor} onChange={e=>setVendor(e.target.value)} placeholder="Who was paid"/><datalist id="vendors">{vendors.map(v=><option key={v} value={v}/>)}</datalist>
+            {err.vendor&&<div className="field-err">{err.vendor}</div>}
+            {autofill&&<div className="autofill-note"><span>Prefilled from {fmtDateShort(autofill.date)} payment</span><button type="button" onClick={()=>setAutofill(null)}>✕</button></div>}</div>
           <div className="field"><label>Transfer To</label><input value={f.transferTo} onChange={e=>up('transferTo',e.target.value)} placeholder="Same as vendor unless intermediary"/></div>
           <div className="field"><label>Account</label><div className="toggle-group">{['Self','Reemon'].map(a=><button key={a} type="button" className={`toggle-btn ${f.account===a?'active':''}`} onClick={()=>up('account',a)}>{a}</button>)}</div></div>
         </>}
         {step===2&&<>
-          <div className="field"><label>Category</label><select value={f.category} onChange={e=>up('category',e.target.value)}><option value="">Select...</option>{Object.keys(CATEGORIES).map(c=><option key={c} value={c}>{c}</option>)}</select></div>
-          <div className="field"><label>Subcategory</label><select value={f.subcategory} onChange={e=>up('subcategory',e.target.value)}><option value="">Select...</option>{subs.map(s=><option key={s} value={s}>{s}</option>)}</select></div>
-          <div className="field"><label>Phase</label><select value={f.phase} onChange={e=>up('phase',e.target.value)}><option value="">Select...</option>{PHASES.map(p=><option key={p} value={p}>{p}</option>)}</select></div>
+          <div className="field"><label>Category</label><select value={f.category} onChange={e=>up('category',e.target.value)}><option value="">Select...</option>{Object.keys(CATEGORIES).map(c=><option key={c} value={c}>{c}</option>)}</select>
+            {err.category&&<div className="field-err">{err.category}</div>}</div>
+          <div className="field"><label>Subcategory</label><select value={f.subcategory} onChange={e=>up('subcategory',e.target.value)}><option value="">Select...</option>{subs.map(s=><option key={s} value={s}>{s}</option>)}</select>
+            {err.subcategory&&<div className="field-err">{err.subcategory}</div>}</div>
+          <div className="field"><label>Phase</label><select value={f.phase} onChange={e=>up('phase',e.target.value)}><option value="">Select...</option>{PHASES.map(p=><option key={p} value={p}>{p}</option>)}</select>
+            {err.phase&&<div className="field-err">{err.phase}</div>}</div>
           <div className="field"><label>Zone</label><select value={f.zone} onChange={e=>up('zone',e.target.value)}>{ZONES.map(z=><option key={z} value={z}>{z}</option>)}</select></div>
           <div className="field"><label>Expense Type</label><div className="toggle-group">{EXPENSE_TYPES.map(t=><button key={t} type="button" className={`toggle-btn ${f.expenseType===t?'active':''}`} onClick={()=>up('expenseType',t)}>{t}</button>)}</div></div>
         </>}
@@ -632,13 +707,26 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
           <div className="field"><label>Notes</label><textarea value={f.notes} onChange={e=>up('notes',e.target.value)} placeholder="Optional"/></div>
           <div className="field"><label>Status</label><div className="toggle-group">{STATUSES.map(s=><button key={s} type="button" className={`toggle-btn ${f.status===s?'active':''}`} style={{fontSize:'.7rem'}} onClick={()=>up('status',s)}>{s}</button>)}</div></div>
         </>}
+        {/* Say why Next is disabled rather than leaving a dead button. */}
+        {step<3&&!canNext&&<div className="form-hint">Still needed: {missing.map(k=>k==='subcategory'?'subcategory':k).join(', ')}</div>}
         <div className="form-actions">
           {step>1&&<button className="btn-secondary" onClick={()=>setStep(step-1)}>Back</button>}
           {step<3&&<button className="btn-primary" onClick={()=>setStep(step+1)} disabled={!canNext}>Next</button>}
-          {step===3&&<button className="btn-primary" onClick={handleSave}>Save</button>}
+          {step===3&&<button className="btn-primary" onClick={()=>handleSave(false)} disabled={!canSave}>Save</button>}
           <button className="btn-secondary" onClick={onCancel}>{step===1?'Cancel':'✕'}</button>
         </div>
       </div>
+      {dupWarn&&
+        <div className="confirm-overlay" onClick={e=>{if(e.target===e.currentTarget)setDupWarn(null);}}>
+          <div className="confirm-box">
+            <h3>Possible duplicate</h3>
+            <p>An entry already exists for {dupWarn.match.vendor} — {fmtFull(dupWarn.match.amount)} on {fmtDate(dupWarn.match.date)} ({dupWarn.match.category}). Save this one anyway?</p>
+            <div className="form-actions">
+              <button className="btn-primary" onClick={()=>{const b=dupWarn.built;setDupWarn(null);onSave(b);}}>Save anyway</button>
+              <button className="btn-secondary" onClick={()=>setDupWarn(null)}>Go back</button>
+            </div>
+          </div>
+        </div>}
     </div>
   );
 }
@@ -681,7 +769,6 @@ function ThemePicker({themeId,onPick,onClose}){
 // ─── JS-APP ───
 function App(){
   const [exps,setExps]=useState([]);
-  const [budgets,setBudgets]=useState([]);
   const [tab,setTab]=useState('entries');
   const [activeFilter,setActiveFilter]=useState(null);
   const [themeId,setThemeId]=useState(()=>localStorage.getItem('hl-theme')||'blueprint');
@@ -690,7 +777,9 @@ function App(){
   const [editEntry,setEditEntry]=useState(null);
   const [deleteTarget,setDeleteTarget]=useState(null);
   const [showThemePicker,setShowThemePicker]=useState(false);
-  const [syncStatus,setSyncStatus]=useState('live');
+  // 'loading' until the first fetch resolves — a green dot over an empty
+  // list claims a successful sync that has not happened yet.
+  const [syncStatus,setSyncStatus]=useState('loading');
   const [userName,setUserName]=useState(()=>localStorage.getItem('hl-user')||'Jiten');
 
   useEffect(()=>{applyTheme(themeId);},[themeId]);
@@ -703,7 +792,20 @@ function App(){
     }catch(err){console.error(err);setSyncStatus('err');}
   },[]);
 
-  useEffect(()=>{loadData();const iv=setInterval(loadData,10000);return()=>clearInterval(iv);},[loadData]);
+  // Poll every 60s and only while the tab is visible, with an immediate
+  // refetch on return. At 10s an open tab burned the 50,000 reads/day free
+  // quota in about 95 minutes. Past a few hundred entries, switch to the
+  // Firestore real-time listener rather than polling harder.
+  useEffect(()=>{
+    let iv=null;
+    const start=()=>{if(iv===null)iv=setInterval(loadData,60000);};
+    const stop=()=>{if(iv!==null){clearInterval(iv);iv=null;}};
+    const onVis=()=>{if(document.hidden)stop();else{loadData();start();}};
+    loadData();
+    if(!document.hidden)start();
+    document.addEventListener('visibilitychange',onVis);
+    return()=>{stop();document.removeEventListener('visibilitychange',onVis);};
+  },[loadData]);
 
   const navigateToEntries=useCallback((filter)=>{setActiveFilter(filter);setTab('entries');setExpandId(null);},[]);
 
@@ -732,11 +834,20 @@ function App(){
         <HeroAccountCard exps={exps} onNavigate={navigateToEntries}/>
       </div>
       <div style={{paddingBottom:70}}>
+        {syncStatus==='loading'&&exps.length===0&&
+          <div className="entry-list">{[0,1,2,3,4].map(i=>
+            <div key={i} className="skel-row">
+              <div className="skel-line" style={{width:'55%'}}/>
+              <div className="skel-line" style={{width:'35%'}}/>
+            </div>)}
+          </div>}
+        {!(syncStatus==='loading'&&exps.length===0)&&<>
         {tab==='entries'&&<EntriesTab exps={exps} activeFilter={activeFilter} onClearFilter={()=>setActiveFilter(null)} onEdit={handleEdit} onDelete={handleDeleteConfirm} expandId={expandId} onToggle={id=>setExpandId(expandId===id?null:id)}/>}
         {tab==='phases'&&<PhasesTab exps={exps} onNavigate={navigateToEntries}/>}
         {tab==='zones'&&<ZonesTab exps={exps} onNavigate={navigateToEntries}/>}
         {tab==='vendors'&&<VendorsTab exps={exps} onNavigate={navigateToEntries}/>}
         {tab==='timeline'&&<TimelineTab exps={exps} onNavigate={navigateToEntries}/>}
+        </>}
       </div>
       <TabBar tab={tab} onTab={setTab}/>
       {tab==='entries'&&<button className="fab" onClick={()=>{setEditEntry(null);setShowForm(true);}}>+</button>}
