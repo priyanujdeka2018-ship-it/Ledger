@@ -4,11 +4,13 @@
 
 ```
 Ledger/CCC/House/
-├── house-ledger.jsx.html   ← EDIT THIS (JSX source, ~800 lines)
-├── house-ledger.html       ← GENERATED and DEPLOYED (~77KB, no Babel)
+├── house-ledger.jsx.html   ← EDIT THIS (JSX source)
+├── house-ledger.html       ← GENERATED and DEPLOYED (no Babel)
 ├── compile.js              ← Build script (JSX → React.createElement)
-├── package.json            ← @babel/core + @babel/preset-react
-└── DEVELOPMENT.md          ← This file
+├── smoke-test.js           ← Whole-app walk; run before every deploy
+├── package.json            ← Babel + React (dev only)
+├── DEVELOPMENT.md          ← This file
+└── LEASE_MODE_PLAN.md      ← Design doc for the unbuilt lease module
 ```
 
 Both files sit in the same directory. `house-ledger.html` is what GitHub
