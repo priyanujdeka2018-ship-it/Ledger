@@ -189,10 +189,11 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:60;display:flex;align-items:flex-end;justify-content:center}
 .modal{background:var(--card);border-radius:24px 24px 0 0;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;padding:20px 16px env(safe-area-inset-bottom,16px)}
 .modal h2{font-size:1.1rem;margin-bottom:14px;color:var(--t1)}
-.form-steps{display:flex;gap:6px;margin-bottom:16px}
-.form-step{flex:1;height:4px;border-radius:2px;background:var(--border)}
-.form-step.active{background:var(--accent)}
-.form-step.done{background:var(--accent);opacity:.5}
+.form-sep{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin:16px 0 10px;padding-top:12px;border-top:1px solid var(--border)}
+.more-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 12px;margin-top:4px;border-radius:12px;border:1px dashed var(--border);background:none;color:var(--t2);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer}
+.more-chev{transition:transform .2s;font-size:.9rem}
+.more-chev.open{transform:rotate(180deg)}
+.more-panel{margin-top:12px}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:4px}
 .field input,.field select,.field textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);font-size:.88rem;color:var(--t1);font-family:'Nunito',sans-serif}
@@ -201,6 +202,9 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .toggle-btn{flex:1;padding:8px;border-radius:12px;border:1px solid var(--border);background:var(--card);font-size:.78rem;font-weight:600;cursor:pointer;text-align:center;color:var(--t2);font-family:'Nunito',sans-serif;transition:all .2s}
 .toggle-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .form-actions{display:flex;gap:8px;margin-top:16px}
+/* Sticky inside the scrolling sheet: Save stays reachable without scrolling
+   past classification fields the user did not need to change. */
+.form-actions.sticky{position:sticky;bottom:0;background:var(--card);padding:10px 0 6px;margin-top:18px;box-shadow:0 -10px 14px -10px rgba(0,0,0,.22)}
 .form-actions button{flex:1;padding:12px;border-radius:14px;border:none;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif}
 .btn-primary{background:var(--accent);color:#fff}
 .btn-secondary{background:var(--border);color:var(--t2)}
@@ -609,8 +613,10 @@ function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
     if(idle)idle.style.opacity=0;
     if(active){active.style.opacity=d===0?0:show;active.textContent=armed?(d>0?'✏️ Release to edit':'🗑 Release to delete'):(d>0?'✏️ Edit':'🗑 Delete');}
   };
-  const handleStart=e=>{startX.current=e.touches[0].clientX;dx.current=0;swiped.current=false;};
-  const handleMove=e=>{dx.current=e.touches[0].clientX-startX.current;if(Math.abs(dx.current)>8)swiped.current=true;const el=ref.current;if(el)el.style.transform=`translateX(${Math.max(-80,Math.min(80,dx.current))}px)`;paint(dx.current);};
+  // Guard the touch list: a touch event without one throws, and one bad
+  // event otherwise leaves the row permanently unresponsive.
+  const handleStart=e=>{if(!e.touches?.length)return;startX.current=e.touches[0].clientX;dx.current=0;swiped.current=false;};
+  const handleMove=e=>{if(!e.touches?.length)return;dx.current=e.touches[0].clientX-startX.current;if(Math.abs(dx.current)>8)swiped.current=true;const el=ref.current;if(el)el.style.transform=`translateX(${Math.max(-80,Math.min(80,dx.current))}px)`;paint(dx.current);};
   const handleEnd=()=>{const el=ref.current;if(!el)return;const d=dx.current;paint(0);el.style.transform='translateX(0)';if(d<-THRESH)onDelete(entry);else if(d>THRESH)onEdit(entry);};
   // A swipe also lands as a click; suppress the expand toggle past 8px of travel.
   const handleClick=()=>{if(swiped.current){swiped.current=false;return;}onToggle(entry.id);};
@@ -972,14 +978,29 @@ function TimelineTab({exps,onNavigate}){
 }
 
 // ─── JS-ENTRY-FORM ───
+// One scrollable sheet, not three steps. With vendor autofill doing the
+// classification, a repeat payment is two fields and a Save — the two Next
+// taps in between were pure friction. Rare fields sit under a disclosure so
+// everything that matters is visible at once.
 function EntryForm({entry,onSave,onCancel,exps,userName}){
   const isEdit=!!entry?.id;
-  const [step,setStep]=useState(1);
   const [f,setF]=useState(entry||{date:new Date().toISOString().slice(0,10),amount:'',vendor:'',transferTo:'',account:'Self',category:'',subcategory:'',phase:'',zone:'Whole House',expenseType:'Contract',paymentMode:'NEFT',invoiceRef:'',notes:'',status:'Paid'});
   const [autofill,setAutofill]=useState(null);
   const [dupWarn,setDupWarn]=useState(null);
-  const up=(k,v)=>setF(p=>({...p,[k]:v,...(k==='vendor'&&!isEdit&&p.transferTo===p.vendor?{transferTo:v}:{}),
-    ...(k==='category'?{subcategory:''}:{})}));
+  // Errors appear once a field has been touched or Save attempted — showing
+  // ten fields' worth of red on open would be noise, not help.
+  const [touched,setTouched]=useState({});
+  const [tried,setTried]=useState(false);
+  // Open the disclosure when it already holds content, so editing never
+  // hides a value that exists.
+  const [more,setMore]=useState(()=>!!(entry&&(entry.invoiceRef||entry.notes||(entry.status&&entry.status!=='Paid'))));
+  const sheetRef=useRef(null);
+
+  const up=(k,v)=>{
+    setTouched(t=>t[k]?t:{...t,[k]:true});
+    setF(p=>({...p,[k]:v,...(k==='vendor'&&!isEdit&&p.transferTo===p.vendor?{transferTo:v}:{}),
+      ...(k==='category'?{subcategory:''}:{})}));
+  };
   const vendors=useMemo(()=>[...new Set(exps.map(e=>e.vendor))].sort(),[exps]);
 
   // Most recent entry per vendor, for autofill.
@@ -994,6 +1015,7 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
   // the values came from.
   const setVendor=v=>{
     const src=vendorLast[v.trim().toLowerCase()];
+    setTouched(t=>({...t,vendor:true}));
     setF(p=>{
       const next={...p,vendor:v,...(!isEdit&&p.transferTo===p.vendor?{transferTo:v}:{})};
       if(!isEdit&&src&&src.vendor!==p.vendor){
@@ -1016,10 +1038,11 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
     subcategory:!f.subcategory?'Subcategory is required':'',
     phase:!f.phase?'Phase is required':''
   };
-  const stepFields={1:['date','amount','vendor'],2:['category','subcategory','phase'],3:[]};
-  const missing=stepFields[step].filter(k=>err[k]);
-  const canNext=missing.length===0;
-  const canSave=[...stepFields[1],...stepFields[2]].every(k=>!err[k]);
+  const REQUIRED=['date','amount','vendor','category','subcategory','phase'];
+  const missing=REQUIRED.filter(k=>err[k]);
+  const canSave=missing.length===0;
+  const show=k=>(touched[k]||tried)&&err[k];
+  const Err=({k})=>show(k)?<div className="field-err">{err[k]}</div>:null;
 
   // Non-blocking duplicate check: same date + amount + vendor + category.
   // Genuine same-day repeat payments to one vendor do occur, so this warns
@@ -1028,54 +1051,63 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
     &&(x.vendor||'').trim().toLowerCase()===e.vendor.toLowerCase()&&x.category===e.category);
 
   const handleSave=(force)=>{
-    if(!canSave)return;
+    if(!canSave){
+      // Reveal every outstanding error and scroll to the first one — with a
+      // long sheet the offending field may be off-screen.
+      setTried(true);
+      setTimeout(()=>{const el=sheetRef.current?.querySelector('.field-err');if(el)el.scrollIntoView({block:'center',behavior:'smooth'});},0);
+      return;
+    }
     const built={...f,amount:amtNum||0,vendor:f.vendor.trim(),transferTo:(f.transferTo||f.vendor).trim(),loggedBy:userName||'Unknown'};
     if(!force){const d=findDup(built);if(d){setDupWarn({built,match:d});return;}}
     onSave(built);
   };
+
   return(
     <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
-      <div className="modal">
+      <div className="modal" ref={sheetRef}>
         <h2>{isEdit?'Edit Entry':'New Entry'}</h2>
-        <div className="form-steps"><div className={`form-step ${step>=1?'active':''} ${step>1?'done':''}`}/><div className={`form-step ${step>=2?'active':''} ${step>2?'done':''}`}/><div className={`form-step ${step>=3?'active':''}`}/></div>
-        {step===1&&<>
-          <div className="field"><label>Date</label><input type="date" max={today} value={f.date} onChange={e=>up('date',e.target.value)}/>
-            {err.date&&<div className="field-err">{err.date}</div>}</div>
-          <div className="field"><label>Amount (₹)</label><input type="number" inputMode="decimal" placeholder="0" value={f.amount} onChange={e=>up('amount',e.target.value)}/>
-            {/* Echo the parsed figure back — a dropped or extra zero is the
-                most expensive data-entry error in a ledger. */}
-            {amtNum>0&&<div className="amt-echo">{fmtFull(amtNum)} ({fmtAmt(amtNum).replace('₹','')})</div>}
-            {err.amount&&<div className="field-err">{err.amount}</div>}</div>
-          <div className="field"><label>Vendor</label><input list="vendors" value={f.vendor} onChange={e=>setVendor(e.target.value)} placeholder="Who was paid"/><datalist id="vendors">{vendors.map(v=><option key={v} value={v}/>)}</datalist>
-            {err.vendor&&<div className="field-err">{err.vendor}</div>}
-            {autofill&&<div className="autofill-note"><span>Prefilled from {fmtDateShort(autofill.date)} payment</span><button type="button" aria-label="Dismiss autofill note" onClick={()=>setAutofill(null)}>✕</button></div>}</div>
-          <div className="field"><label>Transfer To</label><input value={f.transferTo} onChange={e=>up('transferTo',e.target.value)} placeholder="Same as vendor unless intermediary"/></div>
-          <div className="field"><label>Account</label><div className="toggle-group">{['Self','Reemon'].map(a=><button key={a} type="button" className={`toggle-btn ${f.account===a?'active':''}`} onClick={()=>up('account',a)}>{a}</button>)}</div></div>
-        </>}
-        {step===2&&<>
-          <div className="field"><label>Category</label><select value={f.category} onChange={e=>up('category',e.target.value)}><option value="">Select...</option>{Object.keys(CATEGORIES).map(c=><option key={c} value={c}>{c}</option>)}</select>
-            {err.category&&<div className="field-err">{err.category}</div>}</div>
-          <div className="field"><label>Subcategory</label><select value={f.subcategory} onChange={e=>up('subcategory',e.target.value)}><option value="">Select...</option>{subs.map(s=><option key={s} value={s}>{s}</option>)}</select>
-            {err.subcategory&&<div className="field-err">{err.subcategory}</div>}</div>
-          <div className="field"><label>Phase</label><select value={f.phase} onChange={e=>up('phase',e.target.value)}><option value="">Select...</option>{PHASES.map(p=><option key={p} value={p}>{p}</option>)}</select>
-            {err.phase&&<div className="field-err">{err.phase}</div>}</div>
-          <div className="field"><label>Zone</label><select value={f.zone} onChange={e=>up('zone',e.target.value)}>{ZONES.map(z=><option key={z} value={z}>{z}</option>)}</select></div>
-          <div className="field"><label>Expense Type</label><div className="toggle-group">{EXPENSE_TYPES.map(t=><button key={t} type="button" className={`toggle-btn ${f.expenseType===t?'active':''}`} onClick={()=>up('expenseType',t)}>{t}</button>)}</div></div>
-        </>}
-        {step===3&&<>
-          <div className="field"><label>Payment Mode</label><select value={f.paymentMode} onChange={e=>up('paymentMode',e.target.value)}>{PAYMENT_MODES.map(m=><option key={m} value={m}>{m}</option>)}</select></div>
+
+        <div className="field"><label>Date</label><input type="date" max={today} value={f.date} onChange={e=>up('date',e.target.value)}/>
+          <Err k="date"/></div>
+        <div className="field"><label>Amount (₹)</label><input type="number" inputMode="decimal" placeholder="0" value={f.amount} onChange={e=>up('amount',e.target.value)}/>
+          {/* Echo the parsed figure back — a dropped or extra zero is the
+              most expensive data-entry error in a ledger. */}
+          {amtNum>0&&<div className="amt-echo">{fmtFull(amtNum)} ({fmtAmt(amtNum).replace('₹','')})</div>}
+          <Err k="amount"/></div>
+        <div className="field"><label>Vendor</label><input list="vendors" value={f.vendor} onChange={e=>setVendor(e.target.value)} placeholder="Who was paid"/><datalist id="vendors">{vendors.map(v=><option key={v} value={v}/>)}</datalist>
+          <Err k="vendor"/>
+          {autofill&&<div className="autofill-note"><span>Prefilled from {fmtDateShort(autofill.date)} payment</span><button type="button" aria-label="Dismiss autofill note" onClick={()=>setAutofill(null)}>✕</button></div>}</div>
+        <div className="field"><label>Transfer To</label><input value={f.transferTo} onChange={e=>up('transferTo',e.target.value)} placeholder="Same as vendor unless intermediary"/></div>
+        <div className="field"><label>Account</label><div className="toggle-group">{['Self','Reemon'].map(a=><button key={a} type="button" className={`toggle-btn ${f.account===a?'active':''}`} onClick={()=>up('account',a)}>{a}</button>)}</div></div>
+
+        <div className="form-sep">Classification</div>
+        <div className="field"><label>Category</label><select value={f.category} onChange={e=>up('category',e.target.value)}><option value="">Select...</option>{Object.keys(CATEGORIES).map(c=><option key={c} value={c}>{c}</option>)}</select>
+          <Err k="category"/></div>
+        <div className="field"><label>Subcategory</label><select value={f.subcategory} onChange={e=>up('subcategory',e.target.value)}><option value="">Select...</option>{subs.map(x=><option key={x} value={x}>{x}</option>)}</select>
+          <Err k="subcategory"/></div>
+        <div className="field"><label>Phase</label><select value={f.phase} onChange={e=>up('phase',e.target.value)}><option value="">Select...</option>{PHASES.map(x=><option key={x} value={x}>{x}</option>)}</select>
+          <Err k="phase"/></div>
+        <div className="field"><label>Zone</label><select value={f.zone} onChange={e=>up('zone',e.target.value)}>{ZONES.map(z=><option key={z} value={z}>{z}</option>)}</select></div>
+        <div className="field"><label>Expense Type</label><div className="toggle-group">{EXPENSE_TYPES.map(t=><button key={t} type="button" className={`toggle-btn ${f.expenseType===t?'active':''}`} onClick={()=>up('expenseType',t)}>{t}</button>)}</div></div>
+        <div className="field"><label>Payment Mode</label><select value={f.paymentMode} onChange={e=>up('paymentMode',e.target.value)}>{PAYMENT_MODES.map(m=><option key={m} value={m}>{m}</option>)}</select></div>
+
+        <button type="button" className="more-toggle" aria-expanded={more} onClick={()=>setMore(m=>!m)}>
+          <span>More details</span><span className={`more-chev ${more?'open':''}`}>▾</span>
+        </button>
+        {more&&<div className="more-panel">
           <div className="field"><label>Invoice Ref</label><input value={f.invoiceRef} onChange={e=>up('invoiceRef',e.target.value)} placeholder="Optional"/></div>
           <div className="field"><label>Notes</label><textarea value={f.notes} onChange={e=>up('notes',e.target.value)} placeholder="Optional"/></div>
-          <div className="field"><label>Status</label><div className="toggle-group">{STATUSES.map(s=><button key={s} type="button" className={`toggle-btn ${f.status===s?'active':''}`} onClick={()=>up('status',s)}>{s}</button>)}</div></div>
-        </>}
-        {/* Say why Next is disabled rather than leaving a dead button. */}
-        {step<3&&!canNext&&<div className="form-hint">Still needed: {missing.map(k=>k==='subcategory'?'subcategory':k).join(', ')}</div>}
-        <div className="form-actions">
-          {step>1&&<button className="btn-secondary" onClick={()=>setStep(step-1)}>Back</button>}
-          {step<3&&<button className="btn-primary" onClick={()=>setStep(step+1)} disabled={!canNext}>Next</button>}
-          {step===3&&<button className="btn-primary" onClick={()=>handleSave(false)} disabled={!canSave}>Save</button>}
-          <button className="btn-secondary" onClick={onCancel}>{step===1?'Cancel':'✕'}</button>
+          <div className="field" style={{marginBottom:0}}><label>Status</label><div className="toggle-group">{STATUSES.map(x=><button key={x} type="button" className={`toggle-btn ${f.status===x?'active':''}`} onClick={()=>up('status',x)}>{x}</button>)}</div></div>
+        </div>}
+
+        {/* Sticky, so a repeat entry is date, amount, vendor, Save — without
+            scrolling past the classification you did not need to change. */}
+        <div className="form-actions sticky">
+          <button className="btn-primary" onClick={()=>handleSave(false)}>Save</button>
+          <button className="btn-secondary" onClick={onCancel}>Cancel</button>
         </div>
+        {tried&&!canSave&&<div className="form-hint">Still needed: {missing.join(', ')}</div>}
       </div>
       {dupWarn&&
         <div className="confirm-overlay" onClick={e=>{if(e.target===e.currentTarget)setDupWarn(null);}}>
@@ -1088,22 +1120,6 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
             </div>
           </div>
         </div>}
-    </div>
-  );
-}
-
-// ─── JS-CONFIRM-DIALOG ───
-function ConfirmDialog({title,message,onConfirm,onCancel}){
-  return(
-    <div className="confirm-overlay" onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
-      <div className="confirm-box">
-        <h3>{title}</h3>
-        <p>{message}</p>
-        <div className="form-actions">
-          <button className="btn-danger" onClick={onConfirm}>Delete</button>
-          <button className="btn-secondary" onClick={onCancel}>Cancel</button>
-        </div>
-      </div>
     </div>
   );
 }
