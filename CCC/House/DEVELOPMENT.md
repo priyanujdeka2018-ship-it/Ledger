@@ -3,97 +3,117 @@
 ## File Structure
 
 ```
-Ledger/CCC/
-├── src/
-│   └── house-ledger.jsx.html    ← EDIT THIS (JSX source, ~820 lines)
-├── dist/
-│   └── house-ledger.html        ← DEPLOY THIS (compiled, ~70KB, no Babel)
-├── seed-house-expenses.html     ← One-time seeder (88 entries)
-├── compile.js                   ← Build script (JSX → React.createElement)
-├── package.json
-└── DEVELOPMENT.md               ← This file
+Ledger/CCC/House/
+├── house-ledger.jsx.html   ← EDIT THIS (JSX source, ~800 lines)
+├── house-ledger.html       ← GENERATED and DEPLOYED (~77KB, no Babel)
+├── compile.js              ← Build script (JSX → React.createElement)
+├── package.json            ← @babel/core + @babel/preset-react
+└── DEVELOPMENT.md          ← This file
 ```
+
+Both files sit in the same directory. `house-ledger.html` is what GitHub
+Pages serves, at `/Ledger/CCC/House/house-ledger.html` — `compile.js` writes
+it in place, so a rebuild always reaches the live site.
+
+**Never hand-edit `house-ledger.html`.** It is overwritten on every build.
 
 ## How to Make Changes
 
 ### Setup (one-time)
 ```bash
-npm install @babel/core @babel/preset-react
+npm install
 ```
 
-### Edit → Compile → Deploy
+### Edit → Compile → Verify → Deploy
 ```bash
-# 1. Edit the source file
-#    (or have Claude edit it via str_replace)
+# 1. Edit house-ledger.jsx.html
 
 # 2. Compile
 node compile.js
 
-# 3. Commit & push
-git add dist/house-ledger.html
+# 3. Syntax-check the generated bundle
+node -e "const fs=require('fs');const m=fs.readFileSync('house-ledger.html','utf8').match(/<script>([\s\S]*?)<\/script>/);fs.writeFileSync('/tmp/c.js',m[1])" \
+  && node --check /tmp/c.js && echo "JS valid"
+
+# 4. Commit both files together
+git add house-ledger.jsx.html house-ledger.html
 git push
 ```
 
-## Working with Claude — Token-Conscious Edits
+Compile output should report ~300 `React.createElement` calls and **0 Babel
+references**. If Babel references appear, the babel-standalone CDN script tag
+was reintroduced into the source — remove it. Runtime transpilation is what
+made the page fail to load on iPhone Safari in the first place.
 
-The source file has section markers (e.g. `// ─── JS-HERO-SPEND-CARD ───`).
+## Finding code without reading the whole file
 
-### For each change, tell Claude:
-1. **What to change** (the feature/fix)
-2. **Which section** (if you know it)
+The source is divided by section markers. **Do not hardcode line numbers** —
+they shift on every edit.
 
-### Claude's workflow:
-```
-1. view src/house-ledger.jsx.html [specific line range]
-2. str_replace the change
-3. Run: node compile.js
-4. Present dist/house-ledger.html
-```
-
-This reads ~20-50 lines instead of ~820, saving significant tokens.
-
-### Section Index (line numbers in src/house-ledger.jsx.html)
-```
-CSS-HEADER ..............  48   Header bar styles
-CSS-HERO-CARDS ..........  64   Expandable hero card styles
-CSS-TAB-BAR .............  87   Bottom navigation
-CSS-ENTRY-LIST ..........  93   Entry rows, search, chips
-CSS-OVERVIEW-CARDS ...... 120   Phase/Zone drill-down cards
-CSS-VENDOR-TAB .......... 131   Vendor list cards
-CSS-TIMELINE ............ 141   Timeline chart bars
-CSS-FAB ................. 152   Floating action button
-CSS-MODAL-FORM .......... 155   Entry form modal
-CSS-CONFIRM-THEME ....... 176   Confirm dialog + theme picker
-CSS-MISC ................ 191   Empty states
-
-JS-FIREBASE ............. 205   Project ID, API key, endpoints
-JS-CONSTANTS ............ 210   Phases, zones, categories, etc.
-JS-PHASE-CAT-ACCT-CLR .. 220   Colour systems
-JS-THEMES ............... 225   6 theme definitions
-JS-FIRESTORE-HELPERS .... 242   toFS/fromFS, CRUD operations
-JS-FORMATTING ........... 262   fmtAmt, fmtDate, etc.
-JS-HEADER-COMPONENT ..... 277   Header with sync dot, user menu
-JS-HERO-SPEND-CARD ..... 297   Total + contract breakdown card
-JS-HERO-ACCOUNT-CARD ... 330   Self/Reemon split card
-JS-TAB-BAR .............. 371   5-tab bottom nav
-JS-SUBTOTAL-BAR ......... 377   Filtered view subtotal
-JS-ENTRY-ROW ............ 383   Individual entry with swipe
-JS-ENTRIES-TAB .......... 426   Entry list + search + filters
-JS-OVERVIEW-CARDS ....... 454   Reusable phase/zone card
-JS-PHASES-TAB ........... 485   Phase drill-down (2 levels)
-JS-ZONES-TAB ............ 500   Zone drill-down (2 levels)
-JS-VENDORS-TAB .......... 515   Vendor list with aggregation
-JS-TIMELINE-TAB ......... 550   Monthly bars + quarter summary
-JS-ENTRY-FORM ........... 610   3-step add/edit modal
-JS-CONFIRM-DIALOG ....... 660   Delete confirmation
-JS-THEME-PICKER ......... 676   Theme selection grid
-JS-APP .................. 695   Main App component + state
+```bash
+grep -n "─── " house-ledger.jsx.html            # list all sections
+grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 ```
 
-## Why This Works
+| Section | Contents |
+|---|---|
+| `CSS-HEADER` | Header bar, sync dot |
+| `CSS-HERO-CARDS` | Expandable hero cards |
+| `CSS-TAB-BAR` | Bottom navigation |
+| `CSS-ENTRY-LIST` | Entry rows, search, chips, swipe underlays |
+| `CSS-OVERVIEW-CARDS` | Phase/Zone drill-down cards |
+| `CSS-VENDOR-TAB` | Vendor list cards |
+| `CSS-TIMELINE` | Timeline chart bars |
+| `CSS-FAB` | Floating action button |
+| `CSS-MODAL-FORM` | Entry form modal, amount echo, autofill note, field errors |
+| `CSS-CONFIRM-THEME` | Confirm dialog, theme picker, user menu |
+| `CSS-MISC` | Empty state, loading skeleton |
+| `JS-FIREBASE` | Project ID, API key, endpoints |
+| `JS-CONSTANTS` | Phases, zones, categories, budget |
+| `JS-PHASE-CAT-ACCT-CLR` | Colour lookups (hardcoded hex, not theme vars) |
+| `JS-THEMES` | 6 theme definitions + `applyTheme` |
+| `JS-FIRESTORE-HELPERS` | `toFS`/`fromFS`, CRUD |
+| `JS-FORMATTING` | `fmtAmt`, `fmtFull`, date helpers |
+| `JS-HEADER-COMPONENT` | Sync dot, refresh, theme, user menu |
+| `JS-HERO-SPEND-CARD` | Total + contract breakdown |
+| `JS-HERO-ACCOUNT-CARD` | Self/Reemon split |
+| `JS-TAB-BAR` | 5-tab bottom nav |
+| `JS-SUBTOTAL-BAR` | Filtered-view subtotal |
+| `JS-ENTRY-ROW` | Entry row, swipe handling, expanded detail |
+| `JS-ENTRIES-TAB` | List + search + filter chip |
+| `JS-OVERVIEW-CARDS` | Shared Phases/Zones card renderer |
+| `JS-PHASES-TAB` | Phase drill-down (2 levels) |
+| `JS-ZONES-TAB` | Zone drill-down (2 levels) |
+| `JS-VENDORS-TAB` | Vendor aggregation |
+| `JS-TIMELINE-TAB` | Monthly bars + quarter summary |
+| `JS-ENTRY-FORM` | 3-step add/edit modal, autofill, validation |
+| `JS-CONFIRM-DIALOG` | Delete confirmation |
+| `JS-THEME-PICKER` | Theme grid |
+| `JS-APP` | State, polling, routing |
 
-- **Babel standalone** (~800KB) caused iPhone load failures
-- **Pre-compilation** converts JSX → `React.createElement` at build time
-- **Output** is ~70KB with zero runtime transpilation
-- **Section markers** let Claude read only the 20-50 lines being changed
-- **str_replace** makes surgical edits without regenerating the full file
+## Constraints that bite
+
+- **Mobile-first.** Reason against a ~390px viewport. The primary user is on
+  iPhone; desktop is a bonus.
+- **No bundler, no runtime deps.** React + ReactDOM from CDN as UMD globals,
+  everything else hand-rolled.
+- **Do not shorten the poll interval.** It is 60s and pauses while the tab is
+  hidden. At 10s an open tab exhausted the 50,000 reads/day free quota in
+  about 95 minutes. Past a few hundred entries, switch to the Firestore
+  real-time listener rather than polling harder.
+- **Any new colour goes in all six theme objects.** Three themes are dark; a
+  hardcoded light-mode value will be unreadable on them.
+- **`undefined` breaks Firestore writes.** Any string field that could be
+  unset must default to `''` in `toFS()`.
+- **Vendor aggregation groups by `vendor`, never `transferTo`** — several
+  payments to Mewalal Sharma were routed through intermediaries, and grouping
+  by recipient fragments one contractor across four names.
+- **Abbreviate aggregates, not line items.** `fmtAmt()` for hero cards and
+  totals, `fmtFull()` in the entry list, which is the reconciliation unit.
+
+## Testing
+
+There is no test suite. Changes are verified by loading the compiled file in
+headless Chromium at a 390px viewport with the Firestore endpoint stubbed —
+never against the live database. Playwright is available in the Claude Code
+web environment with Chromium preinstalled.
