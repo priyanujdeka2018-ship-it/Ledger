@@ -66,13 +66,16 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `CSS-TIMELINE` | Timeline chart bars |
 | `CSS-FAB` | Floating action button |
 | `CSS-MODAL-FORM` | Entry form modal, amount echo, autofill note, field errors |
-| `CSS-CONFIRM-THEME` | Confirm dialog, theme picker, user menu |
-| `CSS-MISC` | Empty state, loading skeleton |
+| `CSS-CONFIRM-THEME` | Dialog boxes, theme picker, user menu |
+| `CSS-MISC` | Empty state, loading skeleton, undo toast |
 | `JS-FIREBASE` | Project ID, API key, endpoints |
 | `JS-CONSTANTS` | Phases, zones, categories, budget |
 | `JS-PHASE-CAT-ACCT-CLR` | Colour lookups (hardcoded hex, not theme vars) |
 | `JS-THEMES` | 6 theme definitions + `applyTheme` |
-| `JS-FIRESTORE-HELPERS` | `toFS`/`fromFS`, CRUD |
+| `JS-FIRESTORE-HELPERS` | `toFS`/`fromFS`, CRUD, change probe |
+| `JS-AUTH` | Identity Toolkit sign-in, token refresh |
+| `JS-BUDGETS` | `house-budgets` helpers |
+| `JS-CSV-EXPORT` | CSV of the filtered view |
 | `JS-FORMATTING` | `fmtAmt`, `fmtFull`, date helpers |
 | `JS-HEADER-COMPONENT` | Sync dot, refresh, theme, user menu |
 | `JS-HERO-SPEND-CARD` | Total + contract breakdown |
@@ -86,8 +89,10 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-ZONES-TAB` | Zone drill-down (2 levels) |
 | `JS-VENDORS-TAB` | Vendor aggregation |
 | `JS-TIMELINE-TAB` | Monthly bars + quarter summary |
-| `JS-ENTRY-FORM` | 3-step add/edit modal, autofill, validation |
-| `JS-CONFIRM-DIALOG` | Delete confirmation |
+| `JS-ENTRY-FORM` | Single-sheet add/edit modal, autofill, validation |
+| `JS-UNDO-TOAST` | Deferred-delete toast with undo |
+| `JS-BUDGET-EDITOR` | Per-phase budget editor |
+| `JS-SIGN-IN` | Email/password dialog |
 | `JS-THEME-PICKER` | Theme grid |
 | `JS-APP` | State, polling, routing |
 
@@ -97,10 +102,15 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
   iPhone; desktop is a bonus.
 - **No bundler, no runtime deps.** React + ReactDOM from CDN as UMD globals,
   everything else hand-rolled.
-- **Do not shorten the poll interval.** It is 60s and pauses while the tab is
-  hidden. At 10s an open tab exhausted the 50,000 reads/day free quota in
-  about 95 minutes. Past a few hundred entries, switch to the Firestore
-  real-time listener rather than polling harder.
+- **Do not make sync chattier.** Every 60s the app runs a *change probe* — a
+  `:runQuery` filtered on `updatedAt > lastSeen` — which bills one document
+  read when nothing has changed, against 88 for a full collection fetch. A
+  full reconcile runs every 10 minutes, on manual refresh, and whenever the
+  tab is returned to, because a probe cannot see a deletion made on another
+  device. Polling stops entirely while the tab is hidden.
+  Measured: ~14,000 reads/day per open tab, against ~126,720 for a plain 60s
+  full poll, on a 50,000/day free quota. Firestore's real-time listener would
+  be better still but needs the SDK this app deliberately does without.
 - **Any new colour goes in all six theme objects.** Three themes are dark; a
   hardcoded light-mode value will be unreadable on them.
 - **`undefined` breaks Firestore writes.** Any string field that could be
@@ -203,6 +213,19 @@ changed.
 and they change perhaps monthly; polling them would add roughly 14,000
 reads/day per open tab for nothing. They load on mount, on manual refresh, and
 after an edit.
+
+## Deleting an entry
+
+There is no delete confirmation. Swiping a row left removes it from the view
+immediately and shows an undo toast for 5 seconds; the Firestore `DELETE` only
+fires when that window closes.
+
+The delete is **deferred rather than performed-and-restored** so that undo is
+purely local and cannot fail — for a ledger, "an interrupted delete left the
+row alone" is the right failure direction. The pending row is filtered out of
+`exps` for every consumer, so totals agree with what the toast says. A pending
+delete is flushed on tab hide, on unmount, and if a second delete starts, so
+it is never silently dropped.
 
 ## Data note — the account split
 

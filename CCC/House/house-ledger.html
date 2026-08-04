@@ -213,6 +213,14 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .readonly-note button{background:none;border:none;color:var(--accent);font-size:.7rem;font-weight:700;cursor:pointer;text-decoration:underline;font-family:'Nunito',sans-serif}
 
 /* ─── CSS-MISC ─── */
+.undo-toast{position:fixed;left:12px;right:12px;bottom:76px;z-index:65;display:flex;align-items:center;gap:10px;background:var(--t1);color:var(--bg);border-radius:14px;padding:11px 14px;box-shadow:0 6px 20px rgba(0,0,0,.28);overflow:hidden}
+.undo-toast .ut-text{flex:1;min-width:0}
+.undo-toast .ut-title{font-size:.8rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.undo-toast .ut-sub{font-size:.7rem;opacity:.75;font-weight:600;margin-top:1px}
+.undo-toast .ut-undo{flex-shrink:0;background:none;border:1px solid currentColor;color:inherit;border-radius:10px;padding:7px 14px;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer}
+.undo-toast .ut-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.15)}
+.undo-toast .ut-fill{height:100%;background:currentColor;opacity:.55;animation:undoDrain linear forwards;transform-origin:left}
+@keyframes undoDrain{from{width:100%}to{width:0}}
 .empty-state{text-align:center;padding:40px 20px;color:var(--t3)}
 .empty-state .icon{font-size:2.5rem;margin-bottom:8px}
 .empty-state p{font-size:.85rem}
@@ -237,7 +245,8 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 // ─── JS-FIREBASE ───
 const PROJ = 'japan-2026-apr',
   AKEY = 'AIzaSyD372bOo6NQR6VxB-_kkv4zfLNt4B5HaAc';
-const FS_EXP = `https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-expenses`;
+const FS_ROOT = `https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents`;
+const FS_EXP = `${FS_ROOT}/house-expenses`;
 const FS_BUD = `https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-budgets`;
 const ID_SIGNIN = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${AKEY}`;
 const ID_REFRESH = `https://securetoken.googleapis.com/v1/token?key=${AKEY}`;
@@ -350,6 +359,7 @@ const PAYMENT_MODES = ['Cash', 'NEFT', 'GPay', 'UPI', 'IMPS'];
 const EXPENSE_TYPES = ['Contract', 'Fee', 'Miscellaneous'];
 const STATUSES = ['Paid', 'Partial', 'Pending', 'Overdue'];
 const CONTRACT_BUDGET = 7537510;
+const UNDO_MS = 5000;
 
 // ─── JS-PHASE-CAT-ACCT-CLR ───
 const PHASE_CLR = {
@@ -815,6 +825,48 @@ const fromFSBudget = doc => {
   };
 };
 const fetchBudgets = () => fetchAll(FS_BUD, fromFSBudget);
+
+// A query that matches nothing still bills one document read, against 88 for
+// a full collection fetch — so probing for changes is ~88x cheaper than
+// refetching. Firestore's real-time listener would be better still, but it
+// needs the SDK this app deliberately does without.
+async function fetchChangedSince(iso) {
+  const body = {
+    structuredQuery: {
+      from: [{
+        collectionId: 'house-expenses'
+      }],
+      where: {
+        fieldFilter: {
+          field: {
+            fieldPath: 'updatedAt'
+          },
+          op: 'GREATER_THAN',
+          value: {
+            stringValue: iso
+          }
+        }
+      },
+      orderBy: [{
+        field: {
+          fieldPath: 'updatedAt'
+        },
+        direction: 'ASCENDING'
+      }],
+      limit: 300
+    }
+  };
+  const r = await fetch(`${FS_ROOT}:runQuery?key=${AKEY}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(r.statusText);
+  const d = await r.json();
+  return (Array.isArray(d) ? d : []).filter(x => x.document).map(x => fromFS(x.document));
+}
 // PATCH without an updateMask upserts, so this covers create and update both.
 async function saveBudget(phase, amount, who) {
   await authedFetch(`${FS_BUD}/${budgetId(phase)}?key=${AKEY}`, {
@@ -2565,6 +2617,36 @@ function EntryForm({
   }, "Go back")))));
 }
 
+// ─── JS-UNDO-TOAST ───
+// Replaces the delete confirmation. A modal interrupt for a reversible
+// action is heavier than the action deserves; a countdown you can cancel is
+// faster in the common case and safer in the accidental one.
+function UndoToast({
+  entry,
+  onUndo
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "undo-toast",
+    role: "status"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ut-text"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ut-title"
+  }, "Deleted ", entry.vendor), /*#__PURE__*/React.createElement("div", {
+    className: "ut-sub"
+  }, fmtFull(entry.amount), " \xB7 ", fmtDate(entry.date))), /*#__PURE__*/React.createElement("button", {
+    className: "ut-undo",
+    onClick: onUndo
+  }, "Undo"), /*#__PURE__*/React.createElement("div", {
+    className: "ut-bar"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ut-fill",
+    style: {
+      animationDuration: UNDO_MS + 'ms'
+    }
+  })));
+}
+
 // ─── JS-BUDGET-EDITOR ───
 // Budgets are allocations against CONTRACT_BUDGET, not a replacement for it:
 // budgeting three of ten phases must not collapse the headline figure.
@@ -2803,7 +2885,12 @@ function App() {
   const [heroCard, setHeroCard] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [editEntry, setEditEntry] = useState(null);
-  const [deleteTarget, setDeleteTarget] = useState(null);
+  // The delete is deferred, not performed-and-restored: undo is then purely
+  // local and cannot fail. For a ledger, "an interrupted delete left the row
+  // alone" is the right failure direction.
+  const [undoTarget, setUndoTarget] = useState(null);
+  const undoRef = useRef(null);
+  const delTimer = useRef(null);
   const [showThemePicker, setShowThemePicker] = useState(false);
   // 'loading' until the first fetch resolves — a green dot over an empty
   // list claims a successful sync that has not happened yet.
@@ -2823,9 +2910,15 @@ function App() {
       authListeners.delete(setAuthS);
     };
   }, []);
+
+  // High-water mark of updatedAt seen so far, so a poll can ask "anything
+  // newer?" instead of refetching the collection.
+  const lastSync = useRef('');
+  const maxUpdated = list => list.reduce((m, x) => x.updatedAt > m ? x.updatedAt : m, '');
   const loadData = useCallback(async () => {
     try {
       const e = await fetchAll(FS_EXP);
+      lastSync.current = maxUpdated(e);
       setExps(e);
       setSyncStatus('live');
     } catch (err) {
@@ -2833,6 +2926,28 @@ function App() {
       setSyncStatus('err');
     }
   }, []);
+
+  // Cheap poll: one read when nothing changed, against 88 for a full fetch.
+  // It cannot see deletions made on another device, so a full reconcile still
+  // runs periodically and whenever the tab is returned to.
+  const probe = useCallback(async () => {
+    if (!lastSync.current) return loadData();
+    try {
+      const changed = await fetchChangedSince(lastSync.current);
+      if (changed.length) {
+        lastSync.current = maxUpdated(changed) > lastSync.current ? maxUpdated(changed) : lastSync.current;
+        setExps(prev => {
+          const m = new Map(prev.map(e => [e.id, e]));
+          changed.forEach(c => m.set(c.id, c));
+          return [...m.values()];
+        });
+      }
+      setSyncStatus('live');
+    } catch (err) {
+      console.error(err);
+      setSyncStatus('err');
+    }
+  }, [loadData]);
 
   // Budgets are deliberately NOT part of the 60s poll. There are ~10 of them
   // and they change perhaps monthly, so polling them would add ~14,000
@@ -2858,14 +2973,23 @@ function App() {
     loadBudgets();
   }, [loadData, loadBudgets]);
 
-  // Poll every 60s and only while the tab is visible, with an immediate
-  // refetch on return. At 10s an open tab burned the 50,000 reads/day free
-  // quota in about 95 minutes. Past a few hundred entries, switch to the
-  // Firestore real-time listener rather than polling harder.
+  // Every 60s a change probe, every 10 minutes a full reconcile, nothing at
+  // all while the tab is hidden, and a full fetch on return. A tab left open
+  // all day costs roughly 14,000 reads instead of 126,720 — the 60s full
+  // poll was already over the 50,000/day free quota on paper.
+  const POLL_MS = 60000,
+    RECONCILE_MS = 600000;
   useEffect(() => {
-    let iv = null;
+    let iv = null,
+      last = Date.now();
+    const tick = () => {
+      if (Date.now() - last >= RECONCILE_MS) {
+        last = Date.now();
+        loadData();
+      } else probe();
+    };
     const start = () => {
-      if (iv === null) iv = setInterval(loadData, 60000);
+      if (iv === null) iv = setInterval(tick, POLL_MS);
     };
     const stop = () => {
       if (iv !== null) {
@@ -2874,7 +2998,14 @@ function App() {
       }
     };
     const onVis = () => {
-      if (document.hidden) stop();else {
+      if (document.hidden) {
+        stop();
+        flushDelete();
+      }
+      // A full fetch on return, not a probe: it is the one moment a deletion
+      // made elsewhere would otherwise stay invisible.
+      else {
+        last = Date.now();
         loadData();
         start();
       }
@@ -2886,7 +3017,11 @@ function App() {
       stop();
       document.removeEventListener('visibilitychange', onVis);
     };
-  }, [loadData]);
+  }, [loadData, probe]);
+
+  // Everything downstream sees the ledger as the toast describes it: the
+  // pending row is gone from the list and from every total.
+  const shown = useMemo(() => undoTarget ? exps.filter(e => e.id !== undoTarget.id) : exps, [exps, undoTarget]);
   const toggleHero = useCallback(id => setHeroCard(h => h === id ? null : id), []);
   const navigateToEntries = useCallback(filter => {
     setActiveFilter(filter);
@@ -2916,16 +3051,50 @@ function App() {
       alert('Error: ' + err.message);
     }
   }, [editEntry, loadData]);
-  const handleDeleteEntry = useCallback(async () => {
-    if (!deleteTarget) return;
+  const commitDelete = useCallback(async entry => {
+    if (!entry) return;
     try {
-      await deleteEntry(deleteTarget.id);
-      setDeleteTarget(null);
-      loadData();
+      await deleteEntry(entry.id);
     } catch (err) {
-      alert('Error: ' + err.message);
+      alert('Delete failed: ' + err.message);
     }
-  }, [deleteTarget, loadData]);
+    loadData();
+  }, [loadData]);
+
+  // Send any in-flight delete now — on tab hide, on unmount, or when a
+  // second delete starts. Without this a pending delete could be lost.
+  const flushDelete = useCallback(() => {
+    if (delTimer.current) {
+      clearTimeout(delTimer.current);
+      delTimer.current = null;
+    }
+    const e = undoRef.current;
+    if (e) {
+      undoRef.current = null;
+      setUndoTarget(null);
+      commitDelete(e);
+    }
+  }, [commitDelete]);
+  const startDelete = useCallback(entry => {
+    flushDelete();
+    undoRef.current = entry;
+    setUndoTarget(entry);
+    delTimer.current = setTimeout(() => {
+      delTimer.current = null;
+      flushDelete();
+    }, UNDO_MS);
+  }, [flushDelete]);
+  const undoDelete = useCallback(() => {
+    if (delTimer.current) {
+      clearTimeout(delTimer.current);
+      delTimer.current = null;
+    }
+    undoRef.current = null;
+    setUndoTarget(null);
+  }, []);
+  useEffect(() => () => {
+    flushDelete();
+  }, [flushDelete]);
 
   // Any write-shaped action routes through here. Signed out, it parks the
   // action and asks for credentials; on success the action resumes, so the
@@ -2946,7 +3115,7 @@ function App() {
     setEditEntry(entry);
     setShowForm(true);
   }, 'Sign in to edit this entry.');
-  const handleDeleteConfirm = entry => guard(() => setDeleteTarget(entry), 'Sign in to delete this entry.');
+  const handleDeleteConfirm = entry => guard(() => startDelete(entry), 'Sign in to delete this entry.');
   const handleAdd = () => guard(() => {
     setEditEntry(null);
     setShowForm(true);
@@ -2966,16 +3135,16 @@ function App() {
   }), /*#__PURE__*/React.createElement("div", {
     className: `hero-row ${heroCard ? 'stacked' : ''}`
   }, /*#__PURE__*/React.createElement(HeroSpendCard, {
-    exps: exps,
+    exps: shown,
     expanded: heroCard === 'spend',
     onToggle: () => toggleHero('spend')
   }), /*#__PURE__*/React.createElement(HeroAccountCard, {
-    exps: exps,
+    exps: shown,
     onNavigate: navigateToEntries,
     expanded: heroCard === 'account',
     onToggle: () => toggleHero('account')
   }), /*#__PURE__*/React.createElement(HeroMonthCard, {
-    exps: exps,
+    exps: shown,
     onNavigate: navigateToEntries,
     expanded: heroCard === 'month',
     onToggle: () => toggleHero('month')
@@ -2983,7 +3152,7 @@ function App() {
     style: {
       paddingBottom: 70
     }
-  }, syncStatus === 'loading' && exps.length === 0 && /*#__PURE__*/React.createElement("div", {
+  }, syncStatus === 'loading' && shown.length === 0 && /*#__PURE__*/React.createElement("div", {
     className: "entry-list"
   }, [0, 1, 2, 3, 4].map(i => /*#__PURE__*/React.createElement("div", {
     key: i,
@@ -2998,13 +3167,13 @@ function App() {
     style: {
       width: '35%'
     }
-  })))), !(syncStatus === 'loading' && exps.length === 0) && /*#__PURE__*/React.createElement(React.Fragment, null, tab === 'entries' && /*#__PURE__*/React.createElement(EntriesTab, {
+  })))), !(syncStatus === 'loading' && shown.length === 0) && /*#__PURE__*/React.createElement(React.Fragment, null, tab === 'entries' && /*#__PURE__*/React.createElement(EntriesTab, {
     auth: auth,
     onSignIn: () => {
       setSignInReason('');
       setShowSignIn(true);
     },
-    exps: exps,
+    exps: shown,
     activeFilter: activeFilter,
     onClearFilter: () => setActiveFilter(null),
     onClearFilterKey: clearFilterKey,
@@ -3013,18 +3182,18 @@ function App() {
     expandId: expandId,
     onToggle: id => setExpandId(expandId === id ? null : id)
   }), tab === 'phases' && /*#__PURE__*/React.createElement(PhasesTab, {
-    exps: exps,
+    exps: shown,
     onNavigate: navigateToEntries,
     budgets: budgets,
     onEditBudgets: handleEditBudgets
   }), tab === 'zones' && /*#__PURE__*/React.createElement(ZonesTab, {
-    exps: exps,
+    exps: shown,
     onNavigate: navigateToEntries
   }), tab === 'vendors' && /*#__PURE__*/React.createElement(VendorsTab, {
-    exps: exps,
+    exps: shown,
     onNavigate: navigateToEntries
   }), tab === 'timeline' && /*#__PURE__*/React.createElement(TimelineTab, {
-    exps: exps,
+    exps: shown,
     onNavigate: navigateToEntries
   }))), /*#__PURE__*/React.createElement(TabBar, {
     tab: tab,
@@ -3040,16 +3209,14 @@ function App() {
       setShowForm(false);
       setEditEntry(null);
     },
-    exps: exps,
+    exps: shown,
     userName: auth?.name
-  }), deleteTarget && /*#__PURE__*/React.createElement(ConfirmDialog, {
-    title: "Delete Entry?",
-    message: `${deleteTarget.vendor} — ${fmtFull(deleteTarget.amount)} on ${fmtDate(deleteTarget.date)}`,
-    onConfirm: handleDeleteEntry,
-    onCancel: () => setDeleteTarget(null)
+  }), undoTarget && /*#__PURE__*/React.createElement(UndoToast, {
+    entry: undoTarget,
+    onUndo: undoDelete
   }), showBudgets && /*#__PURE__*/React.createElement(BudgetEditor, {
     budgets: budgets,
-    exps: exps,
+    exps: shown,
     userName: auth?.name,
     onDone: () => {
       setShowBudgets(false);
@@ -3073,6 +3240,9 @@ function App() {
     onClose: () => setShowThemePicker(false)
   }));
 }
-ReactDOM.render(/*#__PURE__*/React.createElement(App, null), document.getElementById('root'));</script>
+
+// createRoot, not the legacy ReactDOM.render — that shim runs React 18 in
+// React 17 compatibility mode and warns on every load.
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));</script>
 </body>
 </html>
