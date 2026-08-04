@@ -212,6 +212,10 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .user-menu{position:absolute;top:100%;right:8px;background:var(--card);border-radius:14px;border:1px solid var(--border);padding:6px;min-width:140px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:55}
 .user-opt{padding:8px 12px;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--t1)}
 .user-opt:hover,.user-opt.active{background:var(--accentLt);color:var(--accent)}
+.user-who{padding:8px 12px;font-size:.8rem;font-weight:700;color:var(--t1);border-bottom:1px solid var(--border);margin-bottom:4px}
+.user-who span{display:block;font-size:.7rem;font-weight:600;color:var(--t3);margin-top:2px;word-break:break-all}
+.readonly-note{display:flex;align-items:center;gap:6px;justify-content:center;background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:7px 12px;margin-bottom:8px;font-size:.7rem;color:var(--t2);font-weight:600}
+.readonly-note button{background:none;border:none;color:var(--accent);font-size:.7rem;font-weight:700;cursor:pointer;text-decoration:underline;font-family:'Nunito',sans-serif}
 
 /* ─── CSS-MISC ─── */
 .empty-state{text-align:center;padding:40px 20px;color:var(--t3)}
@@ -235,6 +239,60 @@ const {useState,useEffect,useRef,useCallback,useMemo}=React;
 const PROJ='japan-2026-apr',AKEY='AIzaSyD372bOo6NQR6VxB-_kkv4zfLNt4B5HaAc';
 const FS_EXP=`https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-expenses`;
 const FS_BUD=`https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-budgets`;
+const ID_SIGNIN=`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${AKEY}`;
+const ID_REFRESH=`https://securetoken.googleapis.com/v1/token?key=${AKEY}`;
+
+// ─── JS-AUTH ───
+// Email/password against the Identity Toolkit REST API — no Firebase SDK, in
+// keeping with the rest of the app. Reads stay public and need no token; the
+// token is required only for writes, which is what the Firestore rules
+// enforce (see DEVELOPMENT.md).
+const AUTH_KEY='hl-auth';
+let authState=null;
+const authListeners=new Set();
+function loadAuth(){
+  try{const raw=localStorage.getItem(AUTH_KEY);authState=raw?JSON.parse(raw):null;}
+  catch(e){authState=null;}
+  return authState;
+}
+function setAuth(a){
+  authState=a;
+  if(a)localStorage.setItem(AUTH_KEY,JSON.stringify(a));else localStorage.removeItem(AUTH_KEY);
+  authListeners.forEach(fn=>fn(a));
+}
+function nameFromEmail(e){
+  const l=(e||'').split('@')[0].replace(/[._-]+/g,' ').trim();
+  return l?l.charAt(0).toUpperCase()+l.slice(1):'Unknown';
+}
+const authErr=m=>({EMAIL_NOT_FOUND:'No account with that email',INVALID_PASSWORD:'Wrong password',
+  INVALID_LOGIN_CREDENTIALS:'Wrong email or password',USER_DISABLED:'That account is disabled',
+  TOO_MANY_ATTEMPTS_TRY_LATER:'Too many attempts — try again later'})[m]||'Sign-in failed';
+
+async function signIn(email,password){
+  const r=await fetch(ID_SIGNIN,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({email:email.trim(),password,returnSecureToken:true})});
+  const d=await r.json();
+  if(!r.ok)throw new Error(authErr(d.error?.message?.split(' ')[0]));
+  // Expire a minute early so a write never races the token.
+  setAuth({idToken:d.idToken,refreshToken:d.refreshToken,expiresAt:Date.now()+(+d.expiresIn-60)*1000,
+    email:d.email,name:d.displayName||nameFromEmail(d.email)});
+  return authState;
+}
+function signOut(){setAuth(null);}
+
+async function refreshAuth(){
+  if(!authState?.refreshToken)return null;
+  const r=await fetch(ID_REFRESH,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+    body:`grant_type=refresh_token&refresh_token=${encodeURIComponent(authState.refreshToken)}`});
+  const d=await r.json();
+  if(!r.ok){setAuth(null);return null;}
+  setAuth({...authState,idToken:d.id_token,refreshToken:d.refresh_token,expiresAt:Date.now()+(+d.expires_in-60)*1000});
+  return authState.idToken;
+}
+async function authToken(){
+  if(!authState)return null;
+  return Date.now()<authState.expiresAt?authState.idToken:refreshAuth();
+}
 
 // ─── JS-CONSTANTS ───
 const PHASES=['Pre-Construction','Foundation','Structure','Finishing','Boundary & External','Furnishing','Landscaping','Decorating','Maintenance','Leasing'];
@@ -243,7 +301,6 @@ const CATEGORIES={'Construction Materials':['General Hardware','Bricks','Timber'
 const PAYMENT_MODES=['Cash','NEFT','GPay','UPI','IMPS'];
 const EXPENSE_TYPES=['Contract','Fee','Miscellaneous'];
 const STATUSES=['Paid','Partial','Pending','Overdue'];
-const FAMILY=['Jiten','Runa','Priyanuj','Devanuj'];
 const CONTRACT_BUDGET=7537510;
 
 // ─── JS-PHASE-CAT-ACCT-CLR ───
@@ -287,9 +344,27 @@ async function fetchAll(url){
   return all;
 }
 
-async function createEntry(e){const id='exp-'+Date.now();const r=await fetch(`${FS_EXP}?key=${AKEY}&documentId=${id}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(toFS(e))});if(!r.ok)throw new Error(await r.text());return id;}
-async function updateEntry(id,e){const fields=Object.keys(toFS(e).fields);const masks=fields.map(f=>'updateMask.fieldPaths='+f).join('&');const r=await fetch(`${FS_EXP}/${id}?key=${AKEY}&${masks}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(toFS(e))});if(!r.ok)throw new Error(await r.text());}
-async function deleteEntry(id){const r=await fetch(`${FS_EXP}/${id}?key=${AKEY}`,{method:'DELETE'});if(!r.ok)throw new Error(await r.text());}
+// Every write carries the signed-in user's ID token. Reads deliberately do
+// not — the rules allow public reads, so the app works signed out.
+async function authedFetch(url,opts={}){
+  const t=await authToken();
+  if(!t)throw new Error('Sign in to save changes');
+  const go=tok=>fetch(url,{...opts,headers:{...(opts.headers||{}),Authorization:'Bearer '+tok}});
+  let r=await go(t);
+  if(r.status===401||r.status===403){
+    // Token may have gone stale mid-session; refresh once and retry.
+    const t2=await refreshAuth();
+    r=t2?await go(t2):r;
+  }
+  if(!r.ok){
+    if(r.status===401||r.status===403)throw new Error('Not permitted — sign in again');
+    throw new Error(await r.text());
+  }
+  return r;
+}
+async function createEntry(e){const id='exp-'+Date.now();await authedFetch(`${FS_EXP}?key=${AKEY}&documentId=${id}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(toFS(e))});return id;}
+async function updateEntry(id,e){const fields=Object.keys(toFS(e).fields);const masks=fields.map(f=>'updateMask.fieldPaths='+f).join('&');await authedFetch(`${FS_EXP}/${id}?key=${AKEY}&${masks}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(toFS(e))});}
+async function deleteEntry(id){await authedFetch(`${FS_EXP}/${id}?key=${AKEY}`,{method:'DELETE'});}
 
 // ─── JS-FORMATTING ───
 function fmtAmt(n,opts={}){
@@ -327,7 +402,7 @@ function downloadCSV(entries,name){
 function monthLabel(k){const[y,m]=k.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return `${mn[parseInt(m)-1]}'${y.slice(2)}`;}
 
 // ─── JS-HEADER-COMPONENT ───
-function Header({syncStatus,themeId,onTheme,onRefresh,userName,onUserChange}){
+function Header({syncStatus,themeId,onTheme,onRefresh,auth,onSignIn,onSignOut}){
   const [showMenu,setShowMenu]=useState(false);
   return(
     <div className="header">
@@ -338,10 +413,20 @@ function Header({syncStatus,themeId,onTheme,onRefresh,userName,onUserChange}){
       <div className="header-r" style={{position:'relative'}}>
         <button className="header-btn" onClick={onRefresh} aria-label="Refresh data">↻</button>
         <button className="header-btn" onClick={onTheme} aria-label="Choose theme">🎨</button>
-        <button className="header-btn" onClick={()=>setShowMenu(!showMenu)} aria-label={`Logged in as ${userName||'nobody'} — switch user`} aria-expanded={showMenu} style={{fontSize:'.75rem',fontWeight:700}}>{userName?.slice(0,1)||'?'}</button>
-        {showMenu&&<div className="user-menu">{FAMILY.map(f=><div key={f} className={`user-opt ${f===userName?'active':''}`} onClick={()=>{onUserChange(f);setShowMenu(false);}}>{f}</div>)}</div>}
+        {/* Signed out is a valid state: the ledger is readable by anyone.
+            The account button only matters for writing. */}
+        <button className="header-btn" onClick={()=>auth?setShowMenu(!showMenu):onSignIn()}
+          aria-label={auth?`Signed in as ${auth.name} — account menu`:'Sign in to add or edit entries'}
+          aria-expanded={auth?showMenu:undefined} style={{fontSize:auth?'.75rem':'1rem',fontWeight:700}}>
+          {auth?auth.name.slice(0,1).toUpperCase():'🔒'}
+        </button>
+        {auth&&showMenu&&
+          <div className="user-menu">
+            <div className="user-who">{auth.name}<span>{auth.email}</span></div>
+            <div className="user-opt" onClick={()=>{onSignOut();setShowMenu(false);}}>Sign out</div>
+          </div>}
       </div>
-      {showMenu&&<div style={{position:'fixed',inset:0,zIndex:54}} onClick={()=>setShowMenu(false)}/>}
+      {auth&&showMenu&&<div style={{position:'fixed',inset:0,zIndex:54}} onClick={()=>setShowMenu(false)}/>}
     </div>
   );
 }
@@ -531,7 +616,7 @@ function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
 }
 
 // ─── JS-ENTRIES-TAB ───
-function EntriesTab({exps,activeFilter,onClearFilter,onClearFilterKey,onEdit,onDelete,expandId,onToggle}){
+function EntriesTab({exps,activeFilter,onClearFilter,onClearFilterKey,onEdit,onDelete,expandId,onToggle,auth,onSignIn}){
   const [search,setSearch]=useState('');
   // The old hint lived inside the expanded detail, so you had to already know
   // to expand a row to discover you could swipe it.
@@ -603,7 +688,9 @@ function EntriesTab({exps,activeFilter,onClearFilter,onClearFilterKey,onEdit,onD
           {filterChips.length>1&&<div className="filter-badge" style={{background:'var(--border)',color:'var(--t2)'}} onClick={onClearFilter}>Clear all ✕</div>}
         </div>}
       {crumb&&<SubtotalBar label={crumb} entries={filtered}/>}
-      {showTip&&filtered.length>0&&
+      {!auth&&filtered.length>0&&
+        <div className="readonly-note"><span>👁 View only</span><button onClick={onSignIn}>sign in to make changes</button></div>}
+      {auth&&showTip&&filtered.length>0&&
         <div className="swipe-tip"><span>Swipe a row → to edit, ← to delete</span><button aria-label="Dismiss tip" onClick={dismissTip}>✕</button></div>}
       {filtered.length===0&&<div className="empty-state"><div className="icon">📭</div><p>No entries found</p></div>}
       {filtered.map(e=><EntryRow key={e.id} entry={e} isExpanded={expandId===e.id} onToggle={onToggle} onEdit={onEdit} onDelete={onDelete}/>)}
@@ -920,6 +1007,39 @@ function ConfirmDialog({title,message,onConfirm,onCancel}){
   );
 }
 
+// ─── JS-SIGN-IN ───
+function SignInDialog({onClose,onSignedIn,reason}){
+  const [email,setEmail]=useState('');
+  const [pw,setPw]=useState('');
+  const [err,setErr]=useState('');
+  const [busy,setBusy]=useState(false);
+  const submit=async()=>{
+    if(!email.trim()||!pw)return setErr('Email and password are required');
+    setBusy(true);setErr('');
+    try{const a=await signIn(email,pw);onSignedIn(a);}
+    catch(e){setErr(e.message);setBusy(false);}
+  };
+  return(
+    <div className="confirm-overlay" onClick={e=>{if(e.target===e.currentTarget)onClose();}}>
+      <div className="confirm-box" style={{textAlign:'left'}}>
+        <h3 style={{textAlign:'center'}}>Sign in</h3>
+        <p style={{textAlign:'center'}}>{reason||'Anyone can view the ledger. Changing it needs an account.'}</p>
+        <div className="field"><label>Email</label>
+          <input type="email" autoComplete="username" inputMode="email" value={email}
+            onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></div>
+        <div className="field"><label>Password</label>
+          <input type="password" autoComplete="current-password" value={pw}
+            onChange={e=>setPw(e.target.value)} onKeyDown={e=>{if(e.key==='Enter')submit();}}/></div>
+        {err&&<div className="field-err">{err}</div>}
+        <div className="form-actions">
+          <button className="btn-primary" disabled={busy} onClick={submit}>{busy?'Signing in…':'Sign in'}</button>
+          <button className="btn-secondary" onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── JS-THEME-PICKER ───
 function ThemePicker({themeId,onPick,onClose}){
   return(
@@ -956,10 +1076,15 @@ function App(){
   // 'loading' until the first fetch resolves — a green dot over an empty
   // list claims a successful sync that has not happened yet.
   const [syncStatus,setSyncStatus]=useState('loading');
-  const [userName,setUserName]=useState(()=>localStorage.getItem('hl-user')||'Jiten');
+  // Replaces the old localStorage family-name picker: loggedBy now comes from
+  // the authenticated account rather than a self-declared label.
+  const [auth,setAuthS]=useState(loadAuth);
+  const [showSignIn,setShowSignIn]=useState(false);
+  const [signInReason,setSignInReason]=useState('');
+  const pendingRef=useRef(null);
 
   useEffect(()=>{applyTheme(themeId);},[themeId]);
-  useEffect(()=>{localStorage.setItem('hl-user',userName);},[userName]);
+  useEffect(()=>{authListeners.add(setAuthS);return()=>{authListeners.delete(setAuthS);};},[]);
 
   const loadData=useCallback(async()=>{
     try{
@@ -1005,12 +1130,27 @@ function App(){
     catch(err){alert('Error: '+err.message);}
   },[deleteTarget,loadData]);
 
-  const handleEdit=(entry)=>{setEditEntry(entry);setShowForm(true);};
-  const handleDeleteConfirm=(entry)=>{setDeleteTarget(entry);};
+  // Any write-shaped action routes through here. Signed out, it parks the
+  // action and asks for credentials; on success the action resumes, so the
+  // sign-in never costs the user the tap they already made.
+  const guard=useCallback((fn,reason)=>{
+    if(authState)return fn();
+    pendingRef.current=fn;setSignInReason(reason||'');setShowSignIn(true);
+  },[]);
+  const onSignedIn=useCallback(()=>{
+    setShowSignIn(false);
+    const fn=pendingRef.current;pendingRef.current=null;
+    if(fn)fn();
+  },[]);
+
+  const handleEdit=(entry)=>guard(()=>{setEditEntry(entry);setShowForm(true);},'Sign in to edit this entry.');
+  const handleDeleteConfirm=(entry)=>guard(()=>setDeleteTarget(entry),'Sign in to delete this entry.');
+  const handleAdd=()=>guard(()=>{setEditEntry(null);setShowForm(true);},'Sign in to add an entry.');
 
   return(
     <>
-      <Header syncStatus={syncStatus} themeId={themeId} onTheme={()=>setShowThemePicker(true)} onRefresh={loadData} userName={userName} onUserChange={setUserName}/>
+      <Header syncStatus={syncStatus} themeId={themeId} onTheme={()=>setShowThemePicker(true)} onRefresh={loadData}
+        auth={auth} onSignIn={()=>{setSignInReason('');setShowSignIn(true);}} onSignOut={signOut}/>
       <div className={`hero-row ${heroCard?'stacked':''}`}>
         <HeroSpendCard exps={exps} expanded={heroCard==='spend'} onToggle={()=>toggleHero('spend')}/>
         <HeroAccountCard exps={exps} onNavigate={navigateToEntries} expanded={heroCard==='account'} onToggle={()=>toggleHero('account')}/>
@@ -1025,7 +1165,7 @@ function App(){
             </div>)}
           </div>}
         {!(syncStatus==='loading'&&exps.length===0)&&<>
-        {tab==='entries'&&<EntriesTab exps={exps} activeFilter={activeFilter} onClearFilter={()=>setActiveFilter(null)} onClearFilterKey={clearFilterKey} onEdit={handleEdit} onDelete={handleDeleteConfirm} expandId={expandId} onToggle={id=>setExpandId(expandId===id?null:id)}/>}
+        {tab==='entries'&&<EntriesTab auth={auth} onSignIn={()=>{setSignInReason('');setShowSignIn(true);}} exps={exps} activeFilter={activeFilter} onClearFilter={()=>setActiveFilter(null)} onClearFilterKey={clearFilterKey} onEdit={handleEdit} onDelete={handleDeleteConfirm} expandId={expandId} onToggle={id=>setExpandId(expandId===id?null:id)}/>}
         {tab==='phases'&&<PhasesTab exps={exps} onNavigate={navigateToEntries}/>}
         {tab==='zones'&&<ZonesTab exps={exps} onNavigate={navigateToEntries}/>}
         {tab==='vendors'&&<VendorsTab exps={exps} onNavigate={navigateToEntries}/>}
@@ -1033,9 +1173,10 @@ function App(){
         </>}
       </div>
       <TabBar tab={tab} onTab={setTab}/>
-      {tab==='entries'&&<button className="fab" onClick={()=>{setEditEntry(null);setShowForm(true);}} aria-label="Add new entry">+</button>}
-      {showForm&&<EntryForm entry={editEntry} onSave={handleSaveEntry} onCancel={()=>{setShowForm(false);setEditEntry(null);}} exps={exps} userName={userName}/>}
+      {tab==='entries'&&<button className="fab" onClick={handleAdd} aria-label="Add new entry">+</button>}
+      {showForm&&<EntryForm entry={editEntry} onSave={handleSaveEntry} onCancel={()=>{setShowForm(false);setEditEntry(null);}} exps={exps} userName={auth?.name}/>}
       {deleteTarget&&<ConfirmDialog title="Delete Entry?" message={`${deleteTarget.vendor} — ${fmtFull(deleteTarget.amount)} on ${fmtDate(deleteTarget.date)}`} onConfirm={handleDeleteEntry} onCancel={()=>setDeleteTarget(null)}/>}
+      {showSignIn&&<SignInDialog reason={signInReason} onClose={()=>{pendingRef.current=null;setShowSignIn(false);}} onSignedIn={onSignedIn}/>}
       {showThemePicker&&<ThemePicker themeId={themeId} onPick={id=>{setThemeId(id);applyTheme(id);setShowThemePicker(false);}} onClose={()=>setShowThemePicker(false)}/>}
     </>
   );

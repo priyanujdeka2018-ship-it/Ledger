@@ -190,6 +190,10 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .user-menu{position:absolute;top:100%;right:8px;background:var(--card);border-radius:14px;border:1px solid var(--border);padding:6px;min-width:140px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:55}
 .user-opt{padding:8px 12px;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--t1)}
 .user-opt:hover,.user-opt.active{background:var(--accentLt);color:var(--accent)}
+.user-who{padding:8px 12px;font-size:.8rem;font-weight:700;color:var(--t1);border-bottom:1px solid var(--border);margin-bottom:4px}
+.user-who span{display:block;font-size:.7rem;font-weight:600;color:var(--t3);margin-top:2px;word-break:break-all}
+.readonly-note{display:flex;align-items:center;gap:6px;justify-content:center;background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:7px 12px;margin-bottom:8px;font-size:.7rem;color:var(--t2);font-weight:600}
+.readonly-note button{background:none;border:none;color:var(--accent);font-size:.7rem;font-weight:700;cursor:pointer;text-decoration:underline;font-family:'Nunito',sans-serif}
 
 /* ─── CSS-MISC ─── */
 .empty-state{text-align:center;padding:40px 20px;color:var(--t3)}
@@ -218,6 +222,95 @@ const PROJ = 'japan-2026-apr',
   AKEY = 'AIzaSyD372bOo6NQR6VxB-_kkv4zfLNt4B5HaAc';
 const FS_EXP = `https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-expenses`;
 const FS_BUD = `https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-budgets`;
+const ID_SIGNIN = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${AKEY}`;
+const ID_REFRESH = `https://securetoken.googleapis.com/v1/token?key=${AKEY}`;
+
+// ─── JS-AUTH ───
+// Email/password against the Identity Toolkit REST API — no Firebase SDK, in
+// keeping with the rest of the app. Reads stay public and need no token; the
+// token is required only for writes, which is what the Firestore rules
+// enforce (see DEVELOPMENT.md).
+const AUTH_KEY = 'hl-auth';
+let authState = null;
+const authListeners = new Set();
+function loadAuth() {
+  try {
+    const raw = localStorage.getItem(AUTH_KEY);
+    authState = raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    authState = null;
+  }
+  return authState;
+}
+function setAuth(a) {
+  authState = a;
+  if (a) localStorage.setItem(AUTH_KEY, JSON.stringify(a));else localStorage.removeItem(AUTH_KEY);
+  authListeners.forEach(fn => fn(a));
+}
+function nameFromEmail(e) {
+  const l = (e || '').split('@')[0].replace(/[._-]+/g, ' ').trim();
+  return l ? l.charAt(0).toUpperCase() + l.slice(1) : 'Unknown';
+}
+const authErr = m => ({
+  EMAIL_NOT_FOUND: 'No account with that email',
+  INVALID_PASSWORD: 'Wrong password',
+  INVALID_LOGIN_CREDENTIALS: 'Wrong email or password',
+  USER_DISABLED: 'That account is disabled',
+  TOO_MANY_ATTEMPTS_TRY_LATER: 'Too many attempts — try again later'
+})[m] || 'Sign-in failed';
+async function signIn(email, password) {
+  const r = await fetch(ID_SIGNIN, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: email.trim(),
+      password,
+      returnSecureToken: true
+    })
+  });
+  const d = await r.json();
+  if (!r.ok) throw new Error(authErr(d.error?.message?.split(' ')[0]));
+  // Expire a minute early so a write never races the token.
+  setAuth({
+    idToken: d.idToken,
+    refreshToken: d.refreshToken,
+    expiresAt: Date.now() + (+d.expiresIn - 60) * 1000,
+    email: d.email,
+    name: d.displayName || nameFromEmail(d.email)
+  });
+  return authState;
+}
+function signOut() {
+  setAuth(null);
+}
+async function refreshAuth() {
+  if (!authState?.refreshToken) return null;
+  const r = await fetch(ID_REFRESH, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(authState.refreshToken)}`
+  });
+  const d = await r.json();
+  if (!r.ok) {
+    setAuth(null);
+    return null;
+  }
+  setAuth({
+    ...authState,
+    idToken: d.id_token,
+    refreshToken: d.refresh_token,
+    expiresAt: Date.now() + (+d.expires_in - 60) * 1000
+  });
+  return authState.idToken;
+}
+async function authToken() {
+  if (!authState) return null;
+  return Date.now() < authState.expiresAt ? authState.idToken : refreshAuth();
+}
 
 // ─── JS-CONSTANTS ───
 const PHASES = ['Pre-Construction', 'Foundation', 'Structure', 'Finishing', 'Boundary & External', 'Furnishing', 'Landscaping', 'Decorating', 'Maintenance', 'Leasing'];
@@ -239,7 +332,6 @@ const CATEGORIES = {
 const PAYMENT_MODES = ['Cash', 'NEFT', 'GPay', 'UPI', 'IMPS'];
 const EXPENSE_TYPES = ['Contract', 'Fee', 'Miscellaneous'];
 const STATUSES = ['Paid', 'Partial', 'Pending', 'Overdue'];
-const FAMILY = ['Jiten', 'Runa', 'Priyanuj', 'Devanuj'];
 const CONTRACT_BUDGET = 7537510;
 
 // ─── JS-PHASE-CAT-ACCT-CLR ───
@@ -669,35 +761,57 @@ async function fetchAll(url) {
   } while (token);
   return all;
 }
+
+// Every write carries the signed-in user's ID token. Reads deliberately do
+// not — the rules allow public reads, so the app works signed out.
+async function authedFetch(url, opts = {}) {
+  const t = await authToken();
+  if (!t) throw new Error('Sign in to save changes');
+  const go = tok => fetch(url, {
+    ...opts,
+    headers: {
+      ...(opts.headers || {}),
+      Authorization: 'Bearer ' + tok
+    }
+  });
+  let r = await go(t);
+  if (r.status === 401 || r.status === 403) {
+    // Token may have gone stale mid-session; refresh once and retry.
+    const t2 = await refreshAuth();
+    r = t2 ? await go(t2) : r;
+  }
+  if (!r.ok) {
+    if (r.status === 401 || r.status === 403) throw new Error('Not permitted — sign in again');
+    throw new Error(await r.text());
+  }
+  return r;
+}
 async function createEntry(e) {
   const id = 'exp-' + Date.now();
-  const r = await fetch(`${FS_EXP}?key=${AKEY}&documentId=${id}`, {
+  await authedFetch(`${FS_EXP}?key=${AKEY}&documentId=${id}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(toFS(e))
   });
-  if (!r.ok) throw new Error(await r.text());
   return id;
 }
 async function updateEntry(id, e) {
   const fields = Object.keys(toFS(e).fields);
   const masks = fields.map(f => 'updateMask.fieldPaths=' + f).join('&');
-  const r = await fetch(`${FS_EXP}/${id}?key=${AKEY}&${masks}`, {
+  await authedFetch(`${FS_EXP}/${id}?key=${AKEY}&${masks}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(toFS(e))
   });
-  if (!r.ok) throw new Error(await r.text());
 }
 async function deleteEntry(id) {
-  const r = await fetch(`${FS_EXP}/${id}?key=${AKEY}`, {
+  await authedFetch(`${FS_EXP}/${id}?key=${AKEY}`, {
     method: 'DELETE'
   });
-  if (!r.ok) throw new Error(await r.text());
 }
 
 // ─── JS-FORMATTING ───
@@ -779,8 +893,9 @@ function Header({
   themeId,
   onTheme,
   onRefresh,
-  userName,
-  onUserChange
+  auth,
+  onSignIn,
+  onSignOut
 }) {
   const [showMenu, setShowMenu] = useState(false);
   return /*#__PURE__*/React.createElement("div", {
@@ -810,23 +925,24 @@ function Header({
     "aria-label": "Choose theme"
   }, "\uD83C\uDFA8"), /*#__PURE__*/React.createElement("button", {
     className: "header-btn",
-    onClick: () => setShowMenu(!showMenu),
-    "aria-label": `Logged in as ${userName || 'nobody'} — switch user`,
-    "aria-expanded": showMenu,
+    onClick: () => auth ? setShowMenu(!showMenu) : onSignIn(),
+    "aria-label": auth ? `Signed in as ${auth.name} — account menu` : 'Sign in to add or edit entries',
+    "aria-expanded": auth ? showMenu : undefined,
     style: {
-      fontSize: '.75rem',
+      fontSize: auth ? '.75rem' : '1rem',
       fontWeight: 700
     }
-  }, userName?.slice(0, 1) || '?'), showMenu && /*#__PURE__*/React.createElement("div", {
+  }, auth ? auth.name.slice(0, 1).toUpperCase() : '🔒'), auth && showMenu && /*#__PURE__*/React.createElement("div", {
     className: "user-menu"
-  }, FAMILY.map(f => /*#__PURE__*/React.createElement("div", {
-    key: f,
-    className: `user-opt ${f === userName ? 'active' : ''}`,
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "user-who"
+  }, auth.name, /*#__PURE__*/React.createElement("span", null, auth.email)), /*#__PURE__*/React.createElement("div", {
+    className: "user-opt",
     onClick: () => {
-      onUserChange(f);
+      onSignOut();
       setShowMenu(false);
     }
-  }, f)))), showMenu && /*#__PURE__*/React.createElement("div", {
+  }, "Sign out"))), auth && showMenu && /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
       inset: 0,
@@ -1371,7 +1487,9 @@ function EntriesTab({
   onEdit,
   onDelete,
   expandId,
-  onToggle
+  onToggle,
+  auth,
+  onSignIn
 }) {
   const [search, setSearch] = useState('');
   // The old hint lived inside the expanded detail, so you had to already know
@@ -1486,7 +1604,11 @@ function EntriesTab({
   }, "Clear all \u2715")), crumb && /*#__PURE__*/React.createElement(SubtotalBar, {
     label: crumb,
     entries: filtered
-  }), showTip && filtered.length > 0 && /*#__PURE__*/React.createElement("div", {
+  }), !auth && filtered.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "readonly-note"
+  }, /*#__PURE__*/React.createElement("span", null, "\uD83D\uDC41 View only"), /*#__PURE__*/React.createElement("button", {
+    onClick: onSignIn
+  }, "sign in to make changes")), auth && showTip && filtered.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "swipe-tip"
   }, /*#__PURE__*/React.createElement("span", null, "Swipe a row \u2192 to edit, \u2190 to delete"), /*#__PURE__*/React.createElement("button", {
     "aria-label": "Dismiss tip",
@@ -2261,6 +2383,79 @@ function ConfirmDialog({
   }, "Cancel"))));
 }
 
+// ─── JS-SIGN-IN ───
+function SignInDialog({
+  onClose,
+  onSignedIn,
+  reason
+}) {
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
+  const [err, setErr] = useState('');
+  const [busy, setBusy] = useState(false);
+  const submit = async () => {
+    if (!email.trim() || !pw) return setErr('Email and password are required');
+    setBusy(true);
+    setErr('');
+    try {
+      const a = await signIn(email, pw);
+      onSignedIn(a);
+    } catch (e) {
+      setErr(e.message);
+      setBusy(false);
+    }
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "confirm-overlay",
+    onClick: e => {
+      if (e.target === e.currentTarget) onClose();
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "confirm-box",
+    style: {
+      textAlign: 'left'
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      textAlign: 'center'
+    }
+  }, "Sign in"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      textAlign: 'center'
+    }
+  }, reason || 'Anyone can view the ledger. Changing it needs an account.'), /*#__PURE__*/React.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/React.createElement("label", null, "Email"), /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    autoComplete: "username",
+    inputMode: "email",
+    value: email,
+    onChange: e => setEmail(e.target.value),
+    placeholder: "you@example.com"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/React.createElement("label", null, "Password"), /*#__PURE__*/React.createElement("input", {
+    type: "password",
+    autoComplete: "current-password",
+    value: pw,
+    onChange: e => setPw(e.target.value),
+    onKeyDown: e => {
+      if (e.key === 'Enter') submit();
+    }
+  })), err && /*#__PURE__*/React.createElement("div", {
+    className: "field-err"
+  }, err), /*#__PURE__*/React.createElement("div", {
+    className: "form-actions"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn-primary",
+    disabled: busy,
+    onClick: submit
+  }, busy ? 'Signing in…' : 'Sign in'), /*#__PURE__*/React.createElement("button", {
+    className: "btn-secondary",
+    onClick: onClose
+  }, "Cancel"))));
+}
+
 // ─── JS-THEME-PICKER ───
 function ThemePicker({
   themeId,
@@ -2307,13 +2502,21 @@ function App() {
   // 'loading' until the first fetch resolves — a green dot over an empty
   // list claims a successful sync that has not happened yet.
   const [syncStatus, setSyncStatus] = useState('loading');
-  const [userName, setUserName] = useState(() => localStorage.getItem('hl-user') || 'Jiten');
+  // Replaces the old localStorage family-name picker: loggedBy now comes from
+  // the authenticated account rather than a self-declared label.
+  const [auth, setAuthS] = useState(loadAuth);
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [signInReason, setSignInReason] = useState('');
+  const pendingRef = useRef(null);
   useEffect(() => {
     applyTheme(themeId);
   }, [themeId]);
   useEffect(() => {
-    localStorage.setItem('hl-user', userName);
-  }, [userName]);
+    authListeners.add(setAuthS);
+    return () => {
+      authListeners.delete(setAuthS);
+    };
+  }, []);
   const loadData = useCallback(async () => {
     try {
       const e = await fetchAll(FS_EXP);
@@ -2393,20 +2596,42 @@ function App() {
       alert('Error: ' + err.message);
     }
   }, [deleteTarget, loadData]);
-  const handleEdit = entry => {
+
+  // Any write-shaped action routes through here. Signed out, it parks the
+  // action and asks for credentials; on success the action resumes, so the
+  // sign-in never costs the user the tap they already made.
+  const guard = useCallback((fn, reason) => {
+    if (authState) return fn();
+    pendingRef.current = fn;
+    setSignInReason(reason || '');
+    setShowSignIn(true);
+  }, []);
+  const onSignedIn = useCallback(() => {
+    setShowSignIn(false);
+    const fn = pendingRef.current;
+    pendingRef.current = null;
+    if (fn) fn();
+  }, []);
+  const handleEdit = entry => guard(() => {
     setEditEntry(entry);
     setShowForm(true);
-  };
-  const handleDeleteConfirm = entry => {
-    setDeleteTarget(entry);
-  };
+  }, 'Sign in to edit this entry.');
+  const handleDeleteConfirm = entry => guard(() => setDeleteTarget(entry), 'Sign in to delete this entry.');
+  const handleAdd = () => guard(() => {
+    setEditEntry(null);
+    setShowForm(true);
+  }, 'Sign in to add an entry.');
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Header, {
     syncStatus: syncStatus,
     themeId: themeId,
     onTheme: () => setShowThemePicker(true),
     onRefresh: loadData,
-    userName: userName,
-    onUserChange: setUserName
+    auth: auth,
+    onSignIn: () => {
+      setSignInReason('');
+      setShowSignIn(true);
+    },
+    onSignOut: signOut
   }), /*#__PURE__*/React.createElement("div", {
     className: `hero-row ${heroCard ? 'stacked' : ''}`
   }, /*#__PURE__*/React.createElement(HeroSpendCard, {
@@ -2443,6 +2668,11 @@ function App() {
       width: '35%'
     }
   })))), !(syncStatus === 'loading' && exps.length === 0) && /*#__PURE__*/React.createElement(React.Fragment, null, tab === 'entries' && /*#__PURE__*/React.createElement(EntriesTab, {
+    auth: auth,
+    onSignIn: () => {
+      setSignInReason('');
+      setShowSignIn(true);
+    },
     exps: exps,
     activeFilter: activeFilter,
     onClearFilter: () => setActiveFilter(null),
@@ -2468,10 +2698,7 @@ function App() {
     onTab: setTab
   }), tab === 'entries' && /*#__PURE__*/React.createElement("button", {
     className: "fab",
-    onClick: () => {
-      setEditEntry(null);
-      setShowForm(true);
-    },
+    onClick: handleAdd,
     "aria-label": "Add new entry"
   }, "+"), showForm && /*#__PURE__*/React.createElement(EntryForm, {
     entry: editEntry,
@@ -2481,12 +2708,19 @@ function App() {
       setEditEntry(null);
     },
     exps: exps,
-    userName: userName
+    userName: auth?.name
   }), deleteTarget && /*#__PURE__*/React.createElement(ConfirmDialog, {
     title: "Delete Entry?",
     message: `${deleteTarget.vendor} — ${fmtFull(deleteTarget.amount)} on ${fmtDate(deleteTarget.date)}`,
     onConfirm: handleDeleteEntry,
     onCancel: () => setDeleteTarget(null)
+  }), showSignIn && /*#__PURE__*/React.createElement(SignInDialog, {
+    reason: signInReason,
+    onClose: () => {
+      pendingRef.current = null;
+      setShowSignIn(false);
+    },
+    onSignedIn: onSignedIn
   }), showThemePicker && /*#__PURE__*/React.createElement(ThemePicker, {
     themeId: themeId,
     onPick: id => {
