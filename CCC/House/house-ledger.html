@@ -167,10 +167,11 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:60;display:flex;align-items:flex-end;justify-content:center}
 .modal{background:var(--card);border-radius:24px 24px 0 0;width:100%;max-width:500px;max-height:85vh;overflow-y:auto;padding:20px 16px env(safe-area-inset-bottom,16px)}
 .modal h2{font-size:1.1rem;margin-bottom:14px;color:var(--t1)}
-.form-steps{display:flex;gap:6px;margin-bottom:16px}
-.form-step{flex:1;height:4px;border-radius:2px;background:var(--border)}
-.form-step.active{background:var(--accent)}
-.form-step.done{background:var(--accent);opacity:.5}
+.form-sep{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--t3);margin:16px 0 10px;padding-top:12px;border-top:1px solid var(--border)}
+.more-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;padding:11px 12px;margin-top:4px;border-radius:12px;border:1px dashed var(--border);background:none;color:var(--t2);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer}
+.more-chev{transition:transform .2s;font-size:.9rem}
+.more-chev.open{transform:rotate(180deg)}
+.more-panel{margin-top:12px}
 .field{margin-bottom:12px}
 .field label{display:block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:4px}
 .field input,.field select,.field textarea{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--border);background:var(--bg);font-size:.88rem;color:var(--t1);font-family:'Nunito',sans-serif}
@@ -179,6 +180,9 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .toggle-btn{flex:1;padding:8px;border-radius:12px;border:1px solid var(--border);background:var(--card);font-size:.78rem;font-weight:600;cursor:pointer;text-align:center;color:var(--t2);font-family:'Nunito',sans-serif;transition:all .2s}
 .toggle-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .form-actions{display:flex;gap:8px;margin-top:16px}
+/* Sticky inside the scrolling sheet: Save stays reachable without scrolling
+   past classification fields the user did not need to change. */
+.form-actions.sticky{position:sticky;bottom:0;background:var(--card);padding:10px 0 6px;margin-top:18px;box-shadow:0 -10px 14px -10px rgba(0,0,0,.22)}
 .form-actions button{flex:1;padding:12px;border-radius:14px;border:none;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif}
 .btn-primary{background:var(--accent);color:#fff}
 .btn-secondary{background:var(--border);color:var(--t2)}
@@ -1405,12 +1409,16 @@ function EntryRow({
       active.textContent = armed ? d > 0 ? '✏️ Release to edit' : '🗑 Release to delete' : d > 0 ? '✏️ Edit' : '🗑 Delete';
     }
   };
+  // Guard the touch list: a touch event without one throws, and one bad
+  // event otherwise leaves the row permanently unresponsive.
   const handleStart = e => {
+    if (!e.touches?.length) return;
     startX.current = e.touches[0].clientX;
     dx.current = 0;
     swiped.current = false;
   };
   const handleMove = e => {
+    if (!e.touches?.length) return;
     dx.current = e.touches[0].clientX - startX.current;
     if (Math.abs(dx.current) > 8) swiped.current = true;
     const el = ref.current;
@@ -2209,6 +2217,10 @@ function TimelineTab({
 }
 
 // ─── JS-ENTRY-FORM ───
+// One scrollable sheet, not three steps. With vendor autofill doing the
+// classification, a repeat payment is two fields and a Save — the two Next
+// taps in between were pure friction. Rare fields sit under a disclosure so
+// everything that matters is visible at once.
 function EntryForm({
   entry,
   onSave,
@@ -2217,7 +2229,6 @@ function EntryForm({
   userName
 }) {
   const isEdit = !!entry?.id;
-  const [step, setStep] = useState(1);
   const [f, setF] = useState(entry || {
     date: new Date().toISOString().slice(0, 10),
     amount: '',
@@ -2236,16 +2247,30 @@ function EntryForm({
   });
   const [autofill, setAutofill] = useState(null);
   const [dupWarn, setDupWarn] = useState(null);
-  const up = (k, v) => setF(p => ({
-    ...p,
-    [k]: v,
-    ...(k === 'vendor' && !isEdit && p.transferTo === p.vendor ? {
-      transferTo: v
-    } : {}),
-    ...(k === 'category' ? {
-      subcategory: ''
-    } : {})
-  }));
+  // Errors appear once a field has been touched or Save attempted — showing
+  // ten fields' worth of red on open would be noise, not help.
+  const [touched, setTouched] = useState({});
+  const [tried, setTried] = useState(false);
+  // Open the disclosure when it already holds content, so editing never
+  // hides a value that exists.
+  const [more, setMore] = useState(() => !!(entry && (entry.invoiceRef || entry.notes || entry.status && entry.status !== 'Paid')));
+  const sheetRef = useRef(null);
+  const up = (k, v) => {
+    setTouched(t => t[k] ? t : {
+      ...t,
+      [k]: true
+    });
+    setF(p => ({
+      ...p,
+      [k]: v,
+      ...(k === 'vendor' && !isEdit && p.transferTo === p.vendor ? {
+        transferTo: v
+      } : {}),
+      ...(k === 'category' ? {
+        subcategory: ''
+      } : {})
+    }));
+  };
   const vendors = useMemo(() => [...new Set(exps.map(e => e.vendor))].sort(), [exps]);
 
   // Most recent entry per vendor, for autofill.
@@ -2264,6 +2289,10 @@ function EntryForm({
   // the values came from.
   const setVendor = v => {
     const src = vendorLast[v.trim().toLowerCase()];
+    setTouched(t => ({
+      ...t,
+      vendor: true
+    }));
     setF(p => {
       const next = {
         ...p,
@@ -2297,21 +2326,34 @@ function EntryForm({
     subcategory: !f.subcategory ? 'Subcategory is required' : '',
     phase: !f.phase ? 'Phase is required' : ''
   };
-  const stepFields = {
-    1: ['date', 'amount', 'vendor'],
-    2: ['category', 'subcategory', 'phase'],
-    3: []
-  };
-  const missing = stepFields[step].filter(k => err[k]);
-  const canNext = missing.length === 0;
-  const canSave = [...stepFields[1], ...stepFields[2]].every(k => !err[k]);
+  const REQUIRED = ['date', 'amount', 'vendor', 'category', 'subcategory', 'phase'];
+  const missing = REQUIRED.filter(k => err[k]);
+  const canSave = missing.length === 0;
+  const show = k => (touched[k] || tried) && err[k];
+  const Err = ({
+    k
+  }) => show(k) ? /*#__PURE__*/React.createElement("div", {
+    className: "field-err"
+  }, err[k]) : null;
 
   // Non-blocking duplicate check: same date + amount + vendor + category.
   // Genuine same-day repeat payments to one vendor do occur, so this warns
   // rather than refuses.
   const findDup = e => exps.find(x => x.id !== entry?.id && x.date === e.date && Math.abs(x.amount - e.amount) < 0.01 && (x.vendor || '').trim().toLowerCase() === e.vendor.toLowerCase() && x.category === e.category);
   const handleSave = force => {
-    if (!canSave) return;
+    if (!canSave) {
+      // Reveal every outstanding error and scroll to the first one — with a
+      // long sheet the offending field may be off-screen.
+      setTried(true);
+      setTimeout(() => {
+        const el = sheetRef.current?.querySelector('.field-err');
+        if (el) el.scrollIntoView({
+          block: 'center',
+          behavior: 'smooth'
+        });
+      }, 0);
+      return;
+    }
     const built = {
       ...f,
       amount: amtNum || 0,
@@ -2337,25 +2379,18 @@ function EntryForm({
       if (e.target === e.currentTarget) onCancel();
     }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "modal"
+    className: "modal",
+    ref: sheetRef
   }, /*#__PURE__*/React.createElement("h2", null, isEdit ? 'Edit Entry' : 'New Entry'), /*#__PURE__*/React.createElement("div", {
-    className: "form-steps"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: `form-step ${step >= 1 ? 'active' : ''} ${step > 1 ? 'done' : ''}`
-  }), /*#__PURE__*/React.createElement("div", {
-    className: `form-step ${step >= 2 ? 'active' : ''} ${step > 2 ? 'done' : ''}`
-  }), /*#__PURE__*/React.createElement("div", {
-    className: `form-step ${step >= 3 ? 'active' : ''}`
-  })), step === 1 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "field"
   }, /*#__PURE__*/React.createElement("label", null, "Date"), /*#__PURE__*/React.createElement("input", {
     type: "date",
     max: today,
     value: f.date,
     onChange: e => up('date', e.target.value)
-  }), err.date && /*#__PURE__*/React.createElement("div", {
-    className: "field-err"
-  }, err.date)), /*#__PURE__*/React.createElement("div", {
+  }), /*#__PURE__*/React.createElement(Err, {
+    k: "date"
+  })), /*#__PURE__*/React.createElement("div", {
     className: "field"
   }, /*#__PURE__*/React.createElement("label", null, "Amount (\u20B9)"), /*#__PURE__*/React.createElement("input", {
     type: "number",
@@ -2365,9 +2400,9 @@ function EntryForm({
     onChange: e => up('amount', e.target.value)
   }), amtNum > 0 && /*#__PURE__*/React.createElement("div", {
     className: "amt-echo"
-  }, fmtFull(amtNum), " (", fmtAmt(amtNum).replace('₹', ''), ")"), err.amount && /*#__PURE__*/React.createElement("div", {
-    className: "field-err"
-  }, err.amount)), /*#__PURE__*/React.createElement("div", {
+  }, fmtFull(amtNum), " (", fmtAmt(amtNum).replace('₹', ''), ")"), /*#__PURE__*/React.createElement(Err, {
+    k: "amount"
+  })), /*#__PURE__*/React.createElement("div", {
     className: "field"
   }, /*#__PURE__*/React.createElement("label", null, "Vendor"), /*#__PURE__*/React.createElement("input", {
     list: "vendors",
@@ -2379,9 +2414,9 @@ function EntryForm({
   }, vendors.map(v => /*#__PURE__*/React.createElement("option", {
     key: v,
     value: v
-  }))), err.vendor && /*#__PURE__*/React.createElement("div", {
-    className: "field-err"
-  }, err.vendor), autofill && /*#__PURE__*/React.createElement("div", {
+  }))), /*#__PURE__*/React.createElement(Err, {
+    k: "vendor"
+  }), autofill && /*#__PURE__*/React.createElement("div", {
     className: "autofill-note"
   }, /*#__PURE__*/React.createElement("span", null, "Prefilled from ", fmtDateShort(autofill.date), " payment"), /*#__PURE__*/React.createElement("button", {
     type: "button",
@@ -2402,7 +2437,9 @@ function EntryForm({
     type: "button",
     className: `toggle-btn ${f.account === a ? 'active' : ''}`,
     onClick: () => up('account', a)
-  }, a))))), step === 2 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }, a)))), /*#__PURE__*/React.createElement("div", {
+    className: "form-sep"
+  }, "Classification"), /*#__PURE__*/React.createElement("div", {
     className: "field"
   }, /*#__PURE__*/React.createElement("label", null, "Category"), /*#__PURE__*/React.createElement("select", {
     value: f.category,
@@ -2412,33 +2449,33 @@ function EntryForm({
   }, "Select..."), Object.keys(CATEGORIES).map(c => /*#__PURE__*/React.createElement("option", {
     key: c,
     value: c
-  }, c))), err.category && /*#__PURE__*/React.createElement("div", {
-    className: "field-err"
-  }, err.category)), /*#__PURE__*/React.createElement("div", {
+  }, c))), /*#__PURE__*/React.createElement(Err, {
+    k: "category"
+  })), /*#__PURE__*/React.createElement("div", {
     className: "field"
   }, /*#__PURE__*/React.createElement("label", null, "Subcategory"), /*#__PURE__*/React.createElement("select", {
     value: f.subcategory,
     onChange: e => up('subcategory', e.target.value)
   }, /*#__PURE__*/React.createElement("option", {
     value: ""
-  }, "Select..."), subs.map(s => /*#__PURE__*/React.createElement("option", {
-    key: s,
-    value: s
-  }, s))), err.subcategory && /*#__PURE__*/React.createElement("div", {
-    className: "field-err"
-  }, err.subcategory)), /*#__PURE__*/React.createElement("div", {
+  }, "Select..."), subs.map(x => /*#__PURE__*/React.createElement("option", {
+    key: x,
+    value: x
+  }, x))), /*#__PURE__*/React.createElement(Err, {
+    k: "subcategory"
+  })), /*#__PURE__*/React.createElement("div", {
     className: "field"
   }, /*#__PURE__*/React.createElement("label", null, "Phase"), /*#__PURE__*/React.createElement("select", {
     value: f.phase,
     onChange: e => up('phase', e.target.value)
   }, /*#__PURE__*/React.createElement("option", {
     value: ""
-  }, "Select..."), PHASES.map(p => /*#__PURE__*/React.createElement("option", {
-    key: p,
-    value: p
-  }, p))), err.phase && /*#__PURE__*/React.createElement("div", {
-    className: "field-err"
-  }, err.phase)), /*#__PURE__*/React.createElement("div", {
+  }, "Select..."), PHASES.map(x => /*#__PURE__*/React.createElement("option", {
+    key: x,
+    value: x
+  }, x))), /*#__PURE__*/React.createElement(Err, {
+    k: "phase"
+  })), /*#__PURE__*/React.createElement("div", {
     className: "field"
   }, /*#__PURE__*/React.createElement("label", null, "Zone"), /*#__PURE__*/React.createElement("select", {
     value: f.zone,
@@ -2455,7 +2492,7 @@ function EntryForm({
     type: "button",
     className: `toggle-btn ${f.expenseType === t ? 'active' : ''}`,
     onClick: () => up('expenseType', t)
-  }, t))))), step === 3 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }, t)))), /*#__PURE__*/React.createElement("div", {
     className: "field"
   }, /*#__PURE__*/React.createElement("label", null, "Payment Mode"), /*#__PURE__*/React.createElement("select", {
     value: f.paymentMode,
@@ -2463,7 +2500,16 @@ function EntryForm({
   }, PAYMENT_MODES.map(m => /*#__PURE__*/React.createElement("option", {
     key: m,
     value: m
-  }, m)))), /*#__PURE__*/React.createElement("div", {
+  }, m)))), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "more-toggle",
+    "aria-expanded": more,
+    onClick: () => setMore(m => !m)
+  }, /*#__PURE__*/React.createElement("span", null, "More details"), /*#__PURE__*/React.createElement("span", {
+    className: `more-chev ${more ? 'open' : ''}`
+  }, "\u25BE")), more && /*#__PURE__*/React.createElement("div", {
+    className: "more-panel"
+  }, /*#__PURE__*/React.createElement("div", {
     className: "field"
   }, /*#__PURE__*/React.createElement("label", null, "Invoice Ref"), /*#__PURE__*/React.createElement("input", {
     value: f.invoiceRef,
@@ -2476,33 +2522,28 @@ function EntryForm({
     onChange: e => up('notes', e.target.value),
     placeholder: "Optional"
   })), /*#__PURE__*/React.createElement("div", {
-    className: "field"
+    className: "field",
+    style: {
+      marginBottom: 0
+    }
   }, /*#__PURE__*/React.createElement("label", null, "Status"), /*#__PURE__*/React.createElement("div", {
     className: "toggle-group"
-  }, STATUSES.map(s => /*#__PURE__*/React.createElement("button", {
-    key: s,
+  }, STATUSES.map(x => /*#__PURE__*/React.createElement("button", {
+    key: x,
     type: "button",
-    className: `toggle-btn ${f.status === s ? 'active' : ''}`,
-    onClick: () => up('status', s)
-  }, s))))), step < 3 && !canNext && /*#__PURE__*/React.createElement("div", {
-    className: "form-hint"
-  }, "Still needed: ", missing.map(k => k === 'subcategory' ? 'subcategory' : k).join(', ')), /*#__PURE__*/React.createElement("div", {
-    className: "form-actions"
-  }, step > 1 && /*#__PURE__*/React.createElement("button", {
-    className: "btn-secondary",
-    onClick: () => setStep(step - 1)
-  }, "Back"), step < 3 && /*#__PURE__*/React.createElement("button", {
+    className: `toggle-btn ${f.status === x ? 'active' : ''}`,
+    onClick: () => up('status', x)
+  }, x))))), /*#__PURE__*/React.createElement("div", {
+    className: "form-actions sticky"
+  }, /*#__PURE__*/React.createElement("button", {
     className: "btn-primary",
-    onClick: () => setStep(step + 1),
-    disabled: !canNext
-  }, "Next"), step === 3 && /*#__PURE__*/React.createElement("button", {
-    className: "btn-primary",
-    onClick: () => handleSave(false),
-    disabled: !canSave
+    onClick: () => handleSave(false)
   }, "Save"), /*#__PURE__*/React.createElement("button", {
     className: "btn-secondary",
     onClick: onCancel
-  }, step === 1 ? 'Cancel' : '✕'))), dupWarn && /*#__PURE__*/React.createElement("div", {
+  }, "Cancel")), tried && !canSave && /*#__PURE__*/React.createElement("div", {
+    className: "form-hint"
+  }, "Still needed: ", missing.join(', '))), dupWarn && /*#__PURE__*/React.createElement("div", {
     className: "confirm-overlay",
     onClick: e => {
       if (e.target === e.currentTarget) setDupWarn(null);
@@ -2522,31 +2563,6 @@ function EntryForm({
     className: "btn-secondary",
     onClick: () => setDupWarn(null)
   }, "Go back")))));
-}
-
-// ─── JS-CONFIRM-DIALOG ───
-function ConfirmDialog({
-  title,
-  message,
-  onConfirm,
-  onCancel
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "confirm-overlay",
-    onClick: e => {
-      if (e.target === e.currentTarget) onCancel();
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "confirm-box"
-  }, /*#__PURE__*/React.createElement("h3", null, title), /*#__PURE__*/React.createElement("p", null, message), /*#__PURE__*/React.createElement("div", {
-    className: "form-actions"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "btn-danger",
-    onClick: onConfirm
-  }, "Delete"), /*#__PURE__*/React.createElement("button", {
-    className: "btn-secondary",
-    onClick: onCancel
-  }, "Cancel"))));
 }
 
 // ─── JS-BUDGET-EDITOR ───
