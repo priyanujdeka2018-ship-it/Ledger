@@ -134,6 +134,19 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .ov-mini-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;margin-top:8px;gap:1px}
 .ov-mini-seg{border-radius:2px}
 .back-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:12px;background:var(--accentLt);color:var(--accent);font-size:.75rem;font-weight:700;border:none;cursor:pointer;margin-bottom:10px}
+.alloc-card{background:var(--card);border-radius:18px;border:1px solid var(--border);padding:14px;margin-bottom:10px}
+.alloc-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
+.alloc-head .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);font-weight:700}
+.alloc-head .amt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem;color:var(--t1)}
+.alloc-btn{width:100%;margin-top:10px;padding:9px;border-radius:12px;border:1px solid var(--accent);background:var(--accentLt);color:var(--accent);font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer}
+.bud-none{font-size:.7rem;color:var(--t3);font-weight:600;margin-top:8px;font-style:italic}
+.bud-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.bud-row:last-of-type{border-bottom:none}
+.bud-row .bp{flex:1;min-width:0}
+.bud-row .bp .n{font-size:.78rem;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:5px}
+.bud-row .bp .s{font-size:.7rem;color:var(--t3);font-weight:600;margin-top:1px}
+.bud-row input{width:104px;flex-shrink:0;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--bg);font-size:.8rem;color:var(--t1);font-family:'Nunito',sans-serif;text-align:right}
+.bud-total{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0 2px;font-size:.78rem;font-weight:700;color:var(--t2);border-top:2px solid var(--border);margin-top:6px}
 
 /* ─── CSS-VENDOR-TAB ─── */
 .vendor-card{background:var(--card);border-radius:18px;border:1px solid var(--border);padding:16px;margin-bottom:10px;cursor:pointer;transition:transform .15s}
@@ -332,17 +345,44 @@ function applyTheme(id){
 const toFS=e=>({fields:{date:{stringValue:e.date},category:{stringValue:e.category},subcategory:{stringValue:e.subcategory},description: { stringValue: e.description || '' },amount:{doubleValue:e.amount},vendor:{stringValue:e.vendor},transferTo:{stringValue:e.transferTo},account:{stringValue:e.account},paymentMode:{stringValue:e.paymentMode},phase:{stringValue:e.phase},zone:{stringValue:e.zone},expenseType:{stringValue:e.expenseType},invoiceRef:{stringValue:e.invoiceRef||''},notes:{stringValue:e.notes||''},status:{stringValue:e.status},loggedBy:{stringValue:e.loggedBy},updatedAt:{stringValue:new Date().toISOString()}}});
 const fromFS=doc=>{const f=doc.fields||{};const id=doc.name.split('/').pop();const g=k=>f[k]?.stringValue||'';return{id,date:g('date'),category:g('category'),subcategory:g('subcategory'),description:g('description'),amount:f.amount?.doubleValue||f.amount?.integerValue||0,vendor:g('vendor'),transferTo:g('transferTo'),account:g('account'),paymentMode:g('paymentMode'),phase:g('phase'),zone:g('zone'),expenseType:g('expenseType'),invoiceRef:g('invoiceRef'),notes:g('notes'),status:g('status'),loggedBy:g('loggedBy'),updatedAt:g('updatedAt')};};
 
-async function fetchAll(url){
+async function fetchAll(url,map=fromFS){
   let all=[],token='';
   do{
     const u=`${url}?key=${AKEY}&pageSize=500${token?'&pageToken='+token:''}`;
     const r=await fetch(u);if(!r.ok)throw new Error(r.statusText);
     const d=await r.json();
-    if(d.documents)all.push(...d.documents.map(fromFS));
+    if(d.documents)all.push(...d.documents.map(map));
     token=d.nextPageToken||'';
   }while(token);
   return all;
 }
+
+// ─── JS-BUDGETS ───
+// One document per phase in house-budgets. Phase names contain spaces and
+// ampersands, so the document id is a slug and the real name lives in a field.
+const budgetId=p=>'bud-'+p.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const toFSBudget=b=>({fields:{phase:{stringValue:b.phase},amount:{doubleValue:b.amount},
+  notes:{stringValue:b.notes||''},updatedAt:{stringValue:new Date().toISOString()},
+  updatedBy:{stringValue:b.updatedBy||''}}});
+const fromFSBudget=doc=>{
+  const f=doc.fields||{};const g=k=>f[k]?.stringValue||'';
+  return{id:doc.name.split('/').pop(),phase:g('phase'),
+    amount:f.amount?.doubleValue??(+f.amount?.integerValue||0),
+    notes:g('notes'),updatedAt:g('updatedAt'),updatedBy:g('updatedBy')};
+};
+const fetchBudgets=()=>fetchAll(FS_BUD,fromFSBudget);
+// PATCH without an updateMask upserts, so this covers create and update both.
+async function saveBudget(phase,amount,who){
+  await authedFetch(`${FS_BUD}/${budgetId(phase)}?key=${AKEY}`,{method:'PATCH',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(toFSBudget({phase,amount,updatedBy:who||''}))});
+}
+async function deleteBudget(phase){
+  await authedFetch(`${FS_BUD}/${budgetId(phase)}?key=${AKEY}`,{method:'DELETE'});
+}
+// Only Contract spend counts against a budget, same rule as CONTRACT_BUDGET.
+const contractSpend=entries=>entries.reduce((s,e)=>e.expenseType==='Contract'?s+e.amount:s,0);
+function budgetTone(pct){return pct>100?'#ef4444':pct>90?'#d97706':'#22c55e';}
 
 // Every write carries the signed-in user's ID token. Reads deliberately do
 // not — the rules allow public reads, so the app works signed out.
@@ -699,10 +739,15 @@ function EntriesTab({exps,activeFilter,onClearFilter,onClearFilterKey,onEdit,onD
 }
 
 // ─── JS-OVERVIEW-CARDS ───
-function OverviewCards({groups,onSelect,labelKey}){
+function OverviewCards({groups,onSelect,labelKey,budgets}){
   return groups.map(g=>{
     const pc=labelKey==='phase'?PHASE_CLR[g.name]:null;
     const total=g.entries.reduce((s,e)=>s+e.amount,0);
+    const budget=budgets?budgets[g.name]:null;
+    const contract=budget!=null?contractSpend(g.entries):0;
+    const pct=budget?Math.min((contract/budget)*100,100):0;
+    const tone=budget?budgetTone((contract/budget)*100):null;
+    const left=budget?budget-contract:0;
     const catCounts={};g.entries.forEach(e=>{catCounts[e.category]=(catCounts[e.category]||0)+e.amount;});
     const catEntries=Object.entries(catCounts).sort((a,b)=>b[1]-a[1]);
     const biggest=g.entries.reduce((max,e)=>e.amount>max.amount?e:max,g.entries[0]);
@@ -717,30 +762,86 @@ function OverviewCards({groups,onSelect,labelKey}){
           </div>
           <div className="ov-amount">{fmtAmt(total)}</div>
         </div>
-        <div className="ov-meta">{g.entries.length} entries · Largest: {fmtAmt(biggest?.amount||0)} ({biggest?.vendor})</div>
+        <div className="ov-meta">{g.entries.length} {g.entries.length===1?'entry':'entries'}{biggest?` · Largest: ${fmtAmt(biggest.amount)} (${biggest.vendor})`:''}</div>
+        {/* Category composition first, budget bar last — stacked the other way
+            the thin category strip reads as a second progress bar. */}
         <div className="ov-mini-bar">
           {catEntries.slice(0,5).map(([cat,amt])=>{
             const cc=CAT_CLR[cat]||{dot:'#888'};
             return <div key={cat} className="ov-mini-seg" style={{flex:amt,background:cc.dot}}/>;
           })}
         </div>
+        {budget!=null&&
+          <div className="budget-bar-wrap">
+            <div className="budget-bar"><div className="budget-fill" style={{width:pct+'%',background:tone}}/></div>
+            <div className="budget-labels">
+              <span>{fmtAmt(contract)} of {fmtAmt(budget)} contract</span>
+              <span style={{color:tone}}>{left>=0?`${fmtAmt(left)} left`:`${fmtAmt(-left)} over`}</span>
+            </div>
+          </div>}
+        {budgets&&budget==null&&<div className="bud-none">No budget set</div>}
       </div>
     );
   });
 }
 
 // ─── JS-PHASES-TAB ───
-function PhasesTab({exps,onNavigate}){
+function PhasesTab({exps,onNavigate,budgets,onEditBudgets}){
   const [level,setLevel]=useState(0);const [selPhase,setSelPhase]=useState(null);
   const phases=useMemo(()=>{
     const m={};exps.forEach(e=>{if(!m[e.phase])m[e.phase]={name:e.phase,entries:[]};m[e.phase].entries.push(e);});
-    return PHASES.filter(p=>m[p]).map(p=>m[p]);
-  },[exps]);
+    // A budgeted phase with nothing spent yet is worth showing — that is
+    // precisely the phase you want to be reminded about.
+    return PHASES.filter(p=>m[p]||budgets[p]!=null).map(p=>m[p]||{name:p,entries:[]});
+  },[exps,budgets]);
+  const allocated=useMemo(()=>Object.values(budgets).reduce((s,v)=>s+v,0),[budgets]);
+  const unallocated=CONTRACT_BUDGET-allocated;
+  const allocPct=Math.min((allocated/CONTRACT_BUDGET)*100,100);
   const zones=useMemo(()=>{
     if(!selPhase)return [];const pe=exps.filter(e=>e.phase===selPhase);const m={};pe.forEach(e=>{if(!m[e.zone])m[e.zone]={name:e.zone,entries:[]};m[e.zone].entries.push(e);});return Object.values(m).sort((a,b)=>b.entries.reduce((s,e)=>s+e.amount,0)-a.entries.reduce((s,e)=>s+e.amount,0));
   },[exps,selPhase]);
-  if(level===0)return(<div className="entry-list"><OverviewCards groups={phases} labelKey="phase" onSelect={p=>{setSelPhase(p);setLevel(1);}}/></div>);
-  if(level===1)return(<div className="entry-list"><button className="back-btn" onClick={()=>setLevel(0)}>← All Phases</button><SubtotalBar label={selPhase} entries={exps.filter(e=>e.phase===selPhase)}/><OverviewCards groups={zones} labelKey="zone" onSelect={z=>onNavigate({phase:selPhase,zone:z})}/></div>);
+  if(level===0)return(
+    <div className="entry-list">
+      <div className="alloc-card">
+        <div className="alloc-head">
+          <span className="lbl">Budget allocated</span>
+          <span className="amt">{fmtAmt(allocated)}</span>
+        </div>
+        <div className="budget-bar"><div className="budget-fill" style={{width:allocPct+'%',background:unallocated<0?'#ef4444':'var(--accent)'}}/></div>
+        <div className="budget-labels">
+          <span>of {fmtAmt(CONTRACT_BUDGET)} contract</span>
+          <span style={{color:unallocated<0?'#ef4444':undefined}}>
+            {unallocated>=0?`${fmtAmt(unallocated)} unallocated`:`${fmtAmt(-unallocated)} over contract`}
+          </span>
+        </div>
+        <button className="alloc-btn" onClick={onEditBudgets}>
+          {allocated>0?'Edit phase budgets':'Set phase budgets'}
+        </button>
+      </div>
+      <OverviewCards groups={phases} labelKey="phase" budgets={budgets} onSelect={p=>{setSelPhase(p);setLevel(1);}}/>
+    </div>);
+  if(level===1){
+    const pe=exps.filter(e=>e.phase===selPhase);
+    const b=budgets[selPhase],spent=contractSpend(pe);
+    const pct=b?Math.min((spent/b)*100,100):0,tone=b?budgetTone((spent/b)*100):null;
+    const nonContract=pe.reduce((s,e)=>s+e.amount,0)-spent;
+    return(
+      <div className="entry-list">
+        <button className="back-btn" onClick={()=>setLevel(0)}>← All Phases</button>
+        <SubtotalBar label={selPhase} entries={pe}/>
+        {b!=null&&
+          <div className="alloc-card">
+            <div className="alloc-head"><span className="lbl">Contract spend</span><span className="amt">{fmtFull(spent)}</span></div>
+            <div className="budget-bar"><div className="budget-fill" style={{width:pct+'%',background:tone}}/></div>
+            <div className="budget-labels">
+              <span>of {fmtFull(b)} budget</span>
+              <span style={{color:tone}}>{spent<=b?`${fmtAmt(b-spent)} left`:`${fmtAmt(spent-b)} over`}</span>
+            </div>
+            {nonContract>0&&<div className="bud-none">Plus {fmtAmt(nonContract)} in fees and miscellaneous, which do not count against the budget</div>}
+          </div>}
+        <OverviewCards groups={zones} labelKey="zone" onSelect={z=>onNavigate({phase:selPhase,zone:z})}/>
+      </div>);
+  }
   return null;
 }
 
@@ -1007,6 +1108,78 @@ function ConfirmDialog({title,message,onConfirm,onCancel}){
   );
 }
 
+// ─── JS-BUDGET-EDITOR ───
+// Budgets are allocations against CONTRACT_BUDGET, not a replacement for it:
+// budgeting three of ten phases must not collapse the headline figure.
+function BudgetEditor({budgets,exps,onDone,onCancel,userName}){
+  const [vals,setVals]=useState(()=>{
+    const m={};PHASES.forEach(p=>{m[p]=budgets[p]!=null?String(budgets[p]):'';});return m;
+  });
+  const [busy,setBusy]=useState(false);
+  const [err,setErr]=useState('');
+  const spendByPhase=useMemo(()=>{
+    const m={};exps.forEach(e=>{if(e.expenseType==='Contract')m[e.phase]=(m[e.phase]||0)+e.amount;});
+    return m;
+  },[exps]);
+  const parsed=p=>{const n=parseFloat(vals[p]);return isFinite(n)&&n>0?n:0;};
+  const allocated=PHASES.reduce((s,p)=>s+parsed(p),0);
+  const unallocated=CONTRACT_BUDGET-allocated;
+
+  const save=async()=>{
+    setBusy(true);setErr('');
+    try{
+      for(const p of PHASES){
+        const next=parsed(p),prev=budgets[p]??0;
+        if(next===prev)continue;
+        // A cleared or zeroed field removes the budget rather than storing 0.
+        if(next===0)await deleteBudget(p);else await saveBudget(p,next,userName);
+      }
+      onDone();
+    }catch(e){setErr(e.message);setBusy(false);}
+  };
+
+  return(
+    <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
+      <div className="modal">
+        <h2>Phase budgets</h2>
+        <p style={{fontSize:'.75rem',color:'var(--t2)',marginBottom:12,fontWeight:600}}>
+          Allocated against the {fmtAmt(CONTRACT_BUDGET)} contract. Contract spend only — fees and
+          miscellaneous do not count. Clear a field to remove its budget.
+        </p>
+        {PHASES.map(p=>{
+          const spent=spendByPhase[p]||0,b=parsed(p);
+          const over=b>0&&spent>b;
+          return(
+            <div key={p} className="bud-row">
+              <div className="bp">
+                <div className="n"><span className="dot" style={{background:(PHASE_CLR[p]||{}).dot||'#888'}}/>{p}</div>
+                <div className="s" style={over?{color:'#ef4444'}:null}>
+                  {spent>0?`${fmtAmt(spent)} spent`:'nothing spent'}{over?` · ${fmtAmt(spent-b)} over`:''}
+                </div>
+              </div>
+              <input type="number" inputMode="numeric" placeholder="—" value={vals[p]}
+                aria-label={`${p} budget`}
+                onChange={e=>setVals(v=>({...v,[p]:e.target.value}))}/>
+            </div>
+          );
+        })}
+        <div className="bud-total"><span>Allocated</span><span>{fmtFull(allocated)}</span></div>
+        <div className="bud-total" style={{borderTop:'none',marginTop:0,paddingTop:2}}>
+          <span>Unallocated</span>
+          <span style={{color:unallocated<0?'#ef4444':'var(--t2)'}}>
+            {unallocated<0?'−':''}{fmtFull(Math.abs(unallocated))}{unallocated<0?' over contract':''}
+          </span>
+        </div>
+        {err&&<div className="field-err">{err}</div>}
+        <div className="form-actions">
+          <button className="btn-primary" disabled={busy} onClick={save}>{busy?'Saving…':'Save budgets'}</button>
+          <button className="btn-secondary" onClick={onCancel}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── JS-SIGN-IN ───
 function SignInDialog({onClose,onSignedIn,reason}){
   const [email,setEmail]=useState('');
@@ -1062,6 +1235,8 @@ function ThemePicker({themeId,onPick,onClose}){
 // ─── JS-APP ───
 function App(){
   const [exps,setExps]=useState([]);
+  const [budgets,setBudgets]=useState({});
+  const [showBudgets,setShowBudgets]=useState(false);
   const [tab,setTab]=useState('entries');
   const [activeFilter,setActiveFilter]=useState(null);
   const [themeId,setThemeId]=useState(()=>localStorage.getItem('hl-theme')||'blueprint');
@@ -1092,6 +1267,20 @@ function App(){
       setExps(e);setSyncStatus('live');
     }catch(err){console.error(err);setSyncStatus('err');}
   },[]);
+
+  // Budgets are deliberately NOT part of the 60s poll. There are ~10 of them
+  // and they change perhaps monthly, so polling them would add ~14,000
+  // reads/day per open tab for nothing. Loaded on mount, on manual refresh,
+  // and after an edit.
+  const loadBudgets=useCallback(async()=>{
+    try{
+      const list=await fetchBudgets();
+      const m={};list.forEach(b=>{if(b.phase&&b.amount>0)m[b.phase]=b.amount;});
+      setBudgets(m);
+    }catch(err){console.error(err);}
+  },[]);
+  useEffect(()=>{loadBudgets();},[loadBudgets]);
+  const refreshAll=useCallback(()=>{loadData();loadBudgets();},[loadData,loadBudgets]);
 
   // Poll every 60s and only while the tab is visible, with an immediate
   // refetch on return. At 10s an open tab burned the 50,000 reads/day free
@@ -1146,10 +1335,11 @@ function App(){
   const handleEdit=(entry)=>guard(()=>{setEditEntry(entry);setShowForm(true);},'Sign in to edit this entry.');
   const handleDeleteConfirm=(entry)=>guard(()=>setDeleteTarget(entry),'Sign in to delete this entry.');
   const handleAdd=()=>guard(()=>{setEditEntry(null);setShowForm(true);},'Sign in to add an entry.');
+  const handleEditBudgets=()=>guard(()=>setShowBudgets(true),'Sign in to set phase budgets.');
 
   return(
     <>
-      <Header syncStatus={syncStatus} themeId={themeId} onTheme={()=>setShowThemePicker(true)} onRefresh={loadData}
+      <Header syncStatus={syncStatus} themeId={themeId} onTheme={()=>setShowThemePicker(true)} onRefresh={refreshAll}
         auth={auth} onSignIn={()=>{setSignInReason('');setShowSignIn(true);}} onSignOut={signOut}/>
       <div className={`hero-row ${heroCard?'stacked':''}`}>
         <HeroSpendCard exps={exps} expanded={heroCard==='spend'} onToggle={()=>toggleHero('spend')}/>
@@ -1166,7 +1356,7 @@ function App(){
           </div>}
         {!(syncStatus==='loading'&&exps.length===0)&&<>
         {tab==='entries'&&<EntriesTab auth={auth} onSignIn={()=>{setSignInReason('');setShowSignIn(true);}} exps={exps} activeFilter={activeFilter} onClearFilter={()=>setActiveFilter(null)} onClearFilterKey={clearFilterKey} onEdit={handleEdit} onDelete={handleDeleteConfirm} expandId={expandId} onToggle={id=>setExpandId(expandId===id?null:id)}/>}
-        {tab==='phases'&&<PhasesTab exps={exps} onNavigate={navigateToEntries}/>}
+        {tab==='phases'&&<PhasesTab exps={exps} onNavigate={navigateToEntries} budgets={budgets} onEditBudgets={handleEditBudgets}/>}
         {tab==='zones'&&<ZonesTab exps={exps} onNavigate={navigateToEntries}/>}
         {tab==='vendors'&&<VendorsTab exps={exps} onNavigate={navigateToEntries}/>}
         {tab==='timeline'&&<TimelineTab exps={exps} onNavigate={navigateToEntries}/>}
@@ -1176,6 +1366,8 @@ function App(){
       {tab==='entries'&&<button className="fab" onClick={handleAdd} aria-label="Add new entry">+</button>}
       {showForm&&<EntryForm entry={editEntry} onSave={handleSaveEntry} onCancel={()=>{setShowForm(false);setEditEntry(null);}} exps={exps} userName={auth?.name}/>}
       {deleteTarget&&<ConfirmDialog title="Delete Entry?" message={`${deleteTarget.vendor} — ${fmtFull(deleteTarget.amount)} on ${fmtDate(deleteTarget.date)}`} onConfirm={handleDeleteEntry} onCancel={()=>setDeleteTarget(null)}/>}
+      {showBudgets&&<BudgetEditor budgets={budgets} exps={exps} userName={auth?.name}
+        onDone={()=>{setShowBudgets(false);loadBudgets();}} onCancel={()=>setShowBudgets(false)}/>}
       {showSignIn&&<SignInDialog reason={signInReason} onClose={()=>{pendingRef.current=null;setShowSignIn(false);}} onSignedIn={onSignedIn}/>}
       {showThemePicker&&<ThemePicker themeId={themeId} onPick={id=>{setThemeId(id);applyTheme(id);setShowThemePicker(false);}} onClose={()=>setShowThemePicker(false)}/>}
     </>

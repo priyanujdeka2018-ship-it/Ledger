@@ -112,6 +112,19 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .ov-mini-bar{display:flex;height:4px;border-radius:2px;overflow:hidden;margin-top:8px;gap:1px}
 .ov-mini-seg{border-radius:2px}
 .back-btn{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:12px;background:var(--accentLt);color:var(--accent);font-size:.75rem;font-weight:700;border:none;cursor:pointer;margin-bottom:10px}
+.alloc-card{background:var(--card);border-radius:18px;border:1px solid var(--border);padding:14px;margin-bottom:10px}
+.alloc-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
+.alloc-head .lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);font-weight:700}
+.alloc-head .amt{font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem;color:var(--t1)}
+.alloc-btn{width:100%;margin-top:10px;padding:9px;border-radius:12px;border:1px solid var(--accent);background:var(--accentLt);color:var(--accent);font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer}
+.bud-none{font-size:.7rem;color:var(--t3);font-weight:600;margin-top:8px;font-style:italic}
+.bud-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.bud-row:last-of-type{border-bottom:none}
+.bud-row .bp{flex:1;min-width:0}
+.bud-row .bp .n{font-size:.78rem;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:5px}
+.bud-row .bp .s{font-size:.7rem;color:var(--t3);font-weight:600;margin-top:1px}
+.bud-row input{width:104px;flex-shrink:0;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--bg);font-size:.8rem;color:var(--t1);font-family:'Nunito',sans-serif;text-align:right}
+.bud-total{display:flex;justify-content:space-between;align-items:baseline;padding:10px 0 2px;font-size:.78rem;font-weight:700;color:var(--t2);border-top:2px solid var(--border);margin-top:6px}
 
 /* ─── CSS-VENDOR-TAB ─── */
 .vendor-card{background:var(--card);border-radius:18px;border:1px solid var(--border);padding:16px;margin-bottom:10px;cursor:pointer;transition:transform .15s}
@@ -748,7 +761,7 @@ const fromFS = doc => {
     updatedAt: g('updatedAt')
   };
 };
-async function fetchAll(url) {
+async function fetchAll(url, map = fromFS) {
   let all = [],
     token = '';
   do {
@@ -756,10 +769,71 @@ async function fetchAll(url) {
     const r = await fetch(u);
     if (!r.ok) throw new Error(r.statusText);
     const d = await r.json();
-    if (d.documents) all.push(...d.documents.map(fromFS));
+    if (d.documents) all.push(...d.documents.map(map));
     token = d.nextPageToken || '';
   } while (token);
   return all;
+}
+
+// ─── JS-BUDGETS ───
+// One document per phase in house-budgets. Phase names contain spaces and
+// ampersands, so the document id is a slug and the real name lives in a field.
+const budgetId = p => 'bud-' + p.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const toFSBudget = b => ({
+  fields: {
+    phase: {
+      stringValue: b.phase
+    },
+    amount: {
+      doubleValue: b.amount
+    },
+    notes: {
+      stringValue: b.notes || ''
+    },
+    updatedAt: {
+      stringValue: new Date().toISOString()
+    },
+    updatedBy: {
+      stringValue: b.updatedBy || ''
+    }
+  }
+});
+const fromFSBudget = doc => {
+  const f = doc.fields || {};
+  const g = k => f[k]?.stringValue || '';
+  return {
+    id: doc.name.split('/').pop(),
+    phase: g('phase'),
+    amount: f.amount?.doubleValue ?? (+f.amount?.integerValue || 0),
+    notes: g('notes'),
+    updatedAt: g('updatedAt'),
+    updatedBy: g('updatedBy')
+  };
+};
+const fetchBudgets = () => fetchAll(FS_BUD, fromFSBudget);
+// PATCH without an updateMask upserts, so this covers create and update both.
+async function saveBudget(phase, amount, who) {
+  await authedFetch(`${FS_BUD}/${budgetId(phase)}?key=${AKEY}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(toFSBudget({
+      phase,
+      amount,
+      updatedBy: who || ''
+    }))
+  });
+}
+async function deleteBudget(phase) {
+  await authedFetch(`${FS_BUD}/${budgetId(phase)}?key=${AKEY}`, {
+    method: 'DELETE'
+  });
+}
+// Only Contract spend counts against a budget, same rule as CONTRACT_BUDGET.
+const contractSpend = entries => entries.reduce((s, e) => e.expenseType === 'Contract' ? s + e.amount : s, 0);
+function budgetTone(pct) {
+  return pct > 100 ? '#ef4444' : pct > 90 ? '#d97706' : '#22c55e';
 }
 
 // Every write carries the signed-in user's ID token. Reads deliberately do
@@ -1631,11 +1705,17 @@ function EntriesTab({
 function OverviewCards({
   groups,
   onSelect,
-  labelKey
+  labelKey,
+  budgets
 }) {
   return groups.map(g => {
     const pc = labelKey === 'phase' ? PHASE_CLR[g.name] : null;
     const total = g.entries.reduce((s, e) => s + e.amount, 0);
+    const budget = budgets ? budgets[g.name] : null;
+    const contract = budget != null ? contractSpend(g.entries) : 0;
+    const pct = budget ? Math.min(contract / budget * 100, 100) : 0;
+    const tone = budget ? budgetTone(contract / budget * 100) : null;
+    const left = budget ? budget - contract : 0;
     const catCounts = {};
     g.entries.forEach(e => {
       catCounts[e.category] = (catCounts[e.category] || 0) + e.amount;
@@ -1675,7 +1755,7 @@ function OverviewCards({
       className: "ov-amount"
     }, fmtAmt(total))), /*#__PURE__*/React.createElement("div", {
       className: "ov-meta"
-    }, g.entries.length, " entries \xB7 Largest: ", fmtAmt(biggest?.amount || 0), " (", biggest?.vendor, ")"), /*#__PURE__*/React.createElement("div", {
+    }, g.entries.length, " ", g.entries.length === 1 ? 'entry' : 'entries', biggest ? ` · Largest: ${fmtAmt(biggest.amount)} (${biggest.vendor})` : ''), /*#__PURE__*/React.createElement("div", {
       className: "ov-mini-bar"
     }, catEntries.slice(0, 5).map(([cat, amt]) => {
       const cc = CAT_CLR[cat] || {
@@ -1689,14 +1769,34 @@ function OverviewCards({
           background: cc.dot
         }
       });
-    })));
+    })), budget != null && /*#__PURE__*/React.createElement("div", {
+      className: "budget-bar-wrap"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "budget-bar"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "budget-fill",
+      style: {
+        width: pct + '%',
+        background: tone
+      }
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "budget-labels"
+    }, /*#__PURE__*/React.createElement("span", null, fmtAmt(contract), " of ", fmtAmt(budget), " contract"), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: tone
+      }
+    }, left >= 0 ? `${fmtAmt(left)} left` : `${fmtAmt(-left)} over`))), budgets && budget == null && /*#__PURE__*/React.createElement("div", {
+      className: "bud-none"
+    }, "No budget set"));
   });
 }
 
 // ─── JS-PHASES-TAB ───
 function PhasesTab({
   exps,
-  onNavigate
+  onNavigate,
+  budgets,
+  onEditBudgets
 }) {
   const [level, setLevel] = useState(0);
   const [selPhase, setSelPhase] = useState(null);
@@ -1709,8 +1809,16 @@ function PhasesTab({
       };
       m[e.phase].entries.push(e);
     });
-    return PHASES.filter(p => m[p]).map(p => m[p]);
-  }, [exps]);
+    // A budgeted phase with nothing spent yet is worth showing — that is
+    // precisely the phase you want to be reminded about.
+    return PHASES.filter(p => m[p] || budgets[p] != null).map(p => m[p] || {
+      name: p,
+      entries: []
+    });
+  }, [exps, budgets]);
+  const allocated = useMemo(() => Object.values(budgets).reduce((s, v) => s + v, 0), [budgets]);
+  const unallocated = CONTRACT_BUDGET - allocated;
+  const allocPct = Math.min(allocated / CONTRACT_BUDGET * 100, 100);
   const zones = useMemo(() => {
     if (!selPhase) return [];
     const pe = exps.filter(e => e.phase === selPhase);
@@ -1726,30 +1834,88 @@ function PhasesTab({
   }, [exps, selPhase]);
   if (level === 0) return /*#__PURE__*/React.createElement("div", {
     className: "entry-list"
-  }, /*#__PURE__*/React.createElement(OverviewCards, {
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, "Budget allocated"), /*#__PURE__*/React.createElement("span", {
+    className: "amt"
+  }, fmtAmt(allocated))), /*#__PURE__*/React.createElement("div", {
+    className: "budget-bar"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "budget-fill",
+    style: {
+      width: allocPct + '%',
+      background: unallocated < 0 ? '#ef4444' : 'var(--accent)'
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "budget-labels"
+  }, /*#__PURE__*/React.createElement("span", null, "of ", fmtAmt(CONTRACT_BUDGET), " contract"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: unallocated < 0 ? '#ef4444' : undefined
+    }
+  }, unallocated >= 0 ? `${fmtAmt(unallocated)} unallocated` : `${fmtAmt(-unallocated)} over contract`)), /*#__PURE__*/React.createElement("button", {
+    className: "alloc-btn",
+    onClick: onEditBudgets
+  }, allocated > 0 ? 'Edit phase budgets' : 'Set phase budgets')), /*#__PURE__*/React.createElement(OverviewCards, {
     groups: phases,
     labelKey: "phase",
+    budgets: budgets,
     onSelect: p => {
       setSelPhase(p);
       setLevel(1);
     }
   }));
-  if (level === 1) return /*#__PURE__*/React.createElement("div", {
-    className: "entry-list"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "back-btn",
-    onClick: () => setLevel(0)
-  }, "\u2190 All Phases"), /*#__PURE__*/React.createElement(SubtotalBar, {
-    label: selPhase,
-    entries: exps.filter(e => e.phase === selPhase)
-  }), /*#__PURE__*/React.createElement(OverviewCards, {
-    groups: zones,
-    labelKey: "zone",
-    onSelect: z => onNavigate({
-      phase: selPhase,
-      zone: z
-    })
-  }));
+  if (level === 1) {
+    const pe = exps.filter(e => e.phase === selPhase);
+    const b = budgets[selPhase],
+      spent = contractSpend(pe);
+    const pct = b ? Math.min(spent / b * 100, 100) : 0,
+      tone = b ? budgetTone(spent / b * 100) : null;
+    const nonContract = pe.reduce((s, e) => s + e.amount, 0) - spent;
+    return /*#__PURE__*/React.createElement("div", {
+      className: "entry-list"
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "back-btn",
+      onClick: () => setLevel(0)
+    }, "\u2190 All Phases"), /*#__PURE__*/React.createElement(SubtotalBar, {
+      label: selPhase,
+      entries: pe
+    }), b != null && /*#__PURE__*/React.createElement("div", {
+      className: "alloc-card"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "alloc-head"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "lbl"
+    }, "Contract spend"), /*#__PURE__*/React.createElement("span", {
+      className: "amt"
+    }, fmtFull(spent))), /*#__PURE__*/React.createElement("div", {
+      className: "budget-bar"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "budget-fill",
+      style: {
+        width: pct + '%',
+        background: tone
+      }
+    })), /*#__PURE__*/React.createElement("div", {
+      className: "budget-labels"
+    }, /*#__PURE__*/React.createElement("span", null, "of ", fmtFull(b), " budget"), /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: tone
+      }
+    }, spent <= b ? `${fmtAmt(b - spent)} left` : `${fmtAmt(spent - b)} over`)), nonContract > 0 && /*#__PURE__*/React.createElement("div", {
+      className: "bud-none"
+    }, "Plus ", fmtAmt(nonContract), " in fees and miscellaneous, which do not count against the budget")), /*#__PURE__*/React.createElement(OverviewCards, {
+      groups: zones,
+      labelKey: "zone",
+      onSelect: z => onNavigate({
+        phase: selPhase,
+        zone: z
+      })
+    }));
+  }
   return null;
 }
 
@@ -2383,6 +2549,128 @@ function ConfirmDialog({
   }, "Cancel"))));
 }
 
+// ─── JS-BUDGET-EDITOR ───
+// Budgets are allocations against CONTRACT_BUDGET, not a replacement for it:
+// budgeting three of ten phases must not collapse the headline figure.
+function BudgetEditor({
+  budgets,
+  exps,
+  onDone,
+  onCancel,
+  userName
+}) {
+  const [vals, setVals] = useState(() => {
+    const m = {};
+    PHASES.forEach(p => {
+      m[p] = budgets[p] != null ? String(budgets[p]) : '';
+    });
+    return m;
+  });
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+  const spendByPhase = useMemo(() => {
+    const m = {};
+    exps.forEach(e => {
+      if (e.expenseType === 'Contract') m[e.phase] = (m[e.phase] || 0) + e.amount;
+    });
+    return m;
+  }, [exps]);
+  const parsed = p => {
+    const n = parseFloat(vals[p]);
+    return isFinite(n) && n > 0 ? n : 0;
+  };
+  const allocated = PHASES.reduce((s, p) => s + parsed(p), 0);
+  const unallocated = CONTRACT_BUDGET - allocated;
+  const save = async () => {
+    setBusy(true);
+    setErr('');
+    try {
+      for (const p of PHASES) {
+        const next = parsed(p),
+          prev = budgets[p] ?? 0;
+        if (next === prev) continue;
+        // A cleared or zeroed field removes the budget rather than storing 0.
+        if (next === 0) await deleteBudget(p);else await saveBudget(p, next, userName);
+      }
+      onDone();
+    } catch (e) {
+      setErr(e.message);
+      setBusy(false);
+    }
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "modal-overlay",
+    onClick: e => {
+      if (e.target === e.currentTarget) onCancel();
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal"
+  }, /*#__PURE__*/React.createElement("h2", null, "Phase budgets"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: '.75rem',
+      color: 'var(--t2)',
+      marginBottom: 12,
+      fontWeight: 600
+    }
+  }, "Allocated against the ", fmtAmt(CONTRACT_BUDGET), " contract. Contract spend only \u2014 fees and miscellaneous do not count. Clear a field to remove its budget."), PHASES.map(p => {
+    const spent = spendByPhase[p] || 0,
+      b = parsed(p);
+    const over = b > 0 && spent > b;
+    return /*#__PURE__*/React.createElement("div", {
+      key: p,
+      className: "bud-row"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "bp"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "n"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "dot",
+      style: {
+        background: (PHASE_CLR[p] || {}).dot || '#888'
+      }
+    }), p), /*#__PURE__*/React.createElement("div", {
+      className: "s",
+      style: over ? {
+        color: '#ef4444'
+      } : null
+    }, spent > 0 ? `${fmtAmt(spent)} spent` : 'nothing spent', over ? ` · ${fmtAmt(spent - b)} over` : '')), /*#__PURE__*/React.createElement("input", {
+      type: "number",
+      inputMode: "numeric",
+      placeholder: "\u2014",
+      value: vals[p],
+      "aria-label": `${p} budget`,
+      onChange: e => setVals(v => ({
+        ...v,
+        [p]: e.target.value
+      }))
+    }));
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "bud-total"
+  }, /*#__PURE__*/React.createElement("span", null, "Allocated"), /*#__PURE__*/React.createElement("span", null, fmtFull(allocated))), /*#__PURE__*/React.createElement("div", {
+    className: "bud-total",
+    style: {
+      borderTop: 'none',
+      marginTop: 0,
+      paddingTop: 2
+    }
+  }, /*#__PURE__*/React.createElement("span", null, "Unallocated"), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: unallocated < 0 ? '#ef4444' : 'var(--t2)'
+    }
+  }, unallocated < 0 ? '−' : '', fmtFull(Math.abs(unallocated)), unallocated < 0 ? ' over contract' : '')), err && /*#__PURE__*/React.createElement("div", {
+    className: "field-err"
+  }, err), /*#__PURE__*/React.createElement("div", {
+    className: "form-actions"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn-primary",
+    disabled: busy,
+    onClick: save
+  }, busy ? 'Saving…' : 'Save budgets'), /*#__PURE__*/React.createElement("button", {
+    className: "btn-secondary",
+    onClick: onCancel
+  }, "Cancel"))));
+}
+
 // ─── JS-SIGN-IN ───
 function SignInDialog({
   onClose,
@@ -2488,6 +2776,8 @@ function ThemePicker({
 // ─── JS-APP ───
 function App() {
   const [exps, setExps] = useState([]);
+  const [budgets, setBudgets] = useState({});
+  const [showBudgets, setShowBudgets] = useState(false);
   const [tab, setTab] = useState('entries');
   const [activeFilter, setActiveFilter] = useState(null);
   const [themeId, setThemeId] = useState(() => localStorage.getItem('hl-theme') || 'blueprint');
@@ -2527,6 +2817,30 @@ function App() {
       setSyncStatus('err');
     }
   }, []);
+
+  // Budgets are deliberately NOT part of the 60s poll. There are ~10 of them
+  // and they change perhaps monthly, so polling them would add ~14,000
+  // reads/day per open tab for nothing. Loaded on mount, on manual refresh,
+  // and after an edit.
+  const loadBudgets = useCallback(async () => {
+    try {
+      const list = await fetchBudgets();
+      const m = {};
+      list.forEach(b => {
+        if (b.phase && b.amount > 0) m[b.phase] = b.amount;
+      });
+      setBudgets(m);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+  useEffect(() => {
+    loadBudgets();
+  }, [loadBudgets]);
+  const refreshAll = useCallback(() => {
+    loadData();
+    loadBudgets();
+  }, [loadData, loadBudgets]);
 
   // Poll every 60s and only while the tab is visible, with an immediate
   // refetch on return. At 10s an open tab burned the 50,000 reads/day free
@@ -2621,11 +2935,12 @@ function App() {
     setEditEntry(null);
     setShowForm(true);
   }, 'Sign in to add an entry.');
+  const handleEditBudgets = () => guard(() => setShowBudgets(true), 'Sign in to set phase budgets.');
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Header, {
     syncStatus: syncStatus,
     themeId: themeId,
     onTheme: () => setShowThemePicker(true),
-    onRefresh: loadData,
+    onRefresh: refreshAll,
     auth: auth,
     onSignIn: () => {
       setSignInReason('');
@@ -2683,7 +2998,9 @@ function App() {
     onToggle: id => setExpandId(expandId === id ? null : id)
   }), tab === 'phases' && /*#__PURE__*/React.createElement(PhasesTab, {
     exps: exps,
-    onNavigate: navigateToEntries
+    onNavigate: navigateToEntries,
+    budgets: budgets,
+    onEditBudgets: handleEditBudgets
   }), tab === 'zones' && /*#__PURE__*/React.createElement(ZonesTab, {
     exps: exps,
     onNavigate: navigateToEntries
@@ -2714,6 +3031,15 @@ function App() {
     message: `${deleteTarget.vendor} — ${fmtFull(deleteTarget.amount)} on ${fmtDate(deleteTarget.date)}`,
     onConfirm: handleDeleteEntry,
     onCancel: () => setDeleteTarget(null)
+  }), showBudgets && /*#__PURE__*/React.createElement(BudgetEditor, {
+    budgets: budgets,
+    exps: exps,
+    userName: auth?.name,
+    onDone: () => {
+      setShowBudgets(false);
+      loadBudgets();
+    },
+    onCancel: () => setShowBudgets(false)
   }), showSignIn && /*#__PURE__*/React.createElement(SignInDialog, {
     reason: signInReason,
     onClose: () => {

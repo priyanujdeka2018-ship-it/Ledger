@@ -170,6 +170,40 @@ anyone until that date, then **everything denied, reads included**. The house
 collections above no longer have an expiry. The `expenses` block does; that
 belongs to the Japan trip app and is a separate decision.
 
+## Per-phase budgets
+
+`house-budgets` holds one document per budgeted phase. Phase names contain
+spaces and ampersands, so the document id is a slug (`bud-boundary-external`)
+and the real name lives in a `phase` field.
+
+| Field | Notes |
+|---|---|
+| `phase` | Member of `PHASES` |
+| `amount` | number, INR |
+| `notes` | Optional, unused by the UI so far |
+| `updatedAt` / `updatedBy` | Metadata; `updatedBy` is the signed-in account |
+
+**Budgets are allocations against `CONTRACT_BUDGET`, not a replacement for
+it.** The constant (`7537510`) is the real contract value, so the Phases tab
+shows how much of it has been allocated and how much is still unallocated.
+Deriving the overall budget by summing phase budgets was rejected: budgeting
+three of ten phases would silently collapse the headline figure.
+
+**Only `Contract` spend counts against a budget**, matching the rule the hero
+card already used. A phase's card shows contract spend against its budget; the
+phase detail additionally names the fee and miscellaneous spend that is
+excluded, so the difference between the two figures is never a mystery.
+
+Writing: `saveBudget()` PATCHes without an `updateMask`, which upserts, so it
+covers create and update alike. Clearing a field deletes the document rather
+than storing a zero. The editor only writes phases whose value actually
+changed.
+
+**Budgets are deliberately not part of the 60s poll.** There are ~10 of them
+and they change perhaps monthly; polling them would add roughly 14,000
+reads/day per open tab for nothing. They load on mount, on manual refresh, and
+after an edit.
+
 ## Data note — the account split
 
 Use these figures. They are what the per-row data actually sums to:
