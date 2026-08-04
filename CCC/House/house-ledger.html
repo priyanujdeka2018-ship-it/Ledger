@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<!-- No maximum-scale / user-scalable=no: blocking pinch zoom is an
+     accessibility failure, newer iOS Safari ignores it anyway, and the
+     layout is responsive enough not to need it. -->
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>House Ledger</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
 
@@ -34,7 +37,7 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .hero-card{flex:0 0 calc(50% - 6px);scroll-snap-align:start;background:var(--card);border-radius:20px;border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all .3s ease;min-width:0}
 .hero-card.expanded{flex:0 0 100%;position:relative}
 .hero-front{padding:16px 14px}
-.hero-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);font-weight:700;margin-bottom:6px}
+.hero-label{font-size:.7rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);font-weight:700;margin-bottom:6px}
 .hero-big{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:800;line-height:1.15;color:var(--t1);word-break:break-word;overflow-wrap:anywhere}
 .hero-sub{font-size:.72rem;color:var(--t2);margin-top:4px;font-weight:600}
 .hero-expand{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease;padding:0 14px}
@@ -46,7 +49,7 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .budget-bar-wrap{margin:8px 0}
 .budget-bar{height:8px;border-radius:4px;background:var(--border);overflow:hidden;position:relative}
 .budget-fill{height:100%;border-radius:4px;transition:width .5s}
-.budget-labels{display:flex;justify-content:space-between;font-size:.65rem;color:var(--t3);margin-top:3px;font-weight:600}
+.budget-labels{display:flex;justify-content:space-between;font-size:.7rem;color:var(--t3);margin-top:3px;font-weight:600}
 .detail-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:.78rem}
 .detail-row .label{color:var(--t2)}
 .detail-row .value{font-weight:700;color:var(--t1)}
@@ -54,7 +57,7 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 
 /* ─── CSS-TAB-BAR ─── */
 .tab-bar{display:flex;background:var(--card);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;z-index:40;padding:4px 0 env(safe-area-inset-bottom,4px)}
-.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:.6rem;font-weight:700;color:var(--t3);cursor:pointer;border:none;background:none;transition:color .2s}
+.tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:.7rem;font-weight:700;color:var(--t3);cursor:pointer;border:none;background:none;transition:color .2s}
 .tab-item.active{color:var(--tabActive)}
 .tab-icon{font-size:1.15rem}
 
@@ -83,17 +86,21 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .entry-amt{font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;color:var(--t1);white-space:nowrap;flex-shrink:0}
 .entry-meta{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;align-items:center}
 .entry-date{font-size:.7rem;color:var(--t3)}
-.chip{display:inline-flex;padding:2px 8px;border-radius:10px;font-size:.62rem;font-weight:700;white-space:nowrap}
+.chip{display:inline-flex;padding:3px 8px;border-radius:10px;font-size:.7rem;font-weight:700;white-space:nowrap}
 .entry-detail{padding:0 14px;max-height:0;overflow:hidden;transition:max-height .3s}
 .entry-detail.open{max-height:400px;padding:8px 14px 14px}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .detail-cell{font-size:.72rem}
-.detail-cell .lbl{color:var(--t3);font-size:.6rem;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.detail-cell .lbl{color:var(--t3);font-size:.7rem;text-transform:uppercase;letter-spacing:.5px;font-weight:700}
 .detail-cell .val{color:var(--t1);font-weight:600;margin-top:1px}
-.swipe-hint{text-align:center;font-size:.62rem;color:var(--t3);padding:4px 0 8px;font-style:italic}
-.swipe-underlay{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 20px;font-weight:700;font-size:.8rem;color:#fff;z-index:1}
+.swipe-hint{text-align:center;font-size:.7rem;color:var(--t3);padding:4px 0 8px;font-style:italic}
+/* Opacity tracks swipe distance and the label changes at the commit
+   threshold, so 60px is felt rather than guessed. */
+.swipe-underlay{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 18px;font-weight:700;font-size:.8rem;color:#fff;z-index:1;opacity:0}
 .swipe-underlay.left{right:0;background:#ef4444;border-radius:0 16px 16px 0}
 .swipe-underlay.right{left:0;background:#3b82f6;border-radius:16px 0 0 16px}
+.swipe-tip{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:7px 12px;margin-bottom:8px;font-size:.7rem;color:var(--t2);font-weight:600}
+.swipe-tip button{background:none;border:none;color:var(--t3);font-size:.85rem;font-weight:700;cursor:pointer;padding:0 2px;line-height:1}
 
 /* ─── CSS-OVERVIEW-CARDS ─── */
 .overview-card{background:var(--card);border-radius:18px;border:1px solid var(--border);padding:16px;margin-bottom:10px;cursor:pointer;transition:transform .15s}
@@ -113,16 +120,29 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .v-name{font-weight:700;font-size:.92rem;color:var(--t1);flex:1;min-width:0}
 .v-total{font-family:'Playfair Display',serif;font-weight:700;font-size:1.05rem;color:var(--t1);white-space:nowrap;flex-shrink:0}
 .v-meta{font-size:.7rem;color:var(--t3);margin-top:4px;font-weight:600}
-.v-intermediary{font-size:.65rem;color:var(--lav);margin-top:4px;font-weight:600}
+.v-intermediary{font-size:.7rem;color:var(--lav);margin-top:4px;font-weight:600}
 .v-modes{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
 
 /* ─── CSS-TIMELINE ─── */
-.tl-chart{padding:12px;background:var(--card);border-radius:18px;border:1px solid var(--border);margin-bottom:10px}
-.tl-bars{display:flex;align-items:flex-end;gap:4px;height:180px;padding:0 4px}
-.tl-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
-.tl-bar{width:100%;border-radius:4px 4px 0 0;cursor:pointer;transition:opacity .2s;min-height:2px}
-.tl-bar:hover{opacity:.8}
-.tl-month{font-size:.5rem;color:var(--t3);font-weight:700;transform:rotate(-45deg);white-space:nowrap;margin-top:4px}
+.tl-chart{padding:12px 6px;background:var(--card);border-radius:18px;border:1px solid var(--border);margin-bottom:10px}
+/* Horizontally scrollable with fixed-width bars and upright labels. At
+   flex:1 across ~20 months the bars were ~15px wide and the labels were 8px
+   of text rotated -45°, which is unreadable on a phone. */
+.tl-bars{display:flex;align-items:flex-end;gap:6px;padding:0 6px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+.tl-bar-col{flex:0 0 38px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border-radius:6px;padding:2px 0;background:none;border:none;font-family:'Nunito',sans-serif}
+.tl-bar-col.sel{background:var(--accentLt)}
+.tl-stack{display:flex;flex-direction:column;width:100%;border-radius:4px 4px 0 0;overflow:hidden}
+.tl-bar{width:100%;transition:opacity .2s;min-height:2px}
+.tl-bar-col:active .tl-stack{opacity:.7}
+.tl-month{font-size:.7rem;color:var(--t3);font-weight:700;white-space:nowrap;margin-top:4px}
+.tl-bar-col.sel .tl-month{color:var(--accent)}
+.tl-axis{display:flex;justify-content:space-between;align-items:baseline;padding:0 8px 6px;font-size:.7rem;color:var(--t3);font-weight:700}
+.tl-readout{background:var(--accentLt);border-radius:14px;padding:10px 14px;margin-bottom:10px}
+.tl-readout .r-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.tl-readout .r-month{font-size:.8rem;font-weight:700;color:var(--accent)}
+.tl-readout .r-amt{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:var(--accent)}
+.tl-readout .r-sub{font-size:.7rem;color:var(--t2);font-weight:600;margin-top:2px}
+.tl-readout button{width:100%;margin-top:8px;padding:8px;border-radius:12px;border:1px solid var(--accent);background:var(--card);color:var(--accent);font-family:'Nunito',sans-serif;font-size:.75rem;font-weight:700;cursor:pointer}
 .tl-toggle{display:flex;gap:6px;justify-content:center;margin-bottom:10px}
 .tl-toggle button{padding:6px 14px;border-radius:12px;border:1px solid var(--border);background:var(--card);font-size:.72rem;font-weight:700;color:var(--t2);cursor:pointer;font-family:'Nunito',sans-serif}
 .tl-toggle button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
@@ -170,6 +190,10 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .user-menu{position:absolute;top:100%;right:8px;background:var(--card);border-radius:14px;border:1px solid var(--border);padding:6px;min-width:140px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:55}
 .user-opt{padding:8px 12px;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--t1)}
 .user-opt:hover,.user-opt.active{background:var(--accentLt);color:var(--accent)}
+.user-who{padding:8px 12px;font-size:.8rem;font-weight:700;color:var(--t1);border-bottom:1px solid var(--border);margin-bottom:4px}
+.user-who span{display:block;font-size:.7rem;font-weight:600;color:var(--t3);margin-top:2px;word-break:break-all}
+.readonly-note{display:flex;align-items:center;gap:6px;justify-content:center;background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:7px 12px;margin-bottom:8px;font-size:.7rem;color:var(--t2);font-weight:600}
+.readonly-note button{background:none;border:none;color:var(--accent);font-size:.7rem;font-weight:700;cursor:pointer;text-decoration:underline;font-family:'Nunito',sans-serif}
 
 /* ─── CSS-MISC ─── */
 .empty-state{text-align:center;padding:40px 20px;color:var(--t3)}
@@ -198,6 +222,95 @@ const PROJ = 'japan-2026-apr',
   AKEY = 'AIzaSyD372bOo6NQR6VxB-_kkv4zfLNt4B5HaAc';
 const FS_EXP = `https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-expenses`;
 const FS_BUD = `https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-budgets`;
+const ID_SIGNIN = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${AKEY}`;
+const ID_REFRESH = `https://securetoken.googleapis.com/v1/token?key=${AKEY}`;
+
+// ─── JS-AUTH ───
+// Email/password against the Identity Toolkit REST API — no Firebase SDK, in
+// keeping with the rest of the app. Reads stay public and need no token; the
+// token is required only for writes, which is what the Firestore rules
+// enforce (see DEVELOPMENT.md).
+const AUTH_KEY = 'hl-auth';
+let authState = null;
+const authListeners = new Set();
+function loadAuth() {
+  try {
+    const raw = localStorage.getItem(AUTH_KEY);
+    authState = raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    authState = null;
+  }
+  return authState;
+}
+function setAuth(a) {
+  authState = a;
+  if (a) localStorage.setItem(AUTH_KEY, JSON.stringify(a));else localStorage.removeItem(AUTH_KEY);
+  authListeners.forEach(fn => fn(a));
+}
+function nameFromEmail(e) {
+  const l = (e || '').split('@')[0].replace(/[._-]+/g, ' ').trim();
+  return l ? l.charAt(0).toUpperCase() + l.slice(1) : 'Unknown';
+}
+const authErr = m => ({
+  EMAIL_NOT_FOUND: 'No account with that email',
+  INVALID_PASSWORD: 'Wrong password',
+  INVALID_LOGIN_CREDENTIALS: 'Wrong email or password',
+  USER_DISABLED: 'That account is disabled',
+  TOO_MANY_ATTEMPTS_TRY_LATER: 'Too many attempts — try again later'
+})[m] || 'Sign-in failed';
+async function signIn(email, password) {
+  const r = await fetch(ID_SIGNIN, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: email.trim(),
+      password,
+      returnSecureToken: true
+    })
+  });
+  const d = await r.json();
+  if (!r.ok) throw new Error(authErr(d.error?.message?.split(' ')[0]));
+  // Expire a minute early so a write never races the token.
+  setAuth({
+    idToken: d.idToken,
+    refreshToken: d.refreshToken,
+    expiresAt: Date.now() + (+d.expiresIn - 60) * 1000,
+    email: d.email,
+    name: d.displayName || nameFromEmail(d.email)
+  });
+  return authState;
+}
+function signOut() {
+  setAuth(null);
+}
+async function refreshAuth() {
+  if (!authState?.refreshToken) return null;
+  const r = await fetch(ID_REFRESH, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: `grant_type=refresh_token&refresh_token=${encodeURIComponent(authState.refreshToken)}`
+  });
+  const d = await r.json();
+  if (!r.ok) {
+    setAuth(null);
+    return null;
+  }
+  setAuth({
+    ...authState,
+    idToken: d.id_token,
+    refreshToken: d.refresh_token,
+    expiresAt: Date.now() + (+d.expires_in - 60) * 1000
+  });
+  return authState.idToken;
+}
+async function authToken() {
+  if (!authState) return null;
+  return Date.now() < authState.expiresAt ? authState.idToken : refreshAuth();
+}
 
 // ─── JS-CONSTANTS ───
 const PHASES = ['Pre-Construction', 'Foundation', 'Structure', 'Finishing', 'Boundary & External', 'Furnishing', 'Landscaping', 'Decorating', 'Maintenance', 'Leasing'];
@@ -219,7 +332,6 @@ const CATEGORIES = {
 const PAYMENT_MODES = ['Cash', 'NEFT', 'GPay', 'UPI', 'IMPS'];
 const EXPENSE_TYPES = ['Contract', 'Fee', 'Miscellaneous'];
 const STATUSES = ['Paid', 'Partial', 'Pending', 'Overdue'];
-const FAMILY = ['Jiten', 'Runa', 'Priyanuj', 'Devanuj'];
 const CONTRACT_BUDGET = 7537510;
 
 // ─── JS-PHASE-CAT-ACCT-CLR ───
@@ -649,35 +761,57 @@ async function fetchAll(url) {
   } while (token);
   return all;
 }
+
+// Every write carries the signed-in user's ID token. Reads deliberately do
+// not — the rules allow public reads, so the app works signed out.
+async function authedFetch(url, opts = {}) {
+  const t = await authToken();
+  if (!t) throw new Error('Sign in to save changes');
+  const go = tok => fetch(url, {
+    ...opts,
+    headers: {
+      ...(opts.headers || {}),
+      Authorization: 'Bearer ' + tok
+    }
+  });
+  let r = await go(t);
+  if (r.status === 401 || r.status === 403) {
+    // Token may have gone stale mid-session; refresh once and retry.
+    const t2 = await refreshAuth();
+    r = t2 ? await go(t2) : r;
+  }
+  if (!r.ok) {
+    if (r.status === 401 || r.status === 403) throw new Error('Not permitted — sign in again');
+    throw new Error(await r.text());
+  }
+  return r;
+}
 async function createEntry(e) {
   const id = 'exp-' + Date.now();
-  const r = await fetch(`${FS_EXP}?key=${AKEY}&documentId=${id}`, {
+  await authedFetch(`${FS_EXP}?key=${AKEY}&documentId=${id}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(toFS(e))
   });
-  if (!r.ok) throw new Error(await r.text());
   return id;
 }
 async function updateEntry(id, e) {
   const fields = Object.keys(toFS(e).fields);
   const masks = fields.map(f => 'updateMask.fieldPaths=' + f).join('&');
-  const r = await fetch(`${FS_EXP}/${id}?key=${AKEY}&${masks}`, {
+  await authedFetch(`${FS_EXP}/${id}?key=${AKEY}&${masks}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(toFS(e))
   });
-  if (!r.ok) throw new Error(await r.text());
 }
 async function deleteEntry(id) {
-  const r = await fetch(`${FS_EXP}/${id}?key=${AKEY}`, {
+  await authedFetch(`${FS_EXP}/${id}?key=${AKEY}`, {
     method: 'DELETE'
   });
-  if (!r.ok) throw new Error(await r.text());
 }
 
 // ─── JS-FORMATTING ───
@@ -759,8 +893,9 @@ function Header({
   themeId,
   onTheme,
   onRefresh,
-  userName,
-  onUserChange
+  auth,
+  onSignIn,
+  onSignOut
 }) {
   const [showMenu, setShowMenu] = useState(false);
   return /*#__PURE__*/React.createElement("div", {
@@ -772,7 +907,9 @@ function Header({
       gap: 8
     }
   }, /*#__PURE__*/React.createElement("div", {
-    className: `sync-dot ${syncStatus === 'live' ? 'sync-live' : syncStatus === 'err' ? 'sync-err' : 'sync-loading'}`
+    className: `sync-dot ${syncStatus === 'live' ? 'sync-live' : syncStatus === 'err' ? 'sync-err' : 'sync-loading'}`,
+    role: "status",
+    "aria-label": syncStatus === 'live' ? 'Synced' : syncStatus === 'err' ? 'Sync error' : 'Loading'
   }), /*#__PURE__*/React.createElement("h1", null, "House Ledger")), /*#__PURE__*/React.createElement("div", {
     className: "header-r",
     style: {
@@ -780,27 +917,32 @@ function Header({
     }
   }, /*#__PURE__*/React.createElement("button", {
     className: "header-btn",
-    onClick: onRefresh
+    onClick: onRefresh,
+    "aria-label": "Refresh data"
   }, "\u21BB"), /*#__PURE__*/React.createElement("button", {
     className: "header-btn",
-    onClick: onTheme
+    onClick: onTheme,
+    "aria-label": "Choose theme"
   }, "\uD83C\uDFA8"), /*#__PURE__*/React.createElement("button", {
     className: "header-btn",
-    onClick: () => setShowMenu(!showMenu),
+    onClick: () => auth ? setShowMenu(!showMenu) : onSignIn(),
+    "aria-label": auth ? `Signed in as ${auth.name} — account menu` : 'Sign in to add or edit entries',
+    "aria-expanded": auth ? showMenu : undefined,
     style: {
-      fontSize: '.75rem',
+      fontSize: auth ? '.75rem' : '1rem',
       fontWeight: 700
     }
-  }, userName?.slice(0, 1) || '?'), showMenu && /*#__PURE__*/React.createElement("div", {
+  }, auth ? auth.name.slice(0, 1).toUpperCase() : '🔒'), auth && showMenu && /*#__PURE__*/React.createElement("div", {
     className: "user-menu"
-  }, FAMILY.map(f => /*#__PURE__*/React.createElement("div", {
-    key: f,
-    className: `user-opt ${f === userName ? 'active' : ''}`,
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "user-who"
+  }, auth.name, /*#__PURE__*/React.createElement("span", null, auth.email)), /*#__PURE__*/React.createElement("div", {
+    className: "user-opt",
     onClick: () => {
-      onUserChange(f);
+      onSignOut();
       setShowMenu(false);
     }
-  }, f)))), showMenu && /*#__PURE__*/React.createElement("div", {
+  }, "Sign out"))), auth && showMenu && /*#__PURE__*/React.createElement("div", {
     style: {
       position: 'fixed',
       inset: 0,
@@ -914,7 +1056,7 @@ function HeroAccountCard({
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: '.62rem',
+      fontSize: '.7rem',
       color: ACCT_CLR.Self.text,
       fontWeight: 700
     }
@@ -933,7 +1075,7 @@ function HeroAccountCard({
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      fontSize: '.62rem',
+      fontSize: '.7rem',
       color: ACCT_CLR.Reemon.text,
       fontWeight: 700
     }
@@ -1167,6 +1309,8 @@ function EntryRow({
   const startX = useRef(0);
   const dx = useRef(0);
   const swiped = useRef(false);
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
   const pc = PHASE_CLR[entry.phase] || {
     bg: '#f5f5f4',
     text: '#44403c'
@@ -1174,6 +1318,18 @@ function EntryRow({
   const ac = ACCT_CLR[entry.account] || {
     bg: '#f5f5f4',
     text: '#44403c'
+  };
+  const THRESH = 60;
+  // Direct DOM writes rather than state: this runs on every touchmove.
+  const paint = d => {
+    const armed = Math.abs(d) >= THRESH;
+    const show = Math.min(1, Math.abs(d) / THRESH);
+    const [active, idle] = d > 0 ? [rightRef.current, leftRef.current] : [leftRef.current, rightRef.current];
+    if (idle) idle.style.opacity = 0;
+    if (active) {
+      active.style.opacity = d === 0 ? 0 : show;
+      active.textContent = armed ? d > 0 ? '✏️ Release to edit' : '🗑 Release to delete' : d > 0 ? '✏️ Edit' : '🗑 Delete';
+    }
   };
   const handleStart = e => {
     startX.current = e.touches[0].clientX;
@@ -1185,12 +1341,15 @@ function EntryRow({
     if (Math.abs(dx.current) > 8) swiped.current = true;
     const el = ref.current;
     if (el) el.style.transform = `translateX(${Math.max(-80, Math.min(80, dx.current))}px)`;
+    paint(dx.current);
   };
   const handleEnd = () => {
     const el = ref.current;
     if (!el) return;
-    if (dx.current < -60) onDelete(entry);else if (dx.current > 60) onEdit(entry);
+    const d = dx.current;
+    paint(0);
     el.style.transform = 'translateX(0)';
+    if (d < -THRESH) onDelete(entry);else if (d > THRESH) onEdit(entry);
   };
   // A swipe also lands as a click; suppress the expand toggle past 8px of travel.
   const handleClick = () => {
@@ -1203,8 +1362,10 @@ function EntryRow({
   return /*#__PURE__*/React.createElement("div", {
     className: "entry-row"
   }, /*#__PURE__*/React.createElement("div", {
+    ref: rightRef,
     className: "swipe-underlay right"
   }, "\u270F\uFE0F Edit"), /*#__PURE__*/React.createElement("div", {
+    ref: leftRef,
     className: "swipe-underlay left"
   }, "\uD83D\uDDD1 Delete"), /*#__PURE__*/React.createElement("div", {
     ref: ref,
@@ -1314,9 +1475,7 @@ function EntryRow({
     className: "lbl"
   }, "Notes"), /*#__PURE__*/React.createElement("div", {
     className: "val"
-  }, entry.notes))), /*#__PURE__*/React.createElement("div", {
-    className: "swipe-hint"
-  }, "\u2190 swipe to edit or delete \u2192")));
+  }, entry.notes)))));
 }
 
 // ─── JS-ENTRIES-TAB ───
@@ -1324,12 +1483,22 @@ function EntriesTab({
   exps,
   activeFilter,
   onClearFilter,
+  onClearFilterKey,
   onEdit,
   onDelete,
   expandId,
-  onToggle
+  onToggle,
+  auth,
+  onSignIn
 }) {
   const [search, setSearch] = useState('');
+  // The old hint lived inside the expanded detail, so you had to already know
+  // to expand a row to discover you could swipe it.
+  const [showTip, setShowTip] = useState(() => !localStorage.getItem('hl-swipe-tip'));
+  const dismissTip = () => {
+    localStorage.setItem('hl-swipe-tip', '1');
+    setShowTip(false);
+  };
   const [sort, setSort] = useState({
     key: 'date',
     dir: 'desc'
@@ -1371,7 +1540,14 @@ function EntriesTab({
     dir: 'desc'
   });
   const arrow = k => sort.key !== k ? '' : sort.dir === 'desc' ? ' ↓' : ' ↑';
-  const filterLabel = activeFilter ? Object.entries(activeFilter).filter(([k, v]) => v).map(([k, v]) => typeof v === 'object' ? `${monthLabel(v.start.slice(0, 7))}` : v).join(' · ') : '';
+
+  // One chip per active filter, each individually dismissible — they used to
+  // collapse into a single joined label that could only be cleared wholesale.
+  const filterChips = activeFilter ? Object.entries(activeFilter).filter(([k, v]) => v).map(([k, v]) => ({
+    key: k,
+    text: typeof v === 'object' ? monthLabel(v.start.slice(0, 7)) : v
+  })) : [];
+  const filterLabel = filterChips.map(c => c.text).join(' · ');
   const crumb = [filterLabel, statusSel.join('/'), search && `"${search}"`].filter(Boolean).join(' · ');
   const exportName = () => {
     const slug = (crumb || 'all').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
@@ -1412,13 +1588,32 @@ function EntriesTab({
       },
       onClick: () => toggleStatus(s)
     }, s, " (", exps.filter(e => e.status === s).length, ")");
-  })), filterLabel && /*#__PURE__*/React.createElement("div", {
+  })), filterChips.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "status-filters"
+  }, filterChips.map(c => /*#__PURE__*/React.createElement("div", {
+    key: c.key,
     className: "filter-badge",
+    onClick: () => onClearFilterKey(c.key)
+  }, c.text, " \u2715")), filterChips.length > 1 && /*#__PURE__*/React.createElement("div", {
+    className: "filter-badge",
+    style: {
+      background: 'var(--border)',
+      color: 'var(--t2)'
+    },
     onClick: onClearFilter
-  }, filterLabel, " \u2715"), crumb && /*#__PURE__*/React.createElement(SubtotalBar, {
+  }, "Clear all \u2715")), crumb && /*#__PURE__*/React.createElement(SubtotalBar, {
     label: crumb,
     entries: filtered
-  }), filtered.length === 0 && /*#__PURE__*/React.createElement("div", {
+  }), !auth && filtered.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "readonly-note"
+  }, /*#__PURE__*/React.createElement("span", null, "\uD83D\uDC41 View only"), /*#__PURE__*/React.createElement("button", {
+    onClick: onSignIn
+  }, "sign in to make changes")), auth && showTip && filtered.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "swipe-tip"
+  }, /*#__PURE__*/React.createElement("span", null, "Swipe a row \u2192 to edit, \u2190 to delete"), /*#__PURE__*/React.createElement("button", {
+    "aria-label": "Dismiss tip",
+    onClick: dismissTip
+  }, "\u2715")), filtered.length === 0 && /*#__PURE__*/React.createElement("div", {
     className: "empty-state"
   }, /*#__PURE__*/React.createElement("div", {
     className: "icon"
@@ -1653,7 +1848,10 @@ function VendorsTab({
     placeholder: "Search vendors...",
     value: search,
     onChange: e => setSearch(e.target.value)
-  })), filtered.map(v => {
+  })), filtered.length > 0 && /*#__PURE__*/React.createElement(SubtotalBar, {
+    label: `${filtered.length} ${filtered.length === 1 ? 'vendor' : 'vendors'}`,
+    entries: filtered.flatMap(v => v.entries)
+  }), filtered.map(v => {
     // Copy before sorting — v.entries is memoized and sorting it in place
     // mutates state during render.
     const lastDate = [...v.entries].sort((a, b) => b.date.localeCompare(a.date))[0]?.date;
@@ -1711,6 +1909,8 @@ function TimelineTab({
   onNavigate
 }) {
   const [mode, setMode] = useState('phase');
+  const [sel, setSel] = useState(null);
+  const barsRef = useRef(null);
   const months = useMemo(() => {
     const m = {};
     exps.forEach(e => {
@@ -1726,6 +1926,27 @@ function TimelineTab({
     }));
   }, [exps]);
   const maxTotal = Math.max(...months.map(m => m.total), 1);
+  const peak = months.find(m => m.total === maxTotal);
+
+  // Open on the most recent month, which is the end of a scrolling chart.
+  useEffect(() => {
+    const el = barsRef.current;
+    if (el) el.scrollLeft = el.scrollWidth;
+  }, [months.length, mode]);
+  const segsFor = m => {
+    if (mode === 'account') {
+      const s = m.entries.filter(e => e.account === 'Self').reduce((a, e) => a + e.amount, 0);
+      return [['Self', s, ACCT_CLR.Self.dot], ['Reemon', m.total - s, ACCT_CLR.Reemon.dot]].filter(x => x[1] > 0);
+    }
+    const g = {};
+    m.entries.forEach(e => {
+      g[e.phase] = (g[e.phase] || 0) + e.amount;
+    });
+    return Object.entries(g).sort((a, b) => b[1] - a[1]).map(([ph, amt]) => [ph, amt, (PHASE_CLR[ph] || {
+      dot: '#888'
+    }).dot]);
+  };
+  const selMonth = sel ? months.find(m => m.key === sel) : null;
   return /*#__PURE__*/React.createElement("div", {
     className: "entry-list"
   }, /*#__PURE__*/React.createElement("div", {
@@ -1736,93 +1957,50 @@ function TimelineTab({
   }, "By Phase"), /*#__PURE__*/React.createElement("button", {
     className: mode === 'account' ? 'active' : '',
     onClick: () => setMode('account')
-  }, "By Account")), /*#__PURE__*/React.createElement("div", {
+  }, "By Account")), selMonth && /*#__PURE__*/React.createElement("div", {
+    className: "tl-readout"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "r-top"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "r-month"
+  }, selMonth.label), /*#__PURE__*/React.createElement("span", {
+    className: "r-amt"
+  }, fmtFull(selMonth.total))), /*#__PURE__*/React.createElement("div", {
+    className: "r-sub"
+  }, selMonth.entries.length, " ", selMonth.entries.length === 1 ? 'entry' : 'entries', " \xB7 ", segsFor(selMonth).slice(0, 2).map(([n, a]) => `${n} ${fmtAmt(a)}`).join(' · ')), /*#__PURE__*/React.createElement("button", {
+    onClick: () => onNavigate({
+      dateRange: {
+        start: selMonth.key + '-01',
+        end: monthEnd(selMonth.key)
+      }
+    })
+  }, "View ", selMonth.label, " entries \u2192")), /*#__PURE__*/React.createElement("div", {
     className: "tl-chart"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "tl-bars"
-  }, months.map(m => {
-    const h = m.total / maxTotal * 160;
-    if (mode === 'phase') {
-      const groups = {};
-      m.entries.forEach(e => {
-        groups[e.phase] = (groups[e.phase] || 0) + e.amount;
-      });
-      const segs = Object.entries(groups).sort((a, b) => b[1] - a[1]);
-      return /*#__PURE__*/React.createElement("div", {
-        key: m.key,
-        className: "tl-bar-col",
-        onClick: () => {
-          const start = m.key + '-01';
-          const end = m.key + '-31';
-          onNavigate({
-            dateRange: {
-              start,
-              end
-            }
-          });
-        }
-      }, /*#__PURE__*/React.createElement("div", {
-        style: {
-          height: h,
-          display: 'flex',
-          flexDirection: 'column',
-          width: '100%'
-        }
-      }, segs.map(([ph, amt]) => {
-        const pc = PHASE_CLR[ph] || {
-          dot: '#888'
-        };
-        return /*#__PURE__*/React.createElement("div", {
-          key: ph,
-          className: "tl-bar",
-          style: {
-            flex: amt,
-            background: pc.dot
-          }
-        });
-      })), /*#__PURE__*/React.createElement("div", {
-        className: "tl-month"
-      }, m.label));
-    } else {
-      const selfAmt = m.entries.filter(e => e.account === 'Self').reduce((s, e) => s + e.amount, 0);
-      const reemonAmt = m.total - selfAmt;
-      return /*#__PURE__*/React.createElement("div", {
-        key: m.key,
-        className: "tl-bar-col",
-        onClick: () => {
-          const start = m.key + '-01';
-          const end = m.key + '-31';
-          onNavigate({
-            dateRange: {
-              start,
-              end
-            }
-          });
-        }
-      }, /*#__PURE__*/React.createElement("div", {
-        style: {
-          height: h,
-          display: 'flex',
-          flexDirection: 'column',
-          width: '100%'
-        }
-      }, selfAmt > 0 && /*#__PURE__*/React.createElement("div", {
-        className: "tl-bar",
-        style: {
-          flex: selfAmt,
-          background: ACCT_CLR.Self.dot
-        }
-      }), reemonAmt > 0 && /*#__PURE__*/React.createElement("div", {
-        className: "tl-bar",
-        style: {
-          flex: reemonAmt,
-          background: ACCT_CLR.Reemon.dot
-        }
-      })), /*#__PURE__*/React.createElement("div", {
-        className: "tl-month"
-      }, m.label));
+    className: "tl-axis"
+  }, /*#__PURE__*/React.createElement("span", null, "peak ", fmtAmt(maxTotal), peak ? ` · ${peak.label}` : ''), /*#__PURE__*/React.createElement("span", null, "tap a bar")), /*#__PURE__*/React.createElement("div", {
+    className: "tl-bars",
+    ref: barsRef
+  }, months.map(m => /*#__PURE__*/React.createElement("button", {
+    key: m.key,
+    className: `tl-bar-col ${sel === m.key ? 'sel' : ''}`,
+    "aria-label": `${m.label}: ${fmtFull(m.total)}, ${m.entries.length} ${m.entries.length === 1 ? 'entry' : 'entries'}`,
+    onClick: () => setSel(s => s === m.key ? null : m.key)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "tl-stack",
+    style: {
+      height: m.total / maxTotal * 160
+    }
+  }, segsFor(m).map(([name, amt, clr]) => /*#__PURE__*/React.createElement("div", {
+    key: name,
+    className: "tl-bar",
+    style: {
+      flex: amt,
+      background: clr
     }
   }))), /*#__PURE__*/React.createElement("div", {
+    className: "tl-month"
+  }, m.label))))), /*#__PURE__*/React.createElement("div", {
     style: {
       marginTop: 8
     }
@@ -1856,7 +2034,7 @@ function TimelineTab({
       }
     }, fmtAmt(d.total), " ", /*#__PURE__*/React.createElement("span", {
       style: {
-        fontSize: '.65rem',
+        fontSize: '.7rem',
         color: 'var(--t3)',
         fontWeight: 400
       }
@@ -2041,6 +2219,7 @@ function EntryForm({
     className: "autofill-note"
   }, /*#__PURE__*/React.createElement("span", null, "Prefilled from ", fmtDateShort(autofill.date), " payment"), /*#__PURE__*/React.createElement("button", {
     type: "button",
+    "aria-label": "Dismiss autofill note",
     onClick: () => setAutofill(null)
   }, "\u2715"))), /*#__PURE__*/React.createElement("div", {
     className: "field"
@@ -2138,9 +2317,6 @@ function EntryForm({
     key: s,
     type: "button",
     className: `toggle-btn ${f.status === s ? 'active' : ''}`,
-    style: {
-      fontSize: '.7rem'
-    },
     onClick: () => up('status', s)
   }, s))))), step < 3 && !canNext && /*#__PURE__*/React.createElement("div", {
     className: "form-hint"
@@ -2207,6 +2383,79 @@ function ConfirmDialog({
   }, "Cancel"))));
 }
 
+// ─── JS-SIGN-IN ───
+function SignInDialog({
+  onClose,
+  onSignedIn,
+  reason
+}) {
+  const [email, setEmail] = useState('');
+  const [pw, setPw] = useState('');
+  const [err, setErr] = useState('');
+  const [busy, setBusy] = useState(false);
+  const submit = async () => {
+    if (!email.trim() || !pw) return setErr('Email and password are required');
+    setBusy(true);
+    setErr('');
+    try {
+      const a = await signIn(email, pw);
+      onSignedIn(a);
+    } catch (e) {
+      setErr(e.message);
+      setBusy(false);
+    }
+  };
+  return /*#__PURE__*/React.createElement("div", {
+    className: "confirm-overlay",
+    onClick: e => {
+      if (e.target === e.currentTarget) onClose();
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "confirm-box",
+    style: {
+      textAlign: 'left'
+    }
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      textAlign: 'center'
+    }
+  }, "Sign in"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      textAlign: 'center'
+    }
+  }, reason || 'Anyone can view the ledger. Changing it needs an account.'), /*#__PURE__*/React.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/React.createElement("label", null, "Email"), /*#__PURE__*/React.createElement("input", {
+    type: "email",
+    autoComplete: "username",
+    inputMode: "email",
+    value: email,
+    onChange: e => setEmail(e.target.value),
+    placeholder: "you@example.com"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "field"
+  }, /*#__PURE__*/React.createElement("label", null, "Password"), /*#__PURE__*/React.createElement("input", {
+    type: "password",
+    autoComplete: "current-password",
+    value: pw,
+    onChange: e => setPw(e.target.value),
+    onKeyDown: e => {
+      if (e.key === 'Enter') submit();
+    }
+  })), err && /*#__PURE__*/React.createElement("div", {
+    className: "field-err"
+  }, err), /*#__PURE__*/React.createElement("div", {
+    className: "form-actions"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn-primary",
+    disabled: busy,
+    onClick: submit
+  }, busy ? 'Signing in…' : 'Sign in'), /*#__PURE__*/React.createElement("button", {
+    className: "btn-secondary",
+    onClick: onClose
+  }, "Cancel"))));
+}
+
 // ─── JS-THEME-PICKER ───
 function ThemePicker({
   themeId,
@@ -2253,13 +2502,21 @@ function App() {
   // 'loading' until the first fetch resolves — a green dot over an empty
   // list claims a successful sync that has not happened yet.
   const [syncStatus, setSyncStatus] = useState('loading');
-  const [userName, setUserName] = useState(() => localStorage.getItem('hl-user') || 'Jiten');
+  // Replaces the old localStorage family-name picker: loggedBy now comes from
+  // the authenticated account rather than a self-declared label.
+  const [auth, setAuthS] = useState(loadAuth);
+  const [showSignIn, setShowSignIn] = useState(false);
+  const [signInReason, setSignInReason] = useState('');
+  const pendingRef = useRef(null);
   useEffect(() => {
     applyTheme(themeId);
   }, [themeId]);
   useEffect(() => {
-    localStorage.setItem('hl-user', userName);
-  }, [userName]);
+    authListeners.add(setAuthS);
+    return () => {
+      authListeners.delete(setAuthS);
+    };
+  }, []);
   const loadData = useCallback(async () => {
     try {
       const e = await fetchAll(FS_EXP);
@@ -2307,6 +2564,14 @@ function App() {
     setExpandId(null);
     setHeroCard(null);
   }, []);
+  const clearFilterKey = useCallback(k => setActiveFilter(f => {
+    if (!f) return f;
+    const n = {
+      ...f
+    };
+    delete n[k];
+    return Object.keys(n).length ? n : null;
+  }), []);
   const handleSaveEntry = useCallback(async entry => {
     try {
       if (editEntry?.id) {
@@ -2331,20 +2596,42 @@ function App() {
       alert('Error: ' + err.message);
     }
   }, [deleteTarget, loadData]);
-  const handleEdit = entry => {
+
+  // Any write-shaped action routes through here. Signed out, it parks the
+  // action and asks for credentials; on success the action resumes, so the
+  // sign-in never costs the user the tap they already made.
+  const guard = useCallback((fn, reason) => {
+    if (authState) return fn();
+    pendingRef.current = fn;
+    setSignInReason(reason || '');
+    setShowSignIn(true);
+  }, []);
+  const onSignedIn = useCallback(() => {
+    setShowSignIn(false);
+    const fn = pendingRef.current;
+    pendingRef.current = null;
+    if (fn) fn();
+  }, []);
+  const handleEdit = entry => guard(() => {
     setEditEntry(entry);
     setShowForm(true);
-  };
-  const handleDeleteConfirm = entry => {
-    setDeleteTarget(entry);
-  };
+  }, 'Sign in to edit this entry.');
+  const handleDeleteConfirm = entry => guard(() => setDeleteTarget(entry), 'Sign in to delete this entry.');
+  const handleAdd = () => guard(() => {
+    setEditEntry(null);
+    setShowForm(true);
+  }, 'Sign in to add an entry.');
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Header, {
     syncStatus: syncStatus,
     themeId: themeId,
     onTheme: () => setShowThemePicker(true),
     onRefresh: loadData,
-    userName: userName,
-    onUserChange: setUserName
+    auth: auth,
+    onSignIn: () => {
+      setSignInReason('');
+      setShowSignIn(true);
+    },
+    onSignOut: signOut
   }), /*#__PURE__*/React.createElement("div", {
     className: `hero-row ${heroCard ? 'stacked' : ''}`
   }, /*#__PURE__*/React.createElement(HeroSpendCard, {
@@ -2381,9 +2668,15 @@ function App() {
       width: '35%'
     }
   })))), !(syncStatus === 'loading' && exps.length === 0) && /*#__PURE__*/React.createElement(React.Fragment, null, tab === 'entries' && /*#__PURE__*/React.createElement(EntriesTab, {
+    auth: auth,
+    onSignIn: () => {
+      setSignInReason('');
+      setShowSignIn(true);
+    },
     exps: exps,
     activeFilter: activeFilter,
     onClearFilter: () => setActiveFilter(null),
+    onClearFilterKey: clearFilterKey,
     onEdit: handleEdit,
     onDelete: handleDeleteConfirm,
     expandId: expandId,
@@ -2405,10 +2698,8 @@ function App() {
     onTab: setTab
   }), tab === 'entries' && /*#__PURE__*/React.createElement("button", {
     className: "fab",
-    onClick: () => {
-      setEditEntry(null);
-      setShowForm(true);
-    }
+    onClick: handleAdd,
+    "aria-label": "Add new entry"
   }, "+"), showForm && /*#__PURE__*/React.createElement(EntryForm, {
     entry: editEntry,
     onSave: handleSaveEntry,
@@ -2417,12 +2708,19 @@ function App() {
       setEditEntry(null);
     },
     exps: exps,
-    userName: userName
+    userName: auth?.name
   }), deleteTarget && /*#__PURE__*/React.createElement(ConfirmDialog, {
     title: "Delete Entry?",
     message: `${deleteTarget.vendor} — ${fmtFull(deleteTarget.amount)} on ${fmtDate(deleteTarget.date)}`,
     onConfirm: handleDeleteEntry,
     onCancel: () => setDeleteTarget(null)
+  }), showSignIn && /*#__PURE__*/React.createElement(SignInDialog, {
+    reason: signInReason,
+    onClose: () => {
+      pendingRef.current = null;
+      setShowSignIn(false);
+    },
+    onSignedIn: onSignedIn
   }), showThemePicker && /*#__PURE__*/React.createElement(ThemePicker, {
     themeId: themeId,
     onPick: id => {

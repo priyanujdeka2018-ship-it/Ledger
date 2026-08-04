@@ -111,6 +111,88 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 - **Abbreviate aggregates, not line items.** `fmtAmt()` for hero cards and
   totals, `fmtFull()` in the entry list, which is the reconciliation unit.
 
+## Auth and Firestore rules
+
+The ledger is **read-open, write-locked**: anyone with the URL can view it, and
+changing it requires a signed-in family account.
+
+Sign-in is email/password against the Identity Toolkit REST API — no Firebase
+SDK, consistent with the rest of the app. `signIn()` stores `{idToken,
+refreshToken, expiresAt, email, name}` in `localStorage` under `hl-auth`.
+`authedFetch()` attaches `Authorization: Bearer <idToken>` to every write and,
+on a 401/403, refreshes once via the Secure Token API and retries. Reads
+deliberately send no token, so the app works fully signed out.
+
+`loggedBy` now comes from the authenticated account. The old `FAMILY` constant
+and its localStorage name picker are gone — attribution was self-declared and
+anyone could claim to be anyone.
+
+### Rules to paste in the Firebase console
+
+Replace the placeholder emails with the real family accounts, created under
+Authentication → Users.
+
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function familyMember() {
+      return request.auth != null
+        && request.auth.token.email in [
+             'jiten@example.com',
+             'priyanuj@example.com'
+           ];
+    }
+
+    match /house-expenses/{doc} {
+      allow read: if true;
+      allow write: if familyMember();
+    }
+
+    match /house-budgets/{doc} {
+      allow read: if true;
+      allow write: if familyMember();
+    }
+
+    // Japan trip ledger — separate app, left exactly as it was.
+    // NOTE: this rule still expires and that app stops working on 2026-12-30.
+    match /expenses/{doc} {
+      allow read, write: if request.time < timestamp.date(2026, 12, 30);
+    }
+  }
+}
+```
+
+The previous rule was the test-mode default, `allow read, write: if
+request.time < timestamp.date(2026, 12, 30)` — unrestricted read and write by
+anyone until that date, then **everything denied, reads included**. The house
+collections above no longer have an expiry. The `expenses` block does; that
+belongs to the Japan trip app and is a separate decision.
+
+## Data note — the account split
+
+Use these figures. They are what the per-row data actually sums to:
+
+| Account | Total | Entries |
+|---|---|---|
+| Self | ₹63,73,628 | 65 |
+| Reemon | ₹21,42,760 | 23 |
+| **Total** | **₹85,16,388** | **88** |
+
+`HOUSE_CONTEXT.md` states the split as Self ₹63,30,198 / Reemon ₹21,86,190 — a
+₹43,430 difference. That figure is not reproducible from the per-row data and
+is treated as an error in that summary. Entry counts and the grand total agree
+across sources. **Do not change any row's `account` field to make the summary
+match**, and do not reopen the reconciliation.
+
+Caveat worth keeping: no single row equals ₹43,430 and no single Self↔Reemon
+swap produces it; multi-row combinations were not exhaustively searched, so
+"summary-level arithmetic error" is inference rather than proof. Neither figure
+has been checked against the original bank statement. If the split ever needs
+to be authoritative — for tax, or for splitting costs between family members —
+verify against the statement, not against any of these documents.
+
 ## Testing
 
 There is no test suite. Changes are verified by loading the compiled file in
