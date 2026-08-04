@@ -83,7 +83,10 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-OVERVIEW-CARDS` | Shared Phases/Zones card renderer |
 | `JS-PHASES-TAB` | Phase drill-down (2 levels) |
 | `JS-ZONES-TAB` | Zone drill-down (2 levels) |
-| `JS-VENDORS-TAB` | Vendor aggregation |
+| `JS-PAYMENT-MODES` | Cash vs banked card, reused per vendor |
+| `JS-INTERMEDIARY-TREE` | vendor → who was actually paid |
+| `JS-VENDOR-DETAIL` | Per-vendor view (2nd level of Vendors tab) |
+| `JS-VENDORS-TAB` | Vendor aggregation, drills into the detail |
 | `JS-TIMELINE-TAB` | Monthly bars + quarter summary |
 | `JS-ENTRY-FORM` | Single-sheet add/edit modal, autofill, validation |
 | `JS-UNDO-TOAST` | Deferred-delete toast with undo |
@@ -209,6 +212,27 @@ changed.
 and they change perhaps monthly; polling them would add roughly 14,000
 reads/day per open tab for nothing. They load on mount, on manual refresh, and
 after an edit.
+
+## Vendor analytics
+
+The Vendors tab is two levels. The list carries a **cash vs banked** card for
+the whole ledger; tapping a vendor opens a detail view rather than jumping
+straight to filtered entries, with a "View N entries →" button for that.
+
+The detail shows totals and account split, contract spend, average payment, a
+month-by-month sparkline, the **intermediary tree**, per-vendor payment modes,
+a phase split, and the full payment list with `↳ recipient` on routed rows.
+
+**The intermediary tree is the point.** `vendor` ≠ `transferTo` is real domain
+information — several payments to Mewalal Sharma went through Bharti Pradhan,
+Foudo Chetri, Afrina Begum and Suresh Prasad — and it was previously visible
+only as a comma-joined list of names. The tree branches by recipient with
+amount, count, share and last date; a "Paid directly" branch covers the rest,
+and the branches sum to the vendor total. It does not render for a vendor with
+no intermediaries.
+
+`MODE_CLR` joins the other hardcoded semantic colour lookups. Cash is the
+distinction that matters at this scale; everything else leaves a bank trail.
 
 ## Deleting an entry
 

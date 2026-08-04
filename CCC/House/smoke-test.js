@@ -199,7 +199,12 @@ async function run() {
   await step('vendors tab', () => tab('Vendors'));
   await step('vendor search', () => page.locator('.search-bar input').first().fill('Mewalal'));
   await step('vendor search cleared', () => page.locator('.search-bar input').first().fill(''));
-  await step('open a vendor', () => page.locator('.vendor-card').first().click());
+  await step('open vendor detail', () => page.locator('.vendor-card').first().click());
+  await step('vendor: intermediary tree', () => page.locator('.tree-root').waitFor());
+  await step('vendor: jump to entries', () => page.locator('.alloc-btn').first().click());
+  await step('back to vendors', () => tab('Vendors'));
+  await step('vendor without intermediaries', () => page.locator('.vendor-card').nth(1).click());
+  await step('vendor detail back', () => page.locator('.back-btn').click());
   await step('timeline tab', () => tab('Timeline'));
   await step('timeline: by account', () => page.locator('.tl-toggle button', { hasText: 'Account' }).click());
   await step('timeline: by phase', () => page.locator('.tl-toggle button', { hasText: 'Phase' }).click());
