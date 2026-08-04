@@ -20,8 +20,9 @@
 
     JS-FIREBASE         JS-CONSTANTS        JS-PHASE-CAT-ACCT-CLR
     JS-THEMES           JS-FIRESTORE-HELPERS JS-FORMATTING
-    JS-HEADER-COMPONENT JS-HERO-SPEND-CARD  JS-HERO-ACCOUNT-CARD
-    JS-TAB-BAR          JS-SUBTOTAL-BAR     JS-ENTRY-ROW
+    JS-CSV-EXPORT       JS-HEADER-COMPONENT JS-HERO-SPEND-CARD
+    JS-HERO-ACCOUNT-CARD JS-HERO-MONTH-CARD JS-TAB-BAR
+    JS-SUBTOTAL-BAR     JS-ENTRY-ROW
     JS-ENTRIES-TAB      JS-OVERVIEW-CARDS   JS-PHASES-TAB
     JS-ZONES-TAB        JS-VENDORS-TAB      JS-TIMELINE-TAB
     JS-ENTRY-FORM       JS-CONFIRM-DIALOG   JS-THEME-PICKER
@@ -48,6 +49,10 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 
 /* ─── CSS-HERO-CARDS ─── */
 .hero-row{display:flex;gap:12px;padding:12px 12px 4px;overflow-x:auto;scroll-snap-type:x mandatory}
+/* While a card is expanded the row stops being a horizontal scroller and
+   wraps instead: the expanded card takes a full-width line and its siblings
+   stay visible below it, rather than being shoved off-screen. */
+.hero-row.stacked{overflow-x:visible;flex-wrap:wrap;scroll-snap-type:none}
 .hero-card{flex:0 0 calc(50% - 6px);scroll-snap-align:start;background:var(--card);border-radius:20px;border:1px solid var(--border);overflow:hidden;cursor:pointer;transition:all .3s ease;min-width:0}
 .hero-card.expanded{flex:0 0 100%;position:relative}
 .hero-front{padding:16px 14px}
@@ -80,6 +85,16 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .search-bar{display:flex;gap:8px;margin-bottom:8px}
 .search-bar input{flex:1;padding:10px 14px;border-radius:14px;border:1px solid var(--border);background:var(--card);font-size:.85rem;color:var(--t1);font-family:'Nunito',sans-serif}
 .filter-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:var(--accentLt);color:var(--accent);font-size:.7rem;font-weight:700;margin-bottom:8px;cursor:pointer}
+.list-tools{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.sort-seg{display:flex;flex:1;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card)}
+.sort-seg button{flex:1;padding:7px 6px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;color:var(--t2);cursor:pointer;white-space:nowrap}
+.sort-seg button+button{border-left:1px solid var(--border)}
+.sort-seg button.active{background:var(--accent);color:#fff}
+.export-btn{flex-shrink:0;padding:7px 12px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--t2);font-family:'Nunito',sans-serif;font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap}
+.export-btn:active{background:var(--accentLt);color:var(--accent)}
+.status-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.status-chip{padding:4px 10px;border-radius:20px;border:1px solid transparent;font-size:.7rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif}
+.status-chip.on{box-shadow:0 0 0 2px var(--accent) inset}
 .subtotal-bar{background:var(--accentLt);border-radius:14px;padding:10px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
 .subtotal-bar .crumb{font-size:.72rem;color:var(--accent);font-weight:600}
 .subtotal-bar .amt{font-family:'Playfair Display',serif;font-weight:700;color:var(--accent);font-size:1rem}
@@ -215,6 +230,9 @@ const CONTRACT_BUDGET=7537510;
 const PHASE_CLR={'Pre-Construction':{bg:'#e8f0fe',text:'#1a56db',dot:'#3b82f6'},'Foundation':{bg:'#fef3e2',text:'#b45309',dot:'#f59e0b'},'Structure':{bg:'#e6f4ea',text:'#137333',dot:'#34a853'},'Finishing':{bg:'#fce8f0',text:'#b91c5c',dot:'#ec4899'},'Boundary & External':{bg:'#f3e8ff',text:'#6b21a8',dot:'#a855f7'},'Furnishing':{bg:'#fff7e6',text:'#92400e',dot:'#d97706'},'Landscaping':{bg:'#ecfdf5',text:'#065f46',dot:'#10b981'},'Decorating':{bg:'#fdf2f8',text:'#9d174d',dot:'#f472b6'},'Maintenance':{bg:'#f0f4f8',text:'#334155',dot:'#64748b'},'Leasing':{bg:'#eff6ff',text:'#1e40af',dot:'#3b82f6'}};
 const CAT_CLR={'Construction Materials':{bg:'#fef3c7',text:'#92400e',dot:'#d97706'},'Labour & Contractors':{bg:'#dbeafe',text:'#1e40af',dot:'#3b82f6'},'Professional Fees':{bg:'#e0e7ff',text:'#3730a3',dot:'#6366f1'},'Fixtures & Installations':{bg:'#fce7f3',text:'#9d174d',dot:'#ec4899'},'Site Work':{bg:'#d1fae5',text:'#065f46',dot:'#10b981'},'Furnishing':{bg:'#ffedd5',text:'#9a3412',dot:'#f97316'},'Landscaping':{bg:'#dcfce7',text:'#166534',dot:'#22c55e'},'Decorating':{bg:'#fdf2f8',text:'#831843',dot:'#f472b6'},'Utilities & Systems':{bg:'#e0f2fe',text:'#075985',dot:'#0ea5e9'},'Maintenance':{bg:'#f1f5f9',text:'#334155',dot:'#64748b'},'Leasing':{bg:'#ede9fe',text:'#5b21b6',dot:'#8b5cf6'},'Miscellaneous':{bg:'#f5f5f4',text:'#44403c',dot:'#78716c'}};
 const ACCT_CLR={'Self':{bg:'#dbeafe',text:'#1e40af',dot:'#3b82f6'},'Reemon':{bg:'#fce7f3',text:'#9d174d',dot:'#ec4899'}};
+// Hardcoded like the lookups above, not theme variables — chosen to read on
+// both light and dark backgrounds.
+const STATUS_CLR={'Paid':{bg:'#dcfce7',text:'#166534',dot:'#22c55e'},'Partial':{bg:'#fef3c7',text:'#92400e',dot:'#d97706'},'Pending':{bg:'#e0f2fe',text:'#075985',dot:'#0ea5e9'},'Overdue':{bg:'#fee2e2',text:'#991b1b',dot:'#ef4444'}};
 
 // ─── JS-THEMES ───
 const THEMES={
@@ -266,6 +284,26 @@ function fmtFull(n){return '₹'+Math.abs(n).toLocaleString('en-IN');}
 function fmtDate(d){if(!d)return '';const[y,m,dd]=d.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return `${parseInt(dd)} ${mn[parseInt(m)-1]} ${y}`;}
 function fmtDateShort(d){if(!d)return '';const[y,m,dd]=d.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return `${parseInt(dd)} ${mn[parseInt(m)-1]} '${y.slice(2)}`;}
 function monthKey(d){return d.slice(0,7);}
+function thisMonthKey(){const n=new Date();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;}
+function prevMonthKey(k){const[y,m]=k.split('-').map(Number);const d=new Date(y,m-2,1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;}
+function monthEnd(k){const[y,m]=k.split('-').map(Number);return `${k}-${String(new Date(y,m,0).getDate()).padStart(2,'0')}`;}
+
+// ─── JS-CSV-EXPORT ───
+const CSV_COLS=['date','vendor','transferTo','account','amount','category','subcategory','description','phase','zone','expenseType','paymentMode','status','invoiceRef','notes','loggedBy'];
+const csvCell=v=>{const s=v==null?'':String(v);return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;};
+function toCSV(entries){
+  return [CSV_COLS.join(','),...entries.map(e=>CSV_COLS.map(c=>csvCell(e[c])).join(','))].join('\r\n');
+}
+// Exports whatever the list is currently showing, not the whole ledger —
+// that is what makes the filter and sort state worth setting.
+function downloadCSV(entries,name){
+  // Leading BOM so Excel reads the ₹ sign and vendor names as UTF-8.
+  const blob=new Blob(['﻿'+toCSV(entries)],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=name;document.body.appendChild(a);a.click();
+  document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
 function monthLabel(k){const[y,m]=k.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return `${mn[parseInt(m)-1]}'${y.slice(2)}`;}
 
 // ─── JS-HEADER-COMPONENT ───
@@ -289,8 +327,7 @@ function Header({syncStatus,themeId,onTheme,onRefresh,userName,onUserChange}){
 }
 
 // ─── JS-HERO-SPEND-CARD ───
-function HeroSpendCard({exps}){
-  const [expanded,setExpanded]=useState(false);
+function HeroSpendCard({exps,expanded,onToggle}){
   const total=useMemo(()=>exps.reduce((s,e)=>s+e.amount,0),[exps]);
   const contract=useMemo(()=>exps.filter(e=>e.expenseType==='Contract').reduce((s,e)=>s+e.amount,0),[exps]);
   const nonContract=total-contract;
@@ -298,7 +335,7 @@ function HeroSpendCard({exps}){
   const pct=Math.min((contract/CONTRACT_BUDGET)*100,100);
   const barColor=pct>100?'#ef4444':pct>90?'#ef4444':pct>70?'#d97706':'#22c55e';
   return(
-    <div className={`hero-card ${expanded?'expanded':''}`} onClick={()=>setExpanded(!expanded)}>
+    <div className={`hero-card ${expanded?'expanded':''}`} onClick={onToggle}>
       <div className="hero-front">
         <div className="hero-label">Total Spent</div>
         <div className="hero-big">{fmtAmt(total)}</div>
@@ -322,8 +359,7 @@ function HeroSpendCard({exps}){
 }
 
 // ─── JS-HERO-ACCOUNT-CARD ───
-function HeroAccountCard({exps,onNavigate}){
-  const [expanded,setExpanded]=useState(false);
+function HeroAccountCard({exps,onNavigate,expanded,onToggle}){
   const selfExps=useMemo(()=>exps.filter(e=>e.account==='Self'),[exps]);
   const reemonExps=useMemo(()=>exps.filter(e=>e.account==='Reemon'),[exps]);
   const selfTotal=selfExps.reduce((s,e)=>s+e.amount,0);
@@ -331,7 +367,7 @@ function HeroAccountCard({exps,onNavigate}){
   const total=selfTotal+reemonTotal;
   const selfPct=total>0?(selfTotal/total)*100:50;
   return(
-    <div className={`hero-card ${expanded?'expanded':''}`} onClick={e=>{if(e.target.closest('.acct-tap'))return;setExpanded(!expanded);}}>
+    <div className={`hero-card ${expanded?'expanded':''}`} onClick={e=>{if(e.target.closest('.acct-tap'))return;onToggle();}}>
       <div className="hero-front">
         <div className="hero-label">Accounts</div>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',gap:4}}>
@@ -362,6 +398,45 @@ function HeroAccountCard({exps,onNavigate}){
   );
 }
 
+// ─── JS-HERO-MONTH-CARD ───
+// For a build in progress, current-month spend is the most-checked figure
+// and it was not on screen anywhere.
+function HeroMonthCard({exps,onNavigate,expanded,onToggle}){
+  const mk=thisMonthKey();
+  const pk=prevMonthKey(mk);
+  const cur=useMemo(()=>exps.filter(e=>monthKey(e.date)===mk),[exps,mk]);
+  const prev=useMemo(()=>exps.filter(e=>monthKey(e.date)===pk),[exps,pk]);
+  const curTotal=cur.reduce((s,e)=>s+e.amount,0);
+  const prevTotal=prev.reduce((s,e)=>s+e.amount,0);
+  const delta=curTotal-prevTotal;
+  const top=useMemo(()=>{
+    const m={};cur.forEach(e=>{m[e.vendor]=(m[e.vendor]||0)+e.amount;});
+    return Object.entries(m).sort((a,b)=>b[1]-a[1])[0];
+  },[cur]);
+  return(
+    <div className={`hero-card ${expanded?'expanded':''}`} onClick={e=>{if(e.target.closest('.acct-tap'))return;onToggle();}}>
+      <div className="hero-front">
+        <div className="hero-label">{monthLabel(mk)}</div>
+        <div className="hero-big">{fmtAmt(curTotal)}</div>
+        <div className="hero-sub">{cur.length?`${cur.length} ${cur.length===1?'entry':'entries'}`:'No entries yet'}</div>
+      </div>
+      <div className="hero-chevron">▼</div>
+      <div className="hero-expand">
+        <div className="detail-row"><span className="label">{monthLabel(pk)}</span><span className="value">{fmtAmt(prevTotal)}</span></div>
+        <div className="detail-row"><span className="label">Change</span>
+          <span className="value" style={{color:delta>0?'#ef4444':delta<0?'#22c55e':'var(--t2)'}}>
+            {delta>0?'+':delta<0?'−':''}{fmtAmt(Math.abs(delta))}
+          </span></div>
+        {top&&<div className="detail-row"><span className="label">Largest</span><span className="value">{top[0]}</span></div>}
+        <button className="acct-tap" onClick={()=>onNavigate({dateRange:{start:mk+'-01',end:monthEnd(mk)}})}
+          style={{width:'100%',marginTop:8,padding:'8px',borderRadius:12,border:'1px solid var(--accent)',background:'var(--accentLt)',color:'var(--accent)',fontSize:'.72rem',fontWeight:700,cursor:'pointer',fontFamily:"'Nunito',sans-serif"}}>
+          View {monthLabel(mk)} →
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // ─── JS-TAB-BAR ───
 function TabBar({tab,onTab}){
   const tabs=[{id:'entries',icon:'📋',label:'Entries'},{id:'phases',icon:'🏗️',label:'Phases'},{id:'zones',icon:'🏠',label:'Zones'},{id:'vendors',icon:'👷',label:'Vendors'},{id:'timeline',icon:'📅',label:'Timeline'}];
@@ -371,7 +446,7 @@ function TabBar({tab,onTab}){
 // ─── JS-SUBTOTAL-BAR ───
 function SubtotalBar({label,entries}){
   const total=entries.reduce((s,e)=>s+e.amount,0);
-  return(<div className="subtotal-bar"><span className="crumb">{label} · {entries.length} entries</span><span className="amt">{fmtAmt(total)}</span></div>);
+  return(<div className="subtotal-bar"><span className="crumb">{label} · {entries.length} {entries.length===1?'entry':'entries'}</span><span className="amt">{fmtAmt(total)}</span></div>);
 }
 
 // ─── JS-ENTRY-ROW ───
@@ -399,6 +474,10 @@ function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
           <span className="entry-date">{fmtDateShort(entry.date)}</span>
           <span className="chip" style={{background:pc.bg,color:pc.text}}>{entry.phase}</span>
           <span className="chip" style={{background:ac.bg,color:ac.text}}>{entry.account}</span>
+          {/* Only non-Paid gets a chip. Everything is Paid today, so the first
+              Pending entry would otherwise vanish into the list. */}
+          {entry.status&&entry.status!=='Paid'&&
+            <span className="chip" style={{background:(STATUS_CLR[entry.status]||{}).bg||'#f5f5f4',color:(STATUS_CLR[entry.status]||{}).text||'#44403c'}}>{entry.status}</span>}
         </div>
       </div>
       <div className={`entry-detail ${isExpanded?'open':''}`}>
@@ -425,6 +504,14 @@ function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
 // ─── JS-ENTRIES-TAB ───
 function EntriesTab({exps,activeFilter,onClearFilter,onEdit,onDelete,expandId,onToggle}){
   const [search,setSearch]=useState('');
+  const [sort,setSort]=useState({key:'date',dir:'desc'});
+  const [statusSel,setStatusSel]=useState([]);
+
+  // Only offer status filters for statuses that actually occur — with
+  // everything Paid, the control would be pure clutter.
+  const openStatuses=useMemo(()=>STATUSES.filter(s=>s!=='Paid'&&exps.some(e=>e.status===s)),[exps]);
+  const toggleStatus=s=>setStatusSel(p=>p.includes(s)?p.filter(x=>x!==s):[...p,s]);
+
   const filtered=useMemo(()=>{
     let list=[...exps];
     if(activeFilter){
@@ -435,15 +522,46 @@ function EntriesTab({exps,activeFilter,onClearFilter,onEdit,onDelete,expandId,on
       if(activeFilter.category)list=list.filter(e=>e.category===activeFilter.category);
       if(activeFilter.dateRange){list=list.filter(e=>e.date>=activeFilter.dateRange.start&&e.date<=activeFilter.dateRange.end);}
     }
+    if(statusSel.length)list=list.filter(e=>statusSel.includes(e.status));
     if(search){const s=search.toLowerCase();list=list.filter(e=>[e.vendor,e.description,e.notes,e.invoiceRef,e.category,e.subcategory].some(f=>(f||'').toLowerCase().includes(s)));}
-    return list.sort((a,b)=>b.date.localeCompare(a.date)||b.amount-a.amount);
-  },[exps,activeFilter,search]);
+    const sgn=sort.dir==='desc'?1:-1;
+    return list.sort((a,b)=>sort.key==='amount'
+      ?sgn*(b.amount-a.amount)||b.date.localeCompare(a.date)
+      :sgn*b.date.localeCompare(a.date)||b.amount-a.amount);
+  },[exps,activeFilter,search,sort,statusSel]);
+
+  // Re-tapping the active key flips direction; tapping the other key starts
+  // at descending, which is what you want in both cases.
+  const setSortKey=k=>setSort(p=>p.key===k?{key:k,dir:p.dir==='desc'?'asc':'desc'}:{key:k,dir:'desc'});
+  const arrow=k=>sort.key!==k?'':sort.dir==='desc'?' ↓':' ↑';
+
   const filterLabel=activeFilter?Object.entries(activeFilter).filter(([k,v])=>v).map(([k,v])=>typeof v==='object'?`${monthLabel(v.start.slice(0,7))}`:v).join(' · '):'';
+  const crumb=[filterLabel,statusSel.join('/'),search&&`"${search}"`].filter(Boolean).join(' · ');
+  const exportName=()=>{
+    const slug=(crumb||'all').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);
+    return `house-ledger-${slug}-${new Date().toISOString().slice(0,10)}.csv`;
+  };
   return(
     <div className="entry-list">
       <div className="search-bar"><input placeholder="Search vendor, notes..." value={search} onChange={e=>setSearch(e.target.value)}/></div>
+      <div className="list-tools">
+        <div className="sort-seg">
+          <button className={sort.key==='date'?'active':''} onClick={()=>setSortKey('date')}>Date{arrow('date')}</button>
+          <button className={sort.key==='amount'?'active':''} onClick={()=>setSortKey('amount')}>Amount{arrow('amount')}</button>
+        </div>
+        <button className="export-btn" disabled={filtered.length===0}
+          onClick={()=>downloadCSV(filtered,exportName())}>↓ CSV ({filtered.length})</button>
+      </div>
+      {openStatuses.length>0&&
+        <div className="status-filters">
+          {openStatuses.map(s=>{const sc=STATUS_CLR[s]||{};return(
+            <button key={s} className={`status-chip ${statusSel.includes(s)?'on':''}`}
+              style={{background:sc.bg,color:sc.text}} onClick={()=>toggleStatus(s)}>
+              {s} ({exps.filter(e=>e.status===s).length})
+            </button>);})}
+        </div>}
       {filterLabel&&<div className="filter-badge" onClick={onClearFilter}>{filterLabel} ✕</div>}
-      {(filterLabel||search)&&<SubtotalBar label={filterLabel||'Search results'} entries={filtered}/>}
+      {crumb&&<SubtotalBar label={crumb} entries={filtered}/>}
       {filtered.length===0&&<div className="empty-state"><div className="icon">📭</div><p>No entries found</p></div>}
       {filtered.map(e=><EntryRow key={e.id} entry={e} isExpanded={expandId===e.id} onToggle={onToggle} onEdit={onEdit} onDelete={onDelete}/>)}
     </div>
@@ -771,6 +889,9 @@ function App(){
   const [activeFilter,setActiveFilter]=useState(null);
   const [themeId,setThemeId]=useState(()=>localStorage.getItem('hl-theme')||'blueprint');
   const [expandId,setExpandId]=useState(null);
+  // Which hero card is open, lifted so the row can restyle itself and so two
+  // cards can't be expanded at once.
+  const [heroCard,setHeroCard]=useState(null);
   const [showForm,setShowForm]=useState(false);
   const [editEntry,setEditEntry]=useState(null);
   const [deleteTarget,setDeleteTarget]=useState(null);
@@ -805,7 +926,8 @@ function App(){
     return()=>{stop();document.removeEventListener('visibilitychange',onVis);};
   },[loadData]);
 
-  const navigateToEntries=useCallback((filter)=>{setActiveFilter(filter);setTab('entries');setExpandId(null);},[]);
+  const toggleHero=useCallback(id=>setHeroCard(h=>h===id?null:id),[]);
+  const navigateToEntries=useCallback((filter)=>{setActiveFilter(filter);setTab('entries');setExpandId(null);setHeroCard(null);},[]);
 
   const handleSaveEntry=useCallback(async(entry)=>{
     try{
@@ -827,9 +949,10 @@ function App(){
   return(
     <>
       <Header syncStatus={syncStatus} themeId={themeId} onTheme={()=>setShowThemePicker(true)} onRefresh={loadData} userName={userName} onUserChange={setUserName}/>
-      <div className="hero-row">
-        <HeroSpendCard exps={exps}/>
-        <HeroAccountCard exps={exps} onNavigate={navigateToEntries}/>
+      <div className={`hero-row ${heroCard?'stacked':''}`}>
+        <HeroSpendCard exps={exps} expanded={heroCard==='spend'} onToggle={()=>toggleHero('spend')}/>
+        <HeroAccountCard exps={exps} onNavigate={navigateToEntries} expanded={heroCard==='account'} onToggle={()=>toggleHero('account')}/>
+        <HeroMonthCard exps={exps} onNavigate={navigateToEntries} expanded={heroCard==='month'} onToggle={()=>toggleHero('month')}/>
       </div>
       <div style={{paddingBottom:70}}>
         {syncStatus==='loading'&&exps.length===0&&
