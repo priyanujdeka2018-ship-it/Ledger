@@ -28,14 +28,10 @@ npm install
 ```bash
 # 1. Edit house-ledger.jsx.html
 
-# 2. Compile
-node compile.js
+# 2. Compile and smoke-test in one go
+npm run verify
 
-# 3. Syntax-check the generated bundle
-node -e "const fs=require('fs');const m=fs.readFileSync('house-ledger.html','utf8').match(/<script>([\s\S]*?)<\/script>/);fs.writeFileSync('/tmp/c.js',m[1])" \
-  && node --check /tmp/c.js && echo "JS valid"
-
-# 4. Commit both files together
+# 3. Commit both files together
 git add house-ledger.jsx.html house-ledger.html
 git push
 ```
@@ -252,7 +248,21 @@ verify against the statement, not against any of these documents.
 
 ## Testing
 
-There is no test suite. Changes are verified by loading the compiled file in
-headless Chromium at a 390px viewport with the Firestore endpoint stubbed —
-never against the live database. Playwright is available in the Claude Code
-web environment with Chromium preinstalled.
+`npm run smoke` walks the whole app in headless Chromium at a 390px viewport
+and asserts that the root element never empties and nothing throws. Firestore,
+Identity Toolkit and fonts are stubbed — it never touches the live database.
+
+**Run it before every deploy.** It exists because a shipped change deleted the
+`ConfirmDialog` component while leaving a reference to it, so swiping a row
+left threw during render, React unmounted the whole tree, and a blank page
+reached production. Every feature had its own test; nothing exercised the app
+as a whole. The smoke test is deliberately shallow and wide: it does not check
+that features are *correct*, only that every screen renders and every control
+can be operated. 65 steps, about 40 seconds.
+
+It fails fast — once the root empties it reports the remaining steps as
+skipped rather than waiting out a timeout on each.
+
+React is loaded from `node_modules` when present (a devDependency) so the test
+works offline, falling back to the CDN otherwise. Playwright is resolved from
+the local install or a global one.
