@@ -83,6 +83,7 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .entry-content{padding:12px 14px;position:relative;z-index:2;background:var(--card);transition:transform .15s}
 .entry-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .entry-vendor{font-weight:700;font-size:.88rem;color:var(--t1);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.via-glyph{color:var(--lav);font-weight:800;margin-right:4px}
 .entry-amt{font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;color:var(--t1);white-space:nowrap;flex-shrink:0}
 .entry-meta{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;align-items:center}
 .entry-date{font-size:.7rem;color:var(--t3)}
@@ -135,6 +136,23 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .v-meta{font-size:.7rem;color:var(--t3);margin-top:4px;font-weight:600}
 .v-intermediary{font-size:.7rem;color:var(--lav);margin-top:4px;font-weight:600}
 .v-modes{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+/* Intermediary tree: one stem per recipient, so vendor → who-was-actually-paid
+   reads as a shape rather than a comma-joined list of names. */
+.tree-root{font-size:.8rem;font-weight:700;color:var(--t1);margin:6px 0 2px}
+.tree-branch{display:flex;gap:10px;padding-left:6px}
+.tree-line{flex:0 0 12px;position:relative}
+.tree-line::before{content:'';position:absolute;left:0;top:0;bottom:0;border-left:2px solid var(--border)}
+.tree-branch.last .tree-line::before{bottom:auto;height:16px}
+.tree-line::after{content:'';position:absolute;left:0;top:16px;width:10px;border-top:2px solid var(--border)}
+.tree-body{flex:1;min-width:0;padding:8px 0 10px}
+.tree-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.tree-who{font-size:.8rem;font-weight:700;color:var(--lav);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tree-amt{font-family:'Playfair Display',serif;font-weight:700;font-size:.9rem;color:var(--t1);white-space:nowrap}
+.tree-sub{font-size:.7rem;color:var(--t3);font-weight:600;margin:1px 0 5px}
+.vd-spark{display:flex;align-items:flex-end;gap:4px;overflow-x:auto;padding-bottom:2px}
+.vd-spark-col{flex:0 0 34px;display:flex;flex-direction:column;align-items:center;gap:3px}
+.vd-spark-bar{width:100%;border-radius:3px 3px 0 0;background:var(--accent);min-height:3px}
+.vd-spark-lbl{font-size:.7rem;color:var(--t3);font-weight:700;white-space:nowrap}
 
 /* ─── CSS-TIMELINE ─── */
 .tl-chart{padding:12px 6px;background:var(--card);border-radius:18px;border:1px solid var(--border);margin-bottom:10px}
@@ -204,6 +222,8 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .theme-opt{padding:14px 8px;border-radius:14px;border:2px solid var(--border);text-align:center;cursor:pointer;font-size:.75rem;font-weight:700;transition:all .2s}
 .theme-opt.active{border-color:var(--accent);background:var(--accentLt)}
 .theme-emoji{font-size:1.4rem;display:block;margin-bottom:4px}
+.theme-swatch{display:flex;gap:2px;margin-top:6px;height:8px;border-radius:4px;overflow:hidden}
+.theme-swatch i{flex:1;display:block}
 .user-menu{position:absolute;top:100%;right:8px;background:var(--card);border-radius:14px;border:1px solid var(--border);padding:6px;min-width:140px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:55}
 .user-opt{padding:8px 12px;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--t1)}
 .user-opt:hover,.user-opt.active{background:var(--accentLt);color:var(--accent)}
@@ -213,6 +233,14 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .readonly-note button{background:none;border:none;color:var(--accent);font-size:.7rem;font-weight:700;cursor:pointer;text-decoration:underline;font-family:'Nunito',sans-serif}
 
 /* ─── CSS-MISC ─── */
+/* U21 — the indicator rides the finger, so the threshold is visible rather
+   than guessed, and it sits under the sticky header. */
+.ptr{position:fixed;left:0;right:0;top:0;z-index:45;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;overflow:hidden}
+.ptr-pill{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:.72rem;font-weight:700;color:var(--t2);box-shadow:0 4px 12px rgba(0,0,0,.12);margin-bottom:6px}
+.ptr-arrow{display:inline-block;transition:transform .2s;font-size:.85rem}
+.ptr-arrow.armed{transform:rotate(180deg);color:var(--accent)}
+.ptr-spin{display:inline-block;width:12px;height:12px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:ptrSpin .7s linear infinite}
+@keyframes ptrSpin{to{transform:rotate(360deg)}}
 .undo-toast{position:fixed;left:12px;right:12px;bottom:76px;z-index:65;display:flex;align-items:center;gap:10px;background:var(--t1);color:var(--bg);border-radius:14px;padding:11px 14px;box-shadow:0 6px 20px rgba(0,0,0,.28);overflow:hidden}
 .undo-toast .ut-text{flex:1;min-width:0}
 .undo-toast .ut-title{font-size:.8rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -490,6 +518,36 @@ const ACCT_CLR = {
 };
 // Hardcoded like the lookups above, not theme variables — chosen to read on
 // both light and dark backgrounds.
+const MODE_CLR = {
+  'Cash': {
+    bg: '#fef3c7',
+    text: '#92400e',
+    dot: '#d97706'
+  },
+  'NEFT': {
+    bg: '#dbeafe',
+    text: '#1e40af',
+    dot: '#3b82f6'
+  },
+  'IMPS': {
+    bg: '#e0e7ff',
+    text: '#3730a3',
+    dot: '#6366f1'
+  },
+  'GPay': {
+    bg: '#dcfce7',
+    text: '#166534',
+    dot: '#22c55e'
+  },
+  'UPI': {
+    bg: '#f3e8ff',
+    text: '#6b21a8',
+    dot: '#a855f7'
+  }
+};
+// Cash is the distinction that matters on a build this size; everything else
+// leaves a bank trail.
+const isCash = m => m === 'Cash';
 const STATUS_CLR = {
   'Paid': {
     bg: '#dcfce7',
@@ -1512,7 +1570,11 @@ function EntryRow({
     className: "entry-top"
   }, /*#__PURE__*/React.createElement("span", {
     className: "entry-vendor"
-  }, entry.vendor), /*#__PURE__*/React.createElement("span", {
+  }, entry.transferTo && entry.transferTo !== entry.vendor && /*#__PURE__*/React.createElement("span", {
+    className: "via-glyph",
+    title: `Paid via ${entry.transferTo}`,
+    "aria-label": `Paid via ${entry.transferTo}`
+  }, "\u21B3"), entry.vendor), /*#__PURE__*/React.createElement("span", {
     className: "entry-amt"
   }, fmtFull(entry.amount))), /*#__PURE__*/React.createElement("div", {
     className: "entry-meta"
@@ -2041,12 +2103,323 @@ function ZonesTab({
   return null;
 }
 
+// ─── JS-PAYMENT-MODES ───
+// U28. Cash versus everything else is the split that matters for a build
+// this size; the per-mode rows are the supporting detail.
+function PaymentModeCard({
+  entries,
+  title
+}) {
+  const modes = useMemo(() => {
+    const m = {};
+    entries.forEach(e => {
+      const k = e.paymentMode || 'Unknown';
+      if (!m[k]) m[k] = {
+        total: 0,
+        count: 0
+      };
+      m[k].total += e.amount;
+      m[k].count++;
+    });
+    return Object.entries(m).sort((x, y) => y[1].total - x[1].total);
+  }, [entries]);
+  const total = entries.reduce((s, e) => s + e.amount, 0);
+  const cash = entries.reduce((s, e) => isCash(e.paymentMode) ? s + e.amount : s, 0);
+  const cashPct = total > 0 ? cash / total * 100 : 0;
+  if (!entries.length) return null;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, title || 'Payment modes'), /*#__PURE__*/React.createElement("span", {
+    className: "amt"
+  }, fmtAmt(cash), " cash")), /*#__PURE__*/React.createElement("div", {
+    className: "split-bar",
+    style: {
+      height: 8,
+      margin: '2px 0 6px'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "split-seg",
+    style: {
+      flex: cashPct || 0.001,
+      background: MODE_CLR.Cash.dot
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "split-seg",
+    style: {
+      flex: 100 - cashPct || 0.001,
+      background: MODE_CLR.NEFT.dot
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "budget-labels",
+    style: {
+      marginBottom: 6
+    }
+  }, /*#__PURE__*/React.createElement("span", null, cashPct.toFixed(0), "% cash"), /*#__PURE__*/React.createElement("span", null, (100 - cashPct).toFixed(0), "% banked")), modes.map(([mode, d]) => {
+    const mc = MODE_CLR[mode] || {
+      bg: '#f5f5f4',
+      text: '#44403c',
+      dot: '#78716c'
+    };
+    return /*#__PURE__*/React.createElement("div", {
+      key: mode,
+      className: "detail-row"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "label"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "dot",
+      style: {
+        background: mc.dot
+      }
+    }), mode, /*#__PURE__*/React.createElement("span", {
+      style: {
+        color: 'var(--t3)',
+        fontWeight: 600
+      }
+    }, " \xB7 ", d.count)), /*#__PURE__*/React.createElement("span", {
+      className: "value"
+    }, fmtAmt(d.total)));
+  }));
+}
+
+// ─── JS-INTERMEDIARY-TREE ───
+// U27. vendor ≠ transferTo is real domain information — several payments to
+// the mason were routed through third parties — and until now it was only
+// visible as a comma-joined list of names.
+function IntermediaryTree({
+  vendor,
+  entries
+}) {
+  const branches = useMemo(() => {
+    const m = {};
+    entries.forEach(e => {
+      const via = e.transferTo && e.transferTo !== e.vendor ? e.transferTo : '__direct__';
+      if (!m[via]) m[via] = {
+        via,
+        total: 0,
+        count: 0,
+        last: ''
+      };
+      m[via].total += e.amount;
+      m[via].count++;
+      if (e.date > m[via].last) m[via].last = e.date;
+    });
+    return Object.values(m).sort((a, b) => b.total - a.total);
+  }, [entries]);
+  const total = entries.reduce((s, e) => s + e.amount, 0);
+  if (branches.length < 2 && branches[0]?.via === '__direct__') return null;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, "Routed via"), /*#__PURE__*/React.createElement("span", {
+    className: "amt"
+  }, fmtAmt(total))), /*#__PURE__*/React.createElement("div", {
+    className: "tree-root"
+  }, vendor), branches.map((b, i) => {
+    const direct = b.via === '__direct__';
+    const pct = total > 0 ? b.total / total * 100 : 0;
+    return /*#__PURE__*/React.createElement("div", {
+      key: b.via,
+      className: `tree-branch ${i === branches.length - 1 ? 'last' : ''}`
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "tree-line"
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "tree-body"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "tree-top"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "tree-who",
+      style: direct ? {
+        color: 'var(--t2)'
+      } : null
+    }, direct ? 'Paid directly' : b.via), /*#__PURE__*/React.createElement("span", {
+      className: "tree-amt"
+    }, fmtFull(b.total))), /*#__PURE__*/React.createElement("div", {
+      className: "tree-sub"
+    }, b.count, " ", b.count === 1 ? 'payment' : 'payments', " \xB7 ", pct.toFixed(0), "% \xB7 last ", fmtDateShort(b.last)), /*#__PURE__*/React.createElement("div", {
+      className: "budget-bar",
+      style: {
+        height: 5
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "budget-fill",
+      style: {
+        width: pct + '%',
+        background: direct ? 'var(--t3)' : 'var(--lav)'
+      }
+    }))));
+  }));
+}
+
+// ─── JS-VENDOR-DETAIL ───
+// U26. Tapping a vendor used to jump straight to filtered entries. The
+// handful of vendors carrying most of the spend deserve their own view.
+function VendorDetail({
+  vendor,
+  entries,
+  onBack,
+  onNavigate
+}) {
+  const total = entries.reduce((s, e) => s + e.amount, 0);
+  const sorted = useMemo(() => [...entries].sort((a, b) => b.date.localeCompare(a.date)), [entries]);
+  const selfAmt = entries.reduce((s, e) => e.account === 'Self' ? s + e.amount : s, 0);
+  const selfPct = total > 0 ? selfAmt / total * 100 : 50;
+  const contract = contractSpend(entries);
+  const byPhase = useMemo(() => {
+    const m = {};
+    entries.forEach(e => {
+      m[e.phase] = (m[e.phase] || 0) + e.amount;
+    });
+    return Object.entries(m).sort((a, b) => b[1] - a[1]);
+  }, [entries]);
+  const months = useMemo(() => {
+    const m = {};
+    entries.forEach(e => {
+      const k = monthKey(e.date);
+      m[k] = (m[k] || 0) + e.amount;
+    });
+    return Object.entries(m).sort((a, b) => a[0].localeCompare(b[0]));
+  }, [entries]);
+  const maxMonth = Math.max(...months.map(m => m[1]), 1);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "entry-list"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "back-btn",
+    onClick: onBack
+  }, "\u2190 All Vendors"), /*#__PURE__*/React.createElement("div", {
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, vendor), /*#__PURE__*/React.createElement("span", {
+    className: "amt"
+  }, fmtFull(total))), /*#__PURE__*/React.createElement("div", {
+    className: "v-meta",
+    style: {
+      marginTop: 0
+    }
+  }, entries.length, " ", entries.length === 1 ? 'payment' : 'payments', " \xB7 ", fmtDateShort(sorted[sorted.length - 1]?.date), " \u2192 ", fmtDateShort(sorted[0]?.date)), /*#__PURE__*/React.createElement("div", {
+    className: "split-bar"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "split-seg",
+    style: {
+      flex: selfPct || 0.001,
+      background: ACCT_CLR.Self.dot
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "split-seg",
+    style: {
+      flex: 100 - selfPct || 0.001,
+      background: ACCT_CLR.Reemon.dot
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "budget-labels"
+  }, /*#__PURE__*/React.createElement("span", null, "Self ", fmtAmt(selfAmt)), /*#__PURE__*/React.createElement("span", null, "Reemon ", fmtAmt(total - selfAmt))), /*#__PURE__*/React.createElement("div", {
+    className: "detail-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Counts against budget"), /*#__PURE__*/React.createElement("span", {
+    className: "value"
+  }, fmtAmt(contract))), /*#__PURE__*/React.createElement("div", {
+    className: "detail-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Average payment"), /*#__PURE__*/React.createElement("span", {
+    className: "value"
+  }, fmtAmt(total / entries.length))), /*#__PURE__*/React.createElement("button", {
+    className: "alloc-btn",
+    onClick: () => onNavigate({
+      vendor
+    })
+  }, "View ", entries.length, " ", entries.length === 1 ? 'entry' : 'entries', " \u2192")), months.length > 1 && /*#__PURE__*/React.createElement("div", {
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, "Over time"), /*#__PURE__*/React.createElement("span", {
+    className: "amt"
+  }, fmtAmt(maxMonth), " peak")), /*#__PURE__*/React.createElement("div", {
+    className: "vd-spark"
+  }, months.map(([k, amt]) => /*#__PURE__*/React.createElement("div", {
+    key: k,
+    className: "vd-spark-col",
+    title: `${monthLabel(k)}: ${fmtFull(amt)}`
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "vd-spark-bar",
+    style: {
+      height: Math.max(3, amt / maxMonth * 70)
+    }
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "vd-spark-lbl"
+  }, monthLabel(k)))))), /*#__PURE__*/React.createElement(IntermediaryTree, {
+    vendor: vendor,
+    entries: entries
+  }), /*#__PURE__*/React.createElement(PaymentModeCard, {
+    entries: entries,
+    title: "How it was paid"
+  }), byPhase.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, "By phase"), /*#__PURE__*/React.createElement("span", {
+    className: "amt"
+  }, byPhase.length)), byPhase.map(([ph, amt]) => {
+    const pc = PHASE_CLR[ph] || {
+      dot: '#888'
+    };
+    return /*#__PURE__*/React.createElement("div", {
+      key: ph,
+      className: "detail-row"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "label"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "dot",
+      style: {
+        background: pc.dot
+      }
+    }), ph), /*#__PURE__*/React.createElement("span", {
+      className: "value"
+    }, fmtAmt(amt)));
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, "Payments"), /*#__PURE__*/React.createElement("span", {
+    className: "amt"
+  }, entries.length)), sorted.map(e => /*#__PURE__*/React.createElement("div", {
+    key: e.id,
+    className: "detail-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, fmtDateShort(e.date), e.transferTo && e.transferTo !== e.vendor && /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: 'var(--lav)',
+      fontWeight: 700
+    }
+  }, " \u21B3 ", e.transferTo)), /*#__PURE__*/React.createElement("span", {
+    className: "value"
+  }, fmtFull(e.amount))))));
+}
+
 // ─── JS-VENDORS-TAB ───
 function VendorsTab({
   exps,
   onNavigate
 }) {
   const [search, setSearch] = useState('');
+  const [selVendor, setSelVendor] = useState(null);
   const vendors = useMemo(() => {
     const m = {};
     exps.forEach(e => {
@@ -2065,6 +2438,26 @@ function VendorsTab({
     });
     return Object.values(m).sort((a, b) => b.total - a.total);
   }, [exps]);
+  if (selVendor) {
+    const v = vendors.find(x => x.name === selVendor);
+    // The vendor can vanish under us if its last entry is deleted.
+    if (!v) return /*#__PURE__*/React.createElement("div", {
+      className: "entry-list"
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "back-btn",
+      onClick: () => setSelVendor(null)
+    }, "\u2190 All Vendors"), /*#__PURE__*/React.createElement("div", {
+      className: "empty-state"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "icon"
+    }, "\uD83D\uDDC2"), /*#__PURE__*/React.createElement("p", null, "That vendor has no entries left")));
+    return /*#__PURE__*/React.createElement(VendorDetail, {
+      vendor: v.name,
+      entries: v.entries,
+      onBack: () => setSelVendor(null),
+      onNavigate: onNavigate
+    });
+  }
   const filtered = search ? vendors.filter(v => v.name.toLowerCase().includes(search.toLowerCase())) : vendors;
   return /*#__PURE__*/React.createElement("div", {
     className: "entry-list"
@@ -2077,6 +2470,9 @@ function VendorsTab({
   })), filtered.length > 0 && /*#__PURE__*/React.createElement(SubtotalBar, {
     label: `${filtered.length} ${filtered.length === 1 ? 'vendor' : 'vendors'}`,
     entries: filtered.flatMap(v => v.entries)
+  }), !search && /*#__PURE__*/React.createElement(PaymentModeCard, {
+    entries: exps,
+    title: "Cash vs banked"
   }), filtered.map(v => {
     // Copy before sorting — v.entries is memoized and sorting it in place
     // mutates state during render.
@@ -2086,9 +2482,7 @@ function VendorsTab({
     return /*#__PURE__*/React.createElement("div", {
       key: v.name,
       className: "vendor-card",
-      onClick: () => onNavigate({
-        vendor: v.name
-      })
+      onClick: () => setSelVendor(v.name)
     }, /*#__PURE__*/React.createElement("div", {
       className: "v-header"
     }, /*#__PURE__*/React.createElement("span", {
@@ -2097,9 +2491,9 @@ function VendorsTab({
       className: "v-total"
     }, fmtAmt(v.total))), /*#__PURE__*/React.createElement("div", {
       className: "v-meta"
-    }, v.entries.length, " payments \xB7 Last: ", fmtDateShort(lastDate)), v.intermediaries.size > 0 && /*#__PURE__*/React.createElement("div", {
+    }, v.entries.length, " ", v.entries.length === 1 ? 'payment' : 'payments', " \xB7 Last: ", fmtDateShort(lastDate)), v.intermediaries.size > 0 && /*#__PURE__*/React.createElement("div", {
       className: "v-intermediary"
-    }, "Also paid via: ", [...v.intermediaries].join(', ')), /*#__PURE__*/React.createElement("div", {
+    }, "\u21B3 via ", [...v.intermediaries].join(', ')), /*#__PURE__*/React.createElement("div", {
       className: "split-bar",
       style: {
         height: 4
@@ -2118,14 +2512,20 @@ function VendorsTab({
       }
     })), /*#__PURE__*/React.createElement("div", {
       className: "v-modes"
-    }, [...v.modes].map(m => /*#__PURE__*/React.createElement("span", {
-      key: m,
-      className: "chip",
-      style: {
-        background: 'var(--accentLt)',
-        color: 'var(--accent)'
-      }
-    }, m))));
+    }, [...v.modes].map(m => {
+      const mc = MODE_CLR[m] || {
+        bg: 'var(--accentLt)',
+        text: 'var(--accent)'
+      };
+      return /*#__PURE__*/React.createElement("span", {
+        key: m,
+        className: "chip",
+        style: {
+          background: mc.bg,
+          color: mc.text
+        }
+      }, m);
+    })));
   }));
 }
 
@@ -2868,7 +3268,22 @@ function ThemePicker({
     onClick: () => onPick(id)
   }, /*#__PURE__*/React.createElement("span", {
     className: "theme-emoji"
-  }, t.emoji), t.name)))));
+  }, t.emoji), t.name, /*#__PURE__*/React.createElement("span", {
+    className: "theme-swatch",
+    "aria-hidden": "true"
+  }, /*#__PURE__*/React.createElement("i", {
+    style: {
+      background: t.bg
+    }
+  }), /*#__PURE__*/React.createElement("i", {
+    style: {
+      background: t.card
+    }
+  }), /*#__PURE__*/React.createElement("i", {
+    style: {
+      background: t.accent
+    }
+  })))))));
 }
 
 // ─── JS-APP ───
@@ -2978,7 +3393,82 @@ function App() {
   // all day costs roughly 14,000 reads instead of 126,720 — the 60s full
   // poll was already over the 50,000/day free quota on paper.
   const POLL_MS = 60000,
-    RECONCILE_MS = 600000;
+    RECONCILE_MS = 600000,
+    PULL_THRESHOLD = 64;
+
+  // ── U21 pull-to-refresh ──────────────────────────────────────────────
+  // There is a refresh button, but pulling is the gesture a mobile user
+  // reaches for first. Horizontal row swipes are unaffected: this only
+  // engages when the page is already scrolled to the top and the drag is
+  // more vertical than horizontal.
+  const [pull, setPull] = useState(0);
+  const [pulling, setPulling] = useState(false);
+  const pullRef = useRef({
+    startY: 0,
+    startX: 0,
+    active: false,
+    dist: 0
+  });
+  useEffect(() => {
+    const modalOpen = () => !!document.querySelector('.modal-overlay,.confirm-overlay,.theme-overlay');
+    const onStart = e => {
+      const p = pullRef.current;
+      p.active = false;
+      p.dist = 0;
+      if (e.touches.length !== 1 || window.scrollY > 0 || modalOpen()) return;
+      p.startY = e.touches[0].clientY;
+      p.startX = e.touches[0].clientX;
+      p.active = true;
+    };
+    const onMove = e => {
+      const p = pullRef.current;
+      if (!p.active) return;
+      const dy = e.touches[0].clientY - p.startY;
+      const dx = Math.abs(e.touches[0].clientX - p.startX);
+      // Let a horizontal swipe on a row win outright.
+      if (dx > Math.abs(dy) || dy <= 0 || window.scrollY > 0) {
+        p.active = false;
+        p.dist = 0;
+        setPull(0);
+        return;
+      }
+      p.dist = Math.min(dy * 0.5, 90);
+      setPull(p.dist);
+    };
+    const onEnd = () => {
+      const p = pullRef.current;
+      if (!p.active) {
+        setPull(0);
+        return;
+      }
+      const fire = p.dist >= PULL_THRESHOLD;
+      p.active = false;
+      p.dist = 0;
+      setPull(0);
+      if (fire) {
+        setPulling(true);
+        Promise.resolve(refreshAll()).finally(() => setTimeout(() => setPulling(false), 400));
+      }
+    };
+    document.addEventListener('touchstart', onStart, {
+      passive: true
+    });
+    document.addEventListener('touchmove', onMove, {
+      passive: true
+    });
+    document.addEventListener('touchend', onEnd, {
+      passive: true
+    });
+    document.addEventListener('touchcancel', onEnd, {
+      passive: true
+    });
+    return () => {
+      document.removeEventListener('touchstart', onStart);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onEnd);
+      document.removeEventListener('touchcancel', onEnd);
+    };
+  }, [refreshAll]);
   useEffect(() => {
     let iv = null,
       last = Date.now();
@@ -3121,7 +3611,19 @@ function App() {
     setShowForm(true);
   }, 'Sign in to add an entry.');
   const handleEditBudgets = () => guard(() => setShowBudgets(true), 'Sign in to set phase budgets.');
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Header, {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, (pull > 0 || pulling) && /*#__PURE__*/React.createElement("div", {
+    className: "ptr",
+    style: {
+      height: pulling ? 42 : pull
+    },
+    "aria-live": "polite"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "ptr-pill"
+  }, pulling ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
+    className: "ptr-spin"
+  }), "Refreshing\u2026") : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("span", {
+    className: `ptr-arrow ${pull >= PULL_THRESHOLD ? 'armed' : ''}`
+  }, "\u2193"), pull >= PULL_THRESHOLD ? 'Release to refresh' : 'Pull to refresh'))), /*#__PURE__*/React.createElement(Header, {
     syncStatus: syncStatus,
     themeId: themeId,
     onTheme: () => setShowThemePicker(true),

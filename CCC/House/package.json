@@ -3,10 +3,14 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "build": "node compile.js"
+    "build": "node compile.js",
+    "smoke": "node smoke-test.js",
+    "verify": "node compile.js && node smoke-test.js"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",
-    "@babel/preset-react": "^7.22.0"
+    "@babel/preset-react": "^7.22.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

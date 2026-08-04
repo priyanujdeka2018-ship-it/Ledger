@@ -28,14 +28,10 @@ npm install
 ```bash
 # 1. Edit house-ledger.jsx.html
 
-# 2. Compile
-node compile.js
+# 2. Compile and smoke-test in one go
+npm run verify
 
-# 3. Syntax-check the generated bundle
-node -e "const fs=require('fs');const m=fs.readFileSync('house-ledger.html','utf8').match(/<script>([\s\S]*?)<\/script>/);fs.writeFileSync('/tmp/c.js',m[1])" \
-  && node --check /tmp/c.js && echo "JS valid"
-
-# 4. Commit both files together
+# 3. Commit both files together
 git add house-ledger.jsx.html house-ledger.html
 git push
 ```
@@ -87,7 +83,10 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-OVERVIEW-CARDS` | Shared Phases/Zones card renderer |
 | `JS-PHASES-TAB` | Phase drill-down (2 levels) |
 | `JS-ZONES-TAB` | Zone drill-down (2 levels) |
-| `JS-VENDORS-TAB` | Vendor aggregation |
+| `JS-PAYMENT-MODES` | Cash vs banked card, reused per vendor |
+| `JS-INTERMEDIARY-TREE` | vendor → who was actually paid |
+| `JS-VENDOR-DETAIL` | Per-vendor view (2nd level of Vendors tab) |
+| `JS-VENDORS-TAB` | Vendor aggregation, drills into the detail |
 | `JS-TIMELINE-TAB` | Monthly bars + quarter summary |
 | `JS-ENTRY-FORM` | Single-sheet add/edit modal, autofill, validation |
 | `JS-UNDO-TOAST` | Deferred-delete toast with undo |
@@ -214,6 +213,38 @@ and they change perhaps monthly; polling them would add roughly 14,000
 reads/day per open tab for nothing. They load on mount, on manual refresh, and
 after an edit.
 
+## Pull-to-refresh
+
+`U21`. Engages only when the page is already scrolled to the top, no modal is
+open, and the drag is more vertical than horizontal — a horizontal row swipe
+wins outright. The indicator rides the finger (drag distance halved, capped at
+90px) and switches to "Release to refresh" past 64px, so the threshold is seen
+rather than guessed. Releasing short of it does nothing.
+
+Listeners are passive and attached to `document`; nothing calls
+`preventDefault`, so native overscroll is untouched.
+
+## Vendor analytics
+
+The Vendors tab is two levels. The list carries a **cash vs banked** card for
+the whole ledger; tapping a vendor opens a detail view rather than jumping
+straight to filtered entries, with a "View N entries →" button for that.
+
+The detail shows totals and account split, contract spend, average payment, a
+month-by-month sparkline, the **intermediary tree**, per-vendor payment modes,
+a phase split, and the full payment list with `↳ recipient` on routed rows.
+
+**The intermediary tree is the point.** `vendor` ≠ `transferTo` is real domain
+information — several payments to Mewalal Sharma went through Bharti Pradhan,
+Foudo Chetri, Afrina Begum and Suresh Prasad — and it was previously visible
+only as a comma-joined list of names. The tree branches by recipient with
+amount, count, share and last date; a "Paid directly" branch covers the rest,
+and the branches sum to the vendor total. It does not render for a vendor with
+no intermediaries.
+
+`MODE_CLR` joins the other hardcoded semantic colour lookups. Cash is the
+distinction that matters at this scale; everything else leaves a bank trail.
+
 ## Deleting an entry
 
 There is no delete confirmation. Swiping a row left removes it from the view
@@ -252,7 +283,21 @@ verify against the statement, not against any of these documents.
 
 ## Testing
 
-There is no test suite. Changes are verified by loading the compiled file in
-headless Chromium at a 390px viewport with the Firestore endpoint stubbed —
-never against the live database. Playwright is available in the Claude Code
-web environment with Chromium preinstalled.
+`npm run smoke` walks the whole app in headless Chromium at a 390px viewport
+and asserts that the root element never empties and nothing throws. Firestore,
+Identity Toolkit and fonts are stubbed — it never touches the live database.
+
+**Run it before every deploy.** It exists because a shipped change deleted the
+`ConfirmDialog` component while leaving a reference to it, so swiping a row
+left threw during render, React unmounted the whole tree, and a blank page
+reached production. Every feature had its own test; nothing exercised the app
+as a whole. The smoke test is deliberately shallow and wide: it does not check
+that features are *correct*, only that every screen renders and every control
+can be operated. 65 steps, about 40 seconds.
+
+It fails fast — once the root empties it reports the remaining steps as
+skipped rather than waiting out a timeout on each.
+
+React is loaded from `node_modules` when present (a devDependency) so the test
+works offline, falling back to the CDN otherwise. Playwright is resolved from
+the local install or a global one.
