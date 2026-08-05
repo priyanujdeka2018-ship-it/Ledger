@@ -287,6 +287,14 @@ async function run() {
   await step('lease: closed repairs disclosure', () => page.locator('.more-toggle').first().click());
   await step('lease: new repair form', () => page.locator('.alloc-btn', { hasText: 'Log a repair' }).click());
   await step('lease: close new repair', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: reports tab', () => page.locator('.tab-item', { hasText: 'Reports' }).click());
+  await step('lease: reports rendered a yield', () => page.locator('.alloc-card', { hasText: 'Yield on what it cost' }).waitFor());
+  await step('lease: tax export CSV', async () => {
+    const dl = page.waitForEvent('download');
+    await page.locator('.alloc-btn', { hasText: 'Export' }).click();
+    const f = await dl;
+    if (!/^lease-\d{4}-04-01-to-\d{4}-03-31\.csv$/.test(f.suggestedFilename())) throw new Error('bad filename ' + f.suggestedFilename());
+  });
   await step('lease: tenancy tab', () => page.locator('.tab-item', { hasText: 'Tenancy' }).click());
   await step('lease: open lease form', () => page.locator('.alloc-card').first().locator('button', { hasText: 'Edit' }).click());
   await step('lease: close lease form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());

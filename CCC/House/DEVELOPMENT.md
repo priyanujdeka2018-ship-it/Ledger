@@ -98,6 +98,10 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-RENT-DATA` | `house-rent`, sparse, deterministic ids |
 | `JS-RENT-SCHEDULE` | Computed schedule, period status, arrears |
 | `JS-RENT-FORM` / `JS-RENT-TAB` | Record a receipt; this month, arrears, deposit |
+| `JS-MAINT-DATA` | `house-maintenance`, and `repairToExpense` — the cross-module write |
+| `JS-REPAIR-FORM` / `JS-REPAIRS-TAB` | Log a repair; open by priority, closed behind a disclosure |
+| `JS-REPORTS` | Financial year (Apr–Mar), build cost, occupancy, tax CSV |
+| `JS-REPORTS-TAB` | Yield, recovery, per-year net position, export |
 | `JS-LEASE-LOGIC` | Derived status, overlap refusal, tenant status |
 | `JS-TENANT-FORM` / `JS-LEASE-FORM` | Lease-mode add/edit sheets |
 | `JS-TENANCY-TAB` | Current tenancy, tenants, previous terms |
@@ -284,12 +288,13 @@ rather than in its own collection — with one tenancy at a time there is
 nothing a separate ledger would buy. Linking deductions to repair costs
 arrives with L3.
 
-## Lease mode (L0 + L1 + L2 built)
+## Lease mode (L0–L4 built)
 
 A second module behind a header mode switch, persisted in `localStorage` under
-`hl-mode`. Build mode keeps its five tabs; lease mode has two,
-Rent and Tenancy — Repairs and Reports arrive with L3/L4. Only tabs that exist
-are rendered; a disabled tab teaches nothing.
+`hl-mode`. Build mode keeps its five tabs; lease mode has four — Rent,
+Repairs, Reports and Tenancy. Only tabs that exist are rendered; a disabled
+tab teaches nothing. L5 is the deliberately-unbuilt list in
+`LEASE_MODE_PLAN.md` §6.
 
 Full design and the settled scope decisions are in `LEASE_MODE_PLAN.md`.
 
@@ -324,6 +329,44 @@ keep them apart.
 
 Deleting a lease keeps an explicit confirmation rather than the undo toast —
 unlike an expense row there is no undo path behind it.
+
+### Repairs, and the one seam between the modules (L3)
+
+`house-maintenance` holds what needs fixing: category, zone, priority, status,
+vendor, cost. Vendor suggestions come from `house-expenses`, so a plumber you
+already paid during the build is one tap away.
+
+`repairToExpense()` is the only place lease mode writes into build data. It is
+**opt-in per repair** — the toggle appears only once a cost is entered, and it
+states what it will write before you tap Save. The entry it creates is always
+`expenseType: 'Miscellaneous'`, `phase: 'Maintenance'`, zone taken from the
+repair, so a tenancy repair can never eat into a construction budget.
+
+Order matters: the repair is saved *first* so it has an id, then the expense is
+created, then the repair is patched with the returned `expenseId`. Reversed,
+one repair would produce two maintenance documents.
+
+Deleting a repair leaves its expense alone — the money was still spent — and
+the confirmation says so rather than leaving it to be discovered.
+
+### Reports (L4)
+
+The only screen that sums both modules, so every figure carries its direction:
+`signed()` renders `+`/`−`, `dirClr()` colours it, and zero gets neither.
+
+- **Financial year is Apr–Mar.** `fyOf('2026-03-31')` is 2025; `fyOf('2026-04-01')`
+  is 2026. Never the calendar year.
+- **Capital vs running cost.** `RUNNING_PHASES = ['Maintenance','Leasing']`.
+  Those net off rent. Everything else is `buildCost()` — the denominator a
+  yield is measured against, not a cost of the year.
+- **Cash basis.** A receipt lands in the year the money arrived
+  (`receivedDate`), falling back to the period's own month.
+- **The year in progress is measured to today**, not to a March that has not
+  happened, or the current year always looks like a bad one.
+- **Occupancy merges lease ranges before counting**, so an overlap in old data
+  cannot count a day twice. A `Terminated` lease has no stored end date, so it
+  is counted only to the end of the last month rent was recorded for — and the
+  screen says so rather than quietly overstating.
 
 ## Deleting an entry
 

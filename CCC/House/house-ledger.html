@@ -1269,6 +1269,116 @@ function rentSchedule(lease, rents, today) {
 }
 const scheduleArrears = rows => rows.filter(r => r.outstanding > 0);
 
+// ─── JS-REPORTS ───
+// India runs Apr–Mar. fyOf('2026-08-05') is 2026, meaning FY 2026–27.
+const fyOf = iso => {
+  const y = +iso.slice(0, 4);
+  return +iso.slice(5, 7) >= 4 ? y : y - 1;
+};
+const fyStart = y => `${y}-04-01`;
+const fyEnd = y => `${y + 1}-03-31`;
+const fyLabel = y => `FY ${y}–${String(y + 1).slice(2)}`;
+
+// What the house cost to build, as against what it costs to run. Maintenance
+// and Leasing are running costs: they net off rent. Everything else is
+// capital, and capital is the denominator a yield is measured against.
+const RUNNING_PHASES = ['Maintenance', 'Leasing'];
+const isRunningCost = e => RUNNING_PHASES.includes(e.phase);
+const buildCost = exps => exps.filter(e => !isRunningCost(e)).reduce((s, e) => s + e.amount, 0);
+
+// Cash basis, which is what a tax return wants: a receipt lands in the year
+// the money arrived, not the year it was owed. Where no date was recorded,
+// the period's own month is the honest fallback.
+const receiptDate = r => r.receivedDate || `${r.period}-01`;
+
+// A terminated lease has no recorded end date — the model deliberately holds
+// no such field (LEASE_MODE_PLAN.md §4). Counting it to its paper end would
+// overstate occupancy and counting it not at all would understate it, so it
+// is counted to the end of the last month rent was recorded for, and the
+// screen says as much rather than leaving it to be discovered.
+function occupiedRange(l, rents) {
+  if (l.statusOverride === 'Draft' || !l.startDate || !l.endDate) return null;
+  if (l.statusOverride !== 'Terminated') return [l.startDate, l.endDate];
+  const last = rents.filter(r => r.leaseId === l.id && (r.received > 0 || r.status === 'Waived')).map(r => r.period).sort().pop();
+  return last ? [l.startDate, monthEnd(last)] : null;
+}
+// Days of the window covered by at least one lease. Ranges are merged first,
+// so an overlap — which the lease form refuses, but old data may still hold —
+// cannot count a day twice.
+function occupiedDays(leases, rents, from, to) {
+  const rs = leases.map(l => occupiedRange(l, rents)).filter(Boolean).map(([a, b]) => [a < from ? from : a, b > to ? to : b]).filter(([a, b]) => a <= b).sort((x, y) => x[0].localeCompare(y[0]));
+  let days = 0,
+    cur = null;
+  rs.forEach(r => {
+    if (!cur) {
+      cur = [r[0], r[1]];
+      return;
+    }
+    if (r[0] <= addDays(cur[1], 1)) {
+      if (r[1] > cur[1]) cur[1] = r[1];
+      return;
+    }
+    days += daysBetween(cur[0], cur[1]) + 1;
+    cur = [r[0], r[1]];
+  });
+  if (cur) days += daysBetween(cur[0], cur[1]) + 1;
+  return days;
+}
+
+// One row per financial year, oldest first. Direction lives in the sign: rent
+// is money in, running costs are money out, and the screen never shows a bare
+// total without saying which way it points.
+function fyRows(exps, rents, leases, today) {
+  const t = today || todayISO();
+  const dates = [...rents.filter(r => r.received > 0).map(receiptDate), ...exps.filter(isRunningCost).map(e => e.date), ...leases.flatMap(l => [l.startDate, l.endDate])].filter(Boolean);
+  if (!dates.length) return [];
+  const first = fyOf(dates.reduce((m, d) => d < m ? d : m)),
+    last = Math.max(first, fyOf(t));
+  const out = [];
+  for (let y = first; y <= last; y++) {
+    const a = fyStart(y),
+      b = fyEnd(y),
+      within = d => d >= a && d <= b;
+    const rentIn = rents.filter(r => r.received > 0 && within(receiptDate(r))).reduce((s, r) => s + r.received, 0);
+    const running = exps.filter(e => isRunningCost(e) && within(e.date));
+    const repairs = running.filter(e => e.phase === 'Maintenance').reduce((s, e) => s + e.amount, 0);
+    const leasing = running.filter(e => e.phase === 'Leasing').reduce((s, e) => s + e.amount, 0);
+    // The year in progress is measured to today, not to a March that has not
+    // happened — otherwise this year always looks like a bad year.
+    const end = b < t ? b : t;
+    out.push({
+      fy: y,
+      rentIn,
+      repairs,
+      leasing,
+      net: rentIn - repairs - leasing,
+      partial: b >= t,
+      days: daysBetween(a, end) + 1,
+      letDays: occupiedDays(leases, rents, a, end)
+    });
+  }
+  return out.reverse();
+}
+
+// One flat statement of what came in and what went out in a year, for the
+// accountant. Deliberately not the expense CSV: that one is the build.
+function taxCSV(y, exps, rents, leases, tenants) {
+  const a = fyStart(y),
+    b = fyEnd(y);
+  const cols = ['date', 'direction', 'type', 'description', 'counterparty', 'amount'];
+  const rows = [];
+  rents.filter(r => r.received > 0 && receiptDate(r) >= a && receiptDate(r) <= b).forEach(r => {
+    const l = leases.find(x => x.id === r.leaseId);
+    const who = (l?.tenantIds || []).map(id => tenants.find(t => t.id === id)?.name).filter(Boolean).join(' & ');
+    rows.push([receiptDate(r), 'in', 'Rent', `Rent for ${monthLabel(r.period)}`, who || 'Tenant', r.received]);
+  });
+  exps.filter(e => isRunningCost(e) && e.date >= a && e.date <= b).forEach(e => {
+    rows.push([e.date, 'out', e.phase === 'Maintenance' ? 'Repair' : 'Leasing cost', e.description || e.subcategory || '', e.vendor || '', e.amount]);
+  });
+  rows.sort((x, z) => x[0].localeCompare(z[0]));
+  return [cols.join(','), ...rows.map(r => r.map(csvCell).join(','))].join('\r\n');
+}
+
 // ─── JS-BUDGETS ───
 // One document per phase in house-budgets. Phase names contain spaces and
 // ampersands, so the document id is a slug and the real name lives in a field.
@@ -1934,6 +2044,10 @@ const LEASE_TABS = [{
   id: 'repairs',
   icon: '🔧',
   label: 'Repairs'
+}, {
+  id: 'reports',
+  icon: '📈',
+  label: 'Reports'
 }, {
   id: 'tenancy',
   icon: '🔑',
@@ -4128,6 +4242,265 @@ function RepairRow({
   }, "not logged")))));
 }
 
+// ─── JS-REPORTS-TAB ───
+// The only screen that sums the two modules together, so every figure states
+// its direction. "Net" on its own is the number people misread.
+const IN_CLR = '#166534',
+  OUT_CLR = '#ef4444';
+// Zero has no direction, so it gets no sign — "− ₹0" reads as a loss.
+const signed = (n, dir) => n === 0 ? fmtFull(0) : (dir === 'in' ? '+ ' : '− ') + fmtFull(Math.abs(n));
+const dirClr = (n, dir) => n === 0 ? 'var(--t3)' : dir === 'in' ? IN_CLR : OUT_CLR;
+function ReportsTab({
+  exps,
+  rents,
+  leases,
+  tenants,
+  onGoTenancy
+}) {
+  const today = todayISO();
+  const capital = useMemo(() => buildCost(exps), [exps]);
+  const rows = useMemo(() => fyRows(exps, rents, leases, today), [exps, rents, leases, today]);
+  const receivedAll = useMemo(() => rents.reduce((s, r) => s + r.received, 0), [rents]);
+  // Yield is measured against the rent you are on now, not an average of
+  // rents you have left behind.
+  const live = useMemo(() => sortLeases(leases.filter(l => isLive(l, today)))[0] || null, [leases, today]);
+  const annualRent = live ? live.rentAmount * 12 : 0;
+  const running12 = useMemo(() => {
+    const from = addDays(today, -365);
+    return exps.filter(e => isRunningCost(e) && e.date >= from).reduce((s, e) => s + e.amount, 0);
+  }, [exps, today]);
+  const netAnnual = annualRent - running12;
+  const gross = capital > 0 ? annualRent / capital * 100 : 0;
+  const net = capital > 0 ? netAnnual / capital * 100 : 0;
+  const recovered = capital > 0 ? receivedAll / capital * 100 : 0;
+  const yearsLeft = netAnnual > 0 ? (capital - receivedAll) / netAnnual : 0;
+  const [fy, setFy] = useState(() => fyOf(todayISO()));
+  const [showOld, setShowOld] = useState(false);
+  const anyTerminated = leases.some(l => l.statusOverride === 'Terminated');
+  if (!leases.length) return /*#__PURE__*/React.createElement("div", {
+    className: "entry-list"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "empty-state"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "icon"
+  }, "\uD83D\uDCC8"), /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Nothing to report yet")), /*#__PURE__*/React.createElement("p", {
+    style: {
+      marginTop: 6
+    }
+  }, "Reports compare rent against what the house cost. Add a lease first."), /*#__PURE__*/React.createElement("button", {
+    className: "alloc-btn",
+    style: {
+      maxWidth: 240,
+      margin: '16px auto 0'
+    },
+    onClick: onGoTenancy
+  }, "Go to Tenancy")));
+  const shownRows = showOld ? rows : rows.slice(0, 2);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "entry-list"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, "Yield on what it cost"), /*#__PURE__*/React.createElement("span", {
+    className: "amt"
+  }, capital > 0 && annualRent > 0 ? gross.toFixed(1) + '%' : '—')), capital <= 0 ? /*#__PURE__*/React.createElement("div", {
+    className: "bud-none",
+    style: {
+      fontStyle: 'normal'
+    }
+  }, "No build spend recorded, so there is nothing to measure a yield against.") : !live ? /*#__PURE__*/React.createElement("div", {
+    className: "bud-none",
+    style: {
+      fontStyle: 'normal'
+    }
+  }, "No live lease, so there is no current rent to annualise. The recovery figure below still holds.") : /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+    className: "detail-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Build cost, all time"), /*#__PURE__*/React.createElement("span", {
+    className: "value"
+  }, fmtFull(capital))), /*#__PURE__*/React.createElement("div", {
+    className: "detail-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Rent for a full year at ", fmtFull(live.rentAmount), "/month"), /*#__PURE__*/React.createElement("span", {
+    className: "value",
+    style: {
+      color: dirClr(annualRent, 'in')
+    }
+  }, signed(annualRent, 'in'))), /*#__PURE__*/React.createElement("div", {
+    className: "detail-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Running costs, last 12 months"), /*#__PURE__*/React.createElement("span", {
+    className: "value",
+    style: {
+      color: dirClr(running12, 'out')
+    }
+  }, signed(running12, 'out'))), /*#__PURE__*/React.createElement("div", {
+    className: "bud-total"
+  }, /*#__PURE__*/React.createElement("span", null, "Net yield"), /*#__PURE__*/React.createElement("span", null, net.toFixed(1), "%")), /*#__PURE__*/React.createElement("div", {
+    className: "v-meta",
+    style: {
+      marginTop: 6
+    }
+  }, "Gross is rent alone. Net takes off repairs and leasing costs; the build itself is the denominator, not a cost of the year."))), capital > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, "Recovered so far"), /*#__PURE__*/React.createElement("span", {
+    className: "amt"
+  }, recovered.toFixed(1), "%")), /*#__PURE__*/React.createElement("div", {
+    className: "budget-bar-wrap"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "budget-bar"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "budget-fill",
+    style: {
+      width: Math.min(recovered, 100) + '%',
+      background: IN_CLR
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "budget-labels"
+  }, /*#__PURE__*/React.createElement("span", null, fmtAmt(receivedAll), " received"), /*#__PURE__*/React.createElement("span", null, "of ", fmtAmt(capital)))), /*#__PURE__*/React.createElement("div", {
+    className: "v-meta",
+    style: {
+      marginTop: 2
+    }
+  }, receivedAll === 0 ? 'No rent recorded yet.' : netAnnual > 0 && recovered < 100 ? `At ${fmtAmt(netAnnual)} a year net, about ${yearsLeft < 1 ? 'under a year' : Math.round(yearsLeft) + ' more years'} to break even.` : recovered >= 100 ? 'The build cost is fully recovered.' : 'Running costs currently exceed the rent, so there is no payback rate to project.')), /*#__PURE__*/React.createElement("div", {
+    className: "form-sep",
+    style: {
+      marginTop: 18
+    }
+  }, "By financial year \xB7 Apr\u2013Mar"), !rows.length && /*#__PURE__*/React.createElement("div", {
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bud-none",
+    style: {
+      fontStyle: 'normal'
+    }
+  }, "Nothing recorded in any year yet.")), shownRows.map(r => /*#__PURE__*/React.createElement("div", {
+    key: r.fy,
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, fyLabel(r.fy), r.partial ? ' · to date' : ''), /*#__PURE__*/React.createElement("span", {
+    className: "amt",
+    style: {
+      color: dirClr(r.net, r.net >= 0 ? 'in' : 'out')
+    }
+  }, signed(r.net, r.net >= 0 ? 'in' : 'out'))), /*#__PURE__*/React.createElement("div", {
+    className: "detail-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Rent in"), /*#__PURE__*/React.createElement("span", {
+    className: "value",
+    style: {
+      color: dirClr(r.rentIn, 'in')
+    }
+  }, signed(r.rentIn, 'in'))), /*#__PURE__*/React.createElement("div", {
+    className: "detail-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Repairs out"), /*#__PURE__*/React.createElement("span", {
+    className: "value",
+    style: {
+      color: dirClr(r.repairs, 'out')
+    }
+  }, signed(r.repairs, 'out'))), /*#__PURE__*/React.createElement("div", {
+    className: "detail-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "label"
+  }, "Leasing costs out"), /*#__PURE__*/React.createElement("span", {
+    className: "value",
+    style: {
+      color: dirClr(r.leasing, 'out')
+    }
+  }, signed(r.leasing, 'out'))), /*#__PURE__*/React.createElement("div", {
+    className: "budget-bar-wrap"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "budget-bar"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "budget-fill",
+    style: {
+      width: (r.days ? r.letDays / r.days * 100 : 0) + '%',
+      background: 'var(--accent)'
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "budget-labels"
+  }, /*#__PURE__*/React.createElement("span", null, r.letDays, " of ", r.days, " days let"), /*#__PURE__*/React.createElement("span", null, r.days ? Math.round(r.letDays / r.days * 100) : 0, "% occupied"))), r.days > r.letDays && /*#__PURE__*/React.createElement("div", {
+    className: "v-meta",
+    style: {
+      marginTop: 0
+    }
+  }, r.days - r.letDays, " days vacant \u2014 the cost that never appears as a bill."))), rows.length > 2 && /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "more-toggle",
+    "aria-expanded": showOld,
+    onClick: () => setShowOld(v => !v)
+  }, /*#__PURE__*/React.createElement("span", null, showOld ? 'Show recent years only' : `${rows.length - 2} earlier ${rows.length - 2 === 1 ? 'year' : 'years'}`), /*#__PURE__*/React.createElement("span", {
+    className: `more-chev ${showOld ? 'open' : ''}`
+  }, "\u25BE")), anyTerminated && /*#__PURE__*/React.createElement("div", {
+    className: "v-meta",
+    style: {
+      marginTop: 8
+    }
+  }, "A terminated lease has no recorded end date, so it is counted as let only to the last month rent was recorded for."), /*#__PURE__*/React.createElement("div", {
+    className: "form-sep",
+    style: {
+      marginTop: 18
+    }
+  }, "For the accountant"), /*#__PURE__*/React.createElement("div", {
+    className: "alloc-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "alloc-head"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "lbl"
+  }, "Tax export")), /*#__PURE__*/React.createElement("div", {
+    className: "v-meta",
+    style: {
+      marginTop: 0
+    }
+  }, "Rent received and running costs for one financial year, Apr\u2013Mar, with the direction of every line spelled out."), /*#__PURE__*/React.createElement("div", {
+    className: "toggle-group",
+    style: {
+      flexWrap: 'wrap',
+      marginTop: 10
+    }
+  }, rows.map(r => /*#__PURE__*/React.createElement("button", {
+    key: r.fy,
+    type: "button",
+    className: `toggle-btn ${fy === r.fy ? 'active' : ''}`,
+    style: {
+      fontSize: '.7rem'
+    },
+    onClick: () => setFy(r.fy)
+  }, fyLabel(r.fy)))), /*#__PURE__*/React.createElement("button", {
+    className: "alloc-btn",
+    disabled: !rows.some(r => r.fy === fy),
+    onClick: () => {
+      const blob = new Blob(['﻿' + taxCSV(fy, exps, rents, leases, tenants)], {
+        type: 'text/csv;charset=utf-8;'
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `lease-${fyStart(fy)}-to-${fyEnd(fy)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  }, "Export ", fyLabel(fy), " CSV")));
+}
+
 // ─── JS-TENANT-FORM ───
 function TenantForm({
   tenant,
@@ -5654,6 +6027,12 @@ function App() {
     vendors: paidVendors,
     onAdd: () => setEditRepair({}),
     onEdit: m => setEditRepair(m)
+  }), tab === 'reports' && /*#__PURE__*/React.createElement(ReportsTab, {
+    exps: shown,
+    rents: rents,
+    leases: leases,
+    tenants: tenants,
+    onGoTenancy: () => setTab('tenancy')
   }), tab === 'tenancy' && /*#__PURE__*/React.createElement(TenancyTab, {
     tenants: tenants,
     leases: leases,

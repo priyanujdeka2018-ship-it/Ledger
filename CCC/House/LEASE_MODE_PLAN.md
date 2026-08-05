@@ -297,14 +297,30 @@ Decisions taken while building it:
 - **Deleting a repair leaves its expense alone.** The money was still spent.
   The confirmation says so rather than leaving it to be discovered.
 
-### L4 — Reports
+### L4 — Reports — **shipped**
 
-| | Feature | Notes |
+| | Feature | Status |
 |---|---|---|
-| L4.1 | **Yield**: rent received against total build cost | The number that says whether the project worked |
-| L4.2 | Net position per financial year | Rent in, lease-related expenses out |
-| L4.3 | Occupancy over time | Vacancy is the largest hidden cost |
-| L4.4 | Tax export, **Apr–Mar** financial year | India convention, not calendar |
+| L4.1 | **Yield**: rent received against total build cost | done — gross and net yield, plus a recovery bar and a payback projection |
+| L4.2 | Net position per financial year | done — rent in, repairs out, leasing out, net |
+| L4.3 | Occupancy over time | done — days let per year, vacancy named as a cost |
+| L4.4 | Tax export, **Apr–Mar** financial year | done — one CSV per year, direction on every line |
+
+Decisions taken while building it:
+
+- **Capital is not a running cost.** Phases `Maintenance` and `Leasing` net off
+  rent; every other phase is the build cost, and the build cost is the
+  denominator a yield is measured against. Getting this wrong would make the
+  house look like it loses money every time a tap is fixed.
+- **Direction is never implied.** `signed()` prints `+` or `−` on every figure
+  and `dirClr()` colours it. Zero gets neither — "− ₹0" reads as a loss.
+- **Cash basis**, because that is what a return wants: a receipt lands in the
+  year the money arrived, not the year it was owed.
+- **The year in progress is measured to today**, not to a March that has not
+  happened. Otherwise the current year always looks like a bad year.
+- **Occupancy merges lease ranges before counting**, so an overlap in old data
+  cannot count a day twice; a terminated lease is counted only to the last
+  month rent was recorded for, and the screen says so.
 
 ### L5 — Later, or never
 
