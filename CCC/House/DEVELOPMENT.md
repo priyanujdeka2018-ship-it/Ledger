@@ -83,7 +83,9 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-FIRESTORE-HELPERS` | `toFS`/`fromFS`, CRUD, change probe |
 | `JS-AUTH` | Identity Toolkit sign-in, token refresh |
 | `JS-BUDGETS` | `house-budgets` helpers |
+| `JS-CONFIG-DATA` | `house-config`: `applyConfig` (additive merge), `fetchConfig`/`saveConfig` (U30) |
 | `JS-CSV-EXPORT` | CSV of the filtered view |
+| `JS-PDF-EXPORT` | Printable rent & annual statements — print-to-PDF, no library (U30) |
 | `JS-FORMATTING` | `fmtAmt`, `fmtFull`, date helpers |
 | `JS-HEADER-COMPONENT` | Sync dot, refresh, theme, user menu |
 | `JS-HERO-SPEND-CARD` | Total + contract breakdown |
@@ -103,6 +105,7 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-ENTRY-FORM` | Single-sheet add/edit modal, autofill, validation |
 | `JS-UNDO-TOAST` | Deferred-delete toast with undo |
 | `JS-BUDGET-EDITOR` | Per-phase budget editor |
+| `JS-CONFIG-EDITOR` | Add custom categories/phases/zones (U30) |
 | `JS-SIGN-IN` | Email/password dialog |
 | `JS-LEASE-DATA` | Private (authed-read) tenant and lease collections |
 | `JS-RENT-DATA` | `house-rent`, sparse, deterministic ids |
@@ -406,6 +409,51 @@ The only screen that sums both modules, so every figure carries its direction:
   is counted only to the end of the last month rent was recorded for — and the
   screen says so rather than quietly overstating.
 
+## Editable lists and printable statements (U30)
+
+Two of `U30`'s three parts. The third, receipt attachments, needs Firebase
+Storage and is still deferred.
+
+### Editable lists — `house-config`
+
+Categories, phases and zones ship as the constants in `JS-CONSTANTS` but can be
+extended without a redeploy. `house-config` holds one document, `lists`, with
+three string arrays: `phases`, `zones`, and `subcats` (each entry
+`"Category::Subcategory"`, so a custom subcategory serialises flat — no nested
+Firestore maps). `applyConfig()` merges them into the live constants **in
+place**, rebuilding from a base snapshot each load so a removed custom entry
+actually drops. Because it mutates the same array/object references, every
+consumer that reads `PHASES`/`ZONES`/`CATEGORIES` picks the change up on its
+next render with no wiring.
+
+**Additive only, by design.** The built-ins are load-bearing —
+`RUNNING_PHASES`, the repair→`Maintenance` seam, the `PHASE_CLR`/`CAT_CLR`
+lookups, and every row already stored against them — so the editor extends but
+never removes or renames them. A custom phase/category gets a neutral fallback
+colour (`CUSTOM_CLR`), so a chip the code has no swatch for cannot crash.
+
+Config is **public to read** (categories/phases/zones are not private) and, like
+budgets, loads once on mount and on refresh — **never in the 60s poll**.
+`fetchConfig()` *lists the collection* rather than GETting the single document,
+because an empty collection answers `200` where a missing document answers `404`
+— and a `404` shows up as a console error on every load until the first save.
+The `ConfigEditor` modal is reached from the Phases and Zones tabs.
+
+### Printable statements — print-to-PDF, no library
+
+`JS-PDF-EXPORT`. The app carries no runtime dependencies, so "export to PDF" is
+the browser's own print-to-PDF over a clean, self-contained HTML page. The
+statement downloads as an `.html` file that auto-opens the print dialog; on an
+iPhone it opens in Safari where Share → Print → Save as PDF does the same. Two
+statements: a per-lease rent statement (Rent tab) and a per-year financial
+statement (Reports tab). `taxCSV` and the annual statement share `taxRows()`, so
+the CSV and the PDF cannot drift.
+
+One trap: the statement embeds an auto-print `<script>`. Its closing tag is
+assembled at runtime (`'<'+'/script>'`) so the literal never appears in the
+source or the Babel-compiled output, where it would close the app's own
+`<script>` block early. All interpolated data (tenant names, notes) is escaped.
+
 ## Deleting an entry
 
 There is no delete confirmation. Swiping a row left removes it from the view
@@ -462,14 +510,15 @@ skipped rather than waiting out a timeout on each.
 ### The correctness suites
 
 `npm test` runs everything in `tests/` — narrow and deep, where the smoke test
-is shallow and wide. 113 assertions across four suites.
+is shallow and wide. 130 assertions across five suites.
 
 | Suite | Guards |
 |---|---|
 | `rent.test.js` | Sparse schedule (3 documents → 8 months), Due/Late boundaries, overpayment, waiver clearing stale fields, deterministic upsert ids, deposit ledger, CSV |
 | `repairs.test.js` | Priority sort, the opt-in expense seam, `Miscellaneous`/`Maintenance` tagging, save-then-patch ordering, delete leaving the expense alone |
 | `reports.test.js` | Apr–Mar year boundaries, capital vs running cost, per-year net, seven occupancy edge cases, tax CSV |
-| `read-cost.test.js` | Probe and reconcile counts, no collection joining the poll loop, no token on expense reads |
+| `read-cost.test.js` | Probe and reconcile counts, no collection joining the poll loop (incl. `house-config`), no token on expense reads |
+| `config.test.js` | U30 editable lists: additive merge of custom categories/phases/zones, built-ins preserved, editor round-trips the three arrays back to `house-config/lists` |
 
 `tests/harness.js` stubs the backend, serves React from `node_modules`, and
 **pins the clock** — rent status, arrears, occupancy and the financial year are

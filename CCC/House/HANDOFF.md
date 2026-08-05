@@ -79,8 +79,10 @@ CCC/House/
 │   ├── rent.test.js        ← L2, 32 assertions
 │   ├── repairs.test.js     ← L3, 31 assertions
 │   ├── reports.test.js     ← L4, 40 assertions
-│   ├── read-cost.test.js   ← Firestore bill + privacy boundary, 10 assertions
+│   ├── read-cost.test.js   ← Firestore bill + privacy boundary, 12 assertions
+│   ├── config.test.js      ← U30 editable lists, 17 assertions
 │   └── run-all.js
+├── firestore.rules         ← canonical security rules; paste into the console to apply
 ├── package.json
 ├── CLAUDE.md               ← auto-loaded by Claude Code; rules + pointer
 ├── DEVELOPMENT.md
@@ -156,10 +158,16 @@ which is **`workflow_dispatch` only** — it does not run on push. So:
 
 ## 4. Current state
 
-**`main` is current. Nothing is pending, and no branch is ahead of it.**
-Lease mode L0–L4 was merged on 2026-08-05 in PR #8, together with the
-correctness suites, this handoff, and the archived source documents. Pages was
-redeployed from the merge.
+**Unmerged work sits on branch `claude/house-handoff-tests-qjdbny`** (as of
+2026-08-05): the version-controlled Firestore rules (`firestore.rules`, now
+covering the lease collections and `house-config`), plus the two shipped `U30`
+slices — printable PDF statements and editable lists. Not yet merged to `main`
+or deployed; `npm run check` is green on it (smoke 115/115, suites 130). Merge
+and trigger *Jekyll site CI* to ship, per §3.
+
+Before that branch, **`main` was current** — lease mode L0–L4 merged on
+2026-08-05 in PR #8, together with the correctness suites, this handoff, and
+the archived source documents, and Pages was redeployed from the merge.
 
 Shipped and live, in the order it was built:
 
@@ -171,10 +179,15 @@ Shipped and live, in the order it was built:
 | Navigation (P3) | In-place hero expansion, readable timeline, this-month figure, loading state, swipe affordance, vendor totals, per-filter chips |
 | Accessibility (P4) | Pinch zoom restored, type floor raised, icon buttons labelled, pull-to-refresh, theme swatches |
 | Later tier (P5) | Per-phase budgets, intermediary glyph, vendor detail, intermediary tree, payment-mode analytics, **lease mode** |
+| `U30` (part) | Printable PDF statements (rent + annual, print-to-PDF, no library); editable categories/phases/zones via `house-config` |
 | Not features | Auth with writes locked and reads open, the change-probe sync, the smoke test, the correctness suites |
 
-**The only U-series item not shipped is `U30`** (receipt attachments, richer
-export, Firestore-hosted config) — blocked on Firebase Storage.
+**`U30` is now two-thirds shipped.** It bundled three things: richer export,
+Firestore-hosted config, and receipt attachments. The first two are **live** —
+printable PDF statements (rent, and per-year financial) and editable
+categories/phases/zones via a `house-config` document. **Receipt attachments
+remain the one unshipped piece**, still blocked on Firebase Storage (which
+needs enabling and its own rules in the console — see L5.2).
 
 Merge commit `2e2d079`; the *Jekyll site CI* run on it built and deployed
 green. Verified at the merge: compile clean, smoke 107/107, suites 113/113,
@@ -316,7 +329,7 @@ whole discipline. The gap that let the crash through was that no suite swiped
 
 ### `npm test` — narrow and deep
 
-Four suites, 113 assertions, each checking that specific arithmetic or a
+Five suites, 130 assertions, each checking that specific arithmetic or a
 specific write is right.
 
 | Suite | Guards |
@@ -324,7 +337,8 @@ specific write is right.
 | `rent.test.js` | Sparse schedule (3 documents → 8 months), Due/Late boundaries, overpayment, waiver clearing stale fields, deterministic upsert ids, deposit ledger, CSV |
 | `repairs.test.js` | Priority sort, the opt-in expense seam, `Miscellaneous`/`Maintenance` tagging, save-then-patch ordering, delete leaving the expense alone |
 | `reports.test.js` | Apr–Mar year boundaries, capital vs running cost, per-year net, seven occupancy edge cases, tax CSV |
-| `read-cost.test.js` | Probe/reconcile counts, no collection joining the poll loop, no token on expense reads |
+| `read-cost.test.js` | Probe/reconcile counts, no collection joining the poll loop (incl. `house-config`), no token on expense reads |
+| `config.test.js` | `U30` editable lists: additive merge of custom categories/phases/zones, built-ins preserved, editor round-trips the three arrays back to `house-config/lists` |
 
 The harness (`tests/harness.js`) stubs Firestore, Identity Toolkit and fonts —
 **no suite ever touches the live database** — serves React from
@@ -388,7 +402,7 @@ Three failures from this project's own history, worth not repeating:
 | | |
 |---|---|
 | Firebase project | `japan-2026-apr` |
-| Collections | `house-expenses`, `house-budgets`, `house-tenants`, `house-leases`, `house-rent`, `house-maintenance` |
+| Collections | `house-expenses`, `house-budgets`, `house-config`, `house-tenants`, `house-leases`, `house-rent`, `house-maintenance` |
 | `localStorage` keys | `hl-auth`, `hl-mode`, `hl-theme` |
 | Contract budget | `CONTRACT_BUDGET = 7537510` |
 | Ledger totals | Self ₹63,73,628 (65) · Reemon ₹21,42,760 (23) · **₹85,16,388 (88)** |
