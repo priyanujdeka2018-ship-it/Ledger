@@ -1,0 +1,58 @@
+rules_version = '2';
+
+// Firestore security rules for Firebase project `japan-2026-apr`.
+//
+// This is the canonical, version-controlled copy. There is no Firebase CLI /
+// SDK in this project (the app talks to Firestore over the REST API only), so
+// these rules are not deployed automatically — paste this whole file into the
+// Firebase console under Firestore Database → Rules, then Publish.
+//
+// Before pasting, replace the two placeholder emails in familyMember() with
+// the real accounts created under Authentication → Users. The check is on the
+// signed-in account's email, so it must match the Firebase Auth account
+// exactly (not necessarily a contact address).
+//
+// The privacy boundary this encodes:
+//   - Build ledger (house-expenses, house-budgets): read-open, write-locked.
+//     The ledger is public to read by design; only a family account can write.
+//   - Lease module (house-tenants, house-leases, house-rent, house-maintenance):
+//     fully private. Reads AND writes require a family account, because these
+//     hold a third party's name, phone number and arrears history.
+//   - Japan trip ledger (expenses): a separate app, left exactly as it was.
+//     NOTE: its rule still expires — that app stops working on 2026-12-30.
+//   - Anything not matched below is denied by default.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function familyMember() {
+      return request.auth != null
+        && request.auth.token.email in [
+             'jiten@example.com',      // ← replace with the real Firebase Auth account
+             'priyanuj@example.com'    // ← replace with the real Firebase Auth account
+           ];
+    }
+
+    // ── Build ledger: read-open, write-locked ──────────────────────────────
+    match /house-expenses/{doc} {
+      allow read: if true;
+      allow write: if familyMember();
+    }
+    match /house-budgets/{doc} {
+      allow read: if true;
+      allow write: if familyMember();
+    }
+
+    // ── Lease module: fully private (read AND write require a family account)
+    match /house-tenants/{doc}     { allow read, write: if familyMember(); }
+    match /house-leases/{doc}      { allow read, write: if familyMember(); }
+    match /house-rent/{doc}        { allow read, write: if familyMember(); }
+    match /house-maintenance/{doc} { allow read, write: if familyMember(); }
+
+    // ── Japan trip ledger — separate app, left exactly as it was. ───────────
+    // NOTE: this rule still expires; that app stops working on 2026-12-30.
+    match /expenses/{doc} {
+      allow read, write: if request.time < timestamp.date(2026, 12, 30);
+    }
+  }
+}

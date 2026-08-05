@@ -234,18 +234,23 @@ Break one of these and something quietly goes wrong that no screen shows.
 
 ### Blocking, before real tenant data
 
-**The Firestore rules are still the test-mode default** —
-`allow read, write: if request.time < timestamp.date(2026, 12, 30)`. That is
-unrestricted read *and write* by anyone until that date, then everything
-denied including reads.
+**The rules are now written but not yet applied.** The complete ruleset —
+including the four lease collections, private on read as well as write — lives
+in `CCC/House/firestore.rules` (and is reproduced in `DEVELOPMENT.md` §"Rules
+to paste in the Firebase console"). It is version-controlled but **not
+deployed**: this project has no Firebase CLI, so applying it is a manual paste
+into the Firebase console → Firestore Database → Rules → Publish.
 
-The user deferred this deliberately ("no one else is using the live app other
-than me"), which is fine for build data — but lease mode stores a third
-party's name, phone number and arrears history, and the rules enforce none of
-the privacy the code assumes. **Apply the rules before the first real tenant
-record is written.** The block to paste is in `DEVELOPMENT.md` §"Rules to
-paste in the Firebase console"; replace the placeholder emails with the real
-accounts.
+Until that paste happens, the *live* rules are still the test-mode default —
+`allow read, write: if request.time < timestamp.date(2026, 12, 30)`,
+unrestricted read *and write* by anyone until that date, then everything
+denied including reads. The user deferred applying this deliberately ("no one
+else is using the live app other than me"), which is fine for build data — but
+lease mode stores a third party's name, phone number and arrears history, and
+the live rules enforce none of the privacy the code assumes. **Apply the rules
+before the first real tenant record is written**, and replace the two
+placeholder emails in `familyMember()` with the real Firebase Auth accounts
+first.
 
 Separately: the `expenses` collection belongs to the Japan trip app and still
 carries the 2026-12-30 expiry. That app stops working on that date. Separate

@@ -162,8 +162,16 @@ anyone could claim to be anyone.
 
 ### Rules to paste in the Firebase console
 
-Replace the placeholder emails with the real family accounts, created under
-Authentication → Users.
+The canonical ruleset lives in **`firestore.rules`** at the root of `CCC/House/`.
+It is version-controlled but **not deployed automatically** — there is no
+Firebase CLI in this project. To apply it: open the Firebase console →
+Firestore Database → Rules, paste the whole file, and Publish. Before pasting,
+replace the two placeholder emails in `familyMember()` with the real accounts
+created under Authentication → Users (the check is on `request.auth.token.email`,
+so it must match the Firebase Auth account exactly — not necessarily a contact
+address).
+
+The ruleset, reproduced here so this doc stands alone:
 
 ```
 rules_version = '2';
@@ -178,15 +186,22 @@ service cloud.firestore {
            ];
     }
 
+    // Build ledger: read-open, write-locked.
     match /house-expenses/{doc} {
       allow read: if true;
       allow write: if familyMember();
     }
-
     match /house-budgets/{doc} {
       allow read: if true;
       allow write: if familyMember();
     }
+
+    // Lease module: fully private. Reads AND writes require a family account,
+    // because these hold a third party's name, phone number and arrears history.
+    match /house-tenants/{doc}     { allow read, write: if familyMember(); }
+    match /house-leases/{doc}      { allow read, write: if familyMember(); }
+    match /house-rent/{doc}        { allow read, write: if familyMember(); }
+    match /house-maintenance/{doc} { allow read, write: if familyMember(); }
 
     // Japan trip ledger — separate app, left exactly as it was.
     // NOTE: this rule still expires and that app stops working on 2026-12-30.
@@ -200,8 +215,16 @@ service cloud.firestore {
 The previous rule was the test-mode default, `allow read, write: if
 request.time < timestamp.date(2026, 12, 30)` — unrestricted read and write by
 anyone until that date, then **everything denied, reads included**. The house
-collections above no longer have an expiry. The `expenses` block does; that
-belongs to the Japan trip app and is a separate decision.
+collections above no longer have an expiry, and the four lease collections are
+**private on read as well as write** — matching the `authedFetchAll()` read
+path the code already uses, which the earlier version of this block left
+unenforced. The `expenses` block still expires; that belongs to the Japan trip
+app and is a separate decision.
+
+**Reminder: writing the rules is not applying them.** Until the block above is
+pasted and published in the console, lease documents fall through to the
+test-mode default and are world-readable and world-writable the moment they
+exist. Apply them before the first real tenant record is written.
 
 ## Per-phase budgets
 
