@@ -4,7 +4,39 @@
 > argued about before code is written, because several decisions are hard to
 > reverse once there is data in Firestore.
 >
+> **Scope decisions are settled** (§0). The model below is the simplified one
+> that follows from them, not the general case.
+>
 > Companion to `DEVELOPMENT.md`, which describes the app as it actually is.
+
+---
+
+## 0. Settled decisions
+
+| # | Question | Answer | What it removes |
+|---|---|---|---|
+| 1 | One unit or several? | **One** — the whole property | The `house-units` collection, a tab, and unit selectors everywhere |
+| 2 | Simultaneous tenancies? | **No** — one at a time | Concurrency in every view; "current tenancy" is a single thing |
+| 3 | Escalation convention? | **Renegotiated at renewal** | The whole escalation engine; rent is flat within a lease |
+| 4 | Deposit custody | Options **Self / Runa** | — (see the flag below) |
+| 5 | External read access? | **No** | Any public-read design; lease mode requires sign-in |
+| 6 | Store identity references? | **Optional** | Nothing, but the field stays empty by default |
+
+### ⚠ One thing to confirm: Self / Runa vs Self / Reemon
+
+Expense accounts throughout the app are **`Self` / `Reemon`** (`ACCT_CLR`, the
+Accounts hero card, every per-account total). Answer 4 specifies **`Self` /
+`Runa`** for deposit custody.
+
+Taken at face value that is a second, different account vocabulary living
+alongside the first. That is workable — a deposit is a liability held by
+whoever actually holds it, and it need not be one of the expense accounts —
+but two similar-looking pairs is exactly the sort of thing that causes
+reconciliation pain in three years.
+
+**Built as specified: `DEPOSIT_HOLDERS = ['Self','Runa']`, kept deliberately
+separate from `ACCT_CLR`.** Say the word if it should have been `Reemon` and
+it is a one-line change before any data exists.
 
 ---
 
@@ -19,192 +51,159 @@ difference should drive the architecture rather than be papered over.
 | Primary object | A **transaction** that happened | A **period** with an expectation that may or may not be settled |
 | Time | Finite, ~2 years, ends | Open-ended, recurring monthly, forever |
 | Success measure | Spend against a fixed budget | Received against expected, and yield against build cost |
-| Counterparty | Vendors you pay once or twice | Tenants you have a continuing relationship with |
-| Data volume | 88 rows and stopping | ~12 rows/year/unit, growing indefinitely |
+| Counterparty | Vendors you pay once or twice | A tenant you have a continuing relationship with |
+| Data volume | 88 rows and stopping | ~12 events/year, growing indefinitely |
 
-The trap is modelling rent as an expense row with a negative sign. Do that and
-every existing total silently breaks, the Phases tab starts reporting
-nonsense, and `contractSpend()` becomes a lie. **Rent must never enter
-`house-expenses`.**
+**Trap 1: modelling rent as an expense row with a negative sign.** Every
+existing total silently breaks, the Phases tab reports nonsense, and
+`contractSpend()` becomes a lie. **Rent must never enter `house-expenses`.**
 
-The second trap is subtler: rent is not fundamentally a list of receipts, it
-is a *schedule of obligations*, most of which are met and therefore boring.
-The interesting states are the ones where expectation and reality diverge —
-late, partial, missing. A design that only stores receipts cannot show you
-what is missing, which is the only thing you actually need to look at.
+**Trap 2: storing only receipts.** Rent is not fundamentally a list of
+payments, it is a *schedule of obligations*, most of which are met and
+therefore boring. The interesting states are where expectation and reality
+diverge — late, partial, missing. A design that only records what arrived
+cannot show you what didn't, which is the only thing you actually need.
 
 ---
 
-## 2. Recommended navigation architecture
+## 2. Navigation
 
-Three options considered.
-
-### Option A — Mode switch (recommended)
-
-One app, two modes. A switcher in the header swaps the entire tab bar.
+**Decision: a mode switch in the header swaps the entire tab bar.** Mode
+persists in `localStorage` under `hl-mode`.
 
 ```
 Build mode    │ Entries  Phases  Zones  Vendors  Timeline
-Lease mode    │ Rent  Units  Tenants  Repairs  Reports
+Lease mode    │ Rent  Tenancy  Repairs  Reports
 ```
 
-- **For**: each mode keeps a full 5-tab bar at a comfortable 78px; auth,
-  theming, formatting, sync, the change probe and the smoke harness are all
-  reused rather than duplicated; still one deployable file, which is the
-  app's founding constraint.
-- **Against**: mode is hidden state. Mitigate with a persistent visual
-  difference — mode name in the header, and remember the last mode in
-  `localStorage` under `hl-mode`.
+Four lease tabs, not five, because §0.1 removed Units. At 390px that is ~97px
+per tab — more comfortable than the build side.
 
-### Option B — A sixth tab
+Alternatives considered and rejected:
 
-- **Against**: six tabs at 390px is 65px each, and lease mode needs four or
-  five screens of its own, so you end up with nested navigation inside a tab.
-  Worse on a phone than a mode switch.
-
-### Option C — A separate page (`house-lease.html`)
-
-- **For**: total isolation; the construction app never grows.
-- **Against**: two builds, duplicated auth/theme/format/sync code, a link to
-  maintain between them, and the smoke test doubles.
-- **Becomes right if**: lease mode ever needs a tenant-facing view. That
-  requires per-tenant auth and a completely different security posture, at
-  which point it is genuinely a different application. Revisit then.
-
-**Recommendation: Option A.** It matches "effectively a separate module"
-without paying to duplicate the plumbing. The mode switch is a `useState`
-plus a swapped tab array; if it later needs to be Option C, the components
-lift out cleanly because none of them touch `house-expenses`.
+- **A sixth tab on one bar.** Six tabs at 390px is 65px each, and lease mode
+  needs four screens of its own, so it becomes nested navigation inside a tab.
+  Worse on a phone.
+- **A separate page (`house-lease.html`).** Total isolation, but two builds,
+  duplicated auth/theme/format/sync code, and a doubled smoke test.
+  **Becomes right if** a tenant-facing view is ever wanted — that needs
+  per-tenant auth and a different security posture, i.e. a different
+  application. Revisit then; the components lift out cleanly because none of
+  them touch `house-expenses`.
 
 ---
 
-## 3. The privacy problem — decide this first
+## 3. Privacy — settled, and it has a prerequisite
 
-The house ledger is deliberately **world-readable**: `allow read: if true`.
-That is a defensible choice for construction spend on your own house.
-
-It is not defensible for tenant data. Lease mode introduces:
-
-- Tenant names, phone numbers, email addresses
-- Identity references (Aadhaar/PAN), if recorded
-- Lease terms, rent amounts, arrears history
-- Emergency contacts
-
-Publishing a tenant's phone number and their arrears history to anyone who
-opens the URL is a real harm to a third party who never agreed to it.
-
-**Recommendation: lease collections require authentication to read as well as
-write.** Cost: the lease side does not work signed out. Nobody needs to browse
-your tenancies, so this costs nothing real.
+Answer 5 is *no external read access*, which settles it:
 
 ```
-// Additions to the rules in DEVELOPMENT.md
-match /house-units/{doc}       { allow read, write: if familyMember(); }
 match /house-tenants/{doc}     { allow read, write: if familyMember(); }
 match /house-leases/{doc}      { allow read, write: if familyMember(); }
 match /house-rent/{doc}        { allow read, write: if familyMember(); }
 match /house-maintenance/{doc} { allow read, write: if familyMember(); }
 ```
 
-Consequences to design around:
+Unlike `house-expenses`, these are **not** publicly readable. Lease mode shows
+nothing at all signed out; entering it prompts sign-in, reusing the existing
+guard that parks the action and resumes it after.
 
-- Entering lease mode signed out must prompt sign-in, reusing the existing
-  guard that parks the action and resumes it.
-- `fetchAll` currently sends no `Authorization` header on reads. Lease reads
-  need an authed variant. Small change, but it must not accidentally start
-  sending tokens on expense reads.
-- **This makes the deferred rules decision live again.** Right now nothing
-  enforces any of it. Lease mode is the point at which "only I use it" stops
-  being a sufficient answer, because the data stops being only about you.
+**Prerequisite, stated plainly.** The Firestore rules are currently the
+test-mode default and enforce none of this. That was a reasonable call while
+the data was your own construction spend. It stops being reasonable here: a
+tenant's name, phone number and arrears history belong to someone who never
+agreed to publish them, and until the rules are applied those documents are
+world-readable and world-writable the moment they exist.
 
-Consider also whether to record identity references at all. A lease agreement
-you keep on paper may be the better place for Aadhaar numbers than a Firestore
-collection behind a single password.
+**The rules must be in place before the first tenant record is written.**
+Not before lease mode is coded — before it holds real data.
+
+On answer 6: `idRef` exists and stays empty unless deliberately filled. Worth
+considering whether a paper agreement in a drawer is a better home for an
+Aadhaar number than a Firestore collection behind one password.
 
 ---
 
 ## 4. Data model
 
-Five new collections. All money in INR, all dates `YYYY-MM-DD`, matching the
-existing conventions.
+Four collections. All money INR, all dates `YYYY-MM-DD`, matching existing
+conventions.
 
-### `house-units` — what can be let
-
-A thin layer so a floor can later be split without a migration. Seed with one
-unit, "Whole House", if you let the whole property.
-
-| Field | Type | Notes |
-|---|---|---|
-| `name` | string | "Whole House", "Ground Floor" |
-| `zone` | string | Member of the existing `ZONES`, so repairs can tag expenses correctly |
-| `description` | string | |
-| `bedrooms`, `area` | number | Optional, for reference |
-| `status` | string | Vacant / Occupied / Unavailable — **derived** from leases, not hand-set |
-| `notes` | string | |
-
-### `house-tenants` — who
+### `house-tenants`
 
 | Field | Type | Notes |
 |---|---|---|
 | `name` | string | |
-| `phone`, `email` | string | PII — see §3 |
-| `idRef` | string | Optional. Consider omitting entirely |
+| `phone`, `email` | string | Private — §3 |
+| `idRef` | string | Optional, empty by default |
 | `emergencyContact` | string | |
 | `notes` | string | |
-| `status` | string | Prospective / Current / Past |
+| `status` | string | Prospective / Current / Past — **derived** from lease dates |
 
-### `house-leases` — the agreement
+### `house-leases` — one agreement, one term, flat rent
+
+A renewal is a **new lease document**, not an edit. That is what "renegotiated
+at renewal" means structurally, and it gives you a true tenancy history for
+free: three renewals is three documents with three rents and three date
+ranges.
 
 | Field | Type | Notes |
 |---|---|---|
-| `unitId` | string | |
-| `tenantIds` | array | Plural from day one; joint tenancies are common |
+| `tenantIds` | array | Plural for joint tenancies of the *same* letting |
 | `startDate`, `endDate` | string | |
-| `rentAmount` | number | Base rent at start |
+| `rentAmount` | number | Flat for the whole term — no escalation fields |
 | `rentDueDay` | number | 1–28. Never 29–31: February |
 | `depositAmount` | number | |
-| `escalationPct`, `escalationMonths` | number | e.g. 5% every 11 months |
+| `depositHolder` | string | `Self` / `Runa` — see §0 flag |
 | `noticePeriodDays` | number | |
 | `status` | string | Draft / Active / Ending / Ended / **Terminated** |
 | `agreementRef`, `notes` | string | |
+| `previousLeaseId` | string | Set when created as a renewal, so history chains |
 
-`status` is **derived from dates** except `Draft` and `Terminated`, which are
+`status` is **derived from dates**, except `Draft` and `Terminated` which are
 explicit overrides. A status you have to remember to update is a status that
-will be wrong.
+will be wrong. `Ending` = inside the notice period before `endDate`.
 
-### `house-rent` — receipts, stored sparsely
+**Invariant from §0.2**: at most one lease may be `Active` on any date.
+Creating a lease overlapping an existing active one is refused, with the
+conflict named — not silently allowed.
+
+### `house-rent` — events, stored sparsely
 
 **The important design decision.** One document per *actual event*, not per
-period. The full schedule is computed client-side from the lease; a document
-exists only where something happened — a payment, a waiver, a note.
+period. The schedule is computed client-side from the lease; a document exists
+only where something happened.
 
 | Field | Type | Notes |
 |---|---|---|
 | `leaseId` | string | |
 | `period` | string | `YYYY-MM`, the month the rent is *for* |
-| `expected` | number | Snapshotted, because escalation changes it over time |
+| `expected` | number | Snapshotted, so later edits to the lease don't rewrite history |
 | `received` | number | Supports partial |
 | `receivedDate` | string | |
 | `paymentMode` | string | Reuses the existing `PAYMENT_MODES` |
 | `status` | string | Received / Partial / Waived / Written-off |
 | `notes` | string | |
 
-Why sparse: a fully materialised schedule would be 12 documents per year per
-unit whether or not anything happened, and every one of them would be read on
-every sync. Ten years of a single tenancy is 120 documents to say "yes, paid,
-as expected". Computing the expectation and storing only the exception keeps
-the collection proportional to events rather than to time — which matters on a
-50,000 reads/day quota that this app has already had to engineer around once.
+Why sparse: a materialised schedule is 12 documents a year whether or not
+anything happened, every one read on every sync. Ten years of a quiet tenancy
+is 120 documents saying "yes, paid, as expected". Storing only the event keeps
+the collection proportional to what occurred rather than to elapsed time — the
+read-quota lesson applied before the fact rather than after.
 
-The states with **no document** are the interesting ones: due, or overdue.
+**Periods with no document are the interesting ones**: due, or overdue.
 
-### `house-maintenance` — repairs
+Flat rent (§0.3) makes the computed schedule trivial: for each month from
+`startDate` to `min(endDate, today)`, expect `rentAmount` on `rentDueDay`.
+
+### `house-maintenance`
 
 | Field | Type | Notes |
 |---|---|---|
-| `unitId`, `leaseId` | string | Lease optional — repairs happen when vacant too |
+| `leaseId` | string | Optional — repairs happen when vacant too |
 | `raisedDate`, `raisedBy` | string | Tenant or owner |
-| `category` | string | Plumbing, Electrical, Structural, Appliance, Other |
+| `zone` | string | From the existing `ZONES`, so a created expense is tagged right |
+| `category` | string | Plumbing / Electrical / Structural / Appliance / Other |
 | `description` | string | |
 | `priority` | string | Low / Normal / Urgent |
 | `status` | string | Open / Scheduled / In Progress / Done / Declined |
@@ -217,60 +216,61 @@ The states with **no document** are the interesting ones: due, or overdue.
 
 ## 5. Where the two modes touch
 
-Deliberately narrow. Four seams, all one-directional except the last.
+Deliberately narrow. Four seams, one bidirectional.
 
-1. **Repairs create expenses.** "Record cost" on a maintenance item creates a
-   `house-expenses` entry pre-tagged phase `Maintenance`, zone from the unit,
-   vendor from the repair, and writes the new expense id back to
-   `expenseId`. One action, two records, cross-referenced.
+1. **Repairs create expenses.** "Record cost" writes a `house-expenses` entry
+   pre-tagged phase `Maintenance`, zone from the repair, vendor from the
+   repair, and stores the new id back in `expenseId`. One action, two
+   records, cross-referenced.
 2. **Leasing costs are already expenses.** Agent fees, legal, tenant
-   improvements: phase `Leasing`, category `Leasing`. The subcategories
-   already exist and are unused. No new mechanism needed.
+   improvements: phase `Leasing`, category `Leasing`. Those subcategories
+   already exist and are unused. No new mechanism.
 3. **Vendor names are shared.** The repair vendor datalist reads from
    `house-expenses`, so the plumber you already paid is one tap away.
-4. **Reports read both.** The only place the two modes are summed together,
-   and it must be explicit about direction — see §6, L4.
+4. **Reports read both.** The only place the modes are summed together, and it
+   must be explicit about direction — §6, L4.
 
-Everything else stays separate. In particular the hero cards, `CONTRACT_BUDGET`
-and every existing total remain untouched by lease data.
+Untouched by lease data: hero cards, `CONTRACT_BUDGET`, phase budgets, and
+every existing total.
 
 ---
 
 ## 6. Sub-features, in build order
 
 ### L0 — Foundations
-*Nothing works without these; they are also the riskiest to change later.*
 
 | | Feature | Notes |
 |---|---|---|
-| L0.1 | Mode switch, persisted, visually distinct | `hl-mode` in localStorage |
-| L0.2 | `house-units` + seed "Whole House" | Empty state must offer to create it |
-| L0.3 | Authed reads for lease collections | Must not leak tokens onto expense reads |
-| L0.4 | Lease-mode sync: load on mode entry, reuse the change probe | Do **not** add a second poll loop |
-| L0.5 | Empty states that teach | A brand-new lease mode is entirely empty; it must explain the first step, not show five blank tabs |
+| L0.1 | Mode switch, persisted, visually distinct | `hl-mode` |
+| L0.2 | Authed reads for lease collections | Must not start sending tokens on expense reads |
+| L0.3 | Lease mode requires sign-in; prompts and resumes | Reuses the existing guard |
+| L0.4 | Lease data loads on mode entry, joins the existing change probe | **No second poll loop** |
+| L0.5 | Empty states that teach | A new lease mode is entirely empty; it must explain the first step, not show four blank tabs |
 
-### L1 — Lease lifecycle
+### L1 — Tenancy
 
 | | Feature |
 |---|---|
-| L1.1 | Unit list + detail: status, current lease, tenancy history |
-| L1.2 | Tenant records, create/edit, with the PII decision from §3 applied |
-| L1.3 | Lease create/edit: dates, rent, due day, deposit, escalation, notice |
-| L1.4 | Derived lease status, with `Ending soon` when inside the notice period |
-| L1.5 | Lease detail: terms, rent ledger, deposit position, repair history |
+| L1.1 | Tenant records, create/edit; `idRef` optional and empty by default |
+| L1.2 | Lease create/edit: dates, rent, due day, deposit + holder, notice |
+| L1.3 | Overlap refusal — at most one Active lease, conflict named |
+| L1.4 | Derived lease and tenant status, incl. `Ending` inside the notice period |
+| L1.5 | **Renew** action: creates a new lease pre-filled from the old one, new rent, `previousLeaseId` chained |
+| L1.6 | Tenancy tab: current lease, tenant, deposit position, history chain |
 
 ### L2 — Rent (the point of the module)
 
 | | Feature | Notes |
 |---|---|---|
-| L2.1 | Computed rent schedule from lease terms | Sparse storage, §4 |
-| L2.2 | Record a receipt against a period, partial supported | |
+| L2.1 | Computed schedule from lease terms | Trivial with flat rent |
+| L2.2 | Record a receipt against a period; partial supported | |
 | L2.3 | Period status: Due / Received / Partial / Late / Waived | Late = past `rentDueDay` with nothing recorded |
-| L2.4 | **"This month" dashboard** — due, received, outstanding | The single most-checked number, mirroring U13 |
-| L2.5 | Arrears view, cumulative per lease | |
-| L2.6 | Escalation applied per period | The schedule must show the *right* rent for each month, not today's rent for all of them |
-| L2.7 | CSV export of receipts | Mirrors U9; reuse `toCSV` |
-| L2.8 | Deposit ledger: held, deductions, refunded, balance | Deductions link to repair costs |
+| L2.4 | **"This month"** — due, received, outstanding | The most-checked number, mirroring U13 |
+| L2.5 | Arrears: cumulative outstanding, oldest first | |
+| L2.6 | CSV export of receipts | Reuse `toCSV` |
+| L2.7 | Deposit ledger: held, deductions, refunded, balance | Deductions link to repair costs |
+
+*(The escalation sub-feature that was here is gone — §0.3.)*
 
 ### L3 — Repairs
 
@@ -280,95 +280,76 @@ and every existing total remain untouched by lease data.
 | L3.2 | Status workflow and priority |
 | L3.3 | Vendor from the existing expense vendor list |
 | L3.4 | Record cost → creates the linked expense entry (§5.1) |
-| L3.5 | Per-unit repair history and lifetime cost |
+| L3.5 | Repair history and lifetime cost |
 
-### L4 — Reports, where the two modes finally meet
+### L4 — Reports
 
 | | Feature | Notes |
 |---|---|---|
 | L4.1 | **Yield**: rent received against total build cost | The number that says whether the project worked |
 | L4.2 | Net position per financial year | Rent in, lease-related expenses out |
 | L4.3 | Occupancy over time | Vacancy is the largest hidden cost |
-| L4.4 | Tax-oriented export, **Apr–Mar** financial year | India convention, not calendar year |
+| L4.4 | Tax export, **Apr–Mar** financial year | India convention, not calendar |
 
 ### L5 — Later, or never
 
 | | Feature | Blocker |
 |---|---|---|
-| L5.1 | Rent-due reminders | Needs push; a static page cannot. A badge on the tab is the honest version |
+| L5.1 | Rent-due reminders | Needs push; a static page cannot. A tab badge is the honest version |
 | L5.2 | Agreement/receipt documents | Needs Firebase Storage — same blocker as U30 |
-| L5.3 | Tenant-facing view | Needs per-tenant auth. This is Option C territory |
+| L5.3 | Tenant-facing view | Needs per-tenant auth; separate-page territory |
 
 ---
 
 ## 7. UX principles specific to this mode
 
-Construction mode's design principle was **entry speed** — a payment logged in
-seconds, a few times a week, for years. Lease mode's is different.
+Construction mode's principle was **entry speed** — a payment logged in
+seconds, weekly, for years. Lease mode's is different.
 
 **The default view answers "is anything wrong?"** Rent that arrived on time is
-not information. The Rent tab should open on the current month showing what is
+not information. The Rent tab opens on the current month showing what is
 outstanding, with everything settled collapsed behind a count. If nothing is
 wrong the screen should be nearly empty and say so.
 
-**Never make the user maintain state the data already implies.** Lease status,
-unit occupancy and period status are all derivable. Anything hand-set will
-drift.
+**Never make the user maintain state the data implies.** Lease status, tenant
+status and period status are all derivable. Anything hand-set will drift.
 
-**Money direction must be unmistakable.** Rent received and repair costs
-appear in the same module and point opposite ways. Use the existing green/red
-variance vocabulary from the budget bars, never a bare number that could be
-read either way.
+**Money direction must be unmistakable.** Rent received and repair costs sit in
+the same module pointing opposite ways. Use the existing green/red variance
+vocabulary from the budget bars, never a bare number readable either way.
 
 **Reuse the vocabulary already learned.** Swipe to edit and delete, the undo
-toast, sticky Save, the amount echo, the duplicate warning, `fmtFull` in
-lists and `fmtAmt` in aggregates. Lease mode should feel like the same app,
-not a second one bolted on.
+toast, sticky Save, the amount echo, the duplicate warning, `fmtFull` in lists
+and `fmtAmt` in aggregates. Lease mode should feel like the same app.
 
 ---
 
 ## 8. Rough sizing
 
-Assumes the existing conventions and the smoke test being extended in step.
-
 | Tier | Size | Notes |
 |---|---|---|
-| L0 | ~1 session | Mostly plumbing and the auth-read change |
-| L1 | ~1 session | Three CRUD surfaces, familiar shapes |
-| L2 | ~1–2 sessions | Schedule computation and escalation carry the real complexity |
+| L0 | ~1 session | Plumbing and the authed-read change |
+| L1 | ~1 session | Two CRUD surfaces plus the renewal chain |
+| L2 | ~1 session | Simpler than first estimated — flat rent removed the hard part |
 | L3 | ~1 session | The expense link needs care |
-| L4 | ~1 session | Arithmetic is easy; presenting direction clearly is not |
+| L4 | ~1 session | Arithmetic easy; presenting direction clearly is not |
 
-The file is currently ~141KB compiled. Lease mode plausibly adds 40–60%.
-If it passes roughly 220KB, revisit Option C — the founding constraint was a
-page that loads fast on a phone, and that constraint outranks tidiness.
+Down from the pre-decision estimate: one collection, one tab and the
+escalation engine are gone.
 
----
-
-## 9. Decisions needed before any code
-
-These change the model, not just the screens. Guessing them means rebuilding.
-
-1. **One unit or several?** Whole house to one tenant, or floors let
-   separately? Determines whether units are a real concept or ceremony.
-2. **Multiple simultaneous tenancies?** Affects whether the Rent tab needs a
-   unit selector at every level.
-3. **Escalation convention** — a percentage every N months, a fixed step, or
-   renegotiated each renewal?
-4. **Deposit custody** — which account (`Self` / `Reemon`) holds it, and does
-   it show in the existing account split? It is a liability, not income, and
-   showing it as either would be wrong.
-5. **Does anyone outside the family need read access?** Drives §3, and
-   possibly Option C.
-6. **Do you want identity references stored at all?** See §3.
+The compiled file is ~141KB. Lease mode plausibly adds 30–50%. Past ~220KB,
+revisit the separate-page option — "loads fast on a phone" outranks tidiness.
 
 ---
 
-## 10. What this plan deliberately does not do
+## 9. What this plan deliberately does not do
 
 - **No rent in `house-expenses`.** Ever.
-- **No second poll loop.** Lease data joins the existing change-probe sync or
-  loads once per mode entry.
+- **No second poll loop.** Lease data joins the existing change probe.
 - **No new dependencies.** Same no-bundler, no-runtime-deps constraint.
-- **No hand-maintained status fields** where the data implies the answer.
-- **No tenant PII on a world-readable path.**
+- **No hand-maintained status** where the data implies the answer.
+- **No tenant PII on a world-readable path** — and no tenant data at all until
+  the rules are applied (§3).
+- **No units, no escalation, no concurrent tenancies** — §0. If any of those
+  change later, they are additive: a `unitId` defaulting to the single
+  property, and a renewal that happens to raise the rent.
