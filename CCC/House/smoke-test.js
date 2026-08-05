@@ -194,8 +194,14 @@ async function run() {
   await step('search cleared', () => page.locator('.search-bar input').first().fill(''));
   await step('CSV export', async () => {
     const dl = page.waitForEvent('download', { timeout: 5000 });
-    await page.locator('.export-btn').click();
+    await page.locator('.export-btn', { hasText: 'CSV' }).click();
     await dl;
+  });
+  await step('PDF report export', async () => {
+    const dl = page.waitForEvent('download', { timeout: 5000 });
+    await page.locator('.export-btn', { hasText: 'PDF' }).click();
+    const f = await dl;
+    if (!/^house-report-.*\.html$/.test(f.suggestedFilename())) throw new Error('bad filename ' + f.suggestedFilename());
   });
 
   // ── swipe both ways: the direction that shipped broken had no coverage

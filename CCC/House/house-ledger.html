@@ -1852,6 +1852,38 @@ function annualStatementDoc(y, fyRow, lineRows) {
   return statementDoc('Annual Statement', fyLabel(y) + ' · Apr–Mar', summary + table);
 }
 
+// A build-mode expense report: the same set the CSV exports (the current
+// filtered/sorted view), but as a formatted document — totals, the breakdowns
+// by account/phase/category/vendor/payment mode, and the itemised rows.
+function expenseReportDoc(entries, subtitle) {
+  const total = entries.reduce((s, e) => s + e.amount, 0),
+    count = entries.length;
+  const dates = entries.map(e => e.date).filter(Boolean).sort();
+  const range = dates.length ? fmtDate(dates[0]) + ' – ' + fmtDate(dates[dates.length - 1]) : '—';
+  const cash = entries.reduce((s, e) => isCash(e.paymentMode) ? s + e.amount : s, 0);
+  const cashPct = total > 0 ? Math.round(cash / total * 100) : 0;
+  // Group by a field and sort biggest first. Vendor groups by `vendor`, never
+  // `transferTo` — several payments to one mason ran through intermediaries.
+  const grp = key => {
+    const m = {};
+    entries.forEach(e => {
+      const k = e[key] || '—';
+      m[k] = (m[k] || 0) + e.amount;
+    });
+    return Object.entries(m).sort((a, b) => b[1] - a[1]);
+  };
+  const meta = '<table class="st-meta">' + '<tr><td>Entries</td><td>' + count + '</td></tr>' + '<tr><td>Date range</td><td>' + esc(range) + '</td></tr>' + '<tr><td>Cash vs banked</td><td>' + cashPct + '% cash · ' + (100 - cashPct) + '% banked</td></tr>' + '<tr><td><strong>Total</strong></td><td><strong>' + fmtFull(total) + '</strong></td></tr>' + '</table>';
+  const section = (label, col, pairs, limit) => {
+    const rows = limit ? pairs.slice(0, limit) : pairs;
+    if (!rows.length) return '';
+    return '<div class="st-sec">' + esc(label) + (limit && pairs.length > limit ? ' · top ' + limit : '') + '</div>' + '<table class="grid"><thead><tr><th>' + esc(col) + '</th><th>Amount</th><th>Share</th></tr></thead><tbody>' + rows.map(([k, v]) => '<tr><td>' + esc(k) + '</td><td>' + fmtFull(v) + '</td><td>' + (total > 0 ? Math.round(v / total * 100) : 0) + '%</td></tr>').join('') + '</tbody></table>';
+  };
+  const lines = [...entries].sort((a, b) => (b.date || '').localeCompare(a.date || '')).map(e => '<tr>' + '<td>' + esc(fmtDate(e.date)) + '</td>' + '<td>' + esc(e.vendor || '—') + (e.transferTo && e.transferTo !== e.vendor ? ' <span class="mut">↳ ' + esc(e.transferTo) + '</span>' : '') + '</td>' + '<td>' + esc(e.phase || '—') + '</td>' + '<td>' + esc(e.account || '—') + '</td>' + '<td>' + fmtFull(e.amount) + '</td></tr>').join('');
+  const lineTable = count ? '<div class="st-sec">Entries (' + count + ')</div>' + '<table class="grid"><thead><tr><th>Date</th><th>Vendor</th><th>Phase</th><th>Account</th><th>Amount</th></tr></thead><tbody>' + lines + '</tbody></table>' : '<p class="note">No entries in this view.</p>';
+  const body = meta + section('By account', 'Account', grp('account')) + section('By phase', 'Phase', grp('phase')) + section('By category', 'Category', grp('category')) + section('Top vendors', 'Vendor', grp('vendor'), 10) + section('By payment mode', 'Mode', grp('paymentMode')) + lineTable;
+  return statementDoc('Expense Report', subtitle || 'All entries', body);
+}
+
 // ─── JS-HEADER-COMPONENT ───
 function Header({
   syncStatus,
@@ -2627,9 +2659,9 @@ function EntriesTab({
   })) : [];
   const filterLabel = filterChips.map(c => c.text).join(' · ');
   const crumb = [filterLabel, statusSel.join('/'), search && `"${search}"`].filter(Boolean).join(' · ');
-  const exportName = () => {
+  const slugName = ext => {
     const slug = (crumb || 'all').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40);
-    return `house-ledger-${slug}-${new Date().toISOString().slice(0, 10)}.csv`;
+    return `house-${ext === 'csv' ? 'ledger' : 'report'}-${slug}-${new Date().toISOString().slice(0, 10)}.${ext}`;
   };
   return /*#__PURE__*/React.createElement("div", {
     className: "entry-list"
@@ -2652,8 +2684,12 @@ function EntriesTab({
   }, "Amount", arrow('amount'))), /*#__PURE__*/React.createElement("button", {
     className: "export-btn",
     disabled: filtered.length === 0,
-    onClick: () => downloadCSV(filtered, exportName())
-  }, "\u2193 CSV (", filtered.length, ")")), openStatuses.length > 0 && /*#__PURE__*/React.createElement("div", {
+    onClick: () => downloadCSV(filtered, slugName('csv'))
+  }, "\u2193 CSV (", filtered.length, ")"), /*#__PURE__*/React.createElement("button", {
+    className: "export-btn",
+    disabled: filtered.length === 0,
+    onClick: () => downloadStatement(slugName('html'), expenseReportDoc(filtered, crumb || 'All entries'))
+  }, "\u21A7 PDF")), openStatuses.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "status-filters"
   }, openStatuses.map(s => {
     const sc = STATUS_CLR[s] || {};
