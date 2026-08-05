@@ -201,7 +201,20 @@ async function run() {
   // ── swipe both ways: the direction that shipped broken had no coverage
   await step('swipe right → edit form', () => swipe(100, 240));
   await step('close edit form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
-  await step('swipe left → undo toast', () => swipe(260, 110));
+  await step('swipe left → reveals Delete button', async () => {
+    await swipe(260, 110);
+    await page.locator('.swipe-underlay.left.revealed').first().waitFor({ timeout: 3000 });
+  });
+  await step('tap outside puts the button away', async () => {
+    await page.locator('.search-bar input').first().click();
+    await page.locator('.swipe-underlay.left.revealed').first().waitFor({ state: 'detached', timeout: 3000 });
+  });
+  await step('re-reveal and tap Delete → undo toast', async () => {
+    await swipe(260, 110);
+    await page.locator('.swipe-underlay.left.revealed').first().waitFor({ timeout: 3000 });
+    await page.locator('.row-del-btn').first().click();
+    await page.locator('.ut-undo').waitFor({ timeout: 3000 });
+  });
   await step('undo the delete', () => page.locator('.ut-undo').click());
   await step('sub-threshold swipe is inert', () => swipe(200, 175));
 

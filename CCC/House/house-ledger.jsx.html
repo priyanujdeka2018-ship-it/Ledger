@@ -125,6 +125,8 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .subtotal-bar .amt{font-family:'Playfair Display',serif;font-weight:700;color:var(--accent);font-size:1rem}
 .entry-row{background:var(--card);border-radius:16px;border:1px solid var(--border);margin-bottom:8px;overflow:hidden;position:relative;touch-action:pan-y}
 .entry-content{padding:12px 14px;position:relative;z-index:2;background:var(--card);transition:transform .15s}
+/* Revealed (two-step delete): the row rests offset so the Delete button shows. */
+.entry-content.revealed{transform:translateX(-80px)}
 .entry-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .entry-vendor{font-weight:700;font-size:.88rem;color:var(--t1);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .via-glyph{color:var(--lav);font-weight:800;margin-right:4px}
@@ -142,7 +144,10 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 /* Opacity tracks swipe distance and the label changes at the commit
    threshold, so 60px is felt rather than guessed. */
 .swipe-underlay{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 18px;font-weight:700;font-size:.8rem;color:#fff;z-index:1;opacity:0}
-.swipe-underlay.left{right:0;background:#ef4444;border-radius:0 16px 16px 0}
+.swipe-underlay.left{right:0;padding:0;justify-content:flex-end;background:#ef4444;border-radius:0 16px 16px 0;pointer-events:none}
+/* Once revealed the delete strip stays lit and is the only thing tappable. */
+.swipe-underlay.left.revealed{opacity:1;pointer-events:auto}
+.row-del-btn{width:80px;height:100%;border:none;background:transparent;color:#fff;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px}
 .swipe-underlay.right{left:0;background:#3b82f6;border-radius:16px 0 0 16px}
 .swipe-tip{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:7px 12px;margin-bottom:8px;font-size:.7rem;color:var(--t2);font-weight:600}
 .swipe-tip button{background:none;border:none;color:var(--t3);font-size:.85rem;font-weight:700;cursor:pointer;padding:0 2px;line-height:1}
@@ -1237,30 +1242,63 @@ function SubtotalBar({label,entries}){
 // ─── JS-ENTRY-ROW ───
 function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
   const ref=useRef(null);const startX=useRef(0);const dx=useRef(0);const swiped=useRef(false);
-  const leftRef=useRef(null);const rightRef=useRef(null);
+  const leftRef=useRef(null);const rightRef=useRef(null);const rowRef=useRef(null);
+  // Delete is a TWO-step action now: a left-swipe REVEALS a Delete button that
+  // must then be tapped. A stray swipe can no longer delete a row — it only
+  // uncovers the button, and a tap anywhere else puts it away. The undo toast
+  // still sits behind the eventual delete as a second safety net.
+  const [revealed,setRevealed]=useState(false);
+  const revealedRef=useRef(false);
+  const setReveal=v=>{revealedRef.current=v;setRevealed(v);};
   const pc=PHASE_CLR[entry.phase]||{bg:'#f5f5f4',text:'#44403c'};
   const ac=ACCT_CLR[entry.account]||{bg:'#f5f5f4',text:'#44403c'};
   const THRESH=60;
-  // Direct DOM writes rather than state: this runs on every touchmove.
+  // Direct DOM writes rather than state: this runs on every touchmove. The
+  // left (delete) label is static — its button lives in the JSX — so paint
+  // only tracks opacity there; the right (edit) side keeps its live label.
   const paint=d=>{
-    const armed=Math.abs(d)>=THRESH;
-    const show=Math.min(1,Math.abs(d)/THRESH);
-    const [active,idle]=d>0?[rightRef.current,leftRef.current]:[leftRef.current,rightRef.current];
-    if(idle)idle.style.opacity=0;
-    if(active){active.style.opacity=d===0?0:show;active.textContent=armed?(d>0?'✏️ Release to edit':'🗑 Release to delete'):(d>0?'✏️ Edit':'🗑 Delete');}
+    const show=Math.min(1,Math.abs(d)/THRESH),armed=Math.abs(d)>=THRESH;
+    if(d>0){
+      if(leftRef.current)leftRef.current.style.opacity=0;
+      if(rightRef.current){rightRef.current.style.opacity=d===0?0:show;rightRef.current.textContent=armed?'✏️ Release to edit':'✏️ Edit';}
+    }else{
+      if(rightRef.current)rightRef.current.style.opacity=0;
+      if(leftRef.current)leftRef.current.style.opacity=d===0?(revealedRef.current?1:0):show;
+    }
   };
   // Guard the touch list: a touch event without one throws, and one bad
   // event otherwise leaves the row permanently unresponsive.
   const handleStart=e=>{if(!e.touches?.length)return;startX.current=e.touches[0].clientX;dx.current=0;swiped.current=false;};
   const handleMove=e=>{if(!e.touches?.length)return;dx.current=e.touches[0].clientX-startX.current;if(Math.abs(dx.current)>8)swiped.current=true;const el=ref.current;if(el)el.style.transform=`translateX(${Math.max(-80,Math.min(80,dx.current))}px)`;paint(dx.current);};
-  const handleEnd=()=>{const el=ref.current;if(!el)return;const d=dx.current;paint(0);el.style.transform='translateX(0)';if(d<-THRESH)onDelete(entry);else if(d>THRESH)onEdit(entry);};
+  const handleEnd=()=>{
+    const el=ref.current;if(!el)return;const d=dx.current;
+    // Clear the inline styles so the CSS classes control the settled state.
+    el.style.transform='';if(rightRef.current)rightRef.current.style.opacity='';if(leftRef.current)leftRef.current.style.opacity='';
+    if(d>THRESH){setReveal(false);onEdit(entry);}
+    else if(d<-THRESH){setReveal(true);}   // reveal the Delete button — does NOT delete
+  };
   // A swipe also lands as a click; suppress the expand toggle past 8px of travel.
-  const handleClick=()=>{if(swiped.current){swiped.current=false;return;}onToggle(entry.id);};
+  const handleClick=()=>{
+    if(swiped.current){swiped.current=false;return;}
+    if(revealedRef.current){setReveal(false);return;}   // tapping the row puts the button away
+    onToggle(entry.id);
+  };
+  const commitDelete=e=>{e.stopPropagation();setReveal(false);onDelete(entry);};
+  // A tap anywhere outside this row dismisses the revealed button — which also
+  // means revealing another row tucks this one away, so only one shows at once.
+  useEffect(()=>{
+    if(!revealed)return;
+    const away=e=>{if(rowRef.current&&!rowRef.current.contains(e.target))setReveal(false);};
+    document.addEventListener('touchstart',away,true);document.addEventListener('mousedown',away,true);
+    return()=>{document.removeEventListener('touchstart',away,true);document.removeEventListener('mousedown',away,true);};
+  },[revealed]);
   return(
-    <div className="entry-row">
+    <div className="entry-row" ref={rowRef}>
       <div ref={rightRef} className="swipe-underlay right">✏️ Edit</div>
-      <div ref={leftRef} className="swipe-underlay left">🗑 Delete</div>
-      <div ref={ref} className="entry-content" onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd} onClick={handleClick}>
+      <div ref={leftRef} className={`swipe-underlay left ${revealed?'revealed':''}`}>
+        <button type="button" className="row-del-btn" onClick={commitDelete} aria-label={`Delete ${entry.vendor}`}>🗑 Delete</button>
+      </div>
+      <div ref={ref} className={`entry-content ${revealed?'revealed':''}`} onTouchStart={handleStart} onTouchMove={handleMove} onTouchEnd={handleEnd} onClick={handleClick}>
         <div className="entry-top">
           <span className="entry-vendor">
             {/* U24 — the intermediary is real domain information and was
@@ -1380,7 +1418,7 @@ function EntriesTab({exps,activeFilter,onClearFilter,onClearFilterKey,onEdit,onD
       {!auth&&filtered.length>0&&
         <div className="readonly-note"><span>👁 View only</span><button onClick={onSignIn}>sign in to make changes</button></div>}
       {auth&&showTip&&filtered.length>0&&
-        <div className="swipe-tip"><span>Swipe a row → to edit, ← to delete</span><button aria-label="Dismiss tip" onClick={dismissTip}>✕</button></div>}
+        <div className="swipe-tip"><span>Swipe a row → to edit, ← to reveal Delete</span><button aria-label="Dismiss tip" onClick={dismissTip}>✕</button></div>}
       {filtered.length===0&&<div className="empty-state"><div className="icon">📭</div><p>No entries found</p></div>}
       {filtered.map(e=><EntryRow key={e.id} entry={e} isExpanded={expandId===e.id} onToggle={onToggle} onEdit={onEdit} onDelete={onDelete}/>)}
     </div>
