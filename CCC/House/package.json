@@ -5,7 +5,9 @@
   "scripts": {
     "build": "node compile.js",
     "smoke": "node smoke-test.js",
-    "verify": "node compile.js && node smoke-test.js"
+    "verify": "node compile.js && node smoke-test.js",
+    "test": "node tests/run-all.js",
+    "check": "node compile.js && node smoke-test.js && node tests/run-all.js"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",

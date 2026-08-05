@@ -8,9 +8,11 @@ Ledger/CCC/House/
 ├── house-ledger.html       ← GENERATED and DEPLOYED (no Babel)
 ├── compile.js              ← Build script (JSX → React.createElement)
 ├── smoke-test.js           ← Whole-app walk; run before every deploy
+├── tests/                  ← Correctness suites + shared harness
 ├── package.json            ← Babel + React (dev only)
 ├── DEVELOPMENT.md          ← This file
-└── LEASE_MODE_PLAN.md      ← Design doc for the unbuilt lease module
+├── LEASE_MODE_PLAN.md      ← Lease module design and scope decisions
+└── HANDOFF.md              ← Session handoff: state, open work, traps
 ```
 
 Both files sit in the same directory. `house-ledger.html` is what GitHub
@@ -30,8 +32,8 @@ npm install
 ```bash
 # 1. Edit house-ledger.jsx.html
 
-# 2. Compile and smoke-test in one go
-npm run verify
+# 2. Compile, smoke-test and run the correctness suites
+npm run check          # or: npm run verify (compile + smoke only)
 
 # 3. Commit both files together
 git add house-ledger.jsx.html house-ledger.html
@@ -416,10 +418,30 @@ left threw during render, React unmounted the whole tree, and a blank page
 reached production. Every feature had its own test; nothing exercised the app
 as a whole. The smoke test is deliberately shallow and wide: it does not check
 that features are *correct*, only that every screen renders and every control
-can be operated. 65 steps, about 40 seconds.
+can be operated. 107 steps, about 40 seconds.
 
 It fails fast — once the root empties it reports the remaining steps as
 skipped rather than waiting out a timeout on each.
+
+### The correctness suites
+
+`npm test` runs everything in `tests/` — narrow and deep, where the smoke test
+is shallow and wide. 113 assertions across four suites.
+
+| Suite | Guards |
+|---|---|
+| `rent.test.js` | Sparse schedule (3 documents → 8 months), Due/Late boundaries, overpayment, waiver clearing stale fields, deterministic upsert ids, deposit ledger, CSV |
+| `repairs.test.js` | Priority sort, the opt-in expense seam, `Miscellaneous`/`Maintenance` tagging, save-then-patch ordering, delete leaving the expense alone |
+| `reports.test.js` | Apr–Mar year boundaries, capital vs running cost, per-year net, seven occupancy edge cases, tax CSV |
+| `read-cost.test.js` | Probe and reconcile counts, no collection joining the poll loop, no token on expense reads |
+
+`tests/harness.js` stubs the backend, serves React from `node_modules`, and
+**pins the clock** — rent status, arrears, occupancy and the financial year are
+all functions of "today", so an unpinned suite would start failing on a Tuesday
+for no reason. `run-all.js` picks up any `*.test.js` automatically and exits
+non-zero on failure.
+
+`npm run check` is compile + smoke + suites, and is the gate before a deploy.
 
 React is loaded from `node_modules` when present (a devDependency) so the test
 works offline, falling back to the CDN otherwise. Playwright is resolved from
