@@ -69,6 +69,32 @@ const EXPENSES = [
 ];
 const BUDGETS = [budget('Structure', 2000000), budget('Finishing', 1000000), budget('Landscaping', 500000)];
 
+const TENANTS = [{ name: 'projects/p/databases/(default)/documents/house-tenants/ten-1', fields: {
+  name: field('Anil Bora'), phone: field('98640 11111'), email: field(''), idRef: field(''),
+  emergencyContact: field(''), notes: field(''), updatedAt: field(''), updatedBy: field('Jiten') } }];
+const LEASES = [{ name: 'projects/p/databases/(default)/documents/house-leases/lease-cur', fields: {
+  tenantIds: { arrayValue: { values: [{ stringValue: 'ten-1' }] } },
+  startDate: field('2026-01-01'), endDate: field('2026-12-31'),
+  rentAmount: { doubleValue: 20000 }, rentDueDay: { doubleValue: 5 },
+  depositAmount: { doubleValue: 60000 }, depositHolder: field('Runa'),
+  noticePeriodDays: { doubleValue: 30 }, statusOverride: field(''), agreementRef: field(''),
+  notes: field(''), previousLeaseId: field(''), updatedAt: field(''), updatedBy: field('Jiten') } }];
+
+// One open repair and one closed-and-already-in-the-ledger repair, so both
+// halves of the tab render: the open list and the closed disclosure.
+const MAINT = [
+  { name: 'projects/p/databases/(default)/documents/house-maintenance/mnt-1', fields: {
+    leaseId: field(''), raisedDate: field('2026-07-20'), raisedBy: field('Tenant'),
+    zone: field('Ground Floor'), category: field('Plumbing'), description: field('Leaking tap'),
+    priority: field('Urgent'), status: field('Open'), vendor: field(''), cost: { doubleValue: 0 },
+    expenseId: field(''), notes: field(''), updatedAt: field(''), updatedBy: field('Jiten') } },
+  { name: 'projects/p/databases/(default)/documents/house-maintenance/mnt-2', fields: {
+    leaseId: field(''), raisedDate: field('2026-06-02'), raisedBy: field('Owner'),
+    zone: field('Roof & Terrace'), category: field('Structural'), description: field('Seal terrace crack'),
+    priority: field('Normal'), status: field('Done'), vendor: field('Rahul'), cost: { doubleValue: 8000 },
+    expenseId: field('exp-old'), notes: field(''), updatedAt: field(''), updatedBy: field('Jiten') } },
+];
+
 const SIGNED_IN = { idToken: 'T', refreshToken: 'R', expiresAt: Date.now() + 3600e3, email: 'jiten@example.com', name: 'Jiten' };
 
 // ─── Harness ───
@@ -93,9 +119,14 @@ async function run() {
   await page.route('**firestore.googleapis.com**', route => {
     const url = route.request().url();
     if (url.includes(':runQuery')) return route.fulfill({ status: 200, contentType: 'application/json', body: '[{"readTime":"x"}]' });
-    if (route.request().method() === 'GET')
-      return route.fulfill({ status: 200, contentType: 'application/json',
-        body: JSON.stringify({ documents: url.includes('house-budgets') ? BUDGETS : EXPENSES }) });
+    if (route.request().method() === 'GET') {
+      const docs = url.includes('house-budgets') ? BUDGETS
+        : url.includes('house-tenants') ? TENANTS
+        : url.includes('house-leases') ? LEASES
+        : url.includes('house-maintenance') ? MAINT
+        : url.includes('house-rent') ? [] : EXPENSES;
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ documents: docs }) });
+    }
     return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
   });
 
@@ -228,6 +259,58 @@ async function run() {
   await step('signed in again: form opened', () => page.locator('.modal h2').waitFor({ timeout: 3000 }));
   await step('close form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
   await step('manual refresh', () => page.locator('.header-btn[aria-label="Refresh data"]').click());
+  // ── lease mode: a whole second module behind the switch
+  const toMode = m => page.locator('.mode-btn').click().then(() =>
+    page.locator('.mode-opt', { hasText: m }).click());
+  await step('switch to Lease mode', () => toMode('Lease'));
+  await step('lease: rent tab (default)', () => page.locator('.alloc-card').first().waitFor());
+  await step('lease: open this month', () => page.locator('.alloc-card').first().click());
+  await step('lease: rent form outcome', () => page.locator('.modal .toggle-btn', { hasText: 'Partial' }).click());
+  await step('lease: rent form waived', () => page.locator('.modal .toggle-btn', { hasText: 'Waived' }).click());
+  await step('lease: close rent form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: open an arrears month', () => page.locator('.entry-row').first().click());
+  await step('lease: close it', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: export rent CSV', async () => {
+    const dl = page.waitForEvent('download', { timeout: 5000 });
+    await page.locator('button', { hasText: 'Export' }).click();
+    await dl;
+  });
+  await step('lease: repairs tab', () => page.locator('.tab-item', { hasText: 'Repairs' }).click());
+  await step('lease: open a repair', () => page.locator('.entry-row').first().click());
+  await step('lease: repair cost arms the expense toggle', async () => {
+    await page.locator('.modal input[type=number]').fill('4500');
+    await page.locator('.modal .more-toggle').click();
+  });
+  await step('lease: repair delete asks first', () => page.locator('.form-actions.sticky button[aria-label="Delete this repair"]').click());
+  await step('lease: cancel repair delete', () => page.locator('.confirm-box button', { hasText: 'Cancel' }).click());
+  await step('lease: close repair form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: closed repairs disclosure', () => page.locator('.more-toggle').first().click());
+  await step('lease: new repair form', () => page.locator('.alloc-btn', { hasText: 'Log a repair' }).click());
+  await step('lease: close new repair', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: reports tab', () => page.locator('.tab-item', { hasText: 'Reports' }).click());
+  await step('lease: reports rendered a yield', () => page.locator('.alloc-card', { hasText: 'Yield on what it cost' }).waitFor());
+  await step('lease: tax export CSV', async () => {
+    const dl = page.waitForEvent('download');
+    await page.locator('.alloc-btn', { hasText: 'Export' }).click();
+    const f = await dl;
+    if (!/^lease-\d{4}-04-01-to-\d{4}-03-31\.csv$/.test(f.suggestedFilename())) throw new Error('bad filename ' + f.suggestedFilename());
+  });
+  await step('lease: tenancy tab', () => page.locator('.tab-item', { hasText: 'Tenancy' }).click());
+  await step('lease: open lease form', () => page.locator('.alloc-card').first().locator('button', { hasText: 'Edit' }).click());
+  await step('lease: close lease form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: renew', () => page.locator('.alloc-card').first().locator('button', { hasText: 'Renew' }).click());
+  await step('lease: close renewal', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: open tenant', () => page.locator('.vendor-card').first().click());
+  await step('lease: close tenant', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: add tenant form', () => page.locator('button', { hasText: 'Add tenant' }).click());
+  await step('lease: close add tenant', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: delete asks first', () => page.locator('.alloc-card').first().locator('button[aria-label="Delete this lease"]').click());
+  await step('lease: cancel delete', () => page.locator('.confirm-box button', { hasText: 'Cancel' }).click());
+  await step('lease: theme picker still works', () => page.locator('.header-btn[aria-label="Choose theme"]').click());
+  await step('lease: close theme picker', () => page.locator('.theme-overlay').click({ position: { x: 5, y: 5 } }));
+  await step('back to Build mode', () => toMode('Build'));
+  await step('build: entries intact', () => page.locator('.entry-row').first().waitFor());
+
   await step('pull to refresh', () => page.evaluate(() => {
     const el = document.body;
     const t = y => new Touch({ identifier: 1, target: el, clientX: 190, clientY: y });

@@ -4,11 +4,15 @@
 
 ```
 Ledger/CCC/House/
-├── house-ledger.jsx.html   ← EDIT THIS (JSX source, ~800 lines)
-├── house-ledger.html       ← GENERATED and DEPLOYED (~77KB, no Babel)
+├── house-ledger.jsx.html   ← EDIT THIS (JSX source)
+├── house-ledger.html       ← GENERATED and DEPLOYED (no Babel)
 ├── compile.js              ← Build script (JSX → React.createElement)
-├── package.json            ← @babel/core + @babel/preset-react
-└── DEVELOPMENT.md          ← This file
+├── smoke-test.js           ← Whole-app walk; run before every deploy
+├── tests/                  ← Correctness suites + shared harness
+├── package.json            ← Babel + React (dev only)
+├── DEVELOPMENT.md          ← This file
+├── LEASE_MODE_PLAN.md      ← Lease module design and scope decisions
+└── HANDOFF.md              ← Session handoff: state, open work, traps
 ```
 
 Both files sit in the same directory. `house-ledger.html` is what GitHub
@@ -28,8 +32,8 @@ npm install
 ```bash
 # 1. Edit house-ledger.jsx.html
 
-# 2. Compile and smoke-test in one go
-npm run verify
+# 2. Compile, smoke-test and run the correctness suites
+npm run check          # or: npm run verify (compile + smoke only)
 
 # 3. Commit both files together
 git add house-ledger.jsx.html house-ledger.html
@@ -92,6 +96,18 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-UNDO-TOAST` | Deferred-delete toast with undo |
 | `JS-BUDGET-EDITOR` | Per-phase budget editor |
 | `JS-SIGN-IN` | Email/password dialog |
+| `JS-LEASE-DATA` | Private (authed-read) tenant and lease collections |
+| `JS-RENT-DATA` | `house-rent`, sparse, deterministic ids |
+| `JS-RENT-SCHEDULE` | Computed schedule, period status, arrears |
+| `JS-RENT-FORM` / `JS-RENT-TAB` | Record a receipt; this month, arrears, deposit |
+| `JS-MAINT-DATA` | `house-maintenance`, and `repairToExpense` — the cross-module write |
+| `JS-REPAIR-FORM` / `JS-REPAIRS-TAB` | Log a repair; open by priority, closed behind a disclosure |
+| `JS-REPORTS` | Financial year (Apr–Mar), build cost, occupancy, tax CSV |
+| `JS-REPORTS-TAB` | Yield, recovery, per-year net position, export |
+| `JS-LEASE-LOGIC` | Derived status, overlap refusal, tenant status |
+| `JS-TENANT-FORM` / `JS-LEASE-FORM` | Lease-mode add/edit sheets |
+| `JS-TENANCY-TAB` | Current tenancy, tenants, previous terms |
+| `CSS-LEASE-MODE` | Mode switcher, chip picker, conflict note |
 | `JS-THEME-PICKER` | Theme grid |
 | `JS-APP` | State, polling, routing |
 
@@ -245,6 +261,115 @@ no intermediaries.
 `MODE_CLR` joins the other hardcoded semantic colour lookups. Cash is the
 distinction that matters at this scale; everything else leaves a bank trail.
 
+## Rent (L2)
+
+The Rent tab is the landing tab in lease mode, and its job is to answer
+**"is anything wrong?"** — rent that arrived on time is not information. This
+month sits at the top, arrears next with the oldest first, and settled months
+collapse behind a count.
+
+**`house-rent` is sparse: one document per event, never per period.** The
+schedule is computed by `rentSchedule()` from the lease terms; a document
+exists only where something happened. Eight months of a term with three
+payments recorded is three documents, not eight. The document id is
+deterministic (`rent-<leaseId>-<period>`), so a write is an upsert and two
+records for one month are impossible.
+
+**The months with no document are the interesting ones** — `Due` before the
+due date, `Late` after it. `expected` is snapshotted onto the document when
+one is written, so editing the lease later cannot rewrite history; where no
+document exists the lease's current rent is used.
+
+`rentDueDay` is capped at 28 on both write and read, so February always has a
+due date. Overpayment counts as `Received` with zero outstanding. `Waived` and
+`Written-off` clear the amount, date and mode on save rather than leaving
+stale values behind.
+
+Deposit settlement lives on the lease (`depositDeducted`, `depositRefunded`)
+rather than in its own collection — with one tenancy at a time there is
+nothing a separate ledger would buy. Linking deductions to repair costs
+arrives with L3.
+
+## Lease mode (L0–L4 built)
+
+A second module behind a header mode switch, persisted in `localStorage` under
+`hl-mode`. Build mode keeps its five tabs; lease mode has four — Rent,
+Repairs, Reports and Tenancy. Only tabs that exist are rendered; a disabled
+tab teaches nothing. L5 is the deliberately-unbuilt list in
+`LEASE_MODE_PLAN.md` §6.
+
+Full design and the settled scope decisions are in `LEASE_MODE_PLAN.md`.
+
+**Lease collections are private.** `house-tenants` and `house-leases` need a
+token to *read* as well as write, because they hold a third party's name,
+phone number and arrears history. `authedFetchAll()` is the read path;
+`fetchAll()` (expenses, budgets) still sends no token and must stay that way.
+Entering lease mode signed out prompts sign-in and resumes; a restored
+`hl-mode=lease` with no valid session falls back to build.
+
+⚠ **The Firestore rules are still the test-mode default and enforce none of
+this.** They must be applied before the first real tenant record is written —
+see `LEASE_MODE_PLAN.md` §3 for the block to paste.
+
+**Derived, never stored:** lease status (except the `Draft` / `Terminated`
+overrides in `statusOverride`) and tenant status. A status you have to
+remember to update is a status that will be wrong.
+
+**One tenancy at a time.** `findLeaseConflict()` compares date *ranges*, not
+today's status, so a lease that clashes only in the future is still refused,
+by name. Terminated leases never conflict.
+
+**A renewal is a new document**, chained by `previousLeaseId`, pre-filled from
+the previous term and starting the day after it ends. Rent is flat within a
+term — that is what "renegotiated at renewal" means structurally, and it gives
+a true tenancy history rather than one mutable record that forgets.
+
+**Deposit custody uses `DEPOSIT_HOLDERS` (`Self` / `Runa`), deliberately
+separate from `ACCT_CLR` (`Self` / `Reemon`).** A deposit is a liability held
+by whoever holds it, not an expense account. Two similar-looking pairs, so
+keep them apart.
+
+Deleting a lease keeps an explicit confirmation rather than the undo toast —
+unlike an expense row there is no undo path behind it.
+
+### Repairs, and the one seam between the modules (L3)
+
+`house-maintenance` holds what needs fixing: category, zone, priority, status,
+vendor, cost. Vendor suggestions come from `house-expenses`, so a plumber you
+already paid during the build is one tap away.
+
+`repairToExpense()` is the only place lease mode writes into build data. It is
+**opt-in per repair** — the toggle appears only once a cost is entered, and it
+states what it will write before you tap Save. The entry it creates is always
+`expenseType: 'Miscellaneous'`, `phase: 'Maintenance'`, zone taken from the
+repair, so a tenancy repair can never eat into a construction budget.
+
+Order matters: the repair is saved *first* so it has an id, then the expense is
+created, then the repair is patched with the returned `expenseId`. Reversed,
+one repair would produce two maintenance documents.
+
+Deleting a repair leaves its expense alone — the money was still spent — and
+the confirmation says so rather than leaving it to be discovered.
+
+### Reports (L4)
+
+The only screen that sums both modules, so every figure carries its direction:
+`signed()` renders `+`/`−`, `dirClr()` colours it, and zero gets neither.
+
+- **Financial year is Apr–Mar.** `fyOf('2026-03-31')` is 2025; `fyOf('2026-04-01')`
+  is 2026. Never the calendar year.
+- **Capital vs running cost.** `RUNNING_PHASES = ['Maintenance','Leasing']`.
+  Those net off rent. Everything else is `buildCost()` — the denominator a
+  yield is measured against, not a cost of the year.
+- **Cash basis.** A receipt lands in the year the money arrived
+  (`receivedDate`), falling back to the period's own month.
+- **The year in progress is measured to today**, not to a March that has not
+  happened, or the current year always looks like a bad one.
+- **Occupancy merges lease ranges before counting**, so an overlap in old data
+  cannot count a day twice. A `Terminated` lease has no stored end date, so it
+  is counted only to the end of the last month rent was recorded for — and the
+  screen says so rather than quietly overstating.
+
 ## Deleting an entry
 
 There is no delete confirmation. Swiping a row left removes it from the view
@@ -293,10 +418,30 @@ left threw during render, React unmounted the whole tree, and a blank page
 reached production. Every feature had its own test; nothing exercised the app
 as a whole. The smoke test is deliberately shallow and wide: it does not check
 that features are *correct*, only that every screen renders and every control
-can be operated. 65 steps, about 40 seconds.
+can be operated. 107 steps, about 40 seconds.
 
 It fails fast — once the root empties it reports the remaining steps as
 skipped rather than waiting out a timeout on each.
+
+### The correctness suites
+
+`npm test` runs everything in `tests/` — narrow and deep, where the smoke test
+is shallow and wide. 113 assertions across four suites.
+
+| Suite | Guards |
+|---|---|
+| `rent.test.js` | Sparse schedule (3 documents → 8 months), Due/Late boundaries, overpayment, waiver clearing stale fields, deterministic upsert ids, deposit ledger, CSV |
+| `repairs.test.js` | Priority sort, the opt-in expense seam, `Miscellaneous`/`Maintenance` tagging, save-then-patch ordering, delete leaving the expense alone |
+| `reports.test.js` | Apr–Mar year boundaries, capital vs running cost, per-year net, seven occupancy edge cases, tax CSV |
+| `read-cost.test.js` | Probe and reconcile counts, no collection joining the poll loop, no token on expense reads |
+
+`tests/harness.js` stubs the backend, serves React from `node_modules`, and
+**pins the clock** — rent status, arrears, occupancy and the financial year are
+all functions of "today", so an unpinned suite would start failing on a Tuesday
+for no reason. `run-all.js` picks up any `*.test.js` automatically and exits
+non-zero on failure.
+
+`npm run check` is compile + smoke + suites, and is the gate before a deploy.
 
 React is loaded from `node_modules` when present (a devDependency) so the test
 works offline, falling back to the CDN otherwise. Playwright is resolved from
