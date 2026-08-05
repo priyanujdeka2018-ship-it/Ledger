@@ -157,7 +157,7 @@ which is **`workflow_dispatch` only** — it does not run on push. So:
 ## 4. Current state
 
 **`main` is current. Nothing is pending, and no branch is ahead of it.**
-Lease mode L0–L4 was merged on 2026-08-05 in PR #PRNUM, together with the
+Lease mode L0–L4 was merged on 2026-08-05 in PR #8, together with the
 correctness suites, this handoff, and the archived source documents. Pages was
 redeployed from the merge.
 
