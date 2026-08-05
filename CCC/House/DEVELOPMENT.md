@@ -95,6 +95,9 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-BUDGET-EDITOR` | Per-phase budget editor |
 | `JS-SIGN-IN` | Email/password dialog |
 | `JS-LEASE-DATA` | Private (authed-read) tenant and lease collections |
+| `JS-RENT-DATA` | `house-rent`, sparse, deterministic ids |
+| `JS-RENT-SCHEDULE` | Computed schedule, period status, arrears |
+| `JS-RENT-FORM` / `JS-RENT-TAB` | Record a receipt; this month, arrears, deposit |
 | `JS-LEASE-LOGIC` | Derived status, overlap refusal, tenant status |
 | `JS-TENANT-FORM` / `JS-LEASE-FORM` | Lease-mode add/edit sheets |
 | `JS-TENANCY-TAB` | Current tenancy, tenants, previous terms |
@@ -252,11 +255,40 @@ no intermediaries.
 `MODE_CLR` joins the other hardcoded semantic colour lookups. Cash is the
 distinction that matters at this scale; everything else leaves a bank trail.
 
-## Lease mode (L0 + L1 built)
+## Rent (L2)
+
+The Rent tab is the landing tab in lease mode, and its job is to answer
+**"is anything wrong?"** — rent that arrived on time is not information. This
+month sits at the top, arrears next with the oldest first, and settled months
+collapse behind a count.
+
+**`house-rent` is sparse: one document per event, never per period.** The
+schedule is computed by `rentSchedule()` from the lease terms; a document
+exists only where something happened. Eight months of a term with three
+payments recorded is three documents, not eight. The document id is
+deterministic (`rent-<leaseId>-<period>`), so a write is an upsert and two
+records for one month are impossible.
+
+**The months with no document are the interesting ones** — `Due` before the
+due date, `Late` after it. `expected` is snapshotted onto the document when
+one is written, so editing the lease later cannot rewrite history; where no
+document exists the lease's current rent is used.
+
+`rentDueDay` is capped at 28 on both write and read, so February always has a
+due date. Overpayment counts as `Received` with zero outstanding. `Waived` and
+`Written-off` clear the amount, date and mode on save rather than leaving
+stale values behind.
+
+Deposit settlement lives on the lease (`depositDeducted`, `depositRefunded`)
+rather than in its own collection — with one tenancy at a time there is
+nothing a separate ledger would buy. Linking deductions to repair costs
+arrives with L3.
+
+## Lease mode (L0 + L1 + L2 built)
 
 A second module behind a header mode switch, persisted in `localStorage` under
-`hl-mode`. Build mode keeps its five tabs; lease mode currently has one,
-Tenancy — Rent, Repairs and Reports arrive with L2/L3/L4. Only tabs that exist
+`hl-mode`. Build mode keeps its five tabs; lease mode has two,
+Rent and Tenancy — Repairs and Reports arrive with L3/L4. Only tabs that exist
 are rendered; a disabled tab teaches nothing.
 
 Full design and the settled scope decisions are in `LEASE_MODE_PLAN.md`.

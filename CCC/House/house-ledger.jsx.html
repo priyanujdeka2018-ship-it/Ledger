@@ -309,6 +309,7 @@ const FS_EXP=`${FS_ROOT}/house-expenses`;
 const FS_BUD=`https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-budgets`;
 const FS_TEN=`${FS_ROOT}/house-tenants`;
 const FS_LEASE=`${FS_ROOT}/house-leases`;
+const FS_RENT=`${FS_ROOT}/house-rent`;
 const ID_SIGNIN=`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${AKEY}`;
 const ID_REFRESH=`https://securetoken.googleapis.com/v1/token?key=${AKEY}`;
 
@@ -463,6 +464,7 @@ const toFSLease=l=>({fields:{
   rentAmount:{doubleValue:l.rentAmount||0},rentDueDay:{doubleValue:l.rentDueDay||1},
   depositAmount:{doubleValue:l.depositAmount||0},depositHolder:{stringValue:l.depositHolder||''},
   noticePeriodDays:{doubleValue:l.noticePeriodDays||0},
+  depositDeducted:{doubleValue:l.depositDeducted||0},depositRefunded:{doubleValue:l.depositRefunded||0},
   statusOverride:{stringValue:l.statusOverride||''},
   agreementRef:{stringValue:l.agreementRef||''},notes:{stringValue:l.notes||''},
   previousLeaseId:{stringValue:l.previousLeaseId||''},
@@ -472,7 +474,9 @@ const fromFSLease=d=>{const f=d.fields||{};return{id:d.name.split('/').pop(),
   startDate:str(f,'startDate'),endDate:str(f,'endDate'),
   rentAmount:num(f,'rentAmount'),rentDueDay:num(f,'rentDueDay')||1,
   depositAmount:num(f,'depositAmount'),depositHolder:str(f,'depositHolder'),
-  noticePeriodDays:num(f,'noticePeriodDays'),statusOverride:str(f,'statusOverride'),
+  noticePeriodDays:num(f,'noticePeriodDays'),
+  depositDeducted:num(f,'depositDeducted'),depositRefunded:num(f,'depositRefunded'),
+  statusOverride:str(f,'statusOverride'),
   agreementRef:str(f,'agreementRef'),notes:str(f,'notes'),
   previousLeaseId:str(f,'previousLeaseId'),
   updatedAt:str(f,'updatedAt'),updatedBy:str(f,'updatedBy')};};
@@ -534,6 +538,75 @@ const TENANT_CLR={'Current':{bg:'#dcfce7',text:'#166534'},'Past':{bg:'#f1f5f9',t
 
 // Newest first, and a renewal chain reads as a history.
 const sortLeases=ls=>[...ls].sort((a,b)=>(b.startDate||'').localeCompare(a.startDate||''));
+
+// ─── JS-RENT-DATA ───
+// One document per *event*, not per period: the schedule is computed from the
+// lease and a document exists only where something happened. A deterministic
+// id makes the write an upsert and makes two records for one month
+// impossible. See LEASE_MODE_PLAN.md §4.
+const RENT_STATUSES=['Received','Partial','Waived','Written-off'];
+const RENT_CLR={'Received':{bg:'#dcfce7',text:'#166534'},'Partial':{bg:'#fef3c7',text:'#92400e'},
+  'Due':{bg:'#e0f2fe',text:'#075985'},'Late':{bg:'#fee2e2',text:'#991b1b'},
+  'Waived':{bg:'#ede9fe',text:'#5b21b6'},'Written-off':{bg:'#f1f5f9',text:'#334155'}};
+const rentId=(leaseId,period)=>`rent-${leaseId}-${period}`;
+const toFSRent=r=>({fields:{
+  leaseId:{stringValue:r.leaseId},period:{stringValue:r.period},
+  expected:{doubleValue:r.expected||0},received:{doubleValue:r.received||0},
+  receivedDate:{stringValue:r.receivedDate||''},paymentMode:{stringValue:r.paymentMode||''},
+  status:{stringValue:r.status||''},notes:{stringValue:r.notes||''},
+  updatedAt:{stringValue:new Date().toISOString()},updatedBy:{stringValue:r.updatedBy||''}}});
+const fromFSRent=d=>{const f=d.fields||{};return{id:d.name.split('/').pop(),
+  leaseId:str(f,'leaseId'),period:str(f,'period'),
+  expected:num(f,'expected'),received:num(f,'received'),
+  receivedDate:str(f,'receivedDate'),paymentMode:str(f,'paymentMode'),
+  status:str(f,'status'),notes:str(f,'notes'),
+  updatedAt:str(f,'updatedAt'),updatedBy:str(f,'updatedBy')};};
+const fetchRents=()=>authedFetchAll(FS_RENT,fromFSRent);
+async function saveRent(r){
+  await authedFetch(`${FS_RENT}/${rentId(r.leaseId,r.period)}?key=${AKEY}`,{method:'PATCH',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify(toFSRent(r))});
+}
+const deleteRent=(leaseId,period)=>authedFetch(`${FS_RENT}/${rentId(leaseId,period)}?key=${AKEY}`,{method:'DELETE'});
+
+// ─── JS-RENT-SCHEDULE ───
+// Rent is due on rentDueDay, capped at 28 so February always has one.
+const periodDue=(period,day)=>`${period}-${String(Math.min(Math.max(day||1,1),28)).padStart(2,'0')}`;
+
+// The states with no document are the interesting ones: Due, and Late.
+function periodStatus(rec,expected,dueDate,today){
+  if(rec&&(rec.status==='Waived'||rec.status==='Written-off'))return rec.status;
+  const got=rec?rec.received:0;
+  if(got>=expected&&expected>0)return 'Received';
+  if(got>0)return 'Partial';
+  return today>dueDate?'Late':'Due';
+}
+const periodOutstanding=row=>
+  row.status==='Waived'||row.status==='Written-off'?0:Math.max(0,row.expected-row.received);
+
+// Months from the lease start to whichever comes first, the end of the term
+// or the current month. Future months of a term are not actionable.
+function rentSchedule(lease,rents,today){
+  const t=today||todayISO();
+  if(!lease||!lease.startDate||!lease.endDate)return [];
+  const first=monthKey(lease.startDate),endK=monthKey(lease.endDate),nowK=monthKey(t);
+  const last=endK<nowK?endK:nowK;
+  if(last<first)return [];
+  const byPeriod={};
+  rents.forEach(r=>{if(r.leaseId===lease.id)byPeriod[r.period]=r;});
+  const out=[];
+  for(let k=first;k<=last;k=nextMonthKey(k)){
+    const rec=byPeriod[k]||null;
+    const expected=rec&&rec.expected>0?rec.expected:lease.rentAmount;
+    const dueDate=periodDue(k,lease.rentDueDay);
+    const row={period:k,dueDate,expected,received:rec?rec.received:0,rec,
+      status:periodStatus(rec,expected,dueDate,t)};
+    row.outstanding=periodOutstanding(row);
+    out.push(row);
+  }
+  return out.reverse();
+}
+const scheduleArrears=rows=>rows.filter(r=>r.outstanding>0);
+
 
 // ─── JS-BUDGETS ───
 // One document per phase in house-budgets. Phase names contain spaces and
@@ -617,6 +690,7 @@ function monthKey(d){return d.slice(0,7);}
 function addDays(d,n){const t=new Date(d+'T00:00:00');t.setDate(t.getDate()+n);return t.toISOString().slice(0,10);}
 function daysBetween(a,b){return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000);}
 function todayISO(){return new Date().toISOString().slice(0,10);}
+function nextMonthKey(k){const[y,m]=k.split('-').map(Number);return m===12?`${y+1}-01`:`${y}-${String(m+1).padStart(2,'0')}`;}
 function thisMonthKey(){const n=new Date();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;}
 function prevMonthKey(k){const[y,m]=k.split('-').map(Number);const d=new Date(y,m-2,1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;}
 function monthEnd(k){const[y,m]=k.split('-').map(Number);return `${k}-${String(new Date(y,m,0).getDate()).padStart(2,'0')}`;}
@@ -797,7 +871,7 @@ function HeroMonthCard({exps,onNavigate,expanded,onToggle}){
 const BUILD_TABS=[{id:'entries',icon:'📋',label:'Entries'},{id:'phases',icon:'🏗️',label:'Phases'},{id:'zones',icon:'🏠',label:'Zones'},{id:'vendors',icon:'👷',label:'Vendors'},{id:'timeline',icon:'📅',label:'Timeline'}];
 // Only tabs that exist. Rent, Repairs and Reports arrive with L2/L3/L4 —
 // a disabled tab teaches nothing.
-const LEASE_TABS=[{id:'tenancy',icon:'🔑',label:'Tenancy'}];
+const LEASE_TABS=[{id:'rent',icon:'💰',label:'Rent'},{id:'tenancy',icon:'🔑',label:'Tenancy'}];
 function TabBar({tab,onTab,tabs=BUILD_TABS}){
   return(<div className="tab-bar">{tabs.map(t=><button key={t.id} className={`tab-item ${tab===t.id?'active':''}`} onClick={()=>onTab(t.id)}><span className="tab-icon">{t.icon}</span>{t.label}</button>)}</div>);
 }
@@ -1705,6 +1779,7 @@ function LeaseForm({lease,tenants,leases,onSave,onCancel,userName}){
   const isRenewal=!!lease?.previousLeaseId&&!lease?.id;
   const [f,setF]=useState(lease||{tenantIds:[],startDate:todayISO(),endDate:addDays(todayISO(),334),
     rentAmount:'',rentDueDay:5,depositAmount:'',depositHolder:DEPOSIT_HOLDERS[0],
+    depositDeducted:'',depositRefunded:'',
     noticePeriodDays:30,statusOverride:'',agreementRef:'',notes:'',previousLeaseId:''});
   const [tried,setTried]=useState(false);
   const [busy,setBusy]=useState(false);
@@ -1730,6 +1805,7 @@ function LeaseForm({lease,tenants,leases,onSave,onCancel,userName}){
     setBusy(true);setErr('');
     try{await onSave({...f,rentAmount:rent,rentDueDay:+f.rentDueDay||1,
       depositAmount:parseFloat(f.depositAmount)||0,noticePeriodDays:+f.noticePeriodDays||0,
+      depositDeducted:parseFloat(f.depositDeducted)||0,depositRefunded:parseFloat(f.depositRefunded)||0,
       updatedBy:userName||''});}
     catch(e){setErr(e.message);setBusy(false);}
   };
@@ -1787,6 +1863,11 @@ function LeaseForm({lease,tenants,leases,onSave,onCancel,userName}){
           <div className="toggle-group">{DEPOSIT_HOLDERS.map(h=>
             <button key={h} type="button" className={`toggle-btn ${f.depositHolder===h?'active':''}`}
               onClick={()=>up('depositHolder',h)}>{h}</button>)}</div></div>
+        <div className="field"><label>Deposit deducted</label>
+          <input type="number" inputMode="decimal" value={f.depositDeducted} onChange={e=>up('depositDeducted',e.target.value)} placeholder="0"/>
+          <div className="form-hint" style={{textAlign:'left',marginTop:4}}>Withheld at the end of the tenancy, for damage or arrears.</div></div>
+        <div className="field"><label>Deposit refunded</label>
+          <input type="number" inputMode="decimal" value={f.depositRefunded} onChange={e=>up('depositRefunded',e.target.value)} placeholder="0"/></div>
         <div className="field"><label>Notice period (days)</label>
           <input type="number" inputMode="numeric" value={f.noticePeriodDays} onChange={e=>up('noticePeriodDays',e.target.value)}/></div>
         <div className="field"><label>Agreement reference</label>
@@ -1810,6 +1891,191 @@ function LeaseForm({lease,tenants,leases,onSave,onCancel,userName}){
         </div>
         {tried&&(missing.length>0||conflict)&&
           <div className="form-hint">{conflict?'Resolve the overlap above':'Still needed: '+missing.join(', ')}</div>}
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-RENT-FORM ───
+function RentForm({row,lease,onSave,onClear,onCancel,userName}){
+  const rec=row.rec;
+  const [f,setF]=useState({
+    received:rec&&rec.received?String(rec.received):String(row.expected||''),
+    receivedDate:rec?.receivedDate||todayISO(),
+    paymentMode:rec?.paymentMode||PAYMENT_MODES[1],
+    status:rec?.status||'Received',
+    notes:rec?.notes||''});
+  const [busy,setBusy]=useState(false);
+  const [err,setErr]=useState('');
+  const up=(k,v)=>setF(p=>({...p,[k]:v}));
+  const got=parseFloat(f.received)||0;
+  const settled=f.status==='Waived'||f.status==='Written-off';
+  const short=row.expected-got;
+  const save=async()=>{
+    setBusy(true);setErr('');
+    try{await onSave({leaseId:lease.id,period:row.period,expected:row.expected,
+      received:settled?0:got,receivedDate:settled?'':f.receivedDate,
+      paymentMode:settled?'':f.paymentMode,status:f.status,notes:f.notes,updatedBy:userName||''});}
+    catch(e){setErr(e.message);setBusy(false);}
+  };
+  return(
+    <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
+      <div className="modal">
+        <h2>{monthLabel(row.period)} rent</h2>
+        <div className="detail-row"><span className="label">Expected</span><span className="value">{fmtFull(row.expected)}</span></div>
+        <div className="detail-row"><span className="label">Due</span><span className="value">{fmtDate(row.dueDate)}</span></div>
+
+        <div className="field" style={{marginTop:12}}><label>Outcome</label>
+          <div className="toggle-group" style={{flexWrap:'wrap'}}>{RENT_STATUSES.map(x=>
+            <button key={x} type="button" className={`toggle-btn ${f.status===x?'active':''}`}
+              style={{fontSize:'.72rem'}} onClick={()=>up('status',x)}>{x}</button>)}</div></div>
+
+        {!settled&&<>
+          <div className="field"><label>Amount received (₹)</label>
+            <input type="number" inputMode="decimal" value={f.received} onChange={e=>up('received',e.target.value)} placeholder="0"/>
+            {got>0&&<div className="amt-echo">{fmtFull(got)} ({fmtAmt(got).replace('₹','')})</div>}
+            {got>0&&short>0&&<div className="field-err">{fmtFull(short)} short of the month's rent</div>}
+            {got>row.expected&&<div className="form-hint" style={{textAlign:'left',marginTop:4}}>{fmtFull(got-row.expected)} more than expected</div>}</div>
+          <div className="field"><label>Received on</label>
+            <input type="date" value={f.receivedDate} onChange={e=>up('receivedDate',e.target.value)}/></div>
+          <div className="field"><label>Payment mode</label>
+            <select value={f.paymentMode} onChange={e=>up('paymentMode',e.target.value)}>
+              {PAYMENT_MODES.map(m=><option key={m} value={m}>{m}</option>)}</select></div>
+        </>}
+        <div className="field"><label>Notes</label>
+          <textarea value={f.notes} onChange={e=>up('notes',e.target.value)} placeholder="Optional"/></div>
+
+        {err&&<div className="field-err">{err}</div>}
+        <div className="form-actions sticky">
+          <button className="btn-primary" disabled={busy} onClick={save}>{busy?'Saving…':'Save'}</button>
+          {rec&&<button className="btn-secondary" onClick={onClear} aria-label="Clear this record">🗑</button>}
+          <button className="btn-secondary" onClick={onCancel}>Cancel</button>
+        </div>
+        {rec&&<div className="form-hint">Clearing puts the month back to {row.dueDate<todayISO()?'Late':'Due'} — it does not delete the tenancy.</div>}
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-RENT-TAB ───
+function RentTab({leases,rents,tenants,onRecord,onGoTenancy}){
+  const today=todayISO();
+  const sorted=useMemo(()=>sortLeases(leases),[leases]);
+  const lease=sorted.find(l=>isLive(l,today))||sorted[0];
+  const rows=useMemo(()=>lease?rentSchedule(lease,rents,today):[],[lease,rents,today]);
+  const [showSettled,setShowSettled]=useState(false);
+
+  if(!lease)return(
+    <div className="entry-list">
+      <div className="empty-state">
+        <div className="icon">💰</div>
+        <p><strong>No rent to track yet</strong></p>
+        <p style={{marginTop:6}}>Rent months appear here once a lease exists.</p>
+        <button className="alloc-btn" style={{maxWidth:240,margin:'16px auto 0'}} onClick={onGoTenancy}>Go to Tenancy</button>
+      </div>
+    </div>);
+
+  const thisMonth=rows.find(r=>r.period===monthKey(today));
+  const arrears=scheduleArrears(rows.filter(r=>r!==thisMonth));
+  const arrearsTotal=arrears.reduce((s,r)=>s+r.outstanding,0);
+  // This month has its own card at the top; repeating it below is noise.
+  const open=rows.filter(r=>r.outstanding>0&&r!==thisMonth);
+  const settledRows=rows.filter(r=>r.outstanding===0);
+  const received=rows.reduce((s,r)=>s+r.received,0);
+  const dep=lease.depositAmount||0;
+  const depBal=dep-(lease.depositDeducted||0)-(lease.depositRefunded||0);
+
+  const exportRows=()=>{
+    const cols=['period','dueDate','expected','received','outstanding','status','receivedDate','paymentMode','notes'];
+    const body=[cols.join(','),...rows.map(r=>cols.map(c=>csvCell(
+      c==='receivedDate'?(r.rec?.receivedDate||''):c==='paymentMode'?(r.rec?.paymentMode||''):
+      c==='notes'?(r.rec?.notes||''):r[c])).join(','))].join('\r\n');
+    const blob=new Blob(['﻿'+body],{type:'text/csv;charset=utf-8;'});
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');
+    a.href=url;a.download=`rent-${lease.startDate}-to-${lease.endDate}.csv`;
+    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+
+  return(
+    <div className="entry-list">
+      {/* The default view answers "is anything wrong?" — a month that arrived
+          on time is not information. */}
+      {thisMonth
+        ?<RentRow row={thisMonth} heading={`${monthLabel(thisMonth.period)} — this month`} big onClick={()=>onRecord(thisMonth,lease)}/>
+        :<div className="alloc-card"><div className="alloc-head"><span className="lbl">This month</span></div>
+           <div className="bud-none" style={{fontStyle:'normal'}}>Outside the lease term — nothing due.</div></div>}
+
+      {arrearsTotal>0&&
+        <div className="alloc-card">
+          <div className="alloc-head">
+            <span className="lbl">Arrears</span>
+            <span className="amt" style={{color:'#ef4444'}}>{fmtFull(arrearsTotal)}</span>
+          </div>
+          <div className="v-meta" style={{marginTop:0}}>{arrears.length} {arrears.length===1?'month':'months'} outstanding, oldest first</div>
+          {[...arrears].reverse().map(r=>(
+            <div key={r.period} className="detail-row" style={{cursor:'pointer'}} onClick={()=>onRecord(r,lease)}>
+              <span className="label">{monthLabel(r.period)} · due {fmtDateShort(r.dueDate)}</span>
+              <span className="value" style={{color:'#ef4444'}}>{fmtFull(r.outstanding)}</span>
+            </div>))}
+        </div>}
+
+      {arrearsTotal===0&&thisMonth&&thisMonth.outstanding===0&&
+        <div className="alloc-card"><div className="alloc-head"><span className="lbl">Nothing outstanding</span><span className="amt">✓</span></div>
+          <div className="bud-none" style={{fontStyle:'normal'}}>Every month of this term is settled.</div></div>}
+
+      <div className="alloc-card">
+        <div className="alloc-head"><span className="lbl">Received this term</span><span className="amt">{fmtFull(received)}</span></div>
+        <div className="v-meta" style={{marginTop:0}}>
+          {rows.length} {rows.length===1?'month':'months'} elapsed of {fmtFull(lease.rentAmount)}/month
+        </div>
+        {dep>0&&<>
+          <div className="detail-row"><span className="label">Deposit held{lease.depositHolder?` · ${lease.depositHolder}`:''}</span><span className="value">{fmtFull(dep)}</span></div>
+          {lease.depositDeducted>0&&<div className="detail-row"><span className="label">Deducted</span><span className="value">−{fmtFull(lease.depositDeducted)}</span></div>}
+          {lease.depositRefunded>0&&<div className="detail-row"><span className="label">Refunded</span><span className="value">−{fmtFull(lease.depositRefunded)}</span></div>}
+          {(lease.depositDeducted>0||lease.depositRefunded>0)&&
+            <div className="detail-row"><span className="label">Still held</span><span className="value">{fmtFull(depBal)}</span></div>}
+        </>}
+        <button className="alloc-btn" onClick={exportRows}>↓ Export {rows.length} months as CSV</button>
+      </div>
+
+      {open.length>0&&<>
+        <div className="form-sep" style={{marginTop:18}}>Needs attention</div>
+        {open.map(r=><RentRow key={r.period} row={r} onClick={()=>onRecord(r,lease)}/>)}
+      </>}
+
+      {settledRows.length>0&&<>
+        <button type="button" className="more-toggle" style={{marginTop:18}} aria-expanded={showSettled}
+          onClick={()=>setShowSettled(v=>!v)}>
+          <span>{settledRows.length} settled {settledRows.length===1?'month':'months'}</span>
+          <span className={`more-chev ${showSettled?'open':''}`}>▾</span>
+        </button>
+        {showSettled&&<div className="more-panel">
+          {settledRows.map(r=><RentRow key={r.period} row={r} onClick={()=>onRecord(r,lease)}/>)}
+        </div>}
+      </>}
+    </div>
+  );
+}
+
+function RentRow({row,heading,big,onClick}){
+  const rc=RENT_CLR[row.status]||RENT_CLR.Due;
+  return(
+    <div className={big?'alloc-card':'entry-row'} onClick={onClick} style={{cursor:'pointer'}}>
+      <div className={big?'':'entry-content'}>
+        {heading&&<div className="alloc-head"><span className="lbl">{heading}</span>
+          <span className="chip" style={{background:rc.bg,color:rc.text}}>{row.status}</span></div>}
+        <div className="entry-top">
+          <span className="entry-vendor">{heading?fmtFull(row.expected):monthLabel(row.period)}</span>
+          <span className="entry-amt">{row.received>0?fmtFull(row.received):'—'}</span>
+        </div>
+        <div className="entry-meta">
+          <span className="entry-date">due {fmtDateShort(row.dueDate)}</span>
+          {!heading&&<span className="chip" style={{background:rc.bg,color:rc.text}}>{row.status}</span>}
+          {row.outstanding>0&&<span className="chip" style={{background:RENT_CLR.Late.bg,color:RENT_CLR.Late.text}}>
+            {fmtAmt(row.outstanding)} short</span>}
+          {row.rec?.paymentMode&&<span className="chip" style={{background:(MODE_CLR[row.rec.paymentMode]||{}).bg,color:(MODE_CLR[row.rec.paymentMode]||{}).text}}>{row.rec.paymentMode}</span>}
+        </div>
       </div>
     </div>
   );
@@ -1928,6 +2194,8 @@ function App(){
   const [mode,setMode]=useState(()=>localStorage.getItem('hl-mode')||'build');
   const [tenants,setTenants]=useState([]);
   const [leases,setLeases]=useState([]);
+  const [rents,setRents]=useState([]);
+  const [editRent,setEditRent]=useState(null);
   const [leaseErr,setLeaseErr]=useState('');
   const [editTenant,setEditTenant]=useState(null);
   const [editLease,setEditLease]=useState(null);
@@ -2008,8 +2276,8 @@ function App(){
   const loadLease=useCallback(async()=>{
     if(!authState)return;
     try{
-      const [t,l]=await Promise.all([fetchTenants(),fetchLeases()]);
-      setTenants(t.sort((a,b)=>a.name.localeCompare(b.name)));setLeases(l);setLeaseErr('');
+      const [t,l,r]=await Promise.all([fetchTenants(),fetchLeases(),fetchRents()]);
+      setTenants(t.sort((a,b)=>a.name.localeCompare(b.name)));setLeases(l);setRents(r);setLeaseErr('');
     }catch(e){console.error(e);setLeaseErr(e.message);}
   },[]);
   const refreshAll=useCallback(()=>{loadData();loadBudgets();if(mode==='lease')loadLease();},[loadData,loadBudgets,loadLease,mode]);
@@ -2163,11 +2431,11 @@ function App(){
       setMode('build');setTab(t=>BUILD_TABS.some(x=>x.id===t)?t:'entries');
       localStorage.setItem('hl-mode','build');return;
     }
-    guard(()=>{setMode('lease');setTab('tenancy');localStorage.setItem('hl-mode','lease');loadLease();},
+    guard(()=>{setMode('lease');setTab('rent');localStorage.setItem('hl-mode','lease');loadLease();},
       'Lease records are private. Sign in to open them.');
   },[guard,loadLease]);
   // A restored 'lease' mode is only honoured if the session is still valid.
-  useEffect(()=>{if(mode==='lease'){if(auth){setTab(t=>LEASE_TABS.some(x=>x.id===t)?t:'tenancy');loadLease();}
+  useEffect(()=>{if(mode==='lease'){if(auth){setTab(t=>LEASE_TABS.some(x=>x.id===t)?t:'rent');loadLease();}
     else{setMode('build');localStorage.setItem('hl-mode','build');}}},[auth]);// eslint-disable-line
 
   const saveTenantEntry=useCallback(async t=>{
@@ -2179,6 +2447,15 @@ function App(){
   // Unlike an expense row, a lease has no undo path behind it, so this one
   // keeps an explicit confirmation rather than a toast.
   const [confirmLease,setConfirmLease]=useState(null);
+  const saveRentEntry=useCallback(async r=>{
+    await saveRent(r);setEditRent(null);loadLease();
+  },[loadLease]);
+  const clearRentEntry=useCallback(async()=>{
+    if(!editRent)return;
+    const{lease,row}=editRent;setEditRent(null);
+    try{await deleteRent(lease.id,row.period);loadLease();}catch(e){alert('Could not clear: '+e.message);}
+  },[editRent,loadLease]);
+
   const removeLease=useCallback(async()=>{
     const l=confirmLease;if(!l)return;
     setConfirmLease(null);
@@ -2192,6 +2469,7 @@ function App(){
       endDate:addDays(start,Math.max(1,daysBetween(l.startDate,l.endDate))),
       rentAmount:String(l.rentAmount||''),rentDueDay:l.rentDueDay,
       depositAmount:String(l.depositAmount||''),depositHolder:l.depositHolder||DEPOSIT_HOLDERS[0],
+      depositDeducted:'',depositRefunded:'',
       noticePeriodDays:l.noticePeriodDays,statusOverride:'',agreementRef:'',notes:'',
       previousLeaseId:l.id});
   },[]);
@@ -2237,6 +2515,10 @@ function App(){
       {mode==='lease'&&
         <div style={{paddingBottom:70,paddingTop:8}}>
           {leaseErr&&<div className="entry-list"><div className="conflict-note">Could not load lease records: {leaseErr}</div></div>}
+          {tab==='rent'&&
+            <RentTab leases={leases} rents={rents} tenants={tenants}
+              onRecord={(row,lease)=>setEditRent({row,lease})}
+              onGoTenancy={()=>setTab('tenancy')}/>}
           {tab==='tenancy'&&
             <TenancyTab tenants={tenants} leases={leases}
               onAddTenant={()=>setEditTenant({})}
@@ -2264,6 +2546,8 @@ function App(){
             </div>
           </div>
         </div>}
+      {editRent&&<RentForm row={editRent.row} lease={editRent.lease} userName={auth?.name}
+        onSave={saveRentEntry} onClear={clearRentEntry} onCancel={()=>setEditRent(null)}/>}
       {editTenant&&<TenantForm tenant={editTenant.id?editTenant:null} userName={auth?.name}
         onSave={saveTenantEntry} onCancel={()=>setEditTenant(null)}/>}
       {editLease&&<LeaseForm lease={editLease.startDate||editLease.id?editLease:null}

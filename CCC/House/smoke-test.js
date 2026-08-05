@@ -246,7 +246,19 @@ async function run() {
   const toMode = m => page.locator('.mode-btn').click().then(() =>
     page.locator('.mode-opt', { hasText: m }).click());
   await step('switch to Lease mode', () => toMode('Lease'));
-  await step('lease: tenancy tab', () => page.locator('.alloc-card').first().waitFor());
+  await step('lease: rent tab (default)', () => page.locator('.alloc-card').first().waitFor());
+  await step('lease: open this month', () => page.locator('.alloc-card').first().click());
+  await step('lease: rent form outcome', () => page.locator('.modal .toggle-btn', { hasText: 'Partial' }).click());
+  await step('lease: rent form waived', () => page.locator('.modal .toggle-btn', { hasText: 'Waived' }).click());
+  await step('lease: close rent form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: open an arrears month', () => page.locator('.entry-row').first().click());
+  await step('lease: close it', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: export rent CSV', async () => {
+    const dl = page.waitForEvent('download', { timeout: 5000 });
+    await page.locator('button', { hasText: 'Export' }).click();
+    await dl;
+  });
+  await step('lease: tenancy tab', () => page.locator('.tab-item', { hasText: 'Tenancy' }).click());
   await step('lease: open lease form', () => page.locator('.alloc-card').first().locator('button', { hasText: 'Edit' }).click());
   await step('lease: close lease form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
   await step('lease: renew', () => page.locator('.alloc-card').first().locator('button', { hasText: 'Renew' }).click());
