@@ -92,7 +92,7 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-HERO-ACCOUNT-CARD` | Self/Reemon split |
 | `JS-TAB-BAR` | 5-tab bottom nav |
 | `JS-SUBTOTAL-BAR` | Filtered-view subtotal |
-| `JS-ENTRY-ROW` | Entry row, swipe handling, expanded detail |
+| `JS-ENTRY-ROW` | Entry row; swipe → edit / two-step reveal-Delete |
 | `JS-ENTRIES-TAB` | List + search + filter chip |
 | `JS-OVERVIEW-CARDS` | Shared Phases/Zones card renderer |
 | `JS-PHASES-TAB` | Phase drill-down (2 levels) |
@@ -101,7 +101,7 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-INTERMEDIARY-TREE` | vendor → who was actually paid |
 | `JS-VENDOR-DETAIL` | Per-vendor view (2nd level of Vendors tab) |
 | `JS-VENDORS-TAB` | Vendor aggregation, drills into the detail |
-| `JS-TIMELINE-TAB` | Monthly bars + quarter summary |
+| `JS-INSIGHTS` | Analytics tab: slice control, stat tiles, SVG spend-over-time, ranked breakdowns, `MonthlyChart` (the old timeline bars) |
 | `JS-ENTRY-FORM` | Single-sheet add/edit modal, autofill, validation |
 | `JS-UNDO-TOAST` | Deferred-delete toast with undo |
 | `JS-BUDGET-EDITOR` | Per-phase budget editor |
@@ -456,16 +456,33 @@ source or the Babel-compiled output, where it would close the app's own
 
 ## Deleting an entry
 
-There is no delete confirmation. Swiping a row left removes it from the view
-immediately and shows an undo toast for 5 seconds; the Firestore `DELETE` only
-fires when that window closes.
+Delete is a **two-step, swipe-to-reveal** action, so a stray swipe can't
+delete a row. Swiping a row left past the threshold *reveals* a persistent red
+Delete button (`EntryRow`, `revealed` state); the delete only starts when that
+button is tapped. A tap anywhere outside the row tucks the button away — which,
+via an outside-tap capture listener, also means revealing one row dismisses any
+other, so only one is ever open. Swipe-right → edit is unchanged.
 
-The delete is **deferred rather than performed-and-restored** so that undo is
-purely local and cannot fail — for a ledger, "an interrupted delete left the
-row alone" is the right failure direction. The pending row is filtered out of
-`exps` for every consumer, so totals agree with what the toast says. A pending
-delete is flushed on tab hide, on unmount, and if a second delete starts, so
-it is never silently dropped.
+Behind that tap the delete is **deferred, not performed-and-restored**: it
+removes the row from the view and shows an undo toast for 5 seconds, and the
+Firestore `DELETE` only fires when that window closes — so undo is purely local
+and cannot fail. The pending row is filtered out of `exps` for every consumer,
+so totals agree with what the toast says, and a pending delete is flushed on
+tab hide, on unmount, and if a second delete starts.
+
+## Export and analytics (build mode)
+
+- **Export**: the Entries tab exports the current filtered/sorted view as CSV
+  or as a printable **PDF expense report** (`expenseReportDoc`, `JS-PDF-EXPORT`)
+  — summary, breakdowns by account/phase/category/top-vendors/payment-mode, and
+  the line items. Same print-to-PDF mechanism as the lease statements.
+- **Insights** (the former Timeline tab, `JS-INSIGHTS`): a slice control (range
+  + account) feeds stat tiles, an SVG cumulative spend-over-time with the
+  contract value as a dashed same-axis reference, the monthly bars, deep
+  category/zone/phase drills, top vendors, and account/payment splits. Charts
+  are hand-rolled SVG/CSS; colour follows the job (composition → ranked
+  single-hue bars, two-way splits → the ACCT/MODE schemes) and reads on all six
+  themes. Tap-to-inspect, not hover — the primary user is on a phone.
 
 ## Data note — the account split
 

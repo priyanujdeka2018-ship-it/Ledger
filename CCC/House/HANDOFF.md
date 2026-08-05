@@ -73,7 +73,7 @@ CCC/House/
 ├── house-ledger.jsx.html   ← EDIT THIS. JSX source, ~3,060 lines.
 ├── house-ledger.html       ← GENERATED and DEPLOYED. Never hand-edit.
 ├── compile.js              ← JSX → React.createElement, writes in place
-├── smoke-test.js           ← 107-step whole-app walk
+├── smoke-test.js           ← 124-step whole-app walk
 ├── tests/
 │   ├── harness.js          ← shared rig: stubbed backend, pinned clock, ok()
 │   ├── rent.test.js        ← L2, 32 assertions
@@ -158,16 +158,18 @@ which is **`workflow_dispatch` only** — it does not run on push. So:
 
 ## 4. Current state
 
-**Unmerged work sits on branch `claude/house-handoff-tests-qjdbny`** (as of
-2026-08-05): the version-controlled Firestore rules (`firestore.rules`, now
-covering the lease collections and `house-config`), plus the two shipped `U30`
-slices — printable PDF statements and editable lists. Not yet merged to `main`
-or deployed; `npm run check` is green on it (smoke 115/115, suites 130). Merge
-and trigger *Jekyll site CI* to ship, per §3.
+**`main` carries the Firestore rules and both shipped `U30` slices** (printable
+PDF statements and editable lists), merged and deployed on 2026-08-05.
 
-Before that branch, **`main` was current** — lease mode L0–L4 merged on
-2026-08-05 in PR #8, together with the correctness suites, this handoff, and
-the archived source documents, and Pages was redeployed from the merge.
+**Newer, unmerged work sits on branch `claude/house-handoff-tests-qjdbny`**:
+three UX tweaks — (1) delete is now two-step swipe-to-reveal (no more ghost
+deletes), (2) build mode exports a printable PDF expense report as well as CSV,
+(3) the Timeline tab became a full **Insights** analytics tab. Not yet merged or
+deployed; `npm run check` is green on it (smoke 124/124, suites 132). Merge and
+trigger *Jekyll site CI* to ship, per §3.
+
+For history: lease mode L0–L4 merged on 2026-08-05 in PR #8 with the correctness
+suites, this handoff, and the archived source documents.
 
 Shipped and live, in the order it was built:
 
@@ -180,6 +182,7 @@ Shipped and live, in the order it was built:
 | Accessibility (P4) | Pinch zoom restored, type floor raised, icon buttons labelled, pull-to-refresh, theme swatches |
 | Later tier (P5) | Per-phase budgets, intermediary glyph, vendor detail, intermediary tree, payment-mode analytics, **lease mode** |
 | `U30` (part) | Printable PDF statements (rent + annual, print-to-PDF, no library); editable categories/phases/zones via `house-config` |
+| UX tweaks | Two-step swipe-to-reveal delete; build-mode PDF expense report; **Insights** analytics tab (SVG spend-over-time, ranked breakdowns, deep zone/phase drills, splits) |
 | Not features | Auth with writes locked and reads open, the change-probe sync, the smoke test, the correctness suites |
 
 **`U30` is now two-thirds shipped.** It bundled three things: richer export,
@@ -329,7 +332,7 @@ whole discipline. The gap that let the crash through was that no suite swiped
 
 ### `npm test` — narrow and deep
 
-Five suites, 130 assertions, each checking that specific arithmetic or a
+Five suites, 132 assertions, each checking that specific arithmetic or a
 specific write is right.
 
 | Suite | Guards |

@@ -13,7 +13,7 @@ decisions. Everything in `docs/` is archived and stale in stated ways.
 
 ```bash
 cd CCC/House
-npm run check     # compile + 107-step smoke walk + 4 correctness suites
+npm run check     # compile + 124-step smoke walk + 5 correctness suites
 ```
 
 Edit `house-ledger.jsx.html`. **Never hand-edit `house-ledger.html`** — it is
