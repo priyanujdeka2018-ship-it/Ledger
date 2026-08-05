@@ -181,11 +181,18 @@ green. Verified at the merge: compile clean, smoke 107/107, suites 113/113,
 and the `house-ledger.html` blob on `main` matches the local build byte for
 byte.
 
-Note on verifying a deploy from a session like this one: outbound HTTPS goes
-through a proxy that returns 403 for `github.io`, so the live page cannot be
-fetched directly. Confirm a deploy by the workflow run's conclusion plus the
-blob SHA on `main`, and say that is what you checked — not that you loaded the
-page.
+Note on verifying a deploy from a session like this one: **outbound HTTPS goes
+through a proxy that returns 403 for both `github.io` and `api.github.com`**,
+so neither the live page nor the Actions API is reachable by `curl` or
+WebFetch. The GitHub MCP tools are the only path. Confirm a deploy by the
+workflow run's conclusion plus the blob SHA on `main`, and say that is what
+you checked — not that you loaded the page.
+
+This bites hardest when polling CI. A `curl` poll loop will fail every
+iteration, and if failures are swallowed (`|| continue`) the loop stays silent
+until it times out — indistinguishable from "still running". Poll with
+`mcp__github__actions_list`, and if you must write a watcher, make it emit on
+failure as loudly as on success.
 
 ---
 
