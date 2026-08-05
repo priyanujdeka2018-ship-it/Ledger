@@ -176,7 +176,16 @@ Shipped and live, in the order it was built:
 **The only U-series item not shipped is `U30`** (receipt attachments, richer
 export, Firestore-hosted config) — blocked on Firebase Storage.
 
-Verified at the merge: compile clean, smoke 107/107, suites 113/113.
+Merge commit `2e2d079`; the *Jekyll site CI* run on it built and deployed
+green. Verified at the merge: compile clean, smoke 107/107, suites 113/113,
+and the `house-ledger.html` blob on `main` matches the local build byte for
+byte.
+
+Note on verifying a deploy from a session like this one: outbound HTTPS goes
+through a proxy that returns 403 for `github.io`, so the live page cannot be
+fetched directly. Confirm a deploy by the workflow run's conclusion plus the
+blob SHA on `main`, and say that is what you checked — not that you loaded the
+page.
 
 ---
 

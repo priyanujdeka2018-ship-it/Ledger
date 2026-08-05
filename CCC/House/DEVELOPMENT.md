@@ -10,10 +10,18 @@ Ledger/CCC/House/
 ├── smoke-test.js           ← Whole-app walk; run before every deploy
 ├── tests/                  ← Correctness suites + shared harness
 ├── package.json            ← Babel + React (dev only)
+├── CLAUDE.md               ← Auto-loaded by Claude Code: the rules, and a pointer
 ├── DEVELOPMENT.md          ← This file
 ├── LEASE_MODE_PLAN.md      ← Lease module design and scope decisions
-└── HANDOFF.md              ← Session handoff: state, open work, traps
+├── HANDOFF.md              ← Session handoff: state, open work, traps
+└── docs/                   ← Archived source documents, each with a staleness banner
+    ├── WORKING_BRIEF.md        (the original brief: B1–B3, U1–U30, reference figures)
+    ├── HOUSE_ARCHITECTURE.md   (data model, constants, colour systems)
+    └── HOUSE_CONTEXT.md        (vendors, intermediary routes, phase history)
 ```
+
+⚠ `docs/HOUSE_CONTEXT.md` carries the rejected account split — see "Data note"
+below. Its banner says so, but do not let it leak into anything derived.
 
 Both files sit in the same directory. `house-ledger.html` is what GitHub
 Pages serves, at `/Ledger/CCC/House/house-ledger.html` — `compile.js` writes
