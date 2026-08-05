@@ -275,6 +275,12 @@ async function run() {
     await page.locator('button', { hasText: 'Export' }).click();
     await dl;
   });
+  await step('lease: rent statement (PDF)', async () => {
+    const dl = page.waitForEvent('download', { timeout: 5000 });
+    await page.locator('button', { hasText: 'Rent statement' }).click();
+    const f = await dl;
+    if (!/^rent-statement-.*\.html$/.test(f.suggestedFilename())) throw new Error('bad filename ' + f.suggestedFilename());
+  });
   await step('lease: repairs tab', () => page.locator('.tab-item', { hasText: 'Repairs' }).click());
   await step('lease: open a repair', () => page.locator('.entry-row').first().click());
   await step('lease: repair cost arms the expense toggle', async () => {
@@ -294,6 +300,12 @@ async function run() {
     await page.locator('.alloc-btn', { hasText: 'Export' }).click();
     const f = await dl;
     if (!/^lease-\d{4}-04-01-to-\d{4}-03-31\.csv$/.test(f.suggestedFilename())) throw new Error('bad filename ' + f.suggestedFilename());
+  });
+  await step('lease: annual statement (PDF)', async () => {
+    const dl = page.waitForEvent('download');
+    await page.locator('.alloc-btn', { hasText: 'statement (PDF)' }).click();
+    const f = await dl;
+    if (!/^annual-statement-\d{4}-04-01-to-\d{4}-03-31\.html$/.test(f.suggestedFilename())) throw new Error('bad filename ' + f.suggestedFilename());
   });
   await step('lease: tenancy tab', () => page.locator('.tab-item', { hasText: 'Tenancy' }).click());
   await step('lease: open lease form', () => page.locator('.alloc-card').first().locator('button', { hasText: 'Edit' }).click());

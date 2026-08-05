@@ -1362,20 +1362,40 @@ function fyRows(exps, rents, leases, today) {
 
 // One flat statement of what came in and what went out in a year, for the
 // accountant. Deliberately not the expense CSV: that one is the build.
-function taxCSV(y, exps, rents, leases, tenants) {
+// The itemised in/out lines for one financial year, sorted oldest-first, shared
+// by the tax CSV and the annual PDF statement so the two never drift apart.
+function taxRows(y, exps, rents, leases, tenants) {
   const a = fyStart(y),
     b = fyEnd(y);
-  const cols = ['date', 'direction', 'type', 'description', 'counterparty', 'amount'];
   const rows = [];
   rents.filter(r => r.received > 0 && receiptDate(r) >= a && receiptDate(r) <= b).forEach(r => {
     const l = leases.find(x => x.id === r.leaseId);
     const who = (l?.tenantIds || []).map(id => tenants.find(t => t.id === id)?.name).filter(Boolean).join(' & ');
-    rows.push([receiptDate(r), 'in', 'Rent', `Rent for ${monthLabel(r.period)}`, who || 'Tenant', r.received]);
+    rows.push({
+      date: receiptDate(r),
+      dir: 'in',
+      type: 'Rent',
+      desc: `Rent for ${monthLabel(r.period)}`,
+      who: who || 'Tenant',
+      amount: r.received
+    });
   });
   exps.filter(e => isRunningCost(e) && e.date >= a && e.date <= b).forEach(e => {
-    rows.push([e.date, 'out', e.phase === 'Maintenance' ? 'Repair' : 'Leasing cost', e.description || e.subcategory || '', e.vendor || '', e.amount]);
+    rows.push({
+      date: e.date,
+      dir: 'out',
+      type: e.phase === 'Maintenance' ? 'Repair' : 'Leasing cost',
+      desc: e.description || e.subcategory || '',
+      who: e.vendor || '',
+      amount: e.amount
+    });
   });
-  rows.sort((x, z) => x[0].localeCompare(z[0]));
+  rows.sort((x, z) => x.date.localeCompare(z.date));
+  return rows;
+}
+function taxCSV(y, exps, rents, leases, tenants) {
+  const cols = ['date', 'direction', 'type', 'description', 'counterparty', 'amount'];
+  const rows = taxRows(y, exps, rents, leases, tenants).map(r => [r.date, r.dir, r.type, r.desc, r.who, r.amount]);
   return [cols.join(','), ...rows.map(r => r.map(csvCell).join(','))].join('\r\n');
 }
 
@@ -1620,6 +1640,73 @@ function monthLabel(k) {
   const [y, m] = k.split('-');
   const mn = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   return `${mn[parseInt(m) - 1]}'${y.slice(2)}`;
+}
+
+// ─── JS-PDF-EXPORT ───
+// "Richer export" (U30) without a PDF library: the app carries no runtime
+// dependencies, so the honest path to PDF is the browser's own print-to-PDF
+// over a clean, self-contained HTML page. The statement downloads as an .html
+// file that auto-opens the print dialog on open; on an iPhone it opens in
+// Safari where Share → Print → Save as PDF does the same. CSV stays for
+// spreadsheets; these are for the formatted document a spreadsheet is not.
+const esc = v => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+})[c]);
+// Assembled at runtime so the literal closing-script sequence never appears in
+// this file or the compiled output, where it would end the app's own
+// <script> block early.
+const scriptTag = js => '<' + 'script>' + js + '<' + '/script>';
+const PRINT_ONLOAD = "window.addEventListener('load',function(){setTimeout(function(){try{window.print()}catch(e){}},350)});";
+const STATEMENT_CSS = "*{box-sizing:border-box}" + "body{margin:0;padding-top:52px;background:#f4f4f5;color:#1c1917;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:13px;line-height:1.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}" + ".sheet{max-width:720px;margin:0 auto;background:#fff;padding:32px 34px}" + ".st-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #1c1917;padding-bottom:14px;margin-bottom:18px}" + ".st-title{font-size:20px;font-weight:800;letter-spacing:-.01em}" + ".st-sub{color:#57534e;margin-top:3px;font-size:12.5px}" + ".st-brand{text-align:right;font-weight:800;font-size:13px;line-height:1.25}" + ".st-brand span{font-weight:600;color:#78716c;font-size:11px}" + ".st-sec{font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#78716c;margin:22px 0 8px}" + ".st-meta{width:100%;border-collapse:collapse;margin-bottom:4px}" + ".st-meta td{padding:4px 0;vertical-align:top}" + ".st-meta td:first-child{color:#57534e;width:46%}" + ".st-meta td:last-child{text-align:right;font-weight:600}" + "table.grid{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}" + "table.grid th,table.grid td{padding:6px 8px;border-bottom:1px solid #e7e5e4;text-align:right;white-space:nowrap}" + "table.grid th{background:#fafaf9;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#78716c;border-bottom:1.5px solid #d6d3d1}" + "table.grid th:first-child,table.grid td:first-child{text-align:left;white-space:normal}" + "table.grid tr.total td{font-weight:800;border-top:1.5px solid #1c1917;border-bottom:none;background:#fafaf9}" + ".pos{color:#166534}.neg{color:#b91c1c}.mut{color:#a8a29e}" + ".note{color:#78716c;font-size:11.5px;margin-top:8px}" + ".st-foot{margin-top:26px;padding-top:12px;border-top:1px solid #e7e5e4;color:#a8a29e;font-size:11px}" + ".bar{position:fixed;top:0;left:0;right:0;background:#1c1917;color:#fff;padding:10px 16px;display:flex;gap:14px;align-items:center;font-size:13px}" + ".bar button{background:#fff;color:#1c1917;border:0;border-radius:8px;padding:8px 16px;font-weight:700;font-size:13px;cursor:pointer}" + ".bar span{color:#d6d3d1;font-size:12px}" + "@media print{.bar{display:none}body{padding-top:0;background:#fff}.sheet{max-width:none;padding:0}}" + "@page{margin:14mm}";
+function statementDoc(title, subtitle, bodyHTML) {
+  return '<!doctype html><html lang="en"><head><meta charset="utf-8">' + '<meta name="viewport" content="width=device-width,initial-scale=1">' + '<title>' + esc(title) + '</title><style>' + STATEMENT_CSS + '</style></head><body>' + '<div class="sheet">' + '<header class="st-head"><div><div class="st-title">' + esc(title) + '</div>' + '<div class="st-sub">' + esc(subtitle) + '</div></div>' + '<div class="st-brand">House Ledger<br><span>' + esc(fmtDate(todayISO())) + '</span></div></header>' + bodyHTML + '<footer class="st-foot">Generated ' + esc(fmtDate(todayISO())) + ' · all figures in ₹, Indian grouping. Print, then choose “Save as PDF”.</footer>' + '</div>' + '<div class="bar"><button type="button" onclick="window.print()">Print / Save as PDF</button>' + '<span>Then choose “Save as PDF” as the destination.</span></div>' + scriptTag(PRINT_ONLOAD) + '</body></html>';
+}
+function downloadStatement(filename, doc) {
+  const blob = new Blob([doc], {
+    type: 'text/html;charset=utf-8'
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+const dash = '<span class="mut">—</span>';
+
+// A per-lease rent statement — the shareable artifact a CSV is not: months,
+// what was expected and received, arrears, and the deposit position.
+function rentStatementDoc(lease, rows, tenants) {
+  const who = esc((lease.tenantIds || []).map(id => (tenants.find(t => t.id === id) || {}).name).filter(Boolean).join(' & ') || 'Tenant');
+  const chron = [...rows].reverse(); // schedule is newest-first; a statement reads oldest-first
+  const totExp = rows.reduce((s, r) => s + r.expected, 0);
+  const totRec = rows.reduce((s, r) => s + r.received, 0);
+  const totOut = rows.reduce((s, r) => s + r.outstanding, 0);
+  const behind = rows.filter(r => r.outstanding > 0).length;
+  const dep = lease.depositAmount || 0,
+    depBal = dep - (lease.depositDeducted || 0) - (lease.depositRefunded || 0);
+  const meta = '<table class="st-meta">' + '<tr><td>Tenant</td><td>' + who + '</td></tr>' + '<tr><td>Term</td><td>' + esc(fmtDate(lease.startDate)) + ' – ' + esc(fmtDate(lease.endDate)) + '</td></tr>' + '<tr><td>Monthly rent</td><td>' + fmtFull(lease.rentAmount) + '</td></tr>' + '<tr><td>Rent due day</td><td>' + esc(String(lease.rentDueDay || 1)) + ' of each month</td></tr>' + '</table>';
+  const body = chron.map(r => '<tr>' + '<td>' + esc(monthLabel(r.period)) + '</td>' + '<td>' + esc(fmtDate(r.dueDate)) + '</td>' + '<td>' + fmtFull(r.expected) + '</td>' + '<td>' + (r.received > 0 ? fmtFull(r.received) : dash) + '</td>' + '<td class="' + (r.outstanding > 0 ? 'neg' : '') + '">' + (r.outstanding > 0 ? fmtFull(r.outstanding) : dash) + '</td>' + '<td>' + esc(r.status) + '</td>' + '<td>' + (r.rec && r.rec.receivedDate ? esc(fmtDate(r.rec.receivedDate)) : dash) + '</td>' + '</tr>').join('');
+  const table = '<div class="st-sec">Rent schedule</div>' + '<table class="grid"><thead><tr><th>Month</th><th>Due</th><th>Expected</th><th>Received</th><th>Outstanding</th><th>Status</th><th>Paid on</th></tr></thead><tbody>' + body + '<tr class="total"><td>Total · ' + chron.length + ' ' + (chron.length === 1 ? 'month' : 'months') + '</td><td></td><td>' + fmtFull(totExp) + '</td><td>' + fmtFull(totRec) + '</td><td class="' + (totOut > 0 ? 'neg' : '') + '">' + fmtFull(totOut) + '</td><td></td><td></td></tr>' + '</tbody></table>';
+  const arrears = '<p class="note">' + (totOut > 0 ? fmtFull(totOut) + ' outstanding across ' + behind + ' ' + (behind === 1 ? 'month' : 'months') + '.' : 'No arrears — every elapsed month of this term is settled.') + '</p>';
+  const depBlock = dep > 0 ? '<div class="st-sec">Deposit</div><table class="st-meta">' + '<tr><td>Received' + (lease.depositHolder ? ' · held by ' + esc(lease.depositHolder) : '') + '</td><td>' + fmtFull(dep) + '</td></tr>' + (lease.depositDeducted > 0 ? '<tr><td>Deducted</td><td>− ' + fmtFull(lease.depositDeducted) + '</td></tr>' : '') + (lease.depositRefunded > 0 ? '<tr><td>Refunded</td><td>− ' + fmtFull(lease.depositRefunded) + '</td></tr>' : '') + '<tr><td>Still held</td><td>' + fmtFull(depBal) + '</td></tr></table>' : '';
+  return statementDoc('Rent Statement', who + ' · ' + fmtDate(lease.startDate) + ' – ' + fmtDate(lease.endDate), meta + table + arrears + depBlock);
+}
+
+// A financial-year statement for the accountant: the same figures the Reports
+// screen shows, plus the itemised rent and running-cost lines behind them.
+function annualStatementDoc(y, fyRow, lineRows) {
+  const occ = fyRow.days ? Math.round(fyRow.letDays / fyRow.days * 100) : 0;
+  const summary = '<table class="st-meta">' + '<tr><td>Period</td><td>' + esc(fmtDate(fyStart(y))) + ' – ' + esc(fmtDate(fyEnd(y))) + (fyRow.partial ? ' (to date)' : '') + '</td></tr>' + '<tr><td>Rent received</td><td class="pos">+ ' + fmtFull(fyRow.rentIn) + '</td></tr>' + '<tr><td>Repairs</td><td class="neg">− ' + fmtFull(fyRow.repairs) + '</td></tr>' + '<tr><td>Leasing costs</td><td class="neg">− ' + fmtFull(fyRow.leasing) + '</td></tr>' + '<tr><td><strong>Net</strong></td><td class="' + (fyRow.net >= 0 ? 'pos' : 'neg') + '"><strong>' + (fyRow.net >= 0 ? '+ ' : '− ') + fmtFull(Math.abs(fyRow.net)) + '</strong></td></tr>' + '<tr><td>Occupancy</td><td>' + fyRow.letDays + ' of ' + fyRow.days + ' days · ' + occ + '%</td></tr>' + '</table>';
+  const lines = lineRows.map(r => '<tr>' + '<td>' + esc(fmtDate(r.date)) + '</td>' + '<td>' + esc(r.type) + '</td>' + '<td>' + (r.desc ? esc(r.desc) : dash) + '</td>' + '<td>' + (r.who ? esc(r.who) : dash) + '</td>' + '<td class="' + (r.dir === 'in' ? 'pos' : 'neg') + '">' + (r.dir === 'in' ? '+ ' : '− ') + fmtFull(r.amount) + '</td>' + '</tr>').join('');
+  const table = lineRows.length ? '<div class="st-sec">Transactions</div><table class="grid"><thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Counterparty</th><th>Amount</th></tr></thead><tbody>' + lines + '</tbody></table>' : '<p class="note">No rent or running-cost transactions recorded in this year.</p>';
+  return statementDoc('Annual Statement', fyLabel(y) + ' · Apr–Mar', summary + table);
 }
 
 // ─── JS-HEADER-COMPONENT ───
@@ -4498,7 +4585,11 @@ function ReportsTab({
       document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
-  }, "Export ", fyLabel(fy), " CSV")));
+  }, "Export ", fyLabel(fy), " CSV"), /*#__PURE__*/React.createElement("button", {
+    className: "alloc-btn",
+    disabled: !rows.some(r => r.fy === fy),
+    onClick: () => downloadStatement(`annual-statement-${fyStart(fy)}-to-${fyEnd(fy)}.html`, annualStatementDoc(fy, rows.find(r => r.fy === fy), taxRows(fy, exps, rents, leases, tenants)))
+  }, "\u21A7 ", fyLabel(fy), " statement (PDF)")));
 }
 
 // ─── JS-TENANT-FORM ───
@@ -5144,7 +5235,10 @@ function RentTab({
   }, fmtFull(depBal)))), /*#__PURE__*/React.createElement("button", {
     className: "alloc-btn",
     onClick: exportRows
-  }, "\u2193 Export ", rows.length, " months as CSV")), open.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+  }, "\u2193 Export ", rows.length, " months as CSV"), /*#__PURE__*/React.createElement("button", {
+    className: "alloc-btn",
+    onClick: () => downloadStatement(`rent-statement-${lease.startDate}-to-${lease.endDate}.html`, rentStatementDoc(lease, rows, tenants))
+  }, "\u21A7 Rent statement (PDF)")), open.length > 0 && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
     className: "form-sep",
     style: {
       marginTop: 18
