@@ -8,6 +8,28 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>House Ledger</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<!-- ─── JS-THEMES (head, runs before first paint) ───
+     applyTheme used to run in a useEffect, so a cold load painted the light
+     default for ~160ms before flipping to a saved dark theme. Measured. This
+     is a plain <script>, not the JSX block, so compile.js leaves it alone. -->
+<script>
+const THEMES={
+  blueprint:{name:'Blueprint',emoji:'🔷',dark:false,bg:'#e8f0f4',card:'#ffffff',border:'#d0dbe4',t1:'#1a2a3a',t2:'#4a5a6a',t3:'#8a9aaa',accent:'#0d7377',accentDk:'#095456',accentLt:'#e0f4f4',accent2:'#e94560',accent2Dk:'#b8354d',accent2Lt:'#fce8ec',rose:'#e94560',roseLt:'#fce8ec',lav:'#7c3aed',lavLt:'#ede9fe',amber:'#d97706',amberLt:'#fef3c7',sky:'#0284c7',skyLt:'#e0f2fe',headerGrad:'linear-gradient(135deg,#0d7377,#14919b)',tabActive:'#0d7377',scrollThumb:'#0d7377'},
+  sandstone:{name:'Sandstone',emoji:'🏗️',dark:false,bg:'#f5f0e8',card:'#fffdf8',border:'#e0d5c5',t1:'#3a2e1e',t2:'#6a5e4e',t3:'#9a8e7e',accent:'#b45309',accentDk:'#8a3f06',accentLt:'#fef3e2',accent2:'#dc2626',accent2Dk:'#b91c1c',accent2Lt:'#fef2f2',rose:'#dc2626',roseLt:'#fef2f2',lav:'#7c3aed',lavLt:'#ede9fe',amber:'#d97706',amberLt:'#fef3c7',sky:'#0284c7',skyLt:'#e0f2fe',headerGrad:'linear-gradient(135deg,#b45309,#d97706)',tabActive:'#b45309',scrollThumb:'#b45309'},
+  concrete:{name:'Concrete',emoji:'🌑',dark:true,bg:'#1a1a2e',card:'#242440',border:'#3a3a5c',t1:'#e8e8f0',t2:'#b0b0c8',t3:'#7878a0',accent:'#e94560',accentDk:'#b8354d',accentLt:'#3a1a28',accent2:'#f0c040',accent2Dk:'#c8a030',accent2Lt:'#3a3420',rose:'#e94560',roseLt:'#3a1a28',lav:'#a78bfa',lavLt:'#2e2650',amber:'#fbbf24',amberLt:'#3a3420',sky:'#38bdf8',skyLt:'#1a2e40',headerGrad:'linear-gradient(135deg,#1a1a2e,#2a2a48)',tabActive:'#e94560',scrollThumb:'#e94560'},
+  garden:{name:'Garden',emoji:'🌿',dark:false,bg:'#ecf4ec',card:'#f8fcf8',border:'#c8dcc8',t1:'#1a3a1a',t2:'#4a6a4a',t3:'#7a9a7a',accent:'#137333',accentDk:'#0e5a28',accentLt:'#e0f4e6',accent2:'#dc2626',accent2Dk:'#b91c1c',accent2Lt:'#fef2f2',rose:'#dc2626',roseLt:'#fef2f2',lav:'#7c3aed',lavLt:'#ede9fe',amber:'#d97706',amberLt:'#fef3c7',sky:'#0284c7',skyLt:'#e0f2fe',headerGrad:'linear-gradient(135deg,#137333,#22a852)',tabActive:'#137333',scrollThumb:'#137333'},
+  mahogany:{name:'Mahogany',emoji:'🪵',dark:true,bg:'#1e1410',card:'#2e221c',border:'#4a3a30',t1:'#f0e8e0',t2:'#c8b8a8',t3:'#8a7a6a',accent:'#d97706',accentDk:'#b45309',accentLt:'#3a2a18',accent2:'#ef4444',accent2Dk:'#dc2626',accent2Lt:'#3a1a1a',rose:'#ef4444',roseLt:'#3a1a1a',lav:'#a78bfa',lavLt:'#2e2240',amber:'#fbbf24',amberLt:'#3a3018',sky:'#38bdf8',skyLt:'#1a2830',headerGrad:'linear-gradient(135deg,#3a2618,#5a3a28)',tabActive:'#d97706',scrollThumb:'#d97706'},
+  nightwork:{name:'Nightwork',emoji:'⚫',dark:true,bg:'#000000',card:'#141414',border:'#2a2a2a',t1:'#f0f0f0',t2:'#a0a0a0',t3:'#606060',accent:'#f97316',accentDk:'#ea580c',accentLt:'#2a1a0a',accent2:'#ef4444',accent2Dk:'#dc2626',accent2Lt:'#2a0a0a',rose:'#ef4444',roseLt:'#2a0a0a',lav:'#a78bfa',lavLt:'#1a1430',amber:'#fbbf24',amberLt:'#2a2008',sky:'#38bdf8',skyLt:'#0a1a28',headerGrad:'linear-gradient(135deg,#1a1a1a,#0a0a0a)',tabActive:'#f97316',scrollThumb:'#f97316'}
+};
+
+function applyTheme(id){
+  const t=THEMES[id];if(!t)return;
+  const r=document.documentElement.style;
+  Object.entries(t).forEach(([k,v])=>{if(typeof v==='string'&&k!=='name'&&k!=='emoji')r.setProperty('--'+k,v);});
+  localStorage.setItem('hl-theme',id);
+}
+try{applyTheme(localStorage.getItem('hl-theme')||'blueprint');}catch(e){/* private mode */}
+</script>
 
 {/* ═══════════════════════════════════════════════════════════════
     SECTION INDEX — find a section, don't scroll to it. Line numbers
@@ -310,6 +332,7 @@ const FS_BUD=`https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(de
 const FS_TEN=`${FS_ROOT}/house-tenants`;
 const FS_LEASE=`${FS_ROOT}/house-leases`;
 const FS_RENT=`${FS_ROOT}/house-rent`;
+const FS_MAINT=`${FS_ROOT}/house-maintenance`;
 const ID_SIGNIN=`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${AKEY}`;
 const ID_REFRESH=`https://securetoken.googleapis.com/v1/token?key=${AKEY}`;
 
@@ -392,23 +415,6 @@ const MODE_CLR={'Cash':{bg:'#fef3c7',text:'#92400e',dot:'#d97706'},'NEFT':{bg:'#
 // leaves a bank trail.
 const isCash=m=>m==='Cash';
 const STATUS_CLR={'Paid':{bg:'#dcfce7',text:'#166534',dot:'#22c55e'},'Partial':{bg:'#fef3c7',text:'#92400e',dot:'#d97706'},'Pending':{bg:'#e0f2fe',text:'#075985',dot:'#0ea5e9'},'Overdue':{bg:'#fee2e2',text:'#991b1b',dot:'#ef4444'}};
-
-// ─── JS-THEMES ───
-const THEMES={
-  blueprint:{name:'Blueprint',emoji:'🔷',dark:false,bg:'#e8f0f4',card:'#ffffff',border:'#d0dbe4',t1:'#1a2a3a',t2:'#4a5a6a',t3:'#8a9aaa',accent:'#0d7377',accentDk:'#095456',accentLt:'#e0f4f4',accent2:'#e94560',accent2Dk:'#b8354d',accent2Lt:'#fce8ec',rose:'#e94560',roseLt:'#fce8ec',lav:'#7c3aed',lavLt:'#ede9fe',amber:'#d97706',amberLt:'#fef3c7',sky:'#0284c7',skyLt:'#e0f2fe',headerGrad:'linear-gradient(135deg,#0d7377,#14919b)',tabActive:'#0d7377',scrollThumb:'#0d7377'},
-  sandstone:{name:'Sandstone',emoji:'🏗️',dark:false,bg:'#f5f0e8',card:'#fffdf8',border:'#e0d5c5',t1:'#3a2e1e',t2:'#6a5e4e',t3:'#9a8e7e',accent:'#b45309',accentDk:'#8a3f06',accentLt:'#fef3e2',accent2:'#dc2626',accent2Dk:'#b91c1c',accent2Lt:'#fef2f2',rose:'#dc2626',roseLt:'#fef2f2',lav:'#7c3aed',lavLt:'#ede9fe',amber:'#d97706',amberLt:'#fef3c7',sky:'#0284c7',skyLt:'#e0f2fe',headerGrad:'linear-gradient(135deg,#b45309,#d97706)',tabActive:'#b45309',scrollThumb:'#b45309'},
-  concrete:{name:'Concrete',emoji:'🌑',dark:true,bg:'#1a1a2e',card:'#242440',border:'#3a3a5c',t1:'#e8e8f0',t2:'#b0b0c8',t3:'#7878a0',accent:'#e94560',accentDk:'#b8354d',accentLt:'#3a1a28',accent2:'#f0c040',accent2Dk:'#c8a030',accent2Lt:'#3a3420',rose:'#e94560',roseLt:'#3a1a28',lav:'#a78bfa',lavLt:'#2e2650',amber:'#fbbf24',amberLt:'#3a3420',sky:'#38bdf8',skyLt:'#1a2e40',headerGrad:'linear-gradient(135deg,#1a1a2e,#2a2a48)',tabActive:'#e94560',scrollThumb:'#e94560'},
-  garden:{name:'Garden',emoji:'🌿',dark:false,bg:'#ecf4ec',card:'#f8fcf8',border:'#c8dcc8',t1:'#1a3a1a',t2:'#4a6a4a',t3:'#7a9a7a',accent:'#137333',accentDk:'#0e5a28',accentLt:'#e0f4e6',accent2:'#dc2626',accent2Dk:'#b91c1c',accent2Lt:'#fef2f2',rose:'#dc2626',roseLt:'#fef2f2',lav:'#7c3aed',lavLt:'#ede9fe',amber:'#d97706',amberLt:'#fef3c7',sky:'#0284c7',skyLt:'#e0f2fe',headerGrad:'linear-gradient(135deg,#137333,#22a852)',tabActive:'#137333',scrollThumb:'#137333'},
-  mahogany:{name:'Mahogany',emoji:'🪵',dark:true,bg:'#1e1410',card:'#2e221c',border:'#4a3a30',t1:'#f0e8e0',t2:'#c8b8a8',t3:'#8a7a6a',accent:'#d97706',accentDk:'#b45309',accentLt:'#3a2a18',accent2:'#ef4444',accent2Dk:'#dc2626',accent2Lt:'#3a1a1a',rose:'#ef4444',roseLt:'#3a1a1a',lav:'#a78bfa',lavLt:'#2e2240',amber:'#fbbf24',amberLt:'#3a3018',sky:'#38bdf8',skyLt:'#1a2830',headerGrad:'linear-gradient(135deg,#3a2618,#5a3a28)',tabActive:'#d97706',scrollThumb:'#d97706'},
-  nightwork:{name:'Nightwork',emoji:'⚫',dark:true,bg:'#000000',card:'#141414',border:'#2a2a2a',t1:'#f0f0f0',t2:'#a0a0a0',t3:'#606060',accent:'#f97316',accentDk:'#ea580c',accentLt:'#2a1a0a',accent2:'#ef4444',accent2Dk:'#dc2626',accent2Lt:'#2a0a0a',rose:'#ef4444',roseLt:'#2a0a0a',lav:'#a78bfa',lavLt:'#1a1430',amber:'#fbbf24',amberLt:'#2a2008',sky:'#38bdf8',skyLt:'#0a1a28',headerGrad:'linear-gradient(135deg,#1a1a1a,#0a0a0a)',tabActive:'#f97316',scrollThumb:'#f97316'}
-};
-
-function applyTheme(id){
-  const t=THEMES[id];if(!t)return;
-  const r=document.documentElement.style;
-  Object.entries(t).forEach(([k,v])=>{if(typeof v==='string'&&k!=='name'&&k!=='emoji')r.setProperty('--'+k,v);});
-  localStorage.setItem('hl-theme',id);
-}
 
 // ─── JS-FIRESTORE-HELPERS ───
 const toFS=e=>({fields:{date:{stringValue:e.date},category:{stringValue:e.category},subcategory:{stringValue:e.subcategory},description: { stringValue: e.description || '' },amount:{doubleValue:e.amount},vendor:{stringValue:e.vendor},transferTo:{stringValue:e.transferTo},account:{stringValue:e.account},paymentMode:{stringValue:e.paymentMode},phase:{stringValue:e.phase},zone:{stringValue:e.zone},expenseType:{stringValue:e.expenseType},invoiceRef:{stringValue:e.invoiceRef||''},notes:{stringValue:e.notes||''},status:{stringValue:e.status},loggedBy:{stringValue:e.loggedBy},updatedAt:{stringValue:new Date().toISOString()}}});
@@ -544,6 +550,53 @@ const sortLeases=ls=>[...ls].sort((a,b)=>(b.startDate||'').localeCompare(a.start
 // lease and a document exists only where something happened. A deterministic
 // id makes the write an upsert and makes two records for one month
 // impossible. See LEASE_MODE_PLAN.md §4.
+// ─── JS-MAINT-DATA ───
+const MAINT_CATEGORIES=['Plumbing','Electrical','Structural','Appliance','Other'];
+const MAINT_STATUSES=['Open','Scheduled','In Progress','Done','Declined'];
+const MAINT_PRIORITIES=['Low','Normal','Urgent'];
+const MAINT_CLR={'Open':{bg:'#e0f2fe',text:'#075985'},'Scheduled':{bg:'#ede9fe',text:'#5b21b6'},
+  'In Progress':{bg:'#fef3c7',text:'#92400e'},'Done':{bg:'#dcfce7',text:'#166534'},
+  'Declined':{bg:'#f1f5f9',text:'#334155'}};
+const PRIORITY_CLR={'Low':{bg:'#f1f5f9',text:'#334155'},'Normal':{bg:'#e0f2fe',text:'#075985'},
+  'Urgent':{bg:'#fee2e2',text:'#991b1b'}};
+const toFSMaint=m=>({fields:{
+  leaseId:{stringValue:m.leaseId||''},raisedDate:{stringValue:m.raisedDate},
+  raisedBy:{stringValue:m.raisedBy||''},zone:{stringValue:m.zone||''},
+  category:{stringValue:m.category||''},description:{stringValue:m.description||''},
+  priority:{stringValue:m.priority||'Normal'},status:{stringValue:m.status||'Open'},
+  vendor:{stringValue:m.vendor||''},cost:{doubleValue:m.cost||0},
+  expenseId:{stringValue:m.expenseId||''},notes:{stringValue:m.notes||''},
+  updatedAt:{stringValue:new Date().toISOString()},updatedBy:{stringValue:m.updatedBy||''}}});
+const fromFSMaint=d=>{const f=d.fields||{};return{id:d.name.split('/').pop(),
+  leaseId:str(f,'leaseId'),raisedDate:str(f,'raisedDate'),raisedBy:str(f,'raisedBy'),
+  zone:str(f,'zone'),category:str(f,'category'),description:str(f,'description'),
+  priority:str(f,'priority')||'Normal',status:str(f,'status')||'Open',
+  vendor:str(f,'vendor'),cost:num(f,'cost'),expenseId:str(f,'expenseId'),notes:str(f,'notes'),
+  updatedAt:str(f,'updatedAt'),updatedBy:str(f,'updatedBy')};};
+const fetchMaint=()=>authedFetchAll(FS_MAINT,fromFSMaint);
+async function saveMaint(m){
+  const id=m.id||('mnt-'+Date.now());
+  await authedFetch(`${FS_MAINT}/${id}?key=${AKEY}`,{method:'PATCH',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify(toFSMaint({...m,id}))});
+  return id;
+}
+const deleteMaint=id=>authedFetch(`${FS_MAINT}/${id}?key=${AKEY}`,{method:'DELETE'});
+
+// The one seam that writes across the two modules. A repair cost becomes a
+// real expense entry, pre-tagged, and the two records reference each other.
+// expenseType is Miscellaneous, never Contract — a repair during a tenancy
+// must not count against the construction budget.
+async function repairToExpense(m,who){
+  const entry={date:m.costDate||todayISO(),amount:m.cost,vendor:m.vendor||'Unknown',
+    transferTo:m.vendor||'Unknown',account:'Self',category:'Maintenance',subcategory:'Repairs',
+    description:m.description||'',phase:'Maintenance',zone:m.zone||'Whole House',
+    expenseType:'Miscellaneous',paymentMode:m.paymentMode||'NEFT',invoiceRef:'',
+    notes:`Repair: ${m.description||''}`.trim(),status:'Paid',loggedBy:who||''};
+  const expenseId=await createEntry(entry);
+  await saveMaint({...m,expenseId,updatedBy:who||''});
+  return expenseId;
+}
+
 const RENT_STATUSES=['Received','Partial','Waived','Written-off'];
 const RENT_CLR={'Received':{bg:'#dcfce7',text:'#166534'},'Partial':{bg:'#fef3c7',text:'#92400e'},
   'Due':{bg:'#e0f2fe',text:'#075985'},'Late':{bg:'#fee2e2',text:'#991b1b'},
@@ -871,7 +924,7 @@ function HeroMonthCard({exps,onNavigate,expanded,onToggle}){
 const BUILD_TABS=[{id:'entries',icon:'📋',label:'Entries'},{id:'phases',icon:'🏗️',label:'Phases'},{id:'zones',icon:'🏠',label:'Zones'},{id:'vendors',icon:'👷',label:'Vendors'},{id:'timeline',icon:'📅',label:'Timeline'}];
 // Only tabs that exist. Rent, Repairs and Reports arrive with L2/L3/L4 —
 // a disabled tab teaches nothing.
-const LEASE_TABS=[{id:'rent',icon:'💰',label:'Rent'},{id:'tenancy',icon:'🔑',label:'Tenancy'}];
+const LEASE_TABS=[{id:'rent',icon:'💰',label:'Rent'},{id:'repairs',icon:'🔧',label:'Repairs'},{id:'tenancy',icon:'🔑',label:'Tenancy'}];
 function TabBar({tab,onTab,tabs=BUILD_TABS}){
   return(<div className="tab-bar">{tabs.map(t=><button key={t.id} className={`tab-item ${tab===t.id?'active':''}`} onClick={()=>onTab(t.id)}><span className="tab-icon">{t.icon}</span>{t.label}</button>)}</div>);
 }
@@ -1730,6 +1783,164 @@ function ThemePicker({themeId,onPick,onClose}){
   );
 }
 
+// ─── JS-REPAIR-FORM ───
+function RepairForm({item,vendors,leases,onSave,onCancel,onDelete,userName}){
+  const isEdit=!!item?.id;
+  const [f,setF]=useState(item?.id?{...item,cost:item.cost?String(item.cost):''}:{
+    leaseId:'',raisedDate:todayISO(),raisedBy:'Owner',zone:'Whole House',
+    category:MAINT_CATEGORIES[0],description:'',priority:'Normal',status:'Open',
+    vendor:'',cost:'',expenseId:'',notes:''});
+  const [tried,setTried]=useState(false);
+  const [busy,setBusy]=useState(false);
+  const [err,setErr]=useState('');
+  const [alsoLog,setAlsoLog]=useState(false);
+  const up=(k,v)=>setF(p=>({...p,[k]:v}));
+  const cost=parseFloat(f.cost)||0;
+  const missing=!f.description.trim()?['description']:[];
+  const alreadyLogged=!!f.expenseId;
+
+  const save=async()=>{
+    if(missing.length)return setTried(true);
+    setBusy(true);setErr('');
+    try{await onSave({...f,cost,updatedBy:userName||''},alsoLog&&!alreadyLogged&&cost>0);}
+    catch(e){setErr(e.message);setBusy(false);}
+  };
+  return(
+    <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
+      <div className="modal">
+        <h2>{isEdit?'Edit Repair':'New Repair'}</h2>
+        <div className="field"><label>What needs doing</label>
+          <textarea value={f.description} onChange={e=>up('description',e.target.value)} placeholder="Leaking tap in the ground floor bathroom"/>
+          {tried&&missing.length>0&&<div className="field-err">A description is required</div>}</div>
+        <div className="field"><label>Category</label>
+          <select value={f.category} onChange={e=>up('category',e.target.value)}>
+            {MAINT_CATEGORIES.map(c=><option key={c} value={c}>{c}</option>)}</select></div>
+        <div className="field"><label>Zone</label>
+          <select value={f.zone} onChange={e=>up('zone',e.target.value)}>
+            {ZONES.map(z=><option key={z} value={z}>{z}</option>)}</select>
+          <div className="form-hint" style={{textAlign:'left',marginTop:4}}>Used to tag the expense if you log a cost.</div></div>
+        <div className="field"><label>Priority</label>
+          <div className="toggle-group">{MAINT_PRIORITIES.map(x=>
+            <button key={x} type="button" className={`toggle-btn ${f.priority===x?'active':''}`} onClick={()=>up('priority',x)}>{x}</button>)}</div></div>
+        <div className="field"><label>Status</label>
+          <div className="toggle-group" style={{flexWrap:'wrap'}}>{MAINT_STATUSES.map(x=>
+            <button key={x} type="button" className={`toggle-btn ${f.status===x?'active':''}`} style={{fontSize:'.7rem'}} onClick={()=>up('status',x)}>{x}</button>)}</div></div>
+
+        <div className="form-sep">Who and when</div>
+        <div className="field"><label>Raised on</label>
+          <input type="date" max={todayISO()} value={f.raisedDate} onChange={e=>up('raisedDate',e.target.value)}/></div>
+        <div className="field"><label>Raised by</label>
+          <div className="toggle-group">{['Owner','Tenant'].map(x=>
+            <button key={x} type="button" className={`toggle-btn ${f.raisedBy===x?'active':''}`} onClick={()=>up('raisedBy',x)}>{x}</button>)}</div></div>
+        <div className="field"><label>Vendor</label>
+          <input list="repair-vendors" value={f.vendor} onChange={e=>up('vendor',e.target.value)} placeholder="Who is doing the work"/>
+          <datalist id="repair-vendors">{vendors.map(v=><option key={v} value={v}/>)}</datalist>
+          <div className="form-hint" style={{textAlign:'left',marginTop:4}}>Suggestions come from vendors you have already paid.</div></div>
+
+        <div className="form-sep">Cost</div>
+        <div className="field"><label>Cost (₹)</label>
+          <input type="number" inputMode="decimal" value={f.cost} onChange={e=>up('cost',e.target.value)} placeholder="0"/>
+          {cost>0&&<div className="amt-echo">{fmtFull(cost)} ({fmtAmt(cost).replace('₹','')})</div>}</div>
+        {alreadyLogged
+          ?<div className="autofill-note"><span>Already logged as an expense</span></div>
+          :cost>0&&
+            <button type="button" className={`more-toggle ${alsoLog?'':''}`} aria-pressed={alsoLog}
+              onClick={()=>setAlsoLog(v=>!v)}
+              style={alsoLog?{borderStyle:'solid',borderColor:'var(--accent)',color:'var(--accent)'}:null}>
+              <span>{alsoLog?'✓ ':''}Also log this as an expense</span>
+              <span style={{fontSize:'.7rem',fontWeight:600}}>Maintenance · {f.zone}</span>
+            </button>}
+        {alsoLog&&!alreadyLogged&&
+          <div className="form-hint" style={{textAlign:'left'}}>
+            Creates an entry in Build mode: {fmtFull(cost)} to {f.vendor||'Unknown'}, phase Maintenance,
+            zone {f.zone}, type Miscellaneous — so it never counts against the construction budget.
+          </div>}
+
+        <div className="field" style={{marginTop:12}}><label>Notes</label>
+          <textarea value={f.notes} onChange={e=>up('notes',e.target.value)} placeholder="Optional"/></div>
+        {err&&<div className="field-err">{err}</div>}
+        <div className="form-actions sticky">
+          <button className="btn-primary" disabled={busy} onClick={save}>{busy?'Saving…':'Save'}</button>
+          {isEdit&&<button className="btn-secondary" onClick={onDelete} aria-label="Delete this repair">🗑</button>}
+          <button className="btn-secondary" onClick={onCancel}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-REPAIRS-TAB ───
+function RepairsTab({items,vendors,onAdd,onEdit}){
+  const [showDone,setShowDone]=useState(false);
+  const open=useMemo(()=>items.filter(m=>m.status!=='Done'&&m.status!=='Declined')
+    .sort((a,b)=>{const p={Urgent:0,Normal:1,Low:2};return (p[a.priority]??1)-(p[b.priority]??1)||b.raisedDate.localeCompare(a.raisedDate);}),[items]);
+  const closed=useMemo(()=>items.filter(m=>m.status==='Done'||m.status==='Declined')
+    .sort((a,b)=>b.raisedDate.localeCompare(a.raisedDate)),[items]);
+  const spent=items.reduce((s,m)=>s+m.cost,0);
+  const unlogged=items.filter(m=>m.cost>0&&!m.expenseId);
+
+  if(!items.length)return(
+    <div className="entry-list">
+      <div className="empty-state">
+        <div className="icon">🔧</div>
+        <p><strong>No repairs logged</strong></p>
+        <p style={{marginTop:6}}>Track what needs fixing, who is doing it, and what it cost.</p>
+        <button className="alloc-btn" style={{maxWidth:240,margin:'16px auto 0'}} onClick={onAdd}>Log a repair</button>
+      </div>
+    </div>);
+
+  return(
+    <div className="entry-list">
+      <div className="alloc-card">
+        <div className="alloc-head"><span className="lbl">Spent on repairs</span><span className="amt">{fmtFull(spent)}</span></div>
+        <div className="v-meta" style={{marginTop:0}}>
+          {open.length} open · {closed.length} closed
+          {unlogged.length>0?` · ${unlogged.length} cost${unlogged.length===1?'':'s'} not yet in the ledger`:''}
+        </div>
+        <button className="alloc-btn" onClick={onAdd}>Log a repair</button>
+      </div>
+
+      {open.length>0&&<>
+        <div className="form-sep" style={{marginTop:18}}>Open</div>
+        {open.map(m=><RepairRow key={m.id} item={m} onClick={()=>onEdit(m)}/>)}
+      </>}
+
+      {closed.length>0&&<>
+        <button type="button" className="more-toggle" style={{marginTop:18}} aria-expanded={showDone}
+          onClick={()=>setShowDone(v=>!v)}>
+          <span>{closed.length} closed</span><span className={`more-chev ${showDone?'open':''}`}>▾</span>
+        </button>
+        {showDone&&<div className="more-panel">{closed.map(m=><RepairRow key={m.id} item={m} onClick={()=>onEdit(m)}/>)}</div>}
+      </>}
+    </div>
+  );
+}
+
+function RepairRow({item,onClick}){
+  const sc=MAINT_CLR[item.status]||MAINT_CLR.Open;
+  const pc=PRIORITY_CLR[item.priority]||PRIORITY_CLR.Normal;
+  return(
+    <div className="entry-row" onClick={onClick} style={{cursor:'pointer'}}>
+      <div className="entry-content">
+        <div className="entry-top">
+          <span className="entry-vendor">{item.description||'(no description)'}</span>
+          <span className="entry-amt">{item.cost>0?fmtFull(item.cost):'—'}</span>
+        </div>
+        <div className="entry-meta">
+          <span className="entry-date">{fmtDateShort(item.raisedDate)}</span>
+          <span className="chip" style={{background:sc.bg,color:sc.text}}>{item.status}</span>
+          {item.priority==='Urgent'&&<span className="chip" style={{background:pc.bg,color:pc.text}}>Urgent</span>}
+          <span className="chip" style={{background:'var(--accentLt)',color:'var(--accent)'}}>{item.category}</span>
+          {item.vendor&&<span className="chip" style={{background:'var(--border)',color:'var(--t2)'}}>{item.vendor}</span>}
+          {item.cost>0&&(item.expenseId
+            ?<span className="chip" style={{background:'#dcfce7',color:'#166534'}}>in ledger</span>
+            :<span className="chip" style={{background:'#fef3c7',color:'#92400e'}}>not logged</span>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── JS-TENANT-FORM ───
 function TenantForm({tenant,onSave,onCancel,userName}){
   const [f,setF]=useState(tenant||{name:'',phone:'',email:'',idRef:'',emergencyContact:'',notes:''});
@@ -2195,7 +2406,10 @@ function App(){
   const [tenants,setTenants]=useState([]);
   const [leases,setLeases]=useState([]);
   const [rents,setRents]=useState([]);
+  const [maint,setMaint]=useState([]);
   const [editRent,setEditRent]=useState(null);
+  const [editRepair,setEditRepair]=useState(null);
+  const [confirmRepair,setConfirmRepair]=useState(null);
   const [leaseErr,setLeaseErr]=useState('');
   const [editTenant,setEditTenant]=useState(null);
   const [editLease,setEditLease]=useState(null);
@@ -2276,8 +2490,8 @@ function App(){
   const loadLease=useCallback(async()=>{
     if(!authState)return;
     try{
-      const [t,l,r]=await Promise.all([fetchTenants(),fetchLeases(),fetchRents()]);
-      setTenants(t.sort((a,b)=>a.name.localeCompare(b.name)));setLeases(l);setRents(r);setLeaseErr('');
+      const [t,l,r,m]=await Promise.all([fetchTenants(),fetchLeases(),fetchRents(),fetchMaint()]);
+      setTenants(t.sort((a,b)=>a.name.localeCompare(b.name)));setLeases(l);setRents(r);setMaint(m);setLeaseErr('');
     }catch(e){console.error(e);setLeaseErr(e.message);}
   },[]);
   const refreshAll=useCallback(()=>{loadData();loadBudgets();if(mode==='lease')loadLease();},[loadData,loadBudgets,loadLease,mode]);
@@ -2456,6 +2670,26 @@ function App(){
     try{await deleteRent(lease.id,row.period);loadLease();}catch(e){alert('Could not clear: '+e.message);}
   },[editRent,loadLease]);
 
+  // Vendors already paid, offered as suggestions on a repair. Build-mode data
+  // used read-only by lease mode — the reverse direction of repairToExpense.
+  const paidVendors=useMemo(()=>[...new Set(exps.map(e=>e.vendor).filter(Boolean))].sort(),[exps]);
+  // Save first so a new repair has an id, then let repairToExpense patch the
+  // same document with the expenseId — otherwise it would write a second one.
+  const saveRepairEntry=useCallback(async(m,alsoLog)=>{
+    const id=await saveMaint({...m,updatedBy:auth?.name||''});
+    const logging=alsoLog&&m.cost>0&&!m.expenseId;
+    if(logging)await repairToExpense({...m,id},auth?.name);
+    setEditRepair(null);loadLease();
+    if(logging)loadData();
+  },[auth,loadLease,loadData]);
+  // Deleting a repair leaves any expense it created alone: the money was
+  // still spent, and silently removing a ledger row is the worse surprise.
+  const removeRepair=useCallback(async()=>{
+    const m=confirmRepair;if(!m)return;
+    setConfirmRepair(null);setEditRepair(null);
+    try{await deleteMaint(m.id);loadLease();}catch(e){alert('Delete failed: '+e.message);}
+  },[confirmRepair,loadLease]);
+
   const removeLease=useCallback(async()=>{
     const l=confirmLease;if(!l)return;
     setConfirmLease(null);
@@ -2519,6 +2753,9 @@ function App(){
             <RentTab leases={leases} rents={rents} tenants={tenants}
               onRecord={(row,lease)=>setEditRent({row,lease})}
               onGoTenancy={()=>setTab('tenancy')}/>}
+          {tab==='repairs'&&
+            <RepairsTab items={maint} vendors={paidVendors}
+              onAdd={()=>setEditRepair({})} onEdit={m=>setEditRepair(m)}/>}
           {tab==='tenancy'&&
             <TenancyTab tenants={tenants} leases={leases}
               onAddTenant={()=>setEditTenant({})}
@@ -2548,6 +2785,19 @@ function App(){
         </div>}
       {editRent&&<RentForm row={editRent.row} lease={editRent.lease} userName={auth?.name}
         onSave={saveRentEntry} onClear={clearRentEntry} onCancel={()=>setEditRent(null)}/>}
+      {editRepair&&<RepairForm item={editRepair.id?editRepair:null} vendors={paidVendors} userName={auth?.name}
+        onSave={saveRepairEntry} onDelete={()=>setConfirmRepair(editRepair)} onCancel={()=>setEditRepair(null)}/>}
+      {confirmRepair&&
+        <div className="confirm-overlay" onClick={e=>{if(e.target===e.currentTarget)setConfirmRepair(null);}}>
+          <div className="confirm-box">
+            <h3>Delete this repair?</h3>
+            <p>{confirmRepair.description||'(no description)'}{confirmRepair.expenseId?' — the expense it created stays in the ledger.':''}</p>
+            <div className="form-actions">
+              <button className="btn-danger" onClick={removeRepair}>Delete</button>
+              <button className="btn-secondary" onClick={()=>setConfirmRepair(null)}>Cancel</button>
+            </div>
+          </div>
+        </div>}
       {editTenant&&<TenantForm tenant={editTenant.id?editTenant:null} userName={auth?.name}
         onSave={saveTenantEntry} onCancel={()=>setEditTenant(null)}/>}
       {editLease&&<LeaseForm lease={editLease.startDate||editLease.id?editLease:null}

@@ -272,15 +272,30 @@ every existing total.
 
 *(The escalation sub-feature that was here is gone — §0.3.)*
 
-### L3 — Repairs
+### L3 — Repairs — **shipped**
 
-| | Feature |
-|---|---|
-| L3.1 | Request list + create, raised by tenant or owner |
-| L3.2 | Status workflow and priority |
-| L3.3 | Vendor from the existing expense vendor list |
-| L3.4 | Record cost → creates the linked expense entry (§5.1) |
-| L3.5 | Repair history and lifetime cost |
+| | Feature | Status |
+|---|---|---|
+| L3.1 | Request list + create, raised by tenant or owner | done |
+| L3.2 | Status workflow and priority | done — Open / Scheduled / In Progress / Done / Declined, Low / Normal / Urgent |
+| L3.3 | Vendor from the existing expense vendor list | done — datalist from `house-expenses` |
+| L3.4 | Record cost → creates the linked expense entry (§5.1) | done — opt-in per repair, `repairToExpense` |
+| L3.5 | Repair history and lifetime cost | done — open sorted by priority, closed behind a disclosure |
+
+Decisions taken while building it:
+
+- **The expense link is opt-in, not automatic.** The toggle only appears once a
+  cost is entered, and it states what it will write before you tap Save. A
+  repair whose cost you paid in cash and never want in the ledger is a real
+  case; silently creating an entry would be worse than asking.
+- **The created expense is `Miscellaneous`, phase `Maintenance`.** Never
+  `Contract` — a repair during a tenancy must not eat into a construction
+  budget. The zone comes from the repair, so zone totals stay honest.
+- **The repair is saved before the expense is created**, then patched with the
+  returned `expenseId`. Doing it the other way round would write two
+  maintenance documents for one repair.
+- **Deleting a repair leaves its expense alone.** The money was still spent.
+  The confirmation says so rather than leaving it to be discovered.
 
 ### L4 — Reports
 

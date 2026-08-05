@@ -80,6 +80,21 @@ const LEASES = [{ name: 'projects/p/databases/(default)/documents/house-leases/l
   noticePeriodDays: { doubleValue: 30 }, statusOverride: field(''), agreementRef: field(''),
   notes: field(''), previousLeaseId: field(''), updatedAt: field(''), updatedBy: field('Jiten') } }];
 
+// One open repair and one closed-and-already-in-the-ledger repair, so both
+// halves of the tab render: the open list and the closed disclosure.
+const MAINT = [
+  { name: 'projects/p/databases/(default)/documents/house-maintenance/mnt-1', fields: {
+    leaseId: field(''), raisedDate: field('2026-07-20'), raisedBy: field('Tenant'),
+    zone: field('Ground Floor'), category: field('Plumbing'), description: field('Leaking tap'),
+    priority: field('Urgent'), status: field('Open'), vendor: field(''), cost: { doubleValue: 0 },
+    expenseId: field(''), notes: field(''), updatedAt: field(''), updatedBy: field('Jiten') } },
+  { name: 'projects/p/databases/(default)/documents/house-maintenance/mnt-2', fields: {
+    leaseId: field(''), raisedDate: field('2026-06-02'), raisedBy: field('Owner'),
+    zone: field('Roof & Terrace'), category: field('Structural'), description: field('Seal terrace crack'),
+    priority: field('Normal'), status: field('Done'), vendor: field('Rahul'), cost: { doubleValue: 8000 },
+    expenseId: field('exp-old'), notes: field(''), updatedAt: field(''), updatedBy: field('Jiten') } },
+];
+
 const SIGNED_IN = { idToken: 'T', refreshToken: 'R', expiresAt: Date.now() + 3600e3, email: 'jiten@example.com', name: 'Jiten' };
 
 // ─── Harness ───
@@ -107,7 +122,9 @@ async function run() {
     if (route.request().method() === 'GET') {
       const docs = url.includes('house-budgets') ? BUDGETS
         : url.includes('house-tenants') ? TENANTS
-        : url.includes('house-leases') ? LEASES : EXPENSES;
+        : url.includes('house-leases') ? LEASES
+        : url.includes('house-maintenance') ? MAINT
+        : url.includes('house-rent') ? [] : EXPENSES;
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ documents: docs }) });
     }
     return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
@@ -258,6 +275,18 @@ async function run() {
     await page.locator('button', { hasText: 'Export' }).click();
     await dl;
   });
+  await step('lease: repairs tab', () => page.locator('.tab-item', { hasText: 'Repairs' }).click());
+  await step('lease: open a repair', () => page.locator('.entry-row').first().click());
+  await step('lease: repair cost arms the expense toggle', async () => {
+    await page.locator('.modal input[type=number]').fill('4500');
+    await page.locator('.modal .more-toggle').click();
+  });
+  await step('lease: repair delete asks first', () => page.locator('.form-actions.sticky button[aria-label="Delete this repair"]').click());
+  await step('lease: cancel repair delete', () => page.locator('.confirm-box button', { hasText: 'Cancel' }).click());
+  await step('lease: close repair form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: closed repairs disclosure', () => page.locator('.more-toggle').first().click());
+  await step('lease: new repair form', () => page.locator('.alloc-btn', { hasText: 'Log a repair' }).click());
+  await step('lease: close new repair', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
   await step('lease: tenancy tab', () => page.locator('.tab-item', { hasText: 'Tenancy' }).click());
   await step('lease: open lease form', () => page.locator('.alloc-card').first().locator('button', { hasText: 'Edit' }).click());
   await step('lease: close lease form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
