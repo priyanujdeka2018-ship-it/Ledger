@@ -195,6 +195,11 @@ service cloud.firestore {
       allow read: if true;
       allow write: if familyMember();
     }
+    // Editable lists (custom categories/phases/zones) — read-open, write-locked.
+    match /house-config/{doc} {
+      allow read: if true;
+      allow write: if familyMember();
+    }
 
     // Lease module: fully private. Reads AND writes require a family account,
     // because these hold a third party's name, phone number and arrears history.

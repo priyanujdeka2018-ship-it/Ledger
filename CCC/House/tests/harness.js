@@ -95,7 +95,7 @@ async function open({ docs = {}, today = '2026-08-05', mode = 'lease', signedIn 
     body: JSON.stringify({ id_token: 'T2', refresh_token: 'R2', expires_in: '3600', user_id: 'u1' }) }));
 
   const writes = [];
-  const COLLECTIONS = ['house-expenses', 'house-budgets', 'house-tenants', 'house-leases', 'house-rent', 'house-maintenance'];
+  const COLLECTIONS = ['house-expenses', 'house-budgets', 'house-config', 'house-tenants', 'house-leases', 'house-rent', 'house-maintenance'];
   await page.route('**firestore.googleapis.com**', route => {
     const url = route.request().url(), method = route.request().method();
     // The change probe. One read when nothing has moved — see DEVELOPMENT.md.

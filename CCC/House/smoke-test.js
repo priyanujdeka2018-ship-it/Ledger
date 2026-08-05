@@ -119,6 +119,8 @@ async function run() {
   await page.route('**firestore.googleapis.com**', route => {
     const url = route.request().url();
     if (url.includes(':runQuery')) return route.fulfill({ status: 200, contentType: 'application/json', body: '[{"readTime":"x"}]' });
+    // house-config: listed as a collection, empty here (no custom lists set).
+    if (url.includes('house-config')) return route.fulfill({ status: 200, contentType: 'application/json', body: '{"documents":[]}' });
     if (route.request().method() === 'GET') {
       const docs = url.includes('house-budgets') ? BUDGETS
         : url.includes('house-tenants') ? TENANTS
@@ -215,9 +217,27 @@ async function run() {
   await step('phases tab', () => tab('Phases'));
   await step('phase → zones', () => page.locator('.overview-card').first().click());
   await step('phase back', () => page.locator('.back-btn').click());
-  await step('open budget editor', () => page.locator('.alloc-btn').click());
+  await step('open budget editor', () => page.locator('.alloc-btn', { hasText: 'budget' }).click());
   await step('budget: type a value', () => page.locator('.bud-row input').first().fill('123456'));
   await step('budget: cancel', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  // ── U30 config editor: additive categories/phases/zones
+  await step('open config editor', () => page.locator('.alloc-btn', { hasText: 'Manage categories' }).click());
+  await step('config: add a phase', async () => {
+    await page.locator('input[aria-label="New phase"]').fill('Extension');
+    await page.locator('input[aria-label="New phase"]').press('Enter');
+    await page.locator('.filter-badge', { hasText: 'Extension' }).waitFor();
+  });
+  await step('config: add a zone', async () => {
+    await page.locator('input[aria-label="New zone"]').fill('Garage');
+    await page.locator('input[aria-label="New zone"]').press('Enter');
+  });
+  await step('config: add a subcategory', async () => {
+    await page.locator('input[aria-label="Category"]').fill('Maintenance');
+    await page.locator('input[aria-label="New subcategory"]').fill('Gardening');
+    await page.locator('input[aria-label="New subcategory"]').press('Enter');
+  });
+  await step('config: remove the phase chip', () => page.locator('.filter-badge', { hasText: 'Extension' }).click());
+  await step('config: save lists', () => page.locator('.modal button', { hasText: 'Save lists' }).click());
   await step('zones tab', () => tab('Zones'));
   await step('zone → phases', () => page.locator('.overview-card').first().click());
   await step('zone → entries', () => page.locator('.overview-card').first().click());

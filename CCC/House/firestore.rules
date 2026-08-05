@@ -42,6 +42,12 @@ service cloud.firestore {
       allow read: if true;
       allow write: if familyMember();
     }
+    // Editable lists (custom categories/phases/zones). Not private — the same
+    // read-open, write-locked stance as the ledger and budgets.
+    match /house-config/{doc} {
+      allow read: if true;
+      allow write: if familyMember();
+    }
 
     // ── Lease module: fully private (read AND write require a family account)
     match /house-tenants/{doc}     { allow read, write: if familyMember(); }

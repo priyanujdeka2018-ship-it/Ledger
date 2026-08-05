@@ -60,7 +60,9 @@ const LEASES = [{ name: docName('house-leases', 'lease-1'), fields: {
   agreementRef: s(''), notes: s(''), previousLeaseId: s(''), updatedAt: s(''), updatedBy: s('J') } }];
 
 // Counted separately so a new collection joining the poll loop is obvious.
-const BUCKETS = ['house-budgets', 'house-tenants', 'house-leases', 'house-rent', 'house-maintenance'];
+// house-config is here too so a config read is never miscounted as an expense
+// read (the fixture bug this suite exists to catch, in reverse).
+const BUCKETS = ['house-budgets', 'house-config', 'house-tenants', 'house-leases', 'house-rent', 'house-maintenance'];
 
 async function measure(mode) {
   const browser = await chromium.launch();
@@ -113,6 +115,7 @@ async function measure(mode) {
   ok('nine cheap probes', b.probe, 9);
   ok('one full reconcile in the window', b.expenseFull - build.onMount.expenseFull, 1);
   ok('budgets loaded once, never polled', b['house-budgets'], 1);
+  ok('config loaded once, never polled', b['house-config'], 1);
   ok('no lease collection touched at all',
     [b['house-tenants'], b['house-leases'], b['house-rent'], b['house-maintenance']], [0, 0, 0, 0]);
 
@@ -125,6 +128,7 @@ async function measure(mode) {
   ok('and NOT joined to the 60s loop',
     [l['house-tenants'], l['house-leases'], l['house-rent'], l['house-maintenance']], [1, 1, 1, 1]);
   ok('budgets still not re-fetched', l['house-budgets'], 1);
+  ok('config still not re-fetched', l['house-config'], 1);
   ok('the expense poll is unchanged by the mode', [l.probe, l.expenseFull - lease.onMount.expenseFull], [9, 1]);
 
   head('3. the privacy boundary');

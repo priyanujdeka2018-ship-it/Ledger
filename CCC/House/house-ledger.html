@@ -292,6 +292,10 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .skel-line{height:11px;border-radius:6px;background:var(--border);opacity:.6;animation:shimmer 1.2s ease-in-out infinite}
 .skel-line+.skel-line{margin-top:8px}
 @keyframes shimmer{0%,100%{opacity:.6}50%{opacity:.25}}
+/* U30 — the add-a-list-option row in the config editor. */
+.cfg-add{display:flex;gap:8px;align-items:center;margin:6px 0}
+.cfg-add input{flex:1;min-width:0;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--bg);font-size:.8rem;color:var(--t1);font-family:'Nunito',sans-serif}
+.cfg-add button{flex-shrink:0}
 </style>
 </head>
 <body>
@@ -316,6 +320,8 @@ const FS_TEN = `${FS_ROOT}/house-tenants`;
 const FS_LEASE = `${FS_ROOT}/house-leases`;
 const FS_RENT = `${FS_ROOT}/house-rent`;
 const FS_MAINT = `${FS_ROOT}/house-maintenance`;
+const FS_CONFIG = `${FS_ROOT}/house-config`,
+  CONFIG_DOC = 'lists';
 const ID_SIGNIN = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${AKEY}`;
 const ID_REFRESH = `https://securetoken.googleapis.com/v1/token?key=${AKEY}`;
 
@@ -1554,6 +1560,138 @@ async function deleteEntry(id) {
   });
 }
 
+// ─── JS-CONFIG-DATA ───
+// U30: categories, phases and zones ship as the constants above but can be
+// extended without a redeploy. house-config holds the user's additions, merged
+// into those constants at load. Deliberately ADDITIVE only — the built-ins are
+// load-bearing (RUNNING_PHASES, the repair→Maintenance seam, the colour
+// lookups, and every row already stored against them), so they can be extended
+// but never removed or renamed. Config is public to read like the ledger and
+// budgets; only writes need a family account. It loads once on mount and is
+// NOT part of the 60s poll (there is nothing to poll — it changes by hand).
+const BASE_PHASES = [...PHASES],
+  BASE_ZONES = [...ZONES],
+  BASE_CATEGORIES = {};
+Object.keys(CATEGORIES).forEach(k => {
+  BASE_CATEGORIES[k] = [...CATEGORIES[k]];
+});
+// A custom subcategory serialises flat as "Category::Subcategory", so the whole
+// config is three string arrays — no nested Firestore maps to (de)serialise.
+const SUBCAT_SEP = '::';
+// Neutral chip colour for a custom phase/category, legible on light and dark.
+const CUSTOM_CLR = {
+  bg: '#eef2f7',
+  text: '#334155',
+  dot: '#94a3b8'
+};
+function ensureColors(map, keys) {
+  keys.forEach(k => {
+    if (!map[k]) map[k] = {
+      ...CUSTOM_CLR
+    };
+  });
+  Object.keys(map).forEach(k => {
+    if (!keys.includes(k)) delete map[k];
+  });
+}
+// Rebuild the live lists from the base every time, in place, so a custom entry
+// removed in the editor actually drops rather than lingering until reload.
+// Mutating the same arrays/objects means every consumer that reads
+// PHASES/ZONES/CATEGORIES picks up the change on its next render, unwired.
+function applyConfig(cfg) {
+  cfg = cfg || {};
+  PHASES.length = 0;
+  PHASES.push(...BASE_PHASES);
+  (cfg.phases || []).forEach(p => {
+    p = String(p || '').trim();
+    if (p && !PHASES.includes(p)) PHASES.push(p);
+  });
+  ZONES.length = 0;
+  ZONES.push(...BASE_ZONES);
+  (cfg.zones || []).forEach(z => {
+    z = String(z || '').trim();
+    if (z && !ZONES.includes(z)) ZONES.push(z);
+  });
+  Object.keys(CATEGORIES).forEach(k => delete CATEGORIES[k]);
+  Object.keys(BASE_CATEGORIES).forEach(k => {
+    CATEGORIES[k] = [...BASE_CATEGORIES[k]];
+  });
+  (cfg.subcats || []).forEach(entry => {
+    const parts = String(entry || '').split(SUBCAT_SEP);
+    const c = (parts[0] || '').trim(),
+      s = (parts[1] || '').trim();
+    if (!c || !s) return;
+    if (!CATEGORIES[c]) CATEGORIES[c] = [];
+    if (!CATEGORIES[c].includes(s)) CATEGORIES[c].push(s);
+  });
+  ensureColors(PHASE_CLR, PHASES);
+  ensureColors(CAT_CLR, Object.keys(CATEGORIES));
+}
+const toFSConfig = c => ({
+  fields: {
+    phases: {
+      arrayValue: {
+        values: (c.phases || []).map(v => ({
+          stringValue: v
+        }))
+      }
+    },
+    zones: {
+      arrayValue: {
+        values: (c.zones || []).map(v => ({
+          stringValue: v
+        }))
+      }
+    },
+    subcats: {
+      arrayValue: {
+        values: (c.subcats || []).map(v => ({
+          stringValue: v
+        }))
+      }
+    },
+    updatedAt: {
+      stringValue: new Date().toISOString()
+    },
+    updatedBy: {
+      stringValue: c.updatedBy || ''
+    }
+  }
+});
+const fromFSConfig = doc => {
+  const f = doc && doc.fields || {};
+  const a = k => (f[k] && f[k].arrayValue && f[k].arrayValue.values || []).map(v => v.stringValue || '');
+  return {
+    phases: a('phases'),
+    zones: a('zones'),
+    subcats: a('subcats')
+  };
+};
+// List the collection rather than GET the single doc: an empty collection
+// answers 200 with no documents, where a missing document answers 404 — and a
+// 404 shows up as a console error on every load until the first list is saved.
+async function fetchConfig() {
+  const r = await fetch(`${FS_CONFIG}?key=${AKEY}&pageSize=10`);
+  if (!r.ok) throw new Error(r.statusText);
+  const d = await r.json(),
+    docs = d.documents || [];
+  const doc = docs.find(x => x.name && x.name.endsWith('/' + CONFIG_DOC)) || docs[0];
+  return doc ? fromFSConfig(doc) : {
+    phases: [],
+    zones: [],
+    subcats: []
+  };
+}
+async function saveConfig(c) {
+  await authedFetch(`${FS_CONFIG}/${CONFIG_DOC}?key=${AKEY}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(toFSConfig(c))
+  });
+}
+
 // ─── JS-FORMATTING ───
 function fmtAmt(n, opts = {}) {
   const abs = Math.abs(n);
@@ -2604,7 +2742,8 @@ function PhasesTab({
   exps,
   onNavigate,
   budgets,
-  onEditBudgets
+  onEditBudgets,
+  onEditLists
 }) {
   const [level, setLevel] = useState(0);
   const [selPhase, setSelPhase] = useState(null);
@@ -2675,7 +2814,10 @@ function PhasesTab({
       setSelPhase(p);
       setLevel(1);
     }
-  }));
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "alloc-btn",
+    onClick: onEditLists
+  }, "\u2699 Manage categories, phases & zones"));
   if (level === 1) {
     const pe = exps.filter(e => e.phase === selPhase);
     const b = budgets[selPhase],
@@ -2730,7 +2872,8 @@ function PhasesTab({
 // ─── JS-ZONES-TAB ───
 function ZonesTab({
   exps,
-  onNavigate
+  onNavigate,
+  onEditLists
 }) {
   const [level, setLevel] = useState(0);
   const [selZone, setSelZone] = useState(null);
@@ -2767,7 +2910,10 @@ function ZonesTab({
       setSelZone(z);
       setLevel(1);
     }
-  }));
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "alloc-btn",
+    onClick: onEditLists
+  }, "\u2699 Manage categories, phases & zones"));
   if (level === 1) return /*#__PURE__*/React.createElement("div", {
     className: "entry-list"
   }, /*#__PURE__*/React.createElement("button", {
@@ -3850,6 +3996,217 @@ function BudgetEditor({
     disabled: busy,
     onClick: save
   }, busy ? 'Saving…' : 'Save budgets'), /*#__PURE__*/React.createElement("button", {
+    className: "btn-secondary",
+    onClick: onCancel
+  }, "Cancel"))));
+}
+
+// ─── JS-CONFIG-EDITOR ───
+// U30. Adds to the category, phase and zone lists without a redeploy. Additive
+// only, by design: the built-ins are shown as counts, not offered for removal,
+// because logic and existing rows depend on them (see applyConfig).
+function ConfigEditor({
+  config,
+  userName,
+  onDone,
+  onCancel
+}) {
+  const [phases, setPhases] = useState(() => [...(config.phases || [])]);
+  const [zones, setZones] = useState(() => [...(config.zones || [])]);
+  const [subcats, setSubcats] = useState(() => [...(config.subcats || [])]);
+  const [pIn, setPIn] = useState('');
+  const [zIn, setZIn] = useState('');
+  const [scCat, setScCat] = useState('');
+  const [scSub, setScSub] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
+  const catNames = [...new Set([...Object.keys(BASE_CATEGORIES), ...subcats.map(x => x.split(SUBCAT_SEP)[0])])].sort();
+  const addPhase = () => {
+    const v = pIn.trim();
+    if (!v) {
+      setErr('');
+      return;
+    }
+    if (v.includes(SUBCAT_SEP)) {
+      setErr('Names cannot contain "::".');
+      return;
+    }
+    if (BASE_PHASES.includes(v) || phases.includes(v)) {
+      setErr(`Phase "${v}" already exists.`);
+      return;
+    }
+    setPhases(a => [...a, v]);
+    setPIn('');
+    setErr('');
+  };
+  const addZone = () => {
+    const v = zIn.trim();
+    if (!v) {
+      setErr('');
+      return;
+    }
+    if (v.includes(SUBCAT_SEP)) {
+      setErr('Names cannot contain "::".');
+      return;
+    }
+    if (BASE_ZONES.includes(v) || zones.includes(v)) {
+      setErr(`Zone "${v}" already exists.`);
+      return;
+    }
+    setZones(a => [...a, v]);
+    setZIn('');
+    setErr('');
+  };
+  const addSub = () => {
+    const c = scCat.trim(),
+      s = scSub.trim();
+    if (!c || !s) {
+      setErr('Pick a category and type a subcategory.');
+      return;
+    }
+    if (c.includes(SUBCAT_SEP) || s.includes(SUBCAT_SEP)) {
+      setErr('Names cannot contain "::".');
+      return;
+    }
+    const entry = c + SUBCAT_SEP + s;
+    if ((BASE_CATEGORIES[c] || []).includes(s) || subcats.includes(entry)) {
+      setErr(`"${s}" already exists under ${c}.`);
+      return;
+    }
+    setSubcats(a => [...a, entry]);
+    setScSub('');
+    setErr('');
+  };
+  const save = async () => {
+    setBusy(true);
+    setErr('');
+    try {
+      await saveConfig({
+        phases,
+        zones,
+        subcats,
+        updatedBy: userName
+      });
+      onDone();
+    } catch (e) {
+      setErr(e.message);
+      setBusy(false);
+    }
+  };
+  const chip = (label, key, onX) => /*#__PURE__*/React.createElement("span", {
+    key: key,
+    className: "filter-badge",
+    onClick: onX
+  }, label, " \u2715");
+  const builtIn = n => /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 600,
+      color: 'var(--t3)'
+    }
+  }, " \xB7 ", n, " built-in");
+  return /*#__PURE__*/React.createElement("div", {
+    className: "modal-overlay",
+    onClick: e => {
+      if (e.target === e.currentTarget) onCancel();
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal"
+  }, /*#__PURE__*/React.createElement("h2", null, "Categories, phases & zones"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: '.75rem',
+      color: 'var(--t2)',
+      marginBottom: 12,
+      fontWeight: 600
+    }
+  }, "Add options without a redeploy. Built-ins can't be removed \u2014 the app and your existing entries depend on them \u2014 so this only adds new ones."), /*#__PURE__*/React.createElement("div", {
+    className: "form-sep"
+  }, "Phases", builtIn(BASE_PHASES.length)), /*#__PURE__*/React.createElement("div", {
+    className: "cfg-add"
+  }, /*#__PURE__*/React.createElement("input", {
+    placeholder: "New phase",
+    value: pIn,
+    "aria-label": "New phase",
+    onChange: e => setPIn(e.target.value),
+    onKeyDown: e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addPhase();
+      }
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "btn-secondary",
+    onClick: addPhase
+  }, "Add")), phases.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "status-filters"
+  }, phases.map(p => chip(p, 'p-' + p, () => setPhases(a => a.filter(x => x !== p))))), /*#__PURE__*/React.createElement("div", {
+    className: "form-sep",
+    style: {
+      marginTop: 16
+    }
+  }, "Zones", builtIn(BASE_ZONES.length)), /*#__PURE__*/React.createElement("div", {
+    className: "cfg-add"
+  }, /*#__PURE__*/React.createElement("input", {
+    placeholder: "New zone",
+    value: zIn,
+    "aria-label": "New zone",
+    onChange: e => setZIn(e.target.value),
+    onKeyDown: e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addZone();
+      }
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "btn-secondary",
+    onClick: addZone
+  }, "Add")), zones.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "status-filters"
+  }, zones.map(z => chip(z, 'z-' + z, () => setZones(a => a.filter(x => x !== z))))), /*#__PURE__*/React.createElement("div", {
+    className: "form-sep",
+    style: {
+      marginTop: 16
+    }
+  }, "Subcategories", builtIn(Object.keys(BASE_CATEGORIES).length + ' categories')), /*#__PURE__*/React.createElement("div", {
+    className: "cfg-add"
+  }, /*#__PURE__*/React.createElement("input", {
+    list: "cfg-cats",
+    placeholder: "Category",
+    value: scCat,
+    "aria-label": "Category",
+    onChange: e => setScCat(e.target.value)
+  }), /*#__PURE__*/React.createElement("input", {
+    placeholder: "New subcategory",
+    value: scSub,
+    "aria-label": "New subcategory",
+    onChange: e => setScSub(e.target.value),
+    onKeyDown: e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addSub();
+      }
+    }
+  }), /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "btn-secondary",
+    onClick: addSub
+  }, "Add")), /*#__PURE__*/React.createElement("datalist", {
+    id: "cfg-cats"
+  }, catNames.map(c => /*#__PURE__*/React.createElement("option", {
+    key: c,
+    value: c
+  }))), subcats.length > 0 && /*#__PURE__*/React.createElement("div", {
+    className: "status-filters"
+  }, subcats.map(sc => chip(sc.replace(SUBCAT_SEP, ' › '), 's-' + sc, () => setSubcats(a => a.filter(x => x !== sc))))), err && /*#__PURE__*/React.createElement("div", {
+    className: "field-err"
+  }, err), /*#__PURE__*/React.createElement("div", {
+    className: "form-actions"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn-primary",
+    disabled: busy,
+    onClick: save
+  }, busy ? 'Saving…' : 'Save lists'), /*#__PURE__*/React.createElement("button", {
     className: "btn-secondary",
     onClick: onCancel
   }, "Cancel"))));
@@ -5531,6 +5888,13 @@ function App() {
   const [exps, setExps] = useState([]);
   const [budgets, setBudgets] = useState({});
   const [showBudgets, setShowBudgets] = useState(false);
+  // U30 — user-added categories/phases/zones, merged into the constants at load.
+  const [listCfg, setListCfg] = useState({
+    phases: [],
+    zones: [],
+    subcats: []
+  });
+  const [showConfig, setShowConfig] = useState(false);
   const [tab, setTab] = useState('entries');
   // ── Lease mode (LEASE_MODE_PLAN.md). Separate module, shared shell.
   const [mode, setMode] = useState(() => localStorage.getItem('hl-mode') || 'build');
@@ -5635,6 +5999,22 @@ function App() {
   useEffect(() => {
     loadBudgets();
   }, [loadBudgets]);
+  // Config is public to read (categories/phases/zones are not private) and, like
+  // budgets, loads once on mount and on refresh — never in the 60s poll. It
+  // affects both modes' forms, so it loads regardless of mode. applyConfig
+  // mutates the shared constants in place; the state bump re-renders consumers.
+  const loadConfig = useCallback(async () => {
+    try {
+      const cfg = await fetchConfig();
+      applyConfig(cfg);
+      setListCfg(cfg);
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+  useEffect(() => {
+    loadConfig();
+  }, [loadConfig]);
   // Lease collections are private, so this only runs signed in. Loaded on
   // entering the mode and on refresh — deliberately NOT in the 60s probe.
   const loadLease = useCallback(async () => {
@@ -5654,8 +6034,9 @@ function App() {
   const refreshAll = useCallback(() => {
     loadData();
     loadBudgets();
+    loadConfig();
     if (mode === 'lease') loadLease();
-  }, [loadData, loadBudgets, loadLease, mode]);
+  }, [loadData, loadBudgets, loadConfig, loadLease, mode]);
 
   // Every 60s a change probe, every 10 minutes a full reconcile, nothing at
   // all while the tab is hidden, and a full fetch on return. A tab left open
@@ -5880,6 +6261,7 @@ function App() {
     setShowForm(true);
   }, 'Sign in to add an entry.');
   const handleEditBudgets = () => guard(() => setShowBudgets(true), 'Sign in to set phase budgets.');
+  const handleEditLists = () => guard(() => setShowConfig(true), 'Sign in to edit the lists.');
 
   // Lease mode shows nothing signed out — the data is a third party's, and
   // the rules keep it private. Switching parks and resumes like any write.
@@ -6088,10 +6470,12 @@ function App() {
     exps: shown,
     onNavigate: navigateToEntries,
     budgets: budgets,
-    onEditBudgets: handleEditBudgets
+    onEditBudgets: handleEditBudgets,
+    onEditLists: handleEditLists
   }), tab === 'zones' && /*#__PURE__*/React.createElement(ZonesTab, {
     exps: shown,
-    onNavigate: navigateToEntries
+    onNavigate: navigateToEntries,
+    onEditLists: handleEditLists
   }), tab === 'vendors' && /*#__PURE__*/React.createElement(VendorsTab, {
     exps: shown,
     onNavigate: navigateToEntries
@@ -6165,6 +6549,14 @@ function App() {
       loadBudgets();
     },
     onCancel: () => setShowBudgets(false)
+  }), showConfig && /*#__PURE__*/React.createElement(ConfigEditor, {
+    config: listCfg,
+    userName: auth?.name,
+    onDone: () => {
+      setShowConfig(false);
+      loadConfig();
+    },
+    onCancel: () => setShowConfig(false)
   }), confirmLease && /*#__PURE__*/React.createElement("div", {
     className: "confirm-overlay",
     onClick: e => {
