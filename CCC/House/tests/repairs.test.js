@@ -158,7 +158,7 @@ const MAINT = [
   await page.locator('.mode-opt', { hasText: 'Build' }).click();
   await page.waitForTimeout(400);
   ok('five build tabs, unchanged', (await page.locator('.tab-bar button').allTextContents()).map(t => t.replace(/\s+/g, ' ').trim()),
-    ['📋Entries', '🏗️Phases', '🏠Zones', '👷Vendors', '📅Timeline']);
+    ['📋Entries', '🏗️Phases', '🏠Zones', '👷Vendors', '📊Insights']);
 
   ok('no page errors', errors, []);
   await browser.close();

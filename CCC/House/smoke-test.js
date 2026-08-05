@@ -172,7 +172,7 @@ async function run() {
   const esc = async () => { if (await page.locator('.modal-overlay, .confirm-overlay, .theme-overlay').count()) await page.keyboard.press('Escape'); };
 
   // ── every tab renders
-  for (const t of ['Entries', 'Phases', 'Zones', 'Vendors', 'Timeline'])
+  for (const t of ['Entries', 'Phases', 'Zones', 'Vendors', 'Insights'])
     await step(`tab: ${t}`, () => tab(t));
 
   // ── hero cards expand and collapse
@@ -275,11 +275,18 @@ async function run() {
   await step('back to vendors', () => tab('Vendors'));
   await step('vendor without intermediaries', () => page.locator('.vendor-card').nth(1).click());
   await step('vendor detail back', () => page.locator('.back-btn').click());
-  await step('timeline tab', () => tab('Timeline'));
-  await step('timeline: by account', () => page.locator('.tl-toggle button', { hasText: 'Account' }).click());
-  await step('timeline: by phase', () => page.locator('.tl-toggle button', { hasText: 'Phase' }).click());
-  await step('timeline: inspect a bar', () => page.locator('.tl-bar-col').first().click());
-  await step('timeline: navigate from readout', () => page.locator('.tl-readout button').click());
+  await step('insights tab', () => tab('Insights'));
+  await step('insights: range 12m', () => page.locator('.ins-filters .seg').first().locator('button', { hasText: '12m' }).click());
+  await step('insights: range all', () => page.locator('.ins-filters .seg').first().locator('button', { hasText: 'All' }).click());
+  await step('insights: account Self', () => page.locator('.ins-filters .seg').nth(1).locator('button', { hasText: 'Self' }).click());
+  await step('insights: account All', () => page.locator('.ins-filters .seg').nth(1).locator('button', { hasText: 'All' }).click());
+  await step('insights: monthly by account', () => page.locator('.tl-toggle button', { hasText: 'Account' }).click());
+  await step('insights: monthly by phase', () => page.locator('.tl-toggle button', { hasText: 'Phase' }).click());
+  await step('insights: drill a category', () => page.locator('.rank-row.tappable').first().click());
+  await step('insights: category back', () => page.locator('.back-btn', { hasText: 'All categories' }).click());
+  await step('insights: inspect a bar', () => page.locator('.tl-bar-col').first().click());
+  // Ends on the Entries tab, which the signed-out steps below rely on.
+  await step('insights: navigate from readout', () => page.locator('.tl-readout button').click());
 
   // ── chrome
   await step('theme picker open', () => page.locator('.header-btn[aria-label="Choose theme"]').click());

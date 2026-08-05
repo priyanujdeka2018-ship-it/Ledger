@@ -226,6 +226,26 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .tl-toggle{display:flex;gap:6px;justify-content:center;margin-bottom:10px}
 .tl-toggle button{padding:6px 14px;border-radius:12px;border:1px solid var(--border);background:var(--card);font-size:.72rem;font-weight:700;color:var(--t2);cursor:pointer;font-family:'Nunito',sans-serif}
 .tl-toggle button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* Insights (analytics tier). Slice control, stat tiles, ranked bars, SVG. */
+.ins-filters{display:flex;gap:8px;margin-bottom:8px}
+.seg{display:flex;flex:1;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card)}
+.seg button{flex:1;padding:6px 4px;border:none;background:none;font-family:'Nunito',sans-serif;font-size:.7rem;font-weight:700;color:var(--t2);cursor:pointer;white-space:nowrap}
+.seg button+button{border-left:1px solid var(--border)}
+.seg button.active{background:var(--accent);color:#fff}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.stat-tile{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 12px}
+.stat-tile .k{font-size:.64rem;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+.stat-tile .v{font-family:'Playfair Display',serif;font-weight:700;font-size:1.15rem;color:var(--t1);margin-top:1px}
+.stat-tile .s{font-size:.66rem;color:var(--t3);font-weight:600;margin-top:1px}
+.ins-chart{width:100%;height:auto;display:block;margin:4px 0}
+.rank-row{padding:5px 0}
+.rank-row.tappable{cursor:pointer}
+.rank-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:3px}
+.rank-label{font-size:.78rem;font-weight:700;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.rank-val{font-size:.78rem;font-weight:700;color:var(--t1);white-space:nowrap;flex-shrink:0}
+.rank-pct{font-size:.66rem;color:var(--t3);font-weight:600;margin-left:6px}
+.rank-track{height:8px;background:var(--bg);border-radius:6px;overflow:hidden}
+.rank-fill{height:100%;border-radius:6px;min-width:2px}
 
 /* ─── CSS-FAB ─── */
 .fab{position:fixed;bottom:70px;right:16px;width:52px;height:52px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:1.6rem;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:35;display:flex;align-items:center;justify-content:center}
@@ -1271,7 +1291,7 @@ function HeroMonthCard({exps,onNavigate,expanded,onToggle}){
 }
 
 // ─── JS-TAB-BAR ───
-const BUILD_TABS=[{id:'entries',icon:'📋',label:'Entries'},{id:'phases',icon:'🏗️',label:'Phases'},{id:'zones',icon:'🏠',label:'Zones'},{id:'vendors',icon:'👷',label:'Vendors'},{id:'timeline',icon:'📅',label:'Timeline'}];
+const BUILD_TABS=[{id:'entries',icon:'📋',label:'Entries'},{id:'phases',icon:'🏗️',label:'Phases'},{id:'zones',icon:'🏠',label:'Zones'},{id:'vendors',icon:'👷',label:'Vendors'},{id:'timeline',icon:'📊',label:'Insights'}];
 // Only tabs that exist. Rent, Repairs and Reports arrive with L2/L3/L4 —
 // a disabled tab teaches nothing.
 const LEASE_TABS=[{id:'rent',icon:'💰',label:'Rent'},{id:'repairs',icon:'🔧',label:'Repairs'},{id:'reports',icon:'📈',label:'Reports'},{id:'tenancy',icon:'🔑',label:'Tenancy'}];
@@ -1804,8 +1824,242 @@ function VendorsTab({exps,onNavigate}){
   );
 }
 
-// ─── JS-TIMELINE-TAB ───
-function TimelineTab({exps,onNavigate}){
+// ─── JS-INSIGHTS ───
+// The analytics tier. A slice control (range + account) feeds every chart
+// below it. Charts are hand-rolled SVG/CSS — no library, and they read on all
+// six themes. Colour follows the JOB: a composition (category/zone/phase/
+// vendor) is ranked single-hue bars with the identity in the row label, not a
+// dozen competing hues; the two-way splits reuse the app's ACCT/MODE schemes;
+// the time series is one accent line. Mobile-first, so a bar is TAPPED to
+// inspect, not hovered.
+
+// Ranked horizontal bars — the workhorse for a composition. One hue by default
+// (magnitude), or a per-row colour when the rows are a known categorical set.
+function RankBars({rows,total,onSelect,fmt}){
+  const max=Math.max(...rows.map(r=>r.value),1);
+  return(
+    <div>
+      {rows.map(r=>{
+        const pct=total>0?r.value/total*100:0;
+        return(
+          <div key={r.label} className={`rank-row ${onSelect?'tappable':''}`}
+            onClick={onSelect?()=>onSelect(r.label):undefined}>
+            <div className="rank-top">
+              <span className="rank-label">{r.label}</span>
+              <span className="rank-val">{(fmt||fmtAmt)(r.value)}<span className="rank-pct">{pct.toFixed(0)}%</span></span>
+            </div>
+            <div className="rank-track"><div className="rank-fill"
+              style={{width:Math.max(2,r.value/max*100)+'%',background:r.color||'var(--accent)'}}/></div>
+          </div>);
+      })}
+    </div>
+  );
+}
+const sumBy=(exps,key)=>{const m={};exps.forEach(e=>{const k=e[key]||'—';m[k]=(m[k]||0)+e.amount;});
+  return Object.entries(m).map(([label,value])=>({label,value})).sort((a,b)=>b.value-a.value);};
+
+// Cumulative spend over time as an SVG area+line; the contract value is a
+// dashed reference on the SAME axis. One series, so no legend — the title names it.
+function CumulativeChart({exps}){
+  const pts=useMemo(()=>{
+    const sorted=[...exps].filter(e=>e.date).sort((a,b)=>a.date.localeCompare(b.date));
+    let run=0;return sorted.map(e=>{run+=e.amount;return{date:e.date,cum:run};});
+  },[exps]);
+  if(pts.length<2)return null;
+  const total=pts[pts.length-1].cum;
+  const t0=new Date(pts[0].date+'T00:00:00').getTime();
+  const t1=new Date(pts[pts.length-1].date+'T00:00:00').getTime();
+  const span=Math.max(1,t1-t0),W=300,H=130,pad=4;
+  const ymax=Math.max(total,CONTRACT_BUDGET)*1.05;
+  const X=d=>pad+((new Date(d+'T00:00:00').getTime()-t0)/span)*(W-2*pad);
+  const Y=v=>H-pad-(v/ymax)*(H-2*pad);
+  const line=pts.map((p,i)=>`${i?'L':'M'}${X(p.date).toFixed(1)},${Y(p.cum).toFixed(1)}`).join('');
+  const area=line+`L${X(pts[pts.length-1].date).toFixed(1)},${(H-pad).toFixed(1)}L${X(pts[0].date).toFixed(1)},${(H-pad).toFixed(1)}Z`;
+  const cY=Y(CONTRACT_BUDGET),pct=CONTRACT_BUDGET>0?Math.round(total/CONTRACT_BUDGET*100):0;
+  return(
+    <div className="alloc-card">
+      <div className="alloc-head"><span className="lbl">Spend over time</span><span className="amt">{fmtAmt(total)}</span></div>
+      <svg className="ins-chart" viewBox={`0 0 ${W} ${H}`} style={{color:'var(--accent)'}} preserveAspectRatio="none"
+        role="img" aria-label={`Cumulative spend ${fmtFull(total)}`}>
+        <path d={area} fill="currentColor" fillOpacity="0.12"/>
+        <path d={line} fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke"/>
+        {cY>pad&&cY<H-pad&&<line x1={pad} y1={cY} x2={W-pad} y2={cY} stroke="var(--t3)" strokeWidth="1"
+          strokeDasharray="4 3" vectorEffect="non-scaling-stroke"/>}
+      </svg>
+      <div className="budget-labels"><span>{fmtDateShort(pts[0].date)}</span><span>{fmtDateShort(pts[pts.length-1].date)}</span></div>
+      <div className="v-meta" style={{marginTop:2}}>{fmtAmt(total)} across {pts.length} entries · {pct}% of the {fmtAmt(CONTRACT_BUDGET)} contract{total>CONTRACT_BUDGET?' (over)':''}. Dashed line marks the contract value.</div>
+    </div>
+  );
+}
+
+// Four headline figures — the "is a chart even needed" answer for the top row.
+function StatTiles({exps}){
+  const total=exps.reduce((s,e)=>s+e.amount,0),count=exps.length;
+  const cash=exps.reduce((s,e)=>isCash(e.paymentMode)?s+e.amount:s,0);
+  const tiles=[['Total',fmtAmt(total),count+(count===1?' entry':' entries')],
+    ['Average',fmtAmt(count?total/count:0),'per entry'],
+    ['Contract used',(CONTRACT_BUDGET>0?Math.round(total/CONTRACT_BUDGET*100):0)+'%','of '+fmtAmt(CONTRACT_BUDGET)],
+    ['Cash',(total>0?Math.round(cash/total*100):0)+'%',fmtAmt(cash)]];
+  return(<div className="stat-grid">{tiles.map(([k,v,s])=>
+    <div key={k} className="stat-tile"><div className="k">{k}</div><div className="v">{v}</div><div className="s">{s}</div></div>)}</div>);
+}
+
+// Self / Reemon proportion — two series, so a legend (the dotted labels).
+function AccountSplit({exps}){
+  const total=exps.reduce((s,e)=>s+e.amount,0);
+  if(!total)return null;
+  const self=exps.filter(e=>e.account==='Self').reduce((s,e)=>s+e.amount,0);
+  const selfPct=self/total*100;
+  return(
+    <div className="alloc-card">
+      <div className="alloc-head"><span className="lbl">Account split</span><span className="amt">{fmtAmt(total)}</span></div>
+      <div className="split-bar" style={{height:8}}>
+        <div className="split-seg" style={{flex:selfPct||0.001,background:ACCT_CLR.Self.dot}}/>
+        <div className="split-seg" style={{flex:(100-selfPct)||0.001,background:ACCT_CLR.Reemon.dot}}/>
+      </div>
+      <div className="detail-row"><span className="label"><span className="dot" style={{background:ACCT_CLR.Self.dot}}/>Self</span><span className="value">{fmtFull(self)} · {selfPct.toFixed(0)}%</span></div>
+      <div className="detail-row"><span className="label"><span className="dot" style={{background:ACCT_CLR.Reemon.dot}}/>Reemon</span><span className="value">{fmtFull(total-self)} · {(100-selfPct).toFixed(0)}%</span></div>
+    </div>
+  );
+}
+
+// Category → subcategory drill.
+function CategoryInsight({exps,onNavigate}){
+  const [sel,setSel]=useState(null);
+  const total=exps.reduce((s,e)=>s+e.amount,0);
+  const cats=useMemo(()=>sumBy(exps,'category'),[exps]);
+  if(sel){
+    const sub=exps.filter(e=>e.category===sel),subTotal=sub.reduce((s,e)=>s+e.amount,0);
+    return(<div className="alloc-card">
+      <div className="alloc-head"><span className="lbl">{sel}</span><span className="amt">{fmtAmt(subTotal)}</span></div>
+      <button className="back-btn" style={{marginBottom:6}} onClick={()=>setSel(null)}>← All categories</button>
+      <RankBars rows={sumBy(sub,'subcategory')} total={subTotal}/>
+      <button className="alloc-btn" onClick={()=>onNavigate({category:sel})}>View {sel} entries →</button>
+    </div>);
+  }
+  return(<div className="alloc-card">
+    <div className="alloc-head"><span className="lbl">By category</span><span className="amt">{fmtAmt(total)}</span></div>
+    <div className="v-meta" style={{marginTop:0}}>Tap a category for its subcategories.</div>
+    <RankBars rows={cats} total={total} onSelect={setSel}/>
+  </div>);
+}
+
+// Deep zone analysis: zone total → the phase mix within that zone.
+function ZoneInsight({exps,onNavigate}){
+  const [sel,setSel]=useState(null);
+  const total=exps.reduce((s,e)=>s+e.amount,0);
+  const zones=useMemo(()=>sumBy(exps,'zone'),[exps]);
+  if(sel){
+    const z=exps.filter(e=>e.zone===sel),zt=z.reduce((s,e)=>s+e.amount,0);
+    const phases=sumBy(z,'phase').map(r=>({...r,color:(PHASE_CLR[r.label]||{}).dot}));
+    return(<div className="alloc-card">
+      <div className="alloc-head"><span className="lbl">{sel}</span><span className="amt">{fmtAmt(zt)}</span></div>
+      <button className="back-btn" style={{marginBottom:6}} onClick={()=>setSel(null)}>← All zones</button>
+      <div className="v-meta" style={{marginTop:0}}>Spend in {sel}, by phase.</div>
+      <RankBars rows={phases} total={zt}/>
+      <button className="alloc-btn" onClick={()=>onNavigate({zone:sel})}>View {sel} entries →</button>
+    </div>);
+  }
+  return(<div className="alloc-card">
+    <div className="alloc-head"><span className="lbl">By zone</span><span className="amt">{fmtAmt(total)}</span></div>
+    <div className="v-meta" style={{marginTop:0}}>Tap a zone to see its phase mix.</div>
+    <RankBars rows={zones} total={total} onSelect={setSel}/>
+  </div>);
+}
+
+// Deep phase insight: phase total → contract/fee/misc composition, budget
+// context (Contract spend only, like the Phases tab), and the zones within.
+function PhaseInsight({exps,budgets,onNavigate}){
+  const [sel,setSel]=useState(null);
+  const total=exps.reduce((s,e)=>s+e.amount,0);
+  const phases=useMemo(()=>sumBy(exps,'phase').map(r=>({...r,color:(PHASE_CLR[r.label]||{}).dot})),[exps]);
+  if(sel){
+    const p=exps.filter(e=>e.phase===sel),pt=p.reduce((s,e)=>s+e.amount,0);
+    const contract=contractSpend(p),fee=p.filter(e=>e.expenseType==='Fee').reduce((s,e)=>s+e.amount,0);
+    const misc=pt-contract-fee,budget=budgets[sel];
+    return(<div className="alloc-card">
+      <div className="alloc-head"><span className="lbl">{sel}</span><span className="amt">{fmtAmt(pt)}</span></div>
+      <button className="back-btn" style={{marginBottom:6}} onClick={()=>setSel(null)}>← All phases</button>
+      {budget!=null&&<>
+        <div className="budget-bar"><div className="budget-fill" style={{width:Math.min(contract/budget*100,100)+'%',background:budgetTone(contract/budget*100)}}/></div>
+        <div className="budget-labels"><span>{fmtAmt(contract)} contract spend</span><span>of {fmtAmt(budget)} budget</span></div>
+      </>}
+      <div className="detail-row"><span className="label">Contract</span><span className="value">{fmtFull(contract)}</span></div>
+      {fee>0&&<div className="detail-row"><span className="label">Fees</span><span className="value">{fmtFull(fee)}</span></div>}
+      {misc>0&&<div className="detail-row"><span className="label">Miscellaneous</span><span className="value">{fmtFull(misc)}</span></div>}
+      <div className="v-meta" style={{marginTop:6}}>By zone</div>
+      <RankBars rows={sumBy(p,'zone')} total={pt}/>
+      <button className="alloc-btn" onClick={()=>onNavigate({phase:sel})}>View {sel} entries →</button>
+    </div>);
+  }
+  return(<div className="alloc-card">
+    <div className="alloc-head"><span className="lbl">By phase</span><span className="amt">{fmtAmt(total)}</span></div>
+    <div className="v-meta" style={{marginTop:0}}>Tap a phase for its contract/fee split, budget and zones.</div>
+    <RankBars rows={phases} total={total} onSelect={setSel}/>
+  </div>);
+}
+
+// Top vendors, grouped by `vendor` (never `transferTo` — rule 6).
+function VendorInsight({exps,onNavigate}){
+  const total=exps.reduce((s,e)=>s+e.amount,0);
+  const vendors=useMemo(()=>sumBy(exps,'vendor').slice(0,8),[exps]);
+  if(!vendors.length)return null;
+  return(<div className="alloc-card">
+    <div className="alloc-head"><span className="lbl">Top vendors</span><span className="amt">{fmtAmt(total)}</span></div>
+    <div className="v-meta" style={{marginTop:0}}>Grouped by vendor. Tap to see their entries.</div>
+    <RankBars rows={vendors} total={total} onSelect={v=>onNavigate({vendor:v})}/>
+  </div>);
+}
+
+function InsightsTab({exps,budgets,onNavigate}){
+  const [range,setRange]=useState('all');
+  const [acct,setAcct]=useState('all');
+  const today=todayISO();
+  const sliced=useMemo(()=>{
+    let list=exps;
+    if(range!=='all'){
+      const from=range==='fy'?fyStart(fyOf(today)):range==='12m'?addDays(today,-365):addDays(today,-183);
+      list=list.filter(e=>e.date>=from);
+    }
+    if(acct!=='all')list=list.filter(e=>e.account===acct);
+    return list;
+  },[exps,range,acct,today]);
+  if(!exps.length)return(
+    <div className="entry-list"><div className="empty-state">
+      <div className="icon">📊</div><p><strong>No spend to analyse yet</strong></p>
+      <p style={{marginTop:6}}>Add entries and the charts fill in.</p>
+    </div></div>);
+  return(
+    <div className="entry-list">
+      <div className="ins-filters">
+        <div className="seg">{[['all','All'],['fy','This FY'],['12m','12m'],['6m','6m']].map(([k,l])=>
+          <button key={k} className={range===k?'active':''} onClick={()=>setRange(k)}>{l}</button>)}</div>
+        <div className="seg">{[['all','All'],['Self','Self'],['Reemon','Reemon']].map(([k,l])=>
+          <button key={k} className={acct===k?'active':''} onClick={()=>setAcct(k)}>{l}</button>)}</div>
+      </div>
+      {sliced.length===0
+        ?<div className="alloc-card"><div className="bud-none" style={{fontStyle:'normal'}}>Nothing in this slice.</div></div>
+        :<>
+          <StatTiles exps={sliced}/>
+          <CumulativeChart exps={sliced}/>
+          <div className="form-sep">Over time</div>
+          <MonthlyChart exps={sliced} onNavigate={onNavigate}/>
+          <div className="form-sep">Where it goes</div>
+          <CategoryInsight exps={sliced} onNavigate={onNavigate}/>
+          <ZoneInsight exps={sliced} onNavigate={onNavigate}/>
+          <PhaseInsight exps={sliced} budgets={budgets} onNavigate={onNavigate}/>
+          <div className="form-sep">Who got paid</div>
+          <VendorInsight exps={sliced} onNavigate={onNavigate}/>
+          <div className="form-sep">Splits</div>
+          <AccountSplit exps={sliced}/>
+          <PaymentModeCard entries={sliced} title="Payment modes"/>
+        </>}
+    </div>
+  );
+}
+
+// The monthly bars, kept from the old Timeline tab — one section of Insights.
+function MonthlyChart({exps,onNavigate}){
   const [mode,setMode]=useState('phase');
   const [sel,setSel]=useState(null);
   const barsRef=useRef(null);
@@ -1830,7 +2084,7 @@ function TimelineTab({exps,onNavigate}){
   const selMonth=sel?months.find(m=>m.key===sel):null;
 
   return(
-    <div className="entry-list">
+    <>
       <div className="tl-toggle">
         <button className={mode==='phase'?'active':''} onClick={()=>setMode('phase')}>By Phase</button>
         <button className={mode==='account'?'active':''} onClick={()=>setMode('account')}>By Account</button>
@@ -1873,7 +2127,7 @@ function TimelineTab({exps,onNavigate}){
           ));
         })()}
       </div>
-    </div>
+    </>
   );
 }
 
@@ -3374,7 +3628,7 @@ function App(){
         {tab==='phases'&&<PhasesTab exps={shown} onNavigate={navigateToEntries} budgets={budgets} onEditBudgets={handleEditBudgets} onEditLists={handleEditLists}/>}
         {tab==='zones'&&<ZonesTab exps={shown} onNavigate={navigateToEntries} onEditLists={handleEditLists}/>}
         {tab==='vendors'&&<VendorsTab exps={shown} onNavigate={navigateToEntries}/>}
-        {tab==='timeline'&&<TimelineTab exps={shown} onNavigate={navigateToEntries}/>}
+        {tab==='timeline'&&<InsightsTab exps={shown} budgets={budgets} onNavigate={navigateToEntries}/>}
         </>}
       </div>
       </>}
