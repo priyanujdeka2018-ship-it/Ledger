@@ -94,6 +94,11 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-UNDO-TOAST` | Deferred-delete toast with undo |
 | `JS-BUDGET-EDITOR` | Per-phase budget editor |
 | `JS-SIGN-IN` | Email/password dialog |
+| `JS-LEASE-DATA` | Private (authed-read) tenant and lease collections |
+| `JS-LEASE-LOGIC` | Derived status, overlap refusal, tenant status |
+| `JS-TENANT-FORM` / `JS-LEASE-FORM` | Lease-mode add/edit sheets |
+| `JS-TENANCY-TAB` | Current tenancy, tenants, previous terms |
+| `CSS-LEASE-MODE` | Mode switcher, chip picker, conflict note |
 | `JS-THEME-PICKER` | Theme grid |
 | `JS-APP` | State, polling, routing |
 
@@ -246,6 +251,47 @@ no intermediaries.
 
 `MODE_CLR` joins the other hardcoded semantic colour lookups. Cash is the
 distinction that matters at this scale; everything else leaves a bank trail.
+
+## Lease mode (L0 + L1 built)
+
+A second module behind a header mode switch, persisted in `localStorage` under
+`hl-mode`. Build mode keeps its five tabs; lease mode currently has one,
+Tenancy — Rent, Repairs and Reports arrive with L2/L3/L4. Only tabs that exist
+are rendered; a disabled tab teaches nothing.
+
+Full design and the settled scope decisions are in `LEASE_MODE_PLAN.md`.
+
+**Lease collections are private.** `house-tenants` and `house-leases` need a
+token to *read* as well as write, because they hold a third party's name,
+phone number and arrears history. `authedFetchAll()` is the read path;
+`fetchAll()` (expenses, budgets) still sends no token and must stay that way.
+Entering lease mode signed out prompts sign-in and resumes; a restored
+`hl-mode=lease` with no valid session falls back to build.
+
+⚠ **The Firestore rules are still the test-mode default and enforce none of
+this.** They must be applied before the first real tenant record is written —
+see `LEASE_MODE_PLAN.md` §3 for the block to paste.
+
+**Derived, never stored:** lease status (except the `Draft` / `Terminated`
+overrides in `statusOverride`) and tenant status. A status you have to
+remember to update is a status that will be wrong.
+
+**One tenancy at a time.** `findLeaseConflict()` compares date *ranges*, not
+today's status, so a lease that clashes only in the future is still refused,
+by name. Terminated leases never conflict.
+
+**A renewal is a new document**, chained by `previousLeaseId`, pre-filled from
+the previous term and starting the day after it ends. Rent is flat within a
+term — that is what "renegotiated at renewal" means structurally, and it gives
+a true tenancy history rather than one mutable record that forgets.
+
+**Deposit custody uses `DEPOSIT_HOLDERS` (`Self` / `Runa`), deliberately
+separate from `ACCT_CLR` (`Self` / `Reemon`).** A deposit is a liability held
+by whoever holds it, not an expense account. Two similar-looking pairs, so
+keep them apart.
+
+Deleting a lease keeps an explicit confirmation rather than the undo toast —
+unlike an expense row there is no undo path behind it.
 
 ## Deleting an entry
 

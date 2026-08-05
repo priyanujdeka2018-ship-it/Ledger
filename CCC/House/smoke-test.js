@@ -69,6 +69,17 @@ const EXPENSES = [
 ];
 const BUDGETS = [budget('Structure', 2000000), budget('Finishing', 1000000), budget('Landscaping', 500000)];
 
+const TENANTS = [{ name: 'projects/p/databases/(default)/documents/house-tenants/ten-1', fields: {
+  name: field('Anil Bora'), phone: field('98640 11111'), email: field(''), idRef: field(''),
+  emergencyContact: field(''), notes: field(''), updatedAt: field(''), updatedBy: field('Jiten') } }];
+const LEASES = [{ name: 'projects/p/databases/(default)/documents/house-leases/lease-cur', fields: {
+  tenantIds: { arrayValue: { values: [{ stringValue: 'ten-1' }] } },
+  startDate: field('2026-01-01'), endDate: field('2026-12-31'),
+  rentAmount: { doubleValue: 20000 }, rentDueDay: { doubleValue: 5 },
+  depositAmount: { doubleValue: 60000 }, depositHolder: field('Runa'),
+  noticePeriodDays: { doubleValue: 30 }, statusOverride: field(''), agreementRef: field(''),
+  notes: field(''), previousLeaseId: field(''), updatedAt: field(''), updatedBy: field('Jiten') } }];
+
 const SIGNED_IN = { idToken: 'T', refreshToken: 'R', expiresAt: Date.now() + 3600e3, email: 'jiten@example.com', name: 'Jiten' };
 
 // ─── Harness ───
@@ -93,9 +104,12 @@ async function run() {
   await page.route('**firestore.googleapis.com**', route => {
     const url = route.request().url();
     if (url.includes(':runQuery')) return route.fulfill({ status: 200, contentType: 'application/json', body: '[{"readTime":"x"}]' });
-    if (route.request().method() === 'GET')
-      return route.fulfill({ status: 200, contentType: 'application/json',
-        body: JSON.stringify({ documents: url.includes('house-budgets') ? BUDGETS : EXPENSES }) });
+    if (route.request().method() === 'GET') {
+      const docs = url.includes('house-budgets') ? BUDGETS
+        : url.includes('house-tenants') ? TENANTS
+        : url.includes('house-leases') ? LEASES : EXPENSES;
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ documents: docs }) });
+    }
     return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
   });
 
@@ -228,6 +242,26 @@ async function run() {
   await step('signed in again: form opened', () => page.locator('.modal h2').waitFor({ timeout: 3000 }));
   await step('close form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
   await step('manual refresh', () => page.locator('.header-btn[aria-label="Refresh data"]').click());
+  // ── lease mode: a whole second module behind the switch
+  const toMode = m => page.locator('.mode-btn').click().then(() =>
+    page.locator('.mode-opt', { hasText: m }).click());
+  await step('switch to Lease mode', () => toMode('Lease'));
+  await step('lease: tenancy tab', () => page.locator('.alloc-card').first().waitFor());
+  await step('lease: open lease form', () => page.locator('.alloc-card').first().locator('button', { hasText: 'Edit' }).click());
+  await step('lease: close lease form', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: renew', () => page.locator('.alloc-card').first().locator('button', { hasText: 'Renew' }).click());
+  await step('lease: close renewal', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: open tenant', () => page.locator('.vendor-card').first().click());
+  await step('lease: close tenant', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: add tenant form', () => page.locator('button', { hasText: 'Add tenant' }).click());
+  await step('lease: close add tenant', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
+  await step('lease: delete asks first', () => page.locator('.alloc-card').first().locator('button[aria-label="Delete this lease"]').click());
+  await step('lease: cancel delete', () => page.locator('.confirm-box button', { hasText: 'Cancel' }).click());
+  await step('lease: theme picker still works', () => page.locator('.header-btn[aria-label="Choose theme"]').click());
+  await step('lease: close theme picker', () => page.locator('.theme-overlay').click({ position: { x: 5, y: 5 } }));
+  await step('back to Build mode', () => toMode('Build'));
+  await step('build: entries intact', () => page.locator('.entry-row').first().waitFor());
+
   await step('pull to refresh', () => page.evaluate(() => {
     const el = document.body;
     const t = y => new Touch({ identifier: 1, target: el, clientX: 190, clientY: y });

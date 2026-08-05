@@ -249,6 +249,20 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .user-menu{position:absolute;top:100%;right:8px;background:var(--card);border-radius:14px;border:1px solid var(--border);padding:6px;min-width:140px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:55}
 .user-opt{padding:8px 12px;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;color:var(--t1)}
 .user-opt:hover,.user-opt.active{background:var(--accentLt);color:var(--accent)}
+/* ─── CSS-LEASE-MODE ─── */
+.mode-btn{display:flex;align-items:center;gap:8px;background:none;border:none;color:#fff;cursor:pointer;font-family:'Playfair Display',serif;padding:0}
+.mode-btn h1{font-size:1.2rem;letter-spacing:.5px}
+.mode-chip{font-family:'Nunito',sans-serif;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,.22);white-space:nowrap}
+.mode-chip.lease{background:var(--lav);color:#fff}
+.mode-menu{position:absolute;top:100%;left:8px;background:var(--card);border-radius:14px;border:1px solid var(--border);padding:6px;min-width:190px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:55}
+.mode-opt{padding:9px 12px;border-radius:10px;font-size:.8rem;font-weight:700;cursor:pointer;color:var(--t1);font-family:'Nunito',sans-serif}
+.mode-opt.active{background:var(--accentLt);color:var(--accent)}
+.mode-opt span{display:block;font-size:.7rem;font-weight:600;color:var(--t3);margin-top:2px}
+.mode-opt.active span{color:var(--accent);opacity:.8}
+.chip-picker{display:flex;gap:6px;flex-wrap:wrap}
+.pick-chip{padding:8px 12px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--t2);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer}
+.pick-chip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.conflict-note{background:var(--roseLt);color:var(--rose);border:1px solid var(--rose);border-radius:12px;padding:9px 12px;font-size:.72rem;font-weight:700;margin:8px 0}
 .user-who{padding:8px 12px;font-size:.8rem;font-weight:700;color:var(--t1);border-bottom:1px solid var(--border);margin-bottom:4px}
 .user-who span{display:block;font-size:.7rem;font-weight:600;color:var(--t3);margin-top:2px;word-break:break-all}
 .readonly-note{display:flex;align-items:center;gap:6px;justify-content:center;background:var(--card);border:1px dashed var(--border);border-radius:12px;padding:7px 12px;margin-bottom:8px;font-size:.7rem;color:var(--t2);font-weight:600}
@@ -293,6 +307,8 @@ const PROJ='japan-2026-apr',AKEY='AIzaSyD372bOo6NQR6VxB-_kkv4zfLNt4B5HaAc';
 const FS_ROOT=`https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents`;
 const FS_EXP=`${FS_ROOT}/house-expenses`;
 const FS_BUD=`https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents/house-budgets`;
+const FS_TEN=`${FS_ROOT}/house-tenants`;
+const FS_LEASE=`${FS_ROOT}/house-leases`;
 const ID_SIGNIN=`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${AKEY}`;
 const ID_REFRESH=`https://securetoken.googleapis.com/v1/token?key=${AKEY}`;
 
@@ -357,6 +373,12 @@ const EXPENSE_TYPES=['Contract','Fee','Miscellaneous'];
 const STATUSES=['Paid','Partial','Pending','Overdue'];
 const CONTRACT_BUDGET=7537510;
 const UNDO_MS=5000;
+// Lease mode. Deposit custody is a separate vocabulary from the expense
+// accounts (Self/Reemon) on purpose — a deposit is a liability held by
+// whoever holds it. See LEASE_MODE_PLAN.md §0.
+const DEPOSIT_HOLDERS=['Self','Runa'];
+const LEASE_STATUSES=['Draft','Upcoming','Active','Ending','Ended','Terminated'];
+const LEASE_CLR={'Draft':{bg:'#f5f5f4',text:'#44403c',dot:'#78716c'},'Upcoming':{bg:'#e0f2fe',text:'#075985',dot:'#0ea5e9'},'Active':{bg:'#dcfce7',text:'#166534',dot:'#22c55e'},'Ending':{bg:'#fef3c7',text:'#92400e',dot:'#d97706'},'Ended':{bg:'#f1f5f9',text:'#334155',dot:'#64748b'},'Terminated':{bg:'#fee2e2',text:'#991b1b',dot:'#ef4444'}};
 
 // ─── JS-PHASE-CAT-ACCT-CLR ───
 const PHASE_CLR={'Pre-Construction':{bg:'#e8f0fe',text:'#1a56db',dot:'#3b82f6'},'Foundation':{bg:'#fef3e2',text:'#b45309',dot:'#f59e0b'},'Structure':{bg:'#e6f4ea',text:'#137333',dot:'#34a853'},'Finishing':{bg:'#fce8f0',text:'#b91c5c',dot:'#ec4899'},'Boundary & External':{bg:'#f3e8ff',text:'#6b21a8',dot:'#a855f7'},'Furnishing':{bg:'#fff7e6',text:'#92400e',dot:'#d97706'},'Landscaping':{bg:'#ecfdf5',text:'#065f46',dot:'#10b981'},'Decorating':{bg:'#fdf2f8',text:'#9d174d',dot:'#f472b6'},'Maintenance':{bg:'#f0f4f8',text:'#334155',dot:'#64748b'},'Leasing':{bg:'#eff6ff',text:'#1e40af',dot:'#3b82f6'}};
@@ -402,6 +424,116 @@ async function fetchAll(url,map=fromFS){
   }while(token);
   return all;
 }
+
+// ─── JS-LEASE-DATA ───
+// Lease collections are private: unlike house-expenses they need a token to
+// READ as well as write, because they hold a third party's name, phone
+// number and arrears history. See LEASE_MODE_PLAN.md §3.
+async function authedFetchAll(url,map){
+  let all=[],token='';
+  do{
+    const r=await authedFetch(`${url}?key=${AKEY}&pageSize=500${token?'&pageToken='+token:''}`);
+    const d=await r.json();
+    if(d.documents)all.push(...d.documents.map(map));
+    token=d.nextPageToken||'';
+  }while(token);
+  return all;
+}
+const num=(f,k)=>f[k]?.doubleValue??(+f[k]?.integerValue||0);
+const str=(f,k)=>f[k]?.stringValue||'';
+
+// Tenant `status` is NOT stored — it is derived from the leases they appear
+// on. A status you have to remember to update is a status that will be wrong.
+const toFSTenant=t=>({fields:{
+  name:{stringValue:t.name},phone:{stringValue:t.phone||''},email:{stringValue:t.email||''},
+  idRef:{stringValue:t.idRef||''},emergencyContact:{stringValue:t.emergencyContact||''},
+  notes:{stringValue:t.notes||''},updatedAt:{stringValue:new Date().toISOString()},
+  updatedBy:{stringValue:t.updatedBy||''}}});
+const fromFSTenant=d=>{const f=d.fields||{};return{id:d.name.split('/').pop(),
+  name:str(f,'name'),phone:str(f,'phone'),email:str(f,'email'),idRef:str(f,'idRef'),
+  emergencyContact:str(f,'emergencyContact'),notes:str(f,'notes'),
+  updatedAt:str(f,'updatedAt'),updatedBy:str(f,'updatedBy')};};
+
+// Rent is flat for a lease term — renewal creates a NEW lease chained by
+// previousLeaseId, which is what "renegotiated at renewal" means
+// structurally. No escalation fields. See LEASE_MODE_PLAN.md §0.3.
+const toFSLease=l=>({fields:{
+  tenantIds:{arrayValue:{values:(l.tenantIds||[]).map(v=>({stringValue:v}))}},
+  startDate:{stringValue:l.startDate},endDate:{stringValue:l.endDate},
+  rentAmount:{doubleValue:l.rentAmount||0},rentDueDay:{doubleValue:l.rentDueDay||1},
+  depositAmount:{doubleValue:l.depositAmount||0},depositHolder:{stringValue:l.depositHolder||''},
+  noticePeriodDays:{doubleValue:l.noticePeriodDays||0},
+  statusOverride:{stringValue:l.statusOverride||''},
+  agreementRef:{stringValue:l.agreementRef||''},notes:{stringValue:l.notes||''},
+  previousLeaseId:{stringValue:l.previousLeaseId||''},
+  updatedAt:{stringValue:new Date().toISOString()},updatedBy:{stringValue:l.updatedBy||''}}});
+const fromFSLease=d=>{const f=d.fields||{};return{id:d.name.split('/').pop(),
+  tenantIds:(f.tenantIds?.arrayValue?.values||[]).map(v=>v.stringValue),
+  startDate:str(f,'startDate'),endDate:str(f,'endDate'),
+  rentAmount:num(f,'rentAmount'),rentDueDay:num(f,'rentDueDay')||1,
+  depositAmount:num(f,'depositAmount'),depositHolder:str(f,'depositHolder'),
+  noticePeriodDays:num(f,'noticePeriodDays'),statusOverride:str(f,'statusOverride'),
+  agreementRef:str(f,'agreementRef'),notes:str(f,'notes'),
+  previousLeaseId:str(f,'previousLeaseId'),
+  updatedAt:str(f,'updatedAt'),updatedBy:str(f,'updatedBy')};};
+
+const fetchTenants=()=>authedFetchAll(FS_TEN,fromFSTenant);
+const fetchLeases=()=>authedFetchAll(FS_LEASE,fromFSLease);
+
+async function saveTenant(t){
+  const id=t.id||('ten-'+Date.now());
+  await authedFetch(`${FS_TEN}/${id}?key=${AKEY}`,{method:'PATCH',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify(toFSTenant(t))});
+  return id;
+}
+async function saveLease(l){
+  const id=l.id||('lease-'+Date.now());
+  await authedFetch(`${FS_LEASE}/${id}?key=${AKEY}`,{method:'PATCH',
+    headers:{'Content-Type':'application/json'},body:JSON.stringify(toFSLease(l))});
+  return id;
+}
+const deleteTenant=id=>authedFetch(`${FS_TEN}/${id}?key=${AKEY}`,{method:'DELETE'});
+const deleteLease=id=>authedFetch(`${FS_LEASE}/${id}?key=${AKEY}`,{method:'DELETE'});
+
+// ─── JS-LEASE-LOGIC ───
+// Status is derived from dates. Only Draft and Terminated are explicit
+// overrides, because neither is inferable from a calendar.
+function leaseStatus(l,today){
+  const t=today||todayISO();
+  if(l.statusOverride==='Draft'||l.statusOverride==='Terminated')return l.statusOverride;
+  if(!l.startDate||!l.endDate)return 'Draft';
+  if(t<l.startDate)return 'Upcoming';
+  if(t>l.endDate)return 'Ended';
+  if(l.noticePeriodDays>0&&t>=addDays(l.endDate,-l.noticePeriodDays))return 'Ending';
+  return 'Active';
+}
+const LIVE_STATUSES=['Upcoming','Active','Ending'];
+const isLive=(l,today)=>LIVE_STATUSES.includes(leaseStatus(l,today));
+
+// One letting, one tenancy at a time (LEASE_MODE_PLAN.md §0.2). Overlap is
+// checked on date ranges rather than on today's status, so a lease that
+// clashes only in the future is still refused. Terminated leases never
+// conflict — they were called off.
+const rangesOverlap=(a,b)=>a.startDate<=b.endDate&&b.startDate<=a.endDate;
+function findLeaseConflict(candidate,leases){
+  if(!candidate.startDate||!candidate.endDate)return null;
+  return leases.find(x=>x.id!==candidate.id
+    &&leaseStatus(x)!=='Terminated'
+    &&x.startDate&&x.endDate
+    &&rangesOverlap(candidate,x))||null;
+}
+
+// A tenant is Current if they appear on a live lease, Past if only on
+// finished ones, Prospective if on none.
+function tenantStatus(tenantId,leases,today){
+  const on=leases.filter(l=>l.tenantIds.includes(tenantId));
+  if(!on.length)return 'Prospective';
+  return on.some(l=>isLive(l,today))?'Current':'Past';
+}
+const TENANT_CLR={'Current':{bg:'#dcfce7',text:'#166534'},'Past':{bg:'#f1f5f9',text:'#334155'},'Prospective':{bg:'#e0f2fe',text:'#075985'}};
+
+// Newest first, and a renewal chain reads as a history.
+const sortLeases=ls=>[...ls].sort((a,b)=>(b.startDate||'').localeCompare(a.startDate||''));
 
 // ─── JS-BUDGETS ───
 // One document per phase in house-budgets. Phase names contain spaces and
@@ -451,7 +583,7 @@ function budgetTone(pct){return pct>100?'#ef4444':pct>90?'#d97706':'#22c55e';}
 // not — the rules allow public reads, so the app works signed out.
 async function authedFetch(url,opts={}){
   const t=await authToken();
-  if(!t)throw new Error('Sign in to save changes');
+  if(!t)throw new Error('Not signed in');
   const go=tok=>fetch(url,{...opts,headers:{...(opts.headers||{}),Authorization:'Bearer '+tok}});
   let r=await go(t);
   if(r.status===401||r.status===403){
@@ -482,6 +614,9 @@ function fmtFull(n){return '₹'+Math.abs(n).toLocaleString('en-IN');}
 function fmtDate(d){if(!d)return '';const[y,m,dd]=d.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return `${parseInt(dd)} ${mn[parseInt(m)-1]} ${y}`;}
 function fmtDateShort(d){if(!d)return '';const[y,m,dd]=d.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return `${parseInt(dd)} ${mn[parseInt(m)-1]} '${y.slice(2)}`;}
 function monthKey(d){return d.slice(0,7);}
+function addDays(d,n){const t=new Date(d+'T00:00:00');t.setDate(t.getDate()+n);return t.toISOString().slice(0,10);}
+function daysBetween(a,b){return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000);}
+function todayISO(){return new Date().toISOString().slice(0,10);}
 function thisMonthKey(){const n=new Date();return `${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;}
 function prevMonthKey(k){const[y,m]=k.split('-').map(Number);const d=new Date(y,m-2,1);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;}
 function monthEnd(k){const[y,m]=k.split('-').map(Number);return `${k}-${String(new Date(y,m,0).getDate()).padStart(2,'0')}`;}
@@ -505,13 +640,25 @@ function downloadCSV(entries,name){
 function monthLabel(k){const[y,m]=k.split('-');const mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return `${mn[parseInt(m)-1]}'${y.slice(2)}`;}
 
 // ─── JS-HEADER-COMPONENT ───
-function Header({syncStatus,themeId,onTheme,onRefresh,auth,onSignIn,onSignOut}){
+function Header({syncStatus,themeId,onTheme,onRefresh,auth,onSignIn,onSignOut,mode,onMode}){
   const [showMenu,setShowMenu]=useState(false);
+  const [showModes,setShowModes]=useState(false);
   return(
     <div className="header">
-      <div style={{display:'flex',alignItems:'center',gap:8}}>
+      <div style={{display:'flex',alignItems:'center',gap:8,position:'relative'}}>
         <div className={`sync-dot ${syncStatus==='live'?'sync-live':syncStatus==='err'?'sync-err':'sync-loading'}`} role="status" aria-label={syncStatus==='live'?'Synced':syncStatus==='err'?'Sync error':'Loading'}/>
-        <h1>House Ledger</h1>
+        <button className="mode-btn" onClick={()=>setShowModes(m=>!m)} aria-expanded={showModes}
+          aria-label={`${mode==='lease'?'Lease':'Build'} mode — switch mode`}>
+          <h1>House Ledger</h1>
+          <span className={`mode-chip ${mode==='lease'?'lease':''}`}>{mode==='lease'?'Lease':'Build'} ▾</span>
+        </button>
+        {showModes&&
+          <div className="mode-menu">
+            <div className={`mode-opt ${mode==='build'?'active':''}`} onClick={()=>{onMode('build');setShowModes(false);}}>
+              Build<span>Construction spend</span></div>
+            <div className={`mode-opt ${mode==='lease'?'active':''}`} onClick={()=>{onMode('lease');setShowModes(false);}}>
+              Lease<span>Tenancy and rent</span></div>
+          </div>}
       </div>
       <div className="header-r" style={{position:'relative'}}>
         <button className="header-btn" onClick={onRefresh} aria-label="Refresh data">↻</button>
@@ -530,6 +677,7 @@ function Header({syncStatus,themeId,onTheme,onRefresh,auth,onSignIn,onSignOut}){
           </div>}
       </div>
       {auth&&showMenu&&<div style={{position:'fixed',inset:0,zIndex:54}} onClick={()=>setShowMenu(false)}/>}
+      {showModes&&<div style={{position:'fixed',inset:0,zIndex:54}} onClick={()=>setShowModes(false)}/>}
     </div>
   );
 }
@@ -646,8 +794,11 @@ function HeroMonthCard({exps,onNavigate,expanded,onToggle}){
 }
 
 // ─── JS-TAB-BAR ───
-function TabBar({tab,onTab}){
-  const tabs=[{id:'entries',icon:'📋',label:'Entries'},{id:'phases',icon:'🏗️',label:'Phases'},{id:'zones',icon:'🏠',label:'Zones'},{id:'vendors',icon:'👷',label:'Vendors'},{id:'timeline',icon:'📅',label:'Timeline'}];
+const BUILD_TABS=[{id:'entries',icon:'📋',label:'Entries'},{id:'phases',icon:'🏗️',label:'Phases'},{id:'zones',icon:'🏠',label:'Zones'},{id:'vendors',icon:'👷',label:'Vendors'},{id:'timeline',icon:'📅',label:'Timeline'}];
+// Only tabs that exist. Rent, Repairs and Reports arrive with L2/L3/L4 —
+// a disabled tab teaches nothing.
+const LEASE_TABS=[{id:'tenancy',icon:'🔑',label:'Tenancy'}];
+function TabBar({tab,onTab,tabs=BUILD_TABS}){
   return(<div className="tab-bar">{tabs.map(t=><button key={t.id} className={`tab-item ${tab===t.id?'active':''}`} onClick={()=>onTab(t.id)}><span className="tab-icon">{t.icon}</span>{t.label}</button>)}</div>);
 }
 
@@ -1505,12 +1656,281 @@ function ThemePicker({themeId,onPick,onClose}){
   );
 }
 
+// ─── JS-TENANT-FORM ───
+function TenantForm({tenant,onSave,onCancel,userName}){
+  const [f,setF]=useState(tenant||{name:'',phone:'',email:'',idRef:'',emergencyContact:'',notes:''});
+  const [tried,setTried]=useState(false);
+  const [busy,setBusy]=useState(false);
+  const [err,setErr]=useState('');
+  const up=(k,v)=>setF(p=>({...p,[k]:v}));
+  const missing=!f.name.trim();
+  const save=async()=>{
+    if(missing)return setTried(true);
+    setBusy(true);setErr('');
+    try{await onSave({...f,name:f.name.trim(),updatedBy:userName||''});}
+    catch(e){setErr(e.message);setBusy(false);}
+  };
+  return(
+    <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
+      <div className="modal">
+        <h2>{tenant?.id?'Edit Tenant':'New Tenant'}</h2>
+        <div className="field"><label>Name</label>
+          <input value={f.name} onChange={e=>up('name',e.target.value)} placeholder="Full name"/>
+          {tried&&missing&&<div className="field-err">Name is required</div>}</div>
+        <div className="field"><label>Phone</label>
+          <input type="tel" inputMode="tel" value={f.phone} onChange={e=>up('phone',e.target.value)}/></div>
+        <div className="field"><label>Email</label>
+          <input type="email" inputMode="email" value={f.email} onChange={e=>up('email',e.target.value)}/></div>
+        <div className="field"><label>Emergency contact</label>
+          <input value={f.emergencyContact} onChange={e=>up('emergencyContact',e.target.value)} placeholder="Optional"/></div>
+        <div className="field"><label>ID reference</label>
+          <input value={f.idRef} onChange={e=>up('idRef',e.target.value)} placeholder="Optional — see note below"/>
+          <div className="form-hint" style={{textAlign:'left',marginTop:4}}>
+            Optional by design. A paper agreement in a drawer may be a better home for an Aadhaar number than a database.
+          </div></div>
+        <div className="field"><label>Notes</label>
+          <textarea value={f.notes} onChange={e=>up('notes',e.target.value)} placeholder="Optional"/></div>
+        {err&&<div className="field-err">{err}</div>}
+        <div className="form-actions sticky">
+          <button className="btn-primary" disabled={busy} onClick={save}>{busy?'Saving…':'Save'}</button>
+          <button className="btn-secondary" onClick={onCancel}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-LEASE-FORM ───
+function LeaseForm({lease,tenants,leases,onSave,onCancel,userName}){
+  const isRenewal=!!lease?.previousLeaseId&&!lease?.id;
+  const [f,setF]=useState(lease||{tenantIds:[],startDate:todayISO(),endDate:addDays(todayISO(),334),
+    rentAmount:'',rentDueDay:5,depositAmount:'',depositHolder:DEPOSIT_HOLDERS[0],
+    noticePeriodDays:30,statusOverride:'',agreementRef:'',notes:'',previousLeaseId:''});
+  const [tried,setTried]=useState(false);
+  const [busy,setBusy]=useState(false);
+  const [err,setErr]=useState('');
+  const up=(k,v)=>setF(p=>({...p,[k]:v}));
+  const toggleTenant=id=>setF(p=>({...p,tenantIds:p.tenantIds.includes(id)
+    ?p.tenantIds.filter(x=>x!==id):[...p.tenantIds,id]}));
+
+  const rent=parseFloat(f.rentAmount);
+  const errs={
+    tenantIds:f.tenantIds.length?'':'Pick at least one tenant',
+    startDate:f.startDate?'':'Start date is required',
+    endDate:!f.endDate?'End date is required':f.endDate<=f.startDate?'End date must be after the start':'',
+    rentAmount:f.rentAmount===''?'Rent is required':!(rent>0)?'Rent must be greater than zero':'',
+  };
+  const missing=Object.keys(errs).filter(k=>errs[k]);
+  const conflict=useMemo(()=>errs.startDate||errs.endDate?null:findLeaseConflict({...f,id:lease?.id},leases),[f,leases,lease]);
+  const conflictTenants=conflict?conflict.tenantIds.map(id=>tenants.find(t=>t.id===id)?.name||'?').join(', '):'';
+  const show=k=>tried&&errs[k];
+
+  const save=async()=>{
+    if(missing.length||conflict)return setTried(true);
+    setBusy(true);setErr('');
+    try{await onSave({...f,rentAmount:rent,rentDueDay:+f.rentDueDay||1,
+      depositAmount:parseFloat(f.depositAmount)||0,noticePeriodDays:+f.noticePeriodDays||0,
+      updatedBy:userName||''});}
+    catch(e){setErr(e.message);setBusy(false);}
+  };
+
+  return(
+    <div className="modal-overlay" onClick={e=>{if(e.target===e.currentTarget)onCancel();}}>
+      <div className="modal">
+        <h2>{lease?.id?'Edit Lease':isRenewal?'Renew Lease':'New Lease'}</h2>
+        {isRenewal&&<div className="autofill-note"><span>Prefilled from the previous term — set the renegotiated rent</span></div>}
+
+        <div className="field"><label>Tenant</label>
+          {tenants.length===0
+            ?<div className="form-hint" style={{textAlign:'left'}}>No tenants yet. Add a tenant first.</div>
+            :<div className="chip-picker">
+              {tenants.map(t=>(
+                <button key={t.id} type="button"
+                  className={`pick-chip ${f.tenantIds.includes(t.id)?'on':''}`}
+                  onClick={()=>toggleTenant(t.id)}>{t.name}</button>))}
+            </div>}
+          {show('tenantIds')&&<div className="field-err">{errs.tenantIds}</div>}</div>
+
+        <div className="field"><label>Start date</label>
+          <input type="date" value={f.startDate} onChange={e=>up('startDate',e.target.value)}/>
+          {show('startDate')&&<div className="field-err">{errs.startDate}</div>}</div>
+        <div className="field"><label>End date</label>
+          <input type="date" value={f.endDate} onChange={e=>up('endDate',e.target.value)}/>
+          {show('endDate')&&<div className="field-err">{errs.endDate}</div>}
+          {f.startDate&&f.endDate&&f.endDate>f.startDate&&
+            <div className="amt-echo">{daysBetween(f.startDate,f.endDate)+1} days</div>}</div>
+
+        {/* The one-tenancy-at-a-time invariant, named rather than silent. */}
+        {conflict&&
+          <div className="conflict-note">
+            Overlaps an existing lease: {fmtDate(conflict.startDate)} → {fmtDate(conflict.endDate)}
+            {conflictTenants?` (${conflictTenants})`:''}. Only one tenancy can run at a time.
+          </div>}
+
+        <div className="field"><label>Rent (₹ per month)</label>
+          <input type="number" inputMode="decimal" value={f.rentAmount} onChange={e=>up('rentAmount',e.target.value)} placeholder="0"/>
+          {rent>0&&<div className="amt-echo">{fmtFull(rent)} ({fmtAmt(rent).replace('₹','')})</div>}
+          {show('rentAmount')&&<div className="field-err">{errs.rentAmount}</div>}
+          <div className="form-hint" style={{textAlign:'left',marginTop:4}}>
+            Flat for the whole term. A rent change means a renewal, not an edit.
+          </div></div>
+        <div className="field"><label>Rent due on day</label>
+          <select value={f.rentDueDay} onChange={e=>up('rentDueDay',e.target.value)}>
+            {Array.from({length:28},(_,i)=>i+1).map(d=><option key={d} value={d}>{d}</option>)}
+          </select>
+          <div className="form-hint" style={{textAlign:'left',marginTop:4}}>Capped at 28 — February.</div></div>
+
+        <div className="form-sep">Deposit &amp; terms</div>
+        <div className="field"><label>Deposit (₹)</label>
+          <input type="number" inputMode="decimal" value={f.depositAmount} onChange={e=>up('depositAmount',e.target.value)} placeholder="0"/></div>
+        <div className="field"><label>Held by</label>
+          <div className="toggle-group">{DEPOSIT_HOLDERS.map(h=>
+            <button key={h} type="button" className={`toggle-btn ${f.depositHolder===h?'active':''}`}
+              onClick={()=>up('depositHolder',h)}>{h}</button>)}</div></div>
+        <div className="field"><label>Notice period (days)</label>
+          <input type="number" inputMode="numeric" value={f.noticePeriodDays} onChange={e=>up('noticePeriodDays',e.target.value)}/></div>
+        <div className="field"><label>Agreement reference</label>
+          <input value={f.agreementRef} onChange={e=>up('agreementRef',e.target.value)} placeholder="Optional"/></div>
+        <div className="field"><label>Status override</label>
+          <div className="toggle-group">
+            {['','Draft','Terminated'].map(o=>
+              <button key={o||'auto'} type="button" className={`toggle-btn ${f.statusOverride===o?'active':''}`}
+                onClick={()=>up('statusOverride',o)}>{o||'Automatic'}</button>)}
+          </div>
+          <div className="form-hint" style={{textAlign:'left',marginTop:4}}>
+            Automatic derives the status from the dates. Only Draft and Terminated need saying.
+          </div></div>
+        <div className="field"><label>Notes</label>
+          <textarea value={f.notes} onChange={e=>up('notes',e.target.value)} placeholder="Optional"/></div>
+
+        {err&&<div className="field-err">{err}</div>}
+        <div className="form-actions sticky">
+          <button className="btn-primary" disabled={busy} onClick={save}>{busy?'Saving…':'Save'}</button>
+          <button className="btn-secondary" onClick={onCancel}>Cancel</button>
+        </div>
+        {tried&&(missing.length>0||conflict)&&
+          <div className="form-hint">{conflict?'Resolve the overlap above':'Still needed: '+missing.join(', ')}</div>}
+      </div>
+    </div>
+  );
+}
+
+// ─── JS-TENANCY-TAB ───
+function TenancyTab({tenants,leases,onAddTenant,onEditTenant,onAddLease,onEditLease,onRenew,onDeleteLease,onDeleteTenant}){
+  const today=todayISO();
+  const sorted=useMemo(()=>sortLeases(leases),[leases]);
+  const current=sorted.find(l=>isLive(l,today));
+  const past=sorted.filter(l=>l!==current);
+  // Renewing a historical term would only ever produce a refused overlap.
+  // Offer it on the current tenancy, or on the latest one if none is live.
+  const renewable=current||sorted[0];
+  const nameOf=id=>tenants.find(t=>t.id===id)?.name||'Unknown';
+
+  // L0.5 — a brand-new lease mode is entirely empty. Teach the first step
+  // rather than showing a blank screen.
+  if(!tenants.length&&!leases.length)return(
+    <div className="entry-list">
+      <div className="empty-state">
+        <div className="icon">🔑</div>
+        <p><strong>No tenancy yet</strong></p>
+        <p style={{marginTop:6}}>Start by adding the tenant, then create a lease for them.</p>
+        <button className="alloc-btn" style={{maxWidth:240,margin:'16px auto 0'}} onClick={onAddTenant}>Add the first tenant</button>
+      </div>
+    </div>);
+
+  return(
+    <div className="entry-list">
+      {current
+        ?<LeaseCard lease={current} nameOf={nameOf} today={today} primary
+           onEdit={()=>onEditLease(current)} onRenew={()=>onRenew(current)} onDelete={()=>onDeleteLease(current)}/>
+        :<div className="alloc-card">
+           <div className="alloc-head"><span className="lbl">No current tenancy</span></div>
+           <div className="bud-none" style={{fontStyle:'normal'}}>
+             {leases.length?'The last lease has ended. Create the next one when you have a tenant.':'Create a lease once you have added a tenant.'}
+           </div>
+           <button className="alloc-btn" disabled={!tenants.length} onClick={onAddLease}>
+             {tenants.length?'Create a lease':'Add a tenant first'}
+           </button>
+         </div>}
+
+      <div className="form-sep" style={{marginTop:18}}>Tenants</div>
+      {tenants.length===0&&<div className="bud-none">None yet.</div>}
+      {tenants.map(t=>{
+        const st=tenantStatus(t.id,leases,today);
+        const tc=TENANT_CLR[st];
+        return(
+          <div key={t.id} className="vendor-card" onClick={()=>onEditTenant(t)}>
+            <div className="v-header">
+              <span className="v-name">{t.name}</span>
+              <span className="chip" style={{background:tc.bg,color:tc.text}}>{st}</span>
+            </div>
+            <div className="v-meta">
+              {[t.phone,t.email].filter(Boolean).join(' · ')||'No contact details'}
+              {t.idRef?' · ID on file':''}
+            </div>
+          </div>);
+      })}
+      <button className="alloc-btn" onClick={onAddTenant}>Add tenant</button>
+
+      {past.length>0&&<>
+        <div className="form-sep" style={{marginTop:18}}>Previous terms</div>
+        {past.map(l=><LeaseCard key={l.id} lease={l} nameOf={nameOf} today={today}
+          onEdit={()=>onEditLease(l)} onDelete={()=>onDeleteLease(l)}
+          onRenew={l===renewable?()=>onRenew(l):null}/>)}
+      </>}
+      {current&&<button className="alloc-btn" onClick={onAddLease}>Add another lease</button>}
+    </div>
+  );
+}
+
+function LeaseCard({lease,nameOf,today,primary,onEdit,onRenew,onDelete}){
+  const st=leaseStatus(lease,today);
+  const lc=LEASE_CLR[st]||LEASE_CLR.Draft;
+  const months=lease.startDate&&lease.endDate?Math.max(1,Math.round((daysBetween(lease.startDate,lease.endDate)+1)/30.44)):0;
+  return(
+    <div className="alloc-card">
+      <div className="alloc-head">
+        <span className="lbl">{primary?'Current tenancy':'Term'}</span>
+        <span className="chip" style={{background:lc.bg,color:lc.text}}>{st}</span>
+      </div>
+      <div className="ov-title" style={{fontSize:'1rem'}}>{lease.tenantIds.map(nameOf).join(' & ')||'No tenant'}</div>
+      <div className="v-meta">{fmtDate(lease.startDate)} → {fmtDate(lease.endDate)} · {months} {months===1?'month':'months'}</div>
+      <div className="detail-row"><span className="label">Rent</span><span className="value">{fmtFull(lease.rentAmount)} / month</span></div>
+      <div className="detail-row"><span className="label">Due on</span><span className="value">day {lease.rentDueDay}</span></div>
+      {lease.depositAmount>0&&
+        <div className="detail-row"><span className="label">Deposit</span>
+          <span className="value">{fmtFull(lease.depositAmount)}{lease.depositHolder?` · ${lease.depositHolder}`:''}</span></div>}
+      {lease.noticePeriodDays>0&&
+        <div className="detail-row"><span className="label">Notice</span><span className="value">{lease.noticePeriodDays} days</span></div>}
+      {lease.agreementRef&&
+        <div className="detail-row"><span className="label">Agreement</span><span className="value">{lease.agreementRef}</span></div>}
+      {st==='Ending'&&
+        <div className="conflict-note" style={{background:'var(--amberLt)',color:'var(--amber)',borderColor:'var(--amber)'}}>
+          Inside the notice period — ends {fmtDate(lease.endDate)}. Renew or give notice.
+        </div>}
+      {lease.notes&&<div className="bud-none" style={{fontStyle:'normal'}}>{lease.notes}</div>}
+      <div className="form-actions" style={{marginTop:12}}>
+        <button className="btn-secondary" onClick={onEdit}>Edit</button>
+        {onRenew&&<button className="btn-primary" onClick={onRenew}>Renew</button>}
+        <button className="btn-secondary" onClick={onDelete} aria-label="Delete this lease">🗑</button>
+      </div>
+    </div>
+  );
+}
+
 // ─── JS-APP ───
 function App(){
   const [exps,setExps]=useState([]);
   const [budgets,setBudgets]=useState({});
   const [showBudgets,setShowBudgets]=useState(false);
   const [tab,setTab]=useState('entries');
+  // ── Lease mode (LEASE_MODE_PLAN.md). Separate module, shared shell.
+  const [mode,setMode]=useState(()=>localStorage.getItem('hl-mode')||'build');
+  const [tenants,setTenants]=useState([]);
+  const [leases,setLeases]=useState([]);
+  const [leaseErr,setLeaseErr]=useState('');
+  const [editTenant,setEditTenant]=useState(null);
+  const [editLease,setEditLease]=useState(null);
   const [activeFilter,setActiveFilter]=useState(null);
   const [themeId,setThemeId]=useState(()=>localStorage.getItem('hl-theme')||'blueprint');
   const [expandId,setExpandId]=useState(null);
@@ -1583,7 +2003,16 @@ function App(){
     }catch(err){console.error(err);}
   },[]);
   useEffect(()=>{loadBudgets();},[loadBudgets]);
-  const refreshAll=useCallback(()=>{loadData();loadBudgets();},[loadData,loadBudgets]);
+  // Lease collections are private, so this only runs signed in. Loaded on
+  // entering the mode and on refresh — deliberately NOT in the 60s probe.
+  const loadLease=useCallback(async()=>{
+    if(!authState)return;
+    try{
+      const [t,l]=await Promise.all([fetchTenants(),fetchLeases()]);
+      setTenants(t.sort((a,b)=>a.name.localeCompare(b.name)));setLeases(l);setLeaseErr('');
+    }catch(e){console.error(e);setLeaseErr(e.message);}
+  },[]);
+  const refreshAll=useCallback(()=>{loadData();loadBudgets();if(mode==='lease')loadLease();},[loadData,loadBudgets,loadLease,mode]);
 
   // Every 60s a change probe, every 10 minutes a full reconcile, nothing at
   // all while the tab is hidden, and a full fetch on return. A tab left open
@@ -1725,6 +2154,48 @@ function App(){
   const handleAdd=()=>guard(()=>{setEditEntry(null);setShowForm(true);},'Sign in to add an entry.');
   const handleEditBudgets=()=>guard(()=>setShowBudgets(true),'Sign in to set phase budgets.');
 
+  // Lease mode shows nothing signed out — the data is a third party's, and
+  // the rules keep it private. Switching parks and resumes like any write.
+  const switchMode=useCallback(m=>{
+    // Each mode owns its own tab ids, so returning to one you were not last
+    // on must land somewhere that exists — otherwise the body renders empty.
+    if(m==='build'){
+      setMode('build');setTab(t=>BUILD_TABS.some(x=>x.id===t)?t:'entries');
+      localStorage.setItem('hl-mode','build');return;
+    }
+    guard(()=>{setMode('lease');setTab('tenancy');localStorage.setItem('hl-mode','lease');loadLease();},
+      'Lease records are private. Sign in to open them.');
+  },[guard,loadLease]);
+  // A restored 'lease' mode is only honoured if the session is still valid.
+  useEffect(()=>{if(mode==='lease'){if(auth){setTab(t=>LEASE_TABS.some(x=>x.id===t)?t:'tenancy');loadLease();}
+    else{setMode('build');localStorage.setItem('hl-mode','build');}}},[auth]);// eslint-disable-line
+
+  const saveTenantEntry=useCallback(async t=>{
+    await saveTenant(t);setEditTenant(null);loadLease();
+  },[loadLease]);
+  const saveLeaseEntry=useCallback(async l=>{
+    await saveLease(l);setEditLease(null);loadLease();
+  },[loadLease]);
+  // Unlike an expense row, a lease has no undo path behind it, so this one
+  // keeps an explicit confirmation rather than a toast.
+  const [confirmLease,setConfirmLease]=useState(null);
+  const removeLease=useCallback(async()=>{
+    const l=confirmLease;if(!l)return;
+    setConfirmLease(null);
+    try{await deleteLease(l.id);loadLease();}catch(e){alert('Delete failed: '+e.message);}
+  },[confirmLease,loadLease]);
+  // A renewal is a NEW lease chained to the old one, not an edit — that is
+  // what "renegotiated at renewal" means structurally.
+  const renewLease=useCallback(l=>{
+    const start=addDays(l.endDate,1);
+    setEditLease({tenantIds:[...l.tenantIds],startDate:start,
+      endDate:addDays(start,Math.max(1,daysBetween(l.startDate,l.endDate))),
+      rentAmount:String(l.rentAmount||''),rentDueDay:l.rentDueDay,
+      depositAmount:String(l.depositAmount||''),depositHolder:l.depositHolder||DEPOSIT_HOLDERS[0],
+      noticePeriodDays:l.noticePeriodDays,statusOverride:'',agreementRef:'',notes:'',
+      previousLeaseId:l.id});
+  },[]);
+
   return(
     <>
       {(pull>0||pulling)&&
@@ -1737,7 +2208,9 @@ function App(){
           </div>
         </div>}
       <Header syncStatus={syncStatus} themeId={themeId} onTheme={()=>setShowThemePicker(true)} onRefresh={refreshAll}
-        auth={auth} onSignIn={()=>{setSignInReason('');setShowSignIn(true);}} onSignOut={signOut}/>
+        auth={auth} onSignIn={()=>{setSignInReason('');setShowSignIn(true);}} onSignOut={signOut}
+        mode={mode} onMode={switchMode}/>
+      {mode==='build'&&<>
       <div className={`hero-row ${heroCard?'stacked':''}`}>
         <HeroSpendCard exps={shown} expanded={heroCard==='spend'} onToggle={()=>toggleHero('spend')}/>
         <HeroAccountCard exps={shown} onNavigate={navigateToEntries} expanded={heroCard==='account'} onToggle={()=>toggleHero('account')}/>
@@ -1759,12 +2232,43 @@ function App(){
         {tab==='timeline'&&<TimelineTab exps={shown} onNavigate={navigateToEntries}/>}
         </>}
       </div>
-      <TabBar tab={tab} onTab={setTab}/>
-      {tab==='entries'&&<button className="fab" onClick={handleAdd} aria-label="Add new entry">+</button>}
+      </>}
+
+      {mode==='lease'&&
+        <div style={{paddingBottom:70,paddingTop:8}}>
+          {leaseErr&&<div className="entry-list"><div className="conflict-note">Could not load lease records: {leaseErr}</div></div>}
+          {tab==='tenancy'&&
+            <TenancyTab tenants={tenants} leases={leases}
+              onAddTenant={()=>setEditTenant({})}
+              onEditTenant={t=>setEditTenant(t)}
+              onAddLease={()=>setEditLease({})}
+              onEditLease={l=>setEditLease(l)}
+              onRenew={renewLease}
+              onDeleteLease={l=>setConfirmLease(l)}/>}
+        </div>}
+
+      <TabBar tab={tab} onTab={setTab} tabs={mode==='lease'?LEASE_TABS:BUILD_TABS}/>
+      {mode==='build'&&tab==='entries'&&<button className="fab" onClick={handleAdd} aria-label="Add new entry">+</button>}
       {showForm&&<EntryForm entry={editEntry} onSave={handleSaveEntry} onCancel={()=>{setShowForm(false);setEditEntry(null);}} exps={shown} userName={auth?.name}/>}
       {undoTarget&&<UndoToast entry={undoTarget} onUndo={undoDelete}/>}
       {showBudgets&&<BudgetEditor budgets={budgets} exps={shown} userName={auth?.name}
         onDone={()=>{setShowBudgets(false);loadBudgets();}} onCancel={()=>setShowBudgets(false)}/>}
+      {confirmLease&&
+        <div className="confirm-overlay" onClick={e=>{if(e.target===e.currentTarget)setConfirmLease(null);}}>
+          <div className="confirm-box">
+            <h3>Delete this lease?</h3>
+            <p>{confirmLease.tenantIds.map(id=>tenants.find(t=>t.id===id)?.name||'Unknown').join(' & ')} — {fmtDate(confirmLease.startDate)} → {fmtDate(confirmLease.endDate)}. This cannot be undone.</p>
+            <div className="form-actions">
+              <button className="btn-danger" onClick={removeLease}>Delete</button>
+              <button className="btn-secondary" onClick={()=>setConfirmLease(null)}>Cancel</button>
+            </div>
+          </div>
+        </div>}
+      {editTenant&&<TenantForm tenant={editTenant.id?editTenant:null} userName={auth?.name}
+        onSave={saveTenantEntry} onCancel={()=>setEditTenant(null)}/>}
+      {editLease&&<LeaseForm lease={editLease.startDate||editLease.id?editLease:null}
+        tenants={tenants} leases={leases} userName={auth?.name}
+        onSave={saveLeaseEntry} onCancel={()=>setEditLease(null)}/>}
       {showSignIn&&<SignInDialog reason={signInReason} onClose={()=>{pendingRef.current=null;setShowSignIn(false);}} onSignedIn={onSignedIn}/>}
       {showThemePicker&&<ThemePicker themeId={themeId} onPick={id=>{setThemeId(id);applyTheme(id);setShowThemePicker(false);}} onClose={()=>setShowThemePicker(false)}/>}
     </>
