@@ -12,20 +12,30 @@ Written 2026-08-05, after lease mode L0–L4.
 | 1 | This file | State, commands, open work, the traps |
 | 2 | `DEVELOPMENT.md` | The permanent reference: section index, constraints, auth, budgets, rent, lease mode, testing |
 | 3 | `LEASE_MODE_PLAN.md` | Lease-mode design, the six settled scope decisions (§0), the L0–L5 breakdown (§6) |
+| 4 | `docs/` | Archived originals — history and rationale, stale in the ways their banners name |
 
 `DEVELOPMENT.md` is the living doc — **update it when a decision changes**,
 and treat this handoff as a snapshot that will go stale.
 
-### ⚠ Two source documents are NOT in this repo
+### The archived source documents
 
-The original working brief (`CLAUDE.md`, with the B1–B3 bug list and the
-U1–U30 UX list) and `HOUSE_ARCHITECTURE.md` were uploaded into a chat session,
-not committed. `DEVELOPMENT.md:394` also cites a `HOUSE_CONTEXT.md` that is
-not here.
+`docs/` holds the three documents the project was originally specified from.
+They are committed unchanged, each behind a banner naming exactly what in it
+is now stale:
 
-A new session will not have them. Either re-upload them at the start, or —
-better — commit them into `CCC/House/` so this stops recurring. Nothing below
-depends on them; they are context, not specification.
+| File | Still useful for |
+|---|---|
+| `docs/WORKING_BRIEF.md` | The B1–B3 and U1–U30 lists (all shipped bar `U30`), and the authoritative reference figures |
+| `docs/HOUSE_ARCHITECTURE.md` | Data model, constants, colour systems, the intermediary-payment rationale |
+| `docs/HOUSE_CONTEXT.md` | Vendor table, intermediary routes, phase and quarter history, decision rationale |
+
+⚠ `docs/HOUSE_CONTEXT.md` carries an account split (Self ₹63,30,198 /
+Reemon ₹21,86,190) that is **wrong** and must not be propagated — see rule 10
+below. Its banner says so too.
+
+`CLAUDE.md` sits at the top of `CCC/House/` and is loaded automatically by a
+new Claude Code session. It is deliberately short: the non-negotiable rules
+and a pointer here.
 
 ---
 
@@ -72,9 +82,14 @@ CCC/House/
 │   ├── read-cost.test.js   ← Firestore bill + privacy boundary, 10 assertions
 │   └── run-all.js
 ├── package.json
+├── CLAUDE.md               ← auto-loaded by Claude Code; rules + pointer
 ├── DEVELOPMENT.md
 ├── LEASE_MODE_PLAN.md
-└── HANDOFF.md              ← this file
+├── HANDOFF.md              ← this file
+└── docs/                   ← archived originals, each with a staleness banner
+    ├── WORKING_BRIEF.md
+    ├── HOUSE_ARCHITECTURE.md
+    └── HOUSE_CONTEXT.md
 ```
 
 Both HTML files sit in the same directory; `compile.js` writes the output in
@@ -141,28 +156,27 @@ which is **`workflow_dispatch` only** — it does not run on push. So:
 
 ## 4. Current state
 
-**Branch `claude/new-session-71reme` is 6 commits ahead of `origin/main` and
-has no PR open.** Everything through L4 is on it, pushed, unmerged.
+**`main` is current. Nothing is pending, and no branch is ahead of it.**
+Lease mode L0–L4 was merged on 2026-08-05 in PR #PRNUM, together with the
+correctness suites, this handoff, and the archived source documents. Pages was
+redeployed from the merge.
 
-```
-90314da  Lease mode L4: yield, per-FY net position, occupancy, tax export
-47b9a23  Lease mode L3: repairs + theme flash fix
-5c534a1  Lease mode L2: rent schedule, receipts, arrears, deposit ledger
-a24d2df  Lease mode L0+L1: mode switch, private collections, tenancy, leases
-36087e4  Plan: lock lease-mode scope decisions
-2bc1e07  Plan: lease mode architecture
-─────────  origin/main is at a012744 (PR #7)
-```
+Shipped and live, in the order it was built:
 
-Merged and live on `main`: the B1–B3 bug fixes, the whole U-series except the
-items blocked on Firebase Storage, per-phase budgets, the single-sheet entry
-form, write lockdown behind sign-in, the undo toast, the cheap sync,
-pull-to-refresh, the vendor analytics tier, and the smoke test.
+| | |
+|---|---|
+| Bugs | `B1` render-phase mutation, `B2` dishonest sync dot, `B3` deploy path |
+| Entry speed (P1) | Vendor autofill, live amount echo, explained validation, one-sheet form |
+| Reconciliation (P2) | Exact amounts in rows, sort control, `status` and `loggedBy` surfaced, CSV export, undo-instead-of-confirm, the unbuilt validation rules |
+| Navigation (P3) | In-place hero expansion, readable timeline, this-month figure, loading state, swipe affordance, vendor totals, per-filter chips |
+| Accessibility (P4) | Pinch zoom restored, type floor raised, icon buttons labelled, pull-to-refresh, theme swatches |
+| Later tier (P5) | Per-phase budgets, intermediary glyph, vendor detail, intermediary tree, payment-mode analytics, **lease mode** |
+| Not features | Auth with writes locked and reads open, the change-probe sync, the smoke test, the correctness suites |
 
-**Not live:** all of lease mode.
+**The only U-series item not shipped is `U30`** (receipt attachments, richer
+export, Firestore-hosted config) — blocked on Firebase Storage.
 
-Verified green at the time of writing: compile clean, smoke 107/107, suites
-113/113.
+Verified at the merge: compile clean, smoke 107/107, suites 113/113.
 
 ---
 
