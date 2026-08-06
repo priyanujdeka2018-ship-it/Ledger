@@ -73,8 +73,12 @@ async function measure(mode) {
   if (RD) await page.route('**/react-dom/18.2.0/umd/**', r => r.fulfill({ path: RD, contentType: 'text/javascript' }));
   await page.route('**fonts.googleapis.com**', r => r.fulfill({ status: 200, contentType: 'text/css', body: '' }));
 
-  const c = { expenseFull: 0, probe: 0, tokenOnExpenseRead: 0 };
+  const c = { expenseFull: 0, probe: 0, tokenOnExpenseRead: 0, storage: 0 };
   BUCKETS.forEach(b => { c[b] = 0; });
+
+  // Receipt attachments live in Firebase Storage; nothing here uploads or views
+  // one, so the poll must never touch that host.
+  await page.route('**firebasestorage.googleapis.com**', route => { c.storage++; return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }); });
 
   await page.route('**firestore.googleapis.com**', route => {
     const url = route.request().url(), method = route.request().method();
@@ -133,6 +137,7 @@ async function measure(mode) {
 
   head('3. the privacy boundary');
   ok('no token ever on an expense read', [b.tokenOnExpenseRead, l.tokenOnExpenseRead], [0, 0]);
+  ok('Storage never touched by the poll', [b.storage, l.storage], [0, 0]);
 
   head('4. projected cost');
   // 24h: 1440 minutes. A reconcile every 10 min = 144 of them at 88 reads;

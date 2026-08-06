@@ -73,16 +73,19 @@ CCC/House/
 ├── house-ledger.jsx.html   ← EDIT THIS. JSX source, ~3,060 lines.
 ├── house-ledger.html       ← GENERATED and DEPLOYED. Never hand-edit.
 ├── compile.js              ← JSX → React.createElement, writes in place
-├── smoke-test.js           ← 124-step whole-app walk
+├── smoke-test.js           ← 129-step whole-app walk
 ├── tests/
 │   ├── harness.js          ← shared rig: stubbed backend, pinned clock, ok()
 │   ├── rent.test.js        ← L2, 32 assertions
 │   ├── repairs.test.js     ← L3, 31 assertions
 │   ├── reports.test.js     ← L4, 40 assertions
-│   ├── read-cost.test.js   ← Firestore bill + privacy boundary, 12 assertions
+│   ├── read-cost.test.js   ← Firestore bill + privacy boundary, 13 assertions
 │   ├── config.test.js      ← U30 editable lists, 17 assertions
+│   ├── attachments.test.js ← U30 receipts (Storage), 13 assertions
 │   └── run-all.js
-├── firestore.rules         ← canonical security rules; paste into the console to apply
+├── firestore.rules         ← canonical Firestore security rules; paste into the console
+├── storage.rules           ← canonical Storage security rules (separate file); paste into the console
+├── cors.json               ← bucket CORS for browser uploads; apply with gcloud/gsutil
 ├── package.json
 ├── CLAUDE.md               ← auto-loaded by Claude Code; rules + pointer
 ├── DEVELOPMENT.md
@@ -158,15 +161,17 @@ which is **`workflow_dispatch` only** — it does not run on push. So:
 
 ## 4. Current state
 
-**`main` carries the Firestore rules and both shipped `U30` slices** (printable
-PDF statements and editable lists), merged and deployed on 2026-08-05.
+**`main` carries the Firestore rules, both earlier `U30` slices, the three UX
+tweaks (swipe-to-reveal delete, build-mode PDF report, Insights tab)** — merged
+and deployed on 2026-08-05.
 
-**Newer, unmerged work sits on branch `claude/house-handoff-tests-qjdbny`**:
-three UX tweaks — (1) delete is now two-step swipe-to-reveal (no more ghost
-deletes), (2) build mode exports a printable PDF expense report as well as CSV,
-(3) the Timeline tab became a full **Insights** analytics tab. Not yet merged or
-deployed; `npm run check` is green on it (smoke 124/124, suites 132). Merge and
-trigger *Jekyll site CI* to ship, per §3.
+**Newer, unmerged work sits on branch `claude/house-handoff-tests-qjdbny`**: the
+final `U30` slice — **receipt attachments** (Firebase Storage, `JS-STORAGE`),
+plus `storage.rules` and `cors.json`. Not yet merged or deployed; `npm run
+check` is green on it (smoke 129/129, suites 145). Merge and trigger *Jekyll
+site CI* to ship — but the receipts only work live after the console setup
+(Storage enabled + rules + CORS + real `FS_BUCKET`); until then they degrade
+gracefully.
 
 For history: lease mode L0–L4 merged on 2026-08-05 in PR #8 with the correctness
 suites, this handoff, and the archived source documents.
@@ -183,14 +188,17 @@ Shipped and live, in the order it was built:
 | Later tier (P5) | Per-phase budgets, intermediary glyph, vendor detail, intermediary tree, payment-mode analytics, **lease mode** |
 | `U30` (part) | Printable PDF statements (rent + annual, print-to-PDF, no library); editable categories/phases/zones via `house-config` |
 | UX tweaks | Two-step swipe-to-reveal delete; build-mode PDF expense report; **Insights** analytics tab (SVG spend-over-time, ranked breakdowns, deep zone/phase drills, splits) |
+| `U30` receipts | Photo/PDF attachments per expense via Firebase Storage REST (`JS-STORAGE`); thumbnails + lightbox + 📎 count. Code done; needs console setup to go live |
 | Not features | Auth with writes locked and reads open, the change-probe sync, the smoke test, the correctness suites |
 
-**`U30` is now two-thirds shipped.** It bundled three things: richer export,
-Firestore-hosted config, and receipt attachments. The first two are **live** —
-printable PDF statements (rent, and per-year financial) and editable
-categories/phases/zones via a `house-config` document. **Receipt attachments
-remain the one unshipped piece**, still blocked on Firebase Storage (which
-needs enabling and its own rules in the console — see L5.2).
+**`U30` is fully built.** All three parts — richer export (PDF statements),
+Firestore-hosted config (editable lists), and **receipt attachments** — now
+exist in code. Receipts upload phone photos / PDF invoices to Firebase Storage
+over its REST API (no SDK, reusing the auth token), shown as thumbnails/tiles in
+the expanded row. The one remaining task is **console setup, not code**: enable
+Storage, publish `storage.rules`, apply `cors.json`, and set the real bucket as
+`FS_BUCKET` in `JS-STORAGE` — until then uploads fail gracefully and the entry
+still saves. See `DEVELOPMENT.md` §"Receipt attachments".
 
 Merge commit `2e2d079`; the *Jekyll site CI* run on it built and deployed
 green. Verified at the merge: compile clean, smoke 107/107, suites 113/113,
@@ -280,7 +288,7 @@ real blocker, so don't start one without addressing it:
 | | Feature | Blocker |
 |---|---|---|
 | L5.1 | Rent-due reminders | Needs push; a static page cannot. A tab badge is the honest version. |
-| L5.2 | Agreement / receipt documents | Needs Firebase Storage — same blocker as the U-series item |
+| L5.2 | Lease agreement documents | Firebase Storage is now wired for build-mode receipts (`JS-STORAGE`); a lease-agreement upload would reuse it. Same console setup applies. |
 | L5.3 | Tenant-facing view | Needs per-tenant auth; genuinely separate-page territory |
 
 ### Settled, do not relitigate
@@ -332,7 +340,7 @@ whole discipline. The gap that let the crash through was that no suite swiped
 
 ### `npm test` — narrow and deep
 
-Five suites, 132 assertions, each checking that specific arithmetic or a
+Six suites, 145 assertions, each checking that specific arithmetic or a
 specific write is right.
 
 | Suite | Guards |
@@ -342,6 +350,7 @@ specific write is right.
 | `reports.test.js` | Apr–Mar year boundaries, capital vs running cost, per-year net, seven occupancy edge cases, tax CSV |
 | `read-cost.test.js` | Probe/reconcile counts, no collection joining the poll loop (incl. `house-config`), no token on expense reads |
 | `config.test.js` | `U30` editable lists: additive merge of custom categories/phases/zones, built-ins preserved, editor round-trips the three arrays back to `house-config/lists` |
+| `attachments.test.js` | `U30` receipts: create→upload→patch write shape (token, `house-receipts/<id>/` path, download URL) and remove-on-edit frees the Storage object |
 
 The harness (`tests/harness.js`) stubs Firestore, Identity Toolkit and fonts —
 **no suite ever touches the live database** — serves React from
@@ -405,6 +414,7 @@ Three failures from this project's own history, worth not repeating:
 | | |
 |---|---|
 | Firebase project | `japan-2026-apr` |
+| Storage | Receipts under `house-receipts/<expId>/` (U30); bucket in `FS_BUCKET`, needs console setup |
 | Collections | `house-expenses`, `house-budgets`, `house-config`, `house-tenants`, `house-leases`, `house-rent`, `house-maintenance` |
 | `localStorage` keys | `hl-auth`, `hl-mode`, `hl-theme` |
 | Contract budget | `CONTRACT_BUDGET = 7537510` |

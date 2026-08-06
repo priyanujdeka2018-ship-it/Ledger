@@ -143,8 +143,11 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .swipe-hint{text-align:center;font-size:.7rem;color:var(--t3);padding:4px 0 8px;font-style:italic}
 /* Opacity tracks swipe distance and the label changes at the commit
    threshold, so 60px is felt rather than guessed. */
-.swipe-underlay{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 18px;font-weight:700;font-size:.8rem;color:#fff;z-index:1;opacity:0}
-.swipe-underlay.left{right:0;padding:0;justify-content:flex-end;background:#ef4444;border-radius:0 16px 16px 0;pointer-events:none}
+/* pointer-events:none by default so the full-height underlays never intercept
+   taps meant for the expanded detail below them (e.g. receipt thumbnails);
+   only the revealed Delete button re-enables them. */
+.swipe-underlay{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 18px;font-weight:700;font-size:.8rem;color:#fff;z-index:1;opacity:0;pointer-events:none}
+.swipe-underlay.left{right:0;padding:0;justify-content:flex-end;background:#ef4444;border-radius:0 16px 16px 0}
 /* Once revealed the delete strip stays lit and is the only thing tappable. */
 .swipe-underlay.left.revealed{opacity:1;pointer-events:auto}
 .row-del-btn{width:80px;height:100%;border:none;background:transparent;color:#fff;font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px}
@@ -343,6 +346,19 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .cfg-add{display:flex;gap:8px;align-items:center;margin:6px 0}
 .cfg-add input{flex:1;min-width:0;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--bg);font-size:.8rem;color:var(--t1);font-family:'Nunito',sans-serif}
 .cfg-add button{flex-shrink:0}
+/* U30 receipt attachments */
+.att-add{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:12px;border:1px dashed var(--border);background:var(--card);color:var(--t2);font-family:'Nunito',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer}
+.att-add input{display:none}
+.att-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.att-item{position:relative}
+.att-thumb{width:56px;height:56px;border-radius:8px;object-fit:cover;border:1px solid var(--border);cursor:pointer;background:var(--bg);display:block}
+.att-pdf{width:56px;height:56px;border-radius:8px;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.2rem;text-decoration:none;color:var(--t2);background:var(--card);gap:1px}
+.att-pdf span{font-size:.5rem;font-weight:700;max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 3px}
+.att-x{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--t1);color:var(--bg);border:none;font-size:.7rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
+.att-clip{display:inline-flex;align-items:center;gap:2px;font-size:.7rem;color:var(--t3);font-weight:700}
+.att-note{font-size:.7rem;color:var(--t3);font-weight:600;margin-top:4px}
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:80;display:flex;align-items:center;justify-content:center;padding:16px;cursor:zoom-out}
+.lightbox img{max-width:100%;max-height:100%;border-radius:8px}
 </style>
 </head>
 <body>
@@ -447,8 +463,16 @@ const isCash=m=>m==='Cash';
 const STATUS_CLR={'Paid':{bg:'#dcfce7',text:'#166534',dot:'#22c55e'},'Partial':{bg:'#fef3c7',text:'#92400e',dot:'#d97706'},'Pending':{bg:'#e0f2fe',text:'#075985',dot:'#0ea5e9'},'Overdue':{bg:'#fee2e2',text:'#991b1b',dot:'#ef4444'}};
 
 // ─── JS-FIRESTORE-HELPERS ───
-const toFS=e=>({fields:{date:{stringValue:e.date},category:{stringValue:e.category},subcategory:{stringValue:e.subcategory},description: { stringValue: e.description || '' },amount:{doubleValue:e.amount},vendor:{stringValue:e.vendor},transferTo:{stringValue:e.transferTo},account:{stringValue:e.account},paymentMode:{stringValue:e.paymentMode},phase:{stringValue:e.phase},zone:{stringValue:e.zone},expenseType:{stringValue:e.expenseType},invoiceRef:{stringValue:e.invoiceRef||''},notes:{stringValue:e.notes||''},status:{stringValue:e.status},loggedBy:{stringValue:e.loggedBy},updatedAt:{stringValue:new Date().toISOString()}}});
-const fromFS=doc=>{const f=doc.fields||{};const id=doc.name.split('/').pop();const g=k=>f[k]?.stringValue||'';return{id,date:g('date'),category:g('category'),subcategory:g('subcategory'),description:g('description'),amount:f.amount?.doubleValue||f.amount?.integerValue||0,vendor:g('vendor'),transferTo:g('transferTo'),account:g('account'),paymentMode:g('paymentMode'),phase:g('phase'),zone:g('zone'),expenseType:g('expenseType'),invoiceRef:g('invoiceRef'),notes:g('notes'),status:g('status'),loggedBy:g('loggedBy'),updatedAt:g('updatedAt')};};
+// Receipt attachments (U30) ride on the expense doc as an array of maps. Each
+// carries the public download URL for display and the Storage path for delete.
+const toFSAttachments=list=>({arrayValue:{values:(list||[]).map(a=>({mapValue:{fields:{
+  url:{stringValue:a.url||''},path:{stringValue:a.path||''},name:{stringValue:a.name||''},
+  type:{stringValue:a.type||''},size:{integerValue:String(a.size||0)}}}}))}});
+const fromFSAttachments=f=>(f?.attachments?.arrayValue?.values||[]).map(v=>{const m=v.mapValue?.fields||{};
+  return{url:m.url?.stringValue||'',path:m.path?.stringValue||'',name:m.name?.stringValue||'',
+    type:m.type?.stringValue||'',size:+(m.size?.integerValue||0)};});
+const toFS=e=>({fields:{date:{stringValue:e.date},category:{stringValue:e.category},subcategory:{stringValue:e.subcategory},description: { stringValue: e.description || '' },amount:{doubleValue:e.amount},vendor:{stringValue:e.vendor},transferTo:{stringValue:e.transferTo},account:{stringValue:e.account},paymentMode:{stringValue:e.paymentMode},phase:{stringValue:e.phase},zone:{stringValue:e.zone},expenseType:{stringValue:e.expenseType},invoiceRef:{stringValue:e.invoiceRef||''},notes:{stringValue:e.notes||''},status:{stringValue:e.status},loggedBy:{stringValue:e.loggedBy},attachments:toFSAttachments(e.attachments),updatedAt:{stringValue:new Date().toISOString()}}});
+const fromFS=doc=>{const f=doc.fields||{};const id=doc.name.split('/').pop();const g=k=>f[k]?.stringValue||'';return{id,date:g('date'),category:g('category'),subcategory:g('subcategory'),description:g('description'),amount:f.amount?.doubleValue||f.amount?.integerValue||0,vendor:g('vendor'),transferTo:g('transferTo'),account:g('account'),paymentMode:g('paymentMode'),phase:g('phase'),zone:g('zone'),expenseType:g('expenseType'),invoiceRef:g('invoiceRef'),notes:g('notes'),status:g('status'),loggedBy:g('loggedBy'),attachments:fromFSAttachments(f),updatedAt:g('updatedAt')};};
 
 async function fetchAll(url,map=fromFS){
   let all=[],token='';
@@ -460,6 +484,60 @@ async function fetchAll(url,map=fromFS){
     token=d.nextPageToken||'';
   }while(token);
   return all;
+}
+
+// ─── JS-STORAGE ───
+// Receipt attachments (U30) over the Firebase Storage REST API — no SDK; the
+// same Identity Toolkit id token that authorizes Firestore writes authorizes
+// Storage (same GCP project). Receipts are public: the download-token URL is
+// stored on the public-read expense doc and shown directly. Images are
+// downscaled in the browser before upload; PDFs go up as-is.
+// SETUP: confirm/replace FS_BUCKET with the real bucket from the Firebase
+// console, and complete the console steps (enable Storage, publish
+// storage.rules, apply cors.json). Until then uploads fail and the entry still
+// saves — see DEVELOPMENT.md.
+const FS_BUCKET='japan-2026-apr.firebasestorage.app';
+const FS_STORAGE=`https://firebasestorage.googleapis.com/v0/b/${FS_BUCKET}/o`;
+const MAX_ATTACH=6,MAX_ATTACH_BYTES=10*1024*1024;
+const attType=file=>file.type==='application/pdf'?'pdf':'image';
+const encPath=p=>encodeURIComponent(p);
+// Downscale to <=1600px longest side, JPEG 0.82. PDFs, GIFs and already-small
+// images pass through. Canvas only — no library.
+function downscaleImage(file){
+  return new Promise(resolve=>{
+    if(file.type==='application/pdf'||file.type==='image/gif'){resolve(file);return;}
+    const img=new Image();
+    img.onload=()=>{
+      const scale=Math.min(1,1600/Math.max(img.width,img.height));
+      if(scale>=1&&file.size<600*1024){resolve(file);return;}
+      const c=document.createElement('canvas');
+      c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      c.toBlob(b=>resolve(b||file),'image/jpeg',0.82);
+    };
+    img.onerror=()=>resolve(file);
+    img.src=URL.createObjectURL(file);
+  });
+}
+async function uploadReceipt(expId,file){
+  const type=attType(file);
+  const blob=type==='image'?await downscaleImage(file):file;
+  const mime=type==='pdf'?'application/pdf':(blob.type||'image/jpeg');
+  const ext=type==='pdf'?'pdf':(mime.split('/')[1]||'jpg').replace('jpeg','jpg');
+  const path=`house-receipts/${expId}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+  const r=await authedFetch(`${FS_STORAGE}?name=${encPath(path)}`,{method:'POST',headers:{'Content-Type':mime},body:blob});
+  const d=await r.json();
+  const tok=(d.downloadTokens||'').split(',')[0];
+  return{url:`${FS_STORAGE}/${encPath(path)}?alt=media&token=${tok}`,path,
+    name:file.name||('receipt.'+ext),type,size:blob.size||file.size||0};
+}
+const deleteReceipt=path=>authedFetch(`${FS_STORAGE}/${encPath(path)}`,{method:'DELETE'});
+// Patch only the attachments field (and updatedAt) — the receipts land after
+// the entry itself is saved, so it always has an id to hang them under.
+async function patchAttachments(id,attachments){
+  await authedFetch(`${FS_EXP}/${id}?key=${AKEY}&updateMask.fieldPaths=attachments&updateMask.fieldPaths=updatedAt`,{method:'PATCH',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({fields:{attachments:toFSAttachments(attachments),updatedAt:{stringValue:new Date().toISOString()}}})});
 }
 
 // ─── JS-LEASE-DATA ───
@@ -1316,6 +1394,8 @@ function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
   const [revealed,setRevealed]=useState(false);
   const revealedRef=useRef(false);
   const setReveal=v=>{revealedRef.current=v;setRevealed(v);};
+  const [lightbox,setLightbox]=useState(null); // U30: open receipt image URL
+  const atts=entry.attachments||[];
   const pc=PHASE_CLR[entry.phase]||{bg:'#f5f5f4',text:'#44403c'};
   const ac=ACCT_CLR[entry.account]||{bg:'#f5f5f4',text:'#44403c'};
   const THRESH=60;
@@ -1386,6 +1466,7 @@ function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
               Pending entry would otherwise vanish into the list. */}
           {entry.status&&entry.status!=='Paid'&&
             <span className="chip" style={{background:(STATUS_CLR[entry.status]||{}).bg||'#f5f5f4',color:(STATUS_CLR[entry.status]||{}).text||'#44403c'}}>{entry.status}</span>}
+          {atts.length>0&&<span className="att-clip" aria-label={`${atts.length} receipt${atts.length===1?'':'s'}`}>📎 {atts.length}</span>}
         </div>
       </div>
       <div className={`entry-detail ${isExpanded?'open':''}`}>
@@ -1403,7 +1484,15 @@ function EntryRow({entry,isExpanded,onToggle,onEdit,onDelete}){
           {entry.invoiceRef&&<div className="detail-cell"><div className="lbl">Invoice</div><div className="val">{entry.invoiceRef}</div></div>}
           {entry.notes&&<div className="detail-cell" style={{gridColumn:'1/-1'}}><div className="lbl">Notes</div><div className="val">{entry.notes}</div></div>}
         </div>
+        {atts.length>0&&
+          <div className="att-strip">
+            {atts.map((a,i)=>a.type==='pdf'
+              ?<a key={i} className="att-pdf" href={a.url} target="_blank" rel="noopener">📄<span>{a.name||'PDF'}</span></a>
+              :<img key={i} className="att-thumb" src={a.url} alt={a.name||'receipt'}
+                 onClick={e=>{e.stopPropagation();setLightbox(a.url);}}/>)}
+          </div>}
       </div>
+      {lightbox&&<div className="lightbox" onClick={()=>setLightbox(null)}><img src={lightbox} alt="receipt"/></div>}
     </div>
   );
 }
@@ -2147,8 +2236,25 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
   const [tried,setTried]=useState(false);
   // Open the disclosure when it already holds content, so editing never
   // hides a value that exists.
-  const [more,setMore]=useState(()=>!!(entry&&(entry.invoiceRef||entry.notes||(entry.status&&entry.status!=='Paid'))));
+  const [more,setMore]=useState(()=>!!(entry&&(entry.invoiceRef||entry.notes||entry.attachments?.length||(entry.status&&entry.status!=='Paid'))));
   const sheetRef=useRef(null);
+  // U30 receipts. Existing attachments (kept, minus removed), files picked but
+  // not yet uploaded, and the Storage paths to delete on save.
+  const [attachments,setAttachments]=useState(()=>entry?.attachments||[]);
+  const [pendingFiles,setPendingFiles]=useState([]);
+  const [removedPaths,setRemovedPaths]=useState([]);
+  const [attErr,setAttErr]=useState('');
+  const attCount=attachments.length+pendingFiles.length;
+  const addFiles=list=>{
+    const files=[...list];setAttErr('');
+    for(const file of files){
+      if(attachments.length+pendingFiles.length>=MAX_ATTACH){setAttErr(`Up to ${MAX_ATTACH} receipts.`);break;}
+      if(file.size>MAX_ATTACH_BYTES){setAttErr(`"${file.name}" is over 10 MB.`);continue;}
+      setPendingFiles(p=>[...p,file]);
+    }
+  };
+  const removeExisting=a=>{setAttachments(l=>l.filter(x=>x!==a));if(a.path)setRemovedPaths(p=>[...p,a.path]);};
+  const removePending=f=>setPendingFiles(p=>p.filter(x=>x!==f));
 
   const up=(k,v)=>{
     setTouched(t=>t[k]?t:{...t,[k]:true});
@@ -2212,9 +2318,9 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
       setTimeout(()=>{const el=sheetRef.current?.querySelector('.field-err');if(el)el.scrollIntoView({block:'center',behavior:'smooth'});},0);
       return;
     }
-    const built={...f,amount:amtNum||0,vendor:f.vendor.trim(),transferTo:(f.transferTo||f.vendor).trim(),loggedBy:userName||'Unknown'};
+    const built={...f,amount:amtNum||0,vendor:f.vendor.trim(),transferTo:(f.transferTo||f.vendor).trim(),loggedBy:userName||'Unknown',attachments};
     if(!force){const d=findDup(built);if(d){setDupWarn({built,match:d});return;}}
-    onSave(built);
+    onSave(built,pendingFiles,removedPaths);
   };
 
   return(
@@ -2253,6 +2359,32 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
           <div className="field"><label>Invoice Ref</label><input value={f.invoiceRef} onChange={e=>up('invoiceRef',e.target.value)} placeholder="Optional"/></div>
           <div className="field"><label>Notes</label><textarea value={f.notes} onChange={e=>up('notes',e.target.value)} placeholder="Optional"/></div>
           <div className="field" style={{marginBottom:0}}><label>Status</label><div className="toggle-group">{STATUSES.map(x=><button key={x} type="button" className={`toggle-btn ${f.status===x?'active':''}`} onClick={()=>up('status',x)}>{x}</button>)}</div></div>
+          <div className="field" style={{marginTop:14,marginBottom:0}}>
+            <label>Receipts</label>
+            <label className="att-add">📎 Add receipt
+              <input type="file" accept="image/*,application/pdf" multiple
+                onChange={e=>{addFiles(e.target.files);e.target.value='';}}/>
+            </label>
+            {(attachments.length>0||pendingFiles.length>0)&&
+              <div className="att-strip">
+                {attachments.map((a,i)=>(
+                  <div key={'a'+i} className="att-item">
+                    {a.type==='pdf'
+                      ?<a className="att-pdf" href={a.url} target="_blank" rel="noopener">📄<span>{a.name||'PDF'}</span></a>
+                      :<img className="att-thumb" src={a.url} alt={a.name||'receipt'}/>}
+                    <button type="button" className="att-x" aria-label="Remove receipt" onClick={()=>removeExisting(a)}>✕</button>
+                  </div>))}
+                {pendingFiles.map((file,i)=>(
+                  <div key={'p'+i} className="att-item">
+                    {attType(file)==='pdf'
+                      ?<span className="att-pdf">📄<span>{file.name}</span></span>
+                      :<img className="att-thumb" src={URL.createObjectURL(file)} alt={file.name}/>}
+                    <button type="button" className="att-x" aria-label="Remove receipt" onClick={()=>removePending(file)}>✕</button>
+                  </div>))}
+              </div>}
+            {attErr&&<div className="field-err">{attErr}</div>}
+            <div className="att-note">Photos are shrunk before upload. {attCount>0?`${attCount} attached.`:'Up to 6, images or PDF.'}</div>
+          </div>
         </div>}
 
         {/* Sticky, so a repeat entry is date, amount, vendor, Save — without
@@ -2269,7 +2401,7 @@ function EntryForm({entry,onSave,onCancel,exps,userName}){
             <h3>Possible duplicate</h3>
             <p>An entry already exists for {dupWarn.match.vendor} — {fmtFull(dupWarn.match.amount)} on {fmtDate(dupWarn.match.date)} ({dupWarn.match.category}). Save this one anyway?</p>
             <div className="form-actions">
-              <button className="btn-primary" onClick={()=>{const b=dupWarn.built;setDupWarn(null);onSave(b);}}>Save anyway</button>
+              <button className="btn-primary" onClick={()=>{const b=dupWarn.built;setDupWarn(null);onSave(b,pendingFiles,removedPaths);}}>Save anyway</button>
               <button className="btn-secondary" onClick={()=>setDupWarn(null)}>Go back</button>
             </div>
           </div>
@@ -3468,11 +3600,25 @@ function App(){
     return Object.keys(n).length?n:null;
   }),[]);
 
-  const handleSaveEntry=useCallback(async(entry)=>{
+  const handleSaveEntry=useCallback(async(entry,pendingFiles=[],removedPaths=[])=>{
     try{
-      if(editEntry?.id){await updateEntry(editEntry.id,entry);}
-      else{await createEntry(entry);}
-      setShowForm(false);setEditEntry(null);loadData();
+      let id;
+      if(editEntry?.id){await updateEntry(editEntry.id,entry);id=editEntry.id;}
+      else{id=await createEntry(entry);}
+      setShowForm(false);setEditEntry(null);
+      // Receipts are best-effort: the entry is already saved, so an upload
+      // that fails (e.g. Storage not set up yet) never loses the entry.
+      let attErr=null;
+      if(pendingFiles.length){
+        const refs=[];
+        for(const file of pendingFiles){try{refs.push(await uploadReceipt(id,file));}catch(e){attErr=e;}}
+        if(refs.length){try{await patchAttachments(id,[...(entry.attachments||[]),...refs]);}catch(e){attErr=e;}}
+      }
+      // Removed attachments were already dropped from the doc by the save above;
+      // here we just free the Storage objects. Orphans are harmless.
+      for(const p of removedPaths){try{await deleteReceipt(p);}catch(e){/* ignore */}}
+      loadData();
+      if(attErr)alert('Entry saved, but a receipt could not be uploaded: '+attErr.message);
     }catch(err){alert('Error: '+err.message);}
   },[editEntry,loadData]);
 
@@ -3480,6 +3626,8 @@ function App(){
     if(!entry)return;
     try{await deleteEntry(entry.id);}
     catch(err){alert('Delete failed: '+err.message);}
+    // Free any receipts the entry carried — best-effort, never blocks the delete.
+    (entry.attachments||[]).forEach(a=>{if(a.path)deleteReceipt(a.path).catch(()=>{});});
     loadData();
   },[loadData]);
 

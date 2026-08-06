@@ -69,6 +69,12 @@ const EXPENSES = [
 ];
 const BUDGETS = [budget('Structure', 2000000), budget('Finishing', 1000000), budget('Landscaping', 500000)];
 
+// U30 — give the first entry a receipt image + PDF so the view path is walked.
+const att = (name, type, ext) => ({ mapValue: { fields: {
+  url: field('https://firebasestorage.googleapis.com/v0/b/b/o/house-receipts%2Fe1%2F' + name + '.' + ext + '?alt=media&token=t'),
+  path: field('house-receipts/e1/' + name + '.' + ext), name: field(name + '.' + ext), type: field(type), size: { integerValue: '1024' } } } });
+EXPENSES[0].fields.attachments = { arrayValue: { values: [att('receipt', 'image', 'png'), att('invoice', 'pdf', 'pdf')] } };
+
 const TENANTS = [{ name: 'projects/p/databases/(default)/documents/house-tenants/ten-1', fields: {
   name: field('Anil Bora'), phone: field('98640 11111'), email: field(''), idRef: field(''),
   emergencyContact: field(''), notes: field(''), updatedAt: field(''), updatedBy: field('Jiten') } }];
@@ -131,6 +137,15 @@ async function run() {
     }
     return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
   });
+  // Firebase Storage (U30 receipts): upload → fake token, image GET → 1x1 PNG.
+  const PNG_1x1 = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64');
+  await page.route('**firebasestorage.googleapis.com**', route => {
+    const method = route.request().method();
+    if (method === 'GET') return route.fulfill({ status: 200, contentType: 'image/png', body: PNG_1x1 });
+    if (method === 'POST') return route.fulfill({ status: 200, contentType: 'application/json',
+      body: JSON.stringify({ name: 'house-receipts/x/f.jpg', downloadTokens: 'tok' }) });
+    return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+  });
 
   // Short timeouts: if the app has died, every remaining step would
   // otherwise sit out the 30s default and the run would take half an hour.
@@ -184,6 +199,12 @@ async function run() {
 
   // ── entries list controls
   await step('entry row expand', () => page.locator('.entry-content').first().click());
+  await step('entry: receipts show in the expanded row', () => page.locator('.att-strip .att-thumb').first().waitFor({ timeout: 3000 }));
+  await step('entry: open receipt lightbox', async () => {
+    await page.locator('.att-strip .att-thumb').first().click();
+    await page.locator('.lightbox').waitFor({ timeout: 3000 });
+  });
+  await step('entry: close lightbox', () => page.locator('.lightbox').click());
   await step('entry row collapse', () => page.locator('.entry-content').first().click());
   await step('sort by amount', () => page.locator('.sort-seg button', { hasText: 'Amount' }).click());
   await step('sort direction flip', () => page.locator('.sort-seg button', { hasText: 'Amount' }).click());
@@ -229,6 +250,15 @@ async function run() {
   await step('form: fill amount', () => page.locator('input[type=number]').first().fill('12345'));
   await step('form: pick vendor (autofill)', () => page.locator('input[list=vendors]').fill('Mewalal Sharma'));
   await step('form: toggle More details', () => page.locator('.more-toggle').click());
+  await step('form: attach receipt image + PDF', async () => {
+    await page.locator('input[type=file]').setInputFiles([
+      { name: 'receipt.png', mimeType: 'image/png', buffer: PNG_1x1 },
+      { name: 'invoice.pdf', mimeType: 'application/pdf', buffer: Buffer.from('%PDF-1.4\n%%EOF') },
+    ]);
+    await page.locator('.more-panel .att-thumb').first().waitFor({ timeout: 3000 });
+    await page.locator('.more-panel .att-pdf').first().waitFor({ timeout: 3000 });
+  });
+  await step('form: remove an attachment', () => page.locator('.more-panel .att-x').first().click());
   await step('form: change category', () => page.locator('.modal select').first().selectOption('Construction Materials'));
   await step('form: cancel', () => page.locator('.modal button', { hasText: 'Cancel' }).click());
 

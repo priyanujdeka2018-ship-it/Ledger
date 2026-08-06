@@ -80,7 +80,8 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-CONSTANTS` | Phases, zones, categories, budget |
 | `JS-PHASE-CAT-ACCT-CLR` | Colour lookups (hardcoded hex, not theme vars) |
 | `JS-THEMES` | 6 theme definitions + `applyTheme` |
-| `JS-FIRESTORE-HELPERS` | `toFS`/`fromFS`, CRUD, change probe |
+| `JS-FIRESTORE-HELPERS` | `toFS`/`fromFS`, CRUD, change probe, attachment (de)serialisers |
+| `JS-STORAGE` | Firebase Storage REST: receipt upload/delete, image downscale (U30) |
 | `JS-AUTH` | Identity Toolkit sign-in, token refresh |
 | `JS-BUDGETS` | `house-budgets` helpers |
 | `JS-CONFIG-DATA` | `house-config`: `applyConfig` (additive merge), `fetchConfig`/`saveConfig` (U30) |
@@ -484,6 +485,37 @@ tab hide, on unmount, and if a second delete starts.
   single-hue bars, two-way splits → the ACCT/MODE schemes) and reads on all six
   themes. Tap-to-inspect, not hover — the primary user is on a phone.
 
+## Receipt attachments (U30, `JS-STORAGE`)
+
+A build-mode expense can carry receipt files (phone photos or PDF invoices) in
+**Firebase Storage**, reached over its REST API — no SDK; the same Identity
+Toolkit id token that authorizes Firestore writes authorizes Storage (same GCP
+project), so `authedFetch` is reused for uploads and deletes.
+
+- **Public.** Receipts are world-readable: the download-token URL is stored on
+  the expense doc (`attachments`, an array of `{url,path,name,type,size}`) and
+  shown directly in an `<img>`. Storage rules gate only writes. Chosen with the
+  user; a token URL is a shareable capability regardless.
+- **Images are downscaled** in-browser (`downscaleImage`, `<canvas>`, ≤1600px /
+  JPEG 0.82) before upload; PDFs go up as-is and show as a tile that opens in a
+  new tab.
+- **Save-then-patch**, like `repairToExpense`: the entry is saved first (so it
+  has an id), then each file uploads to `house-receipts/<id>/…`, then
+  `patchAttachments` writes the refs. An upload that fails (e.g. Storage not set
+  up) never loses the entry — it saves and a toast says so.
+- **Cleanup** is best-effort: removing a receipt in the form (or deleting the
+  entry, via `commitDelete`) issues a Storage `DELETE`; an orphan is harmless.
+- **Not polled** — attachments ride on the expense doc that's already fetched,
+  so they add no reads (`read-cost.test.js` guards that Storage is never touched
+  by the poll).
+
+**Console prerequisites** (like the Firestore rules, these are done by hand and
+version-controlled here): enable Storage, publish **`storage.rules`** (Storage
+has its own rule file, separate from `firestore.rules`), and apply **`cors.json`**
+to the bucket (`gcloud storage buckets update gs://<bucket> --cors-file=cors.json`)
+so the browser can upload cross-origin. Confirm the bucket name and set it as
+`FS_BUCKET` in `JS-STORAGE`. Until then uploads fail gracefully.
+
 ## Data note — the account split
 
 Use these figures. They are what the per-row data actually sums to:
@@ -527,7 +559,7 @@ skipped rather than waiting out a timeout on each.
 ### The correctness suites
 
 `npm test` runs everything in `tests/` — narrow and deep, where the smoke test
-is shallow and wide. 130 assertions across five suites.
+is shallow and wide. 145 assertions across six suites.
 
 | Suite | Guards |
 |---|---|
@@ -536,6 +568,7 @@ is shallow and wide. 130 assertions across five suites.
 | `reports.test.js` | Apr–Mar year boundaries, capital vs running cost, per-year net, seven occupancy edge cases, tax CSV |
 | `read-cost.test.js` | Probe and reconcile counts, no collection joining the poll loop (incl. `house-config`), no token on expense reads |
 | `config.test.js` | U30 editable lists: additive merge of custom categories/phases/zones, built-ins preserved, editor round-trips the three arrays back to `house-config/lists` |
+| `attachments.test.js` | U30 receipts: create→upload→patch write shape (token, `house-receipts/<id>/` path, download URL), and remove-on-edit frees the Storage object |
 
 `tests/harness.js` stubs the backend, serves React from `node_modules`, and
 **pins the clock** — rent status, arrears, occupancy and the financial year are
