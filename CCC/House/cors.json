@@ -1,8 +1,0 @@
-[
-  {
-    "origin": ["https://priyanujdeka2018-ship-it.github.io"],
-    "method": ["GET", "POST", "PUT", "DELETE", "HEAD"],
-    "responseHeader": ["Content-Type", "Authorization", "X-Goog-Upload-Command", "X-Goog-Upload-Protocol"],
-    "maxAgeSeconds": 3600
-  }
-]

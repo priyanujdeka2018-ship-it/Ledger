@@ -70,10 +70,12 @@ const EXPENSES = [
 const BUDGETS = [budget('Structure', 2000000), budget('Finishing', 1000000), budget('Landscaping', 500000)];
 
 // U30 — give the first entry a receipt image + PDF so the view path is walked.
-const att = (name, type, ext) => ({ mapValue: { fields: {
-  url: field('https://firebasestorage.googleapis.com/v0/b/b/o/house-receipts%2Fe1%2F' + name + '.' + ext + '?alt=media&token=t'),
-  path: field('house-receipts/e1/' + name + '.' + ext), name: field(name + '.' + ext), type: field(type), size: { integerValue: '1024' } } } });
-EXPENSES[0].fields.attachments = { arrayValue: { values: [att('receipt', 'image', 'png'), att('invoice', 'pdf', 'pdf')] } };
+// The ref points at a house-receipts doc id; the bytes are fetched on demand.
+const PNG_1x1 = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64');
+const PNG_DATAURL = 'data:image/png;base64,' + PNG_1x1.toString('base64');
+const att = (name, type) => ({ mapValue: { fields: {
+  id: field('rcpt-e1-' + name), name: field(name), type: field(type), size: { integerValue: '1024' } } } });
+EXPENSES[0].fields.attachments = { arrayValue: { values: [att('receipt.png', 'image'), att('invoice.pdf', 'pdf')] } };
 
 const TENANTS = [{ name: 'projects/p/databases/(default)/documents/house-tenants/ten-1', fields: {
   name: field('Anil Bora'), phone: field('98640 11111'), email: field(''), idRef: field(''),
@@ -127,6 +129,10 @@ async function run() {
     if (url.includes(':runQuery')) return route.fulfill({ status: 200, contentType: 'application/json', body: '[{"readTime":"x"}]' });
     // house-config: listed as a collection, empty here (no custom lists set).
     if (url.includes('house-config')) return route.fulfill({ status: 200, contentType: 'application/json', body: '{"documents":[]}' });
+    // U30 receipts are read one doc at a time — return a doc with a 1x1 PNG data URL.
+    if (url.includes('house-receipts/') && route.request().method() === 'GET')
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+        fields: { data: { stringValue: PNG_DATAURL }, name: { stringValue: 'receipt.png' }, type: { stringValue: 'image' } } }) });
     if (route.request().method() === 'GET') {
       const docs = url.includes('house-budgets') ? BUDGETS
         : url.includes('house-tenants') ? TENANTS
@@ -135,15 +141,6 @@ async function run() {
         : url.includes('house-rent') ? [] : EXPENSES;
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ documents: docs }) });
     }
-    return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
-  });
-  // Firebase Storage (U30 receipts): upload → fake token, image GET → 1x1 PNG.
-  const PNG_1x1 = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64');
-  await page.route('**firebasestorage.googleapis.com**', route => {
-    const method = route.request().method();
-    if (method === 'GET') return route.fulfill({ status: 200, contentType: 'image/png', body: PNG_1x1 });
-    if (method === 'POST') return route.fulfill({ status: 200, contentType: 'application/json',
-      body: JSON.stringify({ name: 'house-receipts/x/f.jpg', downloadTokens: 'tok' }) });
     return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
   });
 

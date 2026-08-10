@@ -101,6 +101,13 @@ async function open({ docs = {}, today = '2026-08-05', mode = 'lease', signedIn 
     // The change probe. One read when nothing has moved — see DEVELOPMENT.md.
     if (url.includes(':runQuery')) return route.fulfill({ status: 200, contentType: 'application/json', body: '[{"readTime":"x"}]' });
     if (method === 'GET') {
+      // U30 receipts are read one doc at a time (fetchReceipt) — return the
+      // matching single document, not a collection list.
+      const rcpt = url.match(/house-receipts\/([^/?]+)/);
+      if (rcpt) {
+        const d = (docs['house-receipts'] || []).find(x => x.name && x.name.endsWith('/' + rcpt[1]));
+        return route.fulfill({ status: d ? 200 : 404, contentType: 'application/json', body: d ? JSON.stringify(d) : '{}' });
+      }
       const coll = COLLECTIONS.find(c => url.includes(c)) || 'house-expenses';
       return route.fulfill({ status: 200, contentType: 'application/json',
         body: JSON.stringify({ documents: docs[coll] || [] }) });
@@ -110,22 +117,6 @@ async function open({ docs = {}, today = '2026-08-05', mode = 'lease', signedIn 
     // id itself (`exp-<epoch>`) and returns that rather than reading this.
     return route.fulfill({ status: 200, contentType: 'application/json',
       body: JSON.stringify({ name: docName('house-expenses', newExpenseId) }) });
-  });
-
-  // Firebase Storage (U30 receipts). Uploads/deletes are recorded in `writes`
-  // like any other non-GET call; an image GET returns a 1x1 PNG so <img> loads.
-  const PNG_1x1 = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=', 'base64');
-  await page.route('**firebasestorage.googleapis.com**', route => {
-    const url = route.request().url(), method = route.request().method();
-    const auth = route.request().headers()['authorization'] || null;
-    if (method === 'GET') return route.fulfill({ status: 200, contentType: 'image/png', body: PNG_1x1 });
-    writes.push({ method, url, auth, body: null });
-    if (method === 'POST') {
-      const name = decodeURIComponent((url.match(/[?&]name=([^&]+)/) || [])[1] || 'house-receipts/x/f.jpg');
-      return route.fulfill({ status: 200, contentType: 'application/json',
-        body: JSON.stringify({ name, bucket: 'b', downloadTokens: 'tok-' + Math.random().toString(36).slice(2, 8) }) });
-    }
-    return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
   });
 
   // expiresAt is computed against the PINNED clock, not Date.now(). The init

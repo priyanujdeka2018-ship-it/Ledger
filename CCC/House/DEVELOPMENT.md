@@ -81,7 +81,7 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-PHASE-CAT-ACCT-CLR` | Colour lookups (hardcoded hex, not theme vars) |
 | `JS-THEMES` | 6 theme definitions + `applyTheme` |
 | `JS-FIRESTORE-HELPERS` | `toFS`/`fromFS`, CRUD, change probe, attachment (de)serialisers |
-| `JS-STORAGE` | Firebase Storage REST: receipt upload/delete, image downscale (U30) |
+| `JS-RECEIPTS` | `house-receipts` base64 store: upload/fetch/delete, image downscale (U30) |
 | `JS-AUTH` | Identity Toolkit sign-in, token refresh |
 | `JS-BUDGETS` | `house-budgets` helpers |
 | `JS-CONFIG-DATA` | `house-config`: `applyConfig` (additive merge), `fetchConfig`/`saveConfig` (U30) |
@@ -107,6 +107,7 @@ grep -n "─── JS-ENTRY-FORM ───" house-ledger.jsx.html   # find one
 | `JS-UNDO-TOAST` | Deferred-delete toast with undo |
 | `JS-BUDGET-EDITOR` | Per-phase budget editor |
 | `JS-CONFIG-EDITOR` | Add custom categories/phases/zones (U30) |
+| `JS-RECEIPT-THUMB` | Fetch-on-demand receipt thumbnail/tile + session cache (U30) |
 | `JS-SIGN-IN` | Email/password dialog |
 | `JS-LEASE-DATA` | Private (authed-read) tenant and lease collections |
 | `JS-RENT-DATA` | `house-rent`, sparse, deterministic ids |
@@ -201,6 +202,11 @@ service cloud.firestore {
     }
     // Editable lists (custom categories/phases/zones) — read-open, write-locked.
     match /house-config/{doc} {
+      allow read: if true;
+      allow write: if familyMember();
+    }
+    // Receipt attachments (base64, U30) — read-open, write-locked.
+    match /house-receipts/{doc} {
       allow read: if true;
       allow write: if familyMember();
     }
@@ -485,36 +491,38 @@ tab hide, on unmount, and if a second delete starts.
   single-hue bars, two-way splits → the ACCT/MODE schemes) and reads on all six
   themes. Tap-to-inspect, not hover — the primary user is on a phone.
 
-## Receipt attachments (U30, `JS-STORAGE`)
+## Receipt attachments (U30, `JS-RECEIPTS`)
 
-A build-mode expense can carry receipt files (phone photos or PDF invoices) in
-**Firebase Storage**, reached over its REST API — no SDK; the same Identity
-Toolkit id token that authorizes Firestore writes authorizes Storage (same GCP
-project), so `authedFetch` is reused for uploads and deletes.
+A build-mode expense can carry receipt files (phone photos or PDF invoices),
+stored as **base64 in a separate Firestore collection, `house-receipts`** — one
+doc per receipt. This deliberately avoids Firebase Storage, which now needs the
+Blaze plan (a payment method) just to create a bucket; `house-receipts` reuses
+the Firestore the app already has. (A later swap to Cloudinary would touch only
+`uploadReceipt` / `fetchReceipt` / `deleteReceipt` and the ref shape.)
 
-- **Public.** Receipts are world-readable: the download-token URL is stored on
-  the expense doc (`attachments`, an array of `{url,path,name,type,size}`) and
-  shown directly in an `<img>`. Storage rules gate only writes. Chosen with the
-  user; a token URL is a shareable capability regardless.
-- **Images are downscaled** in-browser (`downscaleImage`, `<canvas>`, ≤1600px /
-  JPEG 0.82) before upload; PDFs go up as-is and show as a tile that opens in a
-  new tab.
+- **Ref vs bytes.** The expense doc's `attachments` array holds only a
+  lightweight ref `{id,name,type,size}`; the base64 `data` lives in the
+  `house-receipts/<id>` doc. So the expense doc stays small and — crucially —
+  the 60s poll never carries image bytes.
+- **Fetched on demand.** `ReceiptThumb` (`JS-RECEIPT-THUMB`) pulls a receipt's
+  bytes only when a row is expanded or the edit form is open, and caches them in
+  a session `Map`. `read-cost.test.js` asserts `house-receipts` is never touched
+  by the poll.
+- **Public read, family write** — same stance as the ledger. Images are
+  downscaled in-browser (`downscaleImage`, `<canvas>`, ≤1200px / JPEG 0.72) so
+  the base64 fits Firestore's ~1 MB/doc limit; a file that still won't fit is
+  rejected with a message (mostly a concern for large PDFs).
 - **Save-then-patch**, like `repairToExpense`: the entry is saved first (so it
-  has an id), then each file uploads to `house-receipts/<id>/…`, then
-  `patchAttachments` writes the refs. An upload that fails (e.g. Storage not set
-  up) never loses the entry — it saves and a toast says so.
-- **Cleanup** is best-effort: removing a receipt in the form (or deleting the
-  entry, via `commitDelete`) issues a Storage `DELETE`; an orphan is harmless.
-- **Not polled** — attachments ride on the expense doc that's already fetched,
-  so they add no reads (`read-cost.test.js` guards that Storage is never touched
-  by the poll).
+  has an id), then each file is written as a `house-receipts` doc, then
+  `patchAttachments` writes the refs. A receipt that fails to store never loses
+  the entry — it saves and a toast says so.
+- **Cleanup** is best-effort: removing a receipt (or deleting the entry, via
+  `commitDelete`) deletes the `house-receipts` doc by id; an orphan is harmless.
 
-**Console prerequisites** (like the Firestore rules, these are done by hand and
-version-controlled here): enable Storage, publish **`storage.rules`** (Storage
-has its own rule file, separate from `firestore.rules`), and apply **`cors.json`**
-to the bucket (`gcloud storage buckets update gs://<bucket> --cors-file=cors.json`)
-so the browser can upload cross-origin. Confirm the bucket name and set it as
-`FS_BUCKET` in `JS-STORAGE`. Until then uploads fail gracefully.
+**Prerequisite:** add the `house-receipts` block to the published Firestore
+rules (it's in `firestore.rules` / the paste block above). No Storage, no CORS,
+no billing — just that one rule. Until it's published, writes to
+`house-receipts` are denied and receipts fail to save (the entry still saves).
 
 ## Data note — the account split
 
@@ -559,7 +567,7 @@ skipped rather than waiting out a timeout on each.
 ### The correctness suites
 
 `npm test` runs everything in `tests/` — narrow and deep, where the smoke test
-is shallow and wide. 145 assertions across six suites.
+is shallow and wide. 146 assertions across six suites.
 
 | Suite | Guards |
 |---|---|
@@ -568,7 +576,7 @@ is shallow and wide. 145 assertions across six suites.
 | `reports.test.js` | Apr–Mar year boundaries, capital vs running cost, per-year net, seven occupancy edge cases, tax CSV |
 | `read-cost.test.js` | Probe and reconcile counts, no collection joining the poll loop (incl. `house-config`), no token on expense reads |
 | `config.test.js` | U30 editable lists: additive merge of custom categories/phases/zones, built-ins preserved, editor round-trips the three arrays back to `house-config/lists` |
-| `attachments.test.js` | U30 receipts: create→upload→patch write shape (token, `house-receipts/<id>/` path, download URL), and remove-on-edit frees the Storage object |
+| `attachments.test.js` | U30 receipts: create→write-receipt-doc→patch-ref (base64 + token), and remove-on-edit deletes the `house-receipts` doc |
 
 `tests/harness.js` stubs the backend, serves React from `node_modules`, and
 **pins the clock** — rent status, arrears, occupancy and the financial year are

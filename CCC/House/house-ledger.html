@@ -330,6 +330,7 @@ h1,h2,h3,.serif{font-family:'Playfair Display',serif}
 .att-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .att-item{position:relative}
 .att-thumb{width:56px;height:56px;border-radius:8px;object-fit:cover;border:1px solid var(--border);cursor:pointer;background:var(--bg);display:block}
+.att-skel{width:56px;height:56px;border-radius:8px;border:1px solid var(--border);background:var(--border);opacity:.5;display:block;animation:shimmer 1.2s ease-in-out infinite}
 .att-pdf{width:56px;height:56px;border-radius:8px;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.2rem;text-decoration:none;color:var(--t2);background:var(--card);gap:1px}
 .att-pdf span{font-size:.5rem;font-weight:700;max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 3px}
 .att-x{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--t1);color:var(--bg);border:none;font-size:.7rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;padding:0}
@@ -696,18 +697,17 @@ const STATUS_CLR = {
 };
 
 // ─── JS-FIRESTORE-HELPERS ───
-// Receipt attachments (U30) ride on the expense doc as an array of maps. Each
-// carries the public download URL for display and the Storage path for delete.
+// Receipt attachments (U30) ride on the expense doc as an array of lightweight
+// refs — the id of a house-receipts doc plus display metadata. The bytes (a
+// base64 data URL) live in that separate collection, fetched on demand, so the
+// expense doc stays small and the poll payload never balloons.
 const toFSAttachments = list => ({
   arrayValue: {
     values: (list || []).map(a => ({
       mapValue: {
         fields: {
-          url: {
-            stringValue: a.url || ''
-          },
-          path: {
-            stringValue: a.path || ''
+          id: {
+            stringValue: a.id || ''
           },
           name: {
             stringValue: a.name || ''
@@ -726,8 +726,7 @@ const toFSAttachments = list => ({
 const fromFSAttachments = f => (f?.attachments?.arrayValue?.values || []).map(v => {
   const m = v.mapValue?.fields || {};
   return {
-    url: m.url?.stringValue || '',
-    path: m.path?.stringValue || '',
+    id: m.id?.stringValue || '',
     name: m.name?.stringValue || '',
     type: m.type?.stringValue || '',
     size: +(m.size?.integerValue || 0)
@@ -829,24 +828,24 @@ async function fetchAll(url, map = fromFS) {
   return all;
 }
 
-// ─── JS-STORAGE ───
-// Receipt attachments (U30) over the Firebase Storage REST API — no SDK; the
-// same Identity Toolkit id token that authorizes Firestore writes authorizes
-// Storage (same GCP project). Receipts are public: the download-token URL is
-// stored on the public-read expense doc and shown directly. Images are
-// downscaled in the browser before upload; PDFs go up as-is.
-// SETUP: confirm/replace FS_BUCKET with the real bucket from the Firebase
-// console, and complete the console steps (enable Storage, publish
-// storage.rules, apply cors.json). Until then uploads fail and the entry still
-// saves — see DEVELOPMENT.md.
-const FS_BUCKET = 'japan-2026-apr.firebasestorage.app';
-const FS_STORAGE = `https://firebasestorage.googleapis.com/v0/b/${FS_BUCKET}/o`;
+// ─── JS-RECEIPTS ───
+// Receipt attachments (U30) stored as base64 in a SEPARATE Firestore
+// collection, house-receipts — one doc per receipt, fetched on demand (only
+// when a row is expanded), NEVER in the 60s poll. The expense doc carries just
+// a tiny ref {id,name,type,size}; the bytes live here. This avoids Firebase
+// Storage (and its billing requirement) entirely, reusing the Firestore the
+// app already has. Public read like the ledger; family write. A later backend
+// swap (e.g. Cloudinary) would touch only uploadReceipt / fetchReceipt /
+// deleteReceipt and the attachment ref — nothing else.
+const FS_RCPT = `${FS_ROOT}/house-receipts`;
 const MAX_ATTACH = 6,
   MAX_ATTACH_BYTES = 10 * 1024 * 1024;
+// Firestore caps a document at ~1 MB; keep the base64 comfortably under it.
+const MAX_RCPT_B64 = 900000;
 const attType = file => file.type === 'application/pdf' ? 'pdf' : 'image';
-const encPath = p => encodeURIComponent(p);
-// Downscale to <=1600px longest side, JPEG 0.82. PDFs, GIFs and already-small
-// images pass through. Canvas only — no library.
+// Downscale to <=1200px longest side, JPEG 0.72 — smaller than a Storage
+// upload would need, because the base64 must fit inside one Firestore doc.
+// PDFs, GIFs and already-small images pass through. Canvas only — no library.
 function downscaleImage(file) {
   return new Promise(resolve => {
     if (file.type === 'application/pdf' || file.type === 'image/gif') {
@@ -855,8 +854,8 @@ function downscaleImage(file) {
     }
     const img = new Image();
     img.onload = () => {
-      const scale = Math.min(1, 1600 / Math.max(img.width, img.height));
-      if (scale >= 1 && file.size < 600 * 1024) {
+      const scale = Math.min(1, 1200 / Math.max(img.width, img.height));
+      if (scale >= 1 && file.size < 200 * 1024) {
         resolve(file);
         return;
       }
@@ -864,40 +863,91 @@ function downscaleImage(file) {
       c.width = Math.round(img.width * scale);
       c.height = Math.round(img.height * scale);
       c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-      c.toBlob(b => resolve(b || file), 'image/jpeg', 0.82);
+      c.toBlob(b => resolve(b || file), 'image/jpeg', 0.72);
     };
     img.onerror = () => resolve(file);
     img.src = URL.createObjectURL(file);
   });
 }
-async function uploadReceipt(expId, file) {
+const blobToDataUrl = blob => new Promise((res, rej) => {
+  const r = new FileReader();
+  r.onload = () => res(r.result);
+  r.onerror = rej;
+  r.readAsDataURL(blob);
+});
+const toFSReceipt = r => ({
+  fields: {
+    expId: {
+      stringValue: r.expId || ''
+    },
+    name: {
+      stringValue: r.name || ''
+    },
+    type: {
+      stringValue: r.type || ''
+    },
+    size: {
+      integerValue: String(r.size || 0)
+    },
+    data: {
+      stringValue: r.data || ''
+    },
+    updatedAt: {
+      stringValue: new Date().toISOString()
+    },
+    updatedBy: {
+      stringValue: r.updatedBy || ''
+    }
+  }
+});
+// "Upload" = write one house-receipts doc; return the lightweight ref for the
+// expense. Throws (caught by the save flow) if a file won't fit a Firestore doc.
+async function uploadReceipt(expId, file, who) {
   const type = attType(file);
   const blob = type === 'image' ? await downscaleImage(file) : file;
-  const mime = type === 'pdf' ? 'application/pdf' : blob.type || 'image/jpeg';
-  const ext = type === 'pdf' ? 'pdf' : (mime.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
-  const path = `house-receipts/${expId}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const r = await authedFetch(`${FS_STORAGE}?name=${encPath(path)}`, {
-    method: 'POST',
+  const data = await blobToDataUrl(blob);
+  if (data.length > MAX_RCPT_B64) throw new Error(`"${file.name}" is too large to store — try a smaller photo or a lighter PDF`);
+  const name = file.name || 'receipt.' + (type === 'pdf' ? 'pdf' : 'jpg');
+  const size = blob.size || file.size || 0;
+  const id = 'rcpt-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+  await authedFetch(`${FS_RCPT}/${id}?key=${AKEY}`, {
+    method: 'PATCH',
     headers: {
-      'Content-Type': mime
+      'Content-Type': 'application/json'
     },
-    body: blob
+    body: JSON.stringify(toFSReceipt({
+      expId,
+      name,
+      type,
+      size,
+      data,
+      updatedBy: who
+    }))
   });
-  const d = await r.json();
-  const tok = (d.downloadTokens || '').split(',')[0];
   return {
-    url: `${FS_STORAGE}/${encPath(path)}?alt=media&token=${tok}`,
-    path,
-    name: file.name || 'receipt.' + ext,
+    id,
+    name,
     type,
-    size: blob.size || file.size || 0
+    size
   };
 }
-const deleteReceipt = path => authedFetch(`${FS_STORAGE}/${encPath(path)}`, {
+// Public GET (no token) — receipts are read-open like the ledger, and pulled
+// only when a row is expanded. The caller caches the result.
+async function fetchReceipt(id) {
+  const r = await fetch(`${FS_RCPT}/${id}?key=${AKEY}`);
+  if (!r.ok) throw new Error(r.statusText);
+  const f = (await r.json()).fields || {};
+  return {
+    data: f.data?.stringValue || '',
+    name: f.name?.stringValue || '',
+    type: f.type?.stringValue || ''
+  };
+}
+const deleteReceipt = id => authedFetch(`${FS_RCPT}/${id}?key=${AKEY}`, {
   method: 'DELETE'
 });
-// Patch only the attachments field (and updatedAt) — the receipts land after
-// the entry itself is saved, so it always has an id to hang them under.
+// Patch only the attachments field (and updatedAt) — receipts land after the
+// entry itself is saved, so it always has an id to hang them under.
 async function patchAttachments(id, attachments) {
   await authedFetch(`${FS_EXP}/${id}?key=${AKEY}&updateMask.fieldPaths=attachments&updateMask.fieldPaths=updatedAt`, {
     method: 'PATCH',
@@ -2507,6 +2557,89 @@ function SubtotalBar({
   }, fmtAmt(total)));
 }
 
+// ─── JS-RECEIPT-THUMB ───
+// Receipts are fetched only when shown (a row is expanded, or the edit form is
+// open) and cached across the session, so re-viewing costs nothing and the
+// bytes never touch the poll. Used by both EntryRow and EntryForm.
+const receiptCache = new Map();
+// Open a base64 data URL reliably (some browsers block navigating to data: in
+// window.open) by turning it into a short-lived blob URL first.
+function openReceipt(dataUrl) {
+  try {
+    const [meta, b64] = dataUrl.split(',');
+    const mime = (meta.match(/data:([^;]+)/) || [])[1] || 'application/octet-stream';
+    const bin = atob(b64),
+      arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    const url = URL.createObjectURL(new Blob([arr], {
+      type: mime
+    }));
+    window.open(url, '_blank');
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+  } catch (e) {
+    window.open(dataUrl, '_blank');
+  }
+}
+function ReceiptThumb({
+  att,
+  onView,
+  onRemove
+}) {
+  const [data, setData] = useState(() => receiptCache.get(att.id) || null);
+  const [err, setErr] = useState(false);
+  useEffect(() => {
+    if (data || !att.id) return;
+    let live = true;
+    fetchReceipt(att.id).then(r => {
+      if (live) {
+        receiptCache.set(att.id, r.data);
+        setData(r.data);
+      }
+    }).catch(() => {
+      if (live) setErr(true);
+    });
+    return () => {
+      live = false;
+    };
+  }, [att.id]); // eslint-disable-line
+  const wrap = inner => /*#__PURE__*/React.createElement("div", {
+    className: "att-item"
+  }, inner, onRemove && /*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "att-x",
+    "aria-label": "Remove receipt",
+    onClick: e => {
+      e.stopPropagation();
+      onRemove(att);
+    }
+  }, "\u2715"));
+  if (att.type === 'pdf') return wrap(/*#__PURE__*/React.createElement("button", {
+    type: "button",
+    className: "att-pdf",
+    title: att.name,
+    onClick: e => {
+      e.stopPropagation();
+      if (data) openReceipt(data);
+    }
+  }, "\uD83D\uDCC4", /*#__PURE__*/React.createElement("span", null, att.name || 'PDF')));
+  if (err) return wrap(/*#__PURE__*/React.createElement("span", {
+    className: "att-pdf"
+  }, "\u26A0", /*#__PURE__*/React.createElement("span", null, "failed")));
+  if (!data) return wrap(/*#__PURE__*/React.createElement("span", {
+    className: "att-skel",
+    "aria-label": "loading receipt"
+  }));
+  return wrap(/*#__PURE__*/React.createElement("img", {
+    className: "att-thumb",
+    src: data,
+    alt: att.name || 'receipt',
+    onClick: e => {
+      e.stopPropagation();
+      onView && onView(data);
+    }
+  }));
+}
+
 // ─── JS-ENTRY-ROW ───
 function EntryRow({
   entry,
@@ -2753,21 +2886,10 @@ function EntryRow({
     className: "val"
   }, entry.notes))), atts.length > 0 && /*#__PURE__*/React.createElement("div", {
     className: "att-strip"
-  }, atts.map((a, i) => a.type === 'pdf' ? /*#__PURE__*/React.createElement("a", {
-    key: i,
-    className: "att-pdf",
-    href: a.url,
-    target: "_blank",
-    rel: "noopener"
-  }, "\uD83D\uDCC4", /*#__PURE__*/React.createElement("span", null, a.name || 'PDF')) : /*#__PURE__*/React.createElement("img", {
-    key: i,
-    className: "att-thumb",
-    src: a.url,
-    alt: a.name || 'receipt',
-    onClick: e => {
-      e.stopPropagation();
-      setLightbox(a.url);
-    }
+  }, atts.map((a, i) => /*#__PURE__*/React.createElement(ReceiptThumb, {
+    key: a.id || i,
+    att: a,
+    onView: setLightbox
   })))), lightbox && /*#__PURE__*/React.createElement("div", {
     className: "lightbox",
     onClick: () => setLightbox(null)
@@ -4365,11 +4487,12 @@ function EntryForm({
   const [more, setMore] = useState(() => !!(entry && (entry.invoiceRef || entry.notes || entry.attachments?.length || entry.status && entry.status !== 'Paid')));
   const sheetRef = useRef(null);
   // U30 receipts. Existing attachments (kept, minus removed), files picked but
-  // not yet uploaded, and the Storage paths to delete on save.
+  // not yet uploaded, the house-receipts ids to delete on save, and a lightbox.
   const [attachments, setAttachments] = useState(() => entry?.attachments || []);
   const [pendingFiles, setPendingFiles] = useState([]);
-  const [removedPaths, setRemovedPaths] = useState([]);
+  const [removedIds, setRemovedIds] = useState([]);
   const [attErr, setAttErr] = useState('');
+  const [formLightbox, setFormLightbox] = useState(null);
   const attCount = attachments.length + pendingFiles.length;
   const addFiles = list => {
     const files = [...list];
@@ -4388,7 +4511,7 @@ function EntryForm({
   };
   const removeExisting = a => {
     setAttachments(l => l.filter(x => x !== a));
-    if (a.path) setRemovedPaths(p => [...p, a.path]);
+    if (a.id) setRemovedIds(p => [...p, a.id]);
   };
   const removePending = f => setPendingFiles(p => p.filter(x => x !== f));
   const up = (k, v) => {
@@ -4508,7 +4631,7 @@ function EntryForm({
         return;
       }
     }
-    onSave(built, pendingFiles, removedPaths);
+    onSave(built, pendingFiles, removedIds);
   };
   return /*#__PURE__*/React.createElement("div", {
     className: "modal-overlay",
@@ -4688,24 +4811,12 @@ function EntryForm({
     }
   })), (attachments.length > 0 || pendingFiles.length > 0) && /*#__PURE__*/React.createElement("div", {
     className: "att-strip"
-  }, attachments.map((a, i) => /*#__PURE__*/React.createElement("div", {
-    key: 'a' + i,
-    className: "att-item"
-  }, a.type === 'pdf' ? /*#__PURE__*/React.createElement("a", {
-    className: "att-pdf",
-    href: a.url,
-    target: "_blank",
-    rel: "noopener"
-  }, "\uD83D\uDCC4", /*#__PURE__*/React.createElement("span", null, a.name || 'PDF')) : /*#__PURE__*/React.createElement("img", {
-    className: "att-thumb",
-    src: a.url,
-    alt: a.name || 'receipt'
-  }), /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    className: "att-x",
-    "aria-label": "Remove receipt",
-    onClick: () => removeExisting(a)
-  }, "\u2715"))), pendingFiles.map((file, i) => /*#__PURE__*/React.createElement("div", {
+  }, attachments.map((a, i) => /*#__PURE__*/React.createElement(ReceiptThumb, {
+    key: a.id || 'a' + i,
+    att: a,
+    onView: setFormLightbox,
+    onRemove: removeExisting
+  })), pendingFiles.map((file, i) => /*#__PURE__*/React.createElement("div", {
     key: 'p' + i,
     className: "att-item"
   }, attType(file) === 'pdf' ? /*#__PURE__*/React.createElement("span", {
@@ -4723,7 +4834,13 @@ function EntryForm({
     className: "field-err"
   }, attErr), /*#__PURE__*/React.createElement("div", {
     className: "att-note"
-  }, "Photos are shrunk before upload. ", attCount > 0 ? `${attCount} attached.` : 'Up to 6, images or PDF.'))), /*#__PURE__*/React.createElement("div", {
+  }, "Photos are shrunk before saving. ", attCount > 0 ? `${attCount} attached.` : 'Up to 6, images or PDF.'))), formLightbox && /*#__PURE__*/React.createElement("div", {
+    className: "lightbox",
+    onClick: () => setFormLightbox(null)
+  }, /*#__PURE__*/React.createElement("img", {
+    src: formLightbox,
+    alt: "receipt"
+  })), /*#__PURE__*/React.createElement("div", {
     className: "form-actions sticky"
   }, /*#__PURE__*/React.createElement("button", {
     className: "btn-primary",
@@ -4747,7 +4864,7 @@ function EntryForm({
     onClick: () => {
       const b = dupWarn.built;
       setDupWarn(null);
-      onSave(b, pendingFiles, removedPaths);
+      onSave(b, pendingFiles, removedIds);
     }
   }, "Save anyway"), /*#__PURE__*/React.createElement("button", {
     className: "btn-secondary",
@@ -7083,7 +7200,7 @@ function App() {
     delete n[k];
     return Object.keys(n).length ? n : null;
   }), []);
-  const handleSaveEntry = useCallback(async (entry, pendingFiles = [], removedPaths = []) => {
+  const handleSaveEntry = useCallback(async (entry, pendingFiles = [], removedIds = []) => {
     try {
       let id;
       if (editEntry?.id) {
@@ -7094,14 +7211,14 @@ function App() {
       }
       setShowForm(false);
       setEditEntry(null);
-      // Receipts are best-effort: the entry is already saved, so an upload
-      // that fails (e.g. Storage not set up yet) never loses the entry.
+      // Receipts are best-effort: the entry is already saved, so a receipt that
+      // fails to store (e.g. too big, or rules not yet updated) never loses it.
       let attErr = null;
       if (pendingFiles.length) {
         const refs = [];
         for (const file of pendingFiles) {
           try {
-            refs.push(await uploadReceipt(id, file));
+            refs.push(await uploadReceipt(id, file, auth?.name));
           } catch (e) {
             attErr = e;
           }
@@ -7115,18 +7232,18 @@ function App() {
         }
       }
       // Removed attachments were already dropped from the doc by the save above;
-      // here we just free the Storage objects. Orphans are harmless.
-      for (const p of removedPaths) {
+      // here we just delete their house-receipts docs. Orphans are harmless.
+      for (const rid of removedIds) {
         try {
-          await deleteReceipt(p);
+          await deleteReceipt(rid);
         } catch (e) {/* ignore */}
       }
       loadData();
-      if (attErr) alert('Entry saved, but a receipt could not be uploaded: ' + attErr.message);
+      if (attErr) alert('Entry saved, but a receipt could not be stored: ' + attErr.message);
     } catch (err) {
       alert('Error: ' + err.message);
     }
-  }, [editEntry, loadData]);
+  }, [editEntry, loadData, auth]);
   const commitDelete = useCallback(async entry => {
     if (!entry) return;
     try {
@@ -7136,7 +7253,7 @@ function App() {
     }
     // Free any receipts the entry carried — best-effort, never blocks the delete.
     (entry.attachments || []).forEach(a => {
-      if (a.path) deleteReceipt(a.path).catch(() => {});
+      if (a.id) deleteReceipt(a.id).catch(() => {});
     });
     loadData();
   }, [loadData]);

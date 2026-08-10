@@ -48,6 +48,12 @@ service cloud.firestore {
       allow read: if true;
       allow write: if familyMember();
     }
+    // Receipt attachments (U30) stored as base64 — read-open like the ledger,
+    // family-write. Bytes fetched on demand, never in the poll.
+    match /house-receipts/{doc} {
+      allow read: if true;
+      allow write: if familyMember();
+    }
 
     // ── Lease module: fully private (read AND write require a family account)
     match /house-tenants/{doc}     { allow read, write: if familyMember(); }
